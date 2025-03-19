@@ -130,18 +130,18 @@ export default ({ pages, boards }) => {
                 { "name": "Pages", "icon": "layout", "href": "/workspace/pages" },
                 { "name": "Automations", "icon": ToyBrick, "href": "/workspace/apis" },
             ],
-            "State Machines": [
-                { "name": "Instances", "icon": Power, "href": "/workspace/stateMachines" },
-                { "name": "Definitions", "icon": FileCog, "href": "/workspace/stateMachineDefinitions" },
+            // "State Machines": [
+            //     { "name": "Instances", "icon": Power, "href": "/workspace/stateMachines" },
+            //     { "name": "Definitions", "icon": FileCog, "href": "/workspace/stateMachineDefinitions" },
+            // ],
+            "Devices": [
+                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
+                { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
             ],
             "Content": [
                 { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" },
                 { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
                 { "name": "Public", "icon": "doorOpen", "href": "/workspace/files?path=/apps/next/public" }
-            ],
-            "Devices": [
-                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
-                { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
             ]
         }
     }
