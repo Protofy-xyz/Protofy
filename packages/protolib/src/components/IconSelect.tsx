@@ -1,47 +1,94 @@
 import { useState } from 'react'
-import Select from "react-select";
+import Select, { components } from "react-select";
+import { YStack, Text } from '@my/ui';
+
+const getIconUrl = (icon) => {
+  return `/public/icons/${icon}.svg`;
+}
+
+const IconOption = (props) => {
+  return (
+    <components.Option {...props}>
+      <YStack style={{ display: "flex", alignItems: "center", gap: "8px", width: '95px', height: '95px', justifyContent: 'center' }}>
+        <img
+          src={getIconUrl(props.data.value)}
+          alt={props.data.value}
+          width={40}
+          height={40}
+          style={{
+            filter: "invert(50%) sepia(100%) hue-rotate(120deg)",
+          }}
+        />
+        <Text fos="$2" o={0.6} ta="center" height="30px">
+          {props.data.value}
+        </Text>
+      </YStack>
+    </components.Option>
+  );
+};
+
+const IconSingleValue = ({ data, ...props }) => {
+  return (
+    <components.SingleValue {...props}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          padding: "0px 4px",
+        }}
+      >
+        <img
+          src={getIconUrl(data.value)}
+          alt={data.value}
+          width={24}
+          height={24}
+          style={{
+            verticalAlign: "middle",
+            filter: "invert(50%) sepia(100%) hue-rotate(120deg)",
+          }}
+        />
+        <span style={{ color: "var(--color)" }}>{data.value}</span>
+      </div>
+    </components.SingleValue>
+  );
+};
 
 export const IconSelect = ({ icons, onSelect, selected }) => {
     const [selectedIcon, setSelectedIcon] = useState(
       selected ? { value: selected, label: selected } : null
     );
   
+    const [totalOptions, setTotalOptions] = useState(40);
+  
     const options = icons.map((icon) => ({
       value: icon,
       label: icon,
-    }));
-  
+    })).slice(0, totalOptions);
+
+    const handleLoadMore = (state) => {
+      setTotalOptions((prev) => prev + 40); // Incrementa en 40 (o lo que desees)
+    };
+
     return (
       <div style={{ flex: 1 }}>
         <Select
           options={options}
           components={{
-            SingleValue: ({ data }) => (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "0px 4px",
-                }}
-              >
-                <img
-                  src={`/public/icons/${data.value}.svg`}
-                  alt={data.value}
-                  width={18}
-                  height={18}
-                  style={{
-                    verticalAlign: "middle",
-                    filter: "invert(50%) sepia(100%) hue-rotate(120deg)",
-                  }}
-                />
-                <span style={{ color: "var(--color)" }}>{data.value}</span>
-              </div>
-            ),
+            SingleValue: IconSingleValue,
+            Option: IconOption,
           }}
+          onMenuScrollToBottom={handleLoadMore}
           onChange={(selectedOption) => {
             setSelectedIcon(selectedOption);
             onSelect?.(selectedOption.value);
+          }}
+          onInputChange={(inputValue) => {
+            if (inputValue && inputValue.length > 0) {
+              setTotalOptions(icons.length);
+            } else {
+              setTotalOptions(40);
+            }
           }}
           value={selectedIcon}
           placeholder="Select an icon..."
@@ -70,10 +117,15 @@ export const IconSelect = ({ icons, onSelect, selected }) => {
               backgroundColor: "var(--color2)",  
               borderRadius: "9px",
               zIndex: 99999,
+              overflow: "hidden",
+              padding: "8px",
             }),
             menuList: (provided) => ({
               ...provided,
-              backgroundColor: "var(--color2)",  
+              display: "flex",
+              flexWrap: "wrap", // Activamos el wrap horizontal
+              gap: "8px",      // Espacio entre elementos
+              backgroundColor: "var(--color2)",
             }),
             option: (provided, state) => ({
               ...provided,
@@ -88,6 +140,9 @@ export const IconSelect = ({ icons, onSelect, selected }) => {
               display: "flex",
               alignItems: "center",
               gap: "8px",
+              width: "auto",    // Permitimos que cada opción ajuste su ancho
+              minWidth: "80px", // Añade un ancho mínimo si lo deseas
+              justifyContent: "center",
             }),
             indicatorSeparator: (provided) => ({
               ...provided,
