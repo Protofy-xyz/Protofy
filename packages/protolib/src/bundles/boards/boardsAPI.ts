@@ -36,12 +36,19 @@ const callModel = async (prompt, context) => {
     if(useChatGPT) {
         reply = await context.chatGPT.chatGPTPrompt({
             message: prompt
-          })
-          reply = {
+        })
+        
+        let content = reply[0]
+       
+        if (reply.isError) {
+            content = "// Error: " + reply.data.error.message
+        }
+        
+        reply = {
             choices: [
               {
                 message: {
-                  content: reply[0]
+                  content
                 }
               }
             ]
