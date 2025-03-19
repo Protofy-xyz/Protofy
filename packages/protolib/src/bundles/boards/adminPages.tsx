@@ -30,7 +30,7 @@ const defaultValueHTML = `
 //data contains: data.value, data.icon and data.color
 return card({
     content: \`
-        \${icon({ name: data.icon, size: '48' })}    
+        \${icon({ name: data.icon, color: data.color, size: '48' })}    
         \${cardValue({ value: data.value })}
     \`
 });
