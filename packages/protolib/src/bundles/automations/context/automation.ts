@@ -1,6 +1,7 @@
 import { API, getLogger } from 'protobase';
 import {getServiceToken} from 'protonode'
 import {addAction} from '../../actions/context/addAction';
+import {addCard} from '../../cards/context/addCard';
 
 const logger = getLogger();
 
@@ -51,6 +52,24 @@ export const automation = async (options: {
             tag: options.tags && options.tags.length > 0 ? options.tags[0] : 'system',
             description: options.description ?? "",
             params: options.automationParams ?? {},
+            emitEvent: true,
+            token: token
+        })
+
+        //add card
+        addCard({
+            group: 'automations',
+            tag: 'actions',
+            id: name.split('/').join('_'),
+            templateName: 'Run '+name.split('/').join('_')+' automation',
+            name: 'automations_'+name.split('/').join('_'),
+            defaults: {
+                name: name.split('/').join('_'),
+                description: options.description ?? "",
+                rulesCode: `return execute_action("/api/v1/automations/${name}", userParams)`,
+                params: options.automationParams ?? {},
+                type: 'action'
+            },
             emitEvent: true,
             token: token
         })
