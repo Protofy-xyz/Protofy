@@ -91,15 +91,6 @@ const cardAction = ({ data }) => {
         justify-content: center;
         box-sizing: border-box;
     ">
-        <h3 style="
-            width: 100%;
-            margin-bottom: 20px; 
-            text-align: center; 
-            font-weight: bold;
-        ">
-            \${data.name}
-        </h3>
-
         <form 
             style="width: 100%;" 
             onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
