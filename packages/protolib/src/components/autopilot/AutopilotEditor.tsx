@@ -71,10 +71,17 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                     <Panel defaultSize={34} minSize={20} maxSize={80}>
                         <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Monaco
-                                path={'rules.ts'}
+                                path={'autopilot-rules.ts'}
                                 darkMode={resolvedTheme === 'dark'}
                                 sourceCode={rulesCode}
                                 onChange={setRulesCode}
+                                options={{
+                                    folding: false,
+                                    lineDecorationsWidth: 0,
+                                    lineNumbersMinChars: 0,
+                                    lineNumbers: false,
+                                    minimap: { enabled: false }
+                                  }}
                             />
                         </YStack>
                     </Panel>

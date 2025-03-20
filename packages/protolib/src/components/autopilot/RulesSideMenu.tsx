@@ -22,7 +22,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     //useMemo to keep monaco editor from re-rendering
     const monacoEditor = useMemo(() => {
         return <Monaco
-            path={'rules.ts'}
+            path={'sidemenu-rules.ts'}
             darkMode={resolvedTheme === 'dark'}
             sourceCode={savedCode.current}
             onChange={(text) => {
@@ -31,6 +31,13 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
             onMount={(editor) => {
                 editedCode.current = savedCode.current
             }}
+            options={{
+                folding: false,
+                lineDecorationsWidth: 0,
+                lineNumbersMinChars: 0,
+                lineNumbers: false,
+                minimap: { enabled: false }
+              }}
         />
     }, [resolvedTheme, savedCode.current])
 

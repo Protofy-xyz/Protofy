@@ -42,10 +42,17 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
                     p="$3"
                 >
                     <Monaco
-                        path={'rules.ts'}
+                        path={'html-rules.ts'}
                         darkMode={resolvedTheme === 'dark'}
                         sourceCode={htmlCode}
                         onChange={(newCode) => {setCode(newCode); setHTMLCode(newCode)}}
+                        options={{
+                            folding: false,
+                            lineDecorationsWidth: 0,
+                            lineNumbersMinChars: 0,
+                            lineNumbers: false,
+                            minimap: { enabled: false }
+                          }}
                     />
                 </YStack>
             </Panel>
