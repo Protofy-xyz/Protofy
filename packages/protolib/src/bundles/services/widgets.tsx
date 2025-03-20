@@ -84,7 +84,7 @@ const cardAction = ({data}) => {
         align-items: center;
         justify-content: center;
     ">
-        <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
+
         <form style="width:100%" onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
             \${Object.keys(data.params || {}).map(key => \`
                 <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
@@ -97,7 +97,7 @@ const cardAction = ({data}) => {
                     text-align: center;
                     width: 100%; 
                     padding: 10px; 
-                    margin-top: 15px; 
+                    margin-top: 20px; 
                     background-color: \${data.color}; 
                     color: white; 
                     border: none; 

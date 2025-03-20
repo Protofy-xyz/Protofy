@@ -22,6 +22,7 @@ import stateMachines from './stateMachines/context'
 import agents from './agents/agents/context'
 import stateContext from './state/context'
 import actions from './actions/context'
+import cards from './cards/context'
 import lmstudio from './lmstudio/context'
 import protomemdb from './protomemdb/context'
 import autopilot from './autopilot/context'
@@ -62,6 +63,7 @@ export const APIContext = {
     agents,
     state: stateContext,
     actions,
+    cards,
     lmstudio,
     protomemdb,
     autopilot,
