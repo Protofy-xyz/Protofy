@@ -9,6 +9,20 @@ export class ProtoSchema {
         return Object.keys(this.shape)
     }
 
+    getDefinition() {
+        //this.shape is a zod object
+        //return an object with the field name and the type of the field as a string
+        const fields = {}
+        Object.keys(this.shape).forEach((key) => {
+            fields[key] = {
+                type: this.shape[key]._def.typeName.replace("Zod", "").toLowerCase(), 
+                description: this.shape[key]._def.hint || "",
+                isId: this.shape[key]._def.id || false
+            }
+        })
+        return fields
+    }
+
     getFieldKeyDefinition(field: string, key: string) {
         return this.shape[field] ? this.shape[field]._def[key] : undefined
     }

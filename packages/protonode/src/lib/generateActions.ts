@@ -57,4 +57,36 @@ export const AutoActions = ({
         token: getServiceToken(),
         emitEvent: true
     })
+
+    app.get(actionUrlPrefix+'/create', async (req, res) => {
+        const params = req.query;
+        try {
+            const { token, ...data } = params;
+            const result = await API.post(`${urlPrefix}`, data);
+            if(result.isLoaded) {
+                return res.json(result.data);
+            }
+            return res.json(false);
+        } catch(e) {
+            return res.status(500).json(false);
+        }
+    });
+
+    const def = modelType.getObjectFieldsDefinition()
+    const params = Object.keys(def).map((key) => {
+        return {
+            [key]: def[key].type+": "+def[key].description + (def[key].isId ? " (this will be used as the id of the element)" : "")
+        }
+    })
+
+    context.actions.add({
+        group: 'objects',
+        name: 'create', //get last path element
+        url: actionUrlPrefix+'/create',
+        tag: modelName,
+        description: `Creates a new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
+        params: params,
+        token: getServiceToken(),
+        emitEvent: true
+    })
 }

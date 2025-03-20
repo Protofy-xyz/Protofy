@@ -5,8 +5,11 @@ Protofy("features", {})
 
 export const Base{{name}}Schema = Schema.object(Protofy("schema", {}))
 
+//check if any of the fields of the schema has set the id flag
+const hasId = Object.keys(Base{{name}}Schema.shape).some(key => Base{{name}}Schema.shape[key]._def.id)
+
 export const {{name}}Schema = Schema.object({
-    ...BaseSchema.shape,
+    ...(!hasId? BaseSchema.shape : {}),
     ...Base{{name}}Schema.shape
 });
 
