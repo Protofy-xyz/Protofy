@@ -92,7 +92,7 @@ const cardAction = ({ data }) => {
         box-sizing: border-box;
     ">
         <form 
-            style="width: 100%;" 
+            style="width: 100%; margin-top: 15px;" 
             onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
         >
             \${ 
