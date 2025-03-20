@@ -1,12 +1,12 @@
 import { API } from "protobase";
-import { DevicesModel } from ".";
+// import { DevicesModel } from ".";
 import { AutoAPI, handler, getServiceToken, getDeviceToken } from 'protonode'
-import { generateEvent } from "../../events/eventsLibrary";
+import { generateEvent } from "../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
-import { addAction } from "../../actions/context/addAction";
+import { addAction } from "../actions/context/addAction";
 
 const logger = getLogger()
 
@@ -16,15 +16,15 @@ export const WhatsappAPI = (app, context) => {
     const { topicSub, topicPub, mqtt } = context;
     
     // registerActions()
-    addAction({
-        group: 'Whatsapp',
-        name: 'send-message'
-        url: `/api/core/v1/whatsApp/`,
-        tag: deviceInfo.data.name,
-        description: action.description ?? "",
-        ...!action.payload?.value ? {params: {value: "value to set"}}:{},
-        emitEvent: true
-    })
+    // addAction({
+    //     group: 'Whatsapp',
+    //     name: 'send-message',
+    //     url: `/api/core/v1/whatsApp/`,
+    //     tag: deviceInfo.data.name,
+    //     description: action.description ?? "",
+    //     ...!action.payload?.value ? {params: {value: "value to set"}}:{},
+    //     emitEvent: true
+    // })
 
     app.get('/api/core/v1/whatsapp/send/message/:phone/:message', handler(async (req, res, session) => {
         const { phone, message } = req.params
