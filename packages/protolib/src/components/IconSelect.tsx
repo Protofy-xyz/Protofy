@@ -2,7 +2,7 @@ import { useState } from 'react'
 import Select, { components } from "react-select";
 import { YStack, Text } from '@my/ui';
 
-const getIconUrl = (icon) => {
+export const getIconUrl = (icon) => {
   return `/public/icons/${icon}.svg`;
 }
 

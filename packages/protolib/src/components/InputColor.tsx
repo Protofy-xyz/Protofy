@@ -1,4 +1,4 @@
-import { Popover, Square } from "@my/ui"
+import { Popover, Square, useTheme } from "@my/ui"
 import { SketchPicker } from "react-color";
 import { Input } from "./Input";
 
@@ -9,6 +9,7 @@ type Props = {
 }
 
 export const InputColor = ({ color, onChange, placeholder }: Props) => {
+    const theme = useTheme()
 
     return <Popover
         allowFlip
@@ -34,7 +35,10 @@ export const InputColor = ({ color, onChange, placeholder }: Props) => {
         <Popover.Content width='250px' shadowRadius={"$4"} shadowColor={"black"} shadowOpacity={0.3}>
             <SketchPicker
                 color={color}
-                presetColors={[]}
+                presetColors={[
+                    theme.orange9.val, theme.yellow9.val, theme.green9.val, theme.blue9.val, theme.purple9.val, theme.pink9.val, theme.red9.val, theme.gray9.val,
+                    theme.orange7.val, theme.yellow7.val, theme.green7.val, theme.blue7.val, theme.purple7.val, theme.pink7.val, theme.red7.val, theme.gray7.val,
+                ]}
                 onChange={onChange}
                 disableAlpha={true}
                 styles={{
