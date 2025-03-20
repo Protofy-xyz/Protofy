@@ -89,30 +89,32 @@ const cardAction = ({ data }) => {
         align-items: center;
         justify-content: center;
     ">
-        <h3 style="margin-bottom:20px; text-align: center; font-weight: bold;">\${data.name}</h3>
-        <form onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
-            \${keys.map(key => \`
-                <div style=" display: flex; align-items: center; width: 100%; margin-bottom: 5px;">
+        <h3 style="width: 100%; margin-bottom: 20px; text-align: center; font-weight: bold;">\${data.name}</h3>
+        <form style="width: 100%;" onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
+            \${keys.length > 0 ? keys.map(key => \`
+                <div style="display: flex; align-items: center; width: 100%; margin-bottom: 5px;">
                     <label style="
                         display: inline-block; 
                         font-weight: bold; 
-                        min-width: \${labelWidth}px;
+                        width: \${labelWidth}px;
                         margin-right: 10px;
-                        text-align: right;
+                        text-align: left;
                     ">\${key}</label>
                     <input class="no-drag" type="text" name="\${key}" style="
                         flex: 1; 
                         padding: 5px; 
                         border: 1px solid #ccc; 
                         border-radius: 5px;
+                        box-sizing: border-box;
                     " placeholder="\${data.params[key]}">
                 </div>
-            \`).join('')}
+            \`).join('') : ''}
         <button 
             class="no-drag" 
             type="submit" 
             style="
-                width: 100%; 
+                width: 100%;
+                max-width: 100%;
                 padding: 10px; 
                 text-align: center;
                 margin-top: 15px; 
@@ -147,6 +149,8 @@ const cardAction = ({ data }) => {
     </div>
     \`;
 };
+
+
 
 
 const cardValue = ({ value, style = '' }) => {
