@@ -16,8 +16,17 @@ export const WhatsappAPI = (app, context) => {
     const { topicSub, topicPub, mqtt } = context;
     
     // registerActions()
+    addAction({
+        group: 'Whatsapp',
+        name: 'send-message'
+        url: `/api/core/v1/whatsApp/`,
+        tag: deviceInfo.data.name,
+        description: action.description ?? "",
+        ...!action.payload?.value ? {params: {value: "value to set"}}:{},
+        emitEvent: true
+    })
 
-    app.get('/api/core/v1/whatsApp/:phone/:message', handler(async (req, res, session) => {
+    app.get('/api/core/v1/whatsapp/send/message/:phone/:message', handler(async (req, res, session) => {
         const { phone, message } = req.params
         // console.log("phone", phone)
         // console.log("message", message)
@@ -40,7 +49,7 @@ export const WhatsappAPI = (app, context) => {
         }
     }))
 
-    app.get('/api/core/v1/whatsApp/qrCode/:phone/:message', handler(async (req, res, session) => {
+    app.get('/api/core/v1/whatsapp/qr/:phone/:message', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
