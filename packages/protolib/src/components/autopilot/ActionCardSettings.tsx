@@ -1,5 +1,5 @@
 import { Cog, Text } from '@tamagui/lucide-icons'
-import { YStack, XStack, Label, ToggleGroup, Input } from '@my/ui'
+import { YStack, XStack, Label, ToggleGroup, Input, Switch } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -20,6 +20,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
       html: code,
     })
   }
+
   return (
     <YStack space="$4" padding="$4">
       <Tinted>
@@ -31,13 +32,31 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
         </YStack>
         <YStack mt="$3" height={600}>
           <Label mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Actions</Label>
-          <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
-            <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-              <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
-              <ToggleGroup.Item value="params">params</ToggleGroup.Item>
-              <ToggleGroup.Item value="view">view</ToggleGroup.Item>
-            </ToggleGroup>
+          <XStack width="100%" pt="$0" pr="$1" pb="$2" alignItems="center">
+            <XStack flexBasis="33.33%" />
+            <XStack flexBasis="33.33%" justifyContent="center">
+              <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab} >
+                <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
+                <ToggleGroup.Item value="params">params</ToggleGroup.Item>
+                <ToggleGroup.Item value="view">view</ToggleGroup.Item>
+              </ToggleGroup>
+            </XStack>
+            <XStack flexBasis="33.33%" justifyContent="flex-end" alignItems="center">
+              <Label htmlFor="autopilot-switch" mr={"$3"}>Display response</Label>
+              <Switch
+                id="autopilot-switch"
+                size="$4"
+                checked={cardData.displayResponse}
+                onCheckedChange={(value) => {
+                  setCardData({ ...cardData, displayResponse: value })
+                }}
+                className="no-drag"
+              >
+                <Switch.Thumb className="no-drag" animation="quick" />
+              </Switch>
+            </XStack>
           </XStack>
+
           <Tinted>
             {(tab == 'rules' || !tab) && <RuleEditor
               extraCompilerData={{ userParams: cardData.params, actions: actions }}
