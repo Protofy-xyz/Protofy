@@ -6,12 +6,10 @@ export const CardsAPI = (app, context) => {
 
     app.post('/api/core/v1/cards/:group/:tag', async (req, res) => {
         const info = req.body;
-        context.cards.addCard({
+        context.cards.add({
             group: req.params.group,
             tag: req.params.tag,
-            name: info.name,
-            description: info.description,
-            card: info.card,
+            ...info,
             emitEvent: true
         });
     });

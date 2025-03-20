@@ -1,5 +1,6 @@
 import { API } from "protobase";
 import { getServiceToken } from "./serviceToken";
+
 export const AutoActions = ({
     modelName,
     modelType,
@@ -31,6 +32,23 @@ export const AutoActions = ({
         params: {id: "id to look for"},
         token: getServiceToken(),
         emitEvent: true
+    })
+
+    context.cards.add({
+        group: 'objects',
+        tag: modelName,
+        name: 'exists',
+        id: 'object_'+modelName+'_exists',
+        templateName: 'Check if '+modelName+' exists',
+        defaults: {
+            type: 'action',
+            description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
+            params: {
+                id: 'id to look for'
+            }
+        },
+        emitEvent: true,
+        token: getServiceToken()
     })
 
     app.get(actionUrlPrefix+'/read', async (req, res) => {
