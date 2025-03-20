@@ -7,21 +7,26 @@ export const addCard = async (options: {
     group?: string,
     tag: string,
     name: string,
-    displayName?: string,
-    description?: string,
-    card: any,
+    templateName: string,
+    id: string,
+    defaults: any,
     emitEvent?: boolean,
     token?: string
 }) => {
     const group = options.group || 'system'
     const name = options.name
     const tag = options.tag
-    const displayName = options.displayName || name
-    const description = options.description || ''
-    const card = options.card
+    const id = options.id
+    const defaults = options.defaults
+    const templateName = options.templateName
 
     if(!name) {
         logger.error({}, "Action name is required");
+        return
+    }
+
+    if(!id) {
+        logger.error({}, "Action id is required");
         return
     }
 
@@ -30,16 +35,20 @@ export const addCard = async (options: {
         return
     }
 
-    if(!card) {
-        logger.error({}, "Card body is required");
+    if(!defaults) {
+        logger.error({}, "Card defaults are required");
+        return
+    }
+
+    if(!templateName) {
+        logger.error({}, "Card templateName is required");
         return
     }
 
     const content = {
-        card: card,
-        name: name,
-        description: description,
-        displayName: displayName
+        defaults: defaults,
+        name: templateName,
+        id: id
     }
 
     if(options.token) {

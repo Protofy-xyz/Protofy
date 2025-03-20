@@ -27,26 +27,6 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from '../../components/board/BoardPreview'
 
 const sourceUrl = '/api/core/v1/boards'
-const defaultValueHTML = `
-//data contains: data.value, data.icon and data.color
-return card({
-    content: \`
-        \${icon({ name: data.icon, color: data.color, size: '48' })}    
-        \${cardValue({ value: data.value })}
-    \`
-});
-`
-
-const defaultActionHTML = `
-// data contains: data.icon, data.color, data.name, data.params
-return card({
-    content: \`
-        \${icon({ name: data.icon, color: data.color, size: '48' })}    
-        \${cardAction({ data })}
-    \`
-});
-`
-
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
     <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
@@ -261,7 +241,7 @@ const Board = ({ board, icons }) => {
         </XStack>
       </XStack>
 
-      <CardSelector defaults={{value: {html: defaultValueHTML}, action: {html: defaultActionHTML}}} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>

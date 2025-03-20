@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 import { useProtoStates } from '../../bundles/protomemdb/lib/useProtoStates'
+
 const SelectGrid = ({ children }) => {
   return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
     {children}
@@ -22,8 +23,8 @@ const FirstSlide = ({ selected, setSelected, options }) => {
             from="boards"
             theme={themeName}
             template={option}
-            isSelected={selected === option.id}
-            onPress={() => setSelected(option.id)}
+            isSelected={selected?.id === option.id}
+            onPress={() => setSelected(option)}
           />
         ))}
       </SelectGrid>
@@ -37,33 +38,60 @@ const iconTable = {
   'action': 'zap'
 }
 
-const SecondSlide = ({ defaults, card, selected, states, icons, actions, setCard }) => {
-  const emptyCard = { key: "key", type: selected, width: 2, height: 6, name: selected, icon: iconTable[selected] }
+const SecondSlide = ({ card, selected, states, icons, actions, setCard }) => {
   return <YStack>
-      {selected == "value" ?
-        <ValueCardSettings states={states} icons={icons} card={{...defaults[card.type], ...emptyCard}} onEdit={(data) => {
+      {card?.type == "value" ?
+        <ValueCardSettings states={states} icons={icons} card={card} onEdit={(data) => {
           setCard(data)
         }}/> :
-        <ActionCardSettings states={states} icons={icons} card={{...defaults[card.type], ...emptyCard}} actions={actions} onEdit={(data) => {
+        <ActionCardSettings states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
   </YStack>
 }
 
-const cards = [{
+const typeCodes = {
+  value: `
+//data contains: data.value, data.icon and data.color
+return card({
+    content: \`
+        \${icon({ name: data.icon, color: data.color, size: '48' })}    
+        \${cardValue({ value: data.value })}
+    \`
+});
+`,
+  action: `
+// data contains: data.icon, data.color, data.name, data.params
+return card({
+    content: \`
+        \${icon({ name: data.icon, color: data.color, size: '48' })}    
+        \${cardAction({ data })}
+    \`
+});
+`
+}
+
+const extraCards = [{
+  defaults: {
+    type: 'value'
+  },
   name: 'Display value',
   id: 'value'
 },
 {
+  defaults: {
+    type: 'action'
+  },
   name: 'Invoques an action',
   id: 'action'
 }]
+
 function flattenTree(obj) {
   let leaves = [];
 
   function traverse(node) {
       if (node && typeof node === 'object') {
-          if (node.type) {
+          if (node.name) {
               // Es una hoja, la añadimos al resultado
               leaves.push(node);
           } else {
@@ -76,18 +104,22 @@ function flattenTree(obj) {
   traverse(obj);
   return leaves;
 }
-const useCards = () => {
+const useCards = (extraCards =[]) => {
   const availableCards = useProtoStates({}, 'cards/#', 'cards')
-  return flattenTree(availableCards)
+  return [...flattenTree(availableCards), ...extraCards]
 }
 
 export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
-  const availableCards = useCards()
-  const [selectedCard, setSelectedCard] = useState('value')
-  const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
+  const cards = useCards(extraCards)
+  const [selectedCard, setSelectedCard] = useState()
+  const [card, setCard] = useState()
 
   useEffect(() => {
-    setCard({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
+    if(selectedCard) {
+      setCard({ key: "key", width: 2, height: 6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type] , ...selectedCard.defaults })
+    } else {
+      setCard(undefined)
+    }
   }, [selectedCard])
   return <AlertDialog
     integratedChat
@@ -96,6 +128,7 @@ export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, s
     pl="$5"
     setOpen={setAddOpened}
     open={addOpened}
+    onFinish={() => setCard(undefined)}
     hideAccept={true}
     description={""}
   >
@@ -117,7 +150,7 @@ export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, s
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide defaults={defaults} selected={selectedCard} states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
+              component: <SecondSlide states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
             }
           ]
           }></Slides>
