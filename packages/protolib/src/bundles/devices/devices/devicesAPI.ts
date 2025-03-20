@@ -49,6 +49,23 @@ export const DevicesAPI = (app, context) => {
             const deviceInfo = DevicesModel.load(JSON.parse(value))
             for (const subsystem of deviceInfo.data.subsystem) {
                 // console.log('subsystem: ', subsystem)
+                for (const monitor of subsystem.monitors ?? []) {
+                    addCard({
+                        group: 'devices',
+                        tag: deviceInfo.data.name,
+                        id: 'devices_monitors_'+deviceInfo.data.name+'_'+subsystem.name,
+                        templateName: deviceInfo.data.name + ' ' + subsystem.name+ ' device value',
+                        name: subsystem.name + '_' + monitor.name,
+                        defaults: {
+                            name: deviceInfo.data.name + ' ' + subsystem.name,
+                            description: monitor.description ?? "",
+                            rulesCode: `return states['devices']['${deviceInfo.data.name}']['${subsystem.name}']`,
+                            type: 'value'
+                        },
+                        emitEvent: true
+                    })
+                }
+
                 for (const action of subsystem.actions ?? []) {
                     addAction({
                         group: 'devices',
@@ -65,7 +82,7 @@ export const DevicesAPI = (app, context) => {
                         group: 'devices',
                         tag: deviceInfo.data.name,
                         id: 'devices_'+deviceInfo.data.name+'_'+subsystem.name + '_' + action.name,
-                        templateName: 'device ' + deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
+                        templateName: deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name + ' device action',
                         name: subsystem.name + '_' + action.name,
                         defaults: {
                             name: deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
