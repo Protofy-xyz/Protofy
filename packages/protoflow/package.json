@@ -38,7 +38,7 @@
     "@tamagui/build": "^1.101.7",
     "@types/react-color": "3.0.6",
     "terser": "5.16.9",
-    "typescript": "~5.3.3"
+    "typescript": "5.8.2"
   },
   "files": [
     "dist/**/*"

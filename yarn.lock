@@ -6197,7 +6197,7 @@ __metadata:
   dependencies:
     protobase: "npm:*"
     protonode: "npm:*"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -12801,7 +12801,7 @@ __metadata:
     subleveldown: "npm:^6.0.1"
     tslib: "npm:2.6.2"
     tsx: "npm:4.19.3"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
     zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
@@ -16313,7 +16313,7 @@ __metadata:
     ts-jest: "npm:~29.1.1"
     tslib: "npm:2.6.2"
     tsx: "npm:4.19.3"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
     zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
@@ -33794,7 +33794,7 @@ __metadata:
     handlebars: "npm:4.7.8"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -33833,7 +33833,7 @@ __metadata:
     react-use-websocket: "npm:4.5.0"
     ts-node: "npm:10.9.1"
     tslib: "npm:2.6.2"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
     zustand: "npm:3.6.9"
   languageName: unknown
   linkType: soft
@@ -33864,7 +33864,7 @@ __metadata:
     shx: "npm:^0.3.4"
     terser: "npm:5.16.9"
     ts-morph: "npm:20.0.0"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
     uuid: "npm:9.0.0"
     zustand: "npm:3.6.9"
   languageName: unknown
@@ -33883,7 +33883,7 @@ __metadata:
     jest: "npm:~29.7.0"
     mqtt: "npm:^5.2.1"
     ts-jest: "npm:~29.1.1"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
     zod: "npm:^3.22.2"
     zod-to-json-schema: "npm:3.23.5"
   languageName: unknown
@@ -33988,7 +33988,7 @@ __metadata:
     mqtt: "npm:^5.2.1"
     pino-http: "npm:9.0.0"
     protobase: "npm:*"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
 
@@ -40689,6 +40689,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"typescript@npm:5.8.2":
+  version: 5.8.2
+  resolution: "typescript@npm:5.8.2"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/dbc2168a55d56771f4d581997be52bab5cbc09734fec976cfbaabd787e61fb4c6cf9125fd48c6f98054ce549c77ecedefc7f64252a830dd8e9c3381f61fbeb78
+  languageName: node
+  linkType: hard
+
 "typescript@npm:^5.0.4":
   version: 5.5.3
   resolution: "typescript@npm:5.5.3"
@@ -40716,6 +40726,16 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10/5659316360b5cc2d6f5931b346401fa534107b68b60179cf14970e27978f0936c1d5c46f4b5b8175f8cba0430f522b3ce355b4b724c0ea36ce6c0347fab25afd
+  languageName: node
+  linkType: hard
+
+"typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>":
+  version: 5.8.2
+  resolution: "typescript@patch:typescript@npm%3A5.8.2#optional!builtin<compat/typescript>::version=5.8.2&hash=d69c25"
+  bin:
+    tsc: bin/tsc
+    tsserver: bin/tsserver
+  checksum: 10/6ae9b2c4d3254ec2eaee6f26ed997e19c02177a212422993209f81e87092b2bb0a4738085549c5b0164982a5609364c047c72aeb281f6c8d802cd0d1c6f0d353
   languageName: node
   linkType: hard
 
@@ -41838,7 +41858,7 @@ __metadata:
     ts-jest: "npm:~29.1.1"
     ts-node: "npm:10.9.1"
     tslib: "npm:2.6.2"
-    typescript: "npm:~5.3.3"
+    typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
 
