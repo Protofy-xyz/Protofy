@@ -83,8 +83,6 @@ const useCards = () => {
 
 export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
   const availableCards = useCards()
-
-  console.log('availableCards', availableCards)
   const [selectedCard, setSelectedCard] = useState('value')
   const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
 
