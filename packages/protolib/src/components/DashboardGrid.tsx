@@ -10,6 +10,7 @@ export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, pad
         <Tinted>
             <ResponsiveGridLayout
                 compactType={null}
+                allowOverlap={true}
                 {...props}
                 className="layout"
                 layouts={layouts}
