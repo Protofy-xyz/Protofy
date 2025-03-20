@@ -255,7 +255,9 @@ export const BoardsAPI = (app, context) => {
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                         const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
-                        if (prevValue !== value) {
+
+                        if (prevValue != value) {
+                            // console.log('Prev value: ', prevValue, 'New value: ', value)
                             // logger.info({ card, value, prevValue }, "New value for card " + card.key + ' name: ' + card.name);
                             // logger.info({ card, value }, "New value for card " + card.key);
                             // logger.info({ newValue: value, oldValue: states['boards'][boardId] }, "Setting value for card " + card.key);
