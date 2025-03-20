@@ -32,7 +32,7 @@ import {
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
 
-const enableBoards = false
+const enableBoards = true
 
 export default ({ pages, boards }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin')
