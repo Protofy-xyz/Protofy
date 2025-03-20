@@ -106,7 +106,7 @@ const cardAction = ({data}) => {
                 Run
             </button>
         </form>
-        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." style="padding: 10px;resize: none; height: 100%; flex: 1; margin-bottom: 0px; margin-top: 20px;width: 100%;border:1px solid var(--gray7)" class="no-drag"></textarea>
+        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." style="display: \${data.displayResponse?"block":"none"};padding: 10px;resize: none; height: 100%; flex: 1; margin-bottom: 0px; margin-top: 20px;width: 100%;border:1px solid var(--gray7)" class="no-drag"></textarea>
     </div>
     \`;
 }
