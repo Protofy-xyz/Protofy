@@ -1,11 +1,12 @@
-import { YStack, XStack, Spacer, ScrollView, useThemeName } from '@my/ui'
+import { YStack, XStack, Spacer, ScrollView, useThemeName, Input } from '@my/ui'
 import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
 import { TemplatePreview } from '../../bundles/pages/TemplatePreview';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 import { useProtoStates } from '../../bundles/protomemdb/lib/useProtoStates'
+import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
 
 const SelectGrid = ({ children }) => {
   return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
@@ -14,24 +15,56 @@ const SelectGrid = ({ children }) => {
 }
 
 const FirstSlide = ({ selected, setSelected, options }) => {
-  const themeName = useThemeName();
-  return <YStack>
-    <ScrollView mah={"500px"}>
-      <SelectGrid>
-        {options.map((option) => (
-          <TemplatePreview
-            from="boards"
-            theme={themeName}
-            template={option}
-            isSelected={selected?.id === option.id}
-            onPress={() => setSelected(option)}
-          />
-        ))}
-      </SelectGrid>
-    </ScrollView>
-    <Spacer marginBottom="$8" />
-  </YStack>
+  const themeName = useThemeName()
+  const [search, setSearch] = useState('')
+
+  const filteredOptions = useMemo(() => {
+    const lowerSearch = search.toLowerCase()
+    return options.filter(opt => {
+      return opt.name?.toLowerCase().includes(lowerSearch)
+    })
+  }, [options, search])
+
+  return (
+    <YStack>
+      <XStack pb={8} mt={-15} mb={15} position="relative">
+        <Search pos="absolute" left="$3" top={14} size={16} pointerEvents="none" />
+        <Input
+          bg="$gray1"
+          color="$gray12"
+          paddingLeft="$7"
+          bw={0}
+          h="47px"
+          boc="$gray6"
+          w="100%"
+          placeholder="search..."
+          placeholderTextColor="$gray9"
+          outlineColor="$gray8"
+          value={search}
+          onChangeText={setSearch}
+        />
+      </XStack>
+
+      <ScrollView mah="500px" minHeight={500}>
+        <SelectGrid>
+          {filteredOptions.map((option) => (
+            <TemplatePreview
+              key={option.id}
+              from="boards"
+              theme={themeName}
+              template={option}
+              isSelected={selected?.id === option.id}
+              onPress={() => setSelected(option)}
+            />
+          ))}
+        </SelectGrid>
+      </ScrollView>
+
+      <Spacer marginBottom="$8" />
+    </YStack>
+  )
 }
+
 
 const iconTable = {
   'value': 'tag',
@@ -106,7 +139,7 @@ function flattenTree(obj) {
 }
 const useCards = (extraCards =[]) => {
   const availableCards = useProtoStates({}, 'cards/#', 'cards')
-  return [...flattenTree(availableCards), ...extraCards]
+  return [...extraCards, ...flattenTree(availableCards)]
 }
 
 export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
