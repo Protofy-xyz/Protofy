@@ -349,7 +349,7 @@ export const BoardsAPI = (app, context) => {
             `);
 
             const response = await wrapper(states, req.query, token, API);
-            res.send({response: response});
+            res.json(response);
         } catch (error) {
             logger.error({ error }, "Error executing action");
             if (error instanceof HttpError) {

@@ -20,8 +20,15 @@ const {{codeName}}API = AutoAPI({
     prefix: prefix
 })
 
+const {{codeName}}Actions = AutoActions({
+    modelName: name,
+    modelType: Objects.{{object}},
+    prefix: prefix
+})
+
 export default Protofy("code", async (app:Application, context: typeof APIContext) => {
-    {{codeName}}API(app, context) 
+    {{codeName}}API(app, context)
+    {{codeName}}Actions(app, context)
     //you can add more apis here, like:
     /*
     app.get('/api/v1/test/{{codeName}}', (req, res) => {
