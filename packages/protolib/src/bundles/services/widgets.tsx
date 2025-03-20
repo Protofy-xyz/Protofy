@@ -77,9 +77,15 @@ const card = ({ content, style = '' }) => {
 
 const cardAction = ({data}) => {
     return \`
-    <div style="display: flex; flex-direction: column; width:100%;height: 100%;">
+    <div style="
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    ">
         <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
-        <form onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
+        <form style="width:100%" onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
             \${Object.keys(data.params || {}).map(key => \`
                 <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
                 <input class="no-drag" type="text" name="\${key}" style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px;" placeholder="\${data.params[key]}">
@@ -88,9 +94,10 @@ const cardAction = ({data}) => {
                 class="no-drag" 
                 type="submit" 
                 style="
+                    text-align: center;
                     width: 100%; 
                     padding: 10px; 
-                    margin-top: 10px; 
+                    margin-top: 15px; 
                     background-color: \${data.color}; 
                     color: white; 
                     border: none; 
@@ -114,6 +121,7 @@ const cardAction = ({data}) => {
 const cardValue = ({ value, style = '' }) => {
     return \`
         <div style="
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;

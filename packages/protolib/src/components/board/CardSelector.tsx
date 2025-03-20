@@ -2,7 +2,7 @@ import { YStack, XStack, Spacer, ScrollView, useThemeName } from '@my/ui'
 import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
 import { TemplatePreview } from '../../bundles/pages/TemplatePreview';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 
@@ -54,6 +54,9 @@ export const CardSelector = ({ defaults={}, cards, addOpened, setAddOpened, onFi
   const [selectedCard, setSelectedCard] = useState('value')
   const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
 
+  useEffect(() => {
+    setCard({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
+  }, [selectedCard])
   return <AlertDialog
     integratedChat
     p={"$2"}
