@@ -41,7 +41,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
         />
     }, [resolvedTheme, savedCode.current])
 
-    return <YStack w="100%" backgroundColor="transparent" p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
+    return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
         <Tinted>
             <PanelGroup direction="vertical">
                 <Panel defaultSize={66} minSize={20} maxSize={80}>
