@@ -30,6 +30,7 @@ import { IconsAPI } from './icons/iconsAPI'
 import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
+import { WhatsappAPI } from './whatsapp/whatsappAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
@@ -64,4 +65,5 @@ export const AdminAPIBundles = (app, context) => {
   IconsAPI(app, context)
   VisionAPI(app, context)
   MobileAPI(app, context)
+  WhatsappAPI(app, context)
 }
