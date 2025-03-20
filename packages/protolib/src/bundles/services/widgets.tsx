@@ -74,12 +74,13 @@ const card = ({ content, style = '' }) => {
         </div>
     \`;
 };
-
 const cardAction = ({ data }) => {
     const margin = 10;
     const keys = Object.keys(data.params || {});
-    const longestKey = keys.reduce((acc, cur) => (cur.length > acc.length ? cur : acc), '');
-    const labelWidth = longestKey.length * 8 + margin;
+    const longestKey = keys.reduce((acc, cur) => (
+        cur.length > acc.length ? cur : acc
+    ), '');
+    const baseLabelWidth = longestKey.length * 8 + margin;
 
     return \`
     <div style="
@@ -88,64 +89,99 @@ const cardAction = ({ data }) => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        box-sizing: border-box;
     ">
-        <h3 style="width: 100%; margin-bottom: 20px; text-align: center; font-weight: bold;">\${data.name}</h3>
-        <form style="width: 100%;" onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
-            \${keys.length > 0 ? keys.map(key => \`
-                <div style="display: flex; align-items: center; width: 100%; margin-bottom: 5px;">
-                    <label style="
-                        display: inline-block; 
-                        font-weight: bold; 
-                        width: \${labelWidth}px;
-                        margin-right: 10px;
-                        text-align: left;
-                    ">\${key}</label>
-                    <input class="no-drag" type="text" name="\${key}" style="
-                        flex: 1; 
-                        padding: 5px; 
-                        border: 1px solid #ccc; 
-                        border-radius: 5px;
-                        box-sizing: border-box;
-                    " placeholder="\${data.params[key]}">
-                </div>
-            \`).join('') : ''}
-        <button 
-            class="no-drag" 
-            type="submit" 
-            style="
-                width: 100%;
-                max-width: 100%;
-                padding: 10px; 
-                text-align: center;
-                margin-top: 15px; 
-                background-color: \${data.color}; 
-                color: white; 
-                border: none; 
-                border-radius: 5px; 
-                cursor: pointer;
-                transition: filter 0.2s ease-in-out;
-                display: flex; 
-                align-items: center; 
-                justify-content: center;
-            "
-            onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
-            onmouseout="this.style.filter='none'"
-            onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
-            onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+        <form 
+            style="width: 100%;" 
+            onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
         >
-            Run
-        </button>
+            \${ 
+                keys.length > 0 
+                ? keys.map(key => \`
+                    <div style="
+                        display: flex; 
+                        align-items: center; 
+                        width: 100%; 
+                        margin-bottom: 5px;
+                        box-sizing: border-box;
+                    ">
+                        <label style="
+                            display: inline-block; 
+                            font-weight: bold;
+                            width: clamp(120px, \${baseLabelWidth}px, 200px);
+                            margin-right: 10px;
+                            text-align: left;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                        ">
+                            \${key}
+                        </label>
+                        <input 
+                            class="no-drag" 
+                            type="text" 
+                            name="\${key}" 
+                            style="
+                                flex: 1; 
+                                padding: 5px; 
+                                border: 1px solid #ccc; 
+                                border-radius: 5px;
+                                box-sizing: border-box;
+                                min-width: 100px;
+                            " 
+                            placeholder="\${data.params[key]}"
+                        >
+                    </div>
+                \`).join('') 
+                : ''
+            }
+
+            <button 
+                class="no-drag" 
+                type="submit" 
+                style="
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 10px; 
+                    text-align: center;
+                    margin-top: 15px; 
+                    background-color: \${data.color}; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 5px; 
+                    cursor: pointer;
+                    transition: filter 0.2s ease-in-out;
+                    display: flex; 
+                    align-items: center; 
+                    justify-content: center;
+                "
+                onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+                onmouseout="this.style.filter='none'"
+                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
+                onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+            >
+                Run
+            </button>
         </form>
-        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." 
-            style="display: \${data.displayResponse ? "block" : "none"};
-            padding: 10px;
-            resize: none; 
-            height: 100%; 
-            flex: 1; 
-            margin-bottom: 0px; 
-            margin-top: 20px;
-            width: 100%;
-            border:1px solid var(--gray7)" class="no-drag"></textarea>
+
+        <textarea 
+            id="\${data.name+'_response'}" 
+            readonly 
+            placeholder="responses will appear here..." 
+            style="
+                display: \${data.displayResponse ? 'block' : 'none'};
+                padding: 10px;
+                resize: none; 
+                height: 100%; 
+                flex: 1; 
+                margin-bottom: 0px; 
+                margin-top: 20px;
+                width: 100%;
+                border: 1px solid var(--gray7);
+                box-sizing: border-box;
+            " 
+            class="no-drag"
+        ></textarea>
     </div>
     \`;
 };
