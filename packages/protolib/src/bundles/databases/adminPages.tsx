@@ -47,17 +47,17 @@ export default {
                 "item": {
                     buttonCaption: "Backup",
                     title: "Create Backup",
-                    description: "Are you sure want to backup this database?"
+                    description: "Are you sure to backup this database?"
                 },
                 "bulk": {
                     buttonCaption: "Backup",
                     title: "Create Backups",
-                    description: "Are you sure want to backup " + numSelectedItems + " databases?"
+                    description: "Are you sure to backup " + numSelectedItems + " databases?"
                 },
                 "global": {
                     buttonCaption: "Backup all databases",
                     title: "Create Backups",
-                    description: "Are you sure want to backup all databases?"
+                    description: "Are you sure to backup all databases?"
                 }
             }
 

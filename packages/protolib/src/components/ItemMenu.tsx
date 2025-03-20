@@ -37,7 +37,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
                 setOpen(false);
             }}
             title={'Delete '}
-            description={"Are you sure want to delete this item?"}
+            description={"Are you sure to delete this item?"}
             w={280}
         >
             <YStack f={1} jc="center" ai="center">
