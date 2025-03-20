@@ -46,6 +46,7 @@ return card({
     \`
 });
 `
+
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
     <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
@@ -198,7 +199,7 @@ const Board = ({ board, icons }) => {
             displayResponse={item.displayResponse} 
             name={item.name} 
             color={item.color} 
-            icon={item.icon ? '/public/icons/' + item.icon +'.svg': undefined} 
+            icon={item.icon ? (item.html ? item.icon : '/public/icons/' + item.icon +'.svg'): undefined} 
             id={item.key} 
             title={item.name} 
             params={item.params} 

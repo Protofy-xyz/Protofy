@@ -1,10 +1,14 @@
 import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, TextArea } from '@my/ui';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getHTML } from '../bundles/widgets';
 
-const enableHTML = false 
+const enableHTML = true
 
 export const ActionRunner = ({ name, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
+    useEffect(() => {
+        if(!window['onRunListeners']) window['onRunListeners'] = {}
+        window['onRunListeners'][name] = onRun
+    }, [name])
     const [params, setParams] = useState({});
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState("");
@@ -18,7 +22,7 @@ export const ActionRunner = ({ name, displayResponse, html, caption = "Run", des
     }, [actionParams]);
     console.log("HTML", html)
     return (
-        <YStack alignItems="center" justifyContent="center">
+        <YStack f={1} width="100%" alignItems="center" justifyContent="center">
             {/* Si hay HTML, renderizarlo */}
             {html?.length > 0 && enableHTML && (
                 <div style={{ width: "100%", height: "100%" }}

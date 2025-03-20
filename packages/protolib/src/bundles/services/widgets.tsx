@@ -13,13 +13,29 @@ import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
 import React from 'react';
 
-export const viewLib = `
-const onSubmit = (card) => {
+const executeAction = `
+window.actionResponses = {};
+var executeAction = async (event, card) => {
             event.preventDefault();
             const formData = new FormData(event.target);
             const params = Object.fromEntries(formData.entries());
             console.log('Running action with params:', params, 'in card: ', card);
-}
+            const cleanedParams = {};
+            for (const key in params) {
+                if (params[key] || params[key] === "0") {
+                    cleanedParams[key] = params[key];
+                }
+            }
+            window.actionResponses[card.name] = await window.onRunListeners[card.name](card.name, cleanedParams);
+            const responseElement = document.getElementById(card.name + '_response');
+            if (responseElement) {
+                responseElement.value = JSON.stringify(window.actionResponses[card.name], null, 2);
+            }
+};
+`
+
+export const viewLib = `
+
 
 const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     return \`
@@ -43,12 +59,17 @@ const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
 const card = ({ content, style = '' }) => {
     return \`
         <div style="
+            height: 100%;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             \${style}
         ">
+            <script>
+                ${executeAction}
+            </script>
             \${content}
         </div>
     \`;
@@ -56,8 +77,9 @@ const card = ({ content, style = '' }) => {
 
 const cardAction = ({data}) => {
     return \`
-    <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
-        <form onsubmit="onSubmit(data)" >
+    <div style="display: flex; flex-direction: column; width:100%;height: 100%;">
+        <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
+        <form onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
             \${Object.keys(data.params || {}).map(key => \`
                 <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
                 <input class="no-drag" type="text" name="\${key}" style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px;" placeholder="\${data.params[key]}">
@@ -84,6 +106,8 @@ const cardAction = ({data}) => {
                 Run
             </button>
         </form>
+        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." style="padding: 10px;resize: none; height: 100%; flex: 1; margin-bottom: 0px; margin-top: 20px;width: 100%;border:1px solid var(--gray7)" class="no-drag"></textarea>
+    </div>
     \`;
 }
 
