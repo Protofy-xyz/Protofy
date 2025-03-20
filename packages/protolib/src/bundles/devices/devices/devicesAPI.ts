@@ -103,7 +103,8 @@ export const DevicesAPI = (app, context) => {
             return
         }
 
-        topicPub(mqtt, action.getEndpoint(), value == "undefined" ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : value)
+        //console.log("action value: ",value == undefined ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : value)
+        topicPub(mqtt, action.getEndpoint(), value == undefined ? action.data.payload?.type == "json" ? JSON.stringify(action.getValue()) : action.getValue() : value)
         
         res.send({
             subsystem: req.params.subsystem,
@@ -198,11 +199,11 @@ export const DevicesAPI = (app, context) => {
 
         const {yaml} = req.body
 
-        
+        registerActions()
+
         if(!fs.existsSync(devicesPath)) fs.mkdirSync(devicesPath)
         const devicePath = path.join(devicesPath, req.params.device)
         if(!fs.existsSync(devicePath)) fs.mkdirSync(devicePath)
-
         fs.writeFileSync(path.join(devicePath,"config.yaml"),yaml)
         fs.writeFileSync(path.join(devicePath,"config_"+ moment().format("DD_MM_YYYY_HH_mm_ss")+".yaml"),yaml)
 
