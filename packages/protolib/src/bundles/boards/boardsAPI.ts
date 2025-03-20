@@ -18,6 +18,8 @@ const logger = getLogger()
 const processTable = {}
 const autopilotState = {}
 
+const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
+
 const executeAction = `
 async function execute_action(url, params={}) {
     // console.log('Executing action: ', url, params);
@@ -245,11 +247,11 @@ export const BoardsAPI = (app, context) => {
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
 
-                    const wrapper = new Function('states', `
+                    const wrapper = new AsyncFunction('states', `
                         ${card.rulesCode}
                     `);
 
-                    let value = wrapper(states);
+                    let value = await wrapper(states);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                         const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
@@ -271,7 +273,7 @@ export const BoardsAPI = (app, context) => {
 
         if(autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
-            const wrapper = new Function('states', 'token', 'API', `
+            const wrapper = new AsyncFunction('states', 'token', 'API', `
                 ${fileContent.rulesCode}
                 ${executeAction}
             `);
@@ -341,7 +343,7 @@ export const BoardsAPI = (app, context) => {
             }
 
             const states = await context.state.getStateTree();
-            const wrapper = new Function('states', 'userParams', 'token', 'API', `
+            const wrapper = new AsyncFunction('states', 'userParams', 'token', 'API', `
                 ${executeAction}
                 ${action.rulesCode}
             `);

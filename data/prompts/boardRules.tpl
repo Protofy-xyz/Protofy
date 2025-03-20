@@ -9,6 +9,7 @@ The code has a variable called "states" in the scope, and should call the corres
     //states: state object with the current system state
 
     //call actions with: execute_action(action_url, actionParams)
+    //execute_action is an async function and some actions return values. If you are interested in the return value of an action, just await for it.
     //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
 </code_structure>
 
