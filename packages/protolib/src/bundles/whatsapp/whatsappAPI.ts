@@ -1,12 +1,11 @@
 import { API } from "protobase";
-import { DevicesModel } from ".";
-import { AutoAPI, handler, getServiceToken, getDeviceToken } from 'protonode'
-import { generateEvent } from "../../events/eventsLibrary";
+import { AutoAPI, handler, getServiceToken} from 'protonode'
+import { generateEvent } from "../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
-import { addAction } from "../../actions/context/addAction";
+import { addAction } from "../actions/context/addAction";
 
 const logger = getLogger()
 
@@ -17,17 +16,17 @@ export const WhatsappAPI = (app, context) => {
     
     // registerActions()
     addAction({
-        group: 'Whatsapp',
-        name: 'send-message'
-        url: `/api/core/v1/whatsApp/`,
-        tag: deviceInfo.data.name,
-        description: action.description ?? "",
-        ...!action.payload?.value ? {params: {value: "value to set"}}:{},
+        group: 'whatsapp',
+        name: 'message',
+        url: `/api/core/v1/whatsapp/send/message`,
+        tag: "send",
+        description: "send a whatsapp message to a phone number",
+        params: {phone: "E.164 format phone number started by + and country code. Example: +34666666666", message: "message value to send"},
         emitEvent: true
     })
 
-    app.get('/api/core/v1/whatsapp/send/message/:phone/:message', handler(async (req, res, session) => {
-        const { phone, message } = req.params
+    app.get('/api/core/v1/whatsapp/send/message', handler(async (req, res, session) => {
+        const { phone, message } = req.query
         // console.log("phone", phone)
         // console.log("message", message)
         if(!phone || !message){
@@ -48,7 +47,7 @@ export const WhatsappAPI = (app, context) => {
             res.send({result: "error"})
         }
     }))
-
+    
     app.get('/api/core/v1/whatsapp/qr/:phone/:message', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})

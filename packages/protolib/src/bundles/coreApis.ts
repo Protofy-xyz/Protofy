@@ -26,6 +26,7 @@ import { AgentsAPI } from './agents/agents/agentsApi'
 import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 import { AutomationsAPI } from './automations/automationsAPI'
 import { BoardsAPI } from './boards/boardsAPI'
+import { CardsAPI } from './cards/cardsAPI'
 import { IconsAPI } from './icons/iconsAPI'
 import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 import { VisionAPI } from './vision/visionAPI'
@@ -37,6 +38,7 @@ export const AdminAPIBundles = (app, context) => {
   ProtoMemDBAPI(app, context, true)
   AutomationsAPI(app, context)
   BoardsAPI(app, context)
+  CardsAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)
   ObjectsAPI(app, context)

@@ -31,8 +31,8 @@ export const setContext = async (options: {
     if(options.token) {
         // console.log('Setting value using api: ', value, 'for', group, tag, name)
         const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value??''}) 
-        // console.log('result: ', result)
-        if(options.emitEvent) {
+        
+        if(result && result.status == 'loaded' && result.data.changed && options.emitEvent) {
             generateEvent({
                 path: `${chunk}/${group}/${tag}/${name}/update`, 
                 from: "states",
@@ -42,6 +42,11 @@ export const setContext = async (options: {
             }, getServiceToken())
         }
     } else {
+        const prevData = ProtoMemDB(chunk).get(group, tag, name)
+        //deep compare
+        if(JSON.stringify(prevData) === JSON.stringify(value)) {
+            return
+        }
         ProtoMemDB(chunk).set(group, tag, name, value)
         // console.log('setting locally', value, 'for', group, tag, name)
         if(options.emitEvent) {

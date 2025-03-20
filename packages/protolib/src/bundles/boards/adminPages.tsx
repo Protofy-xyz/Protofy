@@ -103,14 +103,6 @@ const Board = ({ board, icons }) => {
   const [rulesOpened, setRulesOpened] = useState(false)
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
-  const availableCards = [{
-    name: 'Display value',
-    id: 'value'
-  },
-  {
-    name: 'Invoques an action',
-    id: 'action'
-  }]
 
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
   const actions = useProtoStates({}, 'actions/boards/' + board.name + '/#', 'actions')
@@ -125,9 +117,9 @@ const Board = ({ board, icons }) => {
   }
 
   useUpdateEffect(() => {
-    console.log('///////////////////////////////////////////////////////')
-    console.log('Board states: ', states)
-    console.log('///////////////////////////////////////////////////////')
+    // console.log('///////////////////////////////////////////////////////')
+    // console.log('Board states: ', states)
+    // console.log('///////////////////////////////////////////////////////')
     reloadBoard()
   }, [states, actions])
 
@@ -182,7 +174,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard html={item.html??defaultValueHTML} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
+        content: <ValueCard html={item.html} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
@@ -195,7 +187,7 @@ const Board = ({ board, icons }) => {
         return {
           ...item,
           content: <ActionCard 
-            html={item.html ?? defaultActionHTML} 
+            html={item.html} 
             displayResponse={item.displayResponse} 
             name={item.name} 
             color={item.color} 
@@ -269,7 +261,7 @@ const Board = ({ board, icons }) => {
         </XStack>
       </XStack>
 
-      <CardSelector defaults={{value: {html: defaultValueHTML}, action: {html: defaultActionHTML}}} cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector defaults={{value: {html: defaultValueHTML}, action: {html: defaultActionHTML}}} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>

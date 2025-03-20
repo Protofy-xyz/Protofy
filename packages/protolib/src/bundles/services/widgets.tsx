@@ -82,7 +82,13 @@ const cardAction = ({ data }) => {
     const labelWidth = longestKey.length * 8 + margin;
 
     return \`
-    <div style=" display: flex; flex-direction: column; width:100%;height: 100%;">
+    <div style="
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    ">
         <h3 style="margin-bottom:20px; text-align: center; font-weight: bold;">\${data.name}</h3>
         <form onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
             \${keys.map(key => \`
@@ -106,10 +112,10 @@ const cardAction = ({ data }) => {
             class="no-drag" 
             type="submit" 
             style="
-                margin-top: 25px !important;
                 width: 100%; 
                 padding: 10px; 
-                margin-top: 10px; 
+                text-align: center;
+                margin-top: 15px; 
                 background-color: \${data.color}; 
                 color: white; 
                 border: none; 
@@ -146,6 +152,7 @@ const cardAction = ({ data }) => {
 const cardValue = ({ value, style = '' }) => {
     return \`
         <div style="
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
