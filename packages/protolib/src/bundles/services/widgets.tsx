@@ -13,14 +13,14 @@ import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
 import React from 'react';
 
-const onSubmit = `
+export const viewLib = `
+const onSubmit = (card) => {
             event.preventDefault();
             const formData = new FormData(event.target);
             const params = Object.fromEntries(formData.entries());
-            console.log('Running action with params:', params);
-`
+            console.log('Running action with params:', params, 'in card: ', card);
+}
 
-export const viewLib = `
 const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     return \`
         <div style="
@@ -57,12 +57,30 @@ const card = ({ content, style = '' }) => {
 const cardAction = ({data}) => {
     return \`
     <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
-        <form onsubmit="${onSubmit}" >
+        <form onsubmit="onSubmit(data)" >
             \${Object.keys(data.params || {}).map(key => \`
                 <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
                 <input class="no-drag" type="text" name="\${key}" style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px;" placeholder="\${data.params[key]}">
             \`).join('')}
-            <button class="no-drag" type="submit" style="width: 100%; padding: 10px; margin-top: 10px; background-color: \${data.color}; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <button 
+                class="no-drag" 
+                type="submit" 
+                style="
+                    width: 100%; 
+                    padding: 10px; 
+                    margin-top: 10px; 
+                    background-color: \${data.color}; 
+                    color: white; 
+                    border: none; 
+                    border-radius: 5px; 
+                    cursor: pointer;
+                    transition: filter 0.2s ease-in-out;
+                "
+                onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+                onmouseout="this.style.filter='none'"
+                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
+                onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+            >
                 Run
             </button>
         </form>

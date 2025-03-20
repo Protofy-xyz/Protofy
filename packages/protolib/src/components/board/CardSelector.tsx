@@ -44,7 +44,7 @@ const SecondSlide = ({ defaults, card, selected, states, icons, actions, setCard
         <ValueCardSettings states={states} icons={icons} card={{...defaults[card.type], ...emptyCard}} onEdit={(data) => {
           setCard(data)
         }}/> :
-        <ActionCardSettings states={states} icons={icons} card={emptyCard} actions={actions} onEdit={(data) => {
+        <ActionCardSettings states={states} icons={icons} card={{...defaults[card.type], ...emptyCard}} actions={actions} onEdit={(data) => {
           setCard(data)
         }}/>}
   </YStack>
