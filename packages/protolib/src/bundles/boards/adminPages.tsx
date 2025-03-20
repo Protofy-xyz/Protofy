@@ -24,6 +24,7 @@ import { ActionCardSettings } from '../../components/autopilot/ActionCardSetting
 import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
+import BoardPreview from '../../components/board/BoardPreview'
 
 const sourceUrl = '/api/core/v1/boards'
 const defaultValueHTML = `
@@ -347,7 +348,15 @@ export default {
           )}
           model={BoardModel}
           pageState={pageState}
-          dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
+          dataTableGridProps={{
+            getCard: (element, width) => <BoardPreview
+              onDelete={async () => {
+                await API.get(`${sourceUrl}/${element.name}/delete`);
+              }}
+              onPress={() => router.push(`/boards/${element.name}`)}
+              element={element} width={width} />,
+          }}
+          defaultView={"grid"}
         />
       </AdminPage>)
     },
