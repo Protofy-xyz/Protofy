@@ -75,41 +75,73 @@ const card = ({ content, style = '' }) => {
     \`;
 };
 
-const cardAction = ({data}) => {
+const cardAction = ({ data }) => {
+    const margin = 10;
+    const keys = Object.keys(data.params || {});
+    const longestKey = keys.reduce((acc, cur) => (cur.length > acc.length ? cur : acc), '');
+    const labelWidth = longestKey.length * 8 + margin;
+
     return \`
-    <div style="display: flex; flex-direction: column; width:100%;height: 100%;">
-        <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
+    <div style=" display: flex; flex-direction: column; width:100%;height: 100%;">
+        <h3 style="margin-bottom:20px; text-align: center; font-weight: bold;">\${data.name}</h3>
         <form onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})' >
-            \${Object.keys(data.params || {}).map(key => \`
-                <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
-                <input class="no-drag" type="text" name="\${key}" style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px;" placeholder="\${data.params[key]}">
+            \${keys.map(key => \`
+                <div style=" display: flex; align-items: center; width: 100%; margin-bottom: 5px;">
+                    <label style="
+                        display: inline-block; 
+                        font-weight: bold; 
+                        min-width: \${labelWidth}px;
+                        margin-right: 10px;
+                        text-align: right;
+                    ">\${key}</label>
+                    <input class="no-drag" type="text" name="\${key}" style="
+                        flex: 1; 
+                        padding: 5px; 
+                        border: 1px solid #ccc; 
+                        border-radius: 5px;
+                    " placeholder="\${data.params[key]}">
+                </div>
             \`).join('')}
-            <button 
-                class="no-drag" 
-                type="submit" 
-                style="
-                    width: 100%; 
-                    padding: 10px; 
-                    margin-top: 10px; 
-                    background-color: \${data.color}; 
-                    color: white; 
-                    border: none; 
-                    border-radius: 5px; 
-                    cursor: pointer;
-                    transition: filter 0.2s ease-in-out;
-                "
-                onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
-                onmouseout="this.style.filter='none'"
-                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
-                onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
-            >
-                Run
-            </button>
+        <button 
+            class="no-drag" 
+            type="submit" 
+            style="
+                margin-top: 25px !important;
+                width: 100%; 
+                padding: 10px; 
+                margin-top: 10px; 
+                background-color: \${data.color}; 
+                color: white; 
+                border: none; 
+                border-radius: 5px; 
+                cursor: pointer;
+                transition: filter 0.2s ease-in-out;
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+            "
+            onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+            onmouseout="this.style.filter='none'"
+            onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
+            onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+        >
+            Run
+        </button>
         </form>
-        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." style="display: \${data.displayResponse?"block":"none"};padding: 10px;resize: none; height: 100%; flex: 1; margin-bottom: 0px; margin-top: 20px;width: 100%;border:1px solid var(--gray7)" class="no-drag"></textarea>
+        <textarea id="\${data.name+'_response'}" readonly placeholder="responses will appear here..." 
+            style="display: \${data.displayResponse ? "block" : "none"};
+            padding: 10px;
+            resize: none; 
+            height: 100%; 
+            flex: 1; 
+            margin-bottom: 0px; 
+            margin-top: 20px;
+            width: 100%;
+            border:1px solid var(--gray7)" class="no-drag"></textarea>
     </div>
     \`;
-}
+};
+
 
 const cardValue = ({ value, style = '' }) => {
     return \`
