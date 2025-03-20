@@ -42,7 +42,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
                     p="$3"
                 >
                     <Monaco
-                        path={'html-rules.ts'}
+                        path={'html-rules-'+data.name+'.ts'}
                         darkMode={resolvedTheme === 'dark'}
                         sourceCode={htmlCode}
                         onChange={(newCode) => {setCode(newCode); setHTMLCode(newCode)}}

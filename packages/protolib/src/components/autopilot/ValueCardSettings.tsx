@@ -49,7 +49,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             cardData={cardData}
                             setCardData={setCardData}
                         />}
-                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{icon: cardData.icon, color: cardData.color, value: card.value}}/>}
+                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value}}/>}
                     </Tinted>
 
                 </YStack>

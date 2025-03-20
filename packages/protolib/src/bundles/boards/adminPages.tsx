@@ -37,6 +37,16 @@ return card({
 });
 `
 
+const defaultActionHTML = `
+// data contains: data.icon, data.color, data.name, data.params
+return card({
+    content: \`
+        \${icon({ name: data.icon, color: data.color, size: '48' })}    
+        \${cardAction({ data })}
+    \`
+});
+`
+
 const CardIcon = ({ Icon, onPress }) => {
   return <Tinted>
     <XStack right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
@@ -65,7 +75,7 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
   </CenterCard>
 }
 
-const ActionCard = ({ id, displayResponse, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
+const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
       displayResponse={displayResponse}
@@ -75,6 +85,7 @@ const ActionCard = ({ id, displayResponse, name, title, params, icon = undefined
       onRun={onRun}
       icon={icon}
       color={color}
+      html={html}
     />
   </CenterCard>
 }
@@ -181,21 +192,33 @@ const Board = ({ board, icons }) => {
         }} />
       }
     } else if (item.type == 'action') {
-      return {
-        ...item,
-        content: <ActionCard displayResponse={item.displayResponse} name={item.name} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} params={item.params} onDelete={() => {
-          setIsDeleting(true)
-          setCurrentCard(item)
-        }} onEdit={() => {
-          setIsEditing(true)
-          setCurrentCard(item)
-          setEditedCard(item)
-        }} onRun={async (name, params) => {
-          const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&')
-          return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data
-        }} />
+        return {
+          ...item,
+          content: <ActionCard 
+            html={item.html ?? defaultActionHTML} 
+            displayResponse={item.displayResponse} 
+            name={item.name} 
+            color={item.color} 
+            icon={item.icon ? (item.html ? item.icon : '/public/icons/' + item.icon +'.svg'): undefined} 
+            id={item.key} 
+            title={item.name} 
+            params={item.params} 
+            onDelete={() => {
+              setIsDeleting(true);
+              setCurrentCard(item);
+            }} 
+            onEdit={() => {
+              setIsEditing(true);
+              setCurrentCard(item);
+              setEditedCard(item);
+            }} 
+            onRun={async (name, params) => {
+              const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
+              return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
+            }} 
+          />
+        };
       }
-    }
     return item
   })
 
@@ -246,7 +269,7 @@ const Board = ({ board, icons }) => {
         </XStack>
       </XStack>
 
-      <CardSelector defaults={{value: {html: defaultValueHTML}}} cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector defaults={{value: {html: defaultValueHTML}, action: {html: defaultActionHTML}}} cards={availableCards} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
         <Dialog.Portal zIndex={100000} overflow='hidden'>
@@ -263,7 +286,7 @@ const Board = ({ board, icons }) => {
             minHeight={750}
           >
             <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && currentCard.type == 'value' && <ValueCardSettings defaultHTML={defaultValueHTML} states={states} icons={icons} card={currentCard} onEdit={(data) => {
+            {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
               setEditedCard(data)
             }} />}
             {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
