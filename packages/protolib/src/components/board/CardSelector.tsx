@@ -5,7 +5,7 @@ import { TemplatePreview } from '../../bundles/pages/TemplatePreview';
 import { useEffect, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
-
+import { useProtoStates } from '../../bundles/protomemdb/lib/useProtoStates'
 const SelectGrid = ({ children }) => {
   return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
     {children}
@@ -50,7 +50,41 @@ const SecondSlide = ({ defaults, card, selected, states, icons, actions, setCard
   </YStack>
 }
 
-export const CardSelector = ({ defaults={}, cards, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
+const cards = [{
+  name: 'Display value',
+  id: 'value'
+},
+{
+  name: 'Invoques an action',
+  id: 'action'
+}]
+function flattenTree(obj) {
+  let leaves = [];
+
+  function traverse(node) {
+      if (node && typeof node === 'object') {
+          if (node.type) {
+              // Es una hoja, la añadimos al resultado
+              leaves.push(node);
+          } else {
+              // Recorremos las propiedades del nodo
+              Object.values(node).forEach(traverse);
+          }
+      }
+  }
+
+  traverse(obj);
+  return leaves;
+}
+const useCards = () => {
+  const availableCards = useProtoStates({}, 'cards/#', 'cards')
+  return flattenTree(availableCards)
+}
+
+export const CardSelector = ({ defaults={}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
+  const availableCards = useCards()
+
+  console.log('availableCards', availableCards)
   const [selectedCard, setSelectedCard] = useState('value')
   const [card, setCard] = useState({ key: "key", type:selectedCard, width: 2, height: 6, name: selectedCard, icon: iconTable[selectedCard] })
 

@@ -7,6 +7,7 @@ export const addCard = async (options: {
     group?: string,
     tag: string,
     name: string,
+    displayName?: string,
     description?: string,
     card: any,
     emitEvent?: boolean,
@@ -15,6 +16,7 @@ export const addCard = async (options: {
     const group = options.group || 'system'
     const name = options.name
     const tag = options.tag
+    const displayName = options.displayName || name
     const description = options.description || ''
     const card = options.card
 
@@ -37,6 +39,7 @@ export const addCard = async (options: {
         card: card,
         name: name,
         description: description,
+        displayName: displayName
     }
 
     if(options.token) {
