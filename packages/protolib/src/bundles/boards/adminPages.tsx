@@ -338,6 +338,7 @@ export default {
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}
+          onAdd={(data) =>{ router.push(`/boards/${data.name}`); return data }}
           name="Board"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
           onSelectItem={(item) => router.push(`/boards/${item.data.name}`)}
