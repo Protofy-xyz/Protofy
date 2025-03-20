@@ -27,6 +27,7 @@ import protomemdb from './protomemdb/context'
 import autopilot from './autopilot/context'
 import chatbots from './chatbots/context'
 import twilio from './twilio/context'
+import whatsapp from './whatsapp/context'
 
 
 export const APIContext = {
@@ -65,5 +66,6 @@ export const APIContext = {
     protomemdb,
     autopilot,
     chatbots,
-    twilio
+    twilio,
+    whatsapp
 }
