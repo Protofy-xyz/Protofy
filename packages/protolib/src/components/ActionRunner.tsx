@@ -20,7 +20,7 @@ export const ActionRunner = ({ name, displayResponse, html, caption = "Run", des
         const longestKey = keys.reduce((acc, cur) => (cur.length > acc.length ? cur : acc), '');
         return longestKey.length * 8 + margin;
     }, [actionParams]);
-    console.log("HTML", html)
+
     return (
         <YStack f={1} width="100%" alignItems="center" justifyContent="center">
             {/* Si hay HTML, renderizarlo */}

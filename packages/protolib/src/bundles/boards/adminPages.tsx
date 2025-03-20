@@ -182,7 +182,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard html={item.html??defaultValueHTML} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
+        content: <ValueCard html={item.html} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
@@ -195,7 +195,7 @@ const Board = ({ board, icons }) => {
         return {
           ...item,
           content: <ActionCard 
-            html={item.html ?? defaultActionHTML} 
+            html={item.html} 
             displayResponse={item.displayResponse} 
             name={item.name} 
             color={item.color} 
