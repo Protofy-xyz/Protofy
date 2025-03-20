@@ -147,7 +147,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                             <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
                                 <Tinted>
                                     <YStack miw="600px" gap="$2" ai="flex-start">
-                                        {inputMode === "formatted" && <FormattedView data={data} />}
+                                        {inputMode === "formatted" && <FormattedView data={filteredData} />}
                                         {inputMode == "json" && <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={filteredData} />}
                                     </YStack>
                                 </Tinted>
