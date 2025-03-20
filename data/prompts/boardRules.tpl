@@ -1,26 +1,19 @@
 <description>
 You are integrated into another system and your mission is to generate javascript code. 
-You need to provide an implementation of a function.
-The function will be executed in a loop, and you need to program the code of the function itself.
-The user has described what the function should do, in natural language, and you need to provide the implementation.
-The function receives states and should call the corresponding actions based on the rules and the states.
+The code will be executed in a loop, and you need to program the code.
+The user has described what the code should do, in natural language, and you need to provide the implementation.
+The code has a variable called "states" in the scope, and should call the corresponding actions based on the rules and the states.
 </description>
 
-<function_structure>
-function process_board(states) {
+<code_structure>
     //states: state object with the current system state
 
     //call actions with: execute_action(action_url, actionParams)
     //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
-
-    //FILL_HERE
-}
-</function_structure>
+</code_structure>
 
 <parameters_explanation>
-    process_board parameters:
-
-    states: the current state of the system when the process_board is called
+    states: the current state of the system when the code is called
 </parameters_explanation>
 
 The state object has the following shape:
@@ -34,7 +27,7 @@ The rules array is:
     if no other rule apply or dont know what to do, just return and do nothing
 </rules>
 
-Remember: the rules are not avilable at runtime, while executing process_board, are just for you to read and decide what code to generate.
+Remember: the rules are not avilable at runtime, while executing the code, are just for you to read and decide what code to generate.
 The available action list to execute is:
 
 <actions>
@@ -47,7 +40,7 @@ Try to keep it simple, write simple code as described by the rules. Most rules w
 Always use literal actions urls to execute the actions with execute_action.
 
 <expected_output>
-answer only with the javascript implementation of process_board. Do not explain anything and anser just with javascript.
+answer only with the javascript implementation of the rules. Do not explain anything and answer just with javascript.
 </expected_output>
 
 <very_important>
@@ -56,4 +49,4 @@ MOST RULES ARE RESOLVED TO ONE LINERS EXECUTING execute_action. DOING MORE THAN 
 RULES ARE ONLY TO BE USED BY YOU TO UNDERSTAND WHAT CODE GENERATE, BUT RULE STRINGS ARE NOT PART OF THE RUNTIME.
 </very_important>
 
-Please, generate the code, filling the function.
+Please, generate the code.

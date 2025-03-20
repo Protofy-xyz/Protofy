@@ -18,6 +18,16 @@ const logger = getLogger()
 const processTable = {}
 const autopilotState = {}
 
+const executeAction = `
+async function execute_action(url, params={}) {
+    // console.log('Executing action: ', url, params);
+    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+    //console.log('url: ', url+'?token='+token+'&'+paramsStr)
+    const response = await API.get(url+'?token='+token+'&'+paramsStr);
+    return response.data
+}
+`
+
 async function acquireLock(filePath) {
     while (writeLocks.has(filePath)) {
         await new Promise(resolve => setTimeout(resolve, 10)); // Espera 10ms antes de reintentar
@@ -263,14 +273,7 @@ export const BoardsAPI = (app, context) => {
             //evalute board autopilot rules
             const wrapper = new Function('states', 'token', 'API', `
                 ${fileContent.rulesCode}
-                async function execute_action(url, params={}) {
-                    // console.log('Executing action from board: ', url, params);
-                    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-                    // console.log('url: ', url+'?token='+token+'&'+paramsStr)
-                    const response = await API.get(url+'?token='+token+'&'+paramsStr);
-                    return response.data
-                }
-                return process_board(states);
+                ${executeAction}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API);
         }
@@ -339,14 +342,7 @@ export const BoardsAPI = (app, context) => {
 
             const states = await context.state.getStateTree();
             const wrapper = new Function('states', 'userParams', 'token', 'API', `
-
-                async function execute_action(url, params={}) {
-                    // console.log('Executing action: ', url, params);
-                    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-                    // console.log('url: ', url+'?token='+token+'&'+paramsStr)
-                    const response = await API.get(url+'?token='+token+'&'+paramsStr);
-                    return response.data
-                }
+                ${executeAction}
                 ${action.rulesCode}
             `);
 
@@ -430,7 +426,6 @@ export const BoardsAPI = (app, context) => {
                 const actionsCards = boardContent.cards.filter(c => c.type === 'action')
                 for (let i = 0; i < actionsCards.length; i++) {
                     const card = actionsCards[i];
-                    console.log("Adding action: ", JSON.stringify(card, null, 4)) 
                     addAction({
                         group: 'boards',
                         name: card.name,
