@@ -7,6 +7,7 @@ import * as fspath from 'path';
 import { getServiceToken } from "protonode";
 import {addAction} from '../actions/context/addAction';
 import { removeActions } from "../actions/context/removeActions";
+import fileActions from "../files/fileActions";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
@@ -20,13 +21,25 @@ const autopilotState = {}
 
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
-const executeAction = `
+const getExecuteAction = (actions) => `
+const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
-    // console.log('Executing action: ', url, params);
-    const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-    //console.log('url: ', url+'?token='+token+'&'+paramsStr)
-    const response = await API.get(url+'?token='+token+'&'+paramsStr);
-    return response.data
+    console.log('Executing action: ', url, params);
+    const action = actions.find(a => a.url === url);
+    if (!action) {
+        console.error('Action not found: ', url);
+        return;
+    }
+    if (action.method === 'post') {
+        const { token, ...data } = params;
+        const response = await API.post(url+'?token='+token, data);
+        return response.data
+    } else {
+        const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+        //console.log('url: ', url+'?token='+token+'&'+paramsStr)
+        const response = await API.get(url+'?token='+token+'&'+paramsStr);
+        return response.data
+    }
 }
 `
 
@@ -223,6 +236,22 @@ export const BoardsAPI = (app, context) => {
         }
     }
 
+    const getActions = async () => {
+        const actions = await context.state.getStateTree({ chunk: 'actions' });
+        const flatActions = []
+        const flatten = (obj, path) => {
+            if (obj.url) {
+                flatActions.push({ ...obj, path: path })
+            } else {
+                for (const key in obj) {
+                    flatten(obj[key], path + '/' + key)
+                }
+            }
+        }
+        flatten(actions, '')
+        return flatActions
+    }
+
     const reloadBoard = async (boardId) => {
         // console.log('**************Reloading board: ', boardId)
         const states = await context.state.getStateTree();
@@ -276,8 +305,8 @@ export const BoardsAPI = (app, context) => {
         if(autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
             const wrapper = new AsyncFunction('states', 'token', 'API', `
+                ${getExecuteAction(await getActions())}
                 ${fileContent.rulesCode}
-                ${executeAction}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API);
         }
@@ -291,6 +320,10 @@ export const BoardsAPI = (app, context) => {
         return code.replace(/^```[^\s]+/g, '').replace(/```/g, '').trim()
     }
     BoardsAutoAPI(app, context)
+
+    app.get('/api/core/v1/autopilot/actions', async (req, res) => {
+        res.send(await getActions());
+    });
     app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
@@ -346,7 +379,7 @@ export const BoardsAPI = (app, context) => {
 
             const states = await context.state.getStateTree();
             const wrapper = new AsyncFunction('states', 'userParams', 'token', 'API', `
-                ${executeAction}
+                ${getExecuteAction(await getActions())}
                 ${action.rulesCode}
             `);
 

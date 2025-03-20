@@ -58,11 +58,10 @@ export const AutoActions = ({
         emitEvent: true
     })
 
-    app.get(actionUrlPrefix+'/create', async (req, res) => {
-        const params = req.query;
+    app.post(actionUrlPrefix+'/create', async (req, res) => {
+        const params = req.body;
         try {
-            const { token, ...data } = params;
-            const result = await API.post(`${urlPrefix}`, data);
+            const result = await API.post(`${urlPrefix}`, params);
             if(result.isLoaded) {
                 return res.json(result.data);
             }
@@ -77,7 +76,7 @@ export const AutoActions = ({
         return {
             [key]: def[key].type+": "+def[key].description + (def[key].isId ? " (this will be used as the id of the element)" : "")
         }
-    })
+    }).reduce((acc, val) => ({...acc, ...val}), {});
 
     context.actions.add({
         group: 'objects',
@@ -87,6 +86,7 @@ export const AutoActions = ({
         description: `Creates a new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
         params: params,
         token: getServiceToken(),
-        emitEvent: true
+        emitEvent: true,
+        method: 'post'
     })
 }

@@ -9,6 +9,7 @@ export const addAction = async (options: {
     tag: string,
     name: string,
     description?: string,
+    method?: "get" | "post",
     params?: any,
     url: string,
     emitEvent?: boolean,
@@ -21,6 +22,7 @@ export const addAction = async (options: {
     const params = options.params || {}
     const url = options.url
     const chunk = options.chunk || 'actions'
+    const method = options.method || 'get'
 
     if(!name) {
         logger.error({}, "Action name is required");
@@ -41,7 +43,8 @@ export const addAction = async (options: {
         description: description,
         params: params,
         url: url,
-        name: name
+        name: name,
+        method: method
     }
     if(options.token) {
         // console.log('-----------------------------------------------')
