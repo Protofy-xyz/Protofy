@@ -64,9 +64,10 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
   </CenterCard>
 }
 
-const ActionCard = ({ id, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
+const ActionCard = ({ id, displayResponse, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
+      displayResponse={displayResponse}
       name={name}
       description={"Run action"}
       actionParams={params}
@@ -181,7 +182,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'action') {
       return {
         ...item,
-        content: <ActionCard name={item.name} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} params={item.params} onDelete={() => {
+        content: <ActionCard displayResponse={item.displayResponse} name={item.name} color={item.color} icon={item.icon ? '/public/icons/' + item.icon + '.svg' : undefined} id={item.key} title={item.name} params={item.params} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {
@@ -190,7 +191,7 @@ const Board = ({ board, icons }) => {
           setEditedCard(item)
         }} onRun={async (name, params) => {
           const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&')
-          await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)
+          return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data
         }} />
       }
     }

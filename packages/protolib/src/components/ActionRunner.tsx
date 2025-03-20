@@ -1,10 +1,11 @@
-import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner } from '@my/ui';
+import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, TextArea} from '@my/ui';
 import React from 'react';
 import { useMemo } from 'react'
 
-export const ActionRunner = ({ name, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
+export const ActionRunner = ({ name, displayResponse, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
     const [params, setParams] = React.useState({})
     const [loading, setLoading] = React.useState(false)
+    const [response, setResponse] = React.useState("")
     const labelWidth = useMemo(() => {
         const margin = 10
         const keys = Object.keys(actionParams)
@@ -60,6 +61,7 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                     </Tooltip>
                 )
             })}
+            {displayResponse && <TextArea editable={false} f={1} placeholder="Action responses will appear here..." width="100%" value={response}></TextArea>}
             <Tooltip>
                 <Tooltip.Trigger width={"100%"}>
                     <YStack alignItems="center" justifyContent="center">
@@ -75,7 +77,7 @@ export const ActionRunner = ({ name, caption = "Run", description = "", actionPa
                             }
                             setLoading(true)
                             try {
-                                await onRun(name, cleanedParams)
+                                setResponse(JSON.stringify(await onRun(name, cleanedParams), null, 2))
                             } catch (e) { } finally {
                                 setLoading(false)
                             }
