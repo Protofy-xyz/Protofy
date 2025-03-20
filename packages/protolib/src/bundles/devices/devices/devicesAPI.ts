@@ -60,13 +60,16 @@ export const DevicesAPI = (app, context) => {
                         emitEvent: true
                     })
 
+                    //http://localhost:8000/api/core/v1/cards to understand what this fills
                     addCard({
                         group: 'devices',
                         tag: deviceInfo.data.name,
+                        id: 'devices_'+deviceInfo.data.name+'_'+subsystem.name + '_' + action.name,
+                        templateName: 'device ' + deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
                         name: subsystem.name + '_' + action.name,
-                        displayName: 'device ' + deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
-                        description: action.description ?? "",
-                        card: {
+                        defaults: {
+                            name: deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
+                            description: action.description ?? "",
                             rulesCode: `return execute_action('/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}', userParams)`,
                             params: action.payload?.value ? {} : {value: "value to set"},
                             type: 'action'

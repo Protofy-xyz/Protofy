@@ -12,9 +12,11 @@ export const TemplatePreview = ({ from, template, isSelected, onPress, theme }) 
     return (
         <Tinted>
             <YStack id={from+"-template-" + template.id} onPress={onPress} onHoverIn={() => setPreviewVisible(true)} onHoverOut={() => setPreviewVisible(false)} overflow='hidden' borderWidth={isSelected ? "$1" : "$0.5"} borderColor={isSelected ? "$color7" : "$gray8"} cursor='pointer' borderRadius={"$3"}>
-                <Image
-                    source={{ height: height, width: width, uri: templateUrl }}
-                />
+                <XStack width={width} height={height}>
+                    <Image
+                        source={{ height: height, width: width, uri: templateUrl }}
+                    />
+                </XStack>
                 <YStack
                     display={previewVisible ? 'block' : 'none'}
                     zi={10000}
