@@ -41,11 +41,14 @@ export const AutoActions = ({
         id: 'object_'+modelName+'_exists',
         templateName: 'Check if '+modelName+' exists',
         defaults: {
+            displayResponse: true,
+            name: 'exists_product'
             type: 'action',
             description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
             params: {
                 id: 'id to look for'
-            }
+            },
+            rulesCode: `return execute_action("/api/v1/actions/${modelName}/exists", userParams)`
         },
         emitEvent: true,
         token: getServiceToken()
