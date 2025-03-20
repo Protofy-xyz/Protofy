@@ -32,7 +32,7 @@ import {
 
 import { DashboardCard } from 'protolib/components/DashboardCard'
 
-const enableBoards = true
+const enableBoards = true   
 
 export default ({ pages, boards }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin')
@@ -107,9 +107,9 @@ export default ({ pages, boards }) => {
         }],
         "menu": {
             ...(enableBoards) ? {
-                "Boards": (boards ? boards.map((board) => {
+                "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
                     return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
-                }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }])
+                }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }]))
             } : {},
             ...(adminPages.length ? {
                 "CMS": adminPages.map((page) => {
@@ -117,7 +117,6 @@ export default ({ pages, boards }) => {
                 })
             } : {}),
             "System": [
-                { "name": "Dashboard", "icon": LayoutDashboard, "href": "/workspace/dashboard" },
                 { "name": "Users", "icon": "users", "href": "/workspace/users" },
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
                 { "name": "Events", "icon": "activity", "href": "/workspace/events" },
