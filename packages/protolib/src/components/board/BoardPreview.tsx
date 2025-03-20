@@ -1,5 +1,4 @@
-import { YStack, Text, Button, useToastController, ScrollView, XStack } from '@my/ui';
-import { Protofy, API } from 'protobase'
+import { YStack, Text, XStack, Tooltip, Paragraph } from '@my/ui';
 import { Tinted } from '../Tinted';
 import { Sparkles } from "@tamagui/lucide-icons";
 import { BoardModel } from 'protolib/bundles/boards/boardsSchemas';
@@ -46,20 +45,29 @@ export default ({ element, width, onDelete, ...props }: any) => {
                         ? <XStack gap="$2" f={1} mah={"$9"} flexWrap="wrap" overflow="scroll">
                             {board.get("cards")?.map((card: any, index: number) => (
                                 <Tinted key={card.name}>
-                                    <YStack
-                                        h={"$3"}
-                                        w={"$3"}
-                                        br={card.type == "action" ? "$10" : "$2"}
-                                        jc={"center"}
-                                        ai={"center"}
-                                        bc={card.type == "action" ? "$yellow6" : "$blue6"}
-                                    >
-                                        <img
-                                            src={getIconUrl(card.icon)}
-                                            width={20}
-                                            height={20}
-                                        />
-                                    </YStack>
+                                    <Tooltip>
+                                        <Tooltip.Trigger>
+                                            <YStack
+                                                h={"$3"}
+                                                w={"$3"}
+                                                br={card.type == "action" ? "$10" : "$2"}
+                                                jc={"center"}
+                                                ai={"center"}
+                                                bc={card.color?? "$color6"}
+                                            >
+                                                <img
+                                                    src={getIconUrl(card.icon)}
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            </YStack>
+                                        </Tooltip.Trigger>
+                                        <Tooltip.Content>
+                                            <Tooltip.Arrow />
+                                            <Paragraph fow="600">{card.type}</Paragraph>
+                                            <Paragraph>{card.name}</Paragraph>
+                                        </Tooltip.Content>
+                                    </Tooltip>
                                 </Tinted>
                             ))}
                         </XStack>
