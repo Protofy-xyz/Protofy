@@ -13,6 +13,13 @@ import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
 import React from 'react';
 
+const onSubmit = `
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const params = Object.fromEntries(formData.entries());
+            console.log('Running action with params:', params);
+`
+
 export const viewLib = `
 const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     return \`
@@ -46,6 +53,21 @@ const card = ({ content, style = '' }) => {
         </div>
     \`;
 };
+
+const cardAction = ({data}) => {
+    return \`
+    <h3 style="text-align: center; font-weight: bold;">\${data.name}</h3>
+        <form onsubmit="${onSubmit}" >
+            \${Object.keys(data.params || {}).map(key => \`
+                <label style="display: block; font-weight: bold; margin-top: 5px;">\${key}</label>
+                <input class="no-drag" type="text" name="\${key}" style="width: 100%; padding: 5px; margin-bottom: 5px; border: 1px solid #ccc; border-radius: 5px;" placeholder="\${data.params[key]}">
+            \`).join('')}
+            <button class="no-drag" type="submit" style="width: 100%; padding: 10px; margin-top: 10px; background-color: \${data.color}; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                Run
+            </button>
+        </form>
+    \`;
+}
 
 const cardValue = ({ value, style = '' }) => {
     return \`
@@ -120,7 +142,7 @@ export const getHTML = (html, data) => {
             ${html}
         `);
         return wrapper(data);
-    } catch(e) {
+    } catch (e) {
         console.error(e);
         return '';
     }
@@ -129,7 +151,7 @@ export const getHTML = (html, data) => {
 export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div style={{width: "100%", height: '100%'}} dangerouslySetInnerHTML={{ __html: getHTML(html, {icon: Icon, value: value, color: color}) }} />}
+            {html?.length > 0 && <div style={{ width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { icon: Icon, value: value, color: color }) }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",
