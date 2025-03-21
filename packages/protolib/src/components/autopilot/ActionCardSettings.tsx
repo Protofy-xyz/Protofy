@@ -75,7 +75,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                 setCardData({ ...cardData, params: newParams })
               }
             />}
-            {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
+            {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
           </Tinted>
 
         </YStack>
