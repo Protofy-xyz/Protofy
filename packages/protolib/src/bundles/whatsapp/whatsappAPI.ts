@@ -73,6 +73,7 @@ const registerCards = async (context)=>{
             icon: "whatsapp",
             color: "#25d366",
             description: "whatsapp last received message",
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value.from+\" -> \"+data.value.content})}\n    `\n});\n",
             rulesCode: `return states.whatsapp.received.message`,
             type: 'value'
         },
@@ -190,7 +191,7 @@ export const WhatsappAPI = (app, context) => {
         try{
             const msg = JSON.parse(message)
             let payload = {from: cleanPhoneNumber(msg.From), content: msg.Body}
-            context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: formatMessage(payload), emitEvent: true });
+            context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: payload, emitEvent: true });
             if(ONLY_LAST_MESSAGE) return
             const prevValue = await context.state.get({ group: 'whatsapp', tag: "received", name: "messages", defaultValue: [] });
             // console.log("prevValue::::::::::::::: ", prevValue)
