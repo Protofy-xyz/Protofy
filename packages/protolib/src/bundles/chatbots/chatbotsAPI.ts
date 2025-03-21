@@ -5,6 +5,8 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
+import { addAction } from "../actions/context/addAction";
+import { addCard } from "../cards/context/addCard";
 
 const chatbotDirPath = "/packages/app/chatbots/"
 const ChatbotDir = (root) => fspath.join(root, chatbotDirPath)
@@ -13,15 +15,15 @@ const indexFilePath = fspath.join(getRoot(), chatbotDirPath, "index.ts")
 const getChatbot = (name, req, extension?) => {
   let engine
   let filePath = ChatbotDir(getRoot(req)) + name
-  if(extension) {
+  if (extension) {
     filePath += extension
     engine = extension === '.ts' ? 'typescript' : 'python'
   } else {
-    if(fsSync.existsSync(filePath + '.ts')) {
+    if (fsSync.existsSync(filePath + '.ts')) {
       filePath += '.ts'
       engine = "typescript"
       extension = '.ts'
-    } else if(fsSync.existsSync(filePath + '.py')) {
+    } else if (fsSync.existsSync(filePath + '.py')) {
       filePath += '.py'
       engine = "python"
       extension = '.py'
@@ -46,7 +48,7 @@ const getChatbot = (name, req, extension?) => {
 
 const deleteChatbot = (req, key, value) => {
   const api = getChatbot(fspath.basename(key), req)
-  if(api.engine === 'typescript') {
+  if (api.engine === 'typescript') {
     removeFileWithImports(getRoot(req), value, '"chatbots"', indexFilePath, req, fs);
   } else {
     fsSync.unlinkSync(getRoot(req) + api.filePath)
@@ -66,11 +68,12 @@ async function checkFileExists(filePath) {
 const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
-      const files = (await fs.readdir(ChatbotDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(ChatbotDir(getRoot(req)), f)).isDirectory() && (f.endsWith('.ts') || f.endsWith('.py')))    
+      const files = (await fs.readdir(ChatbotDir(getRoot(req)))).filter(f => f != 'index.ts' && !fsSync.lstatSync(fspath.join(ChatbotDir(getRoot(req)), f)).isDirectory() && (f.endsWith('.ts') || f.endsWith('.py')))
       const chatbots = await Promise.all(files.map(async f => {
         const name = f.replace(/\.[^/.]+$/, "")
         const extension = f.endsWith('.ts') ? '.ts' : '.py'
-        return getChatbot(name, req, extension)} 
+        return getChatbot(name, req, extension)
+      }
       ));
 
       for (const chatbot of chatbots) {
@@ -139,7 +142,7 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const ChatbotsAPI = AutoAPI({
+const ChatbotsAutoAPI = AutoAPI({
   modelName: 'chatbots',
   modelType: ChatbotModel,
   prefix: '/api/core/v1/',
@@ -147,3 +150,65 @@ export const ChatbotsAPI = AutoAPI({
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })
+
+export const ChatbotsAPI = (app, context) => {
+  ChatbotsAutoAPI(app, context)
+
+  app.get('/api/core/v1/chatbot/send', async (req, res) => {
+    const { message } = req.query
+    const to = 'all'
+    if (!message) {
+      res.status(400).send('Missing message parameter')
+      return
+    }
+    context.chatbots.sendChat(getServiceToken(), to, message)
+    res.status(200).send('Message sent')
+  });
+
+  addAction({
+    group: 'chat',
+    name: 'send',
+    url: "/api/core/v1/chatbot/send",
+    tag: 'message',
+    description: "Send a chat message to the user",
+    params: {
+      message: "the message to send"
+    },
+    emitEvent: true
+  })
+
+  addCard({
+    group: 'chat',
+    tag: 'message',
+    id: 'send',
+    templateName: 'Send chat message',
+    name: 'chat_send',
+    defaults: {
+      type: "action",
+      icon: 'message-square-text',
+      name: 'send_chat',
+      description: 'Send chat message',
+      params: {
+        message: "Message to send to the user, just a text"
+      },
+      rulesCode: `return await execute_action("/api/core/v1/chatbot/send", userParams)`,
+    },
+    emitEvent: true,
+  })
+
+  addCard({
+    group: 'chat',
+    tag: 'message',
+    id: 'last_message',
+    templateName: 'Receive chat messages',
+    name: 'chat_last_message',
+    defaults: {
+      type: "value",
+      icon: 'messages-square',
+      name: 'chat_message',
+      description: 'Last chat message',
+      rulesCode: `return states.chat?.messages?.lastMessage;`,
+    },
+    emitEvent: true,
+  })
+}

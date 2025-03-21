@@ -1,10 +1,10 @@
 import { Protofy } from 'protobase'
 import assistantChatbot from "./assistant";
-import eventChat from './eventChat';
+import boardChat from './board';
 
 const chatbots = Protofy("chatbots", {
     assistant: assistantChatbot,
-    eventChat: eventChat
+    board: boardChat
 })
 
 export default (app, context) => {
