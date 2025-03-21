@@ -346,8 +346,8 @@ class NeopixelsBus {
                             state: "ON",
                             color: {
                                 r: 0,
-                                g: 0,
-                                b: 180
+                                g: 180,
+                                b: 0
                             },
                             effect: "none",
                             brightness: 255
