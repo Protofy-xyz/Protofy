@@ -405,6 +405,19 @@ else {
                             "b": { "type": "int", "minimum": 0, "maximum": 255 }
                         }
                     }
+                },
+                {
+                    name: 'clear',
+                    label: 'Clear display',
+                    description: 'Clear the display',
+                    endpoint: "/" + this.type + "/" + this.name + "/draw",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            "action": "clear"
+                        }
+                    }
                 }
             ]
         }
