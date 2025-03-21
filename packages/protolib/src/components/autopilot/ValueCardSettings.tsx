@@ -1,5 +1,5 @@
-import { Cog } from '@tamagui/lucide-icons'
-import { YStack, XStack, Label, ToggleGroup, ScrollView, Paragraph, Switch } from '@my/ui'
+import { Braces, Monitor, ClipboardList } from '@tamagui/lucide-icons'
+import { YStack, XStack, ToggleGroup, ScrollView, Text } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -29,13 +29,28 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
         <ScrollView space="$4" padding="$4" mah={"70vh"}>
             <Tinted>
                 <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
-                <YStack mt="$5" height={650} pb="$-5">
-                    <Label mt="$-2" mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
-                    <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
+                <YStack height={650} pb="$-5">
+                    <XStack m="$5" width={"100%"} pt="$0" pr="$1" mt={"$8"} jc="center">
+                        {/* @ts-ignore */}
                         <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-                            <ToggleGroup.Item value="rules">Value</ToggleGroup.Item>
-                            <ToggleGroup.Item value="view">Display</ToggleGroup.Item>
-                            <ToggleGroup.Item value="raw">Raw</ToggleGroup.Item>
+                            <ToggleGroup.Item value="rules">
+                                <XStack gap={"$2"} ai={"center"}>
+                                    <ClipboardList size={"$1"} />
+                                    <Text>Value</Text>
+                                </XStack >
+                            </ToggleGroup.Item>
+                            <ToggleGroup.Item value="view">
+                                <XStack gap={"$2"} ai={"center"}>
+                                    <Monitor size={"$1"} />
+                                    <Text>Display</Text>
+                                </XStack >
+                            </ToggleGroup.Item>
+                            <ToggleGroup.Item value="raw">
+                                <XStack gap={"$2"} ai={"center"}>
+                                    <Braces size={"$1"} />
+                                    <Text>Raw</Text>
+                                </XStack >
+                            </ToggleGroup.Item>
                         </ToggleGroup>
                     </XStack>
                     <Tinted>

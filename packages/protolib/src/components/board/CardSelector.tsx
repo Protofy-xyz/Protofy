@@ -99,7 +99,7 @@ const iconTable = {
 }
 
 const SecondSlide = ({ card, selected, states, icons, actions, setCard }) => {
-  return <YStack>
+  return <YStack mb={"$4"}>
     {card?.type == "value" ?
       <ValueCardSettings states={states} icons={icons} card={card} onEdit={(data) => {
         setCard(data)
