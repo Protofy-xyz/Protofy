@@ -194,8 +194,9 @@ const cardValue = ({ value, style = '' }) => {
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
-            font-weight: bold
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 20px;
             \${style}           
         ">
             \${value}
@@ -285,7 +286,7 @@ export const CardValue = ({ Icon, value, html, color = "var(--color7)", ...props
                     WebkitMaskPosition: "center"
                 }} /> :
                     <Icon color={color} size={48} strokeWidth={1.75} />}
-                <Text userSelect="none" mt={10} fontSize={48} fontWeight="bold" color="$primary">
+                <Text userSelect="none" mt={10} fontSize={30} fontWeight="bold" color="$primary">
                     {React.isValidElement(value) || typeof value === 'string' || typeof value == 'number' ? value : 'N/A'}
                 </Text>
             </>}

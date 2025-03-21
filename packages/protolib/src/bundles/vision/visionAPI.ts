@@ -54,9 +54,6 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
                     `
             const url = params.url;
             const response = parseFloat(await sendPromptWithImage(preprompt + params.prompt, url));
-            if (params.name) {
-                context.state.set({ group: 'vision', tag: 'detect', name: params.name, value: response, emitEvent: true });
-            }
             console.log("response", response);
             return { response };
         } catch (e) {
@@ -74,7 +71,6 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
         tag: 'basic',
         description: "basic object detection, give an object description and get a confidence",
         params: {
-            name: "detection name",
             url: "image url",
             prompt: "what to detect in the image",
         },
@@ -92,7 +88,11 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             icon: 'camera',
             name: 'camera preview',
             description: 'displays a camera preview, only for preview purposes, it doesn\'t contains the camera stream',
-            html: 'return `<img style="width: 100%" src="http://IP_HERE:8080/video" />`'
+            html: 'return `<img style="width: 100%" src="${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.streamPath}" />`',
+            streamAddr: 'IP_HERE',
+            streamPort: '8080',
+            streamPath: '/video',
+            streamProtocol: 'http://'
         },
         emitEvent: true,
     })
