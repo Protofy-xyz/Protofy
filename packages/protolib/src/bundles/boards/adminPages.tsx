@@ -1,4 +1,4 @@
-import { ArrowLeft, BookOpen, Plus, Settings, Sparkles, Tag, Trash2 } from '@tamagui/lucide-icons'
+import { ArrowLeft, BookOpen, Plus, Save, Settings, Sparkles, Tag, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
@@ -7,7 +7,7 @@ import { AdminPage } from "../../components/AdminPage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button } from '@my/ui'
 import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
@@ -25,6 +25,8 @@ import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from '../../components/board/BoardPreview'
+import { Monaco } from 'protolib/components/Monaco'
+import { usePageParams } from 'protolib/next'
 
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress }) => {
@@ -83,6 +85,10 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
+  const [boarCode, setBoardCode] = useState(JSON.stringify(board))
+  const { query, removeReplace, push } = usePageParams()
+  const isJSONView = query.json == 'true'
+
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
 
@@ -96,6 +102,16 @@ const Board = ({ board, icons }) => {
       if (!newItems || newItems.length == 0) newItems = [addCard]
       setItems(newItems)
     }
+  }
+
+  const getParsedJSON = (rawJson) => {
+    let result = rawJson
+    try {
+      const parsed = JSON.parse(rawJson)
+      result = JSON.stringify(parsed, null, 2)
+    } catch (err) { }
+
+    return result
   }
 
   useEffect(() => {
@@ -154,6 +170,21 @@ const Board = ({ board, icons }) => {
     });
   };
 
+  const onEditBoard = async () => {
+    try {
+      const newBoard = JSON.parse(boarCode)
+      const boardRes = await API.post(`/api/core/v1/boards/${board.name}`, newBoard)
+      if (!boardRes.isError) {
+        boardRef.current = newBoard
+        setItems(newBoard.cards)
+        push('json', 'false')
+        removeReplace('json')
+      }
+    } catch (err) {
+      alert('Error editing board')
+    }
+  }
+
   //fill items with react content, addWidget should be the last item
   const cards = items.map((item) => {
     if (item.type == 'addWidget') {
@@ -176,7 +207,7 @@ const Board = ({ board, icons }) => {
               bw={1}
               onPress={() => setAddOpened(true)}
             >
-                <Plus col={"$gray10"} size={60} />
+              <Plus col={"$gray10"} size={60} />
             </YStack>
           </YStack>
         </CenterCard>
@@ -241,34 +272,52 @@ const Board = ({ board, icons }) => {
         </XStack>
         {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
         <XStack f={1} alignItems='center' justifyContent='flex-end'>
-          <Tinted>
-            <XStack userSelect="none" ai="center" jc="center" mr="$5">
-              <XStack mr="$3">
-                <XStack opacity={rulesOpened ? 1.0 : 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
-                  setRulesOpened(!rulesOpened)
-                }}>
-                  <Sparkles size={25} color={autopilot ? "var(--color9)" : "var(--gray8)"} />
+          {
+            isJSONView
+              ? <Tinted>
+                <XStack userSelect="none" ai="center" jc="center" mr="$5" gap="$3">
+                  <Button
+                    icon={X}
+                    theme="red"
+                    scaleIcon={1.2}
+                    onPress={() => removeReplace('json')}
+                  />
+                  <Button
+                    icon={Save}
+                    scaleIcon={1.2}
+                    onPress={onEditBoard}
+                  />
+                </XStack>
+              </Tinted>
+              : <Tinted>
+                <XStack userSelect="none" ai="center" jc="center" mr="$5">
+                  <XStack mr="$3">
+                    <XStack opacity={rulesOpened ? 1.0 : 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
+                      setRulesOpened(!rulesOpened)
+                    }}>
+                      <Sparkles size={25} color={autopilot ? "var(--color9)" : "var(--gray8)"} />
+                    </XStack>
+
+                  </XStack>
+                  <Paragraph size="$3" fontWeight="400" mr="$4">Autopilot</Paragraph>
+                  <Switch size="$2" checked={autopilot} onCheckedChange={async (checked) => {
+                    setAutopilot(checked)
+                    boardRef.current.autopilot = checked
+                    await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked ? 'on' : 'off'}`)
+                  }}>
+                    <Switch.Thumb animation="bouncy" />
+                  </Switch>
                 </XStack>
 
-              </XStack>
-              <Paragraph size="$3" fontWeight="400" mr="$4">Autopilot</Paragraph>
-              <Switch size="$2" checked={autopilot} onCheckedChange={async (checked) => {
-                setAutopilot(checked)
-                boardRef.current.autopilot = checked
-                await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked ? 'on' : 'off'}`)
-              }}>
-                <Switch.Thumb animation="bouncy" />
-              </Switch>
-            </XStack>
-
-            <DataViewActionButton
-              icon={(props) => <Plus {...props} color="var(--color10)" />}
-              description="Add"
-              onPress={async () => {
-                setAddOpened(true)
-              }}
-            />
-          </Tinted>
+                <DataViewActionButton
+                  icon={(props) => <Plus {...props} color="var(--color10)" />}
+                  description="Add"
+                  onPress={async () => {
+                    setAddOpened(true)
+                  }}
+                />
+              </Tinted>
+            }
         </XStack>
       </XStack>
 
@@ -327,17 +376,30 @@ const Board = ({ board, icons }) => {
       </AlertDialog>
       <XStack f={1}>
         <YStack f={1}>
-          <DashboardGrid
-            items={cards}
-            layouts={layouts}
-            borderRadius={10}
-            padding={10}
-            backgroundColor="white"
-            onLayoutChange={(layout, layouts) => {
-              boardRef.current.layouts = layouts
-              API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-            }}
-          />
+          {
+            isJSONView
+              ? <Monaco
+                language='json'
+                darkMode={resolvedTheme === 'dark'}
+                sourceCode={getParsedJSON(boarCode)}
+                onChange={setBoardCode}
+                options={{
+                  formatOnPaste: true,
+                  formatOnType: true
+                }}
+              />
+              : <DashboardGrid
+                items={cards}
+                layouts={layouts}
+                borderRadius={10}
+                padding={10}
+                backgroundColor="white"
+                onLayoutChange={(layout, layouts) => {
+                  boardRef.current.layouts = layouts
+                  API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                }}
+              />
+          }
         </YStack>
         {
           <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={60} width={810} height="80vh">
