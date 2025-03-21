@@ -42,7 +42,7 @@ export const AutoActions = ({
         templateName: 'Check if '+modelName+' exists',
         defaults: {
             displayResponse: true,
-            name: 'exists_product'
+            name: 'exists_product',
             type: 'action',
             description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
             params: {
