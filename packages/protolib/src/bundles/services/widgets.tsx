@@ -52,17 +52,14 @@ const card = ({ content, style = '' }) => {
 const cardAction = ({ data }) => {
     const margin = 10;
     const allKeys = Object.keys(data.params || {});
-    const visibleKeys = allKeys.filter(key => {
-        return data.configParams?.[key]?.visible !== false;
-    });
-
-    const longestKey = visibleKeys.reduce((acc, cur) => (
+    const longestKey = allKeys.reduce((acc, cur) => (
         cur.length > acc.length ? cur : acc
     ), '');
     const baseLabelWidth = longestKey.length * 8 + margin;
+    const dataString = JSON.stringify(data).replace(/'/g, "\\'");
 
     return \`
-    <div style="
+     <div style="
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -70,20 +67,34 @@ const cardAction = ({ data }) => {
         justify-content: center;
         box-sizing: border-box;
     ">
-        <form 
-            style="width: 100%; margin-top: 15px;" 
-            onsubmit='window.executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
+        <form
+            style="width: 100%; margin-top: 15px;"
+            onsubmit='window.executeAction(event, \${dataString})'
         >
-                \${ 
-                    visibleKeys.length > 0 
-                    ? visibleKeys.map(key => \`
+            \${ 
+                allKeys.map(key => {
+                    const cfg = data.configParams?.[key] || {};
+                    const { visible = true, defaultValue = '' } = cfg;
+                    const placeholder = data.params[key] ?? '';
+
+                    if (!visible) {
+                        return \`
+                            <input
+                                type="hidden"
+                                name="\${key}"
+                                value="\${defaultValue}"
+                            >
+                        \`;
+                    }
+
+                    return \`
                         <div style="
                             display: flex; 
                             width: 100%; 
                             margin-bottom: 10px;
                             box-sizing: border-box;
                             flex-direction: column;
-                            ">
+                        ">
                             <label style="
                                 display: inline-block; 
                                 font-weight: 500;
@@ -100,43 +111,43 @@ const cardAction = ({ data }) => {
                             ">
                                 \${key}
                             </label>
-                            <input 
-                                class="no-drag" 
-                                type="text" 
-                                name="\${key}" 
+                            <input
+                                class="no-drag"
+                                type="text"
+                                name="\${key}"
                                 style="
                                     background-color: var(--gray1);
-                                    flex: 1; 
-                                    padding: 5px 10px; 
-                                    border: 0.5px solid var(--gray7); 
+                                    flex: 1;
+                                    padding: 5px 10px;
+                                    border: 0.5px solid var(--gray7);
                                     border-radius: 8px;
                                     box-sizing: border-box;
                                     min-width: 100px;
-                                " 
-                                value ="\${data?.configParams?.[key]?.defaultValue ?? ''}"
-                                placeholder="\${data.params[key]}"
+                                "
+                                value="\${defaultValue}"
+                                placeholder="\${placeholder}"
                             >
                         </div>
-                    \`).join('') 
-                    : ''
-                }
+                    \`;
+                }).join('')
+            }
 
-            <button 
-                class="no-drag" 
-                type="submit" 
+            <button
+                class="no-drag"
+                type="submit"
                 style="
-                    width: 100%; 
+                    width: 100%;
                     max-width: 100%;
-                    padding: 10px; 
+                    padding: 10px;
                     text-align: center;
-                    margin-top: 15px; 
+                    margin-top: 15px;
                     background-color: \${data.color};
-                    border: none; 
+                    border: none;
                     border-radius: 8px;
                     cursor: pointer;
                     transition: filter 0.2s ease-in-out;
-                    display: flex; 
-                    align-items: center; 
+                    display: flex;
+                    align-items: center;
                     justify-content: center;
                 "
                 onmouseover="this.style.filter='brightness(1.05)'"
@@ -144,30 +155,32 @@ const cardAction = ({ data }) => {
                 onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
-                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">\${data.layout?.buttonLabel ? data.layout.buttonLabel : "Run"}</a>
+                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">
+                    \${data.layout?.buttonLabel ? data.layout.buttonLabel : "Run"}
+                </a>
             </button>
         </form>
 
-            <textarea 
-                id="\${data.name+'_response'}" 
-                readonly 
-                placeholder="Responses will appear here..." 
-                style="
-                    display: \${data.displayResponse ? 'block' : 'none'};
-                    padding: 10px;
-                    resize: none; 
-                    height: 100%; 
-                    flex: 1; 
-                    margin-bottom: 0px; 
-                    margin-top: 20px;
-                    width: 100%;
-                    border: 0.5px solid var(--gray7);
-                    border-radius: 8px;
-                    box-sizing: border-box;
-                    background-color: var(--gray1);
-                " 
-                class="no-drag"
-            ></textarea>
+        <textarea
+            id="\${data.name + '_response'}"
+            readonly
+            placeholder="Responses will appear here..."
+            style="
+                display: \${data.displayResponse ? 'block' : 'none'};
+                padding: 10px;
+                resize: none;
+                height: 100%;
+                flex: 1;
+                margin-bottom: 0px;
+                margin-top: 20px;
+                width: 100%;
+                border: 0.5px solid var(--gray7);
+                border-radius: 8px;
+                box-sizing: border-box;
+                background-color: var(--gray1);
+            "
+            class="no-drag"
+        ></textarea>
     </div>
     \`;
 };
