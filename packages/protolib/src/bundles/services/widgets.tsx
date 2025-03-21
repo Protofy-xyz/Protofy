@@ -8,9 +8,7 @@ import { ServiceModel } from './servicesSchema';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';
 import { PieChart } from '../../components/PieChart';
-
 import { LineChart, Cpu } from 'lucide-react'
-import Center from 'protolib/src/components/Center';
 import React from 'react';
 
 export const viewLib = `
@@ -50,10 +48,16 @@ const card = ({ content, style = '' }) => {
         </div>
     \`;
 };
+
 const cardAction = ({ data }) => {
     const margin = 10;
-    const keys = Object.keys(data.params || {});
-    const longestKey = keys.reduce((acc, cur) => (
+    const allKeys = Object.keys(data.params || {});
+    const visibleKeys = allKeys.filter(key => {
+        const cfg = data.configParams?.[key];
+        return cfg?.visible !== false;
+    });
+
+    const longestKey = visibleKeys.reduce((acc, cur) => (
         cur.length > acc.length ? cur : acc
     ), '');
     const baseLabelWidth = longestKey.length * 8 + margin;
@@ -72,8 +76,8 @@ const cardAction = ({ data }) => {
             onsubmit='window.executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
         >
                 \${ 
-                    keys.length > 0 
-                    ? keys.map(key => \`
+                    visibleKeys.length > 0 
+                    ? visibleKeys.map(key => \`
                         <div style="
                             display: flex; 
                             width: 100%; 
@@ -167,8 +171,6 @@ const cardAction = ({ data }) => {
     </div>
     \`;
 };
-
-
 
 
 const cardValue = ({ value, style = '' }) => {

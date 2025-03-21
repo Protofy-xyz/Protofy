@@ -71,9 +71,21 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
             />}
             {tab == 'params' && <ParamsEditor
               params={cardData.params || {}}
-              setParams={(newParams) =>
-                setCardData({ ...cardData, params: newParams })
-              }
+              setParams={(newParams) => {
+                console.log("hacemos setParams", newParams)
+                setCardData((prev) => ({
+                  ...prev,
+                  params: newParams,
+                }))
+              }}
+              configParams={cardData.configParams || {}}
+              setConfigParams={(newConfigParams) => {
+                console.log("hacemos setConfigParams", newConfigParams)
+                setCardData((prev) => ({
+                  ...prev,
+                  configParams: newConfigParams,
+                }))
+              }}
             />}
             {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
           </Tinted>
