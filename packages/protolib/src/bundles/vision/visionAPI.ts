@@ -43,8 +43,9 @@ const locks = {
 
 export const VisionAPI = async (app: Application, context: typeof APIContext) => {
     app.get('/api/core/v1/vision/detect', async (req, res) => {
-        if (locks["detect"]) return { error: "Another detection is in progress" };
+        if (locks["detect"]) return res.send({ error: "Another detection is in progress" });
         locks["detect"] = true;
+        console.log('init')
         try {
             const params = req.query;
             const preprompt = `
@@ -54,11 +55,10 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
                     `
             const url = params.url;
             const response = parseFloat(await sendPromptWithImage(preprompt + params.prompt, url));
-            console.log("response", response);
-            return { response };
+            res.send({ response });
         } catch (e) {
             console.error(e);
-            return { error: e.message };
+            res.send({ error: e.message });
         } finally {
             locks["detect"] = false;
         }
@@ -67,7 +67,7 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
     addAction({
         group: 'vision',
         name: 'detect',
-        url: "/api/core/v1/vision/detect/",
+        url: "/api/core/v1/vision/detect",
         tag: 'basic',
         description: "basic object detection, give an object description and get a confidence",
         params: {
@@ -79,20 +79,43 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
 
     addCard({
         group: 'vision',
-        tag: 'utils',
-        id: 'preview',
-        templateName: 'Preview camera',
-        name: 'vision_preview_camera',
+        tag: 'inputs',
+        id: 'camera',
+        templateName: 'IP Camera',
+        name: 'vision_camera',
         defaults: {
             type: "value",
             icon: 'camera',
-            name: 'camera preview',
-            description: 'displays a camera preview, only for preview purposes, it doesn\'t contains the camera stream',
+            name: 'camera',
+            description: 'Camera stream input',
             html: 'return `<img style="width: 100%" src="${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.streamPath}" />`',
+            rulesCode: 'return `${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.stillPath}`',
             streamAddr: 'IP_HERE',
             streamPort: '8080',
             streamPath: '/video',
+            stillPath: '/photo.jpg',
             streamProtocol: 'http://'
+        },
+        emitEvent: true,
+    })
+
+    addCard({
+        group: 'vision',
+        tag: 'actions',
+        id: 'detect',
+        templateName: 'Detect objects using AI',
+        name: 'vision_detect',
+        defaults: {
+            type: "action",
+            icon: 'camera',
+            name: 'detect',
+            description: 'Detect objects in the camera stream',
+            params: {
+                url: "camera stream url",
+                prompt: "what to detect in the image",
+            },
+            rulesCode: `return await execute_action("/api/core/v1/vision/detect", userParams)`,
+            displayResponse: true
         },
         emitEvent: true,
     })
