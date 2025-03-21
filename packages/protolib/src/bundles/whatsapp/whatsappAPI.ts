@@ -37,8 +37,24 @@ const registerActions = async (context)=>{
         emitEvent: true
     })
 }
-
 const registerCards = async (context)=>{
+    addCard({
+        group: 'whatsapp',
+        tag: "received",
+        id: 'whatsapp_received_messages',
+        templateName: "whatsapp received messages",
+        name: "messages",
+        defaults: {
+            name: "whatsapp_received_messages",
+            icon: "whatsapp",
+            color: "#25d366",
+            description: "received whatsapp messages",
+            rulesCode: `return states['whatsapp']['received']['messages'];`,
+            type: 'value'
+        },
+        emitEvent: true
+    })
+    
     addCard({
         group: 'whatsapp',
         tag: "message",
@@ -48,6 +64,7 @@ const registerCards = async (context)=>{
         defaults: {
             name: "whatsapp_message_send",
             icon: "whatsapp",
+            color: "#25d366",
             description: "send a whatsapp message to a phone number",
             rulesCode: `return execute_action("/api/core/v1/whatsapp/send/message", { phone: userParams.phone, message: userParams.message });`,
             params: {phone: "phone number", message: "message"},
@@ -65,6 +82,7 @@ const registerCards = async (context)=>{
         defaults: {
             name: "whatsapp_onboarding_qr",
             icon: "whatsapp",
+            color: "#25d366",
             html: `
 //data contains: data.value, data.icon and data.color
 return card({
@@ -126,6 +144,24 @@ export const WhatsappAPI = (app, context) => {
 
    
 
-    
+    context.whatsapp.subscribeToMessages("pa",'username', 'password', async (topic, message)=>{
+        // console.log("TOPIC API WHATS: ", topic)
+        // console.log("MESSAGE API WHATS: ", message)
+        // console.log("MESSAGE API WHATS: ", typeof message)
+        try{
+            const msg = JSON.parse(message)
+            const prevValue = await context.state.get({ group: 'whatsapp', tag: "received", name: "messages", defaultValue: [] });
+            // console.log("prevValue::::::::::::::: ", prevValue)
+            let payload = [{from: msg.From, content: msg.Body}]
+            if(prevValue){
+                payload = [...prevValue, ...payload]
+            } 
+            // console.log("PAYLOAD::::::::::::::: ", payload)
+            context.state.set({ group: 'whatsapp', tag: "received", name: "messages", value: payload, emitEvent: true });
+        }catch(e)
+        {
+            console.error("Error parsing whatsapp message", e)
+        }
+    })
     
 }
