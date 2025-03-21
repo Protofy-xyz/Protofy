@@ -310,7 +310,7 @@ const Board = ({ board, icons }) => {
           await deleteCard(currentCard)
         }}
         acceptTint="red"
-        title={"Delete: " + currentCard?.title}
+        title={`Delete "${currentCard?.name}"`}
         description={"Are you sure you want to delete this card?"}
       >
       </AlertDialog>
