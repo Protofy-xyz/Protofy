@@ -3,6 +3,7 @@ import { APIContext } from "../apiContext";
 import { Application } from "express";
 import axios from "axios";
 import { addAction } from "../actions/context/addAction";
+import { addCard } from "../cards/context/addCard";
 
 async function getImageBase64(url) {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -78,6 +79,22 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             prompt: "what to detect in the image",
         },
         emitEvent: true
+    })
+
+    addCard({
+        group: 'vision',
+        tag: 'utils',
+        id: 'preview',
+        templateName: 'Preview camera',
+        name: 'vision_preview_camera',
+        defaults: {
+            type: "value",
+            icon: 'camera',
+            name: 'camera preview',
+            description: 'displays a camera preview, only for preview purposes, it doesn\'t contains the camera stream',
+            html: 'return `<img style="width: 100%" src="http://IP_HERE:8080/video" />`'
+        },
+        emitEvent: true,
     })
 }
 
