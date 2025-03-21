@@ -1,11 +1,12 @@
 import { Cog, Text } from '@tamagui/lucide-icons'
-import { YStack, XStack, Label, ToggleGroup, Input, Switch } from '@my/ui'
+import { YStack, XStack, Label, ToggleGroup, Input, Switch, ScrollView } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { ParamsEditor } from './ParamsEditor'
 import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
+import { JSONView } from '../JSONView'
 
 export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
@@ -39,6 +40,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                 <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
                 <ToggleGroup.Item value="params">params</ToggleGroup.Item>
                 <ToggleGroup.Item value="view">view</ToggleGroup.Item>
+                <ToggleGroup.Item value="raw">raw</ToggleGroup.Item>
               </ToggleGroup>
             </XStack>
             <XStack flexBasis="33.33%" justifyContent="flex-end" alignItems="center">
@@ -88,6 +90,11 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               }}
             />}
             {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
+            {tab == 'raw' && <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
+              <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={cardData} />
+            </ScrollView>}
+
+
           </Tinted>
 
         </YStack>
