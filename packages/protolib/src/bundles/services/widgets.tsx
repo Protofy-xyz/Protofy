@@ -113,7 +113,7 @@ const cardAction = ({ data }) => {
                                     box-sizing: border-box;
                                     min-width: 100px;
                                 " 
-                                value ="\${data.configParams?.[key]?.defaultValue}"
+                                value ="\${data?.configParams?.[key]?.defaultValue ?? ''}"
                                 placeholder="\${data.params[key]}"
                             >
                         </div>
