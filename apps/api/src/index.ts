@@ -6,29 +6,64 @@ import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig('api', process, getServiceToken()))
 require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()
+const axios = require('axios')
 import http from 'http';
 global.defaultRoute = '/api/v1'
-import app from './api'
+
 //@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const serviceName = isProduction?'api':'api-dev'
-const server = http.createServer(app);
+
 const PORT = 3001
-
-server.listen(PORT, () => {
-  logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
-});
+const waitForCore = true
+const coreAddr = process.env.CORE_URL || 'http://localhost:3002/api/core/v1/boards'
 
 
-generateEvent({
-  path: 'services/'+serviceName+'/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-  from: serviceName, // system entity where the event was generated (next, api, cmd...)
-  user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-  payload: {}, // event payload, event-specific data
-}, getServiceToken())
+const start = async () => {
+  //dynamic import of app from ./api.ts
+  const module = await import('./api.js')
+  const server = http.createServer(module.default);
+  server.listen(PORT, () => {
+    logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
+  });
+  generateEvent({
+    path: 'services/'+serviceName+'/start', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
+    from: serviceName, // system entity where the event was generated (next, api, cmd...)
+    user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
+    payload: {}, // event payload, event-specific data
+  }, getServiceToken())
+}
+
+if(waitForCore) {
+  //loop until core is up, 1s interval, 60s timeout
+  let retries = 0
+  const maxRetries = 60
+  const interval = 1000
+  const checkCore = async () => {
+    try {
+      const response = await axios.get(coreAddr)
+      if(response.status !== 200) {
+        throw new Error('Core not available')
+      }
+      start()
+    } catch (error) {
+      if(retries < maxRetries) {
+        console.log('Core not available, retrying...')
+        retries++
+        setTimeout(checkCore, interval)
+      } else {
+        logger.error({ coreAddr }, 'Core not available after retries')
+        process.exit(1)
+      }
+    }
+  }
+  checkCore()
+} else{
+  start()
+}
 
 if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
@@ -70,4 +105,4 @@ if (process.env.NODE_ENV != 'production') {
       process.exit(0)
     }, 1000);
   })
-}
+}  
