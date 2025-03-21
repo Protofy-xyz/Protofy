@@ -21,6 +21,26 @@ const autopilotState = {}
 
 const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
 
+
+async function execute_action(url, actions, params={}) {
+    console.log('Executing action: ', url, params);
+    const action = actions.find(a => a.url === url);
+    if (!action) {
+        console.error('Action not found: ', url);
+        return;
+    }
+    if (action.method === 'post') {
+        const { token, ...data } = params as any;
+        const response = await API.post(url+'?token='+token, data);
+        return response.data
+    } else {
+        const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+        //console.log('url: ', url+'?token='+token+'&'+paramsStr)
+        const response = await API.get(url+'?token='+token+'&'+paramsStr);
+        return response.data
+    }
+}
+
 const getExecuteAction = (actions) => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
@@ -462,6 +482,41 @@ export const BoardsAPI = (app, context) => {
         const boardId = req.params.boardId;
         autopilotState[boardId] = false;
         res.send({ message: "Autopilot disabled for board: " + boardId });
+    })
+
+    app.get('/api/core/v1/autopilot/llm', async (req, res) => {
+        const states = await context.state.getStateTree();
+        const actions = await getActions();
+        if(!req.query.prompt) {
+            res.status(400).send('Missing prompt parameter')
+            return
+        }
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "llm", query: req.query.prompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
+        console.log('prompt: ', prompt)
+        let reply = await callModel(prompt, context)
+        if(reply?.choices[0]?.message?.content) {
+            reply = cleanCode(reply.choices[0].message.content)
+        }
+        try {
+            const orders = JSON.parse(reply)
+            if(!Array.isArray(orders)) {
+                res.status(400).send('Invalid orders format')
+                return
+            }
+            //iterate orders calling execute_action for each one. if the url is wait, wait for the specified time
+            for(const order of orders) {
+                if(order.url === 'wait') {
+                    await new Promise(resolve => setTimeout(resolve, order?.params?.seconds??order?.params?.time??1))
+                } else {
+                    await execute_action(order.url, actions, order.params)
+                }
+            }
+        } catch(e) {
+            res.status(400).send('Invalid orders format')
+            console.error('Error parsing orders: ', e)
+            return
+        }   
+        res.send(reply)
     })
 
     setInterval(async () => {
