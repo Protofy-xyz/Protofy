@@ -140,7 +140,7 @@ const cardAction = ({ data }) => {
                 onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
-                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">Run</a>
+                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">\${data.layout?.buttonLabel ? data.layout.buttonLabel : "Run"}</a>
             </button>
         </form>
 
@@ -251,10 +251,10 @@ export const getHTML = (html, data) => {
     }
 }
 
-export const CardValue = ({ Icon, value, html, color = "var(--color7)" }) => {
+export const CardValue = ({ Icon, value, html, color = "var(--color7)", ...props }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div style={{ width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { icon: Icon, value: value, color: color }) }} />}
+            {html?.length > 0 && <div style={{ width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, icon: Icon, value: value, color: color  }) }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",

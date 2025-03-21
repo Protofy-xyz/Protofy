@@ -4,7 +4,7 @@ import { getHTML } from '../bundles/widgets';
 
 const enableHTML = true
 
-export const ActionRunner = ({ name, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' }) => {
+export const ActionRunner = ({ name, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' , ...props}) => {
     useEffect(() => {
         if(!window['onRunListeners']) window['onRunListeners'] = {}
         window['onRunListeners'][name] = onRun
@@ -26,7 +26,7 @@ export const ActionRunner = ({ name, displayResponse, html, caption = "Run", des
             {/* Si hay HTML, renderizarlo */}
             {html?.length > 0 && enableHTML && (
                 <div style={{ width: "100%", height: "100%" }}
-                    dangerouslySetInnerHTML={{ __html: getHTML(html, { icon, name, params: actionParams, color, displayResponse }) }} />
+                    dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, icon, name, params: actionParams, color, displayResponse }) }} />
             )}
 
             {/* Si NO hay HTML, usar el diseño clásico */}
