@@ -71,7 +71,7 @@ const ActionCard = ({ id, displayResponse, html, name, title, params, icon = und
 }
 
 const Board = ({ board, icons }) => {
-  const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 6 }
+  const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
   const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
@@ -157,16 +157,24 @@ const Board = ({ board, icons }) => {
     if (item.type == 'addWidget') {
       return {
         ...item,
-        content: <CenterCard title={""} id={item.key}>
+        content: <CenterCard title={"Add new card"} id={item.key}>
           <YStack alignItems="center" justifyContent="center" f={1} width="100%" opacity={1}>
-            <YStack p="$2" pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" hoverStyle={{ bg: '$backgroundHover' }} alignItems='center' justifyContent='center' className="no-drag" cursor="pointer" onPress={() => {
-              setAddOpened(true)
-            }}>
-              <Stack alignItems="center" justifyContent="center" opacity={0.5} hoverStyle={{ opacity: 0.75 }} pressStyle={{ opacity: 0.9 }}>
-                <Plus size={50} />
-                <Paragraph size="$5" fontWeight="400" mt="$1">Add</Paragraph>
-              </Stack>
-
+            <YStack
+              bc={"$gray7"}
+              f={1}
+              w={"100%"}
+              p="$2"
+              pressStyle={{ bg: '$gray8' }}
+              borderRadius="$5"
+              hoverStyle={{ opacity: 0.75 }}
+              alignItems='center'
+              justifyContent='center'
+              className="no-drag"
+              cursor="pointer"
+              bw={1}
+              onPress={() => setAddOpened(true)}
+            >
+                <Plus col={"$gray10"} size={60} />
             </YStack>
           </YStack>
         </CenterCard>
@@ -310,7 +318,7 @@ const Board = ({ board, icons }) => {
           await deleteCard(currentCard)
         }}
         acceptTint="red"
-        title={"Delete: " + currentCard?.title}
+        title={`Delete "${currentCard?.name}"`}
         description={"Are you sure you want to delete this card?"}
       >
       </AlertDialog>
