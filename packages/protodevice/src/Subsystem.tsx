@@ -188,20 +188,58 @@ const Action = ({ deviceName, action }) => {
             </Button>
         </XStack>
         default:
+            const schema = action?.payload?.schema;
             return <XStack gap="$3" alignSelf='flex-start' alignItems="center" mt="10px" mb="10px" width="100%">
                 <Text whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden" maxWidth="150px">{action.label ?? action.name}</Text>
                 {
                     Object.keys(value).map((key, index) => {
-                        return <Input
-                            key={index}
-                            value={value[key]}
-                            onChange={async (e) => {
-                                setValue({ ...value, [key]: e.target.value })
-                            }}
-                            width="$10"
-                            placeholder={key}
-                            flex={1}
-                        />
+                        const fieldEnum = schema?.[key]?.enum;
+                        if (Array.isArray(fieldEnum) && fieldEnum.length > 1) {
+                            // Render a <Select> for enum fields
+                            return (
+                                <Select
+                                    key={index}
+                                    value={value[key]}
+                                    onValueChange={(val) => {
+                                        setValue({ ...value, [key]: val });
+                                    }}
+                                    disablePreventBodyScroll
+                                >
+                                    <Select.Trigger f={1} iconAfter={ChevronDown}>
+                                        <Select.Value placeholder={key} />
+                                    </Select.Trigger>
+                                    <Select.Content zIndex={9999999999}>
+                                        <Select.Viewport>
+                                            <Select.Group>
+                                                {fieldEnum.map((enumVal) => (
+                                                    <Select.Item key={enumVal} value={enumVal}>
+                                                        <Select.ItemText>{enumVal}</Select.ItemText>
+                                                        <Select.ItemIndicator marginLeft="auto">
+                                                            <Check size={16} />
+                                                        </Select.ItemIndicator>
+                                                    </Select.Item>
+                                                ))}
+                                            </Select.Group>
+                                        </Select.Viewport>
+                                    </Select.Content>
+                                </Select>
+                            );
+                        } else if (Array.isArray(fieldEnum) && fieldEnum.length === 1) {
+                            // Auto-set the single enum value and skip rendering
+                            value[key] = fieldEnum[0];
+                            return null;
+                        } else {
+                            return <Input
+                                key={index}
+                                value={value[key]}
+                                onChange={async (e) => {
+                                    setValue({ ...value, [key]: e.target.value })
+                                }}
+                                width="$10"
+                                placeholder={key}
+                                flex={1}
+                            />
+                        }
                     })
                 }
                 <Button
@@ -256,7 +294,7 @@ const subsystem = ({ subsystem, deviceName }) => {
 // export {Subsystems} from 'protolib/bundles/agents/subsystems/Subsystems'
 export const Subsystems = ({ subsystems, deviceName }) => <YStack maxHeight={750} overflow="scroll" padding="$2" paddingTop="20px">
     <>
-        <YStack gap="$3">
+        <YStack gap="$3" width={"800px"}>
             {
                 subsystems
                     .sort((a, b) => {

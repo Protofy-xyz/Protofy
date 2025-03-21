@@ -45,6 +45,7 @@ import GM77 from './GM77'
 import UltrasonicDistanceSensor from './UltrasonicDistanceSensor';
 import MAX31865 from './MAX31865';
 import BMP280 from './BMP280';
+import NeopixelsDisplay from './NeopixelsDisplay';
 
 const deviceMasks = [
   Wifi,
@@ -91,7 +92,8 @@ const deviceMasks = [
   GM77,
   UltrasonicDistanceSensor,
   MAX31865,
-  BMP280
+  BMP280,
+  NeopixelsDisplay
 ]
 
 const masksLength = deviceMasks.length
