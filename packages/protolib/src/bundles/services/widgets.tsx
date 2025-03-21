@@ -56,8 +56,6 @@ const cardAction = ({ data }) => {
         cur.length > acc.length ? cur : acc
     ), '');
     const baseLabelWidth = longestKey.length * 8 + margin;
-    const dataString = JSON.stringify(data).replace(/'/g, "\\'");
-
     return \`
      <div style="
         width: 100%;
@@ -69,7 +67,7 @@ const cardAction = ({ data }) => {
     ">
         <form
             style="width: 100%; margin-top: 15px;"
-            onsubmit='window.executeAction(event, \${dataString})'
+            onsubmit='window.executeAction(event, "\${data.name}")'
         >
             \${ 
                 allKeys.map(key => {

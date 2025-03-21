@@ -61,6 +61,7 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
 const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } , data = { }}) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
+      data={data}
       displayResponse={displayResponse}
       name={name}
       description={"Run action"}
@@ -125,8 +126,8 @@ const Board = ({ board, icons }) => {
           cleanedParams[key] = params[key];
         }
       }
-      const response = await window['onRunListeners'][card.name](card.name, cleanedParams);
-      const responseElement = document.getElementById(card.name + '_response');
+      const response = await window['onRunListeners'][card](card, cleanedParams);
+      const responseElement = document.getElementById(card + '_response');
       if (responseElement) {
         responseElement['value'] = JSON.stringify(response, null, 2);
       }
@@ -227,6 +228,7 @@ const Board = ({ board, icons }) => {
       return {
         ...item,
         content: <ActionCard
+          data={item}
           html={item.html}
           displayResponse={item.displayResponse}
           name={item.name}
