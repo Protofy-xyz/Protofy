@@ -61,7 +61,15 @@ const hasStateValue = () => `
         return false
     }
 `
-
+const hasStateValueChanged = ()=>`
+    const hasStateValueChanged = (stateName) => {
+        if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName]) {
+            changeTracker[stateName] = states[stateName]
+            return true
+        }
+        return false
+    }
+`
 
 async function acquireLock(filePath) {
     while (writeLocks.has(filePath)) {
@@ -326,6 +334,7 @@ export const BoardsAPI = (app, context) => {
             const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
                 ${getExecuteAction(await getActions())}
                 ${hasStateValue()}
+                ${hasStateValueChanged()}
                 ${fileContent.rulesCode}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);
