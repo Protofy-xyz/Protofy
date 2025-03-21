@@ -23,6 +23,9 @@ export const getAuth = (req) => {
     var token = '';
     if(req.query.token || (session && session.token)) {
         token = req.query.token ? req.query.token : session.token
+        if(Array.isArray(token)) {
+            token = token[0]
+        }
         try {
             decoded = createSession(verifyToken(token))
         } catch(error) {
