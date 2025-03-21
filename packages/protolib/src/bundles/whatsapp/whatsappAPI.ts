@@ -75,21 +75,5 @@ export const WhatsappAPI = (app, context) => {
         }
     }
     qrImg()
-    app.get('/api/core/v1/whatsapp/image/:phone/:boardName/:message', async (req, res) => {
-        try {
-            const imgBase64 = await context.whatsapp.generateWhatsappQrCode(
-                req.params.phone,
-                req.params.message + ` projectId: ${req.params.boardName}`
-            );
-            
-            const imgBuffer = Buffer.from(imgBase64.replace(/^data:image\/png;base64,/, ""), 'base64');
-            res.setHeader('Content-Type', 'image/png');
-            res.setHeader('Content-Length', imgBuffer.length);  
-            res.send(imgBuffer);
-        } catch (error) {
-            console.error('Error generando QR:', error);
-            res.status(500).send('Error generando la imagen');
-        }
-    });
     
 }
