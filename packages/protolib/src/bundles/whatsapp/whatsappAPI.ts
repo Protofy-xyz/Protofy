@@ -49,7 +49,7 @@ const registerCards = async (context)=>{
             icon: "whatsapp",
             color: "#25d366",
             description: "received whatsapp messages",
-            rulesCode: `return states['whatsapp']['received']['messages'];`,
+            rulesCode: `return states.whatsapp.received.messages.map(msg => msg.from + ':' + msg.content).join('<br>');`,
             type: 'value'
         },
         emitEvent: true
@@ -143,7 +143,9 @@ export const WhatsappAPI = (app, context) => {
     }))
 
    
-
+    const cleanPhoneNumber = (phoneNumber) => {
+        return phoneNumber.replace("whatsapp:","")
+    }
     context.whatsapp.subscribeToMessages("pa",'username', 'password', async (topic, message)=>{
         // console.log("TOPIC API WHATS: ", topic)
         // console.log("MESSAGE API WHATS: ", message)
@@ -152,7 +154,7 @@ export const WhatsappAPI = (app, context) => {
             const msg = JSON.parse(message)
             const prevValue = await context.state.get({ group: 'whatsapp', tag: "received", name: "messages", defaultValue: [] });
             // console.log("prevValue::::::::::::::: ", prevValue)
-            let payload = [{from: msg.From, content: msg.Body}]
+            let payload = [{from: cleanPhoneNumber(msg.From), content: msg.Body}]
             if(prevValue){
                 payload = [...prevValue, ...payload]
             } 
