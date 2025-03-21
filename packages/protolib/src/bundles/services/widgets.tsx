@@ -140,7 +140,7 @@ const cardAction = ({ data }) => {
                 onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
-                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">Run2</a>
+                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">Run</a>
             </button>
         </form>
 
