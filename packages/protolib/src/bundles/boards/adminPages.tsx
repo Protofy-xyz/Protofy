@@ -12,7 +12,7 @@ import { computeLayout } from '../autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from '../../components/Tinted'
 import React from 'react'
@@ -96,6 +96,26 @@ const Board = ({ board, icons }) => {
     }
   }
 
+  useEffect(() => {
+    window['executeAction'] = async (event, card) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+      const params = Object.fromEntries(formData['entries']());
+      console.log('Running action with params:', params, 'in card: ', card);
+      const cleanedParams = {};
+      for (const key in params) {
+        if (params[key] || params[key] === "0") {
+          cleanedParams[key] = params[key];
+        }
+      }
+      const response = await window['onRunListeners'][card.name](card.name, cleanedParams);
+      const responseElement = document.getElementById(card.name + '_response');
+      if (responseElement) {
+        responseElement['value'] = JSON.stringify(response, null, 2);
+      }
+    };
+  }, [])
+
   useUpdateEffect(() => {
     // console.log('///////////////////////////////////////////////////////')
     // console.log('Board states: ', states)
@@ -164,33 +184,33 @@ const Board = ({ board, icons }) => {
         }} />
       }
     } else if (item.type == 'action') {
-        return {
-          ...item,
-          content: <ActionCard 
-            html={item.html} 
-            displayResponse={item.displayResponse} 
-            name={item.name} 
-            color={item.color} 
-            icon={item.icon ? (item.html ? item.icon : '/public/icons/' + item.icon +'.svg'): undefined} 
-            id={item.key} 
-            title={item.name} 
-            params={item.params} 
-            onDelete={() => {
-              setIsDeleting(true);
-              setCurrentCard(item);
-            }} 
-            onEdit={() => {
-              setIsEditing(true);
-              setCurrentCard(item);
-              setEditedCard(item);
-            }} 
-            onRun={async (name, params) => {
-              const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
-              return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
-            }} 
-          />
-        };
-      }
+      return {
+        ...item,
+        content: <ActionCard
+          html={item.html}
+          displayResponse={item.displayResponse}
+          name={item.name}
+          color={item.color}
+          icon={item.icon ? (item.html ? item.icon : '/public/icons/' + item.icon + '.svg') : undefined}
+          id={item.key}
+          title={item.name}
+          params={item.params}
+          onDelete={() => {
+            setIsDeleting(true);
+            setCurrentCard(item);
+          }}
+          onEdit={() => {
+            setIsEditing(true);
+            setCurrentCard(item);
+            setEditedCard(item);
+          }}
+          onRun={async (name, params) => {
+            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
+            return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
+          }}
+        />
+      };
+    }
     return item
   })
 
@@ -310,7 +330,7 @@ const Board = ({ board, icons }) => {
         </YStack>
         {
           <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={60} width={810} height="80vh">
-            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode?'black':'white'} opacity={0.9}></XStack>
+            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? 'black' : 'white'} opacity={0.9}></XStack>
             <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
 
           </XStack>
@@ -334,7 +354,7 @@ export default {
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}
-          onAdd={(data) =>{ router.push(`/boards/${data.name}`); return data }}
+          onAdd={(data) => { router.push(`/boards/${data.name}`); return data }}
           name="Board"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
           onSelectItem={(item) => router.push(`/boards/${item.data.name}`)}

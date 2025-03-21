@@ -13,27 +13,6 @@ import { LineChart, Cpu } from 'lucide-react'
 import Center from 'protolib/src/components/Center';
 import React from 'react';
 
-const executeAction = `
-window.actionResponses = {};
-var executeAction = async (event, card) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const params = Object.fromEntries(formData.entries());
-            console.log('Running action with params:', params, 'in card: ', card);
-            const cleanedParams = {};
-            for (const key in params) {
-                if (params[key] || params[key] === "0") {
-                    cleanedParams[key] = params[key];
-                }
-            }
-            window.actionResponses[card.name] = await window.onRunListeners[card.name](card.name, cleanedParams);
-            const responseElement = document.getElementById(card.name + '_response');
-            if (responseElement) {
-                responseElement.value = JSON.stringify(window.actionResponses[card.name], null, 2);
-            }
-};
-`
-
 export const viewLib = `
 
 
@@ -67,9 +46,6 @@ const card = ({ content, style = '' }) => {
             justify-content: center;
             \${style}
         ">
-            <script>
-                ${executeAction}
-            </script>
             \${content}
         </div>
     \`;
@@ -93,7 +69,7 @@ const cardAction = ({ data }) => {
     ">
         <form 
             style="width: 100%; margin-top: 15px;" 
-            onsubmit='executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
+            onsubmit='window.executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
         >
             \${ 
                 keys.length > 0 

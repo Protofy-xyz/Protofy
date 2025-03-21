@@ -54,7 +54,7 @@ export const addCard = async (options: {
     if(options.token) {
         // console.log('-----------------------------------------------')
         // console.log('Setting value using api: ', value, 'for', group, tag, name)
-        const result = await API.post(`/api/core/v1/cards/${group}/${tag}?token=`+options.token, {templateName, ...content}) 
+        return await API.post(`/api/core/v1/cards/${group}/${tag}?token=`+options.token, {templateName, ...content}) 
     } else {
         ProtoMemDB('cards').set(group, tag, name, content)
         // console.log('setting locally', value, 'for', group, tag, name)

@@ -12,5 +12,6 @@ export const CardsAPI = (app, context) => {
             ...info,
             emitEvent: true
         });
+        res.send({ success: true });
     });
 }
