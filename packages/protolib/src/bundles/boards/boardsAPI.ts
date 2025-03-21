@@ -45,13 +45,20 @@ async function execute_action(url, params={}) {
 
 const changeTracker = {}
 
-const getStateValue = () => `
-    const getStateValue = (stateName, dedup=true) => {
-        if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName] || !dedup) {
-            changeTracker[stateName] = states[stateName]
-            return states[stateName]
+const hasStateValue = () => `
+    const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
+        let value = states[stateName]
+        if (!options.caseSensitive && typeof value === 'string' && value) {
+            value = value.toLowerCase()
+            expectedValue = expectedValue.toLowerCase()
         }
-        return undefined
+
+        if (!changeTracker[stateName] || changeTracker[stateName] !== value || !dedup) {
+            changeTracker[stateName] = value
+            return value === expectedValue
+        }
+
+        return false
     }
 `
 
@@ -318,7 +325,7 @@ export const BoardsAPI = (app, context) => {
             //evalute board autopilot rules
             const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
                 ${getExecuteAction(await getActions())}
-                ${getStateValue()}
+                ${hasStateValue()}
                 ${fileContent.rulesCode}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);
