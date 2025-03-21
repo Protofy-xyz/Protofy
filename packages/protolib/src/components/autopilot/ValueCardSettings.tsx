@@ -1,5 +1,5 @@
 import { Cog } from '@tamagui/lucide-icons'
-import { YStack, XStack, Label, ToggleGroup, ScrollView } from '@my/ui'
+import { YStack, XStack, Label, ToggleGroup, ScrollView, Paragraph, Switch } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -29,8 +29,8 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                     <Label mt="$-2" mb="$-3" size={"$5"}><Cog color={"$color8"} mr="$2"></Cog>Value</Label>
                     <XStack width={"100%"} pt="$0" pr="$1" pb="$2" jc="center">
                         <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-                            <ToggleGroup.Item value="rules">rules</ToggleGroup.Item>
-                            <ToggleGroup.Item value="view">view</ToggleGroup.Item>
+                            <ToggleGroup.Item value="rules">Value</ToggleGroup.Item>
+                            <ToggleGroup.Item value="view">Display</ToggleGroup.Item>
                         </ToggleGroup>
                     </XStack>
                     <Tinted>
@@ -49,7 +49,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             cardData={cardData}
                             setCardData={setCardData}
                         />}
-                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value}}/>}
+                        {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value }} />}
                     </Tinted>
 
                 </YStack>
