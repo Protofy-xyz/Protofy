@@ -135,10 +135,10 @@ const cardAction = ({ data }) => {
                     cursor: pointer;
                     transition: filter 0.2s ease-in-out;
                 "
-                onmouseover="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+                onmouseover="this.style.filter='brightness(1.05)'"
                 onmouseout="this.style.filter='none'"
                 onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
-                onmouseup="this.style.filter='saturate(1.5) contrast(1.2) brightness(1.1)'"
+                onmouseup="this.style.filter='brightness(1.05)'"
             >
                 \${icon({ name: data.icon, color: data.color, size: '48', style: 'filter: brightness(0.7);' })}    
             </button>
