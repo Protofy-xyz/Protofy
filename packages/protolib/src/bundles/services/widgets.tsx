@@ -70,28 +70,30 @@ const cardAction = ({ data }) => {
     ">
 
         <form 
-            style="display: flex; justify-content: space-between; flex-direction: column; flex: 1; width: 100%;" 
+            style="display: flex; justify-content: space-between; flex-direction: column; flex: 1; width: 100%" 
             onsubmit='window.executeAction(event, \${JSON.stringify(data).replace(/'/g, \"\\\\'\")})'
         >
-            <div style="gap: 10px; display:  \${keys.length > 0 ? 'flex' : 'none'}; flex-direction: column; flex: 1; width: 100%;">
+            <div style="gap: 10px; display:  \${keys.length > 0 ? 'flex' : 'none'}; flex-direction: column; flex: 1; width: 100%; margin-top: 8px; margin-bottom: 20px;">
                 \${ 
                     keys.length > 0 
                     ? keys.map(key => \`
                         <div style="
                             display: flex; 
-                            align-items: center; 
                             width: 100%; 
                             margin-bottom: 5px;
                             box-sizing: border-box;
+                            flex-direction: column;
+                            gap: 5px;
                         ">
                             <label style="
                                 display: inline-block; 
-                                font-weight: bold;
+                                font-weight: 300;
                                 width: clamp(120px, \${baseLabelWidth}px, 200px);
-                                margin-right: 10px;
+                                margin-left: 10px;
                                 text-align: left;
                                 white-space: nowrap;
                                 overflow: hidden;
+                                opacity: 0.7;
                                 text-overflow: ellipsis;
                             ">
                                 \${key}
@@ -101,8 +103,9 @@ const cardAction = ({ data }) => {
                                 type="text" 
                                 name="\${key}" 
                                 style="
-                                    background-color: var(--color1);
-                                    flex: 1; 
+                                    background-color: var(--gray1);
+                                    flex: 1;
+                                    width: 100%;
                                     padding: 5px 10px; 
                                     border: 0.5px solid #ccc; 
                                     border-radius: 8px;
@@ -158,7 +161,7 @@ const cardAction = ({ data }) => {
                     border: 0.5px solid var(--gray7);
                     border-radius: 8px;
                     box-sizing: border-box;
-                    background-color: var(--color1);
+                    background-color: var(--gray1);
                 " 
                 class="no-drag"
             ></textarea>
