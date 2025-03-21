@@ -76,15 +76,19 @@ const cardAction = ({ data }) => {
                     ? keys.map(key => \`
                         <div style="
                             display: flex; 
-                            align-items: center; 
                             width: 100%; 
-                            margin-bottom: 5px;
+                            margin-bottom: 10px;
                             box-sizing: border-box;
-                        ">
+                            flex-direction: column;
+                            ">
                             <label style="
                                 display: inline-block; 
-                                font-weight: bold;
-                                width: clamp(120px, \${baseLabelWidth}px, 200px);
+                                font-weight: 500;
+                                margin-left: 12px;
+                                margin-bottom: 2px;
+                                opacity: 0.7;
+                                width: 100%;
+                                font-size: 14px;
                                 margin-right: 10px;
                                 text-align: left;
                                 white-space: nowrap;
@@ -123,7 +127,6 @@ const cardAction = ({ data }) => {
                     text-align: center;
                     margin-top: 15px; 
                     background-color: \${data.color};
-                    color: white; 
                     border: none; 
                     border-radius: 8px;
                     cursor: pointer;
@@ -137,7 +140,7 @@ const cardAction = ({ data }) => {
                 onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
-                Run
+                <a style="color: \${data.color};filter: brightness(0.5); font-weight: 400;">Run</a>
             </button>
         </form>
 
