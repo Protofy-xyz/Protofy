@@ -6,11 +6,13 @@ import { RuleEditor } from './RuleEditor'
 import { ParamsEditor } from './ParamsEditor'
 import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
-import { JSONView } from '../JSONView'
+import { useThemeSetting } from '@tamagui/next-theme';
+import { Monaco } from '../Monaco'
 
 export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
   const [tab, setTab] = useState("rules");
+  const { resolvedTheme } = useThemeSetting();
   useEffect(() => {
     onEdit(cardData);
   }, [cardData, onEdit]);
@@ -90,10 +92,26 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               }}
             />}
             {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
-            {tab == 'raw' && <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
-              <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={cardData} />
-            </ScrollView>}
-
+            {tab == 'raw' && <Monaco
+              path={"card-" + cardData.name + ".ts"}
+              darkMode={resolvedTheme === 'dark'}
+              sourceCode={JSON.stringify(cardData, null, 2)}
+              onChange={(newCode) => {
+                try {
+                  setCardData(JSON.parse(newCode))
+                } catch (err) {
+                  console.error("Invalid JSON", err)
+                }
+              }}
+              options={{
+                folding: false,
+                lineDecorationsWidth: 0,
+                lineNumbersMinChars: 0,
+                minimap: { enabled: false },
+                formatOnPaste: true,
+                formatOnType: true,
+              }}
+            />}
 
           </Tinted>
 
