@@ -171,7 +171,7 @@ const useCards = (extraCards = []) => {
 
 export const CardSelector = ({ defaults = {}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
   const cards = useCards(extraCards)
-  const [selectedCard, setSelectedCard] = useState()
+  const [selectedCard, setSelectedCard] = useState(cards[0])
   const [card, setCard] = useState()
 
   useEffect(() => {
