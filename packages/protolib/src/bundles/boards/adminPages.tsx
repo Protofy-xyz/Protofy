@@ -53,6 +53,7 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
       value={value ?? 'N/A'}
       color={color}
       html={html}
+      {...data}
     />
   </CenterCard>
 }
@@ -213,7 +214,7 @@ const Board = ({ board, icons }) => {
     } else if (item.type == 'value') {
       return {
         ...item,
-        content: <ValueCard html={item.html} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
+        content: <ValueCard data={item} html={item.html} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
           setIsDeleting(true)
           setCurrentCard(item)
         }} onEdit={() => {

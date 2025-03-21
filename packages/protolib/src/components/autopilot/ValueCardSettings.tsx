@@ -5,6 +5,7 @@ import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
+import { JSONView } from '../JSONView'
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
     const [cardData, setCardData] = useState(card);
@@ -31,6 +32,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                         <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
                             <ToggleGroup.Item value="rules">Value</ToggleGroup.Item>
                             <ToggleGroup.Item value="view">Display</ToggleGroup.Item>
+                            <ToggleGroup.Item value="raw">Raw</ToggleGroup.Item>
                         </ToggleGroup>
                     </XStack>
                     <Tinted>
@@ -50,6 +52,9 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             setCardData={setCardData}
                         />}
                         {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value }} />}
+                        {tab == 'raw' && <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
+                            <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={cardData} />
+                        </ScrollView>}
                     </Tinted>
 
                 </YStack>

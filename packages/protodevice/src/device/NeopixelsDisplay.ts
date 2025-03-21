@@ -106,6 +106,18 @@ class NeopixelDisplay {
                 }
             },
             {
+                name: "font",
+                config: {
+                    id: this.name+"_font",
+                    size: 6,
+                    file: {
+                        type: "gfonts",
+                        family: "Roboto",
+                        weight: 900
+                    }
+                }
+            },
+            {
                 name: 'mqtt',
                 config: {
                   on_json_message: [
@@ -123,6 +135,12 @@ auto get_color = [&]() {
   int g = x["g"];
   int b = x["b"];
   return Color(r, g, b);
+};
+auto get_background_color = [&]() {
+int r = 0;
+int g = 0;
+int b = 0;
+return Color(r, g, b);
 };
 
 if (action == "clear") {
@@ -218,6 +236,22 @@ else if (action == "filled_circle") {
   id(${this.name}).filled_circle(cx, cy, radius, c);
   id(${this.name}).do_update_();
 }
+else if (action == "text") {
+    int tx = x["x"];
+    int ty = x["y"];
+    std::string text_str = x["text"].as<std::string>();
+    Color c = get_color();
+    Color bg = get_background_color();
+    ESP_LOGD("${this.name}",
+            "Printing text '%s' at (%d, %d) with Color R:%d, G:%d, B:%d and Background color R:%d, G:%d, B:%d",
+            text_str.c_str(),
+            tx,
+            ty,
+            c.red, c.green, c.blue,
+            bg.red, bg.green, bg.blue);
+    id(${this.name}).print(tx, ty, id(${this.name}_font), c, text_str.c_str(), bg);
+    id(${this.name}).do_update_();
+    }
 else {
   ESP_LOGW("${this.name}", "Unknown action: %s", action.c_str());
 }
@@ -403,6 +437,25 @@ else {
                             "r": { "type": "int", "minimum": 0, "maximum": 255 },
                             "g": { "type": "int", "minimum": 0, "maximum": 255 },
                             "b": { "type": "int", "minimum": 0, "maximum": 255 }
+                        }
+                    }
+                },
+                {
+                    name: 'draw_text',
+                    label: 'Draw text',
+                    description: 'Draw text on display with given coordinates (x, y), font, color (r, g, b) and text',
+                    endpoint: "/" + this.type + "/" + this.name + "/draw",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json-schema',
+                        schema: {
+                            "action": { "type": "string", "enum": ["text"] },
+                            "x": { "type": "int", "minimum": 0, "maximum": this.width - 1 },
+                            "y": { "type": "int", "minimum": 0, "maximum": this.height - 1 },
+                            "r": { "type": "int", "minimum": 0, "maximum": 255 },
+                            "g": { "type": "int", "minimum": 0, "maximum": 255 },
+                            "b": { "type": "int", "minimum": 0, "maximum": 255 },
+                            "text": { "type": "string" }
                         }
                     }
                 },

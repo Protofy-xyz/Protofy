@@ -8,6 +8,7 @@ import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 import { useProtoStates } from '../../bundles/protomemdb/lib/useProtoStates'
 import { AlignLeft, Braces, Copy, Search, ArrowBigDownDash, Activity } from "@tamagui/lucide-icons";
 import { Tinted } from '../Tinted';
+import { getIconUrl } from '../IconSelect';
 
 const SelectGrid = ({ children }) => {
   return <XStack jc="flex-start" ai="center" gap={25} flexWrap='wrap'>
@@ -65,8 +66,19 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                 boc={selected?.id === option.id ? "$color7" : "$gray5"}
                 hoverStyle={{ bc: "$color4", boc: "$color7" }}
               >
-                <YStack br={isAction(option) ? "$10" : "$2"} p={"$2"} bc={isAction(option) ? "$yellow7" : "$blue7"} >
-                  {isAction(option) ? <ArrowBigDownDash /> : <Activity />}
+                <YStack br={isAction(option) ? "$10" : "$2"} p={"$2"} bc={option?.defaults?.color ? option?.defaults?.color : isAction(option) ? "$yellow7" : "$blue7"} >
+                  {
+                    option?.defaults?.icon
+                      ? <img
+                        src={getIconUrl(option.defaults.icon)}
+                        width={20}
+                        height={20}
+                      />
+                      :
+                      isAction(option)
+                        ? <ArrowBigDownDash />
+                        : <Activity />
+                  }
                 </YStack>
                 <Text fow={selected?.id === option.id && "600"} >{option.name}</Text>
               </XStack>
@@ -159,7 +171,7 @@ const useCards = (extraCards = []) => {
 
 export const CardSelector = ({ defaults = {}, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
   const cards = useCards(extraCards)
-  const [selectedCard, setSelectedCard] = useState()
+  const [selectedCard, setSelectedCard] = useState(cards[0])
   const [card, setCard] = useState()
 
   useEffect(() => {
