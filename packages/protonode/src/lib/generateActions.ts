@@ -197,7 +197,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_delete',
         templateName: 'Delete a ' + modelName + ' object',
         defaults: {
-            icon: 'trash2',
+            icon: 'trash',
             displayResponse: true,
             name: 'delete_product',
             type: 'action',
