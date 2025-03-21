@@ -32,7 +32,43 @@ class NeopixelsBus {
             brightness: 255
         }
     }
-
+    extractNestedComponents(element, deviceComponents) {
+        const keysToExtract = [
+          { key: 'mqtt', nestedKey: 'on_message' },
+          { key: 'mqtt', nestedKey: 'on_json_message' },
+        ];
+      
+        keysToExtract.forEach(({ key, nestedKey }) => {
+          if (element.config[nestedKey]) {
+            if(!deviceComponents[key]) deviceComponents[key] = {}
+            if(!deviceComponents[key][nestedKey]) deviceComponents[key][nestedKey] = []
+    
+            if(Array.isArray(deviceComponents[key][nestedKey])){
+              deviceComponents[key][nestedKey].push(...element.config[nestedKey])
+            } else {
+              deviceComponents[key][nestedKey] = {
+                ...deviceComponents[key][nestedKey],
+                ...element.config[nestedKey]
+              }
+            }
+          }
+        });
+      }
+    
+      extractComponent(element, deviceComponents) {
+        if (['mqtt'].includes(element.name)) {
+          this.extractNestedComponents(element, deviceComponents)
+        } else {
+          if (!deviceComponents[element.name]) {
+            deviceComponents[element.name] = element.config
+          } else {
+            if (!Array.isArray(deviceComponents[element.name])) {
+              deviceComponents[element.name] = [deviceComponents[element.name]]
+            }
+            deviceComponents[element.name].push(element.config)
+          }
+        }
+      }
     attach(pin, deviceComponents) {
         var hasEffects = false
         this.effects.forEach(element => {
@@ -55,21 +91,34 @@ class NeopixelsBus {
                 subsystem: this.getSubsystem()
 
             },
+            {
+                name: 'mqtt',
+                config: {
+                  on_json_message: [
+                    {
+                      topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/individual_control/command`,
+                      then: {
+                        "light.addressable_set": {
+                            id: this.name,
+                            range_from: "@!lambda \"return (int)(x[\\\"from\\\"]);\"@",
+                            range_to: "@!lambda \"int t=(int)(x[\\\"from\\\"]); if (x.containsKey(\\\"to\\\")) t=x[\\\"to\\\"]; return t;\"@",
+                            red: "@!lambda \"return (float)((int)x[\\\"red\\\"]) / 255.0;\"@",
+                            green: "@!lambda \"return (float)((int)x[\\\"green\\\"]) / 255.0;\"@",
+                            blue: "@!lambda \"return (float)((int)x[\\\"blue\\\"]) / 255.0;\"@"
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
         ]
         if(deviceComponents.esp32.framework.type == "arduino"){
             componentObjects[0].config["rmt_channel"] = this.channel
         }
 
         componentObjects.forEach((element, j) => {
-            if (!deviceComponents[element.name]) {
-                deviceComponents[element.name] = element.config
-            } else {
-                if (!Array.isArray(deviceComponents[element.name])) {
-                    deviceComponents[element.name] = [deviceComponents[element.name]]
-                }
-                deviceComponents[element.name] = [...deviceComponents[element.name], element.config]
-            }
-        })
+            this.extractComponent(element, deviceComponents)
+          })
         if (!hasEffects) {
             return deviceComponents;
         } else {
@@ -266,9 +315,9 @@ class NeopixelsBus {
             type: this.type,
             actions: [
                 {
-                    name: 'on',
-                    label: 'Turn on',
-                    description: 'Turns on the neopixels',
+                    name: 'red',
+                    label: 'Red',
+                    description: 'Turns on the neopixels in red',
                     endpoint: "/" + this.type + "/" + this.name + "/command",
                     connectionType: 'mqtt',
                     payload: {
@@ -276,9 +325,49 @@ class NeopixelsBus {
                         value: {
                             state: "ON",
                             color: {
-                                r: 255,
-                                g: 255,
-                                b: 255
+                                r: 180,
+                                g: 0,
+                                b: 0
+                            },
+                            effect: "none",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'green',
+                    label: 'Green',
+                    description: 'Turns on the neopixels in green',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 0,
+                                g: 0,
+                                b: 180
+                            },
+                            effect: "none",
+                            brightness: 255
+                        },
+                    },
+                },
+                {
+                    name: 'blue',
+                    label: 'Blue',
+                    description: 'Turns on the neopixels in blue',
+                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    connectionType: 'mqtt',
+                    payload: {
+                        type: 'json',
+                        value: {
+                            state: "ON",
+                            color: {
+                                r: 0,
+                                g: 0,
+                                b: 180
                             },
                             effect: "none",
                             brightness: 255
@@ -306,85 +395,23 @@ class NeopixelsBus {
                     },
                 },
                 {
-                    name: 'pulse',
-                    label: 'Pulse Effect',
-                    description: 'Turn on an effect on the neopixel bus',
-                    endpoint: "/" + this.type + "/" + this.name + "/command",
+                    name: 'individual_control',
+                    label: 'Individual control',
+                    description: 'Control individual neopixels',
+                    endpoint: "/" + this.type + "/" + this.name + "/individual_control/command",
                     connectionType: 'mqtt',
                     payload: {
-                        type: 'json',
-                        value: {
-                            state: "ON",
-                            color: {
-                                r: 255,
-                                g: 255,
-                                b: 255
-                            },
-                            effect: "pulse",
-                            brightness: 255
-                        },
+                        type: 'json-schema',
+                        schema: {
+                            "from": { "type": "int"},
+                            "to": { "type": "int"},
+                            "red": { "type": "int"},
+                            "green": { "type": "int"},
+                            "blue": { "type": "int"}
+
+                          }
                     },
-                },
-                {
-                    name: 'random',
-                    label: 'Random Effect',
-                    description: 'Turn on a random effect on the neopixel bus',
-                    endpoint: "/" + this.type + "/" + this.name + "/command",
-                    connectionType: 'mqtt',
-                    payload: {
-                        type: 'json',
-                        value: {
-                            state: "ON",
-                            color: {
-                                r: 255,
-                                g: 255,
-                                b: 255
-                            },
-                            effect: "random",
-                            brightness: 255
-                        },
-                    },
-                },
-                {
-                    name: 'strobe',
-                    label: 'Strobe Effect',
-                    description: 'Turn on a strobe effect on the neopixel bus',
-                    endpoint: "/" + this.type + "/" + this.name + "/command",
-                    connectionType: 'mqtt',
-                    payload: {
-                        type: 'json',
-                        value: {
-                            state: "ON",
-                            color: {
-                                r: 255,
-                                g: 255,
-                                b: 255
-                            },
-                            effect: "strobe",
-                            brightness: 255
-                        },
-                    },
-                },
-                {
-                    name: 'flicker',
-                    label: 'Flicker Effect',
-                    description: 'Turn on a flicker effect on the neopixel bus',
-                    endpoint: "/" + this.type + "/" + this.name + "/command",
-                    connectionType: 'mqtt',
-                    payload: {
-                        type: 'json',
-                        value: {
-                            state: "ON",
-                            color: {
-                                r: 255,
-                                g: 255,
-                                b: 255
-                            },
-                            effect: "flicker",
-                            brightness: 255
-                        },
-                    },
-                },
+                }
             ]
         }
     }
