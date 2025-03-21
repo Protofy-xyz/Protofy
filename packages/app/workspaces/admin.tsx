@@ -14,7 +14,9 @@ import {
     Power,
     FileCog,
     Bot,
-    Plus
+    Plus,
+    Zap,
+    Wrench
 } from '@tamagui/lucide-icons'
 import {
     ServiceMemoryUsageChart,
@@ -35,8 +37,8 @@ import { DashboardCard } from 'protolib/components/DashboardCard'
 const enableBoards = true   
 
 export default ({ pages, boards }) => {
-    const adminPages = pages.filter(p => p.pageType == 'admin')
-
+    const adminPages = pages.filter(p => p.pageType == 'admin' && !p.object)
+    const cmsPages = pages.filter(p => p.pageType == 'admin' && p.object)
     return {
         "default": "/workspace/",
         "label": "Admin panel",
@@ -111,37 +113,31 @@ export default ({ pages, boards }) => {
                     return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
                 }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }]))
             } : {},
-            ...(adminPages.length ? {
-                "CMS": adminPages.map((page) => {
+            ...(cmsPages.length ? {
+                "CMS Objects": cmsPages.map((page) => {
                     return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Box, "href": page.route }
                 })
             } : {}),
+            ...(adminPages.length ? {
+                "Administration": adminPages.map((page) => {
+                    return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Wrench, "href": page.route }
+                })
+            } : {}),
+            "Integrations": [
+                { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
+                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
+                { "name": "Objects", "icon": Boxes, "href": "/workspace/objects" },
+                { "name": "Pages", "icon": "layout", "href": "/workspace/pages" }
+            ],
             "System": [
                 { "name": "Users", "icon": "users", "href": "/workspace/users" },
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
                 { "name": "Events", "icon": "activity", "href": "/workspace/events" },
-                { "name": "Messages", "icon": Inbox, "href": "/workspace/messages" },
                 { "name": "Services", "icon": Cog, "href": "/workspace/services" },
                 { "name": "Databases", "icon": Database, "type": "databases", "path": "/system" },
+                { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
             ],
-            "Development": [
-                { "name": "Objects", "icon": Boxes, "href": "/workspace/objects" },//"visibility": ["development"]
-                { "name": "Pages", "icon": "layout", "href": "/workspace/pages" },
-                { "name": "Automations", "icon": ToyBrick, "href": "/workspace/apis" },
-            ],
-            // "State Machines": [
-            //     { "name": "Instances", "icon": Power, "href": "/workspace/stateMachines" },
-            //     { "name": "Definitions", "icon": FileCog, "href": "/workspace/stateMachineDefinitions" },
-            // ],
-            "Devices": [
-                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
-                { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
-            ],
-            "Content": [
-                { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" },
-                { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
-                { "name": "Public", "icon": "doorOpen", "href": "/workspace/files?path=/apps/next/public" }
-            ]
+
         }
     }
 }

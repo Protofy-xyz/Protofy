@@ -18,13 +18,14 @@ import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import { Subsystems } from 'protodevice/src/Subsystem'
-import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text } from '@my/ui';
+import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
+import { useRouter } from 'solito/navigation';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
@@ -147,7 +148,7 @@ export default {
     const [targetDeviceName, setTargetDeviceName] = useState('')
     const [targetDeviceModel, setTargetDeviceModel] = useState(DevicesModel.load({}))
     const [compileSessionId, setCompileSessionId] = useState('')
-    const [all, setAll] = useState(false)
+    const router = useRouter()
     // const { message } = useSubscription(['device/compile']);
 
     const flashDevice = async (device, yaml?) => {
@@ -189,7 +190,7 @@ export default {
         const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { yaml });
         const data = await response.json();
         console.log("Save Yaml, compileSessionId:", data.compileSessionId);
-        
+
         // Set compileSessionId and trigger the next step
         setCompileSessionId(data.compileSessionId);
         if (onSuccess) {
@@ -205,18 +206,18 @@ export default {
         throw errorStr;
       }
     };
-    
+
     useEffect(() => {
       const process = async (compileSessionId) => {
         if (stage == 'yaml') {
           try {
             // Call saveYaml with a callback to continue processing
             await saveYaml(yamlRef.current, async (sessionId) => {
-    
+
               // Check if binary is already available to skip compilation
               const url = downloadDeviceFirmwareEndpoint(targetDeviceName, sessionId);
               const resp = await fetch(url);
-    
+
               if (resp.ok) {
                 // Binary exists, skip compilation and go to upload
                 setStage('upload');
@@ -231,7 +232,7 @@ export default {
                   setStage('compile');
                 }, 1000);
               }
-    
+
               targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel");
             });
           } catch (err) {
@@ -266,11 +267,11 @@ export default {
           }
         }
       };
-    
+
       process(compileSessionId);
     }, [stage]);
-    
-    
+
+
 
 
     // useEffect(() => {
@@ -332,24 +333,16 @@ export default {
       <DataView
         entityName="devices"
         defaultView={"grid"}
-        key={all ? 'all' : 'filtered'}
         toolBarContent={
           <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
-            <Text fontSize={14} color="$color11">
-              View all
-            </Text>
             <Tinted>
-              <Switch
-                forceStyle='hover'
-                checked={all}
-                onCheckedChange={v => setAll(v)} size="$1"
-              >
-                {/** @ts-ignore */}
-                <Switch.Thumb animation="quick" backgroundColor={"$color9"} />
-              </Switch>
+              <Button mah="30px" onPress={() => document.location.href = '/workspace/deviceDefinitions'}>
+                <XStack alignItems="center" jc="center">
+                  <BookOpen size={20} mr="$2" />
+                  Definitions
+                </XStack>
+              </Button>
             </Tinted>
-
-
           </XStack>
         }
         itemData={itemData}
