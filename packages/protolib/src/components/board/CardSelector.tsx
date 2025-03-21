@@ -112,7 +112,6 @@ return card({
 // data contains: data.icon, data.color, data.name, data.params
 return card({
     content: \`
-        \${icon({ name: data.icon, color: data.color, size: '48' })}    
         \${cardAction({ data })}
     \`
 });
