@@ -6,6 +6,8 @@ import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
 import { addAction } from "../actions/context/addAction";
+// import { addCard } from "../cards/context/addCard";
+
 
 const logger = getLogger()
 
@@ -24,7 +26,6 @@ export const WhatsappAPI = (app, context) => {
         params: {phone: "E.164 format phone number started by + and country code. Example: +34666666666", message: "message value to send"},
         emitEvent: true
     })
-
     app.get('/api/core/v1/whatsapp/send/message', handler(async (req, res, session) => {
         const { phone, message } = req.query
         // console.log("phone", phone)
@@ -56,5 +57,39 @@ export const WhatsappAPI = (app, context) => {
         const img = await context.whatsapp.generateWhatsappQrCode(req.params.phone, req.params.message)
         res.send({img})
     }))
+
+    const qrImg = async ()=>{ 
+        try {
+            const base64Img = await context.whatsapp.generateWhatsappQrCode(
+                "phone",
+                "message" + ` projectId: ${"a"}`
+            );
+            const base64RawData = base64Img.replace(/^data:image\/png;base64,/, "");
+            // console.log("base64Img->", base64RawData)
+            
+            context.state.set({ group: 'whatsapp', tag: "onboarding", name: "qr", value: base64Img, emitEvent: true });
+
+        } catch (error) {
+            console.error('Error generando whatsapp QR:', error);
+            return "Error generando la imagen";
+        }
+    }
+    qrImg()
+    app.get('/api/core/v1/whatsapp/image/:phone/:boardName/:message', async (req, res) => {
+        try {
+            const imgBase64 = await context.whatsapp.generateWhatsappQrCode(
+                req.params.phone,
+                req.params.message + ` projectId: ${req.params.boardName}`
+            );
+            
+            const imgBuffer = Buffer.from(imgBase64.replace(/^data:image\/png;base64,/, ""), 'base64');
+            res.setHeader('Content-Type', 'image/png');
+            res.setHeader('Content-Length', imgBuffer.length);  
+            res.send(imgBuffer);
+        } catch (error) {
+            console.error('Error generando QR:', error);
+            res.status(500).send('Error generando la imagen');
+        }
+    });
     
 }
