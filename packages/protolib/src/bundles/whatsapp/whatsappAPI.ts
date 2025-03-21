@@ -6,7 +6,7 @@ import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
 import { addAction } from "../actions/context/addAction";
-// import { addCard } from "../cards/context/addCard";
+import { addCard } from "../cards/context/addCard";
 
 
 const logger = getLogger()
@@ -75,5 +75,22 @@ export const WhatsappAPI = (app, context) => {
         }
     }
     qrImg()
+
+    addCard({
+        group: 'whatsapp',
+        tag: "message",
+        id: 'whatsapp_message_send',
+        templateName: "whatsapp send message",
+        name: "message_send",
+        defaults: {
+            name: "whatsapp_message_send",
+            icon: "whatsapp",
+            description: "send a whatsapp message to a phone number",
+            rulesCode: `return execute_action("/api/core/v1/whatsapp/send/message", { phone: userParams.phone, message: userParams.message });`,
+            params: {phone: "phone number", message: "message"},
+            type: 'action'
+        },
+        emitEvent: true
+    })
     
 }
