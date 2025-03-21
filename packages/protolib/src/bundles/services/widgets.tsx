@@ -53,8 +53,7 @@ const cardAction = ({ data }) => {
     const margin = 10;
     const allKeys = Object.keys(data.params || {});
     const visibleKeys = allKeys.filter(key => {
-        const cfg = data.configParams?.[key];
-        return cfg?.visible !== false;
+        return data.configParams?.[key]?.visible !== false;
     });
 
     const longestKey = visibleKeys.reduce((acc, cur) => (
@@ -114,6 +113,7 @@ const cardAction = ({ data }) => {
                                     box-sizing: border-box;
                                     min-width: 100px;
                                 " 
+                                value ="\${data.configParams?.[key]?.defaultValue}"
                                 placeholder="\${data.params[key]}"
                             >
                         </div>
