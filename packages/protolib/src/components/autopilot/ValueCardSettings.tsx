@@ -67,6 +67,11 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                                 }
                             }}
                             options={{
+                                scrollBeyondLastLine: false,
+                                scrollbar: {
+                                  vertical: 'auto',
+                                  horizontal: 'auto',
+                                },
                                 folding: false,
                                 lineDecorationsWidth: 0,
                                 lineNumbersMinChars: 0,

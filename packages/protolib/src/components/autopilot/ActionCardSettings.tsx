@@ -93,25 +93,30 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
             />}
             {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
             {tab == 'raw' && <Monaco
-              path={"card-" + cardData.name + ".ts"}
-              darkMode={resolvedTheme === 'dark'}
-              sourceCode={JSON.stringify(cardData, null, 2)}
-              onChange={(newCode) => {
-                try {
-                  setCardData(JSON.parse(newCode))
-                } catch (err) {
-                  console.error("Invalid JSON", err)
-                }
-              }}
-              options={{
-                folding: false,
-                lineDecorationsWidth: 0,
-                lineNumbersMinChars: 0,
-                minimap: { enabled: false },
-                formatOnPaste: true,
-                formatOnType: true,
-              }}
-            />}
+                            path={"card-" + cardData.name + ".ts"}
+                            darkMode={resolvedTheme === 'dark'}
+                            sourceCode={JSON.stringify(cardData, null, 2)}
+                            onChange={(newCode) => {
+                                try {
+                                    setCardData(JSON.parse(newCode))
+                                } catch (err) {
+                                    console.error("Invalid JSON", err)
+                                }
+                            }}
+                            options={{
+                                scrollBeyondLastLine: false,
+                                scrollbar: {
+                                  vertical: 'auto',
+                                  horizontal: 'auto',
+                                },
+                                folding: false,
+                                lineDecorationsWidth: 0,
+                                lineNumbersMinChars: 0,
+                                minimap: { enabled: false },
+                                formatOnPaste: true,
+                                formatOnType: true,
+                            }}
+                        />}
 
           </Tinted>
 
