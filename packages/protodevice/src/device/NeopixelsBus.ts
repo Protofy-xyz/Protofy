@@ -397,17 +397,17 @@ class NeopixelsBus {
                 {
                     name: 'individual_control',
                     label: 'Individual control',
-                    description: 'Control individual neopixels',
+                    description: 'Control individual neopixels. From and to are the indexes of the neopixels to control. Red, green and blue are the color values and must be between 0 and 255',
                     endpoint: "/" + this.type + "/" + this.name + "/individual_control/command",
                     connectionType: 'mqtt',
                     payload: {
                         type: 'json-schema',
                         schema: {
-                            "from": { "type": "int"},
-                            "to": { "type": "int"},
-                            "red": { "type": "int"},
-                            "green": { "type": "int"},
-                            "blue": { "type": "int"}
+                            "from": { "type": "int", "minimum": 0, "maximum": this.numLeds - 1 },
+                            "to": { "type": "int", "minimum": 0, "maximum": this.numLeds - 1 },
+                            "red": { "type": "int", "minimum": 0, "maximum": 255 },
+                            "green": { "type": "int", "minimum": 0, "maximum": 255 },
+                            "blue": { "type": "int", "minimum": 0, "maximum": 255 }
 
                           }
                     },
