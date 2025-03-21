@@ -44,9 +44,10 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { } }) => {
+const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = { } }) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
+      {...data}
       Icon={icon ?? 'tag'}
       value={value ?? 'N/A'}
       color={color}
@@ -55,9 +56,10 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
   </CenterCard>
 }
 
-const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } }) => {
+const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { } , data = { }}) => {
   return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
+      {...data}
       displayResponse={displayResponse}
       name={name}
       description={"Run action"}
@@ -216,6 +218,7 @@ const Board = ({ board, icons }) => {
             const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
             return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
           }}
+          data={item}
         />
       };
     }
