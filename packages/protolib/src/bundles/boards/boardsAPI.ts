@@ -296,11 +296,11 @@ export const BoardsAPI = (app, context) => {
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
 
-                    const wrapper = new AsyncFunction('states', `
+                    const wrapper = new AsyncFunction('states', 'data',`
                         ${card.rulesCode}
                     `);
 
-                    let value = await wrapper(states);
+                    let value = await wrapper(states, card);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                         const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
