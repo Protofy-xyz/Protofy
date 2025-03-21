@@ -7,15 +7,20 @@ import fs from 'fs';
 import path from 'path';
 import { addAction } from "../actions/context/addAction";
 import { addCard } from "../cards/context/addCard";
+import {getKey} from "../keys/context";
 
+
+const ONLY_LAST_MESSAGE = true
 
 const logger = getLogger()
 
-const qrImg = async (context)=>{ 
+const qrImg = async (context)=>{
+    
+    console.log("GET KEY::::::::::::::",await getKey({key:"WHATSAPP_PHONE",token: getServiceToken()}))
     try {
         const base64Img = await context.whatsapp.generateWhatsappQrCode(
-            "phone",
-            "message" + ` projectId: ${"a"}`
+            process.env.WHATSAPP_PHONE,
+            "Deseo inscribirme al board" + ` projectId: ${"pa"}`
         );
         const base64RawData = base64Img.replace(/^data:image\/png;base64,/, "");
         return base64Img;
@@ -38,7 +43,8 @@ const registerActions = async (context)=>{
     })
 }
 const registerCards = async (context)=>{
-    addCard({
+    if(!ONLY_LAST_MESSAGE){
+        addCard({
         group: 'whatsapp',
         tag: "received",
         id: 'whatsapp_received_messages',
@@ -49,12 +55,32 @@ const registerCards = async (context)=>{
             icon: "whatsapp",
             color: "#25d366",
             description: "received whatsapp messages",
-            rulesCode: `return states.whatsapp.received.messages.map(msg => msg.from + ':' + msg.content).join('<br>');`,
+            rulesCode: `return states.whatsapp.received.messages.map(msg => msg.from + ' -> ' + msg.content).join('<br>');`,
+            type: 'value'
+        },
+        emitEvent: true
+        })
+    }
+
+    addCard({
+        group: 'whatsapp',
+        tag: "received",
+        id: 'whatsapp_received_message',
+        templateName: "whatsapp last received message",
+        name: "message",
+        defaults: {
+            name: "whatsapp_last_received_message",
+            icon: "whatsapp",
+            color: "#25d366",
+            description: "whatsapp last received message",
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value.from+\" -> \"+data.value.content})}\n    `\n});\n",
+            rulesCode: `return states.whatsapp.received.message`,
             type: 'value'
         },
         emitEvent: true
     })
     
+    //TODO: refactor name as recceived is
     addCard({
         group: 'whatsapp',
         tag: "message",
@@ -83,12 +109,20 @@ const registerCards = async (context)=>{
             name: "whatsapp_onboarding_qr",
             icon: "whatsapp",
             color: "#25d366",
-            html: `
+            html: process.env.WHATSAPP_PHONE? `
 //data contains: data.value, data.icon and data.color
 return card({
     content: \`
         \${icon({ name: data.icon, color: data.color, size: '48' })}
         <img src="${await qrImg(context)}" alt="qr code" />
+    \`
+});
+`:`
+//data contains: data.value, data.icon and data.color
+return card({
+    content: \`
+        \${icon({ name: data.icon, color: data.color, size: '48' })}
+        Put the whatsapp phone number in the environment variable: WHATSAPP_PHONE
     \`
 });
 `,
@@ -146,20 +180,32 @@ export const WhatsappAPI = (app, context) => {
     const cleanPhoneNumber = (phoneNumber) => {
         return phoneNumber.replace("whatsapp:","")
     }
+    const formatMessage = (message) => {
+        return `${message.from.replace("whatsapp:","")} -> ${message.content}`
+    }
+
     context.whatsapp.subscribeToMessages("pa",'username', 'password', async (topic, message)=>{
         // console.log("TOPIC API WHATS: ", topic)
         // console.log("MESSAGE API WHATS: ", message)
         // console.log("MESSAGE API WHATS: ", typeof message)
         try{
             const msg = JSON.parse(message)
+            let payload = {from: cleanPhoneNumber(msg.From), content: msg.Body}
+            context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: payload, emitEvent: true });
+            if(ONLY_LAST_MESSAGE) return
             const prevValue = await context.state.get({ group: 'whatsapp', tag: "received", name: "messages", defaultValue: [] });
             // console.log("prevValue::::::::::::::: ", prevValue)
-            let payload = [{from: cleanPhoneNumber(msg.From), content: msg.Body}]
+            let payloadArray = [payload]
             if(prevValue){
-                payload = [...prevValue, ...payload]
+                //si el prevalue tiene una length igual a 10, entonces se elimina el primer elemento
+                if(prevValue.length === 10){
+                    prevValue.shift()
+                }
+                payloadArray = [...prevValue, ...payloadArray]
             } 
             // console.log("PAYLOAD::::::::::::::: ", payload)
-            context.state.set({ group: 'whatsapp', tag: "received", name: "messages", value: payload, emitEvent: true });
+            context.state.set({ group: 'whatsapp', tag: "received", name: "messages", value: payloadArray, emitEvent: true });
+            
         }catch(e)
         {
             console.error("Error parsing whatsapp message", e)
