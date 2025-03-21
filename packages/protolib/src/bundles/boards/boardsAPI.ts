@@ -43,6 +43,19 @@ async function execute_action(url, params={}) {
 }
 `
 
+const changeTracker = {}
+
+const getStateValue = () => `
+    const getStateValue = (stateName, dedup=true) => {
+        if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName] || !dedup) {
+            changeTracker[stateName] = states[stateName]
+            return states[stateName]
+        }
+        return undefined
+    }
+`
+
+
 async function acquireLock(filePath) {
     while (writeLocks.has(filePath)) {
         await new Promise(resolve => setTimeout(resolve, 10)); // Espera 10ms antes de reintentar
@@ -303,11 +316,12 @@ export const BoardsAPI = (app, context) => {
 
         if(autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
-            const wrapper = new AsyncFunction('states', 'token', 'API', `
+            const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
                 ${getExecuteAction(await getActions())}
+                ${getStateValue()}
                 ${fileContent.rulesCode}
             `);
-            await wrapper(states.boards[boardId] ?? {}, token, API);
+            await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);
         }
 
         return fileContent;
