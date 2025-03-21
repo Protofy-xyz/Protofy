@@ -5,11 +5,14 @@ import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
-import { JSONView } from '../JSONView'
+import { useThemeSetting } from '@tamagui/next-theme';
+import { Monaco } from '../Monaco'
+
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
     const [cardData, setCardData] = useState(card);
     const [tab, setTab] = useState("rules");
+    const { resolvedTheme } = useThemeSetting();
 
     useEffect(() => {
         onEdit(cardData);
@@ -52,9 +55,31 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             setCardData={setCardData}
                         />}
                         {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value }} />}
-                        {tab == 'raw' && <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
-                            <JSONView style={{ backgroundColor: 'var(--gray3)' }} src={cardData} />
-                        </ScrollView>}
+                        {tab == 'raw' && <Monaco
+                            path={"card-" + cardData.name + ".ts"}
+                            darkMode={resolvedTheme === 'dark'}
+                            sourceCode={JSON.stringify(cardData, null, 2)}
+                            onChange={(newCode) => {
+                                try {
+                                    setCardData(JSON.parse(newCode))
+                                } catch (err) {
+                                    console.error("Invalid JSON", err)
+                                }
+                            }}
+                            options={{
+                                scrollBeyondLastLine: false,
+                                scrollbar: {
+                                  vertical: 'auto',
+                                  horizontal: 'auto',
+                                },
+                                folding: false,
+                                lineDecorationsWidth: 0,
+                                lineNumbersMinChars: 0,
+                                minimap: { enabled: false },
+                                formatOnPaste: true,
+                                formatOnType: true,
+                            }}
+                        />}
                     </Tinted>
 
                 </YStack>
