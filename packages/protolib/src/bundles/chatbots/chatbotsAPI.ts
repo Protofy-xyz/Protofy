@@ -162,7 +162,7 @@ export const ChatbotsAPI = (app, context) => {
       return
     }
     context.chatbots.sendChat(getServiceToken(), to, message)
-    res.status(200).send('Message sent')
+    res.status(200).send({ result: 'Message sent' })
   });
 
   addAction({
@@ -186,7 +186,7 @@ export const ChatbotsAPI = (app, context) => {
     defaults: {
       type: "action",
       icon: 'message-square-text',
-      name: 'send_chat',
+      name: 'send_user_message',
       description: 'Send chat message',
       params: {
         message: "Message to send to the user, just a text"

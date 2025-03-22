@@ -55,7 +55,8 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
                     `
             const url = params.url;
             const response = parseFloat(await sendPromptWithImage(preprompt + params.prompt, url));
-            res.send({ response });
+            console.log('CONFIDENCE:', response);
+            res.json(response);
         } catch (e) {
             console.error(e);
             res.send({ error: e.message });
@@ -109,7 +110,7 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             type: "action",
             icon: 'camera',
             name: 'detect',
-            description: 'Detect objects in the camera stream',
+            description: 'Detect objects in the camera stream. returns a confidence value between 0 and 1. It just returns the confidence as a number, without a wrapping object.',
             params: {
                 url: "camera stream url",
                 prompt: "what to detect in the image",

@@ -22,27 +22,7 @@ const autopilotState = {}
 
 const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
-
-async function execute_action(url, actions, params = {}) {
-    console.log('Executing action: ', url, params);
-    const action = actions.find(a => a.url === url);
-    if (!action) {
-        console.error('Action not found: ', url);
-        return;
-    }
-    if (action.method === 'post') {
-        const { token, ...data } = params as any;
-        const response = await API.post(url + '?token=' + token, data);
-        return response.data
-    } else {
-        const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-        //console.log('url: ', url+'?token='+token+'&'+paramsStr)
-        const response = await API.get(url + '?token=' + token + '&' + paramsStr);
-        return response.data
-    }
-}
-
-const getExecuteAction = (actions) => `
+const getExecuteAction = (actions, board='') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
     console.log('Executing action: ', url, params);
@@ -51,6 +31,13 @@ async function execute_action(url, params={}) {
         console.error('Action not found: ', url);
         return;
     }
+
+    console.log('Action: ', action)
+
+    if(action.receiveBoard) {
+        params.board = '${board}'
+    }
+
     if (action.method === 'post') {
         const { token, ...data } = params;
         const response = await API.post(url+'?token='+token, data);
@@ -68,7 +55,22 @@ const changeTracker = {}
 
 const hasStateValue = () => `
     const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+        if(!(stateName in states)) {
+            return false
+        }
+        
         let value = states[stateName]
+
+
         if (!options.caseSensitive && typeof value === 'string' && value) {
             value = value.toLowerCase()
             expectedValue = expectedValue.toLowerCase()
@@ -84,11 +86,44 @@ const hasStateValue = () => `
 `
 const hasStateValueChanged = () => `
     const hasStateValueChanged = (stateName) => {
-        if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName]) {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+
+        if(!(stateName in states)) {
+                return false
+        }
+
+        if (!(stateName in changeTracker) || changeTracker[stateName] !== states[stateName]) {
             changeTracker[stateName] = states[stateName]
             return true
         }
         return false
+    }
+`
+
+const getStateValue = () => `
+    const getStateValue = (stateName) => {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+
+        if(!(stateName in states)) {
+            return false
+        }
+        return states[stateName]
     }
 `
 
@@ -353,9 +388,10 @@ export const BoardsAPI = (app, context) => {
         if (autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
             const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
-                ${getExecuteAction(await getActions())}
+                ${getExecuteAction(await getActions(), boardId)}
                 ${hasStateValue()}
                 ${hasStateValueChanged()}
+                ${getStateValue()}
                 ${fileContent.rulesCode}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);
@@ -367,7 +403,12 @@ export const BoardsAPI = (app, context) => {
     const cleanCode = (code) => {
         //remove ```(plus anything is not an space) from the beginning of the code
         //remove ``` from the end of the code
-        return code.replace(/^```[^\s]+/g, '').replace(/```/g, '').trim()
+        let cleaned = code.replace(/^```[^\s]+/g, '').replace(/```/g, '').trim()
+        //remove 'javascript' from the beginning of the code if it exists
+        if (cleaned.startsWith('javascript')) {
+            cleaned = cleaned.replace('javascript', '').trim()
+        }
+        return cleaned
     }
     BoardsAutoAPI(app, context)
 
@@ -429,7 +470,7 @@ export const BoardsAPI = (app, context) => {
 
             const states = await context.state.getStateTree();
             const wrapper = new AsyncFunction('states', 'userParams', 'token', 'API', `
-                ${getExecuteAction(await getActions())}
+                ${getExecuteAction(await getActions(), req.params.boardId)}
                 ${action.rulesCode}
             `);
 
@@ -486,38 +527,58 @@ export const BoardsAPI = (app, context) => {
     })
 
     app.get('/api/core/v1/autopilot/llm', async (req, res) => {
-        const states = await context.state.getStateTree();
-        const actions = await getActions();
         if (!req.query.prompt) {
             res.status(400).send('Missing prompt parameter')
             return
         }
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "llm", query: req.query.prompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
+
+        if(!req.query.board) {
+            res.status(400).send('Missing board parameter')
+            return
+        }
+
+        const board = (await API.get(`/api/core/v1/boards/${req.query.board}`)).data
+        if (!board || !board.cards || !Array.isArray(board.cards)) {
+            res.send({ error: "No actions found" });
+            return;
+        }
+
+        const actions = board.cards.filter(c => c.type === 'action')
+        const states = board.cards.filter(c => c.type === 'value').reduce((acc, c) => {
+            acc[c.name] = c.value
+            return acc
+        }, {})
+
+        const userprompt = `
+            Never use the chat state in the generated code. The chat state is only to understand what code to generate, but will not be available in the runtime.
+            Do not check any state if the user has not provided it in the prompt or requested to consider it.
+            Most probably you just need to write a single line of code calling await execute_action. Try to keep it as simple as possible.
+            The simpler the better.
+        `+req.query.prompt
+        
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "boardRules", rules: userprompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
         console.log('prompt: ', prompt)
         let reply = await callModel(prompt, context)
         if (reply?.choices[0]?.message?.content) {
             reply = cleanCode(reply.choices[0].message.content)
         }
+
+        console.log('GENERATED CODE: ', reply)
+
+        const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
+            ${getExecuteAction(await getActions())}
+            ${hasStateValue()}
+            ${hasStateValueChanged()}
+            ${getStateValue()}
+            ${reply}
+        `);
         try {
-            const orders = JSON.parse(reply)
-            if (!Array.isArray(orders)) {
-                res.status(400).send('Invalid orders format')
-                return
-            }
-            //iterate orders calling execute_action for each one. if the url is wait, wait for the specified time
-            for (const order of orders) {
-                if (order.url === 'wait') {
-                    await new Promise(resolve => setTimeout(resolve, order?.params?.seconds ?? order?.params?.time ?? 1))
-                } else {
-                    await execute_action(order.url, actions, order.params)
-                }
-            }
-        } catch (e) {
-            res.status(400).send('Invalid orders format')
-            console.error('Error parsing orders: ', e)
-            return
+            await wrapper(states ?? {}, token, API, changeTracker);
+        } catch(e) {
+            console.error("Error executing generated code: ", e)
         }
-        res.send(reply)
+
+        res.send({jsCode: reply})
     })
 
     addAction({
@@ -529,7 +590,8 @@ export const BoardsAPI = (app, context) => {
         params: {
             prompt: "the message to send"
         },
-        emitEvent: true
+        emitEvent: true,
+        receiveBoard: true
     })
 
     addCard({
