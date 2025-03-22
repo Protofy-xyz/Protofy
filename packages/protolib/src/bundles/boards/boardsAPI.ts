@@ -68,7 +68,22 @@ const changeTracker = {}
 
 const hasStateValue = () => `
     const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+        if(!(stateName in states)) {
+            return false
+        }
+        
         let value = states[stateName]
+
+
         if (!options.caseSensitive && typeof value === 'string' && value) {
             value = value.toLowerCase()
             expectedValue = expectedValue.toLowerCase()
@@ -84,11 +99,44 @@ const hasStateValue = () => `
 `
 const hasStateValueChanged = () => `
     const hasStateValueChanged = (stateName) => {
-        if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName]) {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+
+        if(!(stateName in states)) {
+                return false
+        }
+
+        if (!(stateName in changeTracker) || changeTracker[stateName] !== states[stateName]) {
             changeTracker[stateName] = states[stateName]
             return true
         }
         return false
+    }
+`
+
+const getStateValue = () => `
+    const getStateValue = (stateName) => {
+        if(!(stateName in states)) {
+            if(stateName.indexOf('-') > 0) {
+                //replace all '-' with '_'
+                stateName = stateName.replace(/-/g, '_')
+            } else if(stateName.indexOf('_') > 0) {
+                //replace all '_' with '-' 
+                stateName = stateName.replace(/_/g, '-')
+            }
+        }
+
+        if(!(stateName in states)) {
+            return false
+        }
+        return states[stateName]
     }
 `
 
@@ -356,6 +404,7 @@ export const BoardsAPI = (app, context) => {
                 ${getExecuteAction(await getActions())}
                 ${hasStateValue()}
                 ${hasStateValueChanged()}
+                ${getStateValue()}
                 ${fileContent.rulesCode}
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);

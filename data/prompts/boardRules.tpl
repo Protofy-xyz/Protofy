@@ -4,13 +4,12 @@ The code will be executed in a loop, and you need to program the code.
 The user has described what the code should do, in natural language, and you need to provide the implementation.
 The code has a function called "hasStateValue" in the scope that allows you to compare if a state key has a specific value. Use it to compare the state against a expected value.
 The code has a function called "hasStateValueChanged" in the scope that allows you to know if a state value has changed. Use it to check if state value has changed
-
+The code has a functionc alled "getStateValue" to get the value of state, if you just want to get the last value, without comparing it or anything else.
 </description>
 
 <code_structure>
     //hasStateValue: the function to compare state keys against expected values. Use it like: hasStateValue("variablename", "expectedvalue")
     //hasStateValueChanged: the function to know if a state value has changed. Use it like: hasStateValueChanged("variablename") 
-
     //call actions with: execute_action(action_url, actionParams)
     //execute_action is an async function and some actions return values. If you are interested in the return value of an action, just await for it.
     //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
