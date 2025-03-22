@@ -63,8 +63,8 @@ class I2cADC_ADS1115 {
         let monitors = []
         for(var i = 0; i < 4; i++){
             const monitor = {
-                label: `A${i} status`,
-                name: `a${i}-status`,
+                label: 'channel '+i,
+                name: this.name+'_channel_'+i,
                 description: `Get A${i} sensor status`,
                 endpoint: "/sensor/"+this.name+'_channel_'+i+"/state",
                 connectionType: "mqtt",
