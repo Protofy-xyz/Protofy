@@ -162,7 +162,7 @@ export const ChatbotsAPI = (app, context) => {
       return
     }
     context.chatbots.sendChat(getServiceToken(), to, message)
-    res.status(200).send('Message sent')
+    res.status(200).send({ result: 'Message sent' })
   });
 
   addAction({
