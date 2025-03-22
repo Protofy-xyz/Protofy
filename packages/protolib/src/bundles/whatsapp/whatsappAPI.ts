@@ -11,6 +11,7 @@ import {getKey} from "../keys/context";
 
 
 const ONLY_LAST_MESSAGE = true
+const MESSAGE_AND_PHONE_TOGETHER = false
 
 const logger = getLogger()
 
@@ -20,7 +21,7 @@ const qrImg = async (context)=>{
     try {
         const base64Img = await context.whatsapp.generateWhatsappQrCode(
             process.env.WHATSAPP_PHONE,
-            "Deseo inscribirme al board" + ` projectId: ${"pa"}`
+            "Deseo inscribirme al board" + ` projectId: ${process.env.PROJECT_ID}`
         );
         const base64RawData = base64Img.replace(/^data:image\/png;base64,/, "");
         return base64Img;
@@ -61,24 +62,60 @@ const registerCards = async (context)=>{
         emitEvent: true
         })
     }
+    if(MESSAGE_AND_PHONE_TOGETHER){
+        addCard({
+            group: 'whatsapp',
+            tag: "received",
+            id: 'whatsapp_received_message',
+            templateName: "whatsapp last received message",
+            name: "message",
+            defaults: {
+                name: "whatsapp_last_received_message",
+                icon: "whatsapp",
+                color: "#25d366",
+                description: "whatsapp last received message",
+                html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value.from+\" -> \"+data.value.content})}\n    `\n});\n",
+                rulesCode: `return states.whatsapp.received.message`,
+                type: 'value'
+            },
+            emitEvent: true
+        })
+    }else{
+        addCard({
+            group: 'whatsapp',
+            tag: "received",
+            id: 'whatsapp_received_message',
+            templateName: "whatsapp last received message",
+            name: "message",
+            defaults: {
+                name: "whatsapp_last_received_message",
+                icon: "whatsapp",
+                color: "#25d366",
+                description: "whatsapp last received message",
+                rulesCode: `return states.whatsapp.received.message`,
+                type: 'value'
+            },
+            emitEvent: true
+        })
+        addCard({
+            group: 'whatsapp',
+            tag: "received",
+            id: 'whatsapp_received_message_from',
+            templateName: "whatsapp last received message from",
+            name: "message_from",
+            defaults: {
+                name: "whatsapp_last_received_message_from",
+                icon: "whatsapp",
+                color: "#25d366",
+                description: "whatsapp last received message from",
+                rulesCode: `return states.whatsapp.received.message_from`,
+                type: 'value'
+            },
+            emitEvent: true
+        })
+    }
 
-    addCard({
-        group: 'whatsapp',
-        tag: "received",
-        id: 'whatsapp_received_message',
-        templateName: "whatsapp last received message",
-        name: "message",
-        defaults: {
-            name: "whatsapp_last_received_message",
-            icon: "whatsapp",
-            color: "#25d366",
-            description: "whatsapp last received message",
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value.from+\" -> \"+data.value.content})}\n    `\n});\n",
-            rulesCode: `return states.whatsapp.received.message`,
-            type: 'value'
-        },
-        emitEvent: true
-    })
+
     
     //TODO: refactor name as recceived is
     addCard({
@@ -109,7 +146,7 @@ const registerCards = async (context)=>{
             name: "whatsapp_onboarding_qr",
             icon: "whatsapp",
             color: "#25d366",
-            html: process.env.WHATSAPP_PHONE? `
+            html: process.env.WHATSAPP_PHONE && process.env.PROJECT_ID? `
 //data contains: data.value, data.icon and data.color
 return card({
     content: \`
@@ -122,7 +159,7 @@ return card({
 return card({
     content: \`
         \${icon({ name: data.icon, color: data.color, size: '48' })}
-        Put the whatsapp phone number in the environment variable: WHATSAPP_PHONE
+        Put the whatsapp phone number in the environment variable: WHATSAPP_PHONE & PROJECT_ID
     \`
 });
 `,
@@ -184,14 +221,19 @@ export const WhatsappAPI = (app, context) => {
         return `${message.from.replace("whatsapp:","")} -> ${message.content}`
     }
 
-    context.whatsapp.subscribeToMessages("pa",'username', 'password', async (topic, message)=>{
+    context.whatsapp.subscribeToMessages(process.env.PROJECT_ID,'username', 'password', async (topic, message)=>{
         // console.log("TOPIC API WHATS: ", topic)
         // console.log("MESSAGE API WHATS: ", message)
         // console.log("MESSAGE API WHATS: ", typeof message)
         try{
             const msg = JSON.parse(message)
             let payload = {from: cleanPhoneNumber(msg.From), content: msg.Body}
-            context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: payload, emitEvent: true });
+            if(MESSAGE_AND_PHONE_TOGETHER){
+                context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: payload, emitEvent: true });
+            }else{
+                context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: payload.content, emitEvent: true });
+                context.state.set({ group: 'whatsapp', tag: "received", name: "message_from", value: payload.from, emitEvent: true });
+            }
             if(ONLY_LAST_MESSAGE) return
             const prevValue = await context.state.get({ group: 'whatsapp', tag: "received", name: "messages", defaultValue: [] });
             // console.log("prevValue::::::::::::::: ", prevValue)
