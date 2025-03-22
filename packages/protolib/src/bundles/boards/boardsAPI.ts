@@ -5,9 +5,10 @@ import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { getServiceToken } from "protonode";
-import {addAction} from '../actions/context/addAction';
+import { addAction } from '../actions/context/addAction';
 import { removeActions } from "../actions/context/removeActions";
 import fileActions from "../files/fileActions";
+import { addCard } from "../cards/context/addCard";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
@@ -19,10 +20,10 @@ const logger = getLogger()
 const processTable = {}
 const autopilotState = {}
 
-const AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
+const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
 
-async function execute_action(url, actions, params={}) {
+async function execute_action(url, actions, params = {}) {
     console.log('Executing action: ', url, params);
     const action = actions.find(a => a.url === url);
     if (!action) {
@@ -31,12 +32,12 @@ async function execute_action(url, actions, params={}) {
     }
     if (action.method === 'post') {
         const { token, ...data } = params as any;
-        const response = await API.post(url+'?token='+token, data);
+        const response = await API.post(url + '?token=' + token, data);
         return response.data
     } else {
         const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
         //console.log('url: ', url+'?token='+token+'&'+paramsStr)
-        const response = await API.get(url+'?token='+token+'&'+paramsStr);
+        const response = await API.get(url + '?token=' + token + '&' + paramsStr);
         return response.data
     }
 }
@@ -81,7 +82,7 @@ const hasStateValue = () => `
         return false
     }
 `
-const hasStateValueChanged = ()=>`
+const hasStateValueChanged = () => `
     const hasStateValueChanged = (stateName) => {
         if (!changeTracker[stateName] || changeTracker[stateName] !== states[stateName]) {
             changeTracker[stateName] = states[stateName]
@@ -106,26 +107,26 @@ const token = getServiceToken()
 
 const callModel = async (prompt, context) => {
     let reply;
-    if(useChatGPT) {
+    if (useChatGPT) {
         reply = await context.chatGPT.chatGPTPrompt({
             message: prompt
         })
-        
+
         let content = reply[0]
-       
+
         if (reply.isError) {
             content = "// Error: " + reply.data.error.message
         }
-        
+
         reply = {
             choices: [
-              {
-                message: {
-                  content
+                {
+                    message: {
+                        content
+                    }
                 }
-              }
             ]
-          }
+        }
     } else {
         reply = await context.lmstudio.chatWithModel(prompt, 'qwen2.5-coder-32b-instruct')
     }
@@ -182,7 +183,7 @@ const getDB = (path, req, session) => {
                 //read file content
                 await acquireLock(BoardsDir(getRoot()) + file);
                 try {
-                    const fileContent = await fs.readFile(BoardsDir(getRoot()) + file+'.json', 'utf8')
+                    const fileContent = await fs.readFile(BoardsDir(getRoot()) + file + '.json', 'utf8')
                     yield [file.name, fileContent];
                 } catch (e) {
 
@@ -219,11 +220,11 @@ const getDB = (path, req, session) => {
                     const actionsCards = value.cards.filter(c => c.type === 'action')
                     for (let i = 0; i < actionsCards.length; i++) {
                         const card = actionsCards[i];
-                        console.log("Adding action: ", JSON.stringify(card, null, 4)) 
+                        console.log("Adding action: ", JSON.stringify(card, null, 4))
                         addAction({
                             group: 'boards',
                             name: card.name,
-                            url: "/api/core/v1/boards/"+key+"/actions/"+card.name,
+                            url: "/api/core/v1/boards/" + key + "/actions/" + card.name,
                             tag: key,
                             description: card.description ?? "",
                             params: card.params ?? {},
@@ -324,22 +325,22 @@ export const BoardsAPI = (app, context) => {
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
 
-                    const wrapper = new AsyncFunction('states', 'data',`
+                    const wrapper = new AsyncFunction('states', 'data', `
                         ${card.rulesCode}
                     `);
 
                     let value = await wrapper(states, card);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
-                        const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
+                    const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
 
-                        if (prevValue != value) {
-                            // logger.info({ card, value, prevValue }, "New value for card " + card.key + ' name: ' + card.name);
-                            // logger.info({ card, value }, "New value for card " + card.key);
-                            // logger.info({ newValue: value, oldValue: states['boards'][boardId] }, "Setting value for card " + card.key);
-                            card.value = value;
-                            context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
-                        }
+                    if (prevValue != value) {
+                        // logger.info({ card, value, prevValue }, "New value for card " + card.key + ' name: ' + card.name);
+                        // logger.info({ card, value }, "New value for card " + card.key);
+                        // logger.info({ newValue: value, oldValue: states['boards'][boardId] }, "Setting value for card " + card.key);
+                        card.value = value;
+                        context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
+                    }
                     // }
                 }
             } catch (error) {
@@ -349,7 +350,7 @@ export const BoardsAPI = (app, context) => {
             }
         }
 
-        if(autopilotState[boardId] && fileContent.rulesCode) {
+        if (autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
             const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
                 ${getExecuteAction(await getActions())}
@@ -385,7 +386,7 @@ export const BoardsAPI = (app, context) => {
     })
 
     app.post('/api/core/v1/autopilot/getActionCode', async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4),  userParams: JSON.stringify(req.body.userParams, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
@@ -487,43 +488,74 @@ export const BoardsAPI = (app, context) => {
     app.get('/api/core/v1/autopilot/llm', async (req, res) => {
         const states = await context.state.getStateTree();
         const actions = await getActions();
-        if(!req.query.prompt) {
+        if (!req.query.prompt) {
             res.status(400).send('Missing prompt parameter')
             return
         }
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "llm", query: req.query.prompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
         console.log('prompt: ', prompt)
         let reply = await callModel(prompt, context)
-        if(reply?.choices[0]?.message?.content) {
+        if (reply?.choices[0]?.message?.content) {
             reply = cleanCode(reply.choices[0].message.content)
         }
         try {
             const orders = JSON.parse(reply)
-            if(!Array.isArray(orders)) {
+            if (!Array.isArray(orders)) {
                 res.status(400).send('Invalid orders format')
                 return
             }
             //iterate orders calling execute_action for each one. if the url is wait, wait for the specified time
-            for(const order of orders) {
-                if(order.url === 'wait') {
-                    await new Promise(resolve => setTimeout(resolve, order?.params?.seconds??order?.params?.time??1))
+            for (const order of orders) {
+                if (order.url === 'wait') {
+                    await new Promise(resolve => setTimeout(resolve, order?.params?.seconds ?? order?.params?.time ?? 1))
                 } else {
                     await execute_action(order.url, actions, order.params)
                 }
             }
-        } catch(e) {
+        } catch (e) {
             res.status(400).send('Invalid orders format')
             console.error('Error parsing orders: ', e)
             return
-        }   
+        }
         res.send(reply)
+    })
+
+    addAction({
+        group: 'autopilot',
+        name: 'send',
+        url: "/api/core/v1/autopilot/llm",
+        tag: 'message',
+        description: "Send a direct request to the autopilot system, in natural language",
+        params: {
+            prompt: "the message to send"
+        },
+        emitEvent: true
+    })
+
+    addCard({
+        group: 'autopilot',
+        tag: 'message',
+        id: 'send',
+        templateName: 'Send a message to the autopilot system',
+        name: 'autopilot_send',
+        defaults: {
+            type: "action",
+            icon: 'message-square-text',
+            name: 'autopilot_send',
+            description: 'Send a direct request to the autopilot system, in natural language',
+            params: {
+                prompt: "Message to send to the system"
+            },
+            rulesCode: `return await execute_action("/api/core/v1/autopilot/llm", userParams)`,
+        },
+        emitEvent: true,
     })
 
     setInterval(async () => {
         const boards = await getBoards()
         // console.log("Boards: ", boards)
         for (const board of boards) {
-            if(processTable[board]) {
+            if (processTable[board]) {
                 console.log("Board already being processed: ", board)
                 continue;
             }
@@ -550,7 +582,7 @@ export const BoardsAPI = (app, context) => {
                     addAction({
                         group: 'boards',
                         name: card.name,
-                        url: "/api/core/v1/boards/"+board+"/actions/"+card.name,
+                        url: "/api/core/v1/boards/" + board + "/actions/" + card.name,
                         tag: board,
                         description: card.description ?? "",
                         params: card.params ?? {},
@@ -559,6 +591,6 @@ export const BoardsAPI = (app, context) => {
                 }
             }
         }
-    } 
+    }
     registerActions()
 }
