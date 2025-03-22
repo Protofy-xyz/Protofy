@@ -29,21 +29,24 @@ export default function TextMessage({ index, chat }: Props) {
     chat,
     prompt
   });
+
+  // IMPORTANTE: mueve esta condición justo después del hook useBot
+  if (isStreamCompleted && !result.trim()) {
+    return null;
+  }
+
   return (
     <div>
       <div className="flex items-start w-full">
-        {/* <div className="mr-4  rounded-md flex items-center flex-shrink-0">
-          <Avatar className=" h-11 w-11" src="/images/bot.webp" />
-        </div> */}
-
-        {!result && !error ? (
-          <div className=" self-center">
+        {/* Loader solo aparece si todavía está cargando y no hay error */}
+        {!isStreamCompleted && !result && !error ? (
+          <div className="self-center">
             <SyncLoader color="gray" size={8} speedMultiplier={0.5} />
           </div>
         ) : (
           <div
             className={classNames(
-              "  animate-preulse overflow-x-hidden whitespace-pre-wrap",
+              "animate-preulse overflow-x-hidden whitespace-pre-wrap",
               { "text-red-500": error, "dark:text-gray-300": !error }
             )}
           >
@@ -73,7 +76,7 @@ export default function TextMessage({ index, chat }: Props) {
               ></span>
             )}
 
-            <div className="mt-2 md:mt-5  text-left self-start">
+            <div className="mt-2 md:mt-5 text-left self-start">
               {!copied ? (
                 <button
                   className="edit text-gray-500 dark:text-gray-200 text-xl"
@@ -89,7 +92,6 @@ export default function TextMessage({ index, chat }: Props) {
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

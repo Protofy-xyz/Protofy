@@ -2,10 +2,23 @@ import { useEffect, useRef } from "react";
 import useChat from "../../store/store";
 import BotMessage from "./BotMessage";
 import UserMessage from "./UserMessage";
+import { useEventEffect } from "../../../../bundles/events/hooks";
+import { createMessage } from "../../utils/createMessage";
 
 export default function Chats() {
   const chats = useChat((state) => state.chats);
+  const addChat = useChat((state) => state.addChat);
   const messagesEndRef = useRef(null);
+
+  useEventEffect((payload, msg) => {
+    try {
+      const parsedMessage = JSON.parse(msg.message);
+      const payload = parsedMessage.payload.message
+      addChat(createMessage("assistant", payload, "text"));
+    } catch(e) {
+      console.error(e);
+    }
+  }, {path: "chat/notifications/#"});
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {

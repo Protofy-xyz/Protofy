@@ -43,8 +43,8 @@ export default function DefaultIdeas({ visible = true }) {
       } h-full py-4`}
     >
       <div className="max-w-[900px] w-full px-4 md:px-0 mx-auto">
-        <DefaultIdea ideas={defaultIdeas.slice(0, 2)} />
-        <DefaultIdea ideas={defaultIdeas.slice(2, 4)} myclassNames="hidden md:visible" />
+        {/* <DefaultIdea ideas={defaultIdeas.slice(0, 2)} />
+        <DefaultIdea ideas={defaultIdeas.slice(2, 4)} myclassNames="hidden md:visible" /> */}
       </div>
     </div>
   );

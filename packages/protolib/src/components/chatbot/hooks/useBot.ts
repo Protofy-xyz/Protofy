@@ -36,11 +36,6 @@ export default function useBot({ index, chat, prompt }: Props) {
   }, 50);
 
   useEffect(() => {
-    function addMessage() {
-      addChat(createMessage("assistant", resultRef.current, chat.type), index);
-      setIsStreamCompleted(true);
-    }
-
     function handleOnData(data: string) {
       resultRef.current += data;
       setResult((prev) => prev + data);
@@ -48,17 +43,23 @@ export default function useBot({ index, chat, prompt }: Props) {
     }
 
     function handleOnError(error: Error | string) {
-      if (typeof error === "string") setError(error);
-      else setError(error.message);
-      resultRef.current = "Error processing the request: " + error.message;
-      setResult("Error processing the request: " + error.message);
-      addMessage();
+      const errorMessage = typeof error === "string" ? error : error.message;
+      setError(errorMessage);
+      resultRef.current = "Error processing the request: " + errorMessage;
+      setResult(resultRef.current);
+      setIsStreamCompleted(true);
+      addChat(createMessage("assistant", resultRef.current, chat.type), index);
     }
 
     function handleOnCompletion() {
-      addMessage();
+      if (resultRef.current.trim() !== "") {
+        addChat(createMessage("assistant", resultRef.current, chat.type), index);
+      }
+      // Aseguramos marcar completo para cerrar el loading
+      setIsStreamCompleted(true);
     }
-    if (chat.content) return;
+
+    if (chat.content || isStreamCompleted) return;
     let mounted = true;
     const controller = new AbortController();
     let signal = controller.signal;
@@ -67,6 +68,7 @@ export default function useBot({ index, chat, prompt }: Props) {
     resultRef.current = "";
     setIsStreamCompleted(false);
     setError("");
+
     (async () => {
       try {
         let prevChats = sendHistory
@@ -84,14 +86,11 @@ export default function useBot({ index, chat, prompt }: Props) {
               },
             ];
         if (useForAllChats && systemMessage) {
-          prevChats = [
-            { role: "system", content: systemMessage},
-            ...prevChats,
-          ];
+          prevChats = [{ role: "system", content: systemMessage }, ...prevChats];
         }
         await fetchResults(
           prevChats,
-          {context: prompt},
+          { context: prompt },
           selectedModal,
           signal,
           handleOnData,
@@ -103,6 +102,7 @@ export default function useBot({ index, chat, prompt }: Props) {
         }
       }
     })();
+
     return () => {
       controller.abort();
       mounted = false;

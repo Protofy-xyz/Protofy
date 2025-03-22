@@ -11,7 +11,7 @@ export async function fetchResults(
   onCompletion: () => void
 ) {
   try {
-    const apiUrl = useSettings.getState().settings.apiUrl
+    const apiUrl = useSettings.getState().settings.apiUrl;
     const response = await fetch(apiUrl, {
       method: `POST`,
       signal: signal,
@@ -25,19 +25,26 @@ export async function fetchResults(
         temperature: 0.7,
         stream: true,
         messages: messages,
-        metadata: metadata
+        metadata: metadata,
       }),
     });
 
     if (response.status !== 200) {
-      console.log(response);
+      console.error(response);
       throw new Error("Error fetching results");
     }
+
     const reader: any = response.body?.getReader();
+
+    let hasReceivedAnyData = false;
+
     while (true) {
       const { done, value } = await reader.read();
 
       if (done) {
+        if (!hasReceivedAnyData) {
+          onData("");
+        }
         onCompletion();
         break;
       }
@@ -46,17 +53,22 @@ export async function fetchResults(
       const chunks = chunk.split("\n").filter((x: string) => x !== "");
 
       chunks.forEach((chunk: string) => {
-        if (chunk === "data: [DONE]") {
+        if (chunk.trim() === "data: [DONE]") {
           return;
         }
         if (!chunk.startsWith("data: ")) return;
+
         chunk = chunk.replace("data: ", "");
         const data = JSON.parse(chunk);
+
         if (data.choices) {
           if (data.choices[0].finish_reason === "stop") return;
+
+          hasReceivedAnyData = true; // <- Se establece a true al recibir datos válidos
           onData(data.choices[0].delta.content);
         }
-        if(data.error) {
+
+        if (data.error) {
           throw new Error(data.error.message);
         }
       });
@@ -68,6 +80,8 @@ export async function fetchResults(
     }
   }
 }
+
+
 
 export type ImageSize =
   | "256x256"
