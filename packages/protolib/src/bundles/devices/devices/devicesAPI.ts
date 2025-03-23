@@ -49,31 +49,70 @@ export const DevicesAPI = (app, context) => {
             const deviceInfo = DevicesModel.load(JSON.parse(value))
             for (const subsystem of deviceInfo.data.subsystem) {
                 // console.log('subsystem: ', subsystem)
+                if(subsystem.name == "mqtt") continue
                 for (const monitor of subsystem.monitors ?? []) {
-                    addCard({
-                        group: 'devices',
-                        tag: deviceInfo.data.name,
-                        id: 'devices_monitors_'+deviceInfo.data.name+'_'+subsystem.name,
-                        templateName: deviceInfo.data.name + ' ' + subsystem.name+ ' device value',
-                        name: subsystem.name + '_' + monitor.name,
-                        defaults: {
-                            name: deviceInfo.data.name + ' ' + subsystem.name,
-                            description: monitor.description ?? "",
-                            rulesCode: `return states['devices']['${deviceInfo.data.name}']['${subsystem.name}']`,
-                            type: 'value'
-                        },
-                        emitEvent: true
-                    })
+                    console.log('monitor: ', monitor)
+                    if(subsystem.monitors.length == 1) {
+                        addCard({
+                            group: 'devices',
+                            tag: deviceInfo.data.name,
+                            id: 'devices_monitors_'+deviceInfo.data.name+'_'+subsystem.name,
+                            templateName: deviceInfo.data.name + ' ' + subsystem.name+ ' device value',
+                            name: subsystem.name,
+                            defaults: {
+                                name: deviceInfo.data.name + ' ' + subsystem.name,
+                                description: monitor.description ?? "",
+                                rulesCode: `return states['devices']['${deviceInfo.data.name}']['${subsystem.name}']`,
+                                type: 'value'
+                            },
+                            emitEvent: true
+                        })
+                    } else{
+                        addCard({
+                            group: 'devices',
+                            tag: deviceInfo.data.name,
+                            id: 'devices_monitors_'+deviceInfo.data.name+'_'+monitor.name,
+                            templateName: deviceInfo.data.name + ' ' + monitor.name + ' device value',
+                            name: monitor.name,
+                            defaults: {
+                                name: deviceInfo.data.name + ' ' + monitor.name,
+                                description: monitor.description ?? "",
+                                rulesCode: `return states['devices']['${deviceInfo.data.name}']['${monitor.name}']`,
+                                type: 'value'
+                            },
+                            emitEvent: true
+                        })
+                    }
+                }
+                const formatParamsJson = (json)=>{
+                    const parts = Object.entries(json).map(([key, value]) => {
+                        return `${key} ${value}`;
+                      });
+                    
+                      if (parts.length === 0) {
+                        return 'No constraints specified';
+                      }
+                    
+                      return `The value must have ${parts.join(', ')}`;
                 }
 
                 for (const action of subsystem.actions ?? []) {
+                    console.log("action::::::::: ", action)
+                    const params = {value: "value to set"}
+                    if(action.payload.type == "json-schema"){
+                        delete params.value
+                        Object.keys(action.payload.schema).forEach((key) => {
+                            params[key] = formatParamsJson(action.payload.schema[key])
+                        })
+                    }
+                    console.log("params: ", params)
                     addAction({
                         group: 'devices',
                         name: subsystem.name + '_' + action.name, //get last path element
                         url: `/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}`,
                         tag: deviceInfo.data.name,
                         description: action.description ?? "",
-                        ...!action.payload?.value ? {params: {value: "value to set"}}:{},
+                        ...!action.payload?.value ? {params}:{},
                         emitEvent: true
                     })
 
@@ -88,7 +127,7 @@ export const DevicesAPI = (app, context) => {
                             name: deviceInfo.data.name + ' ' + subsystem.name + ' ' + action.name,
                             description: action.description ?? "",
                             rulesCode: `return execute_action('/api/core/v1/devices/${deviceInfo.data.name}/subsystems/${subsystem.name}/actions/${action.name}', userParams)`,
-                            params: action.payload?.value ? {} : {value: "value to set"},
+                            params: action.payload?.value ? {} : params,
                             type: 'action'
                         },
                         emitEvent: true
@@ -105,6 +144,7 @@ export const DevicesAPI = (app, context) => {
             res.status(401).send({error: "Unauthorized"})
             return
         }
+        console.log("action params: ",req.params)
         const value = req.params.value ?? req.query.value
         const db = getDB('devices')
         const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
