@@ -575,7 +575,7 @@ export const BoardsAPI = (app, context) => {
             ${reply}
         `);
         try {
-            await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
+            await wrapper(states ?? {}, token, API, prevStates[boardId] ?? {});
         } catch(e) {
             console.error("Error executing generated code: ", e)
         }
