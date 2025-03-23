@@ -556,6 +556,7 @@ export const BoardsAPI = (app, context) => {
             Do not check any state if the user has not provided it in the prompt or requested to consider it.
             Most probably you just need to write a single line of code calling await execute_action. Try to keep it as simple as possible.
             The simpler the better.
+            Remember to always return a value from the generated code.
         `+req.query.prompt
         
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "boardRules", rules: userprompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
@@ -575,12 +576,12 @@ export const BoardsAPI = (app, context) => {
             ${reply}
         `);
         try {
-            await wrapper(states ?? {}, token, API, prevStates[boardId] ?? {});
+            const response = await wrapper(states ?? {}, token, API, prevStates[boardId] ?? {});
+            res.send( response )
         } catch(e) {
             console.error("Error executing generated code: ", e)
+            res.send(`error: ${e.message}`)
         }
-
-        res.send({jsCode: reply})
     })
 
     addAction({
@@ -588,7 +589,7 @@ export const BoardsAPI = (app, context) => {
         name: 'send',
         url: "/api/core/v1/autopilot/llm",
         tag: 'message',
-        description: "Send a direct request to the autopilot system, in natural language",
+        description: "Send a direct instruction to the autopilot system, in natural language. Returns the result of executing the instruction.",
         params: {
             prompt: "the message to send"
         },
@@ -606,11 +607,71 @@ export const BoardsAPI = (app, context) => {
             type: "action",
             icon: 'message-square-text',
             name: 'autopilot_send',
-            description: 'Send a direct request to the autopilot system, in natural language',
+            description: 'Send a direct instruction to the autopilot system, in natural language. Returns the result of executing the instruction.',
             params: {
                 prompt: "Message to send to the system"
             },
             rulesCode: `return await execute_action("/api/core/v1/autopilot/llm", userParams)`,
+            displayResponse: true
+        },
+        emitEvent: true,
+    })
+
+    
+    app.get('/api/core/v1/board/question', async (req, res) => {
+        if (!req.query.prompt) {
+            res.status(400).send('Missing prompt parameter')
+            return
+        }
+
+        if(!req.query.board) {
+            res.status(400).send('Missing board parameter')
+            return
+        }
+
+        const prompt = 'Recover and return the data necessary to answer the following question: ' + req.query.prompt
+        const data = (await API.get(`/api/core/v1/autopilot/llm?prompt=${prompt}&board=${req.query.board}`)).data
+
+        const secondPrompt = 'Given the data: ' + JSON.stringify(data, null, 4) + ' answer the following question: ' + req.query.prompt+`.
+        If the question is about a value of something, infere the answer just from the data.
+        If data has only one value, return that value.
+        If data has multiple values, return the most likely value.
+        Try to keep the responses short, just give the answer, no need to explain.
+        If the user asks for the value of something, include something like "the value of... is ..." in the response, but using the language used by the user.
+        `
+        const reply = (await callModel(secondPrompt, context))?.choices[0]?.message?.content
+        res.send(reply ?? "I don't understand, please try again")
+    });
+
+    addAction({
+        group: 'board',
+        name: 'send',
+        url: "/api/core/v1/board/question",
+        tag: 'question',
+        description: "Send a question to the board in natural language and receive natural lanaguage responses",
+        params: {
+            prompt: "question to send"
+        },
+        emitEvent: true,
+        receiveBoard: true
+    })
+
+    addCard({
+        group: 'board',
+        tag: 'question',
+        id: 'send',
+        templateName: 'Send a question to the board',
+        name: 'board_question',
+        defaults: {
+            type: "action",
+            icon: 'message-square-text',
+            name: 'board question',
+            description: 'Send a question to the board in natural language and receive natural lanaguage responses',
+            params: {
+                prompt: "question to send"
+            },
+            rulesCode: `return await execute_action("/api/core/v1/board/question", userParams)`,
+            displayResponse: true
         },
         emitEvent: true,
     })
