@@ -10,6 +10,7 @@ export function AssistantAPI(app, context) {
             const response = await chatGPTSession({
                 messages: messages,                
                 model: gptModel ?? "gpt-4-turbo",
+                temperature: 0,
             });
         
             res.json(response);
