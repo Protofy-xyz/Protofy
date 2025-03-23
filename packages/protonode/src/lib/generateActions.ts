@@ -46,7 +46,7 @@ export const AutoActions = ({
             height: 8,
             icon: 'file-check',
             displayResponse: true,
-            name: 'exists_product',
+            name: `exists ${modelName}`,	
             type: 'action',
             description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
             params: {
@@ -66,6 +66,7 @@ export const AutoActions = ({
         try {
             const result = await API.get(`${urlPrefix}/${id}`);
             if (result.isLoaded) {
+                fixValues(result.data,modelType);
                 return res.json(result.data);
             }
             return res.json(false);
@@ -97,7 +98,7 @@ export const AutoActions = ({
             height: 8,
             icon: 'file-search',
             displayResponse: true,
-            name: 'read_product',
+            name: `read ${modelName}`,
             type: 'action',
             description: `Reads a ${modelName} given an id. Returns the content of the object if it exists, false otherwise.`,
             params: {
@@ -110,11 +111,25 @@ export const AutoActions = ({
     })
 
     //create
+    const fixValues = (params,modelType) => {
+        Object.keys(params).forEach((key) => {
+            // checkea los tipos de parametros para convetiros a los tipos correctos
+            if (modelType.getObjectFieldsDefinition()[key].type === 'number') {
+                params[key] = Number(params[key]);
+            }
+            if (modelType.getObjectFieldsDefinition()[key].type === 'boolean') {
+                params[key] = Boolean(params[key]);
+            }
+        })
+    }
 
     app.post(actionUrlPrefix + '/create', async (req, res) => {
         const params = req.body;
+        console.log(JSON.stringify(params));
+        fixValues(params,modelType);
         try {
             const result = await API.post(`${urlPrefix}`, params);
+            console.log(result)
             if (result.isLoaded) {
                 return res.json(result.data);
             }
@@ -154,7 +169,7 @@ export const AutoActions = ({
             height: 8,
             icon: 'file-plus',
             displayResponse: true,
-            name: 'create_product',
+            name: `create ${modelName}`,
             type: 'action',
             description: `Creates a ${modelName} given its content. Returns the created ${modelName}.`,
             params,
@@ -199,7 +214,7 @@ export const AutoActions = ({
         defaults: {
             icon: 'trash',
             displayResponse: true,
-            name: 'delete_product',
+            name: `delete ${modelName}`,
             type: 'action',
             description: `Deletes a ${modelName} by id. Returns true if it was deleted, false otherwise.`,
             params: {
@@ -214,6 +229,7 @@ export const AutoActions = ({
     //update
     app.get(actionUrlPrefix + '/update', async (req, res) => {
         const params = req.query;
+        fixValues(params,modelType);
         const id = params.id;
         const field = params.field;
         const value = params.value;
@@ -260,7 +276,7 @@ export const AutoActions = ({
             height: 8,
             icon: 'file-pen-line',
             displayResponse: true,
-            name: 'update_product',
+            name: `update ${modelName}`,
             type: 'action',
             description: `Updates a ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
             params: updateParams,

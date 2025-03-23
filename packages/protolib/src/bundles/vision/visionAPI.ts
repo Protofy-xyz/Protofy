@@ -42,6 +42,29 @@ const locks = {
 }
 
 export const VisionAPI = async (app: Application, context: typeof APIContext) => {
+
+    addCard({
+        group: 'vision',
+        tag: 'inputs',
+        id: 'camera',
+        templateName: 'IP Camera',
+        name: 'vision_camera',
+        defaults: {
+            type: "value",
+            icon: 'camera',
+            name: 'camera',
+            description: 'Camera stream input',
+            html: 'return `<img style="width: 100%" src="${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.streamPath}" />`',
+            rulesCode: 'return `${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.stillPath}`',
+            streamAddr: '192.168.10.103',
+            streamPort: '8080',
+            streamPath: '/video',
+            stillPath: '/photo.jpg',
+            streamProtocol: 'http://'
+        },
+        emitEvent: true,
+    })
+
     app.get('/api/core/v1/vision/detect', async (req, res) => {
         if (locks["detect"]) return res.send({ error: "Another detection is in progress" });
         locks["detect"] = true;
@@ -80,28 +103,6 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
 
     addCard({
         group: 'vision',
-        tag: 'inputs',
-        id: 'camera',
-        templateName: 'IP Camera',
-        name: 'vision_camera',
-        defaults: {
-            type: "value",
-            icon: 'camera',
-            name: 'camera',
-            description: 'Camera stream input',
-            html: 'return `<img style="width: 100%" src="${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.streamPath}" />`',
-            rulesCode: 'return `${data.streamProtocol}${data.streamAddr}:${data.streamPort}${data.stillPath}`',
-            streamAddr: 'IP_HERE',
-            streamPort: '8080',
-            streamPath: '/video',
-            stillPath: '/photo.jpg',
-            streamProtocol: 'http://'
-        },
-        emitEvent: true,
-    })
-
-    addCard({
-        group: 'vision',
         tag: 'actions',
         id: 'detect',
         templateName: 'Detect objects using AI',
@@ -116,6 +117,58 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
                 prompt: "what to detect in the image",
             },
             rulesCode: `return await execute_action("/api/core/v1/vision/detect", userParams)`,
+            displayResponse: true
+        },
+        emitEvent: true,
+    })
+
+    app.get('/api/core/v1/vision/describe', async (req, res) => {
+        if (locks["describe"]) return res.send({ error: "Another detection is in progress" });
+        locks["describe"] = true;
+        console.log('init')
+        try {
+            const params = req.query;
+            const preprompt = `    `
+            const url = params.url;
+            const response = await sendPromptWithImage(preprompt + params.prompt, url);
+            res.json(response);
+        } catch (e) {
+            console.error(e);
+            res.send({ error: e.message });
+        } finally {
+            locks["describe"] = false;
+        }
+    })
+
+    addAction({
+        group: 'vision',
+        name: 'describe',
+        url: "/api/core/v1/vision/describe",
+        tag: 'basic',
+        description: "image description using AI",
+        params: {
+            url: "image url",
+            prompt: "promt for the image model",
+        },
+        emitEvent: true
+    })
+
+    addCard({
+        group: 'vision',
+        tag: 'actions',
+        id: 'describe',
+        templateName: 'describe image using AI',
+        name: 'vision_describe',
+        defaults: {
+            type: "action",
+            icon: 'camera',
+            name: 'describe',
+            description: 'describe image using AI',
+            params: {
+                url: "camera stream url",
+                prompt: "prompt for the image model",
+            },
+            rulesCode: `return await execute_action("/api/core/v1/vision/describe", userParams)`,
             displayResponse: true
         },
         emitEvent: true,
