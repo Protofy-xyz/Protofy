@@ -49,14 +49,12 @@ This allows to execute actions when a value changes or when a value changes to a
 Use the rules tu understand if you need to pass false to dedup, or just leave the default true, depending if the rule asks for something that requieres dedup, or not.
 Rules like "while the dial is 33..." requires to pass dedup to false.
 RUle like "when the dial is 33..." requires to let dedup at true (default)
-This function has a memory to dedup messages based on the stateName and stateValue: never call hasStateValue for the same stateName, use an intermediate variable instead.
 </hasStateValue>
 
 <hasStateValueChanged>
 hasStateValueChanged has the following signature: hasStateValueChanged(stateName)
 returns true if the value of stateName has changed, false otherwise
 Rules like "if a new message is been received...." might requires to use hasStateValueChanged
-This function has a memory to dedup messages based on the stateName and stateValue: never call hasStateValueChanged for the same stateName, use an intermediate variable instead.
 </hasStateValueChanged>
 
 <very_important>

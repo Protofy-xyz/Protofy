@@ -51,7 +51,7 @@ async function execute_action(url, params={}) {
 }
 `
 
-const changeTracker = {"hasStateValue":{},"hasStateValueChanged":{}}
+const prevStates = {}
 
 const hasStateValue = () => `
        const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
@@ -76,10 +76,7 @@ const hasStateValue = () => `
             expectedValue = expectedValue.toLowerCase()
         }
         
-        const myTracker = changeTracker["hasStateValue"]
-        
-        if (!(stateName in myTracker ) || myTracker[stateName] !== value || !dedup) {
-            myTracker[stateName] = value
+        if (!(stateName in prevStates ) || prevStates[stateName] !== value || !dedup) {
             return value === expectedValue
         }
 
@@ -102,10 +99,7 @@ const hasStateValueChanged = () => `
                 return false
         }
 
-        const myTracker = changeTracker["hasStateValueChanged"]
-
-        if (!(stateName in myTracker) || myTracker[stateName] !== states[stateName]) {
-            myTracker[stateName] = states[stateName]
+        if (!(stateName in prevStates) || prevStates[stateName] !== states[stateName]) {
             return true
         }
         return false
@@ -391,14 +385,17 @@ export const BoardsAPI = (app, context) => {
 
         if (autopilotState[boardId] && fileContent.rulesCode) {
             //evalute board autopilot rules
-            const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
+            const wrapper = new AsyncFunction('states', 'token', 'API', 'prevStates', `
                 ${getExecuteAction(await getActions(), boardId)}
                 ${hasStateValue()}
                 ${hasStateValueChanged()}
                 ${getStateValue()}
                 ${fileContent.rulesCode}
             `);
-            await wrapper(states.boards[boardId] ?? {}, token, API, changeTracker);
+            await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
+            // console.log(prevStates)
+            prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId]))
+
         }
 
         return fileContent;
@@ -546,6 +543,7 @@ export const BoardsAPI = (app, context) => {
             res.send({ error: "No actions found" });
             return;
         }
+        const boardId = req.query.board
 
         const actions = board.cards.filter(c => c.type === 'action')
         const states = board.cards.filter(c => c.type === 'value').reduce((acc, c) => {
@@ -569,7 +567,7 @@ export const BoardsAPI = (app, context) => {
 
         console.log('GENERATED CODE: ', reply)
 
-        const wrapper = new AsyncFunction('states', 'token', 'API', 'changeTracker', `
+        const wrapper = new AsyncFunction('states', 'token', 'API', 'prevStates', `
             ${getExecuteAction(await getActions())}
             ${hasStateValue()}
             ${hasStateValueChanged()}
@@ -577,7 +575,7 @@ export const BoardsAPI = (app, context) => {
             ${reply}
         `);
         try {
-            await wrapper(states ?? {}, token, API, changeTracker);
+            await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
         } catch(e) {
             console.error("Error executing generated code: ", e)
         }
