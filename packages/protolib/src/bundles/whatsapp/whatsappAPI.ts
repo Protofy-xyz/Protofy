@@ -17,13 +17,11 @@ const logger = getLogger()
 
 const qrImg = async (context)=>{
     
-    console.log("GET KEY::::::::::::::",await getKey({key:"WHATSAPP_PHONE",token: getServiceToken()}))
     try {
         const base64Img = await context.whatsapp.generateWhatsappQrCode(
             process.env.WHATSAPP_PHONE,
             "Deseo inscribirme al board" + ` projectId: ${process.env.PROJECT_ID}`
         );
-        const base64RawData = base64Img.replace(/^data:image\/png;base64,/, "");
         return base64Img;
 
     } catch (error) {
@@ -75,7 +73,7 @@ const registerCards = async (context)=>{
                 color: "#25d366",
                 description: "whatsapp last received message",
                 html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value.from+\" -> \"+data.value.content})}\n    `\n});\n",
-                rulesCode: `return states.whatsapp.received.message`,
+                rulesCode: `return states?.whatsapp?.received?.message`,
                 type: 'value'
             },
             emitEvent: true
@@ -92,7 +90,7 @@ const registerCards = async (context)=>{
                 icon: "whatsapp",
                 color: "#25d366",
                 description: "whatsapp last received message",
-                rulesCode: `return states.whatsapp.received.message`,
+                rulesCode: `return states?.whatsapp?.received?.message`,
                 type: 'value'
             },
             emitEvent: true
@@ -108,7 +106,7 @@ const registerCards = async (context)=>{
                 icon: "whatsapp",
                 color: "#25d366",
                 description: "whatsapp last received message from",
-                rulesCode: `return states.whatsapp.received.message_from`,
+                rulesCode: `return states?.whatsapp?.received?.message_from`,
                 type: 'value'
             },
             emitEvent: true
@@ -171,7 +169,7 @@ return card({
     })
 }
 
-registerActionsAndCards = async (context)=>{
+const registerActionsAndCards = async (context)=>{
     registerActions(context)
     registerCards(context)
 }
@@ -179,7 +177,6 @@ registerActionsAndCards = async (context)=>{
 export const WhatsappAPI = (app, context) => {
     const devicesPath = '../../data/devices/'
     const { topicSub, topicPub, mqtt } = context;
-    registerActionsAndCards(context)
     
     app.get('/api/core/v1/whatsapp/send/message', handler(async (req, res, session) => {
         const { phone, message } = req.query
@@ -213,6 +210,7 @@ export const WhatsappAPI = (app, context) => {
         res.send({img})
     }))
 
+    
    
     const cleanPhoneNumber = (phoneNumber) => {
         return phoneNumber.replace("whatsapp:","")
@@ -221,6 +219,9 @@ export const WhatsappAPI = (app, context) => {
         return `${message.from.replace("whatsapp:","")} -> ${message.content}`
     }
 
+    context.state.set({ group: 'whatsapp', tag: "received", name: "message", value: "", emitEvent: true });
+    context.state.set({ group: 'whatsapp', tag: "received", name: "message_from", value: "", emitEvent: true });
+    
     context.whatsapp.subscribeToMessages(process.env.PROJECT_ID,'username', 'password', async (topic, message)=>{
         // console.log("TOPIC API WHATS: ", topic)
         // console.log("MESSAGE API WHATS: ", message)
@@ -253,5 +254,8 @@ export const WhatsappAPI = (app, context) => {
             console.error("Error parsing whatsapp message", e)
         }
     })
+
+    registerActionsAndCards(context)
+
     
 }
