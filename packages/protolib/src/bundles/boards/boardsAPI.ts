@@ -51,10 +51,10 @@ async function execute_action(url, params={}) {
 }
 `
 
-const changeTracker = {}
+const changeTracker = {"hasStateValue":{},"hasStateValueChanged":{}}
 
 const hasStateValue = () => `
-    const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
+       const hasStateValue = (stateName, expectedValue, dedup=true, options={}) => {
         if(!(stateName in states)) {
             if(stateName.indexOf('-') > 0) {
                 //replace all '-' with '_'
@@ -75,9 +75,11 @@ const hasStateValue = () => `
             value = value.toLowerCase()
             expectedValue = expectedValue.toLowerCase()
         }
-
-        if (!changeTracker[stateName] || changeTracker[stateName] !== value || !dedup) {
-            changeTracker[stateName] = value
+        
+        const myTracker = changeTracker["hasStateValue"]
+        
+        if (!(stateName in myTracker ) || myTracker[stateName] !== value || !dedup) {
+            myTracker[stateName] = value
             return value === expectedValue
         }
 
@@ -100,8 +102,10 @@ const hasStateValueChanged = () => `
                 return false
         }
 
-        if (!(stateName in changeTracker) || changeTracker[stateName] !== states[stateName]) {
-            changeTracker[stateName] = states[stateName]
+        const myTracker = changeTracker["hasStateValueChanged"]
+
+        if (!(stateName in myTracker) || myTracker[stateName] !== states[stateName]) {
+            myTracker[stateName] = states[stateName]
             return true
         }
         return false
