@@ -577,7 +577,7 @@ export const BoardsAPI = (app, context) => {
         `);
         try {
             const response = await wrapper(states ?? {}, token, API, prevStates[boardId] ?? {});
-            res.send( response )
+            res.json( response )
         } catch(e) {
             console.error("Error executing generated code: ", e)
             res.send(`error: ${e.message}`)
@@ -640,7 +640,7 @@ export const BoardsAPI = (app, context) => {
         If the user asks for the value of something, include something like "the value of... is ..." in the response, but using the language used by the user.
         `
         const reply = (await callModel(secondPrompt, context))?.choices[0]?.message?.content
-        res.send(reply ?? "I don't understand, please try again")
+        res.json(reply ?? "I don't understand, please try again")
     });
 
     addAction({
