@@ -37,14 +37,14 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                 lineNumbersMinChars: 0,
                 lineNumbers: false,
                 minimap: { enabled: false }
-              }}
+            }}
         />
     }, [resolvedTheme, savedCode.current])
 
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
         <Tinted>
             <PanelGroup direction="vertical">
-                <Panel defaultSize={66} minSize={20} maxSize={80}>
+                <Panel defaultSize={100} minSize={20} maxSize={100}>
                     <YStack
                         flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         <Rules
@@ -68,41 +68,42 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     </YStack>
                 </Panel>
                 <CustomPanelResizeHandle direction="horizontal" />
-                <Panel defaultSize={34} minSize={20} maxSize={80}>
+                <Panel defaultSize={0} minSize={0} maxSize={80}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         {monacoEditor}
-                        <XStack mt="auto" pt="$3" gap={30}>
-                            <Button onPress={async () => {
-                                setGeneratingBoardCode(true)
-                                try {
-                                    boardRef.current.rules = savedRules
-                                    const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
-                                    boardRef.current.rulesCode = rulesCode.data.jsCode
-                                    savedCode.current = rulesCode.data.jsCode
-                                    await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-
-                                    // boardRef.current.rules = []
-                                    // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                                    toast.show(`Rules applied successfully!`)
-                                } catch (e) {
-                                    toast.show(`Error generating board code: ${e.message}`)
-                                    console.error(e)
-                                } finally {
-                                    setGeneratingBoardCode(false)
-                                }
-                            }}>
-                                {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
-                            </Button>
-                            <Button onPress={() => {
-                                boardRef.current.rulesCode = editedCode.current
-                                API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                            }}>
-                                Save
-                            </Button>
-                        </XStack>
                     </YStack>
                 </Panel>
             </PanelGroup>
+            <XStack mt="auto" pt="$3" gap={30} jc='center' ai="center">
+                <Button onPress={async () => {
+                    setGeneratingBoardCode(true)
+                    try {
+                        boardRef.current.rules = savedRules
+                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
+                        boardRef.current.rulesCode = rulesCode.data.jsCode
+                        savedCode.current = rulesCode.data.jsCode
+                        await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                        await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+
+                        // boardRef.current.rules = []
+                        // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                        toast.show(`Rules applied successfully!`)
+                    } catch (e) {
+                        toast.show(`Error generating board code: ${e.message}`)
+                        console.error(e)
+                    } finally {
+                        setGeneratingBoardCode(false)
+                    }
+                }}>
+                    {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
+                </Button>
+                {/* <Button onPress={() => {
+                    boardRef.current.rulesCode = editedCode.current
+                    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                }}>
+                    Save
+                </Button> */}
+            </XStack>
         </Tinted>
     </YStack>
 }

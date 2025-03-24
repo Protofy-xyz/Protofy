@@ -58,6 +58,7 @@ const cardAction = ({ data }) => {
     const baseLabelWidth = longestKey.length * 8 + margin;
     return \`
      <div style="
+        height: 100%;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -166,7 +167,6 @@ const cardAction = ({ data }) => {
             style="
                 display: \${data.displayResponse ? 'block' : 'none'};
                 padding: 10px;
-                resize: none;
                 height: 100%;
                 flex: 1;
                 margin-bottom: 0px;
