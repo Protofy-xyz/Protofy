@@ -37,16 +37,16 @@ const registerDiscordCommand = async (command, guildId, clientId, apiKey, filter
         const existingCommands: any = (await rest.get(
             Routes.applicationGuildCommands(clientId, guildId)
         ));
-        
+
         // Convert existing commands to JSON and add the new command
         const updatedCommands = [
             ...existingCommands
-            ?.filter(filter)
-            ?.map(cmd => ({
-                name: cmd.name,
-                description: cmd.description,
-                options: cmd.options
-            }))
+                ?.filter(filter)
+                ?.map(cmd => ({
+                    name: cmd.name,
+                    description: cmd.description,
+                    options: cmd.options
+                }))
         ];
 
         if(command) {
@@ -185,9 +185,27 @@ export const discord = {
                 const getActionByCommand = (actionName: string) => actions[actionName]
                 console.log('interaction created successfully')
                 if (!interaction.isChatInputCommand()) return;
-                const { commandName } = interaction;
-                const actionFunction = getActionByCommand(commandName)
-                if (actionFunction) await actionFunction(interaction);
+                    const { commandName } = interaction;
+                    const actionFunction = getActionByCommand(commandName)
+                    if (actionFunction) {
+                        try {
+                            await actionFunction(interaction);
+                        } catch (error) {
+                            console.error('Error in slash command action:', error);
+                        }
+                    }
+            });
+        });
+    },
+    interactionsHandler: async ({ onInteract = (interaction) => { }, onError = (e) => { } }: { onInteract?: any, onError?: any }) => {
+        client.once('ready', async () => {
+            client.on('interactionCreate', async interaction => {
+                    try {
+                        await onInteract(interaction);
+                    } catch (error) {
+                        console.error('Error in slash command action:', error);
+                        onError(error)
+                    }
             });
         });
     }
