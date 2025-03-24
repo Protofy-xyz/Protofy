@@ -26,7 +26,7 @@ export default {
                     rowIcon={Boxes}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
-                    numColumnsForm={1}
+                    numColumnsForm={2}
                     name="object"
                     entityName='Objects'
                     columns={DataTable2.columns(

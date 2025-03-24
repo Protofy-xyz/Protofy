@@ -49,7 +49,7 @@ export const BaseObjectSchema = z.object({
         params: z.array(z.string()).optional()
       }).name('name')).optional()
     }).name('name'))
-    .generate({})
+    .generate({}).size(2)
   // data: z.string().search(), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
   //from: z.string().search(), // system entity where the event was generated (next, api, cmd...)
   //user: z.string().generate((obj) => 'me').search(), // the original user that generates the action, 'system' if the event originated in the system itself
