@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
+import { Maximize, Minimize } from '@tamagui/lucide-icons'
+import { Button } from "@my/ui"
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId }) => {
 
+    const [fullscreen, setFullscreen] = useState(false);
     const isError = modalFeedback?.details?.error
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
     const themeName = useThemeName();
@@ -102,17 +105,50 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
 
     // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
     return (<AlertDialog open={showModal} hideAccept={true}>
-        <div style={{ height: "350px", width: '400px', position: 'relative', overflow: 'visible', justifyContent: "space-between", display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: "flex", flexDirection: "column" }}>
-                <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
-                <div style={{ flexGrow: 1, textAlign: 'center', color: isError ? 'red' : '', marginBottom: "0px", marginTop: stepsTranslator[stage] === '3' || stepsTranslator[stage] === '1'? '100px' : '0px' }}>
-                    {
-                        modalFeedback && ['write', 'compile', 'upload','yaml'].includes(stage)
-                            ? modalFeedback.message : msg
-                    }
-                </div>
-                <ModalText />
+        <div style={{ 
+            position: 'relative',
+            height: fullscreen ? "80vh" : "350px",
+            width: fullscreen ? "80vw" : '400px',
+            transition: 'all 0.3s ease',
+            overflow: 'visible',
+            justifyContent: "space-between",
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '20px',
+            boxSizing: 'border-box',
+            flexGrow: 1
+        }}>
+            {/* Fullscreen toggle */}
+            <Button
+                position="absolute"
+                top="$2"
+                right="$2"
+                size="$2"
+                icon={fullscreen ? <Minimize size="$1" /> : <Maximize size="$1" />}
+                onPress={() => setFullscreen(prev => !prev)}
+                backgroundColor="transparent"
+                pressStyle={{ scale: 1.1 }}
+                hoverStyle={{ opacity: 0.7 }}
+                padding={24}
+            />
+            <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 'xs' }}>{`[${stepsTranslator[stage]}/${Object.keys(stepsTranslator).length}]`}</div>
+            <div
+                style={{
+                    flexGrow: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    marginTop: stepsTranslator[stage] === '3' || stepsTranslator[stage] === '1' ? '100px' : '0px',
+                    marginBottom: 0,
+                }}
+                >
+                {modalFeedback && ['write', 'compile', 'upload', 'yaml'].includes(stage)
+                    ? modalFeedback.message
+                    : <div style={{ textAlign: 'center', color: isError ? 'red' : '' }}>{msg}</div>}
+                    <ModalText />
+
             </div>
+
             {
                 !isError && images[themeName][isLoading ? 'loading' : stage] ?
                     <img

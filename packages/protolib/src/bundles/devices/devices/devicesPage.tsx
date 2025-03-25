@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
 import { API } from 'protobase';
@@ -33,6 +33,12 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
   //so we can inform the user of the problems if anything fails.
 
   const [messages, setMessages] = useState([])
+  const textareaRef = useRef(null);
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
+    }
+  }, [messages]);
   var isDoneCompiling = false
   useEffect(() => {
     if (stage == "compile") {
@@ -81,16 +87,32 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
             isDoneCompiling = true
             console.error('Error compiling', messages)
             onSetModalFeedback({
-              message: <YStack f={1} height="100%">
-                <Paragraph color="$red8" mt="$3">Error compiling code.</Paragraph>
-                <Paragraph color="$red8">Please check your flow configuration.</Paragraph>
-                <TextArea textAlign="left" f={1} mt="$2" mb={"$5"} minHeight={"200px"} value={
-                  messages.map((ele) => ele.message).join('')
-                }>
-
-                </TextArea>
-              </YStack>, details: { error: true }
+              message: (
+                <YStack f={1} jc="flex-start" gap="$2">
+                  <Paragraph color="$red8" mt="$3" textAlign="center">
+                    Error compiling code.
+                  </Paragraph>
+                  <Paragraph color="$red8" textAlign="center">
+                    Please check your flow configuration.
+                  </Paragraph>
+            
+                  <TextArea
+                    ref={textareaRef}
+                    f={1}
+                    minHeight={150}
+                    maxHeight="100%"
+                    mt="$2"
+                    mb="$4"
+                    overflow="auto"
+                    textAlign="left"
+                    resize="none"
+                    value={messages.map((ele) => ele.message).join('')}
+                  />
+                </YStack>
+              ),
+              details: { error: true }
             })
+            
           }
           setMessages([...messages, data])
         }
