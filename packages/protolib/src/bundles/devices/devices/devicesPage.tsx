@@ -327,7 +327,7 @@ export default {
 
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
-        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} />
+        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} selectedDevice={targetDeviceModel} compileSessionId={compileSessionId}/>
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
       <DataView

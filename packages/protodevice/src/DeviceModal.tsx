@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
 
-const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) => {
+const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId }) => {
 
     const isError = modalFeedback?.details?.error
     const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
@@ -17,6 +17,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
     }
 
     const [msg, setMsg] = React.useState(stages[stage])
+    const [manifestUrl, setManifestUrl] = useState(null)
 
     const Link = (props) => {
         return <Tinted><a
@@ -78,6 +79,26 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
             "idle": '/images/device/protofitoDancingW.gif'
         }
     }
+    useEffect(() => {
+        const fetchManifestUrl = async () => {
+            if (stage === 'upload') {
+                const script = document.createElement('script');
+                script.src = "https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module";
+                script.type = "module";
+                script.async = true;
+                document.body.appendChild(script);
+        
+                try {
+                    const url = await selectedDevice?.getManifestUrl(compileSessionId);
+                    setManifestUrl(url);
+                } catch (error) {
+                    console.error("Error fetching manifest URL:", error);
+                }
+            }
+        };
+    
+        fetchManifestUrl();
+    }, [stage, selectedDevice, compileSessionId]);
 
     // return (<Modal isOpen={showModal} onClose={() => onCancel()} style={{ position: 'relative',backgroundColor: "yellow"}}>
     return (<AlertDialog open={showModal} hideAccept={true}>
@@ -109,12 +130,18 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback }) =>
                     }}>
                     Cancel
                 </button> : <></>}
-                {stage == 'upload' ? <button
+                {(stage == 'upload' && manifestUrl) ?
+                <button
                     style={{ padding: '10px 20px 10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '10px' }}
                     onClick={() => {
-                        onSelect()
+                        onCancel()
+                        console.log("Manifest URL being passed:", manifestUrl);
                     }}>
-                    Select
+                    <esp-web-install-button manifest={manifestUrl}>
+                        <button slot="activate">Select</button>
+                        <span slot="unsupported">Ah snap, your browser is not supported!</span>
+                        <span slot="not-allowed">Ah snap, you are not allowed to use this on HTTP!</span>
+                    </esp-web-install-button>
                 </button> : <></>}
                 {stage == 'idle' ? <button
                     style={{ padding: '10px 20px 10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '10px' }}

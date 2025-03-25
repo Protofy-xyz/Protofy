@@ -233,6 +233,19 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
     API.post("/api/core/v1/devices/" + this.data.name, deviceObject.data)
   }
   
+  async getManifestUrl(compileSessionId){
+    return "http://localhost:8000/api/core/v1/devices/" + this.data.name + "/" + compileSessionId + "/manifest"
+  }
+  async getCore(){
+    const response = await API.get('/api/core/v1/deviceDefinitions/' + this.data.deviceDefinition);
+    if (response.isError) {
+      console.log(response.error)
+      return;
+    }
+    const deviceDefinition = response.data
+    const core = deviceDefinition.board.core
+    return core
+  }
   async setUploaded(){
     await this.setSubsystem()
   }
