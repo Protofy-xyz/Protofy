@@ -20,6 +20,10 @@ class Wifi {
           power_save_mode: this.power_save_mode,
         },
       },
+      {
+        name: "improv_serial", 
+        config : {}
+      }
     ]
     componentObjects.forEach((element, j) => {
         if (!deviceComponents[element.name]) {
