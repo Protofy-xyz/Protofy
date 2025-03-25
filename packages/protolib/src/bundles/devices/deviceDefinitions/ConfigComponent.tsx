@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Button, XStack, YStack, Text } from 'tamagui'
+import { Button, XStack, YStack, Text, Stack } from 'tamagui'
 import { AlertDialog } from '../../../components/AlertDialog'
 import Flows from '../../../adminpanel/features/components/Flows'
 import { getFlowsCustomSnippets } from 'app/bundles/snippets'
@@ -9,20 +9,38 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
 import { SelectList } from '../../../components/SelectList'
+import { X, Check } from "@tamagui/lucide-icons"
+import { Tinted } from '../../../components/Tinted'
+
+const ActionButton = ({ ...props }) => {
+
+  return <Tinted tint={props.tint}>
+    <Button
+      backgroundColor={"transparent"}
+      hoverStyle={{
+        backgroundColor: "$color4",
+      }}
+      color="$color8"
+      size="$3"
+      circular
+      scaleIcon={1.5}
+      {...props}
+    />
+  </Tinted>
+}
 
 
 export const ConfigComponent = ({ path, data, setData, mode, originalData, cores, boards }) => {
-  console.log("🤖 ~ ConfigComponent ~ path:", path)
+  // console.log("🤖 ~ ConfigComponent ~ path:", path)
   const selectedSdk = originalData.sdk
   const selectedBoard = originalData.board
-
 
   if(selectedSdk.startsWith('esphome')) {
     const defaultJsCode = {
         components:
           '[\n "mydevice",\n "esp32dev",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n',
       }
-    const [sourceCode, setSourceCode] = useState(defaultJsCode.components)
+    const sourceCode = useRef(defaultJsCode.components)
     const [editedObjectData, setEditedObjectData] = useState<any>({})
     const [showDialog, setShowDialog] = useState(false)
     const { resolvedTheme } = useThemeSetting()
@@ -32,80 +50,90 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
     const isInitialLoad = useRef(true)
 
     useEffect(() => {
-        if (mode === 'add' && isInitialLoad.current) {
-            isInitialLoad.current = false
-            const esphomeBoardName = originalData.board.name
-            const generatedComponents = generateBoardJs(esphomeBoardName)
-            if (generatedComponents) {
-            setSourceCode(generatedComponents.components)
-            }
-        } else {
-            setSourceCode(data.components)
+      if (mode === 'add' && isInitialLoad.current) {
+        isInitialLoad.current = false
+        const esphomeBoardName = originalData.board.name
+        const generatedComponents = generateBoardJs(esphomeBoardName)
+        if (generatedComponents) {
+          sourceCode.current = generatedComponents.components
         }
-        setEditedObjectData({ path, data, setData, mode })
+      } else {
+        sourceCode.current = data.components
+      }
+      setEditedObjectData({ path, data, setData, mode })
     }, [data, mode, originalData])
 
     const generateBoardJs = (boardName) => {
-        const board = boards.find((board) => board.name === boardName)
-        if (!board) {
-            console.error('Board not found')
-            return null
-        }
-        const components = ['mydevice', boardName]
-        board.ports.forEach(() => {
-            components.push(null)
-        })
-        return { components: JSON.stringify(components) + ';' }
+      const board = boards.find((board) => board.name === boardName)
+      if (!board) {
+        console.error('Board not found')
+        return null
+      }
+      const components = ['mydevice', boardName]
+      board.ports.forEach(() => {
+        components.push(null)
+      })
+      return { components: JSON.stringify(components) + ';' }
     }
 
-    
     return (
       <>
         <Button onPress={() => setShowDialog(true)}>Edit Config</Button>
         <AlertDialog open={showDialog} setOpen={(open) => setShowDialog(open)} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
-            <XStack f={1} minWidth={'100%'}>
-                <Flows
-                    style={{ width: "100%" }}
-                    disableDots={false}
-                    hideBaseComponents={true}
-                    disableStart={true}
-                    autoFitView={true}
-                    getFirstNode={(nodes) => {
-                    return nodes.find(n => n.type == 'ArrayLiteralExpression')
-                    }}
-                    showActionsBar={true}
-                    onSave={
-                    (code)=>{
-                        editedObjectData.setData({ components: code })
-                    }
-                    }
-                    layout={layout}
-                    customComponents={getFlowsCustomComponents(pathname, query)}
-                    customSnippets={getFlowsCustomSnippets(pathname, query)}
-                    bridgeNode={false}
-                    setSourceCode={(sourceCode) => {
-                    console.log('set new sourcecode from flows: ', sourceCode)
-                    setSourceCode(sourceCode)
-                    }}
-                    sourceCode={sourceCode}
-                    themeMode={resolvedTheme}
-                    key={'flow'}
-                    config={{ masks: getFlowMasks(pathname, query), layers: [], menu: getFlowsMenuConfig(pathname, query) }}
-                    bgColor={'transparent'}
-                    dataNotify={(data: any) => {
-                    if (data.notifyId) {
-                        //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
-                    }
-                    }}
-                    onEdit={(code) => editedObjectData.setData({ components: code })}
-                    positions={[]}
-                    disableSideBar={true}
-                    // store={uiStore}
-                    display={true}
-                    flowId={"flows-editor"}
-                    metadata={{board: selectedBoard, sdk: selectedSdk}}
-                />
-            </XStack>
+          <YStack f={1}>
+            <Stack style={{ flexDirection: "row" }} w={"100%"} gap={"$2"} jc={"flex-end"} p={"$3"} >
+              <ActionButton
+                tint={"green"}
+                onPress={() => {
+                  editedObjectData.setData({ components: sourceCode.current })
+                  setShowDialog(false)
+                }}
+                icon={Check}
+              />
+              <ActionButton
+                tint={"red"}
+                onPress={() => setShowDialog(false)}
+                icon={X}
+              />
+            </Stack>
+            <YStack f={1} minWidth={'100%'}>
+              <Flows
+                style={{ width: "100%" }}
+                disableDots={false}
+                hideBaseComponents={true}
+                disableStart={true}
+                autoFitView={true}
+                getFirstNode={(nodes) => {
+                  return nodes.find(n => n.type == 'ArrayLiteralExpression')
+                }}
+                layout={layout}
+                customComponents={getFlowsCustomComponents(pathname, query)}
+                customSnippets={getFlowsCustomSnippets(pathname, query)}
+                bridgeNode={false}
+                setSourceCode={(sourceCode) => {
+                  // console.log('set new sourcecode from flows: ', sourceCode)
+                  sourceCode.current = sourceCode
+                }}
+                sourceCode={sourceCode.current}
+                themeMode={resolvedTheme}
+                key={'flow'}
+                config={{ masks: getFlowMasks(pathname, query), layers: [], menu: getFlowsMenuConfig(pathname, query) }}
+                bgColor={'transparent'}
+                dataNotify={(data: any) => {
+                  if (data.notifyId) {
+                    //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
+                  }
+                }}
+                onEdit={(code) => sourceCode.current = code}
+                positions={[]}
+                disableSideBar={true}
+                // store={uiStore}
+                display={true}
+                flowId={"flows-editor"}
+                metadata={{ board: selectedBoard, sdk: selectedSdk }}
+              />
+            </YStack>
+          </YStack>
         </AlertDialog>
       </>
     )
