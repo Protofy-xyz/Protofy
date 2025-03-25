@@ -11,42 +11,15 @@ import layout from './DeviceLayout'
 import { SelectList } from '../../../components/SelectList'
 import { X, Check } from "@tamagui/lucide-icons"
 import { Tinted } from '../../../components/Tinted'
-
-const ActionButton = ({ ...props }) => {
-
-  return <Tinted tint={props.tint}>
-    <Button
-      backgroundColor={"transparent"}
-      hoverStyle={{
-        backgroundColor: "$color4",
-      }}
-      color="$color8"
-      size="$3"
-      circular
-      scaleIcon={1.5}
-      {...props}
-    />
-  </Tinted>
-}
+import { ConfigEditor } from './ConfigEditor'
 
 
-export const ConfigComponent = ({ path, data, setData, mode, originalData, cores, boards }) => {
+export const ConfigComponent = ({ data, setData, mode, originalData, boards }) => {
   // console.log("🤖 ~ ConfigComponent ~ path:", path)
   const selectedSdk = originalData.sdk
-  const selectedBoard = originalData.board
 
-  if(selectedSdk.startsWith('esphome')) {
-    const defaultJsCode = {
-        components:
-          '[\n "mydevice",\n "esp32dev",\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n null,\n];\n\n',
-      }
-    const sourceCode = useRef(defaultJsCode.components)
-    const [editedObjectData, setEditedObjectData] = useState<any>({})
+  if (selectedSdk.startsWith('esphome')) {
     const [showDialog, setShowDialog] = useState(false)
-    const { resolvedTheme } = useThemeSetting()
-    const searchParams = useSearchParams()
-    const pathname = usePathname()
-    const query = Object.fromEntries(searchParams.entries())
     const isInitialLoad = useRef(true)
 
     useEffect(() => {
@@ -55,12 +28,12 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
         const esphomeBoardName = originalData.board.name
         const generatedComponents = generateBoardJs(esphomeBoardName)
         if (generatedComponents) {
-          sourceCode.current = generatedComponents.components
+          if (!originalData.config) {
+            originalData.config = {}
+          }
+          originalData.config.components = generatedComponents.components
         }
-      } else {
-        sourceCode.current = data.components
       }
-      setEditedObjectData({ path, data, setData, mode })
     }, [data, mode, originalData])
 
     const generateBoardJs = (boardName) => {
@@ -80,60 +53,14 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
       <>
         <Button onPress={() => setShowDialog(true)}>Edit Config</Button>
         <AlertDialog open={showDialog} setOpen={(open) => setShowDialog(open)} hideAccept={true} style={{ width: "80%", height: "80%", padding: '0px', overflow: 'hidden' }}>
-          <YStack f={1}>
-            <Stack style={{ flexDirection: "row" }} w={"100%"} gap={"$2"} jc={"flex-end"} p={"$3"} >
-              <ActionButton
-                tint={"green"}
-                onPress={() => {
-                  editedObjectData.setData({ components: sourceCode.current })
-                  setShowDialog(false)
-                }}
-                icon={Check}
-              />
-              <ActionButton
-                tint={"red"}
-                onPress={() => setShowDialog(false)}
-                icon={X}
-              />
-            </Stack>
-            <YStack f={1} minWidth={'100%'}>
-              <Flows
-                style={{ width: "100%" }}
-                disableDots={false}
-                hideBaseComponents={true}
-                disableStart={true}
-                autoFitView={true}
-                getFirstNode={(nodes) => {
-                  return nodes.find(n => n.type == 'ArrayLiteralExpression')
-                }}
-                layout={layout}
-                customComponents={getFlowsCustomComponents(pathname, query)}
-                customSnippets={getFlowsCustomSnippets(pathname, query)}
-                bridgeNode={false}
-                setSourceCode={(sourceCode) => {
-                  // console.log('set new sourcecode from flows: ', sourceCode)
-                  sourceCode.current = sourceCode
-                }}
-                sourceCode={sourceCode.current}
-                themeMode={resolvedTheme}
-                key={'flow'}
-                config={{ masks: getFlowMasks(pathname, query), layers: [], menu: getFlowsMenuConfig(pathname, query) }}
-                bgColor={'transparent'}
-                dataNotify={(data: any) => {
-                  if (data.notifyId) {
-                    //mqttPub('datanotify/' + data.notifyId, JSON.stringify(data))
-                  }
-                }}
-                onEdit={(code) => sourceCode.current = code}
-                positions={[]}
-                disableSideBar={true}
-                // store={uiStore}
-                display={true}
-                flowId={"flows-editor"}
-                metadata={{ board: selectedBoard, sdk: selectedSdk }}
-              />
-            </YStack>
-          </YStack>
+          <ConfigEditor
+            definition={originalData}
+            onSave={(data) => {
+              setData(data.config)
+              setShowDialog(false)
+            }}
+            onCancel={() => setShowDialog(false)}
+          />
         </AlertDialog>
       </>
     )
@@ -190,7 +117,7 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
       setData({ version: selectedVersion, fileName: file.name, fileUrl: file.browser_download_url });
     };
     //@ts-ignore
-    return (              
+    return (
       <YStack>
         <XStack>
           <Text>Select a Version: </Text>
@@ -205,8 +132,8 @@ export const ConfigComponent = ({ path, data, setData, mode, originalData, cores
       </YStack>
 
     )
-    } else {
-        return <a>SDK not defined</a>
-    }
+  } else {
+    return <a>SDK not defined</a>
+  }
 
 }
