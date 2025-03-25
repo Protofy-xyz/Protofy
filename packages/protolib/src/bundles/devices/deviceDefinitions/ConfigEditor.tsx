@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Button, XStack, YStack, Text, Stack } from 'tamagui'
 import Flows from '../../../adminpanel/features/components/Flows'
 import { getFlowsCustomSnippets } from 'app/bundles/snippets'
@@ -28,21 +28,19 @@ const ActionButton = ({ ...props }) => {
 }
 
 export const ConfigEditor = ({ definition, onSave, onCancel }) => {
-  const selectedSdk = definition.sdk
-  const selectedBoard = definition.board
-  const sourceCode = useRef(definition?.config?.components)
+
   const { resolvedTheme } = useThemeSetting()
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const query = Object.fromEntries(searchParams.entries())
+  const selectedSdk = definition?.sdk
+  const selectedBoard = definition?.board
+  const sourceCode = useRef(definition?.config?.components)
 
-  useEffect(() => {
-    sourceCode.current = definition?.config?.components
-  }, [definition])
 
   return <YStack f={1}>
     <Stack style={{ flexDirection: "row" }} w={"100%"} gap={"$2"} jc={"space-between"} ai="center" px={"$3"} py="$2">
-      <Text fow={"600"}>{definition.name}</Text>
+      <Text fow={"600"}>{definition?.name}</Text>
       <XStack>
         <ActionButton
           tint={"green"}

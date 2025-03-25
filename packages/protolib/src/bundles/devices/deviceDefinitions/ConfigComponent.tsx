@@ -1,18 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Button, XStack, YStack, Text, Stack } from 'tamagui'
+import { useState, useEffect, useRef } from 'react'
+import { Button, XStack, YStack, Text } from 'tamagui'
 import { AlertDialog } from '../../../components/AlertDialog'
-import Flows from '../../../adminpanel/features/components/Flows'
-import { getFlowsCustomSnippets } from 'app/bundles/snippets'
-import { getFlowsMenuConfig } from 'app/bundles/flows'
-import { getFlowMasks, getFlowsCustomComponents } from 'app/bundles/masks'
-import { useThemeSetting } from '@tamagui/next-theme'
-import { useSearchParams, usePathname } from 'solito/navigation'
-import layout from './DeviceLayout'
 import { SelectList } from '../../../components/SelectList'
-import { X, Check } from "@tamagui/lucide-icons"
-import { Tinted } from '../../../components/Tinted'
 import { ConfigEditor } from './ConfigEditor'
-
 
 export const ConfigComponent = ({ data, setData, mode, originalData, boards }) => {
   // console.log("🤖 ~ ConfigComponent ~ path:", path)

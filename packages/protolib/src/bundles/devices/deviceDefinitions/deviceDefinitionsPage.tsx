@@ -10,7 +10,7 @@ import { DataTable2 } from "../../../components/DataTable2"
 import { DataView } from "../../../components/DataView"
 import { AdminPage } from "../../../components/AdminPage"
 import { PaginatedData } from "../../../lib/SSR"
-import { ConfigComponent } from "./ConfigComponent"
+import { ConfigComponent } from "./ConfigComponent" //TODO: Delete this file when WLED case integrated on ConfigEditor
 import { ConfigEditor } from "./ConfigEditor"
 import { Button, Input, XStack } from 'tamagui'
 import { Tinted } from "../../../components/Tinted"
@@ -35,6 +35,18 @@ export default {
     usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardsList, extraData?.boards)
     const boards = boardsList.isLoaded ? boardsList.data.items.map(i => DeviceBoardModel.load(i).getData()) : []
 
+    const generateBoardJs = (boardName) => {
+      const board = boards.find((board) => board.name === boardName)
+      if (!board) {
+        console.error('Board not found')
+        return null
+      }
+      const components = ['mydevice', boardName]
+      board.ports.forEach(() => {
+        components.push(null)
+      })
+      return { components: JSON.stringify(components) + ';' }
+    }
 
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       {!selectedDefinition
@@ -46,6 +58,16 @@ export default {
           initialItems={initialItems}
           onSelectItem={(item) => {
             setSelectedDefinition(item)
+          }}
+          onAdd={(item) => {
+            const generatedComponents = generateBoardJs(item.board.name)
+            if (generatedComponents) {
+              item.config = { components: generatedComponents.components }
+            }
+            const definitionModel = new DeviceDefinitionModel(item)
+            setSelectedDefinition(definitionModel)
+            return item
+
           }}
           numColumnsForm={1}
           name="Definition"
@@ -64,7 +86,7 @@ export default {
             }).after("board"),
           }}
           extraFieldsFormsAdd={{
-            device: z.boolean().after("config").label("automatic device").defaultValue(true)
+            device: z.boolean().after("board").label("automatic device").defaultValue(true)
           }}
           model={DeviceDefinitionModel}
           pageState={pageState}
@@ -79,38 +101,15 @@ export default {
             </XStack>
           }
           dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
-          customFields={{
-            config: {
-              component: (path, data, setData, mode, originalData) => {
-                if (originalData.sdk == undefined) {
-                  return <Input
-                    focusStyle={{ outlineWidth: 1 }}
-                    disabled={true}
-                    f={1}
-                    placeholder={'Fill sdk property first'}
-                    bc="$backgroundTransparent"
-                  ></Input>
-                }
-                else {
-                  return <ConfigComponent
-                    data={data}
-                    setData={setData}
-                    mode={mode}
-                    originalData={originalData}
-                    boards={boards}
-                  />
-                }
-              },
-              hideLabel: false
-            }
-          }}
         />
         : <ConfigEditor
           onSave={async (data) => {
             await API.post(`/api/core/v1/devicedefinitions/${selectedDefinition.getId()}`, data)
             setSelectedDefinition(null)
           }}
-          onCancel={() => setSelectedDefinition(null)}
+          onCancel={() => {
+            setSelectedDefinition(null)
+          }}
           definition={selectedDefinition?.data}
         />
       }
