@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { CircuitBoard, Tag, BookOpen, Eye, Text } from '@tamagui/lucide-icons'
+import { CircuitBoard, Tag, BookOpen, Router } from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
@@ -12,7 +12,8 @@ import { AdminPage } from "../../../components/AdminPage"
 import { PaginatedData } from "../../../lib/SSR"
 import { useSearchParams, usePathname } from 'solito/navigation'
 import { ConfigComponent } from "./ConfigComponent"
-import { Input } from 'tamagui'
+import { Button, Input, XStack } from 'tamagui'
+import { Tinted } from "../../../components/Tinted"
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -78,18 +79,27 @@ export default {
         model={DeviceDefinitionModel}
         pageState={pageState}
         icons={DeviceDefitionIcons}
+        toolBarContent={
+          <XStack f={1} mr="$2" jc="flex-end">
+            <Tinted>
+              <Button icon={Router} mah="30px" onPress={() => document.location.href = '/workspace/devices'} >
+                Devices
+              </Button>
+            </Tinted>
+          </XStack>
+        }
         dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
         customFields={{
           config: {
             component: (path, data, setData, mode, originalData) => {
               if(originalData.sdk == undefined){
                 return <Input
-                          focusStyle={{ outlineWidth: 1 }}
-                          disabled={true}
-                          f={1}
-                          placeholder={'Fill sdk property first'}
-                          bc="$backgroundTransparent"
-                      ></Input>
+                  focusStyle={{ outlineWidth: 1 }}
+                  disabled={true}
+                  f={1}
+                  placeholder={'Fill sdk property first'}
+                  bc="$backgroundTransparent"
+                ></Input>
               }
               else {
                 return renderConfigButton(path, data, setData, mode, originalData);

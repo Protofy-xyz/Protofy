@@ -334,13 +334,10 @@ export default {
         entityName="devices"
         defaultView={"grid"}
         toolBarContent={
-          <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
+          <XStack mr={"$2"} f={1} jc='flex-end'>
             <Tinted>
-              <Button mah="30px" onPress={() => document.location.href = '/workspace/deviceDefinitions'}>
-                <XStack alignItems="center" jc="center">
-                  <BookOpen size={20} mr="$2" />
-                  Definitions
-                </XStack>
+              <Button icon={BookOpen} mah="30px" onPress={() => document.location.href = '/workspace/deviceDefinitions'}>
+                Definitions
               </Button>
             </Tinted>
           </XStack>
