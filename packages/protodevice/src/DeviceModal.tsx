@@ -4,6 +4,7 @@ import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
 import { Maximize, Minimize } from '@tamagui/lucide-icons'
 import { Button } from "@my/ui"
+import { EspWebInstall } from "./EspWebInstall"
 
 const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId }) => {
 
@@ -85,12 +86,6 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
     useEffect(() => {
         const fetchManifestUrl = async () => {
             if (stage === 'upload') {
-                const script = document.createElement('script');
-                script.src = "https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module";
-                script.type = "module";
-                script.async = true;
-                document.body.appendChild(script);
-        
                 try {
                     const url = await selectedDevice?.getManifestUrl(compileSessionId);
                     setManifestUrl(url);
@@ -166,19 +161,14 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
                     }}>
                     Cancel
                 </button> : <></>}
-                {(stage == 'upload' && manifestUrl) ?
-                <button
-                    style={{ padding: '10px 20px 10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '10px' }}
-                    onClick={() => {
+                {stage == 'upload' && manifestUrl && (
+                    <button onClick={() => {
                         onCancel()
                         console.log("Manifest URL being passed:", manifestUrl);
                     }}>
-                    <esp-web-install-button manifest={manifestUrl}>
-                        <button slot="activate">Select</button>
-                        <span slot="unsupported">Ah snap, your browser is not supported!</span>
-                        <span slot="not-allowed">Ah snap, you are not allowed to use this on HTTP!</span>
-                    </esp-web-install-button>
-                </button> : <></>}
+                        <EspWebInstall.ModalButton manifestUrl={manifestUrl} />
+                    </button>
+                )}
                 {stage == 'idle' ? <button
                     style={{ padding: '10px 20px 10px 20px', backgroundColor: 'black', color: 'white', borderRadius: '10px' }}
                     onClick={() => {
