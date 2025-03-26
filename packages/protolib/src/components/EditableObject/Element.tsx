@@ -167,6 +167,7 @@ export const getElement = ({ ele, icon, i, x, data, setData, mode, customFields 
                 {mode != 'preview' && <Stack f={1} t={"$-2"}>
                     <SearchAndSelect
                         bc="$backgroundTransparent"
+                        disabled={(mode == 'view' || mode == 'preview' || (mode == 'edit' && ele._def.static))}
                         // options={["John", "Doe", "Jane", "Smith"]}
                         getDisplayField={elementDef.getDisplayField}
                         options={(search) => elementDef.linkTo(search, URLTransform)}
