@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { CircuitBoard, Tag, BookOpen, Router } from '@tamagui/lucide-icons'
+import { CircuitBoard, Tag, BookOpen, Router, Cog } from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
@@ -14,6 +14,8 @@ import { ConfigComponent } from "./ConfigComponent" //TODO: Delete this file whe
 import { ConfigEditor } from "./ConfigEditor"
 import { Button, Input, XStack } from 'tamagui'
 import { Tinted } from "../../../components/Tinted"
+import { usePageParams } from "../../../next"
+import { InteractiveIcon } from "../../../components/InteractiveIcon"
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -30,6 +32,7 @@ export default {
     const [selectedDefinition, setSelectedDefinition] = useState(null)
     usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
     const cores = coresList.isLoaded ? coresList.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
+    const { replace } = usePageParams(pageState)
 
     const [boardsList, setBoardsList] = useState(extraData?.boards ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: boardsSourceUrl }, s) }, setBoardsList, extraData?.boards)
@@ -72,6 +75,9 @@ export default {
           name="Definition"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
           columns={DataTable2.columns(
+            DataTable2.column("", () => "", false, (row) => {
+              return <InteractiveIcon onPress={() => replace('item', row.name)} Icon={Cog}></InteractiveIcon>
+            }, true, '50px'),
             DataTable2.column("name", row => row.name, "name"),
             DataTable2.column("board", row => row.board, "board", (row) => <Chip text={row.board.name} color={'$gray5'} />),
             DataTable2.column("sdk", row => row.sdk, "sdk", (row) => <Chip text={row.sdk} color={'$gray5'} />),
