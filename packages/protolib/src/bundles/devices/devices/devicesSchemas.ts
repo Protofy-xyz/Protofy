@@ -2,8 +2,8 @@ import { ProtoModel, SessionDataType, API, Schema, z } from 'protobase'
 import path from 'path'
 
 export const DevicesSchema = Schema.object({
-  name: z.string().hint("Device name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search(),
-  deviceDefinition: z.string().hidden(),
+  name: z.string().hint("Device name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search().label("Name"),
+  deviceDefinition: z.string().label("Definition"),
   substitutions: z.record(z.string().optional(), z.any().optional()).optional().hidden(),
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
   data: z.array(z.record(z.string(), z.any())).optional().hidden(),

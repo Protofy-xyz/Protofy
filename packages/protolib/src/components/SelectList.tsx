@@ -2,7 +2,7 @@ import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, SelectTriggerPr
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useState } from "react";
 
-export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, rawDisplay, ...props }: SelectProps & { valueProps?:any,triggerProps?: SelectTriggerProps, rawDisplay?:boolean, title: any, elements: any[], value: any, setValue: any }) {
+export function SelectList({ title, value, elements, setValue, triggerProps, valueProps, rawDisplay, placeholder="choose an option", ...props }: SelectProps & { valueProps?:any,triggerProps?: SelectTriggerProps, rawDisplay?:boolean, title: any, elements: any[], value: any, setValue: any, placeholder?: string }) {
 
   let displaySelected = elements.find((element) => element.value && element.value === value)
   if(displaySelected) {
@@ -21,7 +21,7 @@ export function SelectList({ title, value, elements, setValue, triggerProps, val
     >
       <YStack id={"eo-select-list-" + title} />
       <Select.Trigger f={1} iconAfter={ChevronDown} {...triggerProps}>
-        {!rawDisplay && <Select.Value {...valueProps} placeholder="choose an option">{displaySelected}</Select.Value>}
+        {!rawDisplay && <Select.Value {...valueProps} placeholder={placeholder}>{displaySelected}</Select.Value>}
         {rawDisplay && displaySelected}
       </Select.Trigger>
 

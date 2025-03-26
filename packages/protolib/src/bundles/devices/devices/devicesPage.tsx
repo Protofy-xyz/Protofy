@@ -20,12 +20,13 @@ import * as deviceFunctions from 'protodevice/src/device'
 import { Subsystems } from 'protodevice/src/Subsystem'
 import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
-import { Pencil, UploadCloud } from '@tamagui/lucide-icons';
+import { Pencil, UploadCloud, Navigation } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
 import { useRouter } from 'solito/navigation';
+import { SelectList } from '../../../components/SelectList';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
@@ -374,8 +375,31 @@ export default {
           DataTable2.column("device definition", row => row.deviceDefinition, "deviceDefinition"),
           DataTable2.column("config", row => row.config, false, (row) => <ButtonSimple onPress={(e) => { flashDevice(DevicesModel.load(row)) }}>Upload</ButtonSimple>)
         )}
-        extraFieldsForms={{
-          deviceDefinition: z.union(deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(i => z.literal(DeviceDefinitionModel.load(i).getId())) : []).after('name'),
+        customFields={{
+          deviceDefinition: {
+            component: (path, data, setData, mode) => {
+              const definitions = deviceDefinitions.isLoaded ? deviceDefinitions.data.items.map(definition => definition.name) : []
+              return <SelectList
+                //@ts-ignore
+                f={1}
+                title={definitions.length
+                  ? 'Definitions'
+                  : <YStack f={1} ai="center" p={"$2"} py={"$6"} gap="$4">
+                    <Tinted>
+                      <Text fos={14} fow={"600"}>You don't have any definitions yet</Text>
+                      <Button icon={Navigation} onPress={() => document.location.href = '/workspace/deviceDefinitions'} >
+                        Go to definitions
+                      </Button>
+                    </Tinted>
+                  </YStack>
+                }
+                placeholder={'Select a definition'}
+                elements={definitions}
+                value={data}
+                setValue={(v) => setData(v)}
+              />
+            }
+          }
         }}
         model={DevicesModel}
         pageState={pageState}
