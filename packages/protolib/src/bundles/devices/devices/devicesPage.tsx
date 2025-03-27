@@ -120,33 +120,6 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
 
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 
-const callText = async (url: string, method: string, params?: any, token?: string): Promise<any> => {
-  var fetchParams: any = {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  }
-
-  if (params) {
-    fetchParams.body = JSON.stringify(params);
-  }
-
-  let separator = '?';
-  if (url.indexOf('?') != -1) {
-    separator = '&';
-  }
-
-  var defUrl = url + (token ? separator + "token=" + token : "");
-  console.log("Deff URL: ", defUrl)
-  return fetch(defUrl, fetchParams)
-    .then(function (response) {
-      return response;
-    }).catch((error) => {
-      console.log("Error fetching url: ", error)
-    })
-}
-
 const sourceUrl = '/api/core/v1/devices'
 const definitionsSourceUrl = '/api/core/v1/deviceDefinitions?all=1'
 
@@ -189,12 +162,10 @@ export default {
 
       const uploadYaml = async (yaml: string) => {
         try {
-          const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { yaml });
-          const data = await response.json();
-
-          console.log("Save Yaml, compileSessionId:", data.compileSessionId);
+          const response = await API.post(postYamlApiEndpoint(targetDeviceName), { yaml });
+          const { data } = response
+          console.log("CompileSessionId:", data.compileSessionId);
           setCompileSessionId(data.compileSessionId);
-
           return data.compileSessionId;
         } catch (err) {
           const errorMessage = "Error on fetch petition to compile.protofy.xyz: " + err;
