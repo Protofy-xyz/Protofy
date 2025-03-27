@@ -10,15 +10,12 @@ import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
 import { Tinted } from '../../../components/Tinted';
-import { Chip } from '../../../components/Chip';
 import { useSubscription, Connector } from '../../../lib/mqtt';
-import { z } from 'protobase';
-import { DeviceDefinitionModel } from '../deviceDefinitions';
 import { connectSerialPort, flash } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import { Subsystems } from 'protodevice/src/Subsystem'
-import { Paragraph, Stack, Switch, TextArea, XStack, YStack, Text, Button } from '@my/ui';
+import { Paragraph, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud, Navigation } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
@@ -29,56 +26,49 @@ import { useRouter } from 'solito/navigation';
 import { SelectList } from '../../../components/SelectList';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
+  var isDoneCompiling = false
+  const [messages, setMessages] = useState([])
+  const textareaRef = useRef(null);
   const { message } = useSubscription([compileMessagesTopic(compileSessionId)]);
   //keep a log of messages until success/failure
   //so we can inform the user of the problems if anything fails.
 
-  const [messages, setMessages] = useState([])
-  const textareaRef = useRef(null);
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.scrollTop = textareaRef.current.scrollHeight;
     }
   }, [messages]);
-  var isDoneCompiling = false
+
   useEffect(() => {
     if (stage == "compile") {
       console.log("Compile Message: ", message);
       try {
         if (message?.message) {
           const data = JSON.parse(message?.message.toString());
+          let modalMessage
           if (data.position != "undefined") {
-            console.log("DEV: ", data)
             if (data.position && !isDoneCompiling) {
-              onSetModalFeedback({
-                message: `Current position in queue: ${data.position}.\n Status: ${data.status}`,
-                details: { error: false }
-              });
+              modalMessage = `Current position in queue: ${data.position}\n Status: ${data.status}`
             } else {
-              onSetModalFeedback({
-                message: (
-                  <YStack gap="$2">
-                    <Paragraph fontWeight={"600"}>Compiling firmware: </Paragraph>
-                    {
-                      messages.length > 0 && (
-                        <Paragraph
-                          height={50}
-                        >
-                          {messages
-                            .filter((msg) => Object.keys(msg).length === 1)
-                            .map((msg) => msg.message)
-                            .slice(-1)[0]}
-                        </Paragraph>
-                      )
-                    }
-                  </YStack>
-                ),
-                details: { error: false }
-              });
               isDoneCompiling = true
+              modalMessage = (
+                <YStack gap="$2">
+                  <Paragraph fontWeight={"600"}>Compiling firmware: </Paragraph>
+                  {
+                    messages.length > 0 && (
+                      <Paragraph height={50} >
+                        {messages
+                          .filter((msg) => Object.keys(msg).length === 1)
+                          .map((msg) => msg.message)
+                          .slice(-1)[0]}
+                      </Paragraph>
+                    )
+                  }
+                </YStack>
+              )
             }
+            onSetModalFeedback({ message: modalMessage, details: { error: false } });
           }
-
           if (data.event == 'exit' && data.code == 0) {
             isDoneCompiling = true
             setMessages([])
@@ -87,6 +77,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
           } else if (data.event == 'exit' && data.code != 0) {
             isDoneCompiling = true
             console.error('Error compiling', messages)
+
             onSetModalFeedback({
               message: (
                 <YStack f={1} jc="flex-start" gap="$2">
@@ -96,7 +87,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
                   <Paragraph color="$red8" textAlign="center">
                     Please check your flow configuration.
                   </Paragraph>
-            
+
                   <TextArea
                     ref={textareaRef}
                     f={1}
@@ -113,7 +104,7 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
               ),
               details: { error: true }
             })
-            
+
           }
           setMessages([...messages, data])
         }
@@ -122,7 +113,9 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
       }
     }
   }, [message])
+
   return <></>
+
 }
 
 const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
@@ -134,7 +127,6 @@ const callText = async (url: string, method: string, params?: any, token?: strin
       'Content-Type': 'application/json'
     },
   }
-
 
   if (params) {
     fetchParams.body = JSON.stringify(params);
@@ -171,8 +163,8 @@ export default {
     const [targetDeviceName, setTargetDeviceName] = useState('')
     const [targetDeviceModel, setTargetDeviceModel] = useState(DevicesModel.load({}))
     const [compileSessionId, setCompileSessionId] = useState('')
-    const router = useRouter()
-    // const { message } = useSubscription(['device/compile']);
+    const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
 
     const flashDevice = async (device, yaml?) => {
       setTargetDeviceName(device.data.name)
@@ -186,21 +178,6 @@ export default {
         console.error('error writting firmware: ', e)
       }
     }
-    const sendMessage = async () => {
-      const response = await fetch(compileActionUrl(targetDeviceName, compileSessionId))
-      const data = await response.json()
-    }
-
-    const compile = async () => {
-      // setModalFeedback({ message: `Compiling firmware...`, details: { error: false } })
-      // const compileMsg = { type: "spawn", configuration: +".yaml" };
-      sendMessage();
-    }
-
-    const flashCb = (msgObj) => {
-      console.log(msgObj);
-      setModalFeedback(state => state = msgObj)
-    }
 
     const onSelectPort = async () => {
       const isError = await connectSerialPort()
@@ -208,116 +185,118 @@ export default {
       setStage('write')
     }
 
-    const saveYaml = async (yaml, onSuccess) => {
-      try {
-        const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { yaml });
-        const data = await response.json();
-        console.log("Save Yaml, compileSessionId:", data.compileSessionId);
+    const handleYamlStage = async () => {
 
-        // Set compileSessionId and trigger the next step
-        setCompileSessionId(data.compileSessionId);
-        if (onSuccess) {
-          onSuccess(data.compileSessionId);
+      const uploadYaml = async (yaml: string) => {
+        try {
+          const response = await callText(postYamlApiEndpoint(targetDeviceName), 'POST', { yaml });
+          const data = await response.json();
+
+          console.log("Save Yaml, compileSessionId:", data.compileSessionId);
+          setCompileSessionId(data.compileSessionId);
+
+          return data.compileSessionId;
+        } catch (err) {
+          const errorMessage = "Error on fetch petition to compile.protofy.xyz: " + err;
+          console.log(errorMessage);
+          setModalFeedback({ message: errorMessage, details: { error: true } });
+          throw errorMessage;
         }
-      } catch (err) {
-        const errorStr = "Error on fetch petition to compile.protofy.xyz: " + err;
-        console.log(errorStr);
-        setModalFeedback({
-          message: errorStr,
-          details: { error: true }
-        });
-        throw errorStr;
       }
-    };
+
+      const getBinary = async (sessionId: string) => {
+
+        const isBinaryAvailable = async (deviceName: string, sessionId: string) => {
+          const url = downloadDeviceFirmwareEndpoint(deviceName, sessionId);
+          const response = await fetch(url);
+          return response.ok;
+        }
+
+        const binaryExists = await isBinaryAvailable(targetDeviceName, sessionId);
+
+        if (binaryExists) {
+          // Binary exists, skip compilation and go to upload
+          const message = 'Binary already exists. Skipping compilation.';
+          setStage('upload');
+          setModalFeedback({ message, details: { error: false } });
+          console.log(message);
+        } else {
+          // Binary not found, proceed to compile
+          setTimeout(() => {
+            setStage('compile');
+          }, 1000);
+        }
+
+        if (targetDeviceModel) {
+          await targetDeviceModel.setUploaded();
+        } else {
+          console.log('🤖 No targetDeviceModel');
+        }
+      }
+
+      try {
+        const sessionId = await uploadYaml(yamlRef.current);
+        await getBinary(sessionId);
+      } catch (err) {
+        setModalFeedback({
+          message: 'Error connecting to compilation server. Please verify your Internet connection.',
+          details: { error: true },
+        });
+      }
+    }
+
+    const compile = async () => {
+      const response = await fetch(compileActionUrl(targetDeviceName, compileSessionId))
+      const data = await response.json()
+    }
+
+    const write = async () => {
+
+      const flashCb = (msgObj) => {
+        console.log(msgObj);
+        setModalFeedback(state => state = msgObj)
+      }
+
+      try {
+        await flash(flashCb, targetDeviceName, compileSessionId);
+        setStage('idle');
+      } catch (e) {
+        flashCb({
+          message:
+            'Error writing the device. Check that the USB connection and serial port are correctly configured.',
+          details: { error: true },
+        });
+      }
+    }
+
+    const upload = () => {
+      // getWebSocket()?.close()
+      const chromiumBasedAgent =
+        navigator.userAgent.includes('Chrome') ||
+        navigator.userAgent.includes('Edge') ||
+        navigator.userAgent.includes('Opera');
+
+      if (chromiumBasedAgent) {
+        setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } });
+        console.log('chormium based true');
+      } else {
+        console.log('chormium based very false');
+        setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } });
+      }
+    }
 
     useEffect(() => {
-      const process = async (compileSessionId) => {
-        if (stage == 'yaml') {
-          try {
-            // Call saveYaml with a callback to continue processing
-            await saveYaml(yamlRef.current, async (sessionId) => {
-
-              // Check if binary is already available to skip compilation
-              const url = downloadDeviceFirmwareEndpoint(targetDeviceName, sessionId);
-              const resp = await fetch(url);
-
-              if (resp.ok) {
-                // Binary exists, skip compilation and go to upload
-                setStage('upload');
-                setModalFeedback({
-                  message: 'Binary already exists. Skipping compilation.',
-                  details: { error: false }
-                });
-                console.log("Binary already exists. Skipping compilation.");
-              } else {
-                // Binary not found, proceed to compile
-                setTimeout(() => {
-                  setStage('compile');
-                }, 1000);
-              }
-
-              targetDeviceModel ? await targetDeviceModel.setUploaded() : console.log("🤖 No targetDeviceModel");
-            });
-          } catch (err) {
-            setModalFeedback({
-              message: 'Error connecting to compilation server. Please verify your Internet connection.',
-              details: { error: true }
-            });
-          }
-
-        } else if (stage == 'compile') {
-          console.log("stage - compile")
-          await compile()
-        } else if (stage == 'write') {
-
-          try {
-            await flash(flashCb, targetDeviceName, compileSessionId)
-            setStage('idle')
-          } catch (e) { flashCb({ message: 'Error writing the device. Check that the USB connection and serial port are correctly configured.', details: { error: true } }) }
-        } else if (stage == 'upload') {
-          // getWebSocket()?.close()
-          const chromiumBasedAgent =
-            (navigator.userAgent.includes('Chrome') ||
-              navigator.userAgent.includes('Edge') ||
-              navigator.userAgent.includes('Opera'))
-
-          if (chromiumBasedAgent) {
-            setModalFeedback({ message: 'Connect your device and click select to chose the port. ', details: { error: false } })
-            console.log('chormium based true')
-          } else {
-            console.log('chormium based very false')
-            setModalFeedback({ message: 'You need Chrome, Opera or Edge to upload the code to the device.', details: { error: true } })
-          }
-        }
+      const processStage = async () => {
+        console.log('Stage:', stage);
+        if (stage === 'yaml') await handleYamlStage();
+        else if (stage === 'compile') await compile();
+        else if (stage === 'write') await write();
+        else if (stage === 'upload') upload();
       };
 
-      process(compileSessionId);
+      processStage();
     }, [stage]);
 
-
-
-
-    // useEffect(() => {
-    //   console.log("Compile Message: ", message);
-    //   try {
-    //     if (message?.message) {
-    //       const data = JSON.parse(message?.message.toString());
-    //       if (data.event == 'exit' && data.code == 0) {
-    //         console.log("Succesfully compiled");
-    //         setStage('upload')
-
-    //       } else if (data.event == 'exit' && data.code != 0) {
-    //         console.error('Error compiling')
-    //         setModalFeedback({ message: `Error compiling code. Please check your flow configuration.`, details: { error: true } })
-    //       }
-    //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
-    // }, [message])
-
-    const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
-    usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
 
     const extraMenuActions = [
       {
