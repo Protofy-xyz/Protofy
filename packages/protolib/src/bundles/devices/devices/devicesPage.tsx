@@ -51,18 +51,18 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
             console.log("DEV: ", data)
             if (data.position && !isDoneCompiling) {
               onSetModalFeedback({
-                message: `Current position in queue: ${data.position}. Status: ${data.status}`,
+                message: `Current position in queue: ${data.position}.\n Status: ${data.status}`,
                 details: { error: false }
               });
             } else {
               onSetModalFeedback({
                 message: (
-                  <YStack height="50px" gap="$2">
-                    <Paragraph>Compiling firmware: </Paragraph>
+                  <YStack gap="$2">
+                    <Paragraph fontWeight={"600"}>Compiling firmware: </Paragraph>
                     {
                       messages.length > 0 && (
                         <Paragraph
-                          height={"100px"}
+                          height={50}
                         >
                           {messages
                             .filter((msg) => Object.keys(msg).length === 1)
@@ -350,7 +350,15 @@ export default {
 
     return (<AdminPage title="Devices" pageSession={pageSession}>
       <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
-        <DeviceModal stage={stage} onCancel={() => setShowModal(false)} onSelect={onSelectPort} modalFeedback={modalFeedback} showModal={showModal} selectedDevice={targetDeviceModel} compileSessionId={compileSessionId}/>
+        <DeviceModal
+          stage={stage}
+          onCancel={() => setShowModal(false)}
+          onSelect={onSelectPort}
+          modalFeedback={modalFeedback}
+          showModal={showModal}
+          selectedDevice={targetDeviceModel}
+          compileSessionId={compileSessionId}
+        />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
       <DataView
