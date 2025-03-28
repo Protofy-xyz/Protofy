@@ -22,6 +22,8 @@ const autopilotState = {}
 
 const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
+const memory = {}
+
 const getExecuteAction = (actions, board='') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
@@ -366,12 +368,14 @@ export const BoardsAPI = (app, context) => {
                         continue;
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
-
-                    const wrapper = new AsyncFunction('states', 'data', `
+                    if(!memory[card.key]) {
+                        memory[card.key] = {}
+                    }
+                    const wrapper = new AsyncFunction('states', 'data', 'memory', `
                         ${card.rulesCode}
                     `);
 
-                    let value = await wrapper(states, card);
+                    let value = await wrapper(states, card, memory[card.key]);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                     const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
