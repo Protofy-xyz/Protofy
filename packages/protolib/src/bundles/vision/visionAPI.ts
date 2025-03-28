@@ -131,6 +131,9 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             const preprompt = `    `
             const url = params.url;
             const response = await sendPromptWithImage(preprompt + params.prompt, url);
+            if (params.stateName) {
+                context.state.set({ group: 'vision', tag: 'describe', name: params.stateName, value: response, emitEvent: true, token: getServiceToken() });
+            }
             res.json(response);
         } catch (e) {
             console.error(e);
@@ -149,6 +152,7 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
         params: {
             url: "image url",
             prompt: "promt for the image model",
+            stateName: "state name to store the result"
         },
         emitEvent: true
     })
@@ -167,6 +171,7 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             params: {
                 url: "camera stream url",
                 prompt: "prompt for the image model",
+                stateName: "state name to store the result, if empty the result will not be stored in a state"
             },
             rulesCode: `return await execute_action("/api/core/v1/vision/describe", userParams)`,
             displayResponse: true

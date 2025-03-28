@@ -22,6 +22,8 @@ const autopilotState = {}
 
 const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
+const memory = {}
+
 const getExecuteAction = (actions, board='') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
@@ -37,7 +39,15 @@ async function execute_action(url, params={}) {
     if(action.receiveBoard) {
         params.board = '${board}'
     }
-
+    //check if the action has configParams and if it does, check if the param is visible
+    //if the param is not visible, hardcode the param value to the value in the configParams defaultValue
+    if(action.configParams) {
+        for(const param in action.configParams) {
+            if(action.configParams[param].visible === false) {
+                params[param] = action.configParams[param].defaultValue
+            }
+        }
+    }
     if (action.method === 'post') {
         const { token, ...data } = params;
         const response = await API.post(url+'?token='+token, data);
@@ -261,6 +271,7 @@ const getDB = (path, req, session) => {
                             tag: key,
                             description: card.description ?? "",
                             params: card.params ?? {},
+                            ...(card.configParams && { configParams: card.configParams }),
                             emitEvent: i === actionsCards.length - 1
                         })
                     }
@@ -357,12 +368,14 @@ export const BoardsAPI = (app, context) => {
                         continue;
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
-
-                    const wrapper = new AsyncFunction('states', 'data', `
+                    if(!memory[card.key]) {
+                        memory[card.key] = {}
+                    }
+                    const wrapper = new AsyncFunction('states', 'data', 'memory', `
                         ${card.rulesCode}
                     `);
 
-                    let value = await wrapper(states, card);
+                    let value = await wrapper(states, card, memory[card.key]);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                     const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
@@ -394,7 +407,7 @@ export const BoardsAPI = (app, context) => {
             `);
             await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
             // console.log(prevStates)
-            prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId]))
+            prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId] ?? {}))
 
         }
 
@@ -439,6 +452,19 @@ export const BoardsAPI = (app, context) => {
     })
 
     app.post('/api/core/v1/autopilot/getBoardCode', async (req, res) => {
+        //we need to look for configParams in the action. If there is a config for the param, we need to check
+        //if the param is visible. If its not visible, we should not include it in the params object
+        Object.keys(req.body.actions).map(k => {
+            const a = req.body.actions[k]
+            if (a.configParams) {
+                for (const param in a.configParams) {
+                    if (a.configParams[param].visible === false) {
+                        delete a.params[param]
+                    }
+                }
+            }
+        })
+
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "boardRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
@@ -711,6 +737,7 @@ export const BoardsAPI = (app, context) => {
                         tag: board,
                         description: card.description ?? "",
                         params: card.params ?? {},
+                        configParams: card.configParams ?? undefined,
                         emitEvent: i === actionsCards.length - 1
                     })
                 }

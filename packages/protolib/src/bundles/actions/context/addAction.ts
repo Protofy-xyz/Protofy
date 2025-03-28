@@ -11,6 +11,7 @@ export const addAction = async (options: {
     description?: string,
     method?: "get" | "post",
     params?: any,
+    configParams?: any,
     url: string,
     emitEvent?: boolean,
     receiveBoard?: boolean,
@@ -44,11 +45,13 @@ export const addAction = async (options: {
     const content = {
         description: description,
         params: params,
+        ...(options.configParams && {configParams: options.configParams}),
         url: url,
         name: name,
         method: method,
         ...(receiveBoard && {receiveBoard: receiveBoard})
     }
+    
     if(options.token) {
         // console.log('-----------------------------------------------')
         // console.log('Setting value using api: ', value, 'for', group, tag, name)

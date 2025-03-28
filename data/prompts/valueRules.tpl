@@ -30,6 +30,11 @@ If the rules specify the name a key inside states, make sure you write the key c
 
 The rules are all about what to return from the code
 
+<memory>
+if you need to obey rules like "the value needs to be the same at least twice to accept the change.." you can use a variable you have in scope called 'memory' that contains an object that will retain information between runs. 
+So you can modify keys inside memory to store things for future executions.
+</memory>
+
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.
 The code should end with a return statement in the last statement.
 Do not wrap the code into a function, just give me the lines of code.
