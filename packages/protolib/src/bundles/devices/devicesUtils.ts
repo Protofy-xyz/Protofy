@@ -4,9 +4,9 @@ import { Build, FlashError } from "protodevice/src/const";
 import { manifest } from "protodevice/src/manifest";
 
 
-let port;
+export let port;
 
-const resetTransport = async (transport: Transport) => {
+export const resetTransport = async (transport: Transport) => {
     await transport.device.setSignals({
         dataTerminalReady: false,
         requestToSend: true,
@@ -17,122 +17,153 @@ const resetTransport = async (transport: Transport) => {
     });
 };
 
-export const connectSerialPort = async () => {
-    let isError = true
-    try {
-        port = await (navigator as any).serial.requestPort();
-    } catch (err: any) {
-        if ((err as DOMException).name === "NotFoundError") {
-            //setConfigError(state => ('Please select a port.'))
-            return isError;
+export const closeSerialPort = async () => {
+    if (port) {
+        try {
+            await port.close();
+        } catch (err: any) {
+            console.error("Error closing port:", err);
         }
-        //setConfigError(state => ('Error configuring port.'))
-        return isError;
-    }
-
-    if (!port) {
-        //setConfigError(state => ('Error trying to request port. Please check your browser drivers.'))
-        return isError;
-    }
-    try {
-        await port.open({ baudRate: 115200 });
-        //setConfigError('') 
-    } catch (err: any) {
-        //setConfigError(state => ('Error can not open serial port.'))
-        return isError;
+        port = null;
     }
 }
 
-export const flash = async (cb, deviceName, compileSessionId) => {
-    cb({ message: 'Please hold "Boot" button of your ESP32 board.' })
-    let chipFamily: Build["chipFamily"];
-    const transport = new Transport(port);
-    const esploader = new ESPLoader(
-        transport,
-        115200,
-        // Wrong type, fixed in https://github.com/espressif/esptool-js/pull/75/files
-        undefined as any
-    );
+export function downloadLogs(logs) {
 
-    //ESptools like to reopen the port
-    await port.close();
+    const blob = new Blob([logs], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'device-logs.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+export const resetDevice = async (): Promise<void> => {
+    if (!port) {
+        console.error("No port available to reset device.");
+        return;
+    }
+    const transport = new Transport(port);
+    await resetTransport(transport);
+};
+
+export const connectSerialPort = async (): Promise<{ port: any | null, error?: string }> => {
+    try {
+        port = await (navigator as any).serial.requestPort();
+        await port.open({ baudRate: 115200 });
+        return { port };
+    } catch (err: any) {
+        console.error("dev: Error opening port:", err);
+        if (err.name === "NotFoundError") {
+            return { port: null, error: "Any port selected" };
+        }
+        return { port: null, error: "Couldn't open port, verify connection and drivers" };
+    }
+};
+
+export const flash = async (cb: (data: any) => void, deviceName: string, compileSessionId: string, eraseBeforeFlash: boolean) => {
+    if (!port) {
+        cb({ message: "Invalid port", details: { error: FlashError.PORT_UNAVAILABLE } });
+        return;
+    }
+
+    cb({ message: 'Please hold "Boot" button of your ESP32 board.' });
+
+    const transport = new Transport(port);
+    const esploader = new ESPLoader(transport, 115200, undefined as any);
+
     // For debugging
     (window as any).esploader = esploader;
+
     try {
+        await port.close(); // esptool-js abrirá el puerto internamente
         await esploader.main_fn();
-        //await esploader.flash_id(); //not used -> seems taht not affects to correct function
     } catch (err: any) {
-        console.error(err);
-        cb({ message: "Failed to initialize. Try resetting your device or holding the BOOT button while clicking INSTALL.", details: { error: FlashError.FAILED_INITIALIZING, details: err } });
-        await resetTransport(transport);
-        await transport.disconnect();
-        throw "Failed to initialize. Try resetting your device or holding the BOOT button while clicking INSTALL."
-    }
-    chipFamily = esploader.chip.CHIP_NAME as any;
-    console.log("chipFamily: ", chipFamily);
-    if (!esploader.chip.ROM_TEXT) {
-        cb({ message: `Chip ${chipFamily} is not supported`, details: { error: FlashError.NOT_SUPPORTED, details: `Chip ${chipFamily} is not supported` } })
-        await resetTransport(transport);
-        await transport.disconnect();
-        throw `Chip ${chipFamily} is not supported`
-    }
-    cb({ message: `Initialized. Found ${chipFamily}`, details: { done: true } })
-
-    let build = manifest.builds.find((b) => b.chipFamily === chipFamily);
-
-    if (!build) {
-        cb({ message: `Your ${chipFamily} board is not supported.`, details: { error: FlashError.NOT_SUPPORTED, details: chipFamily } })
-        await resetTransport(transport);
-        await transport.disconnect();
-        throw `Your ${chipFamily} board is not supported.`
-    }
-
-    cb({ message: "Preparing installation...", details: { done: false } })
-
-    const filePromises = build.parts.map(async (part) => {
-
-        // const url = "http://bo-firmware.protofy.xyz/api/v1" + "/electronics/download.bin?configuration=" + "test.yaml" + "&type=firmware-factory.bin"
-        const url = downloadDeviceFirmwareEndpoint(deviceName, compileSessionId)
-
-        const resp = await fetch(url);
-        if (!resp.ok) {
-            throw new Error(
-                `Downlading firmware ${url} failed: ${resp.status}`
-            );
-        }
-
-        const reader = new FileReader();
-        const blob = await resp.blob();
-
-        return new Promise<string>((resolve) => {
-            reader.addEventListener("load", () => resolve(reader.result as string));
-            reader.readAsBinaryString(blob);
+        console.error("Fail in main_fn():", err);
+        cb({
+            message: "Failed to initialize. Try resetting your device or holding the BOOT button while clicking INSTALL.",
+            details: { error: FlashError.FAILED_INITIALIZING, details: err },
         });
+        await resetTransport(transport);
+        await transport.disconnect();
+        return;
+    }
 
-    });
+    const chipFamily = esploader.chip.CHIP_NAME as Build["chipFamily"];
+    console.log("chipFamily:", chipFamily);
+
+    if (!esploader.chip.ROM_TEXT) {
+        cb({
+            message: `Chip ${chipFamily} is not supported`,
+            details: { error: FlashError.NOT_SUPPORTED, details: `Chip ${chipFamily} is not supported` },
+        });
+        await resetTransport(transport);
+        await transport.disconnect();
+        return;
+    }
+
+    cb({ message: `Initialized. Found ${chipFamily}`, details: { done: true } });
+
+    const build = manifest.builds.find((b) => b.chipFamily === chipFamily);
+    if (!build) {
+        cb({
+            message: `Your ${chipFamily} board is not supported.`,
+            details: { error: FlashError.NOT_SUPPORTED, details: chipFamily },
+        });
+        await resetTransport(transport);
+        await transport.disconnect();
+        return;
+    }
+
+    cb({ message: "Preparing installation...", details: { done: false } });
+
     const fileArray: Array<{ data: string; address: number }> = [];
     let totalSize = 0;
 
-    for (let part = 0; part < filePromises.length; part++) {
-        try {
-            const data = await filePromises[part];
-            fileArray.push({ data, address: build.parts[part].offset });
-            totalSize += data.length;
-        } catch (err: any) {
-            cb({ message: err.message, details: { error: FlashError.FAILED_FIRMWARE_DOWNLOAD, details: err.message } })
-            await resetTransport(transport);
-            await transport.disconnect();
-            return;
-        }
-    }
-    cb({ message: "Installation prepared", details: { done: true } })
+    try {
+        const filePromises = build.parts.map(async (part) => {
+            const url = downloadDeviceFirmwareEndpoint(deviceName, compileSessionId);
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`Downloading firmware ${url} failed: ${resp.status}`);
+            const blob = await resp.blob();
 
-    if (true) {
-        cb({ message: "Erasing device...", details: { done: false } })
-        await esploader.erase_flash();
-        cb({ message: "Device erased", details: { done: true } })
+            return new Promise<string>((resolve) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result as string);
+                reader.readAsBinaryString(blob);
+            });
+        });
+
+        const results = await Promise.all(filePromises);
+        results.forEach((data, i) => {
+            fileArray.push({ data, address: build.parts[i].offset });
+            totalSize += data.length;
+        });
+
+        cb({ message: "Installation prepared", details: { done: true } });
+    } catch (err: any) {
+        cb({
+            message: err.message,
+            details: { error: FlashError.FAILED_FIRMWARE_DOWNLOAD, details: err.message },
+        });
+        await resetTransport(transport);
+        await transport.disconnect();
+        return;
     }
-    cb({ message: `Writing progress: 0%`, details: { bytesTotal: totalSize, bytesWritten: 0, percentage: 0 } })
+
+    if (eraseBeforeFlash) {
+        cb({ message: "Erasing device...", details: { done: false } });
+        await esploader.erase_flash();
+        cb({ message: "Device erased", details: { done: true } });
+    }
+
+    cb({
+        message: `Writing progress: 0%`,
+        details: { bytesTotal: totalSize, bytesWritten: 0, percentage: 0 },
+    });
 
     let totalWritten = 0;
 
@@ -144,54 +175,65 @@ export const flash = async (cb, deviceName, compileSessionId) => {
             "keep",
             false,
             true,
-            // report progress
             (fileIndex: number, written: number, total: number) => {
-                const uncompressedWritten =
-                    (written / total) * fileArray[fileIndex].data.length;
+                const uncompressedWritten = (written / total) * fileArray[fileIndex].data.length;
+                const newPct = Math.floor(((totalWritten + uncompressedWritten) / totalSize) * 100);
 
-                const newPct = Math.floor(
-                    ((totalWritten + uncompressedWritten) / totalSize) * 100
-                );
                 if (written === total) {
                     totalWritten += uncompressedWritten;
                     return;
                 }
-                cb({ message: `Writing progress: ${newPct}%`, details: { bytesTotal: totalSize, bytesWritten: totalWritten + written, percentage: newPct } })
+
+                cb({
+                    message: `Writing progress: ${newPct}%`,
+                    details: { bytesTotal: totalSize, bytesWritten: totalWritten + written, percentage: newPct },
+                });
             }
         );
     } catch (err: any) {
-        cb({ message: err.message, details: { error: FlashError.WRITE_FAILED, details: err } })
+        cb({
+            message: err.message,
+            details: { error: FlashError.WRITE_FAILED, details: err },
+        });
         await resetTransport(transport);
         await transport.disconnect();
         return;
     }
-    cb({ message: "Writing complete", details: { bytesTotal: totalSize, bytesWritten: totalWritten, percentage: 100 } })
+
+    cb({
+        message: "Writing complete",
+        details: { bytesTotal: totalSize, bytesWritten: totalWritten, percentage: 100 },
+    });
 
     await sleep(100);
+
     console.log("HARD RESET");
     await resetTransport(transport);
+
     console.log("DISCONNECT");
     await transport.disconnect();
-    cb({ message: "All done!" })
-}
+
+    cb({ message: "All done!" });
+};
+
 
 
 const onlineCompiler = "compile.protofy.xyz";
 const secured = true;
 export const downloadDeviceFirmwareEndpoint = (targetDevice, compileSessionId) => {
-    return (`http${secured?"s":""}://${onlineCompiler}/api/v1/device/download/${targetDevice}?compileSessionId=${compileSessionId}`)
+    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/download/${targetDevice}?compileSessionId=${compileSessionId}`)
 };
 
 export const onlineCompilerSecureWebSocketUrl = () => {
-    return (`ws${secured?"s":""}://${onlineCompiler}/websocket`)
+    return (`ws${secured ? "s" : ""}://${onlineCompiler}/websocket`)
 };
 
 export const postYamlApiEndpoint = (targetDevice) => {
-    return (`http${secured?"s":""}://${onlineCompiler}/api/v1/device/edit/${targetDevice}`);
+    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/edit/${targetDevice}`);
 };
 
 export const compileActionUrl = (targetDevice, compileSessionId) => {
-    return (`http${secured?"s":""}://${onlineCompiler}/api/v1/device/compile/${targetDevice}?compileSessionId=${compileSessionId}`)
+    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/compile/${targetDevice}?compileSessionId=${compileSessionId}`)
 };
 
 export const compileMessagesTopic = (targetDevice) => {
