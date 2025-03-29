@@ -11,7 +11,7 @@ import { CardBody } from '../../../components/CardBody';
 import { ItemMenu } from '../../../components/ItemMenu';
 import { Tinted } from '../../../components/Tinted';
 import { useSubscription, Connector } from '../../../lib/mqtt';
-import { connectSerialPort, flash } from "../devicesUtils";
+import { flash, connectSerialPort } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
 import { Subsystems } from 'protodevice/src/Subsystem'
@@ -19,10 +19,9 @@ import { Paragraph, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud, Navigation } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
-import { onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
+import { closeSerialPort, onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
 import { withSession } from '../../../lib/Session'
-import { useRouter } from 'solito/navigation';
 import { SelectList } from '../../../components/SelectList';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
@@ -123,6 +122,8 @@ const DevicesIcons = { name: Tag, deviceDefinition: BookOpen }
 const sourceUrl = '/api/core/v1/devices'
 const definitionsSourceUrl = '/api/core/v1/deviceDefinitions?all=1'
 
+type DeviceModalStage = 'yaml' | 'compile' | 'write' | 'upload' | 'idle' | 'select-action' | 'confirm-erase' | 'done' | 'console'
+
 export default {
   component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const { replace } = usePageParams(pageState)
@@ -131,10 +132,12 @@ export default {
     }
     const [showModal, setShowModal] = useState(false)
     const [modalFeedback, setModalFeedback] = useState<any>()
-    const [stage, setStage] = useState('')
+    const [stage, setStage] = useState<DeviceModalStage | "">('')
     const yamlRef = React.useRef()
     const [targetDeviceName, setTargetDeviceName] = useState('')
     const [targetDeviceModel, setTargetDeviceModel] = useState(DevicesModel.load({}))
+    const [consoleOutput, setConsoleOutput] = useState('')
+    const [port, setPort] = useState<any>(null)
     const [compileSessionId, setCompileSessionId] = useState('')
     const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
@@ -153,9 +156,14 @@ export default {
     }
 
     const onSelectPort = async () => {
-      const isError = await connectSerialPort()
-      if (isError) return
-      setStage('write')
+      const { port, error } = await connectSerialPort()
+      if (!port || error) {
+        setModalFeedback({ message: error || 'No port detected.', details: { error: true } })
+        return
+      }
+      // setStage('write')
+      setPort(port)
+      setStage("select-action")
     }
 
     const handleYamlStage = async () => {
@@ -229,7 +237,7 @@ export default {
       }
 
       try {
-        await flash(flashCb, targetDeviceName, compileSessionId);
+        await flash((msg) => setModalFeedback(msg), targetDeviceName, compileSessionId, true) //TODO: eraseBeforeFlash
         setStage('idle');
       } catch (e) {
         flashCb({
@@ -240,7 +248,7 @@ export default {
       }
     }
 
-    const upload = () => {
+    const startUploadStage = () => {
       // getWebSocket()?.close()
       const chromiumBasedAgent =
         navigator.userAgent.includes('Chrome') ||
@@ -256,13 +264,47 @@ export default {
       }
     }
 
+    const startConsole = async () => {
+      if (!port) {
+        console.error('No port selected');
+        return;
+      }
+      let reader;
+      try {
+        if (port.readable.locked) {
+          console.warn('Port is already locked. Releasing previous reader...');
+          reader = port.readable.getReader();
+          reader.releaseLock();
+        }
+        reader = port.readable.getReader();
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          setConsoleOutput((prev) => prev + new TextDecoder().decode(value));
+        }
+      } catch (err) {
+        console.error('Error reading from port:', err);
+      } finally {
+        if (reader) {
+          reader.releaseLock();
+        }
+      }
+    };
+
     useEffect(() => {
       const processStage = async () => {
+
         console.log('Stage:', stage);
-        if (stage === 'yaml') await handleYamlStage();
-        else if (stage === 'compile') await compile();
-        else if (stage === 'write') await write();
-        else if (stage === 'upload') upload();
+
+        switch (stage) {
+          case 'yaml': await handleYamlStage(); break;
+          case 'compile': await compile(); break;
+          // case 'select-action': await onSelectPort(); break;
+          case 'write': await write(); break;
+          case 'upload': startUploadStage(); break;
+          case 'console': startConsole(); break;
+        }
+
       };
 
       processStage();
@@ -271,7 +313,7 @@ export default {
 
     const extraMenuActions = [
       {
-        text: "Upload definition",
+        text: "Manage firmware",
         icon: UploadCloud,
         action: (element) => { flashDevice(element) },
         isVisible: (element) => true
@@ -302,12 +344,21 @@ export default {
       <Connector brokerUrl={onlineCompilerSecureWebSocketUrl()}>
         <DeviceModal
           stage={stage}
-          onCancel={() => setShowModal(false)}
+          onCancel={() => {
+            if (["console"].includes(stage)) {
+              setStage("select-action")
+            } else {
+              setShowModal(false)
+            }
+            closeSerialPort()
+          }}
           onSelect={onSelectPort}
           modalFeedback={modalFeedback}
           showModal={showModal}
           selectedDevice={targetDeviceModel}
           compileSessionId={compileSessionId}
+          onSelectAction={setStage}
+          consoleOutput={consoleOutput}
         />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>

@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
 import { useThemeName } from 'tamagui'
-import { Maximize, Minimize } from '@tamagui/lucide-icons'
+import { Maximize, Minimize, Upload, X, SearchCode, Rese, RefreshCcw, Download } from '@tamagui/lucide-icons'
 import { Button, YStack, Text, XStack } from "@my/ui"
 import { EspWebInstall } from "./EspWebInstall"
+import { EspConsole } from "./espConsole";
+import { resetDevice, downloadLogs } from "protolib/bundles/devices/devicesUtils";
 
-const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId }) => {
+const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId, onSelectAction }) => {
     const [fullscreen, setFullscreen] = useState(false);
     const [manifestUrl, setManifestUrl] = useState(null)
     const isError = modalFeedback?.details?.error
@@ -15,6 +17,7 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
     const stages = {
         'yaml': 'Uploading yaml to the project...',
         'compile': 'Compiling firmware...',
+        'select-action': 'What do you want to do?',
         'upload': 'Connect your device and click select to chose the port. ',
         'write': 'Writting firmware to device. Please do not unplug your device.',
         'idle': 'Device configured successfully.\n You can unplug your device.'
@@ -80,10 +83,15 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
                     console.error("Error fetching manifest URL:", error);
                 }
             }
+            if (stage == 'console') {
+                setFullscreen(true)
+            }
         };
 
         fetchManifestUrl();
     }, [stage, selectedDevice, compileSessionId]);
+
+    console.log('dev: stage', stage)
 
     return <AlertDialog open={showModal} hideAccept={true}>
         <YStack
@@ -93,51 +101,98 @@ const DeviceModal = ({ stage, onCancel, onSelect, showModal, modalFeedback, sele
             gap={"$6"}
             justifyContent="space-between"
         >
-            <XStack justifyContent="center" alignItems="center" >
-                <Text fontWeight="600" fontSize="xs" textAlign='center'>
-                    {`[${Object.keys(stages).indexOf(stage)}/${Object.keys(stages).length}]`}
-                </Text>
-                {/* Fullscreen toggle */}
-                <Button
-                    position="absolute"
-                    right={0}
-                    size="$2"
-                    icon={fullscreen ? <Minimize size="$1" /> : <Maximize size="$1" />}
-                    onPress={() => setFullscreen(prev => !prev)}
-                    backgroundColor="transparent"
-                    pressStyle={{ scale: 1.1 }}
-                    hoverStyle={{ opacity: 0.7 }}
-                    padding={"$2"}
-                    paddingVertical="$4"
-                />
-            </XStack>
-            <YStack justifyContent="center" flex={1} gap={"$2"}>
-                <Text fontWeight={"600"} textAlign="center" color={isError ? 'red' : ''}>
-                    {modalFeedback && ['write', 'compile', 'upload', 'yaml'].includes(stage)
-                        ? modalFeedback.message
-                        : stages[stage]
-                    }
-                </Text>
-                {
-                    !isError && images[themeName][isLoading ? 'loading' : stage]
-                        ? <img
-                            alt="protofito dancing"
-                            style={{ height: isLoading ? "200px" : "180px", width: isLoading ? "300px" : "190px", alignSelf: "center", objectFit: 'cover', paddingTop: "20px" }}
-                            src={images[themeName][isLoading ? 'loading' : stage]}
-                        />
-                        : null
-                }
-            </YStack>
-            <DriversNote />
+            {!["console"].includes(stage) &&
+                <XStack justifyContent="center" alignItems="center" >
+                    <Text fontWeight="600" fontSize="xs" textAlign='center'>
+                        {`[${Object.keys(stages).indexOf(stage)}/${Object.keys(stages).length}]`}
+                    </Text>
+                    {/* Fullscreen toggle */}
+                    <Button
+                        position="absolute"
+                        left={0}
+                        size="$2"
+                        icon={fullscreen ? <Minimize size="$1" /> : <Maximize size="$1" />}
+                        onPress={() => setFullscreen(prev => !prev)}
+                        backgroundColor="transparent"
+                        pressStyle={{ scale: 1.1 }}
+                        hoverStyle={{ opacity: 0.7 }}
+                        padding="$2"
+                        paddingVertical="$4"
+                    />
+                    <Button
+                        position="absolute"
+                        right={0}
+                        size={"$3"}
+                        theme="red"
+                        circular
+                        icon={X}
+                        onPress={() => onCancel()}
+                    />
+                </XStack>
+            }
+            {stage === 'console'
+                ? <EspConsole consoleOutput={consoleOutput} />
+                : <>
+                    <YStack justifyContent="center" flex={1} gap={"$2"}>
+                        <Text fontWeight={"600"} textAlign="center" color={isError ? 'red' : ''}>
+                            {modalFeedback && ['write', 'compile', 'upload', 'yaml'].includes(stage)
+                                ? modalFeedback.message
+                                : stages[stage]
+                            }
+                        </Text>
+                        {
+                            !isError && images[themeName][isLoading ? 'loading' : stage] && (
+                                <img
+                                    alt="protofito dancing"
+                                    style={{
+                                        height: isLoading ? "200px" : "180px",
+                                        width: isLoading ? "300px" : "190px",
+                                        alignSelf: "center",
+                                        objectFit: 'cover',
+                                        paddingTop: "20px"
+                                    }}
+                                    src={images[themeName][isLoading ? 'loading' : stage]}
+                                />
+                            )}
+                    </YStack>
+                    <DriversNote />
+                </>
+            }
+            {
+                (stage == 'select-action' && !isError) &&
+                <XStack gap="$3" flex={1} justifyContent="center">
+                    <Tinted>
+                        <Button icon={Upload} onPress={() => onSelectAction("write")}>{`Install ${selectedDevice.getId()} firmware`}</Button>
+                        <Button icon={SearchCode} onPress={() => onSelectAction("console")}>Watch logs</Button>
+                    </Tinted>
+                    {/* <Button disabled color={"gray"}>Wi-Fi (soon)</Button> */}
+                </XStack>
+            }
+
             <XStack justifyContent="center" gap={"$4"}>
-                {
-                    (stage != 'write' && stage != 'idle' || isError) &&
-                    <Button onPress={() => onCancel()}>Cancel</Button>
+                {stage == "console" &&
+                    <XStack justifyContent="center" gap={"$4"}>
+                        <Tinted>
+                            <Button icon={RefreshCcw} onPress={() => resetDevice()}>Reset device</Button>
+                            <Button icon={Download} onPress={() => downloadLogs(consoleOutput)}>Download logs</Button>
+                        </Tinted>
+                    </XStack>
                 }
                 {
-                    (stage == 'upload' && manifestUrl) &&
-                    <EspWebInstall.ModalButton onPress={() => onCancel()} manifestUrl={manifestUrl} />
+                    (!["write", "idle", "upload", "compile"].includes(stage) || isError) &&
+                    <Button onPress={() => {
+                        onCancel()
+                        setFullscreen(false)
+                    }}>Cancel</Button>
                 }
+                {
+                    stage == 'upload' &&
+                    <Button backgroundColor={"black"} color={"white"} onPress={() => onSelect()}>Select</Button>
+                }
+                {/* {
+                        (stage == 'upload' && manifestUrl) &&
+                        <EspWebInstall.ModalButton onPress={() => onCancel()} manifestUrl={manifestUrl} />
+                    } */}
                 {
                     stage == 'idle' &&
                     <Button backgroundColor="black" color={"white"} onPress={() => onCancel()}>Done !</Button>
