@@ -8,6 +8,7 @@ logs/*
 !data/devices
 !data/prompts
 !data/deviceDefinitions
+!data/objects
 !data/public/
 !data/public/fonts/
 !data/public/fonts/*

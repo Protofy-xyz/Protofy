@@ -1,0 +1,14 @@
+{
+    "name": "test",
+    "shape": {
+        "name": [
+            {"c": "string"},
+            {"c": "id"},
+            {"c": "hint", "params": ["name of the test"]}
+        ],
+        "price": [
+            {"c": "string"},
+            {"c": "hint", "params": ["price of the test"]}
+        ]
+    }
+}
