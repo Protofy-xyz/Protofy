@@ -548,6 +548,7 @@ const DataViewInternal = forwardRef(({
                                             toast.show(name + ' updated', {
                                                 message: "Saved new settings for: " + id
                                             })
+                                            removePush('item')
                                         } catch (e) {
                                             throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
                                         }
