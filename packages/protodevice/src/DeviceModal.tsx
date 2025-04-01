@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
-import { useThemeName } from 'tamagui'
-import { Maximize, Minimize, Upload, X, SearchCode, Rese, RefreshCcw, Download } from '@tamagui/lucide-icons'
+import { Switch, useThemeName } from 'tamagui'
+import { Maximize, Minimize, Upload, X, SearchCode, RefreshCcw, Download } from '@tamagui/lucide-icons'
 import { Button, YStack, Text, XStack } from "@my/ui"
 import { EspWebInstall } from "./EspWebInstall"
 import { EspConsole } from "./espConsole";
 import { resetDevice, downloadLogs } from "protolib/bundles/devices/devicesUtils";
 
-const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId, onSelectAction }) => {
+const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId, onSelectAction }) => {
     const [fullscreen, setFullscreen] = useState(false);
     const [manifestUrl, setManifestUrl] = useState(null)
     const isError = modalFeedback?.details?.error
@@ -20,6 +20,7 @@ const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, moda
         'select-action': 'What do you want to do?',
         'upload': 'Connect your device and click select to chose the port. ',
         'write': 'Writting firmware to device. Please do not unplug your device.',
+        "confirm-erase": 'Do you want to erase the device before installing the firmware?',
         'idle': 'Device configured successfully.\n You can unplug your device.'
     }
 
@@ -132,8 +133,9 @@ const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, moda
             }
             {stage === 'console'
                 ? <EspConsole consoleOutput={consoleOutput} />
-                : <>
+                : <YStack>
                     <YStack justifyContent="center" flex={1} gap={"$2"}>
+
                         <Text fontWeight={"600"} textAlign="center" color={isError ? 'red' : ''}>
                             {modalFeedback && ['write', 'compile', 'upload', 'yaml'].includes(stage)
                                 ? modalFeedback.message
@@ -155,14 +157,28 @@ const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, moda
                                 />
                             )}
                     </YStack>
+                    {stage == "confirm-erase" &&
+                        <XStack mt={"$8"} width={"100%"} f={1} alignItems="center" jc={"center"} gap="$2">
+                            <Text>Erase device</Text>
+                            <Tinted>
+                                <Switch
+                                    value={eraseBeforeFlash}
+                                    onCheckedChange={setEraseBeforeFlash}
+                                    defaultChecked={true}
+                                >
+                                    <Switch.Thumb backgroundColor="black" />
+                                </Switch>
+                            </Tinted>
+                        </XStack>
+                    }
                     <DriversNote />
-                </>
+                </YStack>
             }
             {
                 (stage == 'select-action' && !isError) &&
                 <XStack gap="$3" flex={1} justifyContent="center">
                     <Tinted>
-                        <Button icon={Upload} onPress={() => onSelectAction("write")}>{`Install ${selectedDevice.getId()} firmware`}</Button>
+                        <Button icon={Upload} onPress={() => onSelectAction("confirm-erase")}>{`Install ${selectedDevice.getId()} firmware`}</Button>
                         <Button icon={SearchCode} onPress={() => onSelectAction("console")}>Watch logs</Button>
                     </Tinted>
                     {/* <Button disabled color={"gray"}>Wi-Fi (soon)</Button> */}
@@ -178,6 +194,7 @@ const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, moda
                         </Tinted>
                     </XStack>
                 }
+
                 {
                     (!["write", "idle", "upload", "compile"].includes(stage) || isError) &&
                     <Button onPress={() => {
@@ -188,6 +205,10 @@ const DeviceModal = ({ consoleOutput, stage, onCancel, onSelect, showModal, moda
                 {
                     stage == 'upload' &&
                     <Button backgroundColor={"black"} color={"white"} onPress={() => onSelect()}>Select</Button>
+                }
+                {
+                    stage == 'confirm-erase' &&
+                    <Button backgroundColor={"black"} color={"white"} onPress={() => onSelectAction("write")}>Accept</Button>
                 }
                 {/* {
                         (stage == 'upload' && manifestUrl) &&
