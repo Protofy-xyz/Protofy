@@ -46,12 +46,16 @@ export const getDefaultValue = (type) => {
 
 
 export const FormElement = ({ ele, i, icon, children, inArray = false }) => {
+    const isOptional = ele.isOptional()
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
         {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
                 <Stack mr="$2">{React.createElement(icon, iconStyle)}</Stack>
             </Tinted>
             {ele._def.label ?? ele.name}
+            <Tinted>
+                {!isOptional && <Paragraph ml="$1" color="$color8">*</Paragraph>}
+            </Tinted>
         </Label>}
         {inArray && <Spacer size="$1" />}
         <XStack>
