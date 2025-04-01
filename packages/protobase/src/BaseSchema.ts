@@ -25,6 +25,7 @@ interface ZodExtensions {
     location(latKey: string, lonKey: string): this;
     generateOptions(call: Function): this;
     visible(visibilityCheck: Function): this;
+    sequence(): this;
     choices(): this;
     secret(): this;
     static(): this;
@@ -121,6 +122,11 @@ function extendZodTypePrototype(type: any) {
     type.prototype.datePicker = function (type: string) {
         this._def.datePicker = type;
         this._def.coerce = true;
+        return this;
+    };
+    
+    type.prototype.sequence = function () {
+        this._def.sequence = true;
         return this;
     };
 
