@@ -1,6 +1,7 @@
 {
     "name": "test",
     "id": "TestModel",
+    "dynamic": true,
     "features": {
         "AutoAPI": true,
         "adminPage": "/objects/test"
