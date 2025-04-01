@@ -11,7 +11,7 @@ import { ActiveGroup } from './ActiveGroup';
 import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3 } from '@tamagui/lucide-icons'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
@@ -58,7 +58,12 @@ const EditableObject = dynamic<any>(() =>
 
 const MapView = dynamic<any>(() =>
     import('./MapView').then(module => module.MapView),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
+);
+
+const SequenceView = dynamic<any>(() =>
+    import('./SequenceView').then(module => module.SequenceView),
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 interface DataViewProps {
@@ -97,6 +102,7 @@ interface DataViewProps {
     dataTableGridProps?: any;
     dataTableSheetProps?: any;
     dataMapProps?: any;
+    dataSequenceProps?: any;
     extraFieldsForms?: any;
     extraFieldsFormsEdit?: any;
     extraFieldsFormsAdd?: any;
@@ -196,6 +202,7 @@ const DataViewInternal = forwardRef(({
     dataTableGridProps = {},
     dataTableSheetProps = {},
     dataMapProps = {},
+    dataSequenceProps = {},
     extraFieldsForms = {},
     extraFieldsFormsEdit = {},
     extraFieldsFormsAdd = {},
@@ -405,9 +412,38 @@ const DataViewInternal = forwardRef(({
         }
     }
 
+    const sequenceView = {
+        name: 'sequence',
+        icon: Columns3,
+        component: SequenceView,
+        props: {
+            onStageChange: async (ele) => {
+                const id = model.load(ele).getId()
+                const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(ele).getData()))
+                if (result.isError) {
+                    throw result.error
+                }
+                const { item, ...rest } = state;
+                setState(rest)
+                toast.show(name + ' updated', {
+                    message: "Saved new settings for: " + id
+                })
+            },
+            items,
+            sourceUrl,
+            model,
+            ...dataSequenceProps
+        }
+    }
+
     const locationProps = model.getObjectSchema().is('location')
+    const sequenceField = model.getSequeceField()
+
     if (locationProps.getFields().length) {
         defaultViews = [...defaultViews, mapView]
+    }
+    if (sequenceField) {
+        defaultViews = [...defaultViews, sequenceView]
     }
 
     const tableViews = (views ?? [...defaultViews, ...extraViews]).filter(v => !disableViews.includes(v.name))
