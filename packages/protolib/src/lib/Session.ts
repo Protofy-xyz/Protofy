@@ -108,7 +108,7 @@ export const withSession = async (context: any, permissions?: string[] | any[] |
     return {
         props: {
             pageSession: pageSession,
-            ...(typeof props === "function" ? await props() : props),
+            ...(typeof props === "function" ? await props(session) : props),
         }
     }
 }

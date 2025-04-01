@@ -5,16 +5,16 @@ import { useRouter } from 'next/router';
 
 export default function Page(props: any) {
     const router = useRouter();
-    const { board } = router.query;
+    const { object } = router.query;
 
     return (
         <>
             <Head>
-                <title>{board+" Object"}</title>
+                <title>{object+" Object"}</title>
             </Head>
-            <ObjectsPage.objects.component {...props} />
+            <ObjectsPage.view.component {...props} />
         </>
     )
 }
 
-export const getServerSideProps = ObjectsPage.objects.getServerSideProps
+export const getServerSideProps = ObjectsPage.view.getServerSideProps

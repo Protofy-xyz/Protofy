@@ -1,6 +1,6 @@
 import { createSession } from './Session'
 import { SessionDataType } from './lib/perms'
-import { ZodObject } from './BaseSchema'
+import { BaseSchema, Schema, z, ZodObject } from './BaseSchema'
 import { ProtoSchema } from './ProtoSchema';
 import { getLogger } from "./logger"
 import { API } from './Api';
@@ -58,6 +58,42 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
                 fn: groupIndexesSchema.getFieldKeyDefinition(field, 'groupCode')
             }
         })
+    }
+
+    static getClassFromDefinition(definition: any) {
+        const schema = Schema.object(Object.keys(definition.keys).reduce((acc, key) => {
+            const element = definition.keys[key];
+            let schema = z;
+            if(typeof schema[element.type] !== 'function') {
+                throw new Error(`Type ${element.type} does not exist on z`);
+            }
+            schema = schema[element.type](...element.params);
+            if(element.modifiers) {
+                element.modifiers.forEach(modifier => {
+                    const methodName = modifier.name;
+                    const params = modifier.params || [];
+
+                    if (typeof schema[methodName] === 'function') {
+                        schema = schema[methodName](...params);
+                    } else {
+                        throw new Error(`Modifier ${methodName} does not exist on z`);
+                    }
+                });
+            }
+
+            acc[key] = schema;
+            return acc;
+        }, {}))
+
+        const hasId = Object.keys(BaseSchema.shape).some(key => BaseSchema.shape[key]._def.id)
+        const objSchema = Schema.object({
+            ...(!hasId ? BaseSchema.shape : {}),
+            ...schema.shape
+        });
+
+        type objType = z.infer<typeof objSchema>;
+        const objModel = AutoModel.createDerived<objType>(definition.id, objSchema, definition.apiOptions.name, definition.apiOptions.prefix);
+        return objModel
     }
 
     get(key: string, defaultValue?) {
