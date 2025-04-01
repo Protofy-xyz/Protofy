@@ -6,23 +6,8 @@ import { Maximize, Minimize, Upload, X, SearchCode, RefreshCcw, Download } from 
 import { Button, YStack, Text, XStack } from "@my/ui"
 import { EspWebInstall } from "./EspWebInstall"
 import { EspConsole } from "./espConsole";
-import { resetDevice, downloadLogs } from "protolib/bundles/devices/devicesUtils";
 
-const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId, onSelectAction }) => {
-    const [fullscreen, setFullscreen] = useState(false);
-    const [manifestUrl, setManifestUrl] = useState(null)
-    const isError = modalFeedback?.details?.error
-    const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
-    const themeName = useThemeName();
-    const stages = {
-        'yaml': 'Uploading yaml to the project...',
-        'compile': 'Compiling firmware...',
-        'select-action': 'What do you want to do?',
-        'upload': 'Connect your device and click select to chose the port. ',
-        'write': 'Writting firmware to device. Please do not unplug your device.',
-        "confirm-erase": 'Do you want to erase the device before installing the firmware?',
-        'idle': 'Device configured successfully.\n You can unplug your device.'
-    }
+const DriversNote = () => {
 
     const Link = (props, style) => {
         return <Tinted><a
@@ -37,28 +22,38 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
         /></Tinted>
     }
 
-    const DriversNote = () => {
+    const drivers = [
+        { os: 'Windows', link: 'https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip' },
+        { os: 'Mac', link: 'https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip' },
+        { os: 'other OS', link: 'https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads' }
+    ]
 
-        const drivers = [
-            { os: 'Windows', link: 'https://www.silabs.com/documents/public/software/CP210x_Windows_Drivers.zip' },
-            { os: 'Mac', link: 'https://www.silabs.com/documents/public/software/Mac_OSX_VCP_Driver.zip' },
-            { os: 'other OS', link: 'https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers?tab=downloads' }
-        ]
+    return <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <Text fontWeight="600">{"Note: "}</Text>
+        <Text >{"If you don't see your device on the menu, download the device drivers on "}</Text>
+        {drivers.map((driver, index) => (
+            <Link style={{ color: "var(--color8)" }} key={index} href={driver.link}>
+                {`${driver.os}${index < drivers.length - 1 ? ", " : ""}`}
+            </Link>
+        ))}
+        {"."}
+    </div>
+}
 
-        return stage === 'upload'
-            && !isError
-            && (
-                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                    <Text fontWeight="600">{"Note: "}</Text>
-                    <Text >{"If you don't see your device on the menu, download the device drivers on "}</Text>
-                    {drivers.map((driver, index) => (
-                        <Link style={{ color: "var(--color8)" }} key={index} href={driver.link}>
-                            {`${driver.os}${index < drivers.length - 1 ? ", " : ""}`}
-                        </Link>
-                    ))}
-                    {"."}
-                </div>
-            )
+const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, stage, onCancel, onSelect, showModal, modalFeedback, selectedDevice, compileSessionId, onSelectAction }) => {
+    const [fullscreen, setFullscreen] = useState(false);
+    const [manifestUrl, setManifestUrl] = useState(null)
+    const isError = modalFeedback?.details?.error
+    const isLoading = ['write'].includes(stage) && !isError && !modalFeedback?.message?.includes('Please hold "Boot"')
+    const themeName = useThemeName();
+    const stages = {
+        'yaml': 'Uploading yaml to the project...',
+        'compile': 'Compiling firmware...',
+        'select-action': 'What do you want to do?',
+        'upload': 'Connect your device and click select to chose the port.',
+        'write': 'Writting firmware to device. Please do not unplug your device.',
+        "confirm-erase": 'Do you want to erase the device before installing the firmware?',
+        'idle': 'Device configured successfully.\n You can unplug your device.'
     }
 
     const images = {
@@ -84,20 +79,16 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
                     console.error("Error fetching manifest URL:", error);
                 }
             }
-            if (stage == 'console') {
-                setFullscreen(true)
-            }
         };
 
         fetchManifestUrl();
     }, [stage, selectedDevice, compileSessionId]);
 
-    console.log('dev: stage', stage)
 
     return <AlertDialog open={showModal} hideAccept={true}>
         <YStack
-            height={fullscreen ? "80vh" : "450px"}
-            width={fullscreen ? "80vw" : "500px"}
+            height={stage == 'console' || fullscreen ? "80vh" : "450px"}
+            width={stage == 'console' || fullscreen ? "80vw" : "500px"}
             padding={"$3"}
             gap={"$6"}
             justifyContent="space-between"
@@ -132,7 +123,12 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
                 </XStack>
             }
             {stage === 'console'
-                ? <EspConsole consoleOutput={consoleOutput} />
+                ? <EspConsole
+                    consoleOutput={consoleOutput}
+                    onCancel={() => {
+                        onCancel()
+                        setFullscreen(false)
+                    }} />
                 : <YStack>
                     <YStack justifyContent="center" flex={1} gap={"$2"}>
 
@@ -171,7 +167,7 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
                             </Tinted>
                         </XStack>
                     }
-                    <DriversNote />
+                    {stage === 'upload' && !isError && <DriversNote />}
                 </YStack>
             }
             {
@@ -181,20 +177,10 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
                         <Button icon={Upload} onPress={() => onSelectAction("confirm-erase")}>{`Install ${selectedDevice.getId()} firmware`}</Button>
                         <Button icon={SearchCode} onPress={() => onSelectAction("console")}>Watch logs</Button>
                     </Tinted>
-                    {/* <Button disabled color={"gray"}>Wi-Fi (soon)</Button> */}
                 </XStack>
             }
 
-            <XStack justifyContent="center" gap={"$4"}>
-                {stage == "console" &&
-                    <XStack justifyContent="center" gap={"$4"}>
-                        <Tinted>
-                            <Button icon={RefreshCcw} onPress={() => resetDevice()}>Reset device</Button>
-                            <Button icon={Download} onPress={() => downloadLogs(consoleOutput)}>Download logs</Button>
-                        </Tinted>
-                    </XStack>
-                }
-
+            <XStack style={{ display: ["console"].includes(stage) ? "none" : "flex" }} justifyContent="center" gap={"$4"}>
                 {
                     (!["write", "idle", "upload", "compile"].includes(stage) || isError) &&
                     <Button onPress={() => {
