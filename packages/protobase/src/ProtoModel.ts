@@ -149,6 +149,17 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.data[this.idField]
     }
 
+    static getSequeceField() {
+        return this._newInstance({}).getSequeceField()
+    }
+
+    getSequeceField() {
+        return this.objectSchema.getFields().find((field) => {
+            const { sequence } = this.objectSchema.getFieldDefinition(field)
+            return sequence
+        })
+    }
+
     getNotificationsTopic(action?: string | undefined): string {
         if (!action) {
             return `notifications/${this.getModelName()}/#`
@@ -211,13 +222,13 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             const findMatch = (schema, data, searchTerm, path = []) => {
                 for (const key in schema.shape) {
                     const value = schema.shape[key];
-            
+
                     if (value._def.typeName === "ZodObject") {
                         if (findMatch(value, data[key], searchTerm, [...path, key])) return true;
-                    } 
+                    }
                     else if (value._def.search || value._def?.innerType?._def?.search) {
                         const propValue = [...path, key].reduce((acc, key) => acc && acc[key], this.data);
-            
+
                         if (propValue && propValue.toString().toLowerCase().includes(searchTerm.toLowerCase())) {
                             return true;
                         }
