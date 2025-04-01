@@ -418,8 +418,8 @@ const DataViewInternal = forwardRef(({
         component: SequenceView,
         props: {
             onStageChange: async (ele) => {
-                const id = model.load(ele).getId()
-                const result = await API.post(sourceUrl + '/' + id, onEdit(model.load(ele).getData()))
+                const id = ele.getId()
+                const result = await API.post(sourceUrl + '/' + id, onEdit(ele.getData()))
                 if (result.isError) {
                     throw result.error
                 }
@@ -429,6 +429,7 @@ const DataViewInternal = forwardRef(({
                     message: "Saved new settings for: " + id
                 })
             },
+            onSelectItem: onSelectItem ? onSelectItem : (item) => replace('item', item.getId()),
             items,
             sourceUrl,
             model,

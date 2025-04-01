@@ -3,7 +3,7 @@ import { Circle, Text, XStack, YStack } from '@my/ui'
 import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
 import { z } from 'protobase'
 
-const SequenceCard = ({ model, item, index, onEditItem, getCard }) => {
+const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
     const modelItem = model.load(item)
     const validProps = model.getObjectFields().filter((field) => {
         const fieldDef = model.getObjectSchema().getFieldDefinition(field)
@@ -13,7 +13,7 @@ const SequenceCard = ({ model, item, index, onEditItem, getCard }) => {
     return <Draggable
         key={item.id}
         draggableId={item.id}
-        // isDragDisabled={col == "done"}
+        // isDragDisabled={!modelItem.canTransition()}
         index={index}
     >
         {(provided) => (
@@ -31,7 +31,7 @@ const SequenceCard = ({ model, item, index, onEditItem, getCard }) => {
                     getCard
                         ? getCard(item, index)
                         : <YStack
-                            onPress={() => onEditItem(item)}
+                            onPress={() => onSelectItem(modelItem)}
                             p="$3"
                             br="$4"
                             bc="$backgroundStrong"
@@ -62,7 +62,7 @@ const SequenceCard = ({ model, item, index, onEditItem, getCard }) => {
 }
 
 
-export const SequenceView = ({ items, onStageChange, onEditItem, model, getCard, ...props }) => {
+export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCard, ...props }) => {
     const itemsList = items.data.items
 
     const sequenceField = model.getSequeceField()
@@ -83,7 +83,7 @@ export const SequenceView = ({ items, onStageChange, onEditItem, model, getCard,
         movedItem.status = destination.droppableId;
         updatedItems.splice(destination.index, 0, movedItem);
 
-        onStageChange(movedItem)
+        onStageChange(model.load(movedItem))
     };
 
     const themeNames = ["orange", "yellow", "green", "blue", "purple", "pink", "red"]
@@ -118,7 +118,7 @@ export const SequenceView = ({ items, onStageChange, onEditItem, model, getCard,
                                     }}
                                 >
                                     {getItemsBySequenceStages(col).map((item, index) => {
-                                        return <SequenceCard key={item.id} model={model} item={item} index={index} onEditItem={onEditItem} getCard={getCard} />
+                                        return <SequenceCard key={item.id} model={model} item={item} index={index} onSelectItem={onSelectItem} getCard={getCard} />
                                     })}
                                     {provided.placeholder}
                                 </div>
