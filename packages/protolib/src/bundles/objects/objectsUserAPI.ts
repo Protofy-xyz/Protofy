@@ -3,7 +3,7 @@ import path from 'path';
 import { z, Schema, BaseSchema, AutoModel, ProtoModel } from 'protobase';
 import { AutoAPI } from 'protonode'
 
-export const ObjectUserAPI = (app, context) => {
+const reloadObjectAPIs = async (app, context) => {
     // list all objects
     if (!fs.existsSync('../../data/objects')) {
         fs.mkdirSync('../../data/objects', { recursive: true });
@@ -30,5 +30,11 @@ export const ObjectUserAPI = (app, context) => {
             ObjectAPI(app, context)
         }
     });
-
+}
+export const ObjectUserAPI = (app, context) => {
+    reloadObjectAPIs(app, context)
+    app.get('/api/v1/objects/reload', async (req, res) => {
+        reloadObjectAPIs(app, context)
+        res.json({ status: 'ok' })
+    })
 }

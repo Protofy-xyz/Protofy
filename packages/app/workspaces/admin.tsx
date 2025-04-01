@@ -36,9 +36,9 @@ import { DashboardCard } from 'protolib/components/DashboardCard'
 
 const enableBoards = true   
 
-export default ({ pages, boards }) => {
+export default ({ pages, boards, objects }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && !p.object)
-    const cmsPages = pages.filter(p => p.pageType == 'admin' && p.object)
+    const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
     return {
         "default": "/workspace/",
         "label": "Admin panel",
@@ -113,9 +113,9 @@ export default ({ pages, boards }) => {
                     return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
                 }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }]))
             } : {},
-            ...(cmsPages.length ? {
-                "CMS Objects": cmsPages.map((page) => {
-                    return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Box, "href": page.route }
+            ...(objectsWithPage.length ? {
+                "CMS Objects": objectsWithPage.map((obj) => {
+                    return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic?'/workspace/':'/admin/')+obj.features.adminPage }
                 })
             } : {}),
             ...(adminPages.length ? {

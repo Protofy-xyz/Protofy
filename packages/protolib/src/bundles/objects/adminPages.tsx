@@ -36,15 +36,17 @@ export default {
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
+                        dynamic: z.boolean().after("keys").label("dynamic data object").defaultValue(true),
                         api: z.boolean()
                             .after("keys")
                             .label("automatic crud api")
-                            .defaultValue(true),
+                            .defaultValue(true)
+                            .visible((displayType, object) => !object?.data?.dynamic),
                         databaseType: z.union([z.literal("LevelDB"), z.literal("Google Sheets"), z.literal("JSON File")])
                             .after("keys")
                             .label("database type")
                             .defaultValue("LevelDB")
-                            .visible((displayType, object) => object?.data?.api),
+                            .visible((displayType, object) => object?.data?.api && !object?.data?.dynamic),
                         param: z.string()
                             .after("keys")
                             .label("Google Sheet Link")
@@ -54,7 +56,7 @@ export default {
                             .after("keys")
                             .label("admin page")
                             .defaultValue(true)
-                            .visible((displayType, object) => object?.data?.api),
+                            .visible((displayType, object) => object?.data?.api && !object?.data?.dynamic),
                     }}
                     // hideAdd={true}
                     model={ObjectModel}
@@ -63,13 +65,13 @@ export default {
                     deleteable={(element) => {
                         if (Array.isArray(element)) {
                             for (const ele of element) {
-                                if (Object.keys(ele.features).length !== 0) {
+                                if (ele.dynamic || Object.keys(ele.features).length !== 0) {
                                     return false;
                                 }
                             }
                             return true;
                         } else {
-                            return Object.keys(element.data.features).length === 0
+                            return element.data.dynamic || Object.keys(element.data.features).length === 0
                         }
                     }
                     }

@@ -67,7 +67,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             if(typeof schema[element.type] !== 'function') {
                 throw new Error(`Type ${element.type} does not exist on z`);
             }
-            schema = schema[element.type](...element.params);
+            schema = schema[element.type](...(element.params ?? []));
             if(element.modifiers) {
                 element.modifiers.forEach(modifier => {
                     const methodName = modifier.name;

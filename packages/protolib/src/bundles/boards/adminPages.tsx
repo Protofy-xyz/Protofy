@@ -25,8 +25,8 @@ import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from '../../components/board/BoardPreview'
-import { Monaco } from 'protolib/components/Monaco'
-import { usePageParams } from 'protolib/next'
+import { Monaco } from '../../components/Monaco'
+import { usePageParams } from '../../next'
 
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress, ...props }) => {

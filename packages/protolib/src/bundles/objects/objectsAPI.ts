@@ -165,8 +165,8 @@ const getDB = (path, req, session) => {
 
     async del(key, value) {
       value = JSON.parse(value)
-      if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value + '.json'))) {
-        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value + '.json'))
+      if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value.id + '.json'))) {
+        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value.id + '.json'))
       } else {
         removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
       }
@@ -179,6 +179,26 @@ const getDB = (path, req, session) => {
         name: value.name.replace(/\s/g, ""),
         id: value.id.replace(/\s/g, "")
       }
+      if(value.dynamic) {
+        value.initialData = {}
+        value.apiOptions = {
+          name: value.name,
+          prefix: '/api/v1/'
+        }
+        value.features = {
+          AutoAPI: value.api ? value.api : false,
+          adminPage: '/objects/'+value.name
+        }
+        delete value.api
+        delete value.adminPage
+
+        //its a dynamic object, so we need to create a file in data/objects folder
+        const filePath = fspath.join(getRoot(req), 'data/objects', value.id + '.json')
+        syncFs.writeFileSync(filePath, JSON.stringify(value, null, 2))
+        await API.get('/api/v1/objects/reload?token=' + getServiceToken())
+        return
+      }
+
       const filePath = getRoot(req) + 'packages/app/objects/' + fspath.basename(value.name) + '.ts'
       let exists
       try {
