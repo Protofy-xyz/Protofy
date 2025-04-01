@@ -1,5 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { YStack, Paragraph, Text } from '@my/ui';
+import { YStack, Paragraph, Text, XStack, Button } from '@my/ui';
+import { Tinted } from 'protolib/components/Tinted';
+import { RefreshCcw, Download } from '@tamagui/lucide-icons';
+import { resetDevice, downloadLogs } from "protolib/bundles/devices/devicesUtils";
+
 
 const ANSI_REGEX = /((?:\x1b|\u001b)\[[0-9;]*m)/g;
 
@@ -81,7 +85,7 @@ function breakTokensIntoLines(tokens) {
     return lines;
 }
 
-export const EspConsole = ({ consoleOutput = '' }) => {
+export const EspConsole = ({ consoleOutput = '', onCancel }) => {
     const processedOutput = consoleOutput.replace(/\\x1b/g, "\x1b");
     let tokens = parseAnsiText(processedOutput);
 
@@ -103,7 +107,7 @@ export const EspConsole = ({ consoleOutput = '' }) => {
 
     const lines = breakTokensIntoLines(tokens);
 
-    return (
+    return <YStack gap={"$6"} justifyContent="space-between" flex={1} >
         <YStack
             ref={scrollContainerRef}
             backgroundColor="#1f1f1f"
@@ -133,5 +137,12 @@ export const EspConsole = ({ consoleOutput = '' }) => {
                 );
             })}
         </YStack>
-    );
+        <XStack justifyContent="center" gap={"$4"}>
+            <Button onPress={() => onCancel()}>Cancel</Button>
+            <Tinted>
+                <Button icon={RefreshCcw} onPress={() => resetDevice()}>Reset device</Button>
+                <Button icon={Download} onPress={() => downloadLogs(consoleOutput)}>Download logs</Button>
+            </Tinted>
+        </XStack>
+    </YStack>
 };

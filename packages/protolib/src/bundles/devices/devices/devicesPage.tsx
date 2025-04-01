@@ -59,7 +59,8 @@ const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) =
                         {messages
                           .filter((msg) => Object.keys(msg).length === 1)
                           .map((msg) => msg.message)
-                          .slice(-1)[0]}
+                          .slice(-1)[0]
+                        }
                       </Paragraph>
                     )
                   }
@@ -131,6 +132,7 @@ export default {
       Object.keys(deviceFunctions).forEach(k => (window as any)[k] = deviceFunctions[k])
     }
     const [showModal, setShowModal] = useState(false)
+    const [eraseBeforeFlash, setEraseBeforeFlash] = useState(true)
     const [modalFeedback, setModalFeedback] = useState<any>()
     const [stage, setStage] = useState<DeviceModalStage | "">('')
     const yamlRef = React.useRef()
@@ -237,7 +239,7 @@ export default {
       }
 
       try {
-        await flash((msg) => setModalFeedback(msg), targetDeviceName, compileSessionId, true) //TODO: eraseBeforeFlash
+        await flash((msg) => setModalFeedback(msg), targetDeviceName, compileSessionId, eraseBeforeFlash) //TODO: eraseBeforeFlash
         setStage('idle');
       } catch (e) {
         flashCb({
@@ -247,6 +249,7 @@ export default {
         });
       }
     }
+
 
     const startUploadStage = () => {
       // getWebSocket()?.close()
@@ -300,6 +303,7 @@ export default {
           case 'yaml': await handleYamlStage(); break;
           case 'compile': await compile(); break;
           // case 'select-action': await onSelectPort(); break;
+          // case "confirm-erase": setStage("write"); break;
           case 'write': await write(); break;
           case 'upload': startUploadStage(); break;
           case 'console': startConsole(); break;
@@ -353,12 +357,15 @@ export default {
             closeSerialPort()
           }}
           onSelect={onSelectPort}
+          eraseBeforeFlash={eraseBeforeFlash}
+          setEraseBeforeFlash={setEraseBeforeFlash}
           modalFeedback={modalFeedback}
           showModal={showModal}
           selectedDevice={targetDeviceModel}
           compileSessionId={compileSessionId}
           onSelectAction={setStage}
           consoleOutput={consoleOutput}
+        // port={port}
         />
         <MqttTest onSetStage={(v) => setStage(v)} onSetModalFeedback={(v) => setModalFeedback(v)} compileSessionId={compileSessionId} stage={stage} />
       </Connector>
