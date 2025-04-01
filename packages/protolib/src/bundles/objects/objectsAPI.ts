@@ -1,6 +1,7 @@
 import { ObjectModel } from ".";
 import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from 'protonode'
 import { promises as fs } from 'fs';
+import syncFs from 'fs';
 import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protonode'
@@ -16,6 +17,8 @@ const getSchemas = async (req, sourceFile?) => {
     '"objects"'
   );
 
+  let schemas = []
+
   if (node) {
     if (node instanceof ObjectLiteralExpression) {
       const schemaPromises = node.getProperties().map(prop => {
@@ -30,68 +33,101 @@ const getSchemas = async (req, sourceFile?) => {
         }
       }).filter(p => p);
 
-      const schemas = await Promise.all(schemaPromises);
-      return schemas;
+      schemas = await Promise.all(schemaPromises);
     }
   }
-  return [];
+
+  const dataSchemas = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.json'))
+  dataSchemas.forEach(file => {
+    const filePath = fspath.join(getRoot(req), 'data/objects', file)
+    const fileContent = syncFs.readFileSync(filePath, 'utf8')
+    let data = {} as any
+    try {
+      data = JSON.parse(fileContent)
+    } catch (e) {
+      console.error("Ignoring schema in file: ", file, "because of an error: ", e)
+      console.error("File content producing the error: ", fileContent)
+    }
+    if (data['id'] && data['name']) {
+      const { keys, ...rest} = data
+      schemas.push(rest)
+    }
+  })
+  return schemas;
 }
 
 const getSchema = async (idSchema, schemas, req, name?) => {
-  let SchemaFile = fspath.join(getRoot(req), indexFile)
-  let sourceFile = getSourceFile(SchemaFile)
-
-  const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
-
-  sourceFile = getSourceFile(fspath.join("../../packages/app/objects/", getImport(sourceFile, idSchema)) + ".ts")
-  const node = getDefinition(sourceFile, '"schema"')
-  let keys = {}
-  if (node) {
-    if (node instanceof ObjectLiteralExpression) {
-      node.getProperties().forEach(prop => {
-        if (prop instanceof PropertyAssignment) {
-          // obj[prop.getName()] = prop.getInitializer().getText();
-          const chain = extractChainCalls(prop.getInitializer())
-          if (chain.length) {
-            const typ = chain.shift()
-            keys[prop.getName()] = {
-              type: typ.name,
-              params: typ.params,
-              modifiers: chain
+  if(syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', idSchema + '.json'))) {
+    const filePath = fspath.join(getRoot(req), 'data/objects', idSchema + '.json')
+    const fileContent = syncFs.readFileSync(filePath, 'utf8')
+    let data = {} as any
+    try {
+      data = JSON.parse(fileContent)
+    } catch (e) {
+      console.error("Ignoring schema in file: ", filePath, "because of an error: ", e)
+      console.error("File content producing the error: ", fileContent)
+    }
+    if (data['id'] && data['name']) {
+      return data
+    } else {
+      throw "Schema in file: " + filePath + " does not have id or name"
+    }
+  } else {
+    let SchemaFile = fspath.join(getRoot(req), indexFile)
+    let sourceFile = getSourceFile(SchemaFile)
+  
+    const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
+  
+    sourceFile = getSourceFile(fspath.join("../../packages/app/objects/", getImport(sourceFile, idSchema)) + ".ts")
+    const node = getDefinition(sourceFile, '"schema"')
+    let keys = {}
+    if (node) {
+      if (node instanceof ObjectLiteralExpression) {
+        node.getProperties().forEach(prop => {
+          if (prop instanceof PropertyAssignment) {
+            // obj[prop.getName()] = prop.getInitializer().getText();
+            const chain = extractChainCalls(prop.getInitializer())
+            if (chain.length) {
+              const typ = chain.shift()
+              keys[prop.getName()] = {
+                type: typ.name,
+                params: typ.params,
+                modifiers: chain
+              }
             }
           }
-        }
-      });
+        });
+      }
     }
-  }
-  const featuresNode = getDefinition(sourceFile, '"features"')
-  let features = {}
-  if (featuresNode instanceof ObjectLiteralExpression) {
-    console.log('features', featuresNode.getText())
-    try {
-      features = JSON.parse(featuresNode.getText())
-    } catch (e) {
-      console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
-      console.error("Features text producing the error: ", featuresNode.getText())
+    const featuresNode = getDefinition(sourceFile, '"features"')
+    let features = {}
+    if (featuresNode instanceof ObjectLiteralExpression) {
+      console.log('features', featuresNode.getText())
+      try {
+        features = JSON.parse(featuresNode.getText())
+      } catch (e) {
+        console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
+        console.error("Features text producing the error: ", featuresNode.getText())
+      }
     }
-  }
-
-  const apiOptionsNode = getDefinition(sourceFile, '"api.options"')
-  let options = {
-    name: schemaName,
-    prefix: '/api/v1/'
-  }
-
-  if (apiOptionsNode instanceof ObjectLiteralExpression) {
-    console.log('api options', apiOptionsNode.getText())
-    try {
-      options = JSON.parse(apiOptionsNode.getText())
-    } catch (e) {
-      console.error("Ignoring api options in object: ", idSchema, "because of an error: ", e)
-      console.error("Api options text producing the error: ", apiOptionsNode.getText())
+  
+    const apiOptionsNode = getDefinition(sourceFile, '"api.options"')
+    let options = {
+      name: schemaName,
+      prefix: '/api/v1/'
     }
+  
+    if (apiOptionsNode instanceof ObjectLiteralExpression) {
+      console.log('api options', apiOptionsNode.getText())
+      try {
+        options = JSON.parse(apiOptionsNode.getText())
+      } catch (e) {
+        console.error("Ignoring api options in object: ", idSchema, "because of an error: ", e)
+        console.error("Api options text producing the error: ", apiOptionsNode.getText())
+      }
+    }
+    return { name: schemaName, features, id: idSchema, keys, apiOptions: options }
   }
-  return { name: schemaName, features, id: idSchema, keys, apiOptions: options }
 }
 
 const setSchema = (path, content, value, req) => {
@@ -127,7 +163,11 @@ const getDB = (path, req, session) => {
 
     async del(key, value) {
       value = JSON.parse(value)
-      removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
+      if(syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value + '.json'))) {
+        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value + '.json'))
+      } else {
+        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
+      }
     },
 
     async put(key, value) {

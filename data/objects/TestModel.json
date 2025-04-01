@@ -1,0 +1,39 @@
+{
+    "name": "test",
+    "id": "TestModel",
+    "features": {
+        "AutoAPI": true,
+        "adminPage": "/objects/test"
+    },
+    "apiOptions": {
+        "name": "test",
+        "prefix": "/api/v1/"
+    },
+    "initialData": {},
+    "keys": {
+        "name": {
+            "type": "string",
+            "params": [],
+            "modifiers": [
+                {
+                    "name": "id",
+                    "params": []
+                },
+                {
+                    "name": "hint",
+                    "params": ["name of the test"]
+                }
+            ]
+        },
+        "price": {
+            "type": "number",
+            "params": [],
+            "modifiers": [
+                {
+                    "name": "hint",
+                    "params": ["price of the test"]
+                }
+            ]
+        }
+    }
+}
