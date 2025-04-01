@@ -33996,6 +33996,7 @@ __metadata:
     react-markdown: "npm:^9.0.1"
     react-screen-wake-lock: "npm:3.0.2"
     react-select: "npm:5.8.0"
+    react-speech-recognition: "npm:4.0.0"
     react-spinners: "npm:^0.13.8"
     react-syntax-highlighter: "npm:^15.5.0"
     react-use-keypress: "npm:1.3.1"
@@ -35316,6 +35317,15 @@ __metadata:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 10/1ecd78c04ff16642b3de4b0f8d1fc6aa571bd961027d52fa2e44b7dd132545ab6d2fdb5d52e058befaff31ba8c1cea5a0af449841dfc212b2033e95481237a37
+  languageName: node
+  linkType: hard
+
+"react-speech-recognition@npm:4.0.0":
+  version: 4.0.0
+  resolution: "react-speech-recognition@npm:4.0.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10/cc401d3218f8777a996a6f6a41dccd805212440751be9ef9df4776bfa10f6a3ff55e0c541e8422242b6bf32dc73bcc4d0153359b9c6f2df583f3da31d371b195
   languageName: node
   linkType: hard
 
