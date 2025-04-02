@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useTheme, useMedia } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useMedia } from 'tamagui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
 import { AlertDialog } from './AlertDialog';
@@ -97,6 +97,7 @@ interface DataViewProps {
     disableToggleMode?: any;
     customFields?: any;
     customFilters?: any;
+    extraFilters?: any[];
     dataTableRawProps?: any;
     dataTableListProps?: any;
     dataTableGridProps?: any;
@@ -197,6 +198,7 @@ const DataViewInternal = forwardRef(({
     disableToggleMode,
     customFields = {},
     customFilters = {},
+    extraFilters = [],
     dataTableRawProps = {},
     dataTableListProps = {},
     dataTableGridProps = {},
@@ -238,6 +240,8 @@ const DataViewInternal = forwardRef(({
     const { search, setSearch, setSearchName } = useContext(SearchContext)
     const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
     const filters = Object.entries(state).filter((st) => st[0].startsWith('filter'))
+    const extraFiltersKeys = extraFilters.map((f) => f.queryParam)
+    const extraFiltersStates = Object.entries(state).filter((st) => extraFiltersKeys.includes(st[0]))
 
     const isXs = useMedia().xs
 
@@ -277,7 +281,7 @@ const DataViewInternal = forwardRef(({
 
     useUpdateEffect(() => {
         fetch(setItems)
-    }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection + '_' + filters])
+    }, [state.orderBy + '_' + state.itemsPerPage + '_' + state.page + '_' + state.search + '_' + state.orderDirection + '_' + filters + '_' + extraFiltersStates])
 
     const toast = useToastController()
     const RowIcon = rowIcon
@@ -665,6 +669,7 @@ const DataViewInternal = forwardRef(({
                                     customFilters={customFilters}
                                     model={model}
                                     state={state}
+                                    extraFilters={extraFilters}
                                 />}
                                 {extraActions && extraActions.map((action, index) => action)}
                             </XStack>

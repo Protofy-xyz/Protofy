@@ -5,15 +5,16 @@ import { Filter, Check, X } from '@tamagui/lucide-icons'
 import { XStack, Button, Popover, Text, Label, YStack, Checkbox } from '@my/ui'
 import { useState } from 'react';
 import { usePageParams } from '../next';
-import { Chip } from 'protolib/components/Chip';
+import { Chip } from './Chip';
 
 type FiltersType = {
     model: any,
     state: any,
     customFilters?: any
+    extraFilters?: any[]
 }
 
-export const Filters = ({ model, state, customFilters }: FiltersType) => {
+export const Filters = ({ model, state, customFilters, extraFilters }: FiltersType) => {
 
     const [open, setOpen] = useState(false)
     const { push, removePush, query } = usePageParams(state)
@@ -21,6 +22,22 @@ export const Filters = ({ model, state, customFilters }: FiltersType) => {
 
     const onClear = () => {
         removePush(Object.keys(query).filter(q => q.startsWith('filter')))
+    }
+
+    const getExtraFilter = (extraFilter) => {
+        const key = extraFilter.queryParam
+        const changesFilterExtra = (value) => {
+            value !== undefined
+                ? push(key, value)
+                : removePush(key)
+        }
+        var currentValue: any = query[key]
+        return <>
+                {!extraFilter.hideLabel && <Label>{extraFilter.label ?? key}</Label>}
+                {
+                    extraFilter.component(currentValue, changesFilterExtra)
+                }
+            </>
     }
 
     const getFilter = (def, key) => {
@@ -82,7 +99,9 @@ export const Filters = ({ model, state, customFilters }: FiltersType) => {
         }
     }
 
-    const queryFilters = Object.keys(query).filter(q => q.startsWith('filter'))
+    const queryKeys = Object.keys(query)
+    const extraFiltersKeys = extraFilters?.map((extraFilter) => extraFilter.queryParam)
+    const queryFilters = queryKeys.filter(q => q.startsWith('filter') || extraFiltersKeys?.includes(q))
 
     return <Popover
         open={open}
@@ -123,6 +142,14 @@ export const Filters = ({ model, state, customFilters }: FiltersType) => {
                             {getFilter(def, key)}
                         </>
                     })}
+                    {
+                        extraFilters?.map((extraFilter) => {
+                            if (!extraFilter.queryParam || !extraFilter.component) return
+                            return <>
+                                {getExtraFilter(extraFilter)}
+                            </>
+                        })
+                    }
                 </YStack>
                 <XStack mt={'$4'} jc={'flex-end'} gap={'$3'} p={'$3'}>
                     <Tinted>

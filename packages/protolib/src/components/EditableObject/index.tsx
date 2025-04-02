@@ -46,7 +46,7 @@ export const getDefaultValue = (type) => {
 
 
 export const FormElement = ({ ele, i, icon, children, inArray = false }) => {
-    const isOptional = ele.isOptional()
+    const isOptional = (ele.isOptional ? ele.isOptional() : false)
     return <Fieldset ml={!i ? "$0" : "$5"} key={i} gap="$2" f={1}>
         {!inArray && <Label fontWeight={"bold"}>
             <Tinted>
