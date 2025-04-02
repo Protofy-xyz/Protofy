@@ -8,19 +8,27 @@ import { getServiceToken } from "protonode";
 import { ObjectModel } from '../objects/objectsSchemas'
 
 const APIDirPath = "/packages/app/apis/"
+const DynamicAPIDirPath = "/data/automations/"
 const APIDir = (root) => fspath.join(root, "/packages/app/apis/")
+const DynamicAPIDir = (root) => fspath.join(root, "/data/automations/")
 const indexFile = (root) => APIDir(root) + "index.ts"
 const indexFilePath = "/packages/app/apis/index.ts"
 
 const getAPI = (name, req, extension?) => {
   let object = "None"
   let filePath = APIDir(getRoot(req)) + name
+  let dynamicFilepath = DynamicAPIDir(getRoot(req)) + name
   let engine = 'typescript'
   let apiType = 'typescript'
+  let dynamic = false
 
   if (extension) {
     filePath += extension
-
+    dynamicFilepath += extension
+    if(fsSync.existsSync(dynamicFilepath)) {
+      dynamic = true
+      filePath = dynamicFilepath
+    }
     switch (extension) {
       case '.py':
         engine = 'python'
@@ -34,7 +42,25 @@ const getAPI = (name, req, extension?) => {
         break
     }
   } else {
-    if (fsSync.existsSync(filePath + '.ts')) {
+    if( fsSync.existsSync(dynamicFilepath + '.ts')) {
+      filePath = dynamicFilepath + '.ts'
+      extension = '.ts'
+      engine = 'typescript'
+      apiType = 'typescript'
+      dynamic = true
+    } else if (fsSync.existsSync(dynamicFilepath + '.py')) {
+      filePath = dynamicFilepath + '.py'
+      extension = '.py'
+      engine = 'python'
+      apiType = 'python'
+      dynamic = true
+    } else if(fsSync.existsSync(dynamicFilepath + '.php')) {
+      filePath = dynamicFilepath + '.php'
+      extension = '.php'
+      engine = 'php'
+      apiType = 'php'
+      dynamic = true
+    } else if (fsSync.existsSync(filePath + '.ts')) {
       filePath += '.ts'
       extension = '.ts'
       engine = 'typescript'
@@ -66,14 +92,15 @@ const getAPI = (name, req, extension?) => {
     type: apiType,
     object,
     engine,
-    filePath: APIDirPath + name + extension
+    dynamic,
+    filePath: (dynamic ? DynamicAPIDirPath : APIDirPath) + name + extension
   }
 }
 
 const deleteAPI = (req, value) => {
 
   const api = getAPI(fspath.basename(value.name), req)
-  if (api.engine === 'typescript') {
+  if (api.engine === 'typescript' && !api.dynamic) {
     removeFileWithImports(getRoot(req), value, '"apis"', indexFilePath, req, fs);
     if (api.type === "AutoAPI") {
       const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(api.object))
@@ -104,10 +131,24 @@ const getDB = (path, req, session) => {
   const db = {
     async *iterator() {
       const validExtensions = ["ts", "py", "php"]
-      const files = (await fs.readdir(APIDir(getRoot(req)))).filter(f => {
-        const filenameSegments = f.split('.')
-        return f != 'index.ts' && !fsSync.lstatSync(fspath.join(APIDir(getRoot(req)), f)).isDirectory() && (validExtensions.includes(filenameSegments[filenameSegments.length - 1]))
-      })
+      const root = getRoot(req);
+
+      const staticFiles = (await fs.readdir(APIDir(root))).filter(f => {
+        const fullPath = fspath.join(APIDir(root), f);
+        const ext = f.split('.').pop();
+        return f !== 'index.ts' &&
+               !fsSync.lstatSync(fullPath).isDirectory() &&
+               validExtensions.includes(ext!);
+      });
+      
+      const dynamicFiles = (await fs.readdir(DynamicAPIDir(root))).filter(f => {
+        const fullPath = fspath.join(DynamicAPIDir(root), f);
+        const ext = f.split('.').pop();
+        return !fsSync.lstatSync(fullPath).isDirectory() && validExtensions.includes(ext!);
+      });
+      
+      const files = [...staticFiles, ...dynamicFiles];
+      
       const apis = await Promise.all(files.map(async f => {
         const name = f.replace(/\.[^/.]+$/, "")
         const segments = f.split('.')
@@ -143,7 +184,15 @@ const getDB = (path, req, session) => {
           break
       }
 
-      const filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name)
+      let filePath;
+      if(value.dynamic) {
+        if(!fsSync.existsSync(getRoot(req) + DynamicAPIDirPath)) {
+          fsSync.mkdirSync(getRoot(req) + DynamicAPIDirPath, { recursive: true });
+        }
+        filePath = getRoot(req) + DynamicAPIDirPath + fspath.basename(value.name)
+      } else {
+        filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name)
+      } 
       exists = await checkFileExists(filePath);
 
       if (exists) {
@@ -179,7 +228,7 @@ const getDB = (path, req, session) => {
               param: value.param,
             }
           },
-          path: '/packages/app/apis'
+          path: value.dynamic ? DynamicAPIDirPath : APIDirPath
         }
       })
 
@@ -194,7 +243,7 @@ const getDB = (path, req, session) => {
       }
 
       //link in index.ts
-      if (extension == '.ts') {
+      if (extension == '.ts' && !value.dynamic) {
         const sourceFile = getSourceFile(indexFile(getRoot(req)))
         addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
 

@@ -4,6 +4,7 @@ data/*
 logs/*
 !logs/.keep
 !data/workspaces
+!data/automations
 !data/templates
 !data/devices
 !data/prompts

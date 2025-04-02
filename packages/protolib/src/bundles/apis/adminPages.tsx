@@ -46,7 +46,7 @@ const FirstSlide = ({ selected, setSelected }) => {
 }
 
 const SecondSlide = ({ data, setData, error, setError, objects }) => {
-    return <ScrollView height={"200px"}>
+    return <ScrollView height={"250px"}>
         <EditableObject
             externalErrorHandling={true}
             error={error}
@@ -57,7 +57,10 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
             mode={'add'}
             title={false}
             model={APIModel}
-            extraFields={apiTemplates[data['data'].template].extraFields ? apiTemplates[data['data'].template].extraFields(objects) : {}}
+            extraFields={{
+                ...(apiTemplates[data['data'].template].extraFields ? apiTemplates[data['data'].template].extraFields(objects) : {}),
+                dynamic: z.boolean().after("name").label("dynamic automation").defaultValue(true)
+            }}
         />
     </ScrollView>
 }
