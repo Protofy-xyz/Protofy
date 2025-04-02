@@ -1,6 +1,6 @@
 import { Chip } from '../components/Chip'
-import { Circle, Text, XStack, YStack } from '@my/ui'
-import { DragDropContext, Droppable, Draggable, } from '@hello-pangea/dnd';
+import { Circle, Text, XStack, YStack, YStackProps } from '@my/ui'
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { z } from 'protobase'
 
 const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
@@ -62,7 +62,25 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
 }
 
 
-export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCard, ...props }) => {
+export const SequenceView = ({
+    items,
+    onStageChange,
+    onSelectItem,
+    model,
+    getCard,
+    getDroppableStageStyle = (col, provided) => ({}),
+    getStageContainerProps = (stage): YStackProps => ({}),
+    ...props
+}: {
+    items: any
+    onStageChange?: any
+    onSelectItem?: any
+    model?: any
+    getCard?: any
+    getDroppableStageStyle?: (col: any, provided: any) => React.CSSProperties
+    getStageContainerProps?: (stage) => YStackProps
+    [key: string]: any
+}) => {
     const itemsList = items.data.items
 
     const sequenceField = model.getSequeceField()
@@ -101,7 +119,7 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
         <DragDropContext onDragEnd={onDragEnd}>
             <XStack gap="$2" padding="$4" f={1} overflow='scroll' {...props}>
                 {columns ? columns.map((col, i) => (
-                    <YStack theme={getTheme(i) as any} key={col} bc="$background" br="$4" bw="$0.5" p="$2" pt="$2.5" borderColor="$gray4">
+                    <YStack theme={getTheme(i) as any} key={col} bc="$background" br="$4" bw="$0.5" p="$2" pt="$2.5" borderColor="$gray4" {...getStageContainerProps(col)}>
                         <XStack gap="$2" mb="$2" ac="center" jc="flex-start" p="2px">
                             <Chip text={col} textProps={{ fow: "600" }} gap="$2" ai="center" px="$2">
                                 <Circle size={10} bc="$color8" />
@@ -120,6 +138,7 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
                                         padding: '2px',
                                         height: '100%',
                                         overflowY: 'auto',
+                                        ...getDroppableStageStyle(col, provided)
                                     }}
                                 >
                                     {getItemsBySequenceStages(col).map((item, index) => {
