@@ -99,13 +99,13 @@ export const SequenceView = ({
             return;
         }
         const updatedItems = [...itemsList]
-        const [movedItem] = updatedItems.filter(a => a.status == source.droppableId).splice(source.index, 1);
+        const [movedItem] = updatedItems.filter(a => a[sequenceField] == source.droppableId).splice(source.index, 1);
         const modelItem = model.load(movedItem)
-        const newItemData = { ...movedItem, status: destination.droppableId }
+        const newItemData = { ...movedItem, [sequenceField]: destination.droppableId }
 
         if (!modelItem.canTransition(newItemData)) return
 
-        movedItem.status = newItemData.status;
+        movedItem[sequenceField] = newItemData[sequenceField];
         updatedItems.splice(destination.index, 0, movedItem);
 
         onStageChange(model.load(movedItem))
