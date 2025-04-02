@@ -15,12 +15,12 @@ const reloadObjectAPIs = async (app, context) => {
         if (objectData.features && objectData.features.AutoAPI) {
             const objModel = ProtoModel.getClassFromDefinition(objectData)
 
-            console.log('-------------------------------', {
-                modelName: objectData.apiOptions.name,
-                modelType: objModel,
-                initialData: objectData.initialData,
-                prefix: objectData.apiOptions.prefix,
-            })
+            // console.log('-------------------------------', {
+            //     modelName: objectData.apiOptions.name,
+            //     modelType: objModel,
+            //     initialData: objectData.initialData,
+            //     prefix: objectData.apiOptions.prefix,
+            // })
             const ObjectAPI = AutoAPI({
                 modelName: objectData.apiOptions.name,
                 modelType: objModel,
