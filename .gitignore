@@ -10,6 +10,7 @@ logs/*
 !data/prompts
 !data/deviceDefinitions
 !data/objects
+!data/boards
 !data/public/
 !data/public/fonts/
 !data/public/fonts/*
