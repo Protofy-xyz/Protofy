@@ -85,7 +85,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             return acc;
         }, {}))
 
-        const hasId = Object.keys(BaseSchema.shape).some(key => BaseSchema.shape[key]._def.id)
+        const hasId = Object.keys(schema.shape).some(key => schema.shape[key]._def.id)
         const objSchema = Schema.object({
             ...(!hasId ? BaseSchema.shape : {}),
             ...schema.shape
