@@ -66,7 +66,7 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
     const itemsList = items.data.items
 
     const sequenceField = model.getSequeceField()
-    const columns = model.getObjectSchema().getFieldDefinition(sequenceField).options.map(
+    const columns = model.getObjectSchema().getFieldDefinition(sequenceField).options?.map(
         (option: z.ZodLiteral<string>) => option.value
     );
 
@@ -95,7 +95,7 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <XStack gap="$2" padding="$4" f={1} overflow='scroll' {...props}>
-                {columns.map((col, i) => (
+                {columns ? columns.map((col, i) => (
                     <YStack theme={getTheme(i) as any} key={col} bc="$background" br="$4" bw="$0.5" p="$2" pt="$2.5" borderColor="$gray4">
                         <XStack gap="$2" mb="$2" ac="center" jc="flex-start" p="2px">
                             <Chip text={col} textProps={{ fow: "600" }} gap="$2" ai="center" px="$2">
@@ -125,7 +125,9 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
                             )}
                         </Droppable>
                     </YStack>
-                ))}
+                )) 
+                : <Text textAlign="center" f={1} mt="$10" fow="400" color="$color10">No sequence stages defined. Check if the sequence defined has stages or options.</Text>
+                }
             </XStack>
         </DragDropContext>
     );
