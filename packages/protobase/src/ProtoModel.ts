@@ -196,6 +196,10 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         })
     }
 
+    canTransition(newData?: any): boolean {
+        return true
+    }
+
     getNotificationsTopic(action?: string | undefined): string {
         if (!action) {
             return `notifications/${this.getModelName()}/#`

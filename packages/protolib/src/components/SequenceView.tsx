@@ -13,7 +13,7 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
     return <Draggable
         key={item.id}
         draggableId={item.id}
-        // isDragDisabled={!modelItem.canTransition()}
+        isDragDisabled={!modelItem.canTransition()}
         index={index}
     >
         {(provided) => (
@@ -80,7 +80,12 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
         }
         const updatedItems = [...itemsList]
         const [movedItem] = updatedItems.filter(a => a.status == source.droppableId).splice(source.index, 1);
-        movedItem.status = destination.droppableId;
+        const modelItem = model.load(movedItem)
+        const newItemData = { ...movedItem, status: destination.droppableId }
+
+        if (!modelItem.canTransition(newItemData)) return
+
+        movedItem.status = newItemData.status;
         updatedItems.splice(destination.index, 0, movedItem);
 
         onStageChange(model.load(movedItem))
@@ -125,8 +130,8 @@ export const SequenceView = ({ items, onStageChange, onSelectItem, model, getCar
                             )}
                         </Droppable>
                     </YStack>
-                )) 
-                : <Text textAlign="center" f={1} mt="$10" fow="400" color="$color10">No sequence stages defined. Check if the sequence defined has stages or options.</Text>
+                ))
+                    : <Text textAlign="center" f={1} mt="$10" fow="400" color="$color10">No sequence stages defined. Check if the sequence defined has stages or options.</Text>
                 }
             </XStack>
         </DragDropContext>
