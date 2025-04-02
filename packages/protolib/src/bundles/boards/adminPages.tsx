@@ -402,7 +402,7 @@ const Board = ({ board, icons }) => {
           }
         </YStack>
         {
-          <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={60} width={810} height="80vh">
+          <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={130} width={810} height="80vh">
             <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? 'black' : 'white'} opacity={0.9}></XStack>
             <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
 

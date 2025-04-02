@@ -2,12 +2,18 @@ import React, { useRef, useState, useLayoutEffect, useEffect } from 'react'
 import { TextArea } from '@my/ui'
 import { XStack, YStack, Button, Spinner } from '@my/ui'
 import { Trash, Plus } from '@tamagui/lucide-icons'
-import { AutoHeightTextArea } from '../AutoHeightTextArea'
+import dynamic from 'next/dynamic';
+
+const AutoHeightTextArea = dynamic(() =>
+  import('../AutoHeightTextArea').then(mod => mod.AutoHeightTextArea),
+  { ssr: false }
+);
 
 export const RuleItem = ({ value, loading, onDelete, onEdit }) => {
   return (
     <XStack ai="center" gap="$2" mb="$2" width="100%">
       <AutoHeightTextArea
+        speechRecognition={true}
         readOnly={!onEdit}
         value={value}
         onChange={(e) => onEdit(e.target.value)}
@@ -66,6 +72,7 @@ export const Rules = ({ rules, onAddRule, onDeleteRule, onEditRule, loadingIndex
       {/* Input para nueva regla */}
       <XStack ai="center" gap="$2" mb="$2" mt="$4" width="100%">
         <AutoHeightTextArea
+          speechRecognition={true}
           placeholder="Add new rule..."
           value={newRule}
           onChange={handleNewRuleChange}
