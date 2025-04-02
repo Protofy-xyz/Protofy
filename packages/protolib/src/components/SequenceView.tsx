@@ -70,6 +70,7 @@ export const SequenceView = ({
     getCard,
     getDroppableStageStyle = (col, provided) => ({}),
     getStageContainerProps = (stage): YStackProps => ({}),
+    sort = (a, b) => true,
     ...props
 }: {
     items: any
@@ -79,9 +80,10 @@ export const SequenceView = ({
     getCard?: any
     getDroppableStageStyle?: (col: any, provided: any) => React.CSSProperties
     getStageContainerProps?: (stage) => YStackProps
+    sort?: (a, b) => boolean
     [key: string]: any
 }) => {
-    const itemsList = items.data.items
+    const itemsList = (items.data.items ?? []).sort(sort)
 
     const sequenceField = model.getSequeceField()
     const columns = model.getObjectSchema().getFieldDefinition(sequenceField).options?.map(
