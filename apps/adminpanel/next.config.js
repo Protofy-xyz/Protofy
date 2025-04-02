@@ -39,6 +39,7 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
+    devIndicators: false,
     basePath: '/workspace',
     output: 'standalone',
     typescript: {
@@ -58,20 +59,7 @@ module.exports = function () {
       'expo-modules-core',
     ],
     experimental: {
-      scrollRestoration: true,
-      outputFileTracingRoot: join(__dirname, '../../'),
-      outputFileTracingIncludes: {
-        '*': [
-          // Include your proxy handler and its dependencies
-          '../../packages/app/proxy.js',
-          '../../system.js',
-          '../../node_modules/http-proxy/**',
-          '../../node_modules/protobase/**',
-          '../../node_modules/protonode/**',
-          '../../node_modules/@my/config/**',
-          // Add any other modules or files your proxy depends on
-        ]
-      }
+      scrollRestoration: true
     },
     webpack: (config, options) => {
       config.plugins.push(

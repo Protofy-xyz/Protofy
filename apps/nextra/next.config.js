@@ -8,8 +8,5 @@ const withNextra = require('nextra')({
 // If you have other Next.js configurations, you can pass them as the parameter:
 module.exports = withNextra({ 
   basePath: '/documentation',
-  output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: join(__dirname, '../../'),
-  }
+  output: 'standalone'
  })

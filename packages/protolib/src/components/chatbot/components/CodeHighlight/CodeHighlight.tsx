@@ -1,6 +1,6 @@
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import "highlight.js/styles//a11y-dark.min.css";
+import "highlight.js/styles/a11y-dark.min.css";
 import { Check, Clipboard } from "lucide-react";
 import useClipboard from "../../hooks/useClipboard";
 
