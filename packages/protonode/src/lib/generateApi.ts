@@ -168,8 +168,8 @@ export const AutoAPI = ({
 
     const _list = async (req, allResults, _itemsPerPage) => {
         const page = Number(req.query.page) || 0;
-        const orderBy: string = (req.query.orderBy ?? defaultOrderBy) as string;
-        const orderDirection = req.query.orderDirection ?? defaultOrderDirection;
+        const orderBy: string = (req.query.orderBy && req.query.orderBy != "" ? req.query.orderBy : defaultOrderBy) as string;
+        const orderDirection = req.query.orderDirection && req.query.orderDirection != "" ? req.query.orderDirection : defaultOrderDirection;
         if (orderBy) {
             allResults = allResults.sort((a, b) => {
                 if (a[orderBy] > b[orderBy]) return orderDirection === 'asc' ? 1 : -1;
