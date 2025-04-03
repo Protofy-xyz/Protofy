@@ -8,36 +8,6 @@ import { getLogger, createSession } from "protobase"
 
 const logger = getLogger()
 
-
-export const SessionData = atomWithStorage("session", createSession(), undefined, {
-    unstable_getOnInit: true
-})
-
-export const UserSettingsAtom = atomWithStorage("userSettings", {} as any)
-
-export const Session = atom(
-    (get) => get(SessionData),
-    (get, set, data: SessionDataType) => {
-        if (typeof window !== 'undefined') {
-            //store a cookie
-            document.cookie = "session=" + encodeURIComponent(JSON.stringify(data) ?? '') + ";path=/";
-        }
-        set(SessionData, data);
-    }
-);
-
-const initialContext = { state: "pending", group: { workspaces: [] } }
-export const SessionContext = atom(initialContext)
-
-export const initSession = (pageSession) => {
-    if (pageSession) {
-        useHydrateAtoms([
-            [Session, pageSession.session],
-            [SessionContext, pageSession.context]
-        ]);
-    }
-}
-
 //to be used from nextJs
 export const hasSessionCookie = (cookieStr) => {
     const parsedCookies = cookie.parse(cookieStr ?? '');
@@ -112,39 +82,11 @@ export const withSession = async (context: any, permissions?: string[] | any[] |
         }
     }
 }
+const initialContext = { state: "pending", group: { workspaces: [] } }
 
 export const clearSession = (setSession, setSessionContext) => {
     setSession(createSession())
     setSessionContext(initialContext)
-}
-
-export const useSession = (pageSession?) => {
-    initSession(pageSession)
-    return useAtom(Session)
-}
-
-export const useSessionContext = () => {
-    return useAtom(SessionContext)
-}
-
-export const useSessionGroup = () => {
-    const [ctx] = useSessionContext()
-    return ctx.group
-}
-
-export const useWorkspaces = () => {
-    const group = useSessionGroup()
-    if (group && group.workspaces) return group.workspaces
-    return []
-}
-
-export const useUserSettings = () => {
-    const [settings, setSettings] = useAtom(UserSettingsAtom)
-    const [session] = useSession()
-    return [
-        session && settings[session.user.id] ? settings[session.user.id] : {},
-        (val) => setSettings({ ...settings, [session.user.id]: val })
-    ]
 }
 
 export const getURLWithToken = (url, context: NextPageContext) => {

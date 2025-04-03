@@ -1,5 +1,4 @@
 import { ProtoModel, SessionDataType, API, Schema, z } from 'protobase'
-import path from 'path'
 
 export const DevicesSchema = Schema.object({
   name: z.string().hint("Device name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search().label("Name"),
@@ -122,7 +121,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
 
   getConfigFile(){
     if(this.data?.currentSdk == "esphome"){
-      return path.join(this.getConfigDir(),"config.yaml")
+      return this.getConfigDir() + "/config.yaml"
     }
   }
 

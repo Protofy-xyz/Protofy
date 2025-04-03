@@ -1,6 +1,6 @@
 import { XStack } from 'tamagui'
 import { SelectList } from './SelectList';
-import { useWorkspaces, useUserSettings } from '../lib/Session';
+import { useWorkspaces, useUserSettings } from '../lib/useSession';
 import { PanelMenu } from './PanelMenu';
 import { MainPanel } from './MainPanel';
 import { InteractiveIcon } from './InteractiveIcon'

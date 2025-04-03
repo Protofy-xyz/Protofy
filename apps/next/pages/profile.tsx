@@ -1,7 +1,8 @@
 import { Profile } from 'app/features/profile'
 import Head from 'next/head'
 import { NextPageContext } from 'next'
-import { useSession, withSession } from 'protolib/lib/Session'
+import { useSession } from 'protolib/lib/useSession'
+import { withSession } from 'protolib/lib/Session'
 import {SSR} from 'protolib/lib/SSR'
 import { SiteConfig } from 'app/conf'
 

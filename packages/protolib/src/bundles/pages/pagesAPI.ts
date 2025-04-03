@@ -8,6 +8,8 @@ import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
 import admin from "app/workspaces/admin";
+import path from 'path';
+import * as esbuild from 'esbuild';
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -124,8 +126,8 @@ const getDB = (path, req, session) => {
       let prevPage
       try {
         prevPage = getPage(filePath, req)
-      } catch (error) {}
-      
+      } catch (error) { }
+
       const template = fspath.basename(value.template ?? 'default')
       const object = value.object ? value.object.charAt(0).toUpperCase() + value.object.slice(1) : ''
       const route = value.route.startsWith('/') ? value.route : '/' + value.route
@@ -268,7 +270,7 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const PagesAPI = AutoAPI({
+const PagesAutoAPI = AutoAPI({
   modelName: 'pages',
   modelType: PageModel,
   prefix: '/api/core/v1/',
@@ -276,3 +278,175 @@ export const PagesAPI = AutoAPI({
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })
+
+const tsAliasPlugin = {
+  name: 'ts-alias',
+  setup(build) {
+    // protolib/*
+    build.onResolve({ filter: /^protolib\/(.*)$/ }, args => {
+      const subPath = args.path.replace(/^protolib\//, '');
+      const basePath = path.resolve(process.cwd(), '../../packages/protolib/dist', subPath);
+
+      // Primero intentamos con .js (archivo directo)
+      const filePath = `${basePath}.js`;
+      if (syncFs.existsSync(filePath)) {
+        return { path: filePath, namespace: 'file' };
+      }
+
+      // Si no existe como archivo, intentamos como carpeta con index.js
+      const indexPath = path.join(basePath, 'index.js');
+      if (syncFs.existsSync(indexPath)) {
+        return { path: indexPath, namespace: 'file' };
+      }
+
+      // Si no se encuentra, dejamos que falle con error normal
+      return {
+        errors: [{
+          text: `No se encontró el módulo 'protolib/${subPath}' como archivo ni carpeta`,
+        }],
+      };
+    });
+  }
+};
+
+const reactNativeShimPlugin = {
+  name: 'react-native-alias',
+  setup(build) {
+    build.onResolve({ filter: /^react-native$/ }, () => ({
+      path: require.resolve('react-native-web'),
+    }));
+
+    // También puedes hacer algo parecido para otros shims:
+    build.onResolve({ filter: /^react-native-svg$/ }, () => ({
+      path: require.resolve('react-native-svg'),
+    }));
+  },
+};
+
+const reanimatedStubPlugin = {
+  name: 'stub-reanimated',
+  setup(build) {
+    build.onResolve({ filter: /^react-native-reanimated$/ }, () => ({
+      path: require.resolve('./stubs/react-native-reanimated.js'),
+    }));
+  }
+};
+
+const shimProcessPlugin = {
+  name: 'shim-process',
+  setup(build) {
+    build.onResolve({ filter: /^process$/ }, () => ({
+      path: require.resolve('./stubs/process.js'),
+    }));
+  }
+};
+
+const reactNativeSvgStubPlugin = {
+  name: 'stub-react-native-svg',
+  setup(build) {
+    build.onResolve({ filter: /^react-native-svg(\/.*)?$/ }, args => {
+      return {
+        path: path.resolve(__dirname, './stubs/react-native-svg.js'),
+        namespace: 'file',
+      };
+    });
+    build.onResolve({ filter: /react-native\/Libraries\/.*/ }, args => {
+      return {
+        path: path.resolve(__dirname, './stubs/react-native-empty.js'),
+        namespace: 'file',
+      };
+    });
+  }
+};
+
+const stubFsPlugin = {
+  name: 'stub-fs',
+  setup(build) {
+    build.onResolve({ filter: /^fs$/ }, () => ({
+      path: path.resolve(__dirname, './stubs/fs.js'),
+      namespace: 'file',
+    }));
+  }
+};
+
+const stubOsPlugin = {
+  name: 'stub-os',
+  setup(build) {
+    build.onResolve({ filter: /^os$/ }, () => ({
+      path: path.resolve(__dirname, './stubs/os.js'),
+      namespace: 'file',
+    }));
+  }
+};
+
+const stubPathPlugin = {
+  name: 'stub-path',
+  setup(build) {
+    build.onResolve({ filter: /^path$/ }, () => ({
+      path: path.resolve(__dirname, './stubs/path.js'),
+      namespace: 'file',
+    }));
+  }
+};
+
+export const PagesAPI = (app, context) => {
+  PagesAutoAPI(app, context)
+  app.post('/api/core/v1/page/compile', async (req, res) => {
+    const { code } = req.body;
+  
+    // try {
+      const tsconfigPath = path.resolve(process.cwd(), '../../apps/next/tsconfig.json');
+      const result = await esbuild.build({
+        stdin: {
+          contents: code,
+          resolveDir: path.resolve(process.cwd(), '../../packages'), // base para imports relativos
+          loader: 'tsx',
+        },
+        external: ['fs', 'path', 'os', 'crypto', 'stream', 'zlib', 'react-native', 'jsonwebtoken'],
+        write: true,
+        outdir: '../../data/public/pages',
+        bundle: true,
+        format: 'esm',
+        platform: 'browser',
+        jsx: 'automatic',
+        sourcemap: false,
+        absWorkingDir: process.cwd(),
+        inject: [path.resolve(__dirname, './stubs/process-global-shim.js')],
+        define: {
+          'process.env.NODE_ENV': '"development"',
+          global: 'window',
+        },
+        plugins: [
+          {
+            name: 'esm-externals',
+            setup(build) {
+              build.onResolve({ filter: /^react$/ }, () => ({
+                path: path.resolve(process.cwd(), '../../data/public/externals/react.js'),
+                namespace: 'file',
+              }));
+          
+              build.onResolve({ filter: /^react-dom$/ }, () => ({
+                path: path.resolve(process.cwd(), '../../data/public/externals/react-dom.js'),
+                namespace: 'file',
+              }));
+            },
+          },
+          tsAliasPlugin,
+          reactNativeShimPlugin,
+          reanimatedStubPlugin,
+          shimProcessPlugin,
+          reactNativeSvgStubPlugin,
+          stubFsPlugin,
+          stubOsPlugin,
+          stubPathPlugin
+        ]
+      });
+  
+      const js = result
+      res.status(200).json({ result: js });
+    // } catch (err) {
+    //   res.status(500).json({ error: err.message });
+    // }
+  });
+
+}

@@ -1,4 +1,4 @@
-import { useSession } from "protolib/lib/Session";
+import { useSession } from "protolib/lib/useSession";
 import { HeaderLink } from 'protolib/components/HeaderLink';
 
 export default function SessionInfo() {

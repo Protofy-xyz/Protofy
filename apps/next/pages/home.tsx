@@ -1,5 +1,5 @@
 import Feature from 'app/pages/home'
-import { useSession } from 'protolib/lib/Session'
+import { useSession } from 'protolib/lib/useSession'
 
 export default function IndexPage(props:any) {
   useSession(props.pageSession)

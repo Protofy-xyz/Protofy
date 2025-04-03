@@ -1,5 +1,5 @@
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
-import { useUserSettings, useWorkspaces } from "./Session"
+import { useUserSettings, useWorkspaces } from "./useSession"
 import { useContext } from 'react'
 
 export const useWorkspace = (props?:{pages?:string[], boards?: string[], objects?: []}) => {

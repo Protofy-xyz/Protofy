@@ -5,7 +5,7 @@ import { Pencil } from '@tamagui/lucide-icons'
 import { getTokens } from '@tamagui/core'
 import { Button } from 'tamagui'
 import dynamic from 'next/dynamic';
-import { Session } from '../lib/Session'
+import { Session } from '../lib/useSession'
 import { useAtom } from 'jotai'
 import { useIsEditing } from './useIsEditing'
 import { useToastController } from '@my/ui'

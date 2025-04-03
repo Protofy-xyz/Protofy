@@ -1,6 +1,6 @@
 import { DefaultLayout } from '../layout/DefaultLayout'
 import { H2, YStack } from 'tamagui'
-import { useSession} from 'protolib/lib/Session'
+import { useSession} from 'protolib/lib/useSession'
 import {Page} from 'protolib/components/Page'
 
 export function Profile({pageSession}) {

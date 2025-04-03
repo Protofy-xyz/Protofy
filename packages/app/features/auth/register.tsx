@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { ProtofyLogoSVG, Separator, XStack, getValidation } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
-import { useSession, useSessionContext } from 'protolib/lib/Session'
+import { useSession, useSessionContext } from 'protolib/lib/useSession'
 import { Auth } from 'protolib/lib/Auth'
 import { Center } from 'protolib/components/Center'
 import { HorizontalBox } from 'protolib/components/HorizontalBox'

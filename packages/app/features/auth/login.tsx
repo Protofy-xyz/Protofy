@@ -7,7 +7,7 @@ import { ProtofyLogoSVG } from '@my/ui'
 import { useSearchParams, useRouter } from 'solito/navigation';
 import { getErrorMessage } from "@my/ui";
 import { SiteConfig } from '../../conf'
-import { useSession, useSessionContext } from 'protolib/lib/Session'
+import { useSession, useSessionContext } from 'protolib/lib/useSession'
 import { Auth } from 'protolib/lib/Auth'
 import { Center } from 'protolib/components/Center'
 import { HorizontalBox } from 'protolib/components/HorizontalBox'

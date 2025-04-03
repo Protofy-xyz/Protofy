@@ -1,4 +1,4 @@
-import { useSession, useUserSettings, useWorkspaces } from '../lib/Session';
+import { useSession, useUserSettings, useWorkspaces } from '../lib/useSession';
 import { Page } from './Page';
 import { Tinted } from './Tinted';
 import { usePrompt } from '../context/PromptAtom';

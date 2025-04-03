@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { useEvent } from "./useEvent"
 import { API } from "protobase";
-import { useSession } from "../../../lib/Session";
+import { useSession } from "../../../lib/useSession";
 
 export const useFullEventEffect = (onEvent, eventFilter?: { path?: string, from?: string,user?:string }, initialEvent?: boolean) => {
     const event = useEvent(eventFilter)

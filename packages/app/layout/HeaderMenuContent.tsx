@@ -2,7 +2,7 @@ import * as React from 'react'
 import { YStack } from 'tamagui'
 import { Tinted } from 'protolib/components/Tinted'
 import { HeaderLink } from 'protolib/components/HeaderLink'
-import { useSession, useUserSettings, useSessionContext, useWorkspaces } from 'protolib/lib/Session'
+import { useSession, useUserSettings, useSessionContext, useWorkspaces } from 'protolib/lib/useSession'
 import menuOptions from '../bundles/menu'
 import workspaces from '../bundles/workspaces'
 
