@@ -68,6 +68,7 @@ export const SequenceView = ({
     onSelectItem,
     model,
     getCard,
+    getStageBottom,
     getDroppableStageStyle = (col, provided) => ({}),
     getStageContainerProps = (stage): YStackProps => ({}),
     sort = (a, b) => true,
@@ -78,6 +79,7 @@ export const SequenceView = ({
     onSelectItem?: any
     model?: any
     getCard?: any
+    getStageBottom?: any
     getDroppableStageStyle?: (col: any, provided: any) => React.CSSProperties
     getStageContainerProps?: (stage) => YStackProps
     sort?: (a, b) => boolean
@@ -150,6 +152,7 @@ export const SequenceView = ({
                                 </div>
                             )}
                         </Droppable>
+                        {getStageBottom && getStageBottom(col, getItemsBySequenceStages(col))}
                     </YStack>
                 ))
                     : <Text textAlign="center" f={1} mt="$10" fow="400" color="$color10">No sequence stages defined. Check if the sequence defined has stages or options.</Text>
