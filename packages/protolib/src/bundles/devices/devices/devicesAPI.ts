@@ -98,7 +98,6 @@ export const DevicesAPI = (app, context) => {
                 }
 
                 for (const action of subsystem.actions ?? []) {
-                    console.log("action::::::::: ", action)
                     const params = {value: "value to set"}
                     if(action.payload.type == "json-schema"){
                         delete params.value
@@ -106,7 +105,7 @@ export const DevicesAPI = (app, context) => {
                             params[key] = formatParamsJson(action.payload.schema[key])
                         })
                     }
-                    console.log("params: ", params)
+
                     addAction({
                         group: 'devices',
                         name: subsystem.name + '_' + action.name, //get last path element
