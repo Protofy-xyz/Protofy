@@ -14,6 +14,25 @@ type FiltersType = {
     extraFilters?: any[]
 }
 
+export const QueryFilters = ({ state, extraFilters }) => {
+    const { removePush, query } = usePageParams(state)
+
+    const queryKeys = Object.keys(query)
+    const extraFiltersKeys = extraFilters?.map((extraFilter) => extraFilter.queryParam)
+    const queryFilters = queryKeys.filter(q => q.startsWith('filter') || extraFiltersKeys?.includes(q))
+
+    return <XStack gap="$2" mt="$2" flexWrap='wrap' f={1}>
+        {
+            queryFilters.map((q, i) => <Chip color={"$color6"} text={q.replace('filter[', '').replace(']', '')} gap="$2" pl="$1" pr="$3" py="$1" textProps={{ fontSize: 14, color: "$color12", fow: "400" }}>
+                <Button onPress={() => removePush(q)} size="$1" circular={true}>
+                    <X size={12} color={"var(--color8)"}></X>
+                </Button>
+            </Chip>)
+        }
+    </XStack>
+}
+
+
 export const Filters = ({ model, state, customFilters, extraFilters }: FiltersType) => {
 
     const [open, setOpen] = useState(false)
@@ -33,11 +52,11 @@ export const Filters = ({ model, state, customFilters, extraFilters }: FiltersTy
         }
         var currentValue: any = query[key]
         return <>
-                {!extraFilter.hideLabel && <Label>{extraFilter.label ?? key}</Label>}
-                {
-                    extraFilter.component(currentValue, changesFilterExtra)
-                }
-            </>
+            {!extraFilter.hideLabel && <Label>{extraFilter.label ?? key}</Label>}
+            {
+                extraFilter.component(currentValue, changesFilterExtra)
+            }
+        </>
     }
 
     const getFilter = (def, key) => {
@@ -99,10 +118,6 @@ export const Filters = ({ model, state, customFilters, extraFilters }: FiltersTy
         }
     }
 
-    const queryKeys = Object.keys(query)
-    const extraFiltersKeys = extraFilters?.map((extraFilter) => extraFilter.queryParam)
-    const queryFilters = queryKeys.filter(q => q.startsWith('filter') || extraFiltersKeys?.includes(q))
-
     return <Popover
         open={open}
         onOpenChange={setOpen}
@@ -126,13 +141,7 @@ export const Filters = ({ model, state, customFilters, extraFilters }: FiltersTy
                 <Text fontWeight="bold">Filters</Text>
                 <Tinted key="filter" >
                     <XStack gap={'$2'} mt="$2" flexWrap='wrap'>
-                        {
-                            queryFilters.map((q, i) => <Chip color={"$color6"} text={q.replace('filter[', '').replace(']', '')} gap="$2" pl="$1" pr="$2" py="$1" textProps={{ fontSize: 14, color: "$color12" }}>
-                                <Button onPress={() => removePush(q)} size="$1" circular={true}>
-                                    <X size={12} color={"var(--color8)"}></X>
-                                </Button>
-                            </Chip>)
-                        }
+                        <QueryFilters state={state} extraFilters={extraFilters} />
                     </XStack>
                 </Tinted>
                 <YStack overflow='scroll' overflowX='hidden' p="2px" maxHeight="300px">

@@ -22,7 +22,7 @@ import { SearchContext } from '../context/SearchContext';
 import { InteractiveIcon } from './InteractiveIcon';
 import { ItemMenu } from './ItemMenu';
 import ErrorMessage from './ErrorMessage';
-import { Filters } from './Filters';
+import { Filters, QueryFilters } from './Filters';
 import dynamic from 'next/dynamic'
 
 const FileWidget = dynamic<any>(() =>
@@ -675,6 +675,11 @@ const DataViewInternal = forwardRef(({
                             </XStack>
                         </XStack>
                     </XStack>
+                    {
+                        !hideFilters && <Tinted><XStack px="$4">
+                            <QueryFilters state={state} extraFilters={extraFilters} />
+                        </XStack></Tinted>
+                    }
 
                     {items && items.isError && (
                         <Notice>
