@@ -68,6 +68,7 @@ export const SequenceView = ({
     onSelectItem,
     model,
     getCard,
+    onDragEnd,
     getStageBottom,
     getDroppableStageStyle = (col, provided) => ({}),
     getStageContainerProps = (stage): YStackProps => ({}),
@@ -80,6 +81,7 @@ export const SequenceView = ({
     model?: any
     getCard?: any
     getStageBottom?: any
+    onDragEnd?: any
     getDroppableStageStyle?: (col: any, provided: any) => React.CSSProperties
     getStageContainerProps?: (stage) => YStackProps
     sort?: (a, b) => boolean
@@ -94,7 +96,7 @@ export const SequenceView = ({
 
     const getItemsBySequenceStages = (stageName) => itemsList?.filter((item) => item[model.getSequeceField()] === stageName);
 
-    const onDragEnd = (result) => {
+    const onDragFinish = (result) => {
         const { source, destination } = result;
         if (!destination || (destination.droppableId === source.droppableId &&
             destination.index === source.index)) {
@@ -105,12 +107,13 @@ export const SequenceView = ({
         const modelItem = model.load(movedItem)
         const newItemData = { ...movedItem, [sequenceField]: destination.droppableId }
 
-        if (!modelItem.canTransition(newItemData)) return
+        if (!modelItem.canTransition(newItemData)) return onDragEnd({ error: true, message: "Invalid transition", sourceData: movedItem, destinationData: newItemData })
 
         movedItem[sequenceField] = newItemData[sequenceField];
         updatedItems.splice(destination.index, 0, movedItem);
 
         onStageChange(model.load(movedItem))
+        onDragEnd({ error: false, sourceData: movedItem, destinationData: newItemData, updatedItems, message: "Item moved" })
     };
 
     const themeNames = ["orange", "yellow", "green", "blue", "purple", "pink", "red"]
@@ -120,7 +123,7 @@ export const SequenceView = ({
     }
 
     return (
-        <DragDropContext onDragEnd={onDragEnd}>
+        <DragDropContext onDragEnd={onDragFinish}>
             <XStack gap="$2" padding="$4" f={1} overflow='scroll' {...props}>
                 {columns ? columns.map((col, i) => (
                     <YStack theme={getTheme(i) as any} key={col} bc="$background" br="$4" bw="$0.5" p="$2" pt="$2.5" borderColor="$gray4" {...getStageContainerProps(col)}>
