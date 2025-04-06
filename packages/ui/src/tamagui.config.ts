@@ -12,6 +12,8 @@ import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
 import uiConfig from './uiConfig'
+import { createAnimations } from '@tamagui/animations-css'
+
 
 export const cherryBombFont = createCherryBombFont()
 export const munroFont = createMunroFont()
@@ -236,3 +238,13 @@ export const createConfig = (aditionalConfig: any = {}) => {
 }
 
 export const config = createConfig(uiConfig)
+
+export const staticConfig = createTamagui({
+  ...defaultDataConfig,
+  animations: createAnimations({
+    bouncy: 'ease-in-out',
+    lazy: 'ease-out',
+    quick: 'ease-in',
+    tooltip: 'ease-in',
+  })
+})

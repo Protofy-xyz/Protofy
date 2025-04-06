@@ -418,6 +418,14 @@ export const PagesAPI = (app, context) => {
         },
         plugins: [
           {
+            name: 'check-duplicate-tamagui',
+            setup(build) {
+              build.onResolve({ filter: /^tamagui$/ }, (args) => {
+                return
+              })
+            },
+          },
+          {
             name: 'esm-externals',
             setup(build) {
               build.onResolve({ filter: /^react$/ }, () => ({
