@@ -2,7 +2,7 @@ import React from 'react'
 import {
   AvatarImageProps,
   Image as TamaguiImage
-} from 'tamagui'
+} from '@my/ui'
 
 type ImageProps = {
   width?: number | string

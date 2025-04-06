@@ -1,6 +1,6 @@
 import { Check, Copy } from '@tamagui/lucide-icons'
 import React, { memo } from 'react'
-import { Button, Paragraph, Spacer, TooltipSimple, XStack } from 'tamagui'
+import { Button, Paragraph, Spacer, TooltipSimple, XStack } from '@my/ui'
 
 import { useClipboard } from '../lib/useClipboard'
 

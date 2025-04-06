@@ -1,4 +1,4 @@
-import { Paragraph, Tooltip as TamaTooltip } from "tamagui"
+import { Paragraph, Tooltip as TamaTooltip } from "@my/ui"
 
 export const Tooltip = ({trigger, children, ...props}) => (
     <TamaTooltip {...props}>

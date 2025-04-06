@@ -1,4 +1,4 @@
-import { H3, Paragraph, Stack, StackProps, XStack, YStack } from "tamagui"
+import { H3, Paragraph, Stack, StackProps, XStack, YStack } from "@my/ui"
 import { Grid } from './Grid';
 import { EditableObject } from "./EditableObject";
 import { getPendingResult } from 'protobase'

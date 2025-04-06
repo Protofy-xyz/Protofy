@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
-import { Button, Input, Paragraph, Spinner, Stack, YStack } from 'tamagui'
+import { Button, Input, Paragraph, Spinner, Stack, YStack } from '@my/ui'
 import { createSession, PendingResult, getPendingResult } from 'protobase'
 import { DefaultLayout } from '../../layout/DefaultLayout'
 import Link from 'next/link'

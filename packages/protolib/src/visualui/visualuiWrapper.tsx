@@ -1,7 +1,7 @@
 import React from "react";
 import { useNode, useEditor } from "@protocraft/core";
 import { CopyPlus } from '@tamagui/lucide-icons'
-import { H4 } from 'tamagui'
+import { H4 } from '@my/ui'
 import Center from '../components/Center'
 import ContentEditable from 'react-contenteditable';
 

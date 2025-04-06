@@ -1,6 +1,6 @@
 import { DatePickerProvider as _DatePickerProvider } from '@rehookify/datepicker'
 import { useEffect, useState } from 'react'
-import { View } from 'tamagui'
+import { View } from '@my/ui'
 import { DatePicker } from './dateParts'
 import { DatePickerInput, YearPicker, YearRangeSlider } from './dateParts'
 

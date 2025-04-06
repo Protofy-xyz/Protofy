@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AlertDialog } from 'protolib/components/AlertDialog'
 import { Tinted } from 'protolib/components/Tinted'
-import { Switch, useThemeName } from 'tamagui'
+import { Switch, useThemeName } from '@my/ui'
 import { Maximize, Minimize, Upload, X, SearchCode, RefreshCcw, Download } from '@tamagui/lucide-icons'
 import { Button, YStack, Text, XStack } from "@my/ui"
 import { EspWebInstall } from "./EspWebInstall"

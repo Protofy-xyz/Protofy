@@ -1,5 +1,5 @@
 
-import { XStack, Stack, StackProps } from 'tamagui';
+import { XStack, Stack, StackProps } from '@my/ui';
 
 export const InteractiveIcon = ({ Icon, IconColor='var(--color8)', DisabledIconColor='var(--gray9)',  disabled=false, size=18, ...props }:{IconColor?: string, DisabledIconColor?: string, Icon:any, size?:number} & StackProps) => {
   return (

@@ -1,6 +1,6 @@
 import { ReactNode, useState } from "react";
 import { Tinted } from './Tinted';
-import { StackProps, XStack, YStack, Text, Paragraph } from 'tamagui';
+import { StackProps, XStack, YStack, Text, Paragraph } from '@my/ui';
 
 interface DashboardCardProps {
     children: ReactNode;

@@ -12,7 +12,7 @@ import { SelectList } from '../../components/SelectList'
 import { useState } from 'react';
 import { getPendingResult } from 'protobase';
 import { usePendingEffect } from '../../lib/usePendingEffect';
-import { Switch, XStack, Text } from 'tamagui';
+import { Switch, XStack, Text } from '@my/ui';
 import { Tinted } from '../../components/Tinted';
 import { SSR } from '../../lib/SSR'
 import { withSession } from '../../lib/Session'

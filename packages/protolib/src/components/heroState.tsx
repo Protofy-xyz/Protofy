@@ -1,6 +1,6 @@
 import {useTint} from '../lib/Tints'
 import { useCallback, useEffect } from 'react'
-import { useForceUpdate } from 'tamagui'
+import { useForceUpdate } from '@my/ui'
 
 const listeners = new Set<Function>()
 

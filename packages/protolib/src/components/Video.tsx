@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack, StackProps, TamaguiElement } from 'tamagui'
+import { Stack, StackProps, TamaguiElement } from '@my/ui'
 
 type ImageProps = {
   width?: number | string

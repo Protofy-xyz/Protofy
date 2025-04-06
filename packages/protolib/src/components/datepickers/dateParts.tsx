@@ -6,7 +6,7 @@ import {
 import { getFontSized } from '@tamagui/get-font-sized'
 import { Calendar, ChevronLeft, ChevronRight, X } from '@tamagui/lucide-icons'
 import type { GestureReponderEvent } from '@tamagui/web/types'
-import type { PopoverProps } from 'tamagui'
+import type { PopoverProps } from '@my/ui'
 import {
   Adapt,
   Button,
@@ -16,7 +16,7 @@ import {
   withStaticProperties,
   createStyledContext,
   View
-} from 'tamagui'
+} from '@my/ui'
 import { Input } from './inputsParts'
 
 /** rehookify internally return `onClick` and that's incompatible with native */

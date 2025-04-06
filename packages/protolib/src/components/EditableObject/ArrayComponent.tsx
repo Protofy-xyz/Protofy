@@ -1,4 +1,4 @@
-import { Button, Stack, XStack } from "tamagui";
+import { Button, Stack, XStack } from "@my/ui";
 import { Pencil, Tags, Layers } from '@tamagui/lucide-icons';
 import { Tinted } from '../Tinted';
 import { DeleteButton, FormGroup, getDefaultValue, iconStyle } from ".";

@@ -4,7 +4,7 @@ import { Center } from '../../../components/Center';
 import { SSR } from '../../../lib/SSR';
 import { AdminPage } from '../../../components/AdminPage';
 import dynamic from 'next/dynamic'
-import { Spinner } from 'tamagui'
+import { Spinner } from '@my/ui'
 
 const FileBrowser = dynamic<any>(() =>
     import('../../../adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),

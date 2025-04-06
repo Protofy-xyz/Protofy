@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Label from "./Label";
-import { XStack } from "tamagui";
+import { XStack } from "@my/ui";
 import React from "react";
 
 const LabelAndValue = (props) => {

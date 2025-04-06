@@ -1,4 +1,4 @@
-import { H3, styled } from 'tamagui'
+import { H3, styled } from '@my/ui'
 import React from "react"
 
 const StyledHead3 = styled(H3, {

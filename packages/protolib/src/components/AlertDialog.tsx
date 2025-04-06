@@ -1,4 +1,4 @@
-import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from 'tamagui'
+import { Paragraph, Spinner, Stack, Unspaced, XStack, YStack } from '@my/ui'
 import { Button, Dialog, Spacer, getErrorMessage } from '@my/ui'
 import { forwardRef, useEffect, useState } from 'react'
 import { Tinted } from './Tinted'

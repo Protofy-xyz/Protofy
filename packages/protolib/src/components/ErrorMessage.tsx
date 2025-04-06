@@ -1,5 +1,5 @@
 import { AlertTriangle } from "@tamagui/lucide-icons";
-import { YStack, Text, H2, StackProps } from "tamagui";
+import { YStack, Text, H2, StackProps } from "@my/ui";
 import React from "react"
 
 type ErrorMessageProps = {

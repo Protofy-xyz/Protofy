@@ -1,5 +1,5 @@
 import React from "react"
-import { YStack } from "tamagui"
+import { YStack } from "@my/ui"
 
 export const SpotLight = React.forwardRef((props: any, ref: any) => (
     <YStack

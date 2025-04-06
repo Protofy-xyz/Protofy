@@ -1,4 +1,4 @@
-import { YStack } from "tamagui"
+import { YStack } from "@my/ui"
 import React from 'react'
 
 export const BackgroundGradient = React.forwardRef(({height=521, o=0.08, direction="up", ...props}:any, ref: any) => (

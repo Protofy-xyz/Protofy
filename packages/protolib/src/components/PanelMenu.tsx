@@ -1,4 +1,4 @@
-import { YStack, XStack } from 'tamagui'
+import { YStack, XStack } from '@my/ui'
 import {
     Server,
     Box,

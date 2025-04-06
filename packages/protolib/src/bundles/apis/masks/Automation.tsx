@@ -3,7 +3,7 @@ import { API } from 'protobase'
 import { Plug } from '@tamagui/lucide-icons';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import React from 'react';
-import { Spinner, XStack } from 'tamagui';
+import { Spinner, XStack } from '@my/ui';
 import { SiteConfig} from '@my/config/dist/AppConfig'
 
 const Automation = (node: any = {}, nodeData = {}) => {

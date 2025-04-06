@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, Text, Input, Switch, XStack, YStack, Paragraph } from "tamagui";
+import { Stack, Text, Input, Switch, XStack, YStack, Paragraph } from "@my/ui";
 import { DeleteButton } from "./DeleteButton";
 import { useUpdateEffect } from 'usehooks-ts'
 import { ChevronDown, Binary, Type, ToggleLeft, Layers, LayoutList } from '@tamagui/lucide-icons'

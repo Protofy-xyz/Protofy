@@ -1,4 +1,4 @@
-import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from 'tamagui'
+import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from '@my/ui'
 import React, { useEffect, useRef, useCallback, useState, useContext } from 'react';
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from '../../components/DataCard'

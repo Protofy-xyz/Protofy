@@ -1,4 +1,4 @@
-import { Checkbox, Stack, Theme, XStack, Circle, Spacer, YStack } from "tamagui"
+import { Checkbox, Stack, Theme, XStack, Circle, Spacer, YStack } from "@my/ui"
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'

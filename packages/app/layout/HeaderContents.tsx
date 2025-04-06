@@ -1,7 +1,7 @@
 import { HeaderContents as ProtoHeaderContents, HeaderContentsProps } from 'protolib/components/layout/HeaderContents'
 import { HeaderLink } from 'protolib/components/HeaderLink'
 import { Tinted } from 'protolib/components/Tinted'
-import { Text } from 'tamagui'
+import { Text } from '@my/ui'
 import { Paragraph, XStack } from '@my/ui';
 import dynamic from 'next/dynamic';
 import { SiteConfig } from '../conf';

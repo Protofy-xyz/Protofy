@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Button, Input, XStack, Spinner, Dialog, Text, InputProps } from "tamagui"
+import { Button, Input, XStack, Spinner, Dialog, Text, InputProps } from "@my/ui"
 import { Folder } from '@tamagui/lucide-icons'
 import { Tinted, } from './Tinted'
 import { Center } from './Center'

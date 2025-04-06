@@ -2,7 +2,7 @@ import { Node, NodeOutput, NodeParams, filterObject, restoreObject, getFieldValu
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
 import { Plug } from '@tamagui/lucide-icons';
 import React from 'react';
-import { Fieldset, SizableText, Spinner, XStack } from 'tamagui';
+import { Fieldset, SizableText, Spinner, XStack } from '@my/ui';
 import { API } from 'protobase'
 import { SiteConfig} from '@my/config/dist/AppConfig'
 

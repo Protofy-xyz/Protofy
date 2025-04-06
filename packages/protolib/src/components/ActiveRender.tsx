@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { ActiveGroupContext } from "./ActiveGroup";
-import { Stack, StackProps } from "tamagui";
+import { Stack, StackProps } from "@my/ui";
 import React from "react";
 
 // display childrens only if its active (works with ActiveGroup)

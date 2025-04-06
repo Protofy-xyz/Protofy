@@ -3,7 +3,7 @@ import { API } from 'protobase'
 import {Tinted} from '../components/Tinted'
 import { Pencil } from '@tamagui/lucide-icons'
 import { getTokens } from '@tamagui/core'
-import { Button } from 'tamagui'
+import { Button } from '@my/ui'
 import dynamic from 'next/dynamic';
 import { Session } from '../lib/useSession'
 import { useAtom } from 'jotai'

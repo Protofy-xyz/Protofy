@@ -1,4 +1,4 @@
-import { Button, CardProps, Paragraph, StackProps, XStack } from "tamagui"
+import { Button, CardProps, Paragraph, StackProps, XStack } from "@my/ui"
 import OverlayCard from "./OverlayCard"
 import { NextLink } from "./NextLink"
 import React from "react"

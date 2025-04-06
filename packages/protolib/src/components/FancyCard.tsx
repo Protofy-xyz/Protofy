@@ -1,5 +1,5 @@
 import React from 'react';
-import { YStack, styled } from 'tamagui'
+import { YStack, styled } from '@my/ui'
 
 const StyledFancyCard = styled(YStack, {
   name: 'Card',

@@ -1,4 +1,4 @@
-import { Paragraph, SizableText, Spinner, Stack, StackProps } from "tamagui"
+import { Paragraph, SizableText, Spinner, Stack, StackProps } from "@my/ui"
 import ErrorMessage from "./ErrorMessage"
 import React, { useState } from "react"
 import {Tinted} from './Tinted'

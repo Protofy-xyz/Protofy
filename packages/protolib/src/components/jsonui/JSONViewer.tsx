@@ -9,7 +9,7 @@ import { jsonViewerDefaultStyles } from "./util";
 import { getKey } from "./util";
 import LabelAndValue from "./components/viewer/LabelAndValue";
 import Label from "./components/viewer/Label";
-import { Stack, XStack, YStack } from "tamagui";
+import { Stack, XStack, YStack } from "@my/ui";
 import { AddArrayButton } from "./components/viewer/AddArrayButton";
 
 type JSONViewerProps = {

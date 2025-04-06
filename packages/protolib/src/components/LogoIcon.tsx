@@ -1,5 +1,5 @@
 import React from 'react'
-import { StackProps, YStack } from 'tamagui'
+import { StackProps, YStack } from '@my/ui'
 
 
 export const LogoIcon = React.forwardRef(({ children, ...props }: StackProps, ref:any) => {

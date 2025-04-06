@@ -1,7 +1,7 @@
 import { forwardRef } from "react"
 import {useTint} from '../lib/Tints'
 import { useMemo } from "react"
-import { YStack } from "tamagui"
+import { YStack } from "@my/ui"
 
 const SectionBox = forwardRef(({
   children,

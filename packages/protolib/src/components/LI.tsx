@@ -1,4 +1,4 @@
-import { Paragraph, styled } from 'tamagui'
+import { Paragraph, styled } from '@my/ui'
 
 export const LI = styled(Paragraph, {
   display: 'list-item' as any,

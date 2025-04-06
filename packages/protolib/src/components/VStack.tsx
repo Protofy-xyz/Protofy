@@ -1,5 +1,5 @@
 import React from "react"
-import { StackProps, YStack } from "tamagui"
+import { StackProps, YStack } from "@my/ui"
 
 export const VStack = React.forwardRef((props: StackProps, ref: any) => (
   //@ts-ignore

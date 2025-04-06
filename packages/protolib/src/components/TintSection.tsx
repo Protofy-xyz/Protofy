@@ -2,8 +2,8 @@ import { useOnIntersecting } from '../lib/useOnIntersecting'
 import { getTints,useTint} from '../lib/Tints'
 import React from 'react'
 import { useEffect, useMemo, useRef } from 'react'
-import { StackProps } from 'tamagui'
-import { GetProps, XStack, YStack, styled } from 'tamagui'
+import { StackProps } from '@my/ui'
+import { GetProps, XStack, YStack, styled } from '@my/ui'
 
 type Props = SectionProps & { containerProps: StackProps, themed?: boolean; index: number }
 

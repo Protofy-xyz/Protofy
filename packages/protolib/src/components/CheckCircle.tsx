@@ -1,6 +1,6 @@
 import { Check } from '@tamagui/lucide-icons'
 import React from 'react'
-import { YStack } from 'tamagui'
+import { YStack } from '@my/ui'
 
 export const CheckCircle = React.forwardRef((props:any, ref:any) => (
   //@ts-ignore

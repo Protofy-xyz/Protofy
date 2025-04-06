@@ -1,6 +1,6 @@
 import { useTint } from '../lib/Tints'
 import React, { memo, useState } from 'react'
-import { Button, ScrollView, SizableText, XGroup, XStack, YStack, YStackProps } from 'tamagui'
+import { Button, ScrollView, SizableText, XGroup, XStack, YStack, YStackProps } from '@my/ui'
 import { useThemeSetting } from '@tamagui/next-theme'
 
 type TabGroupProps = {

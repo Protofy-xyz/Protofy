@@ -1,5 +1,5 @@
 import React from "react"
-import { StackProps, YStack } from "tamagui"
+import { StackProps, YStack } from "@my/ui"
 import {Tinted} from './Tinted'
 
 export const Section = React.forwardRef((props: StackProps, ref: any) => (

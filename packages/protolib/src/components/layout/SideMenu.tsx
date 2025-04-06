@@ -1,4 +1,4 @@
-import { YStack, useMedia, Button } from 'tamagui'
+import { YStack, useMedia, Button } from '@my/ui'
 import { useState } from 'react'
 import { X, PanelLeftOpen, PanelLeftClose } from '@tamagui/lucide-icons'
 import { Tinted } from '../Tinted'

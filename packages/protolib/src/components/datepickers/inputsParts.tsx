@@ -3,7 +3,7 @@ import { getSpace } from '@tamagui/get-token'
 import { User } from '@tamagui/lucide-icons'
 import type { SizeVariantSpreadFunction } from '@tamagui/web'
 import { useState } from 'react'
-import type { ColorTokens, FontSizeTokens } from 'tamagui'
+import type { ColorTokens, FontSizeTokens } from '@my/ui'
 import {
   Label,
   Button as TButton,
@@ -19,7 +19,7 @@ import {
   useGetThemedIcon,
   useTheme,
   withStaticProperties,
-} from 'tamagui'
+} from '@my/ui'
 
 const defaultContextValues = {
   size: '$true',

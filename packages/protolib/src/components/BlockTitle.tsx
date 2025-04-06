@@ -1,4 +1,4 @@
-import { StackProps, YStack } from "tamagui"
+import { StackProps, YStack } from "@my/ui"
 import { Head2 } from "./Head2"
 import { Head3 } from "./Head3"
 import React from 'react'

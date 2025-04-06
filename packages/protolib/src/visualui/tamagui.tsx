@@ -1,4 +1,4 @@
-import { Text, Spacer, YStack, XStack, Paragraph, Theme } from 'tamagui'
+import { Text, Spacer, YStack, XStack, Paragraph, Theme } from '@my/ui'
 import { BasicPlaceHolder, getComponentWrapper } from './visualuiWrapper'
 
 const cw = getComponentWrapper('tamagui')

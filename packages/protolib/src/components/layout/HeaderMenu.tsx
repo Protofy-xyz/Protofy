@@ -1,6 +1,6 @@
 import { Menu } from '@tamagui/lucide-icons'
 import * as React from 'react'
-import { Adapt, Button, Popover } from 'tamagui'
+import { Adapt, Button, Popover } from '@my/ui'
 
 export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacement="bottom" }: any) {
   const [open, setOpen] = React.useState(false)

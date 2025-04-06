@@ -1,5 +1,5 @@
 import React from "react"
-import { StackProps, YStack } from "tamagui"
+import { StackProps, YStack } from "@my/ui"
 import { Spacer as TSpacer } from '@my/ui'
 
 export const Spacer = React.forwardRef((props: StackProps, ref:any) => (

@@ -4,7 +4,7 @@ import {
   XStack,
   YStack,
   isClient,
-} from 'tamagui'
+} from '@my/ui'
 
 import { ContainerLarge } from './Container'
 

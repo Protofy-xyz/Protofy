@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, ButtonProps, Stack, XGroup } from "tamagui";
+import { Button, ButtonProps, Stack, XGroup } from "@my/ui";
 import { ActiveGroupContext } from "./ActiveGroup";
 import GroupButton from "./GroupButton";
 

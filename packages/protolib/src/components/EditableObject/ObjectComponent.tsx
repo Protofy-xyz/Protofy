@@ -1,4 +1,4 @@
-import { Stack } from "tamagui";
+import { Stack } from "@my/ui";
 import { FormGroup } from ".";
 import { getElement } from "./Element";
 import { List } from '@tamagui/lucide-icons';

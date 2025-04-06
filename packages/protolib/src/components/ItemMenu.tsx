@@ -1,4 +1,4 @@
-import { Popover, Stack, XStack, YStack, Text, StackProps } from "tamagui"
+import { Popover, Stack, XStack, YStack, Text, StackProps } from "@my/ui"
 import { AlertDialog } from './AlertDialog'
 import { useState } from "react";
 import { Tinted } from "./Tinted";

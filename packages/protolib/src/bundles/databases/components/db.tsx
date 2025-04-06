@@ -1,4 +1,4 @@
-import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from 'tamagui'
+import { YStack, XStack, Stack, Paragraph, Text, Button, Input } from '@my/ui'
 import { API } from 'protobase';
 import { DataCard } from '../../../components/DataCard';
 import { Search } from '../../../components/Search';

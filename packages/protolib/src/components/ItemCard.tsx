@@ -9,7 +9,7 @@ import {
   XStack,
   YStack,
   YStackProps,
-} from 'tamagui'
+} from '@my/ui'
 import Center from './Center'
 import { ImageOff } from '@tamagui/lucide-icons'
 

@@ -1,5 +1,5 @@
 import React from "react"
-import { Card, CardProps, YStack } from "tamagui"
+import { Card, CardProps, YStack } from "@my/ui"
 
 const OverlayCard = React.forwardRef((props: CardProps, ref:any) => {  
     return (

@@ -1,4 +1,4 @@
-import { Input, Stack, Switch, SizableText, TextArea } from "tamagui";
+import { Input, Stack, Switch, SizableText, TextArea } from "@my/ui";
 import { Tinted } from '../Tinted';
 import { SelectList } from '../SelectList';
 import { SimpleSlider } from '../SimpleSlider';

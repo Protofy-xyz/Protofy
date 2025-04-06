@@ -1,4 +1,4 @@
-import { Text, TextProps } from 'tamagui'
+import { Text, TextProps } from '@my/ui'
 import React, { useState, useEffect } from "react"
 import { API } from 'protobase'
 import { DeviceCollection } from '../bundles/devices/models/DeviceModel';

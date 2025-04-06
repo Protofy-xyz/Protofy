@@ -4,7 +4,7 @@ import {
   ListItem,
   XStack,
   YStack,
-} from 'tamagui'
+} from '@my/ui'
 import React from 'react'
 import {useTint} from '../lib/Tints'
 

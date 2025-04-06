@@ -6,7 +6,7 @@ import {
   TooltipGroup,
   XGroup,
   XStack,
-} from 'tamagui'
+} from '@my/ui'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 
 export type HeaderContentsProps = {

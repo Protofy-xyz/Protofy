@@ -9,7 +9,7 @@ import Chats from "./components/Chat/Chats"
 import Modal from "./components/modals/Modal"
 import Apikey from "./components/modals/Apikey"
 import { useThemeSetting } from "@tamagui/next-theme"
-import { Stack } from "tamagui"
+import { Stack } from "@my/ui"
 
 const applyTheme = (resolvedTheme) => {
   if (resolvedTheme === "light" && document.documentElement.classList.contains("dark")) {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Button, XStack, YStack, Text } from 'tamagui'
+import { Button, XStack, YStack, Text } from '@my/ui'
 import { AlertDialog } from '../../../components/AlertDialog'
 import { SelectList } from '../../../components/SelectList'
 import { ConfigEditor } from './ConfigEditor'

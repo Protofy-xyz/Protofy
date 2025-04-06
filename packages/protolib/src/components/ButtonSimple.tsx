@@ -1,4 +1,4 @@
-import { ButtonProps, Button, Text } from "tamagui"
+import { ButtonProps, Button, Text } from "@my/ui"
 import React from 'react'
 
 export const ButtonSimple = React.forwardRef(({textColor = undefined, fontFamily = "$silkscreen", ...props}: ButtonProps & any, ref: any) => (

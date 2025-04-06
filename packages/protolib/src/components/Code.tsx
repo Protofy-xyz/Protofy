@@ -1,4 +1,4 @@
-import { Paragraph, styled } from 'tamagui'
+import { Paragraph, styled } from '@my/ui'
 import React from "react"
 
 const StyledCode = styled(Paragraph, {

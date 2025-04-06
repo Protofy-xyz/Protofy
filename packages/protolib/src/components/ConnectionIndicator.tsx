@@ -2,7 +2,7 @@ import useMqttState from '../lib/mqtt/useMqttState';
 import { CloudOff } from '@tamagui/lucide-icons';
 import { useInterval } from 'usehooks-ts';
 import { useState } from 'react';
-import { XStack } from 'tamagui';
+import { XStack } from '@my/ui';
 
 export const ConnectionIndicator = () => {
   const { connectionStatus } = useMqttState();

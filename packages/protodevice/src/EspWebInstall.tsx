@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Spinner } from 'tamagui';
+import { Spinner } from '@my/ui';
 
 const loadEspWebToolsScript = () => {
     return new Promise<void>((resolve) => {

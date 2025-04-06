@@ -1,4 +1,4 @@
-import { EnsureFlexed, H4, HeadingProps, Paragraph, StackProps, YStack } from "tamagui";
+import { EnsureFlexed, H4, HeadingProps, Paragraph, StackProps, YStack } from "@my/ui";
 import React from "react"
 
 export const GridElement = React.forwardRef(({title, children, titleProps={}, ...props}: StackProps & {title: string, titleProps?: HeadingProps}, ref:any) => (

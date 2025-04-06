@@ -1,5 +1,5 @@
 import { NextLink } from './NextLink'
-import { H3, Paragraph, Stack, YStack, YStackProps } from 'tamagui'
+import { H3, Paragraph, Stack, YStack, YStackProps } from '@my/ui'
 
 import { CodeInline } from './Code'
 import { IconStack } from './IconStack'

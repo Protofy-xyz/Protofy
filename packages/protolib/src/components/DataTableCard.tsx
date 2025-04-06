@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "tamagui"
+import { Stack, StackProps } from "@my/ui"
 import { DataCard } from "./DataCard"
 import { useRef } from "react";
 import { Grid } from './Grid';

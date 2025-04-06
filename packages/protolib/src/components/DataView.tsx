@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useMedia } from 'tamagui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useMedia } from '@my/ui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
 import { AlertDialog } from './AlertDialog';

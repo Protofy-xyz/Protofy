@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@my/ui'
 
 export const GithubIcon = forwardRef(({ color, ...props }: any, ref: any) => (
     <svg

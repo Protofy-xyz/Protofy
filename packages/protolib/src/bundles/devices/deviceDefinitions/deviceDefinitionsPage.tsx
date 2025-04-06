@@ -12,7 +12,7 @@ import { AdminPage } from "../../../components/AdminPage"
 import { PaginatedData } from "../../../lib/SSR"
 import { ConfigComponent } from "./ConfigComponent" //TODO: Delete this file when WLED case integrated on ConfigEditor
 import { ConfigEditor } from "./ConfigEditor"
-import { Button, Input, XStack } from 'tamagui'
+import { Button, Input, XStack } from '@my/ui'
 import { Tinted } from "../../../components/Tinted"
 import { usePageParams } from "../../../next"
 import { InteractiveIcon } from "../../../components/InteractiveIcon"

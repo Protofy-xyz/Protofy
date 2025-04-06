@@ -1,6 +1,6 @@
 
 import * as React from 'react'
-import { Paragraph, styled } from 'tamagui'
+import { Paragraph, styled } from '@my/ui'
 import { NextLink } from './NextLink'
 
 export const HeadAnchor = styled(Paragraph, {

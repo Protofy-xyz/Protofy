@@ -5,7 +5,7 @@ import {
   TooltipSimple,
   VisuallyHidden,
   YStack,
-} from 'tamagui'
+} from '@my/ui'
 
 type TooltipContainerProps = {
     children?:any,

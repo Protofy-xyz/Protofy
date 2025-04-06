@@ -1,5 +1,5 @@
 import { useEffect, useState, startTransition, useMemo, useSyncExternalStore } from 'react'
-import { Theme, ThemeName } from 'tamagui'
+import { Theme, ThemeName } from '@my/ui'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 
 const familiesValues = {

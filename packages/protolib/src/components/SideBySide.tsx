@@ -1,4 +1,4 @@
-import { XStack, YStack } from 'tamagui'
+import { XStack, YStack } from '@my/ui'
 import React from 'react';
 
 const SideBySide = React.forwardRef(({ children }: any, ref: any) => {

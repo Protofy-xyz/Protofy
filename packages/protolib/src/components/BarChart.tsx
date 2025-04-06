@@ -1,4 +1,4 @@
-import { Paragraph, XStack, YStack } from 'tamagui'
+import { Paragraph, XStack, YStack } from '@my/ui'
 import React from 'react'
 
 

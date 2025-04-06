@@ -1,4 +1,4 @@
-import { Text, TextProps } from 'tamagui'
+import { Text, TextProps } from '@my/ui'
 import React, { useState } from "react"
 import { useEventEffect, useLastEvent } from '../bundles/events/hooks';
 

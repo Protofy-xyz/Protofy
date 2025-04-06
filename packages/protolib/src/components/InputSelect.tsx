@@ -1,7 +1,7 @@
 import React from 'react';
 import CreatableSelect from 'react-select/creatable';
 import { useThemeSetting } from '@tamagui/next-theme'
-import { getTokenValue } from 'tamagui';
+import { getTokenValue } from '@my/ui';
 import { useTheme } from '@my/ui';
 import { useTint } from '../lib/Tints';
 

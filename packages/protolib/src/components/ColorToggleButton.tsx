@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Circle, Stack, TooltipSimple } from 'tamagui'
+import { Button, ButtonProps, Circle, Stack, TooltipSimple } from '@my/ui'
 import React from 'react'
 import {useTint} from '../lib/Tints'
 

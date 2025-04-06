@@ -1,4 +1,4 @@
-import { Button, Fieldset, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, StackProps, Accordion, Square, Spacer } from "tamagui";
+import { Button, Fieldset, Label, Stack, XStack, H3, YStack, Paragraph, Spinner, StackProps, Accordion, Square, Spacer } from "@my/ui";
 import { Pencil, Tag, ChevronDown, X } from '@tamagui/lucide-icons';
 import { Center } from '../Center';
 import { Grid } from '../Grid';

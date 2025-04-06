@@ -1,7 +1,7 @@
 
 import { createContext, useState } from 'react'
 import React from 'react'
-import { Stack } from 'tamagui';
+import { Stack } from '@my/ui';
 
 export const ActiveGroupContext = createContext({ active: 0, setActive: (next: number) => { } });
 

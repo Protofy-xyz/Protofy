@@ -3,7 +3,7 @@ import { HeaderContents } from './HeaderContents'
 import { DefaultLayout as ProtoDefaultLayout } from 'protolib/components/layout/DefaultLayout'
 import { AppBar } from 'protolib/components/AppBar'
 import React from 'react'
-import { StackProps } from 'tamagui'
+import { StackProps } from '@my/ui'
 import { HeaderMenu } from './HeaderMenu'
 import { HeaderMenuContent } from './HeaderMenuContent'
 

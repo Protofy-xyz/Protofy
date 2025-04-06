@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'tamagui'
+import { Stack, StackProps } from '@my/ui'
 import React from "react"
 
 export const Pressable = React.forwardRef((props: StackProps, ref: any) => {

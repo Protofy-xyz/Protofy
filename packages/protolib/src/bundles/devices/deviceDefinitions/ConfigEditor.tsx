@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Button, XStack, YStack, Text, Stack } from 'tamagui'
+import { Button, XStack, YStack, Text, Stack } from '@my/ui'
 import Flows from '../../../adminpanel/features/components/Flows'
 import { getFlowsCustomSnippets } from 'app/bundles/snippets'
 import { getFlowsMenuConfig } from 'app/bundles/flows'

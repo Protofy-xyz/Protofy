@@ -5,7 +5,7 @@ import {
   Text,
   XStack,
   StackProps
-} from 'tamagui'
+} from '@my/ui'
 import React from 'react'
 
 type AnounceBubbleProps = {

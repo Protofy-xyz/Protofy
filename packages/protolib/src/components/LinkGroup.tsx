@@ -3,7 +3,7 @@ import {
     Paragraph,
     Text,
     styled,
-} from 'tamagui'
+} from '@my/ui'
 import { useContext } from 'react'
 import HoveredGroup, { HoveredGroupContext } from './HoveredGroup'
 import React from 'react'

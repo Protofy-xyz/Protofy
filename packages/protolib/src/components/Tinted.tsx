@@ -1,6 +1,6 @@
 
 import React from "react"
-import { Theme } from "tamagui";
+import { Theme } from "@my/ui";
 import { useTint } from "../lib/Tints";
 
 export const Tinted = React.forwardRef((props: any, ref: any) => {

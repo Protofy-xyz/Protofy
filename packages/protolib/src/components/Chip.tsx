@@ -1,5 +1,5 @@
 import React from 'react'
-import {XStack, SizableText, ColorProp, Spinner, Spacer, XStackProps, TextProps} from 'tamagui'
+import {XStack, SizableText, ColorProp, Spinner, Spacer, XStackProps, TextProps} from '@my/ui'
 
 export const Chip = ({ loading, icon, text, bold, color, children, textProps, ...props}:{loading?:boolean, icon?:any, text?: string, bold?: boolean, color?: ColorProp, textProps: TextProps} & XStackProps) => {
     return <XStack ai="center" jc="center" bc={color??'$color5'} p={2} px={"$3"} br={25} {...props}>

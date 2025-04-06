@@ -1,4 +1,4 @@
-import { Text as TamaguiText, styled, TextProps } from 'tamagui'
+import { Text as TamaguiText, styled, TextProps } from '@my/ui'
 import React from "react"
 
 const StyledText = styled(TamaguiText, {

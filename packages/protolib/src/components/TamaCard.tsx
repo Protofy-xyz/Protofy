@@ -1,5 +1,5 @@
 import React from 'react'
-import { H3, Paragraph, SizableText, XStack, YStack } from 'tamagui'
+import { H3, Paragraph, SizableText, XStack, YStack } from '@my/ui'
 
 import { FancyCard } from './FancyCard'
 

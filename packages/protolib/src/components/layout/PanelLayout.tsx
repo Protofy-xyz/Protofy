@@ -1,4 +1,4 @@
-import { YStack, ScrollView, XStack } from 'tamagui'
+import { YStack, ScrollView, XStack } from '@my/ui'
 import { AppBar } from '../AppBar'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle';

@@ -1,4 +1,4 @@
-import { YStack, Text } from 'tamagui';
+import { YStack, Text } from '@my/ui';
 import { PieChart as PieChartR, Pie, Tooltip, Cell, Legend } from "recharts";
 import { DashboardCard } from './DashboardCard';
 

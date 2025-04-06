@@ -1,6 +1,6 @@
 import { Menu } from '@tamagui/lucide-icons'
 import * as React from 'react'
-import { Adapt, Button, Popover as TamaguiPopover } from 'tamagui'
+import { Adapt, Button, Popover as TamaguiPopover } from '@my/ui'
 
 export const Popover = React.memo(function Popover({ children, menuPlacement = "bottom", trigger = <Menu /> , isOpen, onOpenChange, color = '$color1' }: any) {
   

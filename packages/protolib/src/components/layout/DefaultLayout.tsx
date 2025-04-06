@@ -2,7 +2,7 @@ import { Tinted } from '../Tinted'
 import { ToastProvider, ToastViewport } from '@tamagui/toast'
 import { NextSeo } from 'next-seo'
 import React from 'react'
-import { Stack, StackProps, XStack, YStack } from 'tamagui'
+import { Stack, StackProps, XStack, YStack } from '@my/ui'
 import { Toast, useToastState } from '@my/ui'
 
 const ToastArea = () => {

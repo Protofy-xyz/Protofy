@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   H1, ParagraphProps,
-} from 'tamagui'
+} from '@my/ui'
 
 type BigTitleProps = {
     children?:any

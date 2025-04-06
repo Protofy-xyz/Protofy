@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Button, Input, Stack, XStack, YStack } from "tamagui";
+import { Button, Input, Stack, XStack, YStack } from "@my/ui";
 import { List } from '@tamagui/lucide-icons';
 import { AlertDialog } from '../AlertDialog'
 import { DeleteButton, FormGroup, OpenedSectionsContext, getDefaultValue } from ".";

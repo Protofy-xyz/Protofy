@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Sparkles, X, Maximize, Minimize } from '@tamagui/lucide-icons';
 import { Tinted }  from './Tinted'
 import { Chat } from './Chat'
-import { YStack, Button, XStack, Theme, Spinner, Paragraph} from 'tamagui';
+import { YStack, Button, XStack, Theme, Spinner, Paragraph} from '@my/ui';
 
 type BubleChatProps = {
   apiUrl: string;

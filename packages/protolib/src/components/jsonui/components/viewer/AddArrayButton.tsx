@@ -1,6 +1,6 @@
 import { Cross, Plus, PlusCircle, PlusSquare } from "@tamagui/lucide-icons"
 import { useState, useEffect } from "react"
-import { XStack } from "tamagui"
+import { XStack } from "@my/ui"
 import LabelAndValue from "./LabelAndValue"
 
 export const AddArrayButton = ({ onAdd = () => { } }) => {

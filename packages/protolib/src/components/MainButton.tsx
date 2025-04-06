@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, ButtonProps, ButtonText, TextProps } from "tamagui"
+import { Button, ButtonProps, ButtonText, TextProps } from "@my/ui"
 
 type MainButtonProps = {
   buttonProps?: ButtonProps

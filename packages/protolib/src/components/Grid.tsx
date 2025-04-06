@@ -1,7 +1,7 @@
 import { isWeb } from '@tamagui/core'
 import { XStack } from '@tamagui/stacks'
 import React, { useLayoutEffect, useState } from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@my/ui'
 import { useMasonry, usePositioner, useResizeObserver } from 'masonic'
 // const Masonry = dynamic(() => import('masonic').then(mod => mod.Masonry), {
 //   ssr: false,

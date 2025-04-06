@@ -1,5 +1,5 @@
 
-import { XStack, YStack, Text, ScrollView, Popover, Input } from 'tamagui'
+import { XStack, YStack, Text, ScrollView, Popover, Input } from '@my/ui'
 import { JSONViewer } from './jsonui'
 import {JSONView} from './JSONView'
 import { useTint } from '../lib/Tints'

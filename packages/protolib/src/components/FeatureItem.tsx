@@ -1,5 +1,5 @@
 import { CheckCircle } from "./CheckCircle"
-import { Card, SizableText, XStack, Text, Paragraph } from "tamagui"
+import { Card, SizableText, XStack, Text, Paragraph } from "@my/ui"
 import React from "react"
 
 export const FeatureItem = React.forwardRef(({ label, children }:any, ref:any) => {

@@ -1,4 +1,4 @@
-import { XStack, Text, SizableText, StackProps, Paragraph, Stack } from 'tamagui'
+import { XStack, Text, SizableText, StackProps, Paragraph, Stack } from '@my/ui'
 import React from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 

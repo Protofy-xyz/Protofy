@@ -1,4 +1,4 @@
-import { Button, Dialog, Input, Theme, XStack, useMedia } from "tamagui"
+import { Button, Dialog, Input, Theme, XStack, useMedia } from "@my/ui"
 import { Search as IconSearch } from '@tamagui/lucide-icons'
 import { useState, forwardRef, useRef, useEffect } from "react"
 import { useUpdateEffect } from 'usehooks-ts'

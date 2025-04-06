@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
-import { Circle, XStack, XStackProps, Text, Paragraph } from 'tamagui'
+import { Circle, XStack, XStackProps, Text, Paragraph } from '@my/ui'
 
 import {useTint} from '../lib/Tints'
 

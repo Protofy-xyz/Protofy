@@ -1,5 +1,5 @@
 import React from 'react'
-import { EnsureFlexed, StackProps, YStack } from 'tamagui'
+import { EnsureFlexed, StackProps, YStack } from '@my/ui'
 
 export const HR = React.forwardRef(({lineColor="$borderColor", lineHeight=1, ...props}: StackProps & {lineHeight?: any, lineColor?: any}, ref:any) => (
   //@ts-ignore

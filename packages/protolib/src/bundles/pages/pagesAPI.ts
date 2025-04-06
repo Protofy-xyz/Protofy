@@ -421,6 +421,16 @@ const tamaguiTargetPlugin = {
   },
 }
 
+const jsonwebtokenStubPlugin = {
+  name: 'stub-jsonwebtoken',
+  setup(build) {
+    build.onResolve({ filter: /^jsonwebtoken$/ }, () => ({
+      path: path.resolve(__dirname, './stubs/jsonwebtoken.js'),
+      namespace: 'file',
+    }))
+  }
+}
+
 export const PagesAPI = (app, context) => {
   PagesAutoAPI(app, context)
   app.get('/api/core/v1/page/compile', async (req, res) => {
@@ -479,7 +489,8 @@ export const PagesAPI = (app, context) => {
           stubOsPlugin,
           stubPathPlugin,
           stripCommentsPlugin,
-          tamaguiTargetPlugin
+          tamaguiTargetPlugin,
+          jsonwebtokenStubPlugin
         ]
       });
   

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paragraph, Theme, XStack, styled } from 'tamagui'
+import { Paragraph, Theme, XStack, styled } from '@my/ui'
 
 import { unwrapText } from './unwrapText'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { GroupProps, XGroup, YGroup } from "tamagui"
+import { GroupProps, XGroup, YGroup } from "@my/ui"
 
 export const ButtonGroup = React.forwardRef(({ mode, ...props }: GroupProps & { mode?: "vertical" | "horizontal" }, ref: any) => {
     return !mode || mode == 'horizontal' ? (

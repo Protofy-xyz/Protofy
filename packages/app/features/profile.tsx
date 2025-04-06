@@ -1,5 +1,5 @@
 import { DefaultLayout } from '../layout/DefaultLayout'
-import { H2, YStack } from 'tamagui'
+import { H2, YStack } from '@my/ui'
 import { useSession} from 'protolib/lib/useSession'
 import {Page} from 'protolib/components/Page'
 

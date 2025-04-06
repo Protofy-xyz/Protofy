@@ -5,7 +5,7 @@ import {
 } from '@rehookify/datepicker'
 import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
 import { useEffect, useMemo, useState } from 'react'
-import { Button, H3, Separator, View } from 'tamagui'
+import { Button, H3, Separator, View } from '@my/ui'
 import { DatePicker } from './dateParts'
 import {
   DatePickerInput,

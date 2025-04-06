@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
-import { XStack } from "tamagui"
-import { Paragraph, TamaguiTextElement, TextArea } from "tamagui"
+import { XStack } from "@my/ui"
+import { Paragraph, TamaguiTextElement, TextArea } from "@my/ui"
 
 const EditableText = React.forwardRef(({ text='', placeHolder='' }: any, ref:any) => {
     const [ready, setReady] = useState(false)

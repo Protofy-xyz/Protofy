@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StackProps, YStack, useTheme } from "tamagui";
+import { StackProps, YStack, useTheme } from "@my/ui";
 import { useIsEditing } from "../visualui/useIsEditing"
 import Head from 'next/head'
 import { useSession, useSessionContext, getSessionContext } from "../lib/useSession";

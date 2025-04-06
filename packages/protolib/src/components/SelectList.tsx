@@ -1,4 +1,4 @@
-import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, SelectTriggerProps } from "tamagui";
+import { YStack, SelectProps, Select, Adapt, Sheet, getFontSize, SelectTriggerProps } from "@my/ui";
 import { ChevronDown, ChevronUp, Check } from '@tamagui/lucide-icons';
 import { useEffect, useMemo, useState } from "react";
 

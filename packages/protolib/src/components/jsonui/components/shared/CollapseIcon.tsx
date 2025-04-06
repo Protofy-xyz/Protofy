@@ -1,6 +1,6 @@
 import { ChevronDown, ChevronRight, MinusCircle, MinusSquare, MoreHorizontal, MoreVertical, Plus, PlusSquare } from "@tamagui/lucide-icons";
 import React from "react";
-import { Stack, Text } from "tamagui";
+import { Stack, Text } from "@my/ui";
 
 const CollapseIcon = (props) => {
     let { collapsible, toggleNodeCollapsed, isNodeCollapsed, state } = props;

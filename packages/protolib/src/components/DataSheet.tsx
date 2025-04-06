@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "tamagui"
+import { Stack, StackProps } from "@my/ui"
 import { useLayoutEffect, useRef, useState } from "react";
 import { Column, Table2, Cell } from "@blueprintjs/table";
 import { HotkeysProvider } from "@blueprintjs/core";

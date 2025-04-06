@@ -1,4 +1,4 @@
-import { XStack } from 'tamagui'
+import { XStack } from '@my/ui'
 import { SelectList } from './SelectList';
 import { useWorkspaces, useUserSettings } from '../lib/useSession';
 import { PanelMenu } from './PanelMenu';
