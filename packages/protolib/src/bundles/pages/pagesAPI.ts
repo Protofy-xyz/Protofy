@@ -389,42 +389,73 @@ const stubPathPlugin = {
   }
 };
 
+const stripCommentsPlugin = {
+  name: 'strip-comments',
+  setup(build) {
+    build.onEnd((result) => {
+      const fs = require('fs')
+      const path = require('path')
+      for (const output of result.outputFiles || []) {
+        if (output.path.endsWith('.js')) {
+          const noComments = output.text
+            .replace(/\/\*[\s\S]*?\*\//g, '') // bloque /* */
+            .replace(/\/\/.*/g, '') // línea //
+          fs.writeFileSync(output.path, noComments)
+        }
+      }
+    })
+  }
+}
+
+const tamaguiTargetPlugin = {
+  name: 'tamagui-target',
+  setup(build) {
+    build.onLoad({ filter: /@tamagui\/constants/ }, async (args) => {
+      const contents = await fs.readFile(args.path, 'utf8')
+      const replaced = contents.replace(/process\.env\.TAMAGUI_TARGET/g, '"web"')
+      return {
+        contents: replaced,
+        loader: 'js',
+      }
+    })
+  },
+}
+
 export const PagesAPI = (app, context) => {
   PagesAutoAPI(app, context)
-  app.post('/api/core/v1/page/compile', async (req, res) => {
-    const { code } = req.body;
-  
+  app.get('/api/core/v1/page/compile', async (req, res) => {
+    const page = req.query.page;
+    const sourceFile = path.resolve(process.cwd(), `../../data/pages/${page}.tsx`)
+
     // try {
       const tsconfigPath = path.resolve(process.cwd(), '../../apps/next/tsconfig.json');
       const result = await esbuild.build({
-        stdin: {
-          contents: code,
-          resolveDir: path.resolve(process.cwd(), '../../packages'), // base para imports relativos
-          loader: 'tsx',
+        loader: {
+          '.js': 'jsx',
+          '.mjs': 'jsx',
+          '.ts': 'ts',
+          '.tsx': 'tsx',
         },
+        absWorkingDir: path.resolve(process.cwd(), '../../'),
+        splitting: true,
+        minify: true,
+        entryPoints: [sourceFile],
+        entryNames: '[name]',
         external: ['fs', 'path', 'os', 'crypto', 'stream', 'zlib', 'react-native', 'jsonwebtoken'],
         write: true,
-        outdir: '../../data/public/pages',
+        outdir: 'data/public/pages',
         bundle: true,
         format: 'esm',
         platform: 'browser',
         jsx: 'automatic',
         sourcemap: false,
-        absWorkingDir: process.cwd(),
         inject: [path.resolve(__dirname, './stubs/process-global-shim.js')],
         define: {
           'process.env.NODE_ENV': '"development"',
-          global: 'window',
+          'process.env.TAMAGUI_TARGET': '"web"',
+          global: 'window'
         },
         plugins: [
-          {
-            name: 'check-duplicate-tamagui',
-            setup(build) {
-              build.onResolve({ filter: /^tamagui$/ }, (args) => {
-                return
-              })
-            },
-          },
           {
             name: 'esm-externals',
             setup(build) {
@@ -446,7 +477,9 @@ export const PagesAPI = (app, context) => {
           reactNativeSvgStubPlugin,
           stubFsPlugin,
           stubOsPlugin,
-          stubPathPlugin
+          stubPathPlugin,
+          stripCommentsPlugin,
+          tamaguiTargetPlugin
         ]
       });
   
