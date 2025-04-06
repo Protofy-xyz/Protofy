@@ -73,7 +73,7 @@ const setupProxyHandler = (name, subscribe, handle, server) => {
       return;
     }
 
-    const resolver = system.services.find((resolver) => resolver.route(req));
+    const resolver = system.services.filter(service => !service.disabled).find((resolver) => resolver.route(req));
 
     if (!resolver || resolver.name === name) {
       // console.log('No resolver found for: ' + req.url);
