@@ -11,7 +11,7 @@ import { API, Protofy } from 'protobase';
 import { SSR } from '../../lib/SSR';
 import { Center } from '../../components/Center';
 import dynamic from "next/dynamic";
-import ReactAccelorometerValue from 'reactaccelerometervalue'
+// import ReactAccelorometerValue from 'reactaccelerometervalue'
 import useCompass from "react-world-compass"
 import { useInterval } from 'usehooks-ts';
 import { useMqttState } from '../../lib/mqtt';
@@ -46,10 +46,10 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
         <Page height="99vh">
             <Center>
                 <ActiveFullScreen>
-                    <ReactAccelorometerValue>
+                    {/* <ReactAccelorometerValue>
                         {degree && <Accelerometer degrees={degree?.degree.toFixed(0)} />}
                         {degree && <div>Compass: {degree.degree}</div>}
-                    </ReactAccelorometerValue>
+                    </ReactAccelorometerValue> */}
                 </ActiveFullScreen>
             </Center>
         </Page>
