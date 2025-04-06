@@ -34,7 +34,7 @@
     "http-proxy": "^1.18.1",
     "leva": "^0.9.35",
     "mime-types": "^2.1.35",
-    "next": "15.2.4",
+    "next": "14.2.26",
     "next-seo": "6.5.0",
     "playwright": "1.41.0",
     "protobase": "*",
