@@ -239,7 +239,7 @@ export const createConfig = (aditionalConfig: any = {}) => {
 
 export const config = createConfig(uiConfig)
 
-export const staticConfig = createTamagui({
+export const staticConfig = () => createTamagui({
   ...defaultDataConfig,
   animations: createAnimations({
     bouncy: 'ease-in-out',
