@@ -40,7 +40,6 @@ export default {
     category: "actuators",
     keywords: ["brushless", "motor", "driver", "ODrive", "device", "can"],
     check: (node, nodeData) => {
-        console.log("🤖 ~ nodeData:", nodeData)
         return node.type == "CallExpression" && nodeData.to == 'odrivecan'
     },
     getComponent: (node, nodeData, children) => <ODriveCan color={getColor('odrivecan')} node={node} nodeData={nodeData} children={children} />,

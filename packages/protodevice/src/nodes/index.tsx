@@ -47,6 +47,7 @@ import MAX31865 from './MAX31865';
 import BMP280 from './BMP280';
 import NeopixelsDisplay from './NeopixelsDisplay';
 import ST7789V from './ST7789V';
+import Modem from './Modem';
 
 const deviceMasks = [
   Wifi,
@@ -95,7 +96,8 @@ const deviceMasks = [
   MAX31865,
   BMP280,
   NeopixelsDisplay,
-  ST7789V
+  ST7789V,
+  Modem
 ]
 
 const masksLength = deviceMasks.length
