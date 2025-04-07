@@ -1,37 +1,100 @@
-const fs = require('fs')
-//TODO: add support for other platforms
-const nodeSources = {
-    win: 'https://nodejs.org/dist/v20.17.0/win-x64/node.exe',
+const fs = require('fs');
+const https = require('https');
+const path = require('path');
+const AdmZip = require('adm-zip');
+const tar = require('tar');
+const os = require('os');
+const { chmodSync, renameSync, unlinkSync, mkdirSync, existsSync } = fs;
+
+const version = 'v20.17.0';
+const baseUrl = `https://nodejs.org/dist/${version}`;
+
+const targets = {
+  win: {
+    url: `${baseUrl}/node-${version}-win-x64.zip`,
+    out: 'node-win.exe',
+    extract: async (archivePath, outputPath) => {
+      const zip = new AdmZip(archivePath);
+      const entry = zip.getEntries().find(e => e.entryName.endsWith('node.exe'));
+      if (!entry) throw new Error('❌ No se encontró node.exe en el ZIP');
+      zip.extractEntryTo(entry.entryName, path.dirname(outputPath), false, true);
+      renameSync(path.join(path.dirname(outputPath), 'node.exe'), outputPath);
+    }
+  },
+  linux: {
+    url: `${baseUrl}/node-${version}-linux-x64.tar.gz`,
+    out: 'node-linux',
+    extract: async (archivePath, outputPath) => {
+      await tar.x({
+        file: archivePath,
+        cwd: path.dirname(outputPath),
+        filter: p => p.endsWith('/bin/node'),
+        strip: 1,
+      });
+      const extracted = path.join(path.dirname(outputPath), 'bin', 'node');
+      renameSync(extracted, outputPath);
+      chmodSync(outputPath, 0o755);
+    }
+  },
+  mac: {
+    url: `${baseUrl}/node-${version}-darwin-x64.tar.gz`,
+    out: 'node-macos',
+    extract: async (archivePath, outputPath) => {
+      await tar.x({
+        file: archivePath,
+        cwd: path.dirname(outputPath),
+        filter: p => p.endsWith('/bin/node'),
+        strip: 1,
+      });
+      const extracted = path.join(path.dirname(outputPath), 'bin', 'node');
+      renameSync(extracted, outputPath);
+      chmodSync(outputPath, 0o755);
+    }
+  }
+};
+
+async function download(url, dest) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(dest);
+    https.get(url, response => {
+      if (response.statusCode !== 200) {
+        reject(new Error(`Failed to download: ${response.statusCode}`));
+        return;
+      }
+      response.pipe(file);
+      file.on('finish', () => file.close(resolve));
+    }).on('error', reject);
+  });
 }
-//get platform: win32, linux, darwin
-const platform = process.platform === 'win32' ? 'win' : process.platform === 'linux' ? 'linux' : process.platform === 'darwin' ? 'mac' : null
 
-if(!platform || !nodeSources[platform]){
-    console.error('Platform not supported!')
-    process.exit(1)
+async function setupPlatform(key, config) {
+  const archivePath = path.join('bin', path.basename(config.url));
+  const finalPath = path.join('bin', config.out);
+
+  console.log(`⬇️  Descargando ${key}...`);
+  await download(config.url, archivePath);
+
+  console.log(`📦 Extrayendo ${key}...`);
+  try {
+    await config.extract(archivePath, finalPath);
+  } catch (err) {
+    console.error(`❌ Error extrayendo ${key}:`, err);
+    return;
+  }
+
+  console.log(`🧹 Eliminando archivo temporal ${path.basename(archivePath)}`);
+  unlinkSync(archivePath);
+  console.log(`✅ ${key} listo -> ${config.out}`);
 }
-//get filename from nodeSources
-const nodeSource = nodeSources[platform]
-//get filename from nodeSource
-const filename = nodeSource.split('/').pop()
 
-
-//check if bin contains node.exe if not, download
-const nodePath = './bin/'+filename
-
-if (!fs.existsSync(nodePath)) {
-    console.log('Downloading node...')
-    const https = require('https');
-    const fs = require('fs');
-    const file = fs.createWriteStream(nodePath);
-    https.get(nodeSource, function (response) {
-        response.pipe(file);
-        file.on('finish', function () {
-            file.close();
-            console.log('Node downloaded to bin folder!')
-        });
-    });
-} else {
-    console.log('Node already exists in bin folder!')
-    console.log('If you want to redownload it, delete the node.exe file in the bin folder!')
+async function main() {
+  if (!existsSync('bin')) mkdirSync('bin');
+  for (const [key, config] of Object.entries(targets)) {
+    await setupPlatform(key, config);
+  }
 }
+
+main().catch(err => {
+  console.error('❌ Error general:', err);
+  process.exit(1);
+});
