@@ -12,7 +12,8 @@
     "lint": "next lint",
     "test": "jest",
     "test:deps": "npx playwright install && npx playwright install-deps",
-    "clean": "shx rm -rf dist"
+    "clean": "shx rm -rf dist",
+    "app-package": "electron-builder -c electron-builder.yml build --dir"
   },
   "dependencies": {
     "@craftjs/core": "0.2.0-beta.8",
@@ -61,6 +62,8 @@
     "@types/jest": "~29.5.5",
     "@types/node": "^20.14.1",
     "@types/react": "^18.0.27",
+    "electron": "35.1.4",
+    "electron-builder": "26.0.12",
     "eslint-config-next": "^14.2.3",
     "jest": "~29.7.0",
     "next-compose-plugins": "^2.2.1",
