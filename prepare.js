@@ -8,6 +8,7 @@ if (!semver.satisfies(process.version, requiredVersion)) {
     process.exit(1);
 }
 const directories = [
+    "./bin",
     "./data",
     "./data/public",
     "./logs/raw",

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Protofy Logs</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: monospace;
+      background: #111;
+      color: #0f0;
+    }
+    textarea {
+      width: 100%;
+      height: 100vh;
+      background: #111;
+      color: #0f0;
+      border: none;
+      resize: none;
+      padding: 10px;
+      font-size: 14px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <textarea id="log" readonly></textarea>
+
+  <script>
+    const logBox = document.getElementById('log');
+
+    window.logAPI.onLog((message) => {
+      logBox.value += message + '\n';
+      logBox.scrollTop = logBox.scrollHeight;
+    });
+  </script>
+</body>
+</html>

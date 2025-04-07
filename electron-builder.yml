@@ -3,11 +3,25 @@ productName: Protofy
 mac:
   category: your.app.category
 win:
-  target: portable
+  target:
+    - target: portable
+      arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
+  signingHashAlgorithms: []
   sign: false
 linux:
   target: AppImage
 asar: false
 files:
-  - "**/*"
+  - '**/*'
+  - '!node_modules/.cache/'
+  - '!**/*.log'
+  - "!.git/"
+  - "!.gitignore"
+  - 'node_modules/**/*'
+buildDependenciesFromSource: false
+npmRebuild: false
+
+extraResources:
+  - from: ./node_modules
+    to: ./app/node_modules
