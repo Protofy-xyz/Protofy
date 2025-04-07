@@ -39,6 +39,7 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
+    outputFileTracing: false,
     output: process.env.STANDALONE ? 'standalone' : 'export',
     typescript: {
       ignoreBuildErrors: true,
