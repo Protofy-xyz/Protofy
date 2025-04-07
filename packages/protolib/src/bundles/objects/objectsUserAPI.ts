@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { z, Schema, BaseSchema, AutoModel, ProtoModel } from 'protobase';
-import { AutoAPI } from 'protonode'
+import { AutoActions, AutoAPI } from 'protonode'
 
 const reloadObjectAPIs = async (app, context) => {
     // list all objects
@@ -14,7 +14,6 @@ const reloadObjectAPIs = async (app, context) => {
         const objectData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
         if (objectData.features && objectData.features.AutoAPI) {
             const objModel = ProtoModel.getClassFromDefinition(objectData)
-
             // console.log('-------------------------------', {
             //     modelName: objectData.apiOptions.name,
             //     modelType: objModel,
@@ -28,6 +27,12 @@ const reloadObjectAPIs = async (app, context) => {
                 prefix: objectData.apiOptions.prefix,
             })
             ObjectAPI(app, context)
+
+            const Actions = AutoActions({
+                modelName: objectData.apiOptions.name,
+                modelType: objModel
+            });
+            Actions(app, context);
         }
     });
 }
