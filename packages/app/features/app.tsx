@@ -47,8 +47,8 @@ const getApp = (AppConfig, options={disablePreviewMode: false}) => {
         return (
           <>
             <Head>
-              <title>{projectName + " - AI Supercharged LowCode Platform CMS and Framework"}</title>
-              <meta name="description" content="Next Generation Development Platform for web, mobile and IoT. Based on proven tech: React, ChatGPT, ESPHome, Express, Next, Node, Tamagui, Zod, LevelDB an much more." />
+              <title>{projectName + " - AI Driven Machine Automation Platform"}</title>
+              <meta name="description" content="Natural Language Autopilot system for smart and industrial devices" />
               {/* <link rel="icon" href="/favicon.ico" /> */}
             </Head>
             <JotaiProvider>

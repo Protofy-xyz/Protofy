@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Protofy Logs</title>
   <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+    }
+
+    #root {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+
     body {
       margin: 0;
       font-family: monospace;
       background: #111;
       color: #0f0;
     }
+
     textarea {
       width: 100%;
       height: 100vh;
@@ -23,6 +40,7 @@
     }
   </style>
 </head>
+
 <body>
   <textarea id="log" readonly></textarea>
 
@@ -35,4 +53,5 @@
     });
   </script>
 </body>
+
 </html>

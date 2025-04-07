@@ -53,10 +53,13 @@ function waitForPort(port, timeout = 30000, interval = 500) {
 // Create log window (renderer.html)
 function createLogWindow() {
   logWindow = new BrowserWindow({
-    width: 800,
-    height: 400,
+    width: 900,
+    height: 700,
     title: 'Service Logs',
-    autoHideMenuBar: true, // 👈 Oculta la menubar
+    autoHideMenuBar: true,
+    // useContentSize: true,
+    resizable: true,
+    scrollBounce: false, // solo afecta en macOS
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
