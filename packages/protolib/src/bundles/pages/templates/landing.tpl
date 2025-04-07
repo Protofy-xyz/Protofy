@@ -1,10 +1,7 @@
 import { Theme, YStack, Text, XStack, Paragraph, SizableText } from "@my/ui";
 import { BigTitle} from 'protolib/components/BigTitle'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
 import { API, Protofy } from 'protobase';
-import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
-import { SSR } from 'protolib/lib/SSR';
 import { DefaultLayout, } from '../layout/DefaultLayout'
 import { TintSection } from 'protolib/components/TintSection';
 import { ContainerLarge } from 'protolib/components/Container';
@@ -29,13 +26,14 @@ import { RainbowText } from 'protolib/components/RainbowText';
 import { FeatureItem } from 'protolib/components/FeatureItem';
 import { PageGlow } from 'protolib/components/PageGlow';
 import { Grid } from 'protolib/components/Grid';
-import { useEdit } from 'protolib/visualui/useEdit';
 import { ChevronRight, Star } from "@tamagui/lucide-icons";
 import Link from "next/link";
 import { context } from "../bundles/uiContext";
 import { useRouter } from "solito/navigation";
 
 const isProtected = Protofy("protected", {{protected}})
+const permissions = isProtected?Protofy("permissions", {{{permissions}}}):null
+
 Protofy("pageType", "landing")
 
 const PageComponent = (props) => {
@@ -306,6 +304,5 @@ const PageComponent = (props) => {
     
 export default {
       route: Protofy("route", "{{route}}"),
-        component: (props) => PageComponent(props),
-        getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
+      component: (props) => PageComponent(props)
     }

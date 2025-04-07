@@ -1,5 +1,4 @@
 import { Protofy } from 'protobase'
-import { SSR } from 'protolib/lib/SSR';
 import { AdminPage } from 'protolib/components/AdminPage'
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { withSession } from 'protolib/lib/Session';
@@ -10,6 +9,7 @@ import { useAutopilotAgent } from 'protolib/lib/useAutopilotAgent';
 
 const isProtected = Protofy("protected", true)
 Protofy("pageType", "admin")
+const permissions = isProtected ? Protofy("permissions", []) : null
 
 const agentName = "{{agentName}}"
 const FallbackIcon = Tag
@@ -54,6 +54,5 @@ export default {
                 <AgentPanel agentName={agentName} />
             </XStack>
         </AdminPage>)
-    },
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
+    }
 }

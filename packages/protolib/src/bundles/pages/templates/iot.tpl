@@ -20,7 +20,7 @@ import { useRouter } from "solito/navigation";
 
 const isProtected = Protofy("protected", {{protected}})
 const sourceUrl = '/api/core/v1/devices'
-
+const permissions = isProtected?Protofy("permissions", {{{permissions}}}):null
 Protofy("pageType", "iot")
 
 export default {
@@ -46,6 +46,5 @@ export default {
           } }
         />
       </AdminPage>)
-    }, 
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []):undefined))
+    }
 }

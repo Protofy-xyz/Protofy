@@ -1,4 +1,5 @@
 .vercel
 public/tamagui.css
 analyze
+out
 dist

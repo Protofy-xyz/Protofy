@@ -7,9 +7,8 @@ import {withSession } from "protolib/lib/Session"
 import {SSR} from 'protolib/lib/SSR'
 
 const isProtected = Protofy("protected", false)
-
+const permissions = Protofy("permissions", null)
 const NotFound = () => {
-  console.log(withSession, SSR)
   return (
     <Page height="100vh">
       <DefaultLayout>
@@ -24,6 +23,5 @@ const NotFound = () => {
 
 export default {
     route: Protofy("route", "/404"),
-    component: NotFound,
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", []):undefined))
+    component: NotFound
 }

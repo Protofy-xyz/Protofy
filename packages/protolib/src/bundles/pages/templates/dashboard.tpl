@@ -15,6 +15,7 @@ import { BigTitle } from 'protolib/components/BigTitle'
 import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage, TotalUsers, LastEvents, ListPages, TotalObjects, ListLatestUsers, TotalGroups, ListGroups, TotalEvents } from 'protolib/bundles/widgets';
 
 const isProtected = Protofy("protected", {{protected}})
+const permissions = isProtected ? Protofy("permissions", []) : null
 
 const itemsContent = [
     { key: 'servicememorychart', content: <ServiceMemoryUsageChart title="Memory Usage" id={'servicememorychart'} /> },
@@ -85,6 +86,5 @@ export default {
             </YStack>
 
         </Page>)
-    },
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
+    }
 }

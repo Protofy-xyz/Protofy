@@ -6,7 +6,6 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Protofy, API } from 'protobase'
-import { SSR } from 'protolib/lib/SSR';
 import { AdminPage } from 'protolib/components/AdminPage'
 import { context } from '../bundles/uiContext'
 import { useRouter } from 'solito/navigation'
@@ -16,7 +15,7 @@ import { BigTitle} from 'protolib/components/BigTitle'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
-
+const permissions = isProtected ? Protofy("permissions", []) : null
 Protofy("pageType", "admin")
 
 export default {
@@ -27,6 +26,5 @@ export default {
                     <BigTitle>{{name}}</BigTitle>
                 </VStack>
         </AdminPage>)
-    }, 
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
+    }
 }

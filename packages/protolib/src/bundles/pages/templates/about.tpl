@@ -17,11 +17,7 @@ import { DiscordIcon } from 'protolib/components/icons/DiscordIcon';
 import { TwitterIcon } from 'protolib/components/icons/TwitterIcon';
 import { Protofy, API } from 'protobase'
 import { useComposedState } from 'protolib/lib/useComposedState'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
-import { useEditor } from 'protolib/visualui/useEdit'
-import { SSR } from 'protolib/lib/SSR'
 import React, { useState } from 'react'
-import Theme from 'visualui/src/components/Theme'
 import { DefaultLayout } from '../layout/DefaultLayout'
 import { context } from '../bundles/uiContext'
 import { useRouter } from 'solito/navigation'
@@ -29,6 +25,7 @@ import { Objects } from '../bundles/objects'
 
 const isProtected = Protofy("protected", false)
 Protofy("pageType", "about")
+const permissions = isProtected ? Protofy("permissions", []) : null
 
 const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
   const { cs, states } = useComposedState();
@@ -69,28 +66,8 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
     </Page >)
 }
 
-const cw = UIWrapLib('@my/ui')
 
 export default {
   route: Protofy("route", "{{route}}"),
-  component: (props) => {
-    const [currentView, setCurrentView] = useState("default");
-
-    return useEditor(
-      <PageComponent currentView={currentView} setCurrentView={setCurrentView} {...props} />,
-      {
-          path: "/packages/app/pages/{{name}}.tsx",
-          context: {
-            currentView: currentView,
-            setCurrentView: setCurrentView,
-            Objects: Objects
-          },
-          components: {
-            ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-            ...cw("Theme", Theme)
-          }
-      }, 
-    )
-  },
-  getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
+  component: (props) => <PageComponent {...props} />
 }

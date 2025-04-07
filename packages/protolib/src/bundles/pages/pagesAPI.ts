@@ -1,22 +1,23 @@
 import { PageModel } from ".";
-import { getSourceFile, getDefinition, AutoAPI, getRoot, addFeature, hasFeature, removeFeature } from 'protonode'
+import { getSourceFile, getDefinition, AutoAPI, getRoot, addFeature, hasFeature, removeFeature, getRoot } from 'protonode'
 import { promises as fs } from 'fs';
 import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
-import { getServiceToken } from 'protonode'
+import { getServiceToken, handler } from 'protonode'
 import { API } from 'protobase'
 import { ObjectModel } from "../objects/objectsSchemas";
 import admin from "app/workspaces/admin";
 import path from 'path';
-import * as esbuild from 'esbuild';
+import { v4 as uuidv4 } from 'uuid';
+import { generateEvent } from '../library';
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
 const adminPanelPagesDir = (root) => fspath.join(root, "/apps/next/pages/admin/")
-const publishedNextPagesDir = (root) => fspath.join(root, "/apps/next/dist/apps/next/.next/server/pages/")
-const publishedAdminPagesDir = (root) => fspath.join(root, "/apps/next/dist/apps/next/.next/server/pages/admin/")
-const publishedAdminRootPagesDir = (root) => fspath.join(root, "/apps/next/dist/apps/next/.next/server/pages/admin/")
+const publishedNextPagesDir = (root) => fspath.join(root, "/data/pages/")
+const publishedAdminPagesDir = (root) => fspath.join(root, "/data/pages/admin/")
+const publishedAdminRootPagesDir = (root) => fspath.join(root, "/data/pages/admin/")
 const electronPagesDir = (root) => fspath.join(root, "/apps/electron/pages/")
 
 const getPage = (pagePath, req) => {
@@ -28,17 +29,13 @@ const getPage = (pagePath, req) => {
   if (pageType) {
     pageTypeValue = pageType.getText().replace(/^["']|["']$/g, '')
   }
-
+  
   const prot = getDefinition(sourceFile, '"protected"')
   let permissions = getDefinition(sourceFile, '"permissions"')
   const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
   const adminPanelFilePath = fspath.join(adminPanelPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
   const publishedNextJSFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
   const publishedNextHTMLFilePath = fspath.join(publishedNextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
-  const publishedAdminJSFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
-  const publishedAdminHTMLFilePath = fspath.join(publishedAdminPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
-  const publishedAdminRootJSFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.js')
-  const publishedAdminRootHTMLFilePath = fspath.join(publishedAdminRootPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.html')
   const electronFilePath = fspath.join(electronPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
   if (!route || !permissions || !prot) return undefined
   if (permissions && ArrayLiteralExpression.is(permissions) && permissions.getElements) {
@@ -65,10 +62,7 @@ const getPage = (pagePath, req) => {
     web: syncFs.existsSync(nextFilePath),
     electron: syncFs.existsSync(electronFilePath),
     adminpanel: syncFs.existsSync(adminPanelFilePath),
-    status: {
-      web: syncFs.existsSync(publishedNextJSFilePath) || syncFs.existsSync(publishedNextHTMLFilePath) ? 'published' : 'unpublished',
-      adminpanel: syncFs.existsSync(publishedAdminJSFilePath) || syncFs.existsSync(publishedAdminHTMLFilePath) || syncFs.existsSync(publishedAdminRootJSFilePath) || syncFs.existsSync(publishedAdminRootHTMLFilePath) ? 'published' : 'unpublished'
-    },
+    status: syncFs.existsSync(publishedNextJSFilePath) || syncFs.existsSync(publishedNextHTMLFilePath) ? 'published' : 'unpublished',
     ...(objectName ? { object: objectName } : {})
   }
 }
@@ -279,226 +273,47 @@ const PagesAutoAPI = AutoAPI({
   requiresAdmin: ['*']
 })
 
-const tsAliasPlugin = {
-  name: 'ts-alias',
-  setup(build) {
-    // protolib/*
-    build.onResolve({ filter: /^protolib\/(.*)$/ }, args => {
-      const subPath = args.path.replace(/^protolib\//, '');
-      const basePath = path.resolve(process.cwd(), '../../packages/protolib/dist', subPath);
-
-      // Primero intentamos con .js (archivo directo)
-      const filePath = `${basePath}.js`;
-      if (syncFs.existsSync(filePath)) {
-        return { path: filePath, namespace: 'file' };
-      }
-
-      // Si no existe como archivo, intentamos como carpeta con index.js
-      const indexPath = path.join(basePath, 'index.js');
-      if (syncFs.existsSync(indexPath)) {
-        return { path: indexPath, namespace: 'file' };
-      }
-
-      // Si no se encuentra, dejamos que falle con error normal
-      return {
-        errors: [{
-          text: `No se encontró el módulo 'protolib/${subPath}' como archivo ni carpeta`,
-        }],
-      };
-    });
-  }
-};
-
-const reactNativeShimPlugin = {
-  name: 'react-native-alias',
-  setup(build) {
-    build.onResolve({ filter: /^react-native$/ }, () => ({
-      path: require.resolve('react-native-web'),
-    }));
-
-    // También puedes hacer algo parecido para otros shims:
-    build.onResolve({ filter: /^react-native-svg$/ }, () => ({
-      path: require.resolve('react-native-svg'),
-    }));
-  },
-};
-
-const reanimatedStubPlugin = {
-  name: 'stub-reanimated',
-  setup(build) {
-    build.onResolve({ filter: /^react-native-reanimated$/ }, () => ({
-      path: require.resolve('./stubs/react-native-reanimated.js'),
-    }));
-  }
-};
-
-const shimProcessPlugin = {
-  name: 'shim-process',
-  setup(build) {
-    build.onResolve({ filter: /^process$/ }, () => ({
-      path: require.resolve('./stubs/process.js'),
-    }));
-  }
-};
-
-const reactNativeSvgStubPlugin = {
-  name: 'stub-react-native-svg',
-  setup(build) {
-    build.onResolve({ filter: /^react-native-svg(\/.*)?$/ }, args => {
-      return {
-        path: path.resolve(__dirname, './stubs/react-native-svg.js'),
-        namespace: 'file',
-      };
-    });
-    build.onResolve({ filter: /react-native\/Libraries\/.*/ }, args => {
-      return {
-        path: path.resolve(__dirname, './stubs/react-native-empty.js'),
-        namespace: 'file',
-      };
-    });
-  }
-};
-
-const stubFsPlugin = {
-  name: 'stub-fs',
-  setup(build) {
-    build.onResolve({ filter: /^fs$/ }, () => ({
-      path: path.resolve(__dirname, './stubs/fs.js'),
-      namespace: 'file',
-    }));
-  }
-};
-
-const stubOsPlugin = {
-  name: 'stub-os',
-  setup(build) {
-    build.onResolve({ filter: /^os$/ }, () => ({
-      path: path.resolve(__dirname, './stubs/os.js'),
-      namespace: 'file',
-    }));
-  }
-};
-
-const stubPathPlugin = {
-  name: 'stub-path',
-  setup(build) {
-    build.onResolve({ filter: /^path$/ }, () => ({
-      path: path.resolve(__dirname, './stubs/path.js'),
-      namespace: 'file',
-    }));
-  }
-};
-
-const stripCommentsPlugin = {
-  name: 'strip-comments',
-  setup(build) {
-    build.onEnd((result) => {
-      const fs = require('fs')
-      const path = require('path')
-      for (const output of result.outputFiles || []) {
-        if (output.path.endsWith('.js')) {
-          const noComments = output.text
-            .replace(/\/\*[\s\S]*?\*\//g, '') // bloque /* */
-            .replace(/\/\/.*/g, '') // línea //
-          fs.writeFileSync(output.path, noComments)
-        }
-      }
-    })
-  }
-}
-
-const tamaguiTargetPlugin = {
-  name: 'tamagui-target',
-  setup(build) {
-    build.onLoad({ filter: /@tamagui\/constants/ }, async (args) => {
-      const contents = await fs.readFile(args.path, 'utf8')
-      const replaced = contents.replace(/process\.env\.TAMAGUI_TARGET/g, '"web"')
-      return {
-        contents: replaced,
-        loader: 'js',
-      }
-    })
-  },
-}
-
-const jsonwebtokenStubPlugin = {
-  name: 'stub-jsonwebtoken',
-  setup(build) {
-    build.onResolve({ filter: /^jsonwebtoken$/ }, () => ({
-      path: path.resolve(__dirname, './stubs/jsonwebtoken.js'),
-      namespace: 'file',
-    }))
-  }
-}
-
+const root = getRoot();
 export const PagesAPI = (app, context) => {
   PagesAutoAPI(app, context)
-  app.get('/api/core/v1/page/compile', async (req, res) => {
-    const page = req.query.page;
-    const sourceFile = path.resolve(process.cwd(), `../../data/pages/${page}.tsx`)
+  app.get('/api/core/v1/publish/pages', handler(async (req, res, session) => {
+    if (!session || !session.user.admin) {
+      res.status(401).send({ error: "Unauthorized" });
+      return;
+    }
 
-    // try {
-      const tsconfigPath = path.resolve(process.cwd(), '../../apps/next/tsconfig.json');
-      const result = await esbuild.build({
-        loader: {
-          '.js': 'jsx',
-          '.mjs': 'jsx',
-          '.ts': 'ts',
-          '.tsx': 'tsx',
-        },
-        absWorkingDir: path.resolve(process.cwd(), '../../'),
-        splitting: true,
-        minify: true,
-        entryPoints: [sourceFile],
-        entryNames: '[name]',
-        external: ['fs', 'path', 'os', 'crypto', 'stream', 'zlib', 'react-native', 'jsonwebtoken'],
-        write: true,
-        outdir: 'data/public/pages',
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        jsx: 'automatic',
-        sourcemap: false,
-        inject: [path.resolve(__dirname, './stubs/process-global-shim.js')],
-        define: {
-          'process.env.NODE_ENV': '"development"',
-          'process.env.TAMAGUI_TARGET': '"web"',
-          global: 'window'
-        },
-        plugins: [
-          {
-            name: 'esm-externals',
-            setup(build) {
-              build.onResolve({ filter: /^react$/ }, () => ({
-                path: path.resolve(process.cwd(), '../../data/public/externals/react.js'),
-                namespace: 'file',
-              }));
-          
-              build.onResolve({ filter: /^react-dom$/ }, () => ({
-                path: path.resolve(process.cwd(), '../../data/public/externals/react-dom.js'),
-                namespace: 'file',
-              }));
-            },
-          },
-          tsAliasPlugin,
-          reactNativeShimPlugin,
-          reanimatedStubPlugin,
-          shimProcessPlugin,
-          reactNativeSvgStubPlugin,
-          stubFsPlugin,
-          stubOsPlugin,
-          stubPathPlugin,
-          stripCommentsPlugin,
-          tamaguiTargetPlugin,
-          jsonwebtokenStubPlugin
-        ]
+    const buildId = uuidv4()
+
+    const _generateEvent = (type, payload?) => {
+      generateEvent({
+        path: 'publish/pages/' + type,
+        from: 'core',
+        user: session.user.id,
+        payload: { buildId, ...payload }
+      }, getServiceToken())
+    }
+    try {
+      const path = root + "apps/next/";
+
+      _generateEvent('start')
+      //run the package command
+      const { exec } = require('child_process');
+      exec('npm run publish', { cwd: path,  env: {...process.env, NODE_ENV:'production'}, windowsHide: true  }, (error, stdout, stderr) => {
+        if (error) {
+          console.error(`Error publishing pages: ${error}, stderr: ${stderr}`);
+          _generateEvent('error', { error })
+          res.status(500).send({ error: "Error publishing pages" });
+          return;
+        }
+
+        res.status(200).send({ message: "Pages published" });
+        console.log(`stdout: ${stdout}`);
+        _generateEvent('done', {output:stdout})
       });
-  
-      const js = result
-      res.status(200).json({ result: js });
-    // } catch (err) {
-    //   res.status(500).json({ error: err.message });
-    // }
-  });
-
+    } catch (e) {
+      console.error(`Error publishing pages: ${e}`);
+      _generateEvent('error', { error: e })
+      res.status(500).send({ error: "Error2 publishing pages" });
+    }
+  }));
 }

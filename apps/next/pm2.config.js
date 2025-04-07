@@ -11,7 +11,8 @@ const siteDev = {
   windowsHide: true,
   watch: false,
   env: {
-      NODE_ENV: 'development'
+      NODE_ENV: 'development',
+      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
   },
   cwd: currentDir,
   log_date_format: "YYYY-MM-DD HH:mm:ss",

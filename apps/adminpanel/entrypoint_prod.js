@@ -1,5 +1,7 @@
 const path = require('path')
 const fs = require('fs')
+const url = require('url')
+
 const dir = path.join(__dirname)
 process.env.NODE_ENV = 'production'
 process.chdir(__dirname)
@@ -8,6 +10,19 @@ const setupProxyHandler = require('../../packages/app/proxy')
 if(!fs.existsSync(path.join(__dirname, '../../node_modules/@my/protolib'))) {
   fs.mkdirSync(path.join(__dirname, '../../node_modules/@my/protolib/lib'), { recursive: true })
   fs.copyFileSync(path.join(__dirname, '../../packages/protolib/lib/RemoteTransport.ts'), path.join(__dirname, '../../node_modules/@my/protolib/lib/RemoteTransport.ts'))
+}
+
+const serveStaticFile = (filePath, res) => {
+  console.log('Serving static file:', filePath)
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.statusCode = 404
+      res.end('File not found')
+    } else {
+      res.statusCode = 200
+      res.end(data)
+    }
+  })
 }
 
 function extractNextConfig(script) {
@@ -54,7 +69,33 @@ if (fs.existsSync(path.join(__dirname, 'server.js'))) {
 
     setupProxyHandler('adminpanel', (subFn) => {
       listener = subFn
-    }, requestListener, server);
+    }, (req, res) => {
+      const parsedUrl = url.parse(req.url)
+      let pathname = parsedUrl.pathname
+      // Si la ruta no empieza por /workspace/ ni es exactamente /workspace
+      const isWorkspace = pathname === '/workspace' || pathname.startsWith('/workspace/')
+      if (!isWorkspace) {
+        //if pathname doesn't have extension, add .html
+        if(pathname == '/') {
+          pathname = '/index.html'
+        }
+        
+        if (!pathname.includes('.')) {
+          pathname += '.html'
+        }
+        const localPath = path.resolve(path.join('../../../../../data/pages', pathname))
+        //print cwd
+        fs.stat(localPath, (err, stats) => {
+          if (!err && stats.isFile()) {
+            return serveStaticFile(localPath, res)
+          } else {
+            requestListener(req, res);
+          }
+        })
+      } else {
+        requestListener(req, res);
+      } 
+    }, server);
 
     return server
   };

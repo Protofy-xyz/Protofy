@@ -9,23 +9,19 @@ Don't modify export default object
 */
 
 import React, { useState } from 'react'
-import { Theme } from '@my/ui'
 import { useComposedState } from 'protolib/lib/useComposedState'
 import { Text } from 'protolib/components/Text';
 import { VStack } from 'protolib/components/VStack';
-import { useEditor } from 'protolib/visualui/useEdit';
 import { BigTitle} from 'protolib/components/BigTitle'
-import { UIWrapLib, UIWrap } from 'protolib/visualui/visualuiWrapper'
 import { API, Protofy } from 'protobase';
-import { withSession } from 'protolib/lib/Session';
 import { Page } from 'protolib/components/Page';
-import { SSR } from 'protolib/lib/SSR';
 import { DefaultLayout, } from '../layout/DefaultLayout'
 import { context } from '../bundles/uiContext';
 import { useRouter } from 'solito/navigation';
 import { Objects } from '../bundles/objects';
 
 const isProtected = Protofy("protected", {{protected}})
+const permissions = isProtected?Protofy("permissions", {{{permissions}}}):null
 Protofy("pageType", "default")
 
 const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
@@ -44,31 +40,9 @@ const PageComponent = ({ currentView, setCurrentView, ...props }: any) => {
                 </VStack>
             </DefaultLayout>
         </Page>
-)
-}
-
-const cw = UIWrapLib('@my/ui')
+)}
 
 export default {
     route: Protofy("route", "{{route}}"),
-    component: (props) => {
-        const [currentView, setCurrentView] = useState("default");
-
-        return useEditor(
-            <PageComponent currentView={currentView} setCurrentView={setCurrentView} {...props} />,
-            {
-                path: "/packages/app/pages/{{name}}.tsx",
-                context: {
-                    currentView: currentView,
-                    setCurrentView: setCurrentView,
-                    Objects: Objects
-                },
-                components: {
-                    ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-                    ...cw("Theme", Theme)
-                }
-            },
-        )
-    },
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected?Protofy("permissions", {{{permissions}}}):undefined))
+    component: (props) => <PageComponent {...props} />
 }

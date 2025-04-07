@@ -39,7 +39,6 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
-    devIndicators: false,
     basePath: '/workspace',
     output: 'standalone',
     typescript: {

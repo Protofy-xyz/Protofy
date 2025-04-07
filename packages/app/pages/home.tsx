@@ -9,9 +9,7 @@ import HStack from "protolib/components/HStack";
 import Image from "protolib/components/Image";
 import { useComposedState } from "protolib/lib/useComposedState";
 import { withSession } from "protolib/lib/Session";
-import { useEditor } from "protolib/visualui/useEdit";
 import { SSR } from "protolib/lib/SSR";
-import { UIWrapLib, UIWrap } from "protolib/visualui/visualuiWrapper";
 import { DefaultLayout } from "../layout/DefaultLayout";
 import { Protofy } from "protobase";
 import { context } from "../bundles/uiContext";
@@ -19,6 +17,7 @@ import { useRouter } from "solito/navigation";
 import { Objects } from "../bundles/objects";
 
 const isProtected = Protofy("protected", false);
+const permissions = Protofy("permissions", null)
 
 const Home = ({ currentView, setCurrentView, props }: any) => {
   const { cs, states } = useComposedState();
@@ -73,25 +72,7 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
   );
 };
 
-const cw = UIWrapLib("@my/ui");
-
 export default {
-  route: Protofy("route", "/home"),
-  component: (props) => {
-    const [currentView, setCurrentView] = useState("default");
-
-    return useEditor(<Home currentView={currentView} setCurrentView={setCurrentView} {...props} />, {
-      path: "/packages/app/pages/home.tsx",
-      components: {
-        ...UIWrap("DefaultLayout", DefaultLayout, "../../../layout/DefaultLayout"),
-        ...cw("Theme", Theme),
-      },
-      context: {
-        currentView: currentView,
-        setCurrentView: setCurrentView,
-        Objects: Objects,
-      },
-    });
-  },
-  getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined)),
+  route: Protofy("route", "/"),
+  component: (props) => <Home {...props} />
 };

@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const { withTamagui } = require('@tamagui/next-plugin')
 const { join, resolve } = require('path')
-const webpack = require('webpack');
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.PROFILER_ENABLED === 'true',
 })
@@ -39,8 +39,7 @@ const plugins = [
 module.exports = function () {
   /** @type {import('next').NextConfig} */
   let config = {
-    devIndicators: false,
-    output: 'standalone',
+    output: process.env.STANDALONE ? 'standalone' : 'export',
     typescript: {
       ignoreBuildErrors: true,
     },
@@ -61,6 +60,7 @@ module.exports = function () {
       scrollRestoration: true
     },
     webpack: (config, options) => {
+      const webpack = options.webpack
       config.plugins.push(
         new webpack.IgnorePlugin({
           resourceRegExp: /^perf_hooks$/,
@@ -74,8 +74,8 @@ module.exports = function () {
           /can't resolve 'perf_hooks'/i
         ];
       }
-      config.resolve.alias['protolib'] = resolve(__dirname, '../../packages/protolib/src');
-      
+      config.resolve.alias['protolib'] = resolve(__dirname, '../../packages/protolib/dist');
+      config.externals = config.externals || []
       return config;
     }
   }

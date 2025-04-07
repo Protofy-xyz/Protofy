@@ -17,37 +17,15 @@ if (!fs.existsSync('./../../.env')) {
     }
 }
 
-if (!fs.existsSync('./dist/apps/next/server.js')) {
+if (!fs.existsSync('../../data/pages/')) {
     //run yarn package
     const { exec } = require('child_process');
     console.log("Compiling nextjs app...")
-    exec('yarn package', (err, stdout, stderr) => {
+    exec('yarn publish', (err, stdout, stderr) => {
         if (err) {
             console.error(err);
             return;
         }
         console.log(stdout);
     });
-}
-
-function copyFiles(source, target, skip = []) {
-    const files = fs.readdirSync(source);
-    files.forEach((file) => {
-        if (skip.includes(file)) return
-        const sourcePath = path.join(source, file);
-        const targetPath = path.join(target, file);
-
-        const stat = fs.statSync(sourcePath);
-
-        if (stat.isDirectory()) {
-            if(!fs.existsSync(targetPath)) { fs.mkdirSync(targetPath) }
-            copyFiles(sourcePath, targetPath);
-        } else {
-            fs.copyFileSync(sourcePath, targetPath);
-        }
-    });
-}
-
-if(fs.existsSync('dist/')) {
-    fs.copyFileSync('../../system.js', 'dist/system.js')
 }

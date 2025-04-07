@@ -19,5 +19,3 @@ export default function ProfilePage(props:any) {
     </>
   )
 }
-
-export const getServerSideProps = SSR(async (context:NextPageContext) => withSession(context, []))

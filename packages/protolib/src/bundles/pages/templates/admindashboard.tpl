@@ -6,7 +6,6 @@ Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "tota
 */
 
 import { Protofy, API } from 'protobase'
-import { SSR } from 'protolib/lib/SSR';
 import { AdminPage } from 'protolib/components/AdminPage'
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { withSession } from 'protolib/lib/Session';
@@ -14,6 +13,7 @@ import { YStack } from '@my/ui';
 import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage, TotalUsers, LastEvents, ListPages, TotalObjects, ListLatestUsers, TotalGroups, ListGroups, TotalEvents } from 'protolib/bundles/widgets';
 
 const isProtected = Protofy("protected", {{protected}})
+const permissions = isProtected ? Protofy("permissions", []) : null
 
 const itemsContent =  [
     { key: 'servicememorychart', content: <ServiceMemoryUsageChart title="Memory Usage" id={'servicememorychart'} /> },
@@ -82,6 +82,5 @@ export default {
                     <DashboardGrid items={itemsContent} layouts={layouts} borderRadius={10} padding={10} backgroundColor="white" />
                 </YStack>
         </AdminPage>)
-    }, 
-    getServerSideProps: SSR(async (context) => withSession(context, isProtected ? Protofy("permissions", []) : undefined))
+    }
 }

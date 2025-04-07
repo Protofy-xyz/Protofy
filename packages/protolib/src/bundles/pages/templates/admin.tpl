@@ -16,6 +16,7 @@ import { useRouter } from 'solito/navigation'
 
 const Icons =  {}
 const isProtected = Protofy("protected", {{protected}})
+const permissions = isProtected?Protofy("permissions", {{{permissions}}}):null
 const {name, prefix} = Objects.{{rawObject}}.getApiOptions()
 const apiUrl = prefix + name
 
@@ -38,6 +39,5 @@ export default {
                 hideFilters={false}
             />
         </AdminPage>)
-    }, 
-    getServerSideProps: (context) => PaginatedDataSSR(apiUrl, isProtected?Protofy("permissions", {{{permissions}}}):undefined)(context)
+    }
 }

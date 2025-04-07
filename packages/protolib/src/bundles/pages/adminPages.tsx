@@ -1,12 +1,13 @@
 import { PageModel } from '.'
 import { DataView } from '../../components/DataView'
 import { DataTable2 } from '../../components/DataTable2'
+import { IconContainer } from '../../components/IconContainer'
 import { Chip } from '../../components/Chip'
 import { API, z } from 'protobase'
 import { InteractiveIcon } from '../../components/InteractiveIcon'
 import { AdminPage } from '../../components/AdminPage'
-import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text } from '@my/ui'
-import { ExternalLink, Pencil } from '@tamagui/lucide-icons'
+import { XStack, YStack, useThemeName, useToastController, ScrollView, Spacer, Text, Spinner } from '@my/ui'
+import { ExternalLink, Pencil, Save, Workflow, Code, Ban, Check, X, UploadCloud } from '@tamagui/lucide-icons'
 import { usePageParams } from '../../next';
 import { useState } from 'react'
 import { getPendingResult } from 'protobase'
@@ -19,6 +20,8 @@ import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from '../templates'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 import { PaginatedData } from '../../lib/SSR'
+import { useEventEffect } from '../events/hooks/useEventEffect'
+import { Tinted } from '../../components/Tinted'
 
 const PageIcons = {}
 const sourceUrl = '/api/core/v1/pages'
@@ -66,6 +69,44 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
     />
 }
 
+type PublishButtonStates = "available" | "unavailable" | "loading" | "error"
+
+const PublishButton = ({ checkStatus = () => true, defaultState = 'available', onSave = () => { } }) => {
+    const [state, setState] = useState(defaultState)
+
+    const onEvent = (event) => {
+        setState(defaultState)
+        onSave()
+    }
+
+    const onEventCrash = () => {
+        setState("error")
+    }
+
+    const onEventStart = () => {
+        setState("loading")
+    }
+
+    useEventEffect(onEventStart, { path: 'publish/pages/start' })
+    useEventEffect(onEvent, { path: 'publish/pages/done' })
+    useEventEffect(onEventCrash, { path: 'publish/pages/error' })
+
+    const _onSave = async () => {
+        API.get('/api/core/v1/publish/pages');
+    };
+
+    return (
+        <XStack>
+            {<IconContainer disabled={state == 'unavailable'} onPress={_onSave}>
+                {state != 'error' && state !== 'loading' && <UploadCloud color="var(--color)" size={"$1"} />}
+                {state == 'error' && <Ban color="var(--red10)" size={"$1"} />}
+                {/*@ts-ignore*/}
+                {state == "loading" && <Spinner color={"$color"} opacity={0.5} size={17} />}
+            </IconContainer>}
+        </XStack>
+    );
+};
+
 export default {
     'pages': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
@@ -77,11 +118,18 @@ export default {
             const [data, setData] = useState(defaultData)
             const toast = useToastController()
             const [error, setError] = useState<any>('')
+            const [currentId, setCurrentId] = useState(0)
 
             useUpdateEffect(() => {
                 setError('')
                 setData(defaultData)
             }, [addOpen])
+
+            const onEvent = async () => {
+                setCurrentId(currentId + 1)
+            }
+
+            useEventEffect(onEvent, { path: 'publish/pages/done' })
 
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
             const host = typeof window !== 'undefined' ? window.location.hostname : ''
@@ -147,8 +195,16 @@ export default {
                 </AlertDialog>
 
                 <DataView
+                    key={currentId}
+                    toolBarContent={
+                        <XStack mr={"$2"} f={1} jc='flex-end'>
+                            <Tinted>
+                                <PublishButton />
+                            </Tinted>
+                        </XStack>
+                    }
                     sourceUrl={sourceUrl}
-                    initialItems={initialItems}
+                    initialItems={currentId == 0 ? initialItems: undefined}
                     numColumnsForm={2}
                     name="page"
                     rowIcon={() => <></>}
@@ -156,7 +212,9 @@ export default {
                     columns={DataTable2.columns(
                         DataTable2.column("", () => "", false, (row) => {
                             let route = row.route.startsWith('/') ? row.route : '/' + row.route
-
+                            if (row.status != 'published') {
+                                return <InteractiveIcon disabled={true} Icon={ExternalLink}></InteractiveIcon>
+                            }
                             return <a href={route} target='_blank'>
                                 <InteractiveIcon Icon={ExternalLink}></InteractiveIcon>
                             </a>
@@ -164,7 +222,7 @@ export default {
                         DataTable2.column("name", row => row.name, "name", (row) => <XStack id={"pages-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("route", row => row.route, "route"),
                         DataTable2.column("visibility", row => row.protected, "protected", row => !row.protected ? <Chip text={'public'} color={'$color5'} /> : <Chip text={'protected'} color={'$gray5'} />),
-                        DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
+                        DataTable2.column("permissions", row => row.permissions, "permissions", row => row.permissions?.map && row.permissions.map((p, k) => <XStack key={k} ml={k ? 10 : 0}><Chip text={p} color={'$gray5'} /></XStack>)),
                     )}
                     onAddButton={() => { setAddOpen(true) }}
                     extraMenuActions={[

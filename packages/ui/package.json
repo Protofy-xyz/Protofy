@@ -22,7 +22,7 @@
       "import": "./dist/jsx/tamagui.config.js",
       "require": "./dist/cjs/tamagui.config.js"
     }
-  }, 
+  },
   "scripts": {
     "build": "tamagui-build",
     "watch": "tamagui-build --watch"
