@@ -8,19 +8,20 @@ process.chdir(__dirname);
 console.log('🟢 Starting app...');
 console.log('📁 Current directory:', __dirname);
 
-// Evita bucles infinitos
+// Avoid recursion
 if (process.env.IS_ECOSYSTEM_CHILD === '1') {
   console.log('🚫 Detected child process. Exiting to avoid recursion.');
   process.exit(0);
 }
 
 const PORT = 8000;
-let mainWindow;
+let logWindow = null;
+let mainWindow = null;
 
 function logToRenderer(msg) {
   console.log(msg);
-  if (mainWindow) {
-    mainWindow.webContents.send('log', msg);
+  if (logWindow) {
+    logWindow.webContents.send('log', msg);
   }
 }
 
@@ -49,32 +50,58 @@ function waitForPort(port, timeout = 30000, interval = 500) {
   });
 }
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 1024,
-    height: 768,
+// Create log window (renderer.html)
+function createLogWindow() {
+  logWindow = new BrowserWindow({
+    width: 800,
+    height: 400,
+    title: 'Service Logs',
+    autoHideMenuBar: true, // 👈 Oculta la menubar
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, 'renderer.html'));
+  logWindow.loadFile(path.join(__dirname, 'renderer.html'));
+  logWindow.on('closed', () => {
+    logWindow = null;
+  });
+}
+
+// Create main window (localhost:8000)
+function createMainWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 768,
+    title: 'Main App',
+    autoHideMenuBar: true, // 👈 Oculta la menubar
+  });
+
+  mainWindow.loadURL('http://localhost:8000');
+
+  mainWindow.on('closed', () => {
+    app.quit(); // Quit app if main window is closed
+  });
 }
 
 app.whenReady().then(async () => {
   try {
     const nodeBin = getNodeBinary(__dirname);
-    await startPM2({ ecosystemFile: path.join(__dirname, 'ecosystem.config.js'), nodeBin, onLog: logToRenderer });
+    await startPM2({
+      ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),
+      nodeBin,
+      onLog: logToRenderer,
+    });
+
+    createLogWindow(); // Show logs immediately
+
     logToRenderer('⏳ Waiting for port 8000...');
     await waitForPort(PORT);
-    logToRenderer('✅ Port 8000 ready. Opening UI...');
-    createWindow();
+
+    logToRenderer('✅ Port 8000 ready. Opening main window...');
+    createMainWindow();
   } catch (err) {
     logToRenderer(`❌ Startup failed: ${err.message}`);
     process.exit(1);
   }
-});
-
-app.on('window-all-closed', () => {
-  app.quit();
 });
