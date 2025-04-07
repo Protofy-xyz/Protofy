@@ -20726,12 +20726,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:0.279.0":
-  version: 0.279.0
-  resolution: "lucide-react@npm:0.279.0"
+"lucide-react@npm:0.487.0":
+  version: 0.487.0
+  resolution: "lucide-react@npm:0.487.0"
   peerDependencies:
-    react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: 10/60a9483dff2e48fa23a6732512be61f55797e04ebd5260f9c81da8d00274511faeb02347de15c63e524fca57b600b368ff666b1a918bf19cf1931099115883dd
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/b56363d067c6ef848f79710584a7c5e8306c877401dbaad6a224ed612b62a3dc0cd238dd2c09d7f4ff8534eb40d049f63056e6e86feb1f839d99ae3f49382687
   languageName: node
   linkType: hard
 
@@ -24437,7 +24437,7 @@ __metadata:
     deep-diff: "npm:1.0.2"
     elkjs: "npm:0.8.2"
     immer: "npm:9.0.5"
-    lucide-react: "npm:0.279.0"
+    lucide-react: "npm:0.487.0"
     prettier: "npm:^2.8.1"
     react: "npm:~18.2.0"
     react-color: "npm:2.19.3"
