@@ -32,7 +32,7 @@
     "add-user": "yarn workspace core add-user",
     "build": "yarn workspaces foreach -t --all run build",
     "docker-build": "yarn workspaces foreach -t --all run docker-build",
-    "package": "yarn workspaces foreach --all run clean && yarn prepare-dev",
+    "package": "yarn prepare-dev && yarn package-fast",
     "package-apis": "yarn workspace core package",
     "package-fast": "yarn workspaces foreach --all run package",
     "status": "pm2 status",
