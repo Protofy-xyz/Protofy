@@ -1,23 +1,22 @@
 import {
     Router,
-    Inbox,
-    Library,
-    ToyBrick,
     Key,
     Cog,
     Database,
-    DatabaseBackup,
-    Package,
     Boxes,
     Box,
     LayoutDashboard,
-    Power,
-    FileCog,
-    Bot,
-    Plus,
     Zap,
     Wrench
 } from '@tamagui/lucide-icons'
+import { MonitorCog as RawMonitorCog } from 'lucide-react'
+import { styled } from 'tamagui'
+const MonitorCog = styled(RawMonitorCog, {
+    name: 'MonitorCog',
+    size: '$true',
+    color: 'currentColor',
+  }
+)
 import {
     ServiceMemoryUsageChart,
     TotalMemoryUsage,
@@ -32,7 +31,6 @@ import {
     TotalEvents
 } from '../bundles/widgets'
 
-import { DashboardCard } from 'protolib/components/DashboardCard'
 
 const enableBoards = true   
 
@@ -111,7 +109,7 @@ export default ({ pages, boards, objects }) => {
             ...(enableBoards) ? {
                 "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
                     return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
-                }) : []).concat([{ "name": "Create Board", "icon": Plus, "href": '/workspace/boards' }]))
+                }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
             } : {},
             ...(objectsWithPage.length ? {
                 "CMS Objects": objectsWithPage.map((obj) => {
