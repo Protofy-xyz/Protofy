@@ -5,7 +5,6 @@ const logout = (setSession, setSessionContext) => {
 }
 
 export default [
-    { label: "Profile", path: "/profile", visibility: session => session.loggedIn },
     {
         label: (workspace, session) => workspace.label,
         path: (workspace, session) => workspace.default,

@@ -6,7 +6,7 @@ export default function SessionInfo() {
     return (
       <>
         {
-          session.loggedIn ? <HeaderLink suppressHydrationWarning={true} id="header-session-user-id" href="/profile">{session.user.id}</HeaderLink> : <HeaderLink href="/auth/login" id="header-login-link" suppressHydrationWarning={true}>Login</HeaderLink>
+          session.loggedIn ? <></>: <HeaderLink href="/auth/login" id="header-login-link" suppressHydrationWarning={true}>Login</HeaderLink>
         }
       </>
     )
