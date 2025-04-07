@@ -59,7 +59,7 @@
     "protofy-update": "git fetch protofy && git rebase protofy/main && yarn clean",
     "python": "node apps/python/run.js",
     "git-origin-setup": "node git-origin-setup.js",
-    "app-package": "electron-builder -c electron-builder.yml build",
+    "app-package": "electron-builder -c electron-builder.yml build && node electron-copy.js",
     "download-binaries": "node download-bins.js"
   },
   "resolutions": {

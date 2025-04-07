@@ -18,10 +18,5 @@ files:
   - '!**/*.log'
   - "!.git/"
   - "!.gitignore"
-  - 'node_modules/**/*'
 buildDependenciesFromSource: false
 npmRebuild: false
-
-extraResources:
-  - from: ./node_modules
-    to: ./app/node_modules
