@@ -7,7 +7,6 @@
     "apps/api",
     "apps/next",
     "apps/adminpanel",
-    "apps/nextra",
     "apps/python",
     "packages/*",
     "scripts",
