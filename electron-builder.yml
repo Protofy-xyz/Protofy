@@ -4,10 +4,10 @@ mac:
   category: your.app.category
 win:
   target: portable
-  icon: "public/favicon.ico"
+  icon: "apps/adminpanel/public/favicon.ico"
+  sign: false
 linux:
   target: AppImage
 asar: false
 files:
   - "**/*"
-  - "!**/{.next/cache/**/*,.next/cache}"

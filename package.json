@@ -57,7 +57,8 @@
     "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
     "protofy-update": "git fetch protofy && git rebase protofy/main && yarn clean",
     "python": "node apps/python/run.js",
-    "git-origin-setup": "node git-origin-setup.js"
+    "git-origin-setup": "node git-origin-setup.js",
+    "app-package": "electron-builder -c electron-builder.yml build"
   },
   "resolutions": {
     "react": "18.2.0",
@@ -85,6 +86,8 @@
   },
   "packageManager": "yarn@3.5.1",
   "devDependencies": {
+    "electron": "29.4.6",
+    "electron-builder": "24.13.3",
     "npm-run-all": "^4.1.5",
     "ts-node": "10.9.1",
     "typescript": "5.8.2"
