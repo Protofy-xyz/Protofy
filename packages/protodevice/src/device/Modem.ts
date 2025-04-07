@@ -45,6 +45,10 @@ class Modem {
     //if pin_code is provided, add it to the config 
     if (this.pin_code.length > 0) {
       componentObjects[1].config.pin_code = this.pin_code
+    }      
+    deviceComponents["esp32"].framework.sdkconfig_options = {
+      CONFIG_ESP_TASK_WDT_TIMEOUT_S: "60",
+      ESP_MODEM_CMUX_DEFRAGMENT_PAYLOAD: "n"
     }
     componentObjects.forEach((element, j) => {
         if (!deviceComponents[element.name]) {
