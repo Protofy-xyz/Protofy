@@ -5,18 +5,18 @@ const net = require('net');
 const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const { genToken } = require('protonode')
-//set node env to production
-const isDev = process.argv.includes('--dev')
-const isFullDev = process.argv.includes('--coredev')
+
+const minimist = require('minimist');
+const args = minimist(process.argv.slice(1));
+const isDev = args.dev || false;
+const isFullDev = args.coredev || false;
+const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/dashboard';
 
 // 🔧 Setear NODE_ENV solo si no estaba seteado ya
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = isDev ? 'development' : 'production'
 }
 
-if (isFullDev) {
-  process.env.FULL_DEV = '1'
-}
 
 // 
 process.chdir(__dirname);
@@ -58,12 +58,19 @@ const genNewSession = () => {
 
 const userSession = genNewSession()
 
-function waitForPortHttp(port, path = '/', timeout = 30000, interval = 500) {
+function waitForPortHttp(url, timeout = 30000, interval = 500) {
+  //get port host and path from url
+  const urlObj = new URL(url);
+  const port = urlObj.port || (urlObj.protocol === 'http:' ? 80 : 443);
+  const path = urlObj.pathname || '/';
+  const hostname = urlObj.hostname || 'localhost';
+
+
   return new Promise((resolve, reject) => {
     const start = Date.now();
 
     const check = () => {
-      const req = http.get({ hostname: '127.0.0.1', port, path, timeout: 2000 }, res => {
+      const req = http.get({ hostname, port, path, timeout: 2000 }, res => {
         if (res.statusCode >= 200 && res.statusCode < 400) {
           resolve(); // ✅ Servidor disponible y responde correctamente
         } else {
@@ -148,7 +155,7 @@ function createMainWindow() {
         logWindow.close();
       }
 
-      mainWindow.loadURL('http://localhost:8000/workspace/dashboard');
+      mainWindow.loadURL(initialUrl);
 
 
       let isQuitting = false;
@@ -202,7 +209,7 @@ app.whenReady().then(async () => {
     await coreStarted;
 
     logToRenderer('⏳ Waiting for port 8000...');
-    await waitForPortHttp(PORT, '/workspace/dashboard');
+    await waitForPortHttp(initialUrl);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     logToRenderer('✅ Port 8000 ready. Opening main window...');
