@@ -19,7 +19,8 @@ module.exports = {
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",
             out_file: '../../logs/raw/core-dev.stdout.log',
-            error_file: '../../logs/raw/core-dev.stderr.log'
+            error_file: '../../logs/raw/core-dev.stderr.log',
+            vizion: false
         } : {
             name: 'core',
             script: 'src/index.ts',
@@ -34,7 +35,8 @@ module.exports = {
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",
             out_file: '../../logs/raw/core.stdout.log',
-            error_file: '../../logs/raw/core.stderr.log'
+            error_file: '../../logs/raw/core.stderr.log',
+            vizion: false
         }
     ],
 };

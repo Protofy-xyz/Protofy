@@ -17,7 +17,8 @@ const api = {
     cwd: currentDir,
     log_date_format: "YYYY-MM-DD HH:mm:ss",
     out_file: '../../logs/raw/api.stdout.log',
-    error_file: '../../logs/raw/api.stderr.log'
+    error_file: '../../logs/raw/api.stderr.log',
+    vizion: false
 }
 
 const apiDev = {
@@ -34,7 +35,8 @@ const apiDev = {
     cwd: currentDir,
     log_date_format: "YYYY-MM-DD HH:mm:ss",
     out_file: '../../logs/raw/api-dev.stdout.log',
-    error_file: '../../logs/raw/api-dev.stderr.log'
+    error_file: '../../logs/raw/api-dev.stderr.log',
+    vizion: false
 }
 
 module.exports = {

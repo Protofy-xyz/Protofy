@@ -19,7 +19,8 @@ const siteDev = {
   log_date_format: "YYYY-MM-DD HH:mm:ss",
   out_file: '../../logs/raw/adminpanel-dev.stdout.log',
   error_file: '../../logs/raw/adminpanel-dev.stderr.log',
-  node_args: '--max-old-space-size=4096'
+  node_args: '--max-old-space-size=4096',
+  vizion: false
 }
 
 const site = {
@@ -37,7 +38,8 @@ const site = {
   log_date_format: "YYYY-MM-DD HH:mm:ss",
   out_file: '../../logs/raw/adminpanel.stdout.log',
   error_file: '../../logs/raw/adminpanel.stderr.log',
-  node_args : '-r dotenv/config'
+  node_args : '-r dotenv/config',
+  vizion: false
 }
 
 module.exports = {
