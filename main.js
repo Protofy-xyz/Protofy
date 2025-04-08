@@ -11,6 +11,7 @@ const args = minimist(process.argv.slice(1));
 const isDev = args.dev || false;
 const isFullDev = args.coredev || false;
 const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/dashboard';
+const fullscreen = args.fullscreen || false;
 
 // 🔧 Setear NODE_ENV solo si no estaba seteado ya
 if (!process.env.NODE_ENV) {
@@ -111,6 +112,7 @@ function createLogWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
+    fullscreen: fullscreen,
   });
 
   logWindow.loadFile(path.join(__dirname, 'renderer.html'));
@@ -147,6 +149,7 @@ function createMainWindow() {
           contextIsolation: false,
           nodeIntegration: false,
         },
+        fullscreen: fullscreen
       });
 
       mainWindow.maximize();
