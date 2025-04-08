@@ -51,6 +51,7 @@ const strokeWidth = 2
 const color = '$color8'
 const size = 20
 
+const appId = process.env.NEXT_PUBLIC_APP_ID;
 
 const iconTable = {
     database: <Server color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
@@ -89,7 +90,13 @@ const iconTable = {
 }
 
 const replaceFirstCharIfSlash = (str) => (str.startsWith('/') ? str.replace(/^./, '') : str);
-const healthCheckLinkRoute = (str) => (str.startsWith('/') ? str : ("/" + str));
+const healthCheckLinkRoute = (str) => {
+    if(appId == 'adminpanel' && str.startsWith('/workspace/')) {
+        //remove /workspace/ from the start of the string
+        str = str.replace('/workspace/', '/')
+    }
+    return str.startsWith('/') ? str : ("/" + str)
+};
 
 const getIcon = (Icon) => {
     if (typeof Icon === "string") {
@@ -165,7 +172,7 @@ const Subtabs = ({ tabs, subtabs }: any) => {
                         text={subtab.name}
                     />
                 </Tinted>
-                if (subtab.external || subtab.href) {
+                if (subtab.external || (!subtab.href?.startsWith('/workspace/') && appId == 'adminpanel')) {
                     return <a href={href} key={index}>
                         {content}
                     </a>

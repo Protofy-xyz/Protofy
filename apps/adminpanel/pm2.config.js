@@ -11,7 +11,9 @@ const siteDev = {
   windowsHide: true,
   watch: false,
   env: {
-      NODE_ENV: 'development'
+      NODE_ENV: 'development',
+      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env'),
+      NEXT_PUBLIC_APP_ID: 'adminpanel'
   },
   cwd: currentDir,
   log_date_format: "YYYY-MM-DD HH:mm:ss",
@@ -28,7 +30,8 @@ const site = {
   env: {
       NODE_ENV: 'production',
       PORT: 8000,
-      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
+      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env'),
+      NEXT_PUBLIC_APP_ID: 'adminpanel'
   },
   cwd: path.join(currentDir, 'dist/apps/adminpanel'),
   log_date_format: "YYYY-MM-DD HH:mm:ss",

@@ -12,7 +12,8 @@ const siteDev = {
   watch: false,
   env: {
       NODE_ENV: 'development',
-      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
+      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env'),
+      NEXT_PUBLIC_APP_ID: 'next'
   },
   cwd: currentDir,
   log_date_format: "YYYY-MM-DD HH:mm:ss",
@@ -29,7 +30,8 @@ const site = {
   env: {
       NODE_ENV: 'production',
       PORT: 3000,
-      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env')
+      DOTENV_CONFIG_PATH: path.resolve(__dirname, '../../.env'),
+      NEXT_PUBLIC_APP_ID: 'next'
   },
   cwd: path.join(currentDir, 'dist/apps/next'),
   log_date_format: "YYYY-MM-DD HH:mm:ss",

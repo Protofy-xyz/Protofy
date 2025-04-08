@@ -55,7 +55,7 @@ const getPage = (pagePath, req) => {
 
   return {
     name: fspath.basename(pagePath, fspath.extname(pagePath)),
-    route: pageTypeValue == 'admin' ? '/admin' + routeValue : routeValue,
+    route: pageTypeValue == 'admin' && !routeValue.startsWith('/admin') ? '/admin' + routeValue : routeValue,
     pageType: pageTypeValue,
     protected: prot.getText() == 'false' ? false : true,
     permissions: permissions,
