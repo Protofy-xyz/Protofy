@@ -8,6 +8,7 @@ import {
   XStack,
 } from '@my/ui'
 import { SiteConfig } from '@my/config/dist/AppConfig'
+import { isElectron } from '../../lib/isElectron'
 
 export type HeaderContentsProps = {
   logoSize?: number,
@@ -29,6 +30,13 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
 
   const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
   const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
+
+  const [showMenu, setShowMenu] = React.useState(false)
+  React.useEffect(() => {
+    if (!isElectron()) {
+      setShowMenu(true)
+    }
+  }, []);
   return (
     <XStack f={1} pt="$3" >
       <XStack ai="center" space="$4">
@@ -81,7 +89,7 @@ export const HeaderContents = React.memo(({leftArea, centerArea,rightArea, logo,
       >
         <XStack ai="center" space="$3">
           {rightArea}
-          {menu}
+          {showMenu && menu}
         </XStack>
       </XStack>
     </XStack>
