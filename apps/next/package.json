@@ -8,7 +8,7 @@
     "dev-service": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js",
     "prod": "NODE_ENV=production pm2 start pm2.config.js --no-daemon",
     "dev": "FULL_DEV=1 NODE_ENV=development pm2 start pm2.config.js --no-daemon",
-    "package": "node isEnabled.js && shx rm -rf dist && STANDALONE=1 next build && node copy-assets.js && shx mv .next/standalone dist && npx shx cp ../../packages/app/proxy.js ./dist/packages/app/proxy.js && npx shx cp ../../system.js ./dist/system.js && shx cp entrypoint_prod.js dist/apps/next/entrypoint.js",
+    "package": "node isEnabled.js && shx rm -rf dist && NEXT_PUBLIC_APP_ID=next STANDALONE=1 next build && node copy-assets.js && shx mv .next/standalone dist && npx shx cp ../../packages/app/proxy.js ./dist/packages/app/proxy.js && npx shx cp ../../system.js ./dist/system.js && shx cp entrypoint_prod.js dist/apps/next/entrypoint.js",
     "publish": "next build && shx rm -rf ../../data/pages && shx mv out ../../data/pages",
     "lint": "next lint",
     "test": "jest",
