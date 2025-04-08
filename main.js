@@ -6,8 +6,19 @@ const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const {genToken} = require('protonode')
 //set node env to production
-process.env.NODE_ENV = 'production';
+const isDev = process.argv.includes('--dev')
+const isFullDev = process.argv.includes('--coredev')
 
+// 🔧 Setear NODE_ENV solo si no estaba seteado ya
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = isDev ? 'development' : 'production'
+}
+
+if(isFullDev) {
+  process.env.FULL_DEV = '1'
+}
+
+// 
 process.chdir(__dirname);
 //load envars from .env file
 require('dotenv').config({ path: path.join(__dirname, '.env') });
