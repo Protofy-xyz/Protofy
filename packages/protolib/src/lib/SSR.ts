@@ -42,6 +42,7 @@ export function PaginatedDataSSR(sourceUrl: string|Function, permissions?:string
     }), {}) ?? {}
 
     const _dataProps = {
+      ...context.query,
       ...filters,
       itemsPerPage: parseInt(context.query.itemsPerPage as string) ? parseInt(context.query.itemsPerPage as string) : '',
       page: parseInt(context.query.page as string, 10) ? parseInt(context.query.page as string, 10) : '',
