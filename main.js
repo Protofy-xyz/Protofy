@@ -147,7 +147,7 @@ function createMainWindow() {
 
 app.whenReady().then(async () => {
   globalShortcut.register('CommandOrControl+R', () => {
-    if (mainWindow) {
+    if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.reload();
     }
   });
