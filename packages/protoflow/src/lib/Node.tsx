@@ -24,7 +24,7 @@ export const createNode = (
         type,
         deletable: deletable,
         selectable: deletable,
-        draggable: false
+        draggable: true
         // width: nodeWidth,
         // height: nodeHeight
     }

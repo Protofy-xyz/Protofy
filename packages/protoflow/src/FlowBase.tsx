@@ -794,33 +794,6 @@ const FlowsBase = ({
         const edgesDiffs = getDiffs(removeSizes(initialEdges), removeSizes(edges))
         const nodesDiffs = getDiffs(removeSizes(initialNodes), removeSizes(nodes))
 
-        //look for non connected nodes and make them draggable
-        const unconnected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && !edges.find(e => e.source == n.id) && !n.draggable)
-        if (unconnected.length) {
-            setNodes(nodes.map(n => {
-                if (unconnected.find(u => u.id == n.id)) {
-                    return {
-                        ...n,
-                        draggable: true
-                    }
-                }
-                return n
-            }))
-        }
-        //look for draggable nodes that are connected, and make them non draggable
-        const connected = nodes.filter(n => n.id != getFirstNode(nodes)?.id && edges.find(e => e.source == n.id) && n.draggable)
-        if (connected.length) {
-            setNodes(nodes.map(n => {
-                if (connected.find(u => u.id == n.id)) {
-                    return {
-                        ...n,
-                        draggable: false
-                    }
-                }
-                return n
-            }))
-        }
-
         if (nodesDiffs && nodesDiffs.length || edgesDiffs && edgesDiffs.length) {
             if (!showActionsBar) {
                 onGraphChanged()
