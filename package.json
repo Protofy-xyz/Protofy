@@ -1,6 +1,6 @@
 {
   "name": "site",
-  "main": "main.js",
+  "main": "proxy-main.js",
   "private": true,
   "version": "0.0.1",
   "workspaces": [
@@ -59,7 +59,7 @@
     "protofy-update": "git fetch protofy && git rebase protofy/main && yarn clean",
     "python": "node apps/python/run.js",
     "git-origin-setup": "node git-origin-setup.js",
-    "app-package": "electron-builder -c electron-builder.yml build && node electron-copy.js",
+    "app-package": "yarn download-binaries && electron-builder -c electron-builder.yml build",
     "download-binaries": "node download-bins.js"
   },
   "resolutions": {

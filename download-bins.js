@@ -71,6 +71,11 @@ async function setupPlatform(key, config) {
   const archivePath = path.join('bin', path.basename(config.url));
   const finalPath = path.join('bin', config.out);
 
+  if(fs.existsSync(finalPath)) {
+    console.log(`✅ ${key} already exists -> ${config.out}`);
+    return;
+  }
+
   console.log(`⬇️  Downloading ${key}...`);
   await download(config.url, archivePath);
 

@@ -4,7 +4,7 @@ mac:
   category: your.app.category
 win:
   target:
-    - target: portable
+    - target: dir
       arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
   signingHashAlgorithms: []
@@ -13,10 +13,13 @@ linux:
   target: AppImage
 asar: false
 files:
-  - '**/*'
-  - '!node_modules/.cache/'
-  - '!**/*.log'
-  - "!.git/"
+  - proxy-main.js
+  - "!**/node_modules"
+  - "!**/node_modules/**"
+  - "!node_modules"
+  - "!node_modules/**"
+  - "!**/*.log"
+  - "!.git"
   - "!.gitignore"
 buildDependenciesFromSource: false
 npmRebuild: false
