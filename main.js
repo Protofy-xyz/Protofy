@@ -149,10 +149,18 @@ function createMainWindow() {
       mainWindow.loadURL('http://localhost:8000/workspace/dashboard');
 
 
-      mainWindow.on('closed', async () => {
-        logToRenderer('🛑 Closing main window. Stopping PM2...');
-        await stopPM2(logToRenderer);
-        app.quit();
+      let isQuitting = false;
+
+      app.on('before-quit', async (event) => {
+        if (!isQuitting) {
+          event.preventDefault();
+          isQuitting = true;
+      
+          logToRenderer('🛑 Cleaning up PM2...');
+          await stopPM2(logToRenderer);
+      
+          app.quit();
+        }
       });
     })
     .catch(error => {

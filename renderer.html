@@ -8,13 +8,14 @@
   <style>
     html,
     body {
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
       overflow: hidden;
       width: 100%;
       height: 100%;
-      background: #111;
-      color: #FF8C00;
+      background: #000;
+      color: #ccc;
     }
 
     #particles {
@@ -40,15 +41,14 @@
     }
 
     #splash img {
-      width: 128px;
+      width: 256px;
       height: auto;
-      margin-bottom: 20px;
+      margin-bottom: 5px;
     }
 
     #splash h1 {
-      font-size: 24px;
-      color: #FF8C00;
-      font-family: 'Inter', sans-serif;
+      font-size: 20px;
+      color: #CCC;
     }
 
     #view-logs {
@@ -56,8 +56,8 @@
       bottom: 10px;
       right: 10px;
       font-size: 12px;
-      color: #FF8C00;
-      text-decoration: underline;
+      color: #ccc;
+      text-decoration: none;
       cursor: pointer;
     }
 
@@ -71,7 +71,7 @@
       width: 100%;
       height: 100%;
       background: transparent;
-      color: #FF8C00;
+      color: white;
       border: none;
       resize: none;
       padding: 10px;
@@ -87,8 +87,8 @@
   <div id="particles"></div>
 
   <div id="splash">
-    <img src="data/public/logo.png" alt="Protofy Logo">
-    <h1>Protofy</h1>
+    <img src="data/public/images/loading.gif" alt="Protofy Logo">
+    <h1>Loading Protofy</h1>
     <div id="view-logs">View Logs</div>
   </div>
 
@@ -102,7 +102,7 @@
     // Inicia la animación de partículas
     tsParticles.load("particles", {
       background: {
-        color: { value: "#111" }
+        color: { value: "#000" }
       },
       fpsLimit: 60,
       particles: {
@@ -114,18 +114,18 @@
           }
         },
         color: {
-          value: "#FF8C00"
+          value: "#FFFFFF"
         },
         links: {
           enable: true,
           distance: 150,
-          color: "#FF8C00",
-          opacity: 0.3,
-          width: 1
+          color: "#FFFFFF",
+          opacity: 0.2,
+          width: 0.5
         },
         move: {
           enable: true,
-          speed: 0.6,
+          speed: 0.5,
           direction: "none",
           outModes: { default: "bounce" }
         },
