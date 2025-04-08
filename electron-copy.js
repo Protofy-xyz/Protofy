@@ -19,5 +19,17 @@ async function copyNodeModules() {
 }
 
 copyNodeModules()
-    .then(() => console.log('Copying completed!'))
+    .then(() => {
+        console.log('Copying completed!')
+        //copy sourceDir/protolib/lib/RemoteTransport.ts to a created directory in destDir/@my/protolib/lib/RemoteTransport.ts
+        const sourceFile = path.join(sourceDir, 'protolib', 'lib', 'RemoteTransport.ts');
+        const destFile = path.join(destDir, '@my', 'protolib', 'lib', 'RemoteTransport.ts');
+        const destDir2 = path.dirname(destFile);
+        //create destDir2 if it does not exist
+        if (!fs.existsSync(destDir2)) {
+            fs.mkdirSync(destDir2, { recursive: true });
+        }
+        //copy file
+        fs.copyFileSync(sourceFile, destFile);
+    })
     .catch(err => console.error('Error during copying:', err));
