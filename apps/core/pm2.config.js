@@ -12,6 +12,7 @@ module.exports = {
             interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
+            windowsHide: true,
             env: {
                 NODE_ENV: 'development'
             },
@@ -26,6 +27,7 @@ module.exports = {
             interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
+            windowsHide: true,
             env: {
                 NODE_ENV: 'production'
             },
