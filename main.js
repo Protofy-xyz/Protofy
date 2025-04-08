@@ -141,6 +141,8 @@ function createMainWindow() {
           nodeIntegration: false,
         },
       });
+
+      mainWindow.maximize();
       //close log window
       if (logWindow) {
         logWindow.close();
