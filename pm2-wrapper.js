@@ -23,7 +23,7 @@ function colorize(label, colorIndex, line) {
   return `${color}[${label}]${resetColor} ${line}`;
 }
 
-function startPM2({ ecosystemFile, nodeBin, onLog = console.log }) {
+function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = null }) {
   return new Promise((resolve, reject) => {
     process.env.PM2_NODE_PATH = nodeBin;
     process.env.IS_ECOSYSTEM_CHILD = '1';
@@ -38,6 +38,7 @@ function startPM2({ ecosystemFile, nodeBin, onLog = console.log }) {
 
       pm2.start(ecosystemFile, {
         interpreter: nodeBin,
+        windowsHide: true
       }, err => {
         if (err) {
           onLog(`❌ Error launching ecosystem: ${err.message}`);
@@ -55,22 +56,34 @@ function startPM2({ ecosystemFile, nodeBin, onLog = console.log }) {
           const serviceColorMap = new Map();
           let colorIndex = 0;
 
+          const checkLine = (line) => {
+            if (waitForLog && typeof waitForLog === 'function') {
+              try {
+                waitForLog(line);
+              } catch {}
+            }
+          };
+
           bus.on('log:out', data => {
             const name = data.process.name;
+            const line = data.data;
             if (!serviceColorMap.has(name)) {
               serviceColorMap.set(name, colorIndex++);
             }
             const color = serviceColorMap.get(name);
-            onLog(colorize(name, color, data.data));
+            onLog(colorize(name, color, line));
+            checkLine(line);
           });
 
           bus.on('log:err', data => {
             const name = data.process.name;
+            const line = data.data;
             if (!serviceColorMap.has(name)) {
               serviceColorMap.set(name, colorIndex++);
             }
             const color = serviceColorMap.get(name);
-            onLog(colorize(name, color, data.data));
+            onLog(colorize(name, color, line));
+            checkLine(line);
           });
 
           resolve();

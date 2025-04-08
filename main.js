@@ -3,7 +3,7 @@ const { app, BrowserWindow, session, contextBridge, globalShortcut  } = require(
 const http = require('http');
 const net = require('net');
 const path = require('path');
-const { getNodeBinary, startPM2 } = require('./pm2-wrapper');
+const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const {genToken} = require('protonode')
 //set node env to production
 process.env.NODE_ENV = 'production';
@@ -120,7 +120,7 @@ function createMainWindow() {
     .then(() => {
       mainWindow = new BrowserWindow({
         width: 1700,
-        height: 900,
+        height: 1000,
         title: 'Main App',
         autoHideMenuBar: true,
         webPreferences: {
@@ -133,8 +133,11 @@ function createMainWindow() {
 
       mainWindow.loadURL('http://localhost:8000/workspace/dashboard');
 
-      mainWindow.on('closed', () => {
-        app.quit(); // Quit app if main window is closed
+      
+      mainWindow.on('closed', async () => {
+        logToRenderer('🛑 Closing main window. Stopping PM2...');
+        await stopPM2(logToRenderer);
+        app.quit();
       });
     })
     .catch(error => {
@@ -151,18 +154,32 @@ app.whenReady().then(async () => {
 
   try {
     const nodeBin = getNodeBinary(__dirname);
+
+    let resolveWhenCoreReady;
+    const coreStarted = new Promise(resolve => {
+      resolveWhenCoreReady = resolve;
+    });
+
     await startPM2({
       ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),
       nodeBin,
       onLog: logToRenderer,
+      waitForLog: line => {
+        if (line.includes('Service Started: core')) {
+          resolveWhenCoreReady(); // ✅
+        }
+      }
     });
 
     createLogWindow(); // Show logs immediately
 
+    logToRenderer('⏳ Waiting for core service to start...');
+    await coreStarted;
+
     logToRenderer('⏳ Waiting for port 8000...');
-    await waitForPortHttp(PORT, '/workspace/dashboard')
-    //wait 2 seconds for the server to be ready
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await waitForPortHttp(PORT, '/workspace/dashboard');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     logToRenderer('✅ Port 8000 ready. Opening main window...');
     createMainWindow();
