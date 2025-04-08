@@ -1,10 +1,10 @@
 // 📦 main.js
-const { app, BrowserWindow, session, contextBridge, globalShortcut  } = require('electron');
+const { app, BrowserWindow, session, contextBridge, globalShortcut } = require('electron');
 const http = require('http');
 const net = require('net');
 const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
-const {genToken} = require('protonode')
+const { genToken } = require('protonode')
 //set node env to production
 const isDev = process.argv.includes('--dev')
 const isFullDev = process.argv.includes('--coredev')
@@ -14,7 +14,7 @@ if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = isDev ? 'development' : 'production'
 }
 
-if(isFullDev) {
+if (isFullDev) {
   process.env.FULL_DEV = '1'
 }
 
@@ -51,8 +51,8 @@ const genNewSession = () => {
     permissions: [["*"], 'admin']
   }
   return {
-      user: data,
-      token: genToken(data)
+    user: data,
+    token: genToken(data)
   }
 }
 
@@ -141,10 +141,14 @@ function createMainWindow() {
           nodeIntegration: false,
         },
       });
+      //close log window
+      if (logWindow) {
+        logWindow.close();
+      }
 
       mainWindow.loadURL('http://localhost:8000/workspace/dashboard');
 
-      
+
       mainWindow.on('closed', async () => {
         logToRenderer('🛑 Closing main window. Stopping PM2...');
         await stopPM2(logToRenderer);
@@ -191,7 +195,6 @@ app.whenReady().then(async () => {
     await waitForPortHttp(PORT, '/workspace/dashboard');
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-
     logToRenderer('✅ Port 8000 ready. Opening main window...');
     createMainWindow();
   } catch (err) {

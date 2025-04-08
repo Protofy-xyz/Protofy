@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Protofy Logs</title>
+  <link rel="stylesheet" href="data/public/fonts/inter-400.css">
   <style>
     html,
     body {
@@ -12,42 +13,144 @@
       overflow: hidden;
       width: 100%;
       height: 100%;
+      background: #111;
+      color: #FF8C00;
     }
 
-    #root {
+    #particles {
+      position: absolute;
       width: 100%;
       height: 100%;
-      overflow: auto;
+      z-index: 0;
     }
 
-    body {
-      margin: 0;
-      font-family: monospace;
-      background: #111;
-      color: #0f0;
+    #splash,
+    #logs {
+      position: relative;
+      z-index: 1;
+    }
+
+    #splash {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #splash img {
+      width: 128px;
+      height: auto;
+      margin-bottom: 20px;
+    }
+
+    #splash h1 {
+      font-size: 24px;
+      color: #FF8C00;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #view-logs {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #FF8C00;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    #logs {
+      display: none;
+      width: 100%;
+      height: 100%;
     }
 
     textarea {
       width: 100%;
-      height: 100vh;
-      background: #111;
-      color: #0f0;
+      height: 100%;
+      background: transparent;
+      color: #FF8C00;
       border: none;
       resize: none;
       padding: 10px;
       font-size: 14px;
       font-family: monospace;
+      box-sizing: border-box;
+      z-index: 1;
     }
   </style>
 </head>
 
 <body>
-  <textarea id="log" readonly></textarea>
+  <div id="particles"></div>
 
+  <div id="splash">
+    <img src="data/public/logo.png" alt="Protofy Logo">
+    <h1>Protofy</h1>
+    <div id="view-logs">View Logs</div>
+  </div>
+
+  <div id="logs">
+    <textarea id="log" readonly></textarea>
+  </div>
+
+  <!-- tsParticles CDN -->
+  <script src="data/public/vendor/tsparticles.bundle.min.js"></script>
   <script>
-    const logBox = document.getElementById('log');
+    // Inicia la animación de partículas
+    tsParticles.load("particles", {
+      background: {
+        color: { value: "#111" }
+      },
+      fpsLimit: 60,
+      particles: {
+        number: {
+          value: 50,
+          density: {
+            enable: true,
+            area: 800
+          }
+        },
+        color: {
+          value: "#FF8C00"
+        },
+        links: {
+          enable: true,
+          distance: 150,
+          color: "#FF8C00",
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 0.6,
+          direction: "none",
+          outModes: { default: "bounce" }
+        },
+        size: {
+          value: { min: 1, max: 3 }
+        },
+        opacity: {
+          value: 0.5
+        }
+      },
+      detectRetina: true
+    });
 
-    window.logAPI.onLog((message) => {
+    // Logs
+    const logBox = document.getElementById('log');
+    const splash = document.getElementById('splash');
+    const logs = document.getElementById('logs');
+    const viewLogs = document.getElementById('view-logs');
+
+    viewLogs.addEventListener('click', () => {
+      splash.style.display = 'none';
+      logs.style.display = 'block';
+    });
+
+    window.logAPI?.onLog((message) => {
       logBox.value += message + '\n';
       logBox.scrollTop = logBox.scrollHeight;
     });
