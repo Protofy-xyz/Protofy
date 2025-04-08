@@ -11,10 +11,10 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
     })
 
     return <Draggable
-        key={item.id}
-        draggableId={item.id}
+        key={modelItem.getId()}
+        draggableId={modelItem.getId()}
         isDragDisabled={!modelItem.canTransition()}
-        index={index}
+        index={modelItem.getId()}
     >
         {(provided) => (
             <div
@@ -64,11 +64,11 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
 
 export const SequenceView = ({
     items,
-    onStageChange,
-    onSelectItem,
+    onStageChange = () => { },
+    onSelectItem = () => { },
     model,
     getCard,
-    onDragEnd,
+    onDragEnd = () => { },
     getStageBottom,
     getDroppableStageStyle = (col, provided) => ({}),
     getStageContainerProps = (stage): YStackProps => ({}),
