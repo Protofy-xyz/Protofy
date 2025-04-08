@@ -16,7 +16,7 @@ const targets = {
     extract: async (archivePath, outputPath) => {
       const zip = new AdmZip(archivePath);
       const entry = zip.getEntries().find(e => e.entryName.endsWith('node.exe'));
-      if (!entry) throw new Error('❌ No se encontró node.exe en el ZIP');
+      if (!entry) throw new Error('❌ node.exe not found in zip');
       zip.extractEntryTo(entry.entryName, path.dirname(outputPath), false, true);
       renameSync(path.join(path.dirname(outputPath), 'node.exe'), outputPath);
     }
@@ -71,20 +71,20 @@ async function setupPlatform(key, config) {
   const archivePath = path.join('bin', path.basename(config.url));
   const finalPath = path.join('bin', config.out);
 
-  console.log(`⬇️  Descargando ${key}...`);
+  console.log(`⬇️  Downloading ${key}...`);
   await download(config.url, archivePath);
 
-  console.log(`📦 Extrayendo ${key}...`);
+  console.log(`📦 Extracting ${key}...`);
   try {
     await config.extract(archivePath, finalPath);
   } catch (err) {
-    console.error(`❌ Error extrayendo ${key}:`, err);
+    console.error(`❌ Error extracting ${key}:`, err);
     return;
   }
 
-  console.log(`🧹 Eliminando archivo temporal ${path.basename(archivePath)}`);
+  console.log(`🧹 Deleting temporary file ${path.basename(archivePath)}`);
   unlinkSync(archivePath);
-  console.log(`✅ ${key} listo -> ${config.out}`);
+  console.log(`✅ ${key} ready -> ${config.out}`);
 }
 
 async function main() {
@@ -95,6 +95,6 @@ async function main() {
 }
 
 main().catch(err => {
-  console.error('❌ Error general:', err);
+  console.error('❌ General Error:', err);
   process.exit(1);
 });
