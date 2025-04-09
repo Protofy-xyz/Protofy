@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { Theme } from "@my/ui";
 import { Page } from "protolib/components/Page";
 import { Text } from "protolib/components/Text";
 import { Pressable } from "protolib/components/Pressable";
@@ -8,34 +6,32 @@ import VStack from "protolib/components/VStack";
 import HStack from "protolib/components/HStack";
 import Image from "protolib/components/Image";
 import { useComposedState } from "protolib/lib/useComposedState";
-import { withSession } from "protolib/lib/Session";
-import { SSR } from "protolib/lib/SSR";
 import { DefaultLayout } from "../layout/DefaultLayout";
 import { Protofy } from "protobase";
 import { context } from "../bundles/uiContext";
 import { useRouter } from "solito/navigation";
-import { Objects } from "../bundles/objects";
-
-const isProtected = Protofy("protected", false);
-const permissions = Protofy("permissions", null)
 
 const Home = ({ currentView, setCurrentView, props }: any) => {
   const { cs, states } = useComposedState();
 
   const router = useRouter();
-  context.onRender(async () => {});
+  context.onRender(async () => { });
   return (
     <Page height="99vh">
       <DefaultLayout footer={<></>}>
         <VStack height="100%" alignItems="center" padding="$10">
           <Image url="/images/protofito.png" width="280px" height="200px"></Image>
           <VStack width="100%" margin="$6" alignItems="center">
-            <Text fontSize="60px" fontWeight="600" textAlign="center">
+            <Text fontSize="50px" fontWeight="600" textAlign="center">
               Welcome to Protofy
             </Text>
-            <Text textAlign="center" fontWeight="200" width="550px" maxWidth="100%">
-              Get started by editing this page. Log in with admin user to edit using the Visual UI Editor or access to CMS.
+            <Text fontSize="30px" fontWeight="600" textAlign="center">
+              AI-Driven Machine Automation Platform
             </Text>
+            <Text fontSize="20px" fontWeight="300" textAlign="center" marginTop="$2">
+              Natural Language Autopilot system for smart and industrial devices
+            </Text>
+
           </VStack>
           <HStack gap="$6" margin="$6" flexWrap="wrap" justifyContent="center">
             <Pressable onPress={(e) => context.navigate("/workspace/pages", router)} width="300px" padding="$5" theme="green">
@@ -47,10 +43,10 @@ const Home = ({ currentView, setCurrentView, props }: any) => {
               </HStack>
               <Text fontWeight="200">Manage the contents of your project. Automations, devices and many others.</Text>
             </Pressable>
-            <Pressable onPress={(e) => context.navigate("https://protofy.xyz/documentation", router)} width="300px" padding="$5" theme="blue">
+            <Pressable onPress={(e) => context.navigate("https://github.com/Protofy-xyz/Protofy/blob/main/docs/getting-started.md", router)} width="300px" padding="$5" theme="blue">
               <HStack gap="$2">
                 <Text fontWeight="600" fontSize="18px">
-                  Documentation
+                  Getting started
                 </Text>
                 <Icon name="ArrowRight" size="20px"></Icon>
               </HStack>
