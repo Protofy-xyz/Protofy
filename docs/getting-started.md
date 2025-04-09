@@ -1,15 +1,8 @@
 # 🚀 Getting started
 
-Protofy is an OpenSource Web and App Framework, CMS and IoT system all in a single and integrated stack.
+Protofy is an Open Source Platform designed to automate the control of physical devices and machines using a Large Language Model (LLM) running in a continuous decision loop.
 
-Based on React, NextJS, Expo, Tamagui, EspHome, protofy provides a quick and highly extensible system to quickly build digital systems using mainly javascript/typescript, visual editors, automatic cruds and control panels, an object system with validation and automatic forms, and an integrated ChatGPT assitant with automatic context transfer.
-
-Protofy is at the same time: 
-
-- A framework to develop webs, native mobile apps, and IoT systems
-- A control panel system to extend and modify the underlying framework
-
-We like to think of prototype as a CMS + Framework + Framework UI
+An automatic control loop reads sensor states, evaluates rules, and sends a structured prompt to the LLM to decide which actuators, if any, should be triggered. The system provides a full UI for device onboarding, rule configuration, and real-time monitoring
 
 ## Minimum requirements
 - Windows 11, Ubuntu 20.04 or MacOS Big Sur
@@ -36,7 +29,7 @@ npm i -g yarn
 Start protofy:
 
 ```sh
-yarn && yarn dev
+yarn && yarn start
 ```
 
 ## Access the system
