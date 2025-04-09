@@ -14,7 +14,7 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
         key={modelItem.getId()}
         draggableId={modelItem.getId()}
         isDragDisabled={!modelItem.canTransition()}
-        index={modelItem.getId()}
+        index={index}
     >
         {(provided) => (
             <div
