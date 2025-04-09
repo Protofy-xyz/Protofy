@@ -24,6 +24,10 @@ An automatic control loop reads sensor states, evaluates rules, and sends a stru
 
 Check the [getting started](docs/getting-started.md) guide to run Protofy on your computer, directly with npm or using docker.
 
+![tank-board](https://github.com/Protofy-xyz/Protofy/blob/assets/dashboard/tank.png?raw=true)
+
+![dashboard](https://github.com/Protofy-xyz/Protofy/blob/assets/dashboard/system.png?raw=true)
+
 ## 😎 Node-based UI
 
 ![codeedit](https://github.com/Protofy-xyz/Protofy/assets/5052882/98c071cf-c934-4891-90e7-ad2d05602aad)
