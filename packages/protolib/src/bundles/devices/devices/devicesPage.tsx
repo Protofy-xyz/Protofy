@@ -17,7 +17,7 @@ import * as deviceFunctions from 'protodevice/src/device'
 import { Subsystems } from 'protodevice/src/Subsystem'
 import { Paragraph, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
-import { Pencil, UploadCloud, Navigation } from '@tamagui/lucide-icons';
+import { Pencil, UploadCloud, Navigation, Bug } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../../next';
 import { closeSerialPort, onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 import { SSR } from '../../../lib/SSR'
@@ -143,6 +143,7 @@ export default {
     const [compileSessionId, setCompileSessionId] = useState('')
     const [deviceDefinitions, setDeviceDefinitions] = useState(extraData?.deviceDefinitions ?? getPendingResult('pending'))
     usePendingEffect((s) => { API.get({ url: definitionsSourceUrl }, s) }, setDeviceDefinitions, extraData?.deviceDefinitions)
+    const [logsRequested, setLogsRequested] = useState(false)
 
     const flashDevice = async (device, yaml?) => {
       setTargetDeviceName(device.data.name)
@@ -341,7 +342,32 @@ export default {
 
         },
         isVisible: (element) => element.isInitialized() && element.getConfigFile()
-      }
+      },
+      {
+        text: "View logs",
+        icon: Bug,
+        action: async (element) => {
+          setTargetDeviceName(element.data.name)
+          setTargetDeviceModel(element)
+          setLogsRequested(true)
+
+
+          const { port, error } = await connectSerialPort()
+          if (!port || error) {
+            setModalFeedback({ message: error || 'No port detected.', details: { error: true } })
+            setShowModal(true)
+            setLogsRequested(false)
+
+            return
+          }
+
+          setPort(port)
+          setShowModal(true)
+          setStage("console")
+
+        },
+        isVisible: (element) => true
+      }      
     ]
 
     return (<AdminPage title="Devices" pageSession={pageSession}>
@@ -349,7 +375,10 @@ export default {
         <DeviceModal
           stage={stage}
           onCancel={() => {
-            if (["console"].includes(stage)) {
+            if (logsRequested) {
+              setShowModal(false)
+              setLogsRequested(false)
+            } else if (["console"].includes(stage)) {
               setStage("select-action")
             } else {
               setShowModal(false)
