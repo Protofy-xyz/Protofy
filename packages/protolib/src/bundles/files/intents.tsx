@@ -117,46 +117,12 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
 
 const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   const [fileContent, setFileContent] = useFileFromAPI(path)
-  const [newFileContent, setNewFileContent] = useState('')
-  const [loaded, setLoaded] = useState(false)
-  const isPartial = useRef(false)
-  const sourceCode = useRef('')
-  const originalSourceCode = useRef('')
   const searchParams = useSearchParams();
   const query = Object.fromEntries(searchParams.entries());
-  const pathname = usePathname();
-  const theme = useTheme()
-  const tint = useTint().tint
-  const toast = useToastController();
-
-  const [promptResponse, setPromptResponse] = usePrompt(
-    (prompt, total, image) => {
-      const isGenerate = prompt.startsWith('/code')
-      const prefix = `The user is viewing a sourceCode file named: ${path}. The content of the sourceFile is: ${sourceCode.current}`
-      const suffix = isGenerate ? `
-The user has generated a request to change the sourceCode content. You need to fulfill the request. Reply only with source code with prefix: [code] and nothing else. Your response will be used directly to replace the content of the sourceFile, but adaptaed to what the user requested.
-For example, if the final code you decide to generate is "console.log('test');" then your anser should be [code]console.log('test');
-Keep the original sourcecode comments when generating new code;
-If you are unable to generate the source code (too ambiguous/unespecific/whaterver reason), explain why in natural language, but do not include [code] at the beginning.
-Remember to generate a response for the request that is only sourceCode and prefixed with [code]. Your response will be used to feed another program, that expects just [code] and sourceCode.
-If you include anything else in your message (like reasonings or natural language) it will be considered that you are rejecting the request, and the reasons will be shown to the user.
-            `: ''
-      return suffix + prefix
-    },
-
-    () => promptCmd({ cmd: '/code', format: "sourceCode", action: "generates a source code solution in source code format of the current file." }),
-  )
-
-  useUpdateEffect(() => {
-    console.log('Response prompt: ', promptResponse)
-    if (promptResponse.startsWith("[code]")) {
-      console.log('Replacing code with updated code')
-      const response = promptResponse.substring("[code]".length)
-      setNewFileContent(response)
-      sourceCode.current = response;
-    }
-  }, [promptResponse])
-
+  const sourceCode = useRef('')
+  const isPartial = useRef(false)
+  const [loaded, setLoaded] = useState(false)
+  const originalSourceCode = useRef('')
   useEffect(() => {
     if (fileContent.isLoaded) {
       const sourceFile = toSourceFile(fileContent.data)
@@ -173,146 +139,159 @@ If you include anything else in your message (like reasonings or natural languag
     }
   }, [fileContent]);
 
+  return <CodeView path={path} extraIcons={extraIcons} sourceCode={sourceCode} fileContent={fileContent} isModified={isModified} setIsModified={setIsModified}>
+    <SaveButton
+      onSave={() => originalSourceCode.current = sourceCode.current}
+      checkStatus={() => sourceCode.current != originalSourceCode.current}
+      defaultState={"unavailable"}
+      path={path}
+      getContent={() => {
+        if (isPartial.current) {
+          const sourceFile = toSourceFile(fileContent.data)
+          const definition = getDefinition(sourceFile, '"code"').getBody()
+          definition.replaceWithText("{\n" + sourceCode.current + "\n}");
+          const code = prettier.format(sourceFile.getFullText(), {
+            quoteProps: "consistent",
+            plugins: [parserTypeScript],
+            parser: "typescript"
+          })
+          if (code) {
+            return code
+          }
+        }
+        return sourceCode.current
+      }}
+      positionStyle={{ position: "relative" }}
+    />
+    {extraIcons}
+  </CodeView>
+}
+
+export const CodeView = ({ monacoOptions={}, onCodeChange=(code) => {}, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children=<></> }) => {
+  const pathname = usePathname();
+  const theme = useTheme()
+  const tint = useTint().tint
+  const toast = useToastController();
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState('flow')
 
-  return <AsyncView atom={fileContent}>
-    <XStack mt={30} f={1} width={"100%"}>
-      {/* <Theme name={tint as any}> */}
-      <XStack position="absolute" right={20} top={-32}>
-        {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
+  const content = <XStack mt={30} f={1} width={"100%"}>
+    {/* <Theme name={tint as any}> */}
+    <XStack position="absolute" right={20} top={-32}>
+      {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
+        {/* <SizableText mr={"$2"}>Save</SizableText> */}
+        <Workflow color="var(--color)" size={"$1"} />
+      </IconContainer> :
+        <IconContainer onPress={() => setMode('code')}>
           {/* <SizableText mr={"$2"}>Save</SizableText> */}
-          <Workflow color="var(--color)" size={"$1"} />
-        </IconContainer> :
-          <IconContainer onPress={() => setMode('code')}>
-            {/* <SizableText mr={"$2"}>Save</SizableText> */}
-            <Code color="var(--color)" size={"$1"} />
-          </IconContainer>}
-        <SaveButton
-          onSave={() => originalSourceCode.current = sourceCode.current}
-          checkStatus={() => sourceCode.current != originalSourceCode.current}
-          defaultState={"unavailable"}
-          path={path}
-          getContent={() => {
-            if (isPartial.current) {
-              const sourceFile = toSourceFile(fileContent.data)
-              const definition = getDefinition(sourceFile, '"code"').getBody()
-              definition.replaceWithText("{\n" + sourceCode.current + "\n}");
-              const code = prettier.format(sourceFile.getFullText(), {
-                quoteProps: "consistent",
-                plugins: [parserTypeScript],
-                parser: "typescript"
-              })
-              if (code) {
-                return code
-              }
-            }
-            return sourceCode.current
-          }}
-          positionStyle={{ position: "relative" }}
-        />
-        {extraIcons}
-      </XStack>
-      {mode == 'code' ? <Monaco path={path} darkMode={resolvedTheme == 'dark'} sourceCode={newFileContent ? newFileContent : sourceCode.current} onChange={(code) => { sourceCode.current = code }} />
-        : <Flows
-          nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
-            const [snippetName, setSnippetName] = useState();
-            const [fragmentText, setFragmentText] = useState(dumpFragment());
-            return (
-              <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
-                <XStack f={1} jc="space-between" ai="center">
-                  <Tinted>
-                    <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>
-                  </Tinted>
-                  <XStack gap="$2">
-                    <Button
-                      backgroundColor={"transparent"}
-                      hoverStyle={{
-                        backgroundColor: "$color2",
-                        borderColor: "$color8"
-                      }}
-                      color="$color8"
-                      borderColor="$color8"
-                      size="$3"
-                      onPress={() => closeMenu()}
-                    >
-                      <X size={16} />
-                    </Button>
-                    <Tinted>
-                      <Button disabled={!fragmentText} size="$3" onPress={() => { updateFragment(fragmentText); closeMenu() }}>
-                        <Check size={16} fillOpacity={0} />
-                      </Button>
-                    </Tinted>
-                  </XStack>
-                </XStack>
-                <YStack height={300}>
-                  <Monaco
-                    path={path}
-                    darkMode={resolvedTheme == 'dark'}
-                    sourceCode={fragmentText}
-                    options={{
-                      folding: false,
-                      lineDecorationsWidth: 0,
-                      lineNumbersMinChars: 0,
-                      lineNumbers: false,
-                      minimap: { enabled: false }
-                    }}
-                    onChange={(code) => { setFragmentText(code); }}
-                  />
-                </YStack>
-                <XStack gap="$2">
-                  <Input f={1} value={snippetName} size="$3" placeholder='Snippet name required to export...' onChange={(e) => {
-                    // Only accepts alphabetical characters
-                    const regex = /^[a-zA-Z]+$/;
-                    // @ts-ignore 
-                    const value = e.target?.value
-                    if (regex.test(value) || value == '') {
-                      setSnippetName(value);
-                    }
-                  }} />
-                  <Tinted>
-                    <Button
-                      disabled={!snippetName}
-                      size="$3"
-                      color={!snippetName ? "$gray8" : "$color7"}
-                      backgroundColor={"transparent"}
-                      disabledStyle={{
-                        borderColor: "$gray8",
-                      }}
-                      hoverStyle={{
-                        backgroundColor: "$color2",
-                        borderColor: "$color7"
-                      }}
-                      borderColor="$color7"
-                      onPress={() => {
-                        onGenerateSnippset(snippetName, fragmentText, closeMenu, (err = "") => {
-                          toast.show("Error generating snippet", { message: err, duration: 3000 })
-                        });
-                      }}
-                    >
-                      Export
-                    </Button>
-                  </Tinted>
-                </XStack>
-              </YStack>
-            )
-          }}
-          config={{ menu: getFlowsMenuConfig(pathname, query) }}
-          isModified={isModified}
-          rawCodeFromMenu={true}
-          customComponents={getFlowsCustomComponents(pathname, query)}
-          customSnippets={getFlowsCustomSnippets(pathname, query)}
-          onEdit={(code) => { sourceCode.current = code }}
-          setIsModified={setIsModified}
-          setSourceCode={(sourceCode) => {
-            sourceCode.current = sourceCode
-          }} sourceCode={newFileContent ? newFileContent : sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
-      <XStack opacity={0} top={-200000} position={"absolute"}>
-        <Flows preload={true} primary={"#f00"} />
-      </XStack>
-      {/* </Theme> */}
+          <Code color="var(--color)" size={"$1"} />
+        </IconContainer>}
+      {children}
     </XStack>
-  </AsyncView>
+    {mode == 'code' ? <Monaco path={path} options={monacoOptions} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => { onCodeChange(code); sourceCode.current = code }} />
+      : <Flows
+
+        nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
+          const [snippetName, setSnippetName] = useState();
+          const [fragmentText, setFragmentText] = useState(dumpFragment());
+          return (
+            <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
+              <XStack f={1} jc="space-between" ai="center">
+                <Tinted>
+                  <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>
+                </Tinted>
+                <XStack gap="$2">
+                  <Button
+                    backgroundColor={"transparent"}
+                    hoverStyle={{
+                      backgroundColor: "$color2",
+                      borderColor: "$color8"
+                    }}
+                    color="$color8"
+                    borderColor="$color8"
+                    size="$3"
+                    onPress={() => closeMenu()}
+                  >
+                    <X size={16} />
+                  </Button>
+                  <Tinted>
+                    <Button disabled={!fragmentText} size="$3" onPress={() => { updateFragment(fragmentText); closeMenu() }}>
+                      <Check size={16} fillOpacity={0} />
+                    </Button>
+                  </Tinted>
+                </XStack>
+              </XStack>
+              <YStack height={300}>
+                <Monaco
+                  path={path}
+                  darkMode={resolvedTheme == 'dark'}
+                  sourceCode={fragmentText}
+                  options={{
+                    folding: false,
+                    lineDecorationsWidth: 0,
+                    lineNumbersMinChars: 0,
+                    lineNumbers: false,
+                    minimap: { enabled: false }
+                  }}
+                  onChange={(code) => { setFragmentText(code); }}
+                />
+              </YStack>
+              <XStack gap="$2">
+                <Input f={1} value={snippetName} size="$3" placeholder='Snippet name required to export...' onChange={(e) => {
+                  // Only accepts alphabetical characters
+                  const regex = /^[a-zA-Z]+$/;
+                  // @ts-ignore 
+                  const value = e.target?.value
+                  if (regex.test(value) || value == '') {
+                    setSnippetName(value);
+                  }
+                }} />
+                <Tinted>
+                  <Button
+                    disabled={!snippetName}
+                    size="$3"
+                    color={!snippetName ? "$gray8" : "$color7"}
+                    backgroundColor={"transparent"}
+                    disabledStyle={{
+                      borderColor: "$gray8",
+                    }}
+                    hoverStyle={{
+                      backgroundColor: "$color2",
+                      borderColor: "$color7"
+                    }}
+                    borderColor="$color7"
+                    onPress={() => {
+                      onGenerateSnippset(snippetName, fragmentText, closeMenu, (err = "") => {
+                        toast.show("Error generating snippet", { message: err, duration: 3000 })
+                      });
+                    }}
+                  >
+                    Export
+                  </Button>
+                </Tinted>
+              </XStack>
+            </YStack>
+          )
+        }}
+        config={{ menu: getFlowsMenuConfig(pathname, query) }}
+        isModified={isModified}
+        rawCodeFromMenu={true}
+        customComponents={getFlowsCustomComponents(pathname, query)}
+        customSnippets={getFlowsCustomSnippets(pathname, query)}
+        onEdit={(code) => { sourceCode.current = code }}
+        setIsModified={setIsModified}
+        setSourceCode={(sourceCode) => {
+          sourceCode.current = sourceCode
+        }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
+    <XStack opacity={0} top={-200000} position={"absolute"}>
+      <Flows preload={true} primary={"#f00"} />
+    </XStack>
+    {/* </Theme> */}
+  </XStack>
+
+  return fileContent ? <AsyncView atom={fileContent}>
+    {content}
+  </AsyncView> : content
 }
 
 const MonacoViewer = ({ path }) => {

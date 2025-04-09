@@ -79,7 +79,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     setGeneratingBoardCode(true)
                     try {
                         boardRef.current.rules = savedRules
-                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards[board.name], actions: actions.boards[board.name] })
+                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards ? states.boards[board.name] : {}, actions: actions.boards ? actions.boards[board.name] : {} })
                         boardRef.current.rulesCode = rulesCode.data.jsCode
                         savedCode.current = rulesCode.data.jsCode
                         await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
