@@ -90,7 +90,12 @@ export const SequenceView = ({
     const itemsList = (items.data.items ?? []).sort(sort)
 
     const sequenceField = model.getSequeceField()
-    const columns = model.getObjectSchema().getFieldDefinition(sequenceField).options?.map(
+    const sequenceFieldDefRaw = model.getObjectSchema().getFieldDefinition(sequenceField)
+    const sequenceFieldDef = {
+        ...sequenceFieldDefRaw,
+        ...sequenceFieldDefRaw?.innerType?._def
+    }
+    const columns = sequenceFieldDef.options?.map(
         (option: z.ZodLiteral<string>) => option.value
     );
 
