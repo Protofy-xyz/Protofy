@@ -12,41 +12,45 @@ function useHover(styleOnHover: CSSProperties, styleOnNotHover: CSSProperties = 
 }
 
 export default ({ onPress, label, style = {} }) => {
-    const sharedProps = {
-        width: '50%',
-        margin: '15px',
-        border: '0px solid transparent',
-        borderRadius: '8px',
-        color: useTheme('interactiveColor'),
-        padding: "10px 15px",
-        cursor: "pointer",
-        transition: "background-color 0.3s ease",
-        display: 'flex', 
-        position: 'relative', 
-        alignSelf: 'center', 
-        textAlign: 'center', 
-        alignItems: 'stretch', 
-        boxSizing: 'border-box',
-        flexBasis: 'auto', 
-        flexDirection: 'column', 
-        flexShrink: '0',
-        listStyle: 'none', 
-        textDecoration: 'none',
-        zIndex: '0', 
+    const nodeFontSize = useTheme('nodeFontSize')
+    const borderColor = useTheme('borderColor')
+    const hoverBg = useTheme('interactiveHoverColor')
+    const textColor = useTheme('textColor')
+
+    const baseStyle: CSSProperties = {
+        padding: "8px 16px",
+        fontSize: nodeFontSize - 1,
         fontFamily: 'Jost-Regular',
-        fontSize: useTheme('nodeFontSize'),
+        backgroundColor: 'transparent',
+        border: `1px solid ${borderColor}`,
+        borderRadius: 4,
+        color: textColor,
+        cursor: 'pointer',
+        transition: 'background-color 0.15s ease, border-color 0.15s ease',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        lineHeight: '1',
+        userSelect: 'none',
         ...style
     }
-    const hover = useHover({
-        ...sharedProps,
-        backgroundColor: useTheme('interactiveHoverColor')
-    } as any, {
-        ...sharedProps,
-        backgroundColor: "transparent"
-    } as any, style);
 
-    return <div style={{ display: 'flex', justifyContent: "center" }}>
-        <button onClick={onPress} {...hover} >{label}</button>
-    </div>;
-};
+    const [hovered, setHovered] = React.useState(false)
+
+    return (
+        <div style={{ display: 'flex', justifyContent: "center", marginTop: '8px' }}>
+            <button
+                onClick={onPress}
+                style={{
+                    ...baseStyle,
+                    backgroundColor: hovered ? hoverBg : 'transparent'
+                }}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
+            >
+                {label}
+            </button>
+        </div>
+    )
+}
 
