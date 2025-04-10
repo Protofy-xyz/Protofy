@@ -23,15 +23,6 @@ const IfStatement = (node) => {
     
     const getConnectedNodeMeta = (handle, portType) => metaData.childHeights.find(c => c.node?.edge?.targetHandle == id+portType+handle)
 
-    const getBlockHeight = () => {
-        if(!id) return
-        if(!metaData.childHeight) return minBlockHeight
-        const condition = getConnectedNodeMeta("condition", PORT_TYPES.data)
-        const then = getConnectedNodeMeta("then", PORT_TYPES.flow)
-
-        return (Math.max(minBlockHeight, ((condition?condition.height:0)+(then?Math.min(nodeFontSize*10, then.height):0)))) //getSizeOfLastChild(metaData.childHeights)+headerSize
-    }
-
     const getConnectedPos = (handle, defaultValue) => {
         const n = getConnectedNodeMeta(handle, PORT_TYPES.flow)
         if(n) {
@@ -40,13 +31,11 @@ const IfStatement = (node) => {
         return defaultValue
     }
 
-
-    const blockHeight = getBlockHeight()
     return (
-        <Node style={{minHeight:blockHeight+'px'}} icon={Split} node={node} isPreview={!id} title={!id?'if' : 'if ( '+nodeData.condition+' )'} id={id} color={color} dataOutput={DataOutput.flow}>
+        <Node style={{minHeight:'170px'}} icon={Split} node={node} isPreview={!id} title={!id?'if' : 'if ( '+nodeData.condition+' )'} id={id} color={color} dataOutput={DataOutput.flow}>
             <NodeParams id={id} params={nodeParams} boxStyle={{ marginTop: '0px', marginBottom: '20px' }} />
-            <FlowPort id={id} type='input' label='Then' style={{ top: getConnectedPos('then', nodeFontSize*8)+'px' }} handleId={'then'} />
-            <FlowPort id={id} type='input' label='Else' style={{ top: Math.max(0, blockHeight-nodeFontSize)+'px'}} handleId={'else'} />
+            <FlowPort id={id} type='input' label='Then' style={{ top: '100px'}} handleId={'then'} />
+            <FlowPort id={id} type='input' label='Else' style={{ top: '130px'}} handleId={'else'} />
         </Node>
     );
 }
@@ -78,13 +67,6 @@ IfStatement.dump = (node, nodes, edges, nodesData, metadata = null, enableMarker
         elseData = " else \n"+elseBody
     }
     return "if("+condition+")\n" + body + "\n" + elseData + dumpConnection(node, "source", "output", PORT_TYPES.flow, '', edges, nodes, nodesData, metadata, enableMarkers, dumpType, level)
-}
-
-IfStatement.getChildPosition = (node, childPos, originalPos, childNode, type) => {
-    if(childNode.edge.targetHandle == node.id+PORT_TYPES.flow+'then' && node.position.y == childPos.y) {
-        childPos.y += 120
-    }
-    return childPos
 }
 
 export default memo(IfStatement)
