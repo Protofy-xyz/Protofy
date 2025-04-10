@@ -1,5 +1,6 @@
 appId: com.example.protofy
 productName: Protofy
+executableName: Protofy
 mac:
   target:
     - target: dir
