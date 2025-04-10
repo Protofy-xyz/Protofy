@@ -3,15 +3,21 @@ productName: Protofy
 mac:
   target:
     - target: dir
+      arch: x64
+  icon: "apps/adminpanel/public/favicon.ico"
+  signingHashAlgorithms: []
+  sign: false
 win:
   target:
     - target: dir
+      arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
   signingHashAlgorithms: []
   sign: false
 linux:
   target:
     - target: dir
+      arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
   signingHashAlgorithms: []
   sign: false
