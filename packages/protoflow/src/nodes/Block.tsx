@@ -15,10 +15,13 @@ import { Button } from '@my/ui';
 const blockOffset = 200
 const _marginTop = 222
 const minBlockHeight = 120
-const singleNodeOffset = 100
+const singleNodeOffset = 30
 const alignBlockWithChildrens = true
 const _borderWidth = 5
 
+const ENABLE_CONTAINER = false
+const portSpacing = 100
+const nodeMarginVerticalPort = 120
 
 const Block = (node) => {
     const { id, type } = node
@@ -36,12 +39,14 @@ const Block = (node) => {
     const { setEdges, getEdges } = useProtoflow()
 
 
+
+
     const isEmpty = !metaData.childHeight
     const marginTop = _marginTop + (useTheme('nodeFontSize') / 2)
     //console.log('metadata in', node.id, metaData)
     const getBlockHeight = () => {
         if (!metaData.childHeight) return minBlockHeight
-        return (metaData.childHeight + (marginTop * 1.5)) + ((Math.max(0, nodeData.connections?.length - 1)) * 1)
+        return nodeMarginVerticalPort + Math.max(0, nodeData.connections?.length - 1) * portSpacing
     }
 
     const height = id ? getBlockHeight() : 0
@@ -78,12 +83,12 @@ const Block = (node) => {
         SourceFile: {
             // icon: Box,
             output: false,
-            color: primaryColor,
+            color: resolvedTheme == 'dark' ? primaryColor : '#ccc',
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
             icon: ListOrdered,
-            color: resolvedTheme == 'dark' ? primaryColor : '#cccccc88',
+            color: resolvedTheme == 'dark' ? '#ccc' : '#ccc',
             title: 'Block'
         },
         CaseClause: {
@@ -99,16 +104,18 @@ const Block = (node) => {
     }
 
     const buttonStyle = {
-        borderColor: typeConf[type].color,
-        borderWidth: 4,
+        opacity: 0.1,
+        // borderColor: typeConf[type].color,
+        borderWidth: 2,
         position: 'absolute',
         backgroundColor: nodeBackgroundColor,
         hoverStyle: {
             borderColor: typeConf[type].color,
+            opacity: 1
         },
         scaleIcon: 1.5,
         padding: "$2",
-        left: 20
+        right: 0
     }
     const connectedEdges = id ? edges.filter(e => e.target == id) : []
 
@@ -164,7 +171,7 @@ const Block = (node) => {
         <Node
             draggable={type != 'SourceFile'}
             // contentStyle={{borderLeft:borderWidth+'px solid '+borderColor}}
-            container={!isEmpty}
+            container={!isEmpty && ENABLE_CONTAINER}
             style={extraStyle}
             icon={typeConf[type].icon ?? null}
             node={node}
@@ -175,37 +182,21 @@ const Block = (node) => {
             params={[]}
             color={typeConf[type].color}
             dataOutput={DataOutput.block}>
-            {isEmpty ? <div style={{ height: nodeFontSize * 2 + 'px' }}></div> : <>
-                <div style={{
-                    top: nodeFontSize * 1.90,
-                    opacity: 1,
-                    pointerEvents: 'none',
-                    borderRadius: "0px " + nodeFontSize / 1.3 + "px " + nodeFontSize / 1.3 + "px " + nodeFontSize / 1.3 + 'px', position: 'absolute',
-                    width: metaData.childWidth + (metaData.childWidth > 700 ? 100 : 0) + 'px',
-                    height: height - headerSize - (nodeFontSize * 2) + 'px',
-                    backgroundColor: containerColor,
-                    borderLeft: nodeFontSize / 2 + 'px solid ' + typeConf[type].color,
-                    boxShadow: generateBoxShadow(1.5)
-                }}></div>
-            </>}
             <div>
                 {/* {nodeData.connections?.map((ele, i) => <FlowPort id={id} type='input' label='' style={{ top: 60 + (i * 60) + 'px' }} handleId={'block' + i} />)} */}
                 {nodeData.connections?.map((ele, i) => {
-                    let pos = i && metaData && metaData && metaData.childHeight && metaData.childHeights && metaData.childHeights[i - 1] ? metaData.childHeights[i - 1].height : 0
-                    pos = pos + (nodeData.connections.length == 1 ? singleNodeOffset : marginTop) - 10
-
+                    let pos = i * portSpacing + (nodeMarginVerticalPort/1.4)
+                    let posNext = (i + 1) * portSpacing + (nodeMarginVerticalPort/1.4)
                     const isFirst = i == 0
                     const isLast = i == nodeData.connections.length - 1
                     const isSwitchVisible = !isLast && blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
-                    const nextPos = isLast ? pos : (metaData.childHeights[i]?.height + marginTop - 10)
+                    const nextPos = isLast ? pos : posNext
                     const switchPos = isLast ? (pos + 40) : (pos + nextPos) / 2
 
                     const isAddVisible = isLast && blockEdgesPos.includes(i) || blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
 
                     return <>
-                        {connectedEdges.length > 0 && <div style={{ left: (nodeFontSize / 2 - 1) + 'px', position: 'absolute', top: (pos - (nodeFontSize / 4)) + 'px', width: nodeFontSize + 'px', height: (nodeFontSize / 2) + 'px', backgroundColor: typeConf[type].color }} />}
-                        {isSwitchVisible && isAddVisible && <div style={{ left: - nodeFontSize + 'px', position: 'absolute', top: switchPos + 'px', width: nodeFontSize + 'px', height: (nodeFontSize / 2) + 'px', backgroundColor: typeConf[type].color }} />}
-                        <FlowPort key={i} id={id} type='input' label='' style={{ left: isEmpty ? '' : (nodeFontSize) + 'px', top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        <FlowPort key={i} id={id} type='input' label='' style={{ top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
                         {/*@ts-ignore*/}
                         {isFirst && blockEdgesPos.includes(i) ? <Button
                             {...buttonStyle}
@@ -214,7 +205,7 @@ const Block = (node) => {
                             icon={<Plus color={typeConf[type].color} />}
                         /> : null}
                         {/*@ts-ignore*/}
-                        {isAddVisible ? <Button
+                        {!isSwitchVisible && isAddVisible ? <Button
                             {...buttonStyle}
                             onPress={() => onAddConnection(i + 1)}
                             top={switchPos - 16}
@@ -225,7 +216,6 @@ const Block = (node) => {
                             {...buttonStyle}
                             onPress={() => onSwitchConnection(i + 1)}
                             top={switchPos - 16}
-                            left={-53}
                             icon={<ArrowDownUp color={typeConf[type].color} />}
                         /> : null}
                     </>
@@ -324,19 +314,6 @@ Block.filterChildren = (node, childNodeList, edges, nodeDataTable, setNodeData) 
     vContainer[0].children = childNodeList
 
     return vContainer;
-}
-
-Block.getWidth = (node) => {
-    return 50
-}
-
-Block.getPosition = (pos, type) => {
-    if (alignBlockWithChildrens) pos.y = pos.y + blockOffset
-    return pos
-}
-
-Block.getSpacingFactor = () => {
-    return { factorX: 1.2, factorY: 1 }
 }
 
 export default Block
