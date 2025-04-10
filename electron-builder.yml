@@ -1,16 +1,20 @@
 appId: com.example.protofy
 productName: Protofy
 mac:
-  category: your.app.category
+  target:
+    - target: dir
 win:
   target:
     - target: dir
-      arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
   signingHashAlgorithms: []
   sign: false
 linux:
-  target: AppImage
+  target:
+    - target: dir
+  icon: "apps/adminpanel/public/favicon.ico"
+  signingHashAlgorithms: []
+  sign: false
 asar: false
 files:
   - proxy-main.js
