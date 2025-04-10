@@ -114,9 +114,12 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
                 readOnly={disabled}
                 style={{
                     fontSize: nodeFontSize + 'px',
-                    fontWeight: 'medium',
+                    height: '20px',
+                    padding: '2px 6px',
+                    lineHeight: '1.2',
+                    borderRadius: '4px',
                     ...style
-                }}
+                  }}
                 value={tmpInputValue}
                 placeholder="default"
                 onChange={t => setTmpInputValue(t.target.value)}
@@ -386,7 +389,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
         <div style={{ alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', zIndex: param.type == 'select' || param.type == 'colorPicker' ? 1100 : 0, flexDirection: "column" }}>
             {
                 !isDefaultCase ?
-                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
+                    <div ref={ref} style={{ flex: 1, fontSize: nodeFontSize + 'px', padding: '2px 6px', gap: '4px', display: 'flex', flexDirection: 'row', alignItems: 'stretch' }}>
                         <div className={"handleKey"} ref={textBoxRef} style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', flex: 2 }}>
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton color={colorError} size={nodeFontSize} onDelete={onDeleteParam} id={id} left={true} field={param.field} /> : null}
                             {getValue()}
@@ -463,7 +466,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
     const borderWidth = useTheme('nodeBorderWidth')
     return (
         <div style={{ display: 'flex', flexDirection: 'column', zIndex: 222 }}>
-            {param.label ? <div style={{ padding: '8px 15px 8px 15px', display: 'flex', flexDirection: 'row' }}>
+            {param.label ? <div style={{ padding: '2px 6px', gap: '4px', display: 'flex', flexDirection: 'row' }}>
                 <Text style={{ marginRight: '12px' }}>{param.label}</Text>
             </div> : null}
             <Handle
@@ -508,7 +511,7 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
 
 export const NodeOutput = ({vars, ...props}: NodePortProps & {vars?: string[]}) => {
     const sublabel = vars && vars.length ? vars.reduce((total, current, i) => total + (i > 0? ', ':'') + current, '[')+']' : ''
-    return  <div style={{height: '50px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
+    return  <div style={{height: '20px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
         <FlowPort {...props} sublabel={sublabel} />
     </div>
 }

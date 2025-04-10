@@ -12,14 +12,14 @@ type themeKey = "edgeColor" | "nodeBackgroundColor" | "inputBackgroundColor" | "
 
 const commonVars: any = {
     nodeBorderWidth: '1px',
-    nodeFontSize: 20,
+    nodeFontSize: 12,
     nodeEdgeWidth: 3,
     nodeEdgeStyle: "7 5"
 }
-commonVars.portSize = 20
-commonVars.borderWidth = 0//Math.floor(commonVars.nodeFontSize / 10)
+commonVars.portSize = 14
+commonVars.borderWidth = '1px'
 commonVars.borderWidthSelected = 0
-commonVars.borderRadiusSelected = 13
+commonVars.borderRadiusSelected = 6
 
 const outlineColorLight = '#222'
 const outlineColorDark = '#888'
@@ -123,7 +123,7 @@ const keys = Object.keys(NodeTypes)
 const totalKeys = keys.length
 const generateColor = (type: string, gamut: { hue: number, saturation: number, value: number }, index?) => {
     try {
-    const i = Math.max(typeof type !== "undefined" ? keys.indexOf(type) : index, 0)
+        const i = Math.max(typeof type !== "undefined" ? keys.indexOf(type) : index, 0)
         const h = (100 * (totalKeys / (i + 1))) + gamut?.hue % 100
         const hex = convert?.hsv?.hex ? convert.hsv.hex(h, gamut?.saturation, gamut?.value) : '000000'
         return "#" + hex

@@ -36,7 +36,14 @@ const NodeSelect = (props) => {
 				))}
 			</select>
 			{/* @ts-ignore */}
-			<ChevronDown style={{ position: 'absolute', right: '10px', top: useTheme('nodeFontSize') / 2 , pointerEvents: 'none'}} />
+			<ChevronDown size={useTheme('nodeFontSize')} style={{
+				position: 'absolute',
+				right: '10px',
+				top: '50%',
+				transform: 'translateY(-50%)',
+				pointerEvents: 'none'
+			}}
+			/>
 		</div>
 	)
 }
