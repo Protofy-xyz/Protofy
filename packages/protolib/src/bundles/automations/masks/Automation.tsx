@@ -19,11 +19,10 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Tags', field: 'mask-tags', type: 'input' },
                 { label: 'Response', field: 'mask-responseMode', type: 'select', data: ['instant', 'wait', 'manual'], static: true},
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '5px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Run'} vars={['params']} handleId={'mask-onRun'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
-            
-            <div style={{height: '0px'}} />
+
             <Button label={loading?<Spinner color={color} />:"Run"} onPress={async () => {
                 const params = getFieldValue('testparams', nodeData)
                 setLoading(true)
@@ -35,7 +34,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
             <div style={{height: '0px'}} />
             <NodeParams id={node.id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
             <NodeParams id={node.id} params={[{ label: 'Params', static: true, field: 'testparams', type: 'input' }]} />
-            <div style={{height: '20px'}} />
+            <div style={{height: '5px'}} />
         </Node>
     )
 }
