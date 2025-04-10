@@ -76,7 +76,7 @@ const Block = (node) => {
     let extraStyle: any = {}
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
-    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px' : '200px'
+    extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px' : '120px'
 
     const containerColor = useTheme('containerColor')
     const typeConf = {
