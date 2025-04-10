@@ -3,7 +3,7 @@ import { getKey } from '../../keys/context';
 import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } from 'discord.js'
 
 type connectProps = {
-    onMessage?: (message: any) => void
+    onMessage?: (message: any, client?: any) => void
     onConnect?: (client) => void
     onDisconnect?: (client) => void
     onError?: (err) => void
@@ -85,8 +85,10 @@ const send = async ({ channel, message, onSend }: { channel: any, message: strin
 }
 
 export const discord = {
+    client: client,
     connect: async ({ onMessage, onConnect, onDisconnect, onError, apiKey }: connectProps) => {
         const key = await getToken(apiKey)
+        if (!key) return console.log('Discord api not available. The token “DISCORD_APP_TOKEN” has not been provided.')
         try {
             await client.login(key)
             client.on('disconnect', () => {
@@ -95,7 +97,7 @@ export const discord = {
 
             if (onConnect) onConnect(client)
             client.on('messageCreate', (message) => {
-                if (onMessage) onMessage(message)
+                if (onMessage) onMessage(message, client)
             })
 
         } catch (err) {
