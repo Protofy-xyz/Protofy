@@ -112,7 +112,7 @@ const useTheme = (key: themeKey, defaultValue = null) => {
     const themeOverride = useFlowsStore(state => state.themeOverride)
     const _theme = { ...Theme[themeMode], ...themeOverride }
     try {
-        const value = _theme[key]
+        const value = _theme[key] ?? defaultValue
         return value
     } catch (e) {
         return defaultValue
@@ -122,9 +122,16 @@ const useTheme = (key: themeKey, defaultValue = null) => {
 const keys = Object.keys(NodeTypes)
 const totalKeys = keys.length
 const generateColor = (type: string, gamut: { hue: number, saturation: number, value: number }, index?) => {
+    try {
     const i = Math.max(typeof type !== "undefined" ? keys.indexOf(type) : index, 0)
-    const h = (100 * (totalKeys / (i + 1))) + gamut.hue % 100
-    return "#" + convert.hsv.hex(h, gamut.saturation, gamut.value)
+        const h = (100 * (totalKeys / (i + 1))) + gamut?.hue % 100
+        const hex = convert?.hsv?.hex ? convert.hsv.hex(h, gamut?.saturation, gamut?.value) : '000000'
+        return "#" + hex
+    } catch (e) {
+        console.error('Error generating color:', e)
+        return '#000000'
+    }
+
 }
 
 export const generateColorbyIndex = (index, arrLength) => {
@@ -138,8 +145,9 @@ export const generateColorbyIndex = (index, arrLength) => {
 
 export const useNodeColor = (type?) => {
     //NodeTypes
+    
     const nodePalette = useTheme('nodePalette', {})
-    return type && nodePalette.custom[type] ? nodePalette.custom[type] : generateColor(type, nodePalette.gamut) //nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
+    return type && nodePalette?.custom && nodePalette?.custom[type] ? nodePalette.custom[type] : generateColor(type, nodePalette.gamut) //nodePalette.colors[Object.keys(NodeTypes).indexOf(type) % nodePalette.colors.length]
 }
 
 export const useColorFromPalette = (index) => {
@@ -153,9 +161,9 @@ export const usePrimaryColor = () => {
     const primaryColor = useFlowsStore(state => state.primaryColor)
     const themeMode = useFlowsStore(state => state.themeMode)
     if (themeMode == 'dark') {
-        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette.gamut.saturation - 10, nodePalette.gamut.value + 5)
+        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette?.gamut?.saturation - 10, nodePalette?.gamut?.value + 5)
     } else {
-        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette.gamut.saturation, nodePalette.gamut.value)
+        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette?.gamut?.saturation, nodePalette?.gamut?.value)
     }
 
 }
