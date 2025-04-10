@@ -119,7 +119,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
                     lineHeight: '1.2',
                     borderRadius: '4px',
                     ...style
-                  }}
+                }}
                 value={tmpInputValue}
                 placeholder="default"
                 onChange={t => setTmpInputValue(t.target.value)}
@@ -256,7 +256,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : "#404040"
 
                 return (<div style={{ cursor: "pointer" }}>
-                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor.value, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }}onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
+                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor.value, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 1100 }}>
                         {colorPickerVisible
                             ? <SketchPicker
@@ -288,14 +288,27 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 </>
             case 'boolean':
                 return <span ref={checkRef}>
-                    <input type='checkbox'
+                    <input
+                        type='checkbox'
                         onChange={() => {
                             dataNotify({ id: id, paramField: param.field, newValue: !checked });
-                            setNodeData(id, { ...nodeData, [param.field]: getDataFromField(!checked, param.field, nodeData, {}, 'FalseKeyword') })
-                            setChecked(!checked)
+                            setNodeData(id, {
+                                ...nodeData,
+                                [param.field]: getDataFromField(!checked, param.field, nodeData, {}, 'FalseKeyword')
+                            });
+                            setChecked(!checked);
                         }}
-                        checked={checked ? true : false}
-                        style={{ all: "revert", width: nodeFontSize, margin: "2px 0px 2px 0px", accentColor: interactiveColor, transform: `scale(${nodeFontSize / 15})`, marginRight: '5px' }} />
+                        checked={!!checked}
+                        style={{
+                            all: 'revert',
+                            accentColor: interactiveColor,
+                            transform: `scale(${nodeFontSize / 15})`,
+                            margin: 0,
+                            verticalAlign: 'middle',
+                            position: 'relative',
+                            top: '-3px',
+                        }}
+                    />
                 </span>
             default:
                 const fieldKind = nodeData[param.field]?.kind
@@ -318,7 +331,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         : <></>}
                     <NodeInput
                         id={id}
-                        post={(v) =>  getDataFromField(post(v), param.field, nodeData)}
+                        post={(v) => getDataFromField(post(v), param.field, nodeData)}
                         pre={(v) => pre(v?.value ?? v ?? '')}
                         options={param.data?.options}
                         field={param.field}
@@ -394,7 +407,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                             {(param?.deleteable && isDeletedLeft) ? <DeleteButton color={colorError} size={nodeFontSize} onDelete={onDeleteParam} id={id} left={true} field={param.field} /> : null}
                             {getValue()}
                         </div>
-                        <div className={"handleValue"} title={param.description} style={{ minWidth: '180px', marginRight: '10px', display: 'flex', flexDirection: 'row', justifyContent: param.type == 'boolean' ? 'flex-end' : '', alignItems: 'center', flex: 3 }}>
+                        <div className={"handleValue"} title={param.description} style={{ minWidth: '0px', marginRight: '10px', display: 'flex', flexDirection: 'row', justifyContent: param.type == 'boolean' ? 'flex-end' : '', alignItems: 'center', flex: 3 }}>
                             {getInput(isConnected)}
                             {(param?.deleteable && !isDeletedLeft) ? <DeleteButton color={colorError} size={nodeFontSize} onDelete={onDeleteParam} id={id} field={param.field} /> : null}
                         </div>
@@ -509,9 +522,9 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
     </div>
 }
 
-export const NodeOutput = ({vars, ...props}: NodePortProps & {vars?: string[]}) => {
-    const sublabel = vars && vars.length ? vars.reduce((total, current, i) => total + (i > 0? ', ':'') + current, '[')+']' : ''
-    return  <div style={{height: '20px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column"}}>
+export const NodeOutput = ({ vars, ...props }: NodePortProps & { vars?: string[] }) => {
+    const sublabel = vars && vars.length ? vars.reduce((total, current, i) => total + (i > 0 ? ', ' : '') + current, '[') + ']' : ''
+    return <div style={{ height: '20px', alignItems: 'stretch', flexBasis: 'auto', flexShrink: 0, listStyle: 'none', position: 'relative', display: 'flex', flexDirection: "column" }}>
         <FlowPort {...props} sublabel={sublabel} />
     </div>
 }
