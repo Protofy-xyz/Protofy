@@ -5,8 +5,6 @@ mac:
     - target: dir
       arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
-  signingHashAlgorithms: []
-  sign: false
 win:
   target:
     - target: dir
@@ -19,8 +17,6 @@ linux:
     - target: dir
       arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
-  signingHashAlgorithms: []
-  sign: false
 asar: false
 files:
   - proxy-main.js
