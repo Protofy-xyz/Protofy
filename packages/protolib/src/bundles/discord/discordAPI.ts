@@ -149,6 +149,22 @@ export const DiscordAPI = async (app, context) => {
         connectDiscord(context)
     }, 3000)
 
+    context.onEvent(
+        context.mqtt,
+        context,
+        async (event) => connectDiscord(context),
+        "keys/create/DISCORD_APP_TOKEN",
+        "api"
+    )
+    // TODO: on upate doesn't delete the old token
+    // context.onEvent(
+    //     context.mqtt,
+    //     context,
+    //     async (event) => connectDiscord(context),
+    //     "keys/update/DISCORD_APP_TOKEN",
+    //     "api"
+    // )
+
     app.get('/api/core/v1/discord/send/message', handler(async (req, res, session) => {
         const { channelId: channel_id, message, channelName } = req.query
         let channelId = channel_id
