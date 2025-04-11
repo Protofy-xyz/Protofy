@@ -43,9 +43,9 @@ const DeviceAction = (node: any = {}, nodeData = {}) => {
             {isJsonType || hasNoPayload
                 && <NodeParams id={node.id} params={[{ label: 'Payload' + (hasNoPayload ? '' : ' (optional)'), field: 'param-4', type: 'input' }]} />}
             <div style={{ marginTop: '120px' }}>
-                <FlowPort id={node.id} type='input' label='On done (data)' style={{ top: isJsonType || hasNoPayload ? '300px' : '250px' }} handleId={'param-5'} />
+                <FlowPort id={node.id} type='input' label='On done (data)' style={{ top: isJsonType || hasNoPayload ? '180px' : '130px' }} handleId={'param-5'} />
                 <FallbackPort fallbackText={"null"} node={node} port={'param-5'} type={"target"} fallbackPort={'param-5'} portType={"_"} preText="async () => " postText="" />
-                <FlowPort id={node.id} type='input' label='On error (error)' style={{ top: isJsonType || hasNoPayload ? '350px' : '300px' }} handleId={'param- 6'} />
+                <FlowPort id={node.id} type='input' label='On error (error)' style={{ top: isJsonType || hasNoPayload ? '220px' : '170px' }} handleId={'param- 6'} />
                 <FallbackPort fallbackText={"null"} node={node} port={'param-6'} type={"target"} fallbackPort={'param-6'} portType={"_"} preText="async () => " postText="" />
             </div>
         </Node>
