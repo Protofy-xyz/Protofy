@@ -31,6 +31,34 @@ const registerCards = async (context) => {
             icon: "discord",
             color: "#5865F2",
             description: "discord last received message",
+            rulesCode: `return states?.discord?.received?.message`,
+            type: 'value',
+            html: `
+            //data contains: data.value, data.icon and data.color
+            return card({
+                content: \`
+                    \${icon({ name: data.icon, color: data.color, size: '48' })}    
+                    \${cardValue({ value: "#" + data.value.channelName, style: "font-size: 20px; color: #A0A4A7; font-weight: 400" })}
+                    \${cardValue({ value: data.value.username, style: "font-size: 20px; color: #f7b500; margin-top: 0px" })}
+                    \${cardValue({ value: data.value.content, style: "font-size: 20px; font-weight: 400; margin-top: 0px" })}
+                \`
+            });
+            `
+        },
+        emitEvent: true
+    })
+
+    addCard({
+        group: 'discord',
+        tag: "received",
+        id: 'discord_received_message_content',
+        templateName: "discord last received message content",
+        name: "message_content",
+        defaults: {
+            name: "discord_last_received_message_content",
+            icon: "discord",
+            color: "#5865F2",
+            description: "discord last received message",
             rulesCode: `return states?.discord?.received?.message?.content`,
             type: 'value'
         },
@@ -127,6 +155,7 @@ const connectDiscord = async (context) => {
             if (channelName) {
                 message.channelName = channelName
             }
+            message.username = message.author?.username ?? ''
             context.state.set({ group: 'discord', tag: "received", name: "message", value: message, emitEvent: false });
         },
         onConnect: async (client) =>
