@@ -46,8 +46,8 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {} }) => {
-  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
+const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps={} }) => {
+  return <CenterCard title={title} id={id}  containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit}/>} >
     <CardValue
       Icon={icon ?? 'tag'}
       value={value ?? 'N/A'}
@@ -58,8 +58,8 @@ const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete =
   </CenterCard>
 }
 
-const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {} }) => {
-  return <CenterCard title={title} id={id} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
+const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
       data={data}
       displayResponse={displayResponse}
@@ -222,7 +222,9 @@ const Board = ({ board, icons }) => {
           setIsEditing(true)
           setCurrentCard(item)
           setEditedCard(item)
-        }} />
+        }} 
+        containerProps={item.containerProps}
+        />
       }
     } else if (item.type == 'action') {
       return {
@@ -237,6 +239,7 @@ const Board = ({ board, icons }) => {
           id={item.key}
           title={item.name}
           params={item.params}
+          containerProps={item.containerProps}
           onDelete={() => {
             setIsDeleting(true);
             setCurrentCard(item);
