@@ -5,6 +5,11 @@ import { API } from "protobase";
 export const onEvent = (mqtt, context, cb, path?, from?) => {
     context.topicSub(mqtt, 'notifications/event/create/#', (async (message: string, topic: string) => {
         try {
+            if (typeof message == 'string') {
+                message = JSON.parse(message)
+            }
+        } catch (e) {}
+        try {
             if (message) {
                 if (path && message['path'] != path) {
                     return
