@@ -38,9 +38,9 @@ const registerCards = async (context) => {
             return card({
                 content: \`
                     \${icon({ name: data.icon, color: data.color, size: '48' })}    
-                    \${cardValue({ value: "#" + data.value.channelName, style: "font-size: 20px; color: #A0A4A7; font-weight: 400" })}
-                    \${cardValue({ value: data.value.username, style: "font-size: 20px; color: #f7b500; margin-top: 0px" })}
-                    \${cardValue({ value: data.value.content, style: "font-size: 20px; font-weight: 400; margin-top: 0px" })}
+                    \${cardValue({ value: "#" + data.value.channelName, style: "font-size: 16px; color: #A0A4A7; font-weight: 400;" })}
+                    \${cardValue({ value: data.value.username, style: "font-size: 16px; color: #f7b500; margin-top: 0px;" })}
+                    \${cardValue({ value: data.value.content, style: "font-size: 20px; font-weight: 400; margin-top: 10px" })}
                 \`
             });
             `
