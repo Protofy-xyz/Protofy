@@ -32,7 +32,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
     const borderWidth = useTheme('borderWidth')
     const themeBackgroundColor = useTheme('nodeBackgroundColor')
     const isHover = useHover(flexRef)
-    const titleSize = (useTheme('nodeFontSize') / 100) * 100
+    const titleSize = useTheme('nodeFontSize') * 1.2
     const selectedColor = useTheme('selectedColor')
     const fontSize = useTheme('nodeFontSize')
 
@@ -49,41 +49,99 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
 
     const getNodeShadow = () => {
         if (isNodePreviewMode || container) return 'none'
-        else if (!isPreview && node?.selected) return "0px 0px 0px 2px " + selectedColor
+        else if (!isPreview && node?.selected) return 'none'
         else return generateBoxShadow(isHover ? 10 : 3)
-    }
+      }
 
     return (
         <div
             id={id}
             ref={flexRef}
-            //@ts-ignore
             style={{
-                //@ts-ignore
-                display: 'flex', minHeight: !isPreview ? "80px" : "30px", flexDirection: mode,
-                borderRadius: 13,
-                textAlign: "center",
+                display: 'flex',
+                minHeight: !isPreview ? '80px' : '30px',
+                flexDirection: mode,
+                borderRadius: 5,
+                textAlign: 'center',
                 fontSize: fontSize,
                 boxShadow: getNodeShadow(),
+                outline: !isPreview && node?.selected ? `1px solid ${selectedColor}` : 'none',
+                outlineOffset: '0px',
                 cursor: isNodePreviewMode ? 'default' : undefined,
                 ...style,
             }}
             className={draggable ? '' : 'nodrag'}
-        >
-            {(title || headerContent) && !isNodePreviewMode ? <div ref={boxRef} style={{ display: 'flex', backgroundColor: color, borderRadius: isPreview ? '8px' : innerBorderRadius, borderBottom: mode == 'column' && !isPreview ? borderWidth + ' solid ' + borderColor : '0px', paddingBottom: '10px', justifyContent: 'center' }}>
-                {icon && flowDirection == "LEFT" ? <div style={{ display: 'flex', right: '15px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
-                {title ? <Text style={{ fontSize: id ? titleSize : '18px', padding: '0px 10px 0px 10px', color: tColor, flex: 1, textAlign: 'center', alignSelf: 'center', position: 'relative', top: '4px', fontFamily: 'Jost-Medium', maxWidth: '22ch', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{title}</Text> : null}
-                {icon && flowDirection == "RIGHT" ? <div style={{ display: 'flex', left: '10px', position: 'absolute', top: '8px' }}>{React.createElement(icon, { size: id ? titleSize : '18px', color: hColor })}</div> : null}
-                {headerContent}
-            </div> : null}
-            {!isPreview
-                ? <div className={isNodePreviewMode ? 'nowheel' : ''} style={{ borderRadius: '0px 0px ' + innerRadius + innerRadius, backgroundColor: container ? "transparent" : themeBackgroundColor, flex: 1, paddingTop: '0.5ch', paddingBottom: '0.5ch', ...nodeStyle }}>
-                    {children}
+            >
+          {(title || headerContent) && !isNodePreviewMode ? (
+            <div
+                ref={boxRef}
+                style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    backgroundColor: color,
+                    borderRadius: isPreview ? '6px' : '5px 5px 0 0',
+                    borderBottom: mode === 'column' && !isPreview ? `${borderWidth} solid ${borderColor}` : '0px',
+                    height: '24px',
+                    padding: '0 12px',
+                    gap: '6px',
+                    position: 'relative',
+                }}
+            >
+                {icon && flowDirection === 'LEFT' && (
+                    <div style={{ display: 'flex' }}>
+                    {React.createElement(icon, {
+                        size: titleSize,
+                        color: hColor,
+                    })}
+            </div>)}
+            {title && (
+                <Text
+                style={{
+                    fontSize: titleSize - 1,
+                    color: tColor,
+                    flex: 1,
+                    textAlign: 'left',
+                    fontFamily: 'Jost-Medium',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    lineHeight: '1',
+                    paddingTop: '1px',
+                }}
+                >
+                {title}
+                </Text>
+            )}
+            {icon && flowDirection === 'RIGHT' && (
+                <div style={{ display: 'flex' }}>
+                {React.createElement(icon, {
+                    size: titleSize,
+                    color: hColor,
+                })}
                 </div>
-                : <></>
-            }
+            )}
+            {headerContent}
+            </div>
+
+          ) : null}
+      
+          {!isPreview && (
+            <div
+              className={isNodePreviewMode ? 'nowheel' : ''}
+              style={{
+                borderRadius: '0 0 5px 5px',
+                backgroundColor: container ? 'transparent' : themeBackgroundColor,
+                flex: 1,
+                paddingTop: '0.5ch',
+                paddingBottom: '0.5ch',
+                ...nodeStyle,
+              }}
+            >
+              {children}
+            </div>
+          )}
         </div>
-    );
+    ) 
 }
 
 export interface NodePortProps {
@@ -148,8 +206,13 @@ export const NodePort = ({ id, type, style, label, sublabel, isConnected = false
                     backgroundColor: backgroundColor,
                     display: isNodePreviewMode ? 'none' : 'flex', flexDirection: 'row',
                     alignItems: 'center',
-                    border: borderWidth + " solid " + borderColor, width: portSize + "px", height: portSize + "px", marginLeft: '',
-                    marginRight: marginRight + 'px', cursor: 'pointer', ...style
+                    border: borderWidth + " solid " + borderColor, 
+                    width: portSize + "px", 
+                    height: portSize + "px", 
+                    marginLeft: position === Position.Right ? '-4px' : undefined,
+                    marginRight: position === Position.Left ? '-4px' : undefined,
+                    cursor: 'pointer', 
+                    ...style
                 }}
                 id={id}
                 isConnectable={!connected}
