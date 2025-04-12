@@ -86,7 +86,8 @@ export const jsonViewerDefaultStyles = {
     fontFamily: "monospace",
   },
   builtin: {
-    color: "var(--color7)",
+    color: "var(--color)",
+    opacity: 0.75
   },
   boolean: {
     color: "$yellow9"
@@ -98,8 +99,9 @@ export const jsonViewerDefaultStyles = {
     color: "$purple9"
   },
   property: {
-    fontWeight: "bold",
-    color: "var(--color7)",
+    color: "var(--color)",
+    opacity: 0.75,
+    fontFamily: "monospace",
   },
   collapseIcon: {
     cursor: "pointer",
