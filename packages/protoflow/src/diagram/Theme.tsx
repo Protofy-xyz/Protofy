@@ -16,7 +16,7 @@ const commonVars: any = {
     nodeEdgeWidth: 3,
     nodeEdgeStyle: "7 5"
 }
-commonVars.portSize = 14
+commonVars.portSize = 10
 commonVars.borderWidth = '1px'
 commonVars.borderWidthSelected = 0
 commonVars.borderRadiusSelected = 6
