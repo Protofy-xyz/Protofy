@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { getRoot, handler } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
+import { addAction } from 'protolib/bundles/actions/context/addAction';
+import { addCard } from 'protolib/bundles/cards/context/addCard';
 
 const logger = getLogger()
 const app = getApp()
@@ -45,7 +47,7 @@ async function fileExists(filePath) {
 
 // Handler function to avoid repeating the same code for both routes
 const handleFilesRequest = async (req, res) => {
-    const name = req.params.path || '';
+    const name = req.params.path || req.query.path || '';
     const isDownload = req.query.download
 
     const filepath = path.join(getRoot(req), name);
@@ -241,8 +243,41 @@ app.post('/api/core/v1/files/:path(*)', requireAdmin(), upload.single('file'), h
 // Route to create directories in /api/core/v1/directories/*
 app.post('/api/core/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 
-app.get('/api/core/v1/files/:path(*)', requireAdmin(), handler(handleFilesRequest));
+app.get('/api/core/v1/files/:path(*)?', requireAdmin(), handler(handleFilesRequest));
 
 app.post('/api/core/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
+
+
+addAction({
+    group: 'files',
+    name: 'read',
+    url: "/api/core/v1/files",
+    tag: 'actions',
+    description: "Read a file or directory",
+    params: {
+        path: "Path to the file or directory to read",
+    },
+    emitEvent: true
+})
+
+addCard({
+    group: 'files',
+    tag: 'actions',
+    id: 'send',
+    templateName: 'Read File or Directory',
+    name: 'files_read',
+    defaults: {
+        type: "action",
+        icon: 'file',
+        name: 'files_read',
+        description: 'Read a file or directory',
+        params: {
+            path: "Path to the file or directory to read",
+        },
+        rulesCode: `return await execute_action("/api/core/v1/files", userParams)`,
+        displayResponse: true
+    },
+    emitEvent: true,
+})
 
 export default 'files'
