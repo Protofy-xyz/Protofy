@@ -25,12 +25,14 @@ export const JSONView = (props) => {
             displayDataTypes={false}
             quotesOnKeys={false}
             displayObjectSize={false}
+            {...props}
             style={{
                 dataTypes: {
                     string: 'red'
-                }
+                },
+                backgroundColor: 'transparent',
+                ...props?.style,
             }}
-            {...props}
             src={value}
         /></>
 }
