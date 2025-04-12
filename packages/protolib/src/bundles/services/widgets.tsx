@@ -176,6 +176,9 @@ const cardAction = ({ data }) => {
                 border-radius: 8px;
                 box-sizing: border-box;
                 background-color: var(--gray1);
+                white-space: pre;
+                line-height: 1.4;
+                overflow: auto;
             "
             class="no-drag"
         ></textarea>
@@ -268,7 +271,7 @@ export const getHTML = (html, data) => {
 export const CardValue = ({ Icon, value, html, color = "var(--color7)", ...props }) => {
     return (
         <YStack alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div style={{ width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, icon: Icon, value: value, color: color  }) }} />}
+            {html?.length > 0 && <div style={{ width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, icon: Icon, value: value, color: color }) }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",

@@ -12,6 +12,7 @@ export const getApp = () => {
         const logger = getLogger()
         const config = getConfig()
         app = express();
+        app.set('json spaces', 2);
         app.use(cors());
         app.use(cookieParser());
         app.use(express.json({ limit: '50mb' }));

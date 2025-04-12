@@ -48,6 +48,7 @@ async function fileExists(filePath) {
 // Handler function to avoid repeating the same code for both routes
 const handleFilesRequest = async (req, res) => {
     const name = req.params.path || req.query.path || '';
+    const compact = req.query.path ? true : false
     const isDownload = req.query.download
 
     const filepath = path.join(getRoot(req), name);
@@ -83,7 +84,9 @@ const handleFilesRequest = async (req, res) => {
             res.send(await Promise.all(fileList.map(async (f) => {
                 const filePath = path.join(filepath, f);
                 const stats = await fs.stat(filePath);
-
+                if(compact) {
+                    return `${f}`
+                }
                 return {
                     id: uuidv4(),
                     path: `${name}/${f}`,
