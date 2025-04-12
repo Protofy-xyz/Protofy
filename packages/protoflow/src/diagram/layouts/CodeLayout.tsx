@@ -101,7 +101,7 @@ const computeLayout = (nodes, edges, node, pos={x:0, y: 0}, metadata={}, tracker
 
     metadata[node.id] = {layouted: true, childWidth: tracker.x, childHeight: pos.y - originalPosY, childHeights: childHeights}
     pos.x -= nodeWidth + (marginX*spacingFactorX)
-    const nodeHeight = node.type == 'Block' || node.type == 'CaseClause' || node.type == 'DefaultClause' ? (metadata[node.id].childHeight?metadata[node.id].childHeight+100:0) : node.height
+    const nodeHeight = node.height
     pos.y += pos.y - originalPosY > (nodeHeight+(marginY*spacingFactorY)) ? 0 : (nodeHeight + (marginY*spacingFactorY)) - (pos.y - originalPosY)
     
     return metadata
