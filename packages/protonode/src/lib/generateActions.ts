@@ -46,7 +46,7 @@ export const AutoActions = ({
             height: 8,
             icon: 'file-check',
             displayResponse: true,
-            name: `exists ${modelName}`,	
+            name: `exists ${modelName}`,
             type: 'action',
             description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
             params: {
@@ -66,7 +66,7 @@ export const AutoActions = ({
         try {
             const result = await API.get(`${urlPrefix}/${id}`);
             if (result.isLoaded) {
-                fixValues(result.data,modelType);
+                fixValues(result.data, modelType);
                 return res.json(result.data);
             }
             return res.json(false);
@@ -92,7 +92,7 @@ export const AutoActions = ({
         tag: modelName,
         name: 'read',
         id: 'object_' + modelName + '_read',
-        templateName: 'Read a ' + modelName +' object',
+        templateName: 'Read a ' + modelName + ' object',
         defaults: {
             width: 4,
             height: 8,
@@ -111,7 +111,7 @@ export const AutoActions = ({
     })
 
     //create
-    const fixValues = (params,modelType) => {
+    const fixValues = (params, modelType) => {
         Object.keys(params).forEach((key) => {
             // checkea los tipos de parametros para convetiros a los tipos correctos
             if (modelType.getObjectFieldsDefinition()[key].type === 'number') {
@@ -126,7 +126,7 @@ export const AutoActions = ({
     app.post(actionUrlPrefix + '/create', async (req, res) => {
         const params = req.body;
         console.log(JSON.stringify(params));
-        fixValues(params,modelType);
+        fixValues(params, modelType);
         try {
             const result = await API.post(`${urlPrefix}`, params);
             console.log(result)
@@ -229,7 +229,7 @@ export const AutoActions = ({
     //update
     app.get(actionUrlPrefix + '/update', async (req, res) => {
         const params = req.query;
-        fixValues(params,modelType);
+        fixValues(params, modelType);
         const id = params.id;
         const field = params.field;
         const value = params.value;
@@ -281,6 +281,62 @@ export const AutoActions = ({
             description: `Updates a ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
             params: updateParams,
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/update", userParams)`
+        },
+        emitEvent: true,
+        token: getServiceToken()
+    })
+
+    context.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id, token: getServiceToken() });
+        },
+        modelName + "/create/#"
+    )
+
+    context.cards.add({
+        group: 'objects',
+        tag: modelName,
+        name: 'lastCreated',
+        templateName: 'Last created ' + modelName,
+        id: 'object_' + modelName + '_lastCreated',
+        defaults: {
+            type: "value",
+            icon: 'rss',
+            name: `lastCreated ${modelName}`,
+            description: `Last Created ${modelName}`,
+            rulesCode: `return states.objects?.${modelName}.lastCreated;`,
+        },
+        emitEvent: true,
+        token: getServiceToken()
+    })
+
+    context.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id, token: getServiceToken() });
+        },
+        modelName + "/update/#"
+    )
+
+    context.cards.add({
+        group: 'objects',
+        tag: modelName,
+        name: 'lastUpdated',
+        templateName: 'Last updated ' + modelName,
+        id: 'object_' + modelName + '_lastUpdated',
+        defaults: {
+            type: "value",
+            icon: 'rss',
+            name: `lastUpdated ${modelName}`,
+            description: `Last updated ${modelName}`,
+            rulesCode: `return states.objects?.${modelName}.lastUpdated;`,
         },
         emitEvent: true,
         token: getServiceToken()
