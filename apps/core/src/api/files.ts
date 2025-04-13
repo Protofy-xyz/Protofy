@@ -6,7 +6,7 @@ import { getApp, getServiceToken } from 'protonode';
 import multer from 'multer';
 import fsExtra from 'fs-extra';
 import { v4 as uuidv4 } from 'uuid';
-import { getRoot, handler } from 'protonode';
+import { getRoot, handler, requireAdmin } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
 import { addAction } from 'protolib/bundles/actions/context/addAction';
@@ -225,16 +225,6 @@ const handleRenameRequest = async (req, res, session) => {
         res.status(500).send({ error: "Error renaming item" });
     }
 };
-
-
-const requireAdmin = () => handler(async (req, res, session, next) => {
-    if(!session || !session.user.admin) {
-        res.status(401).send({error: "Unauthorized"})
-        return
-    }
-    next()
-})
-
 
 //Route to delete files and directories
 app.post('/api/core/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDeleteRequest));

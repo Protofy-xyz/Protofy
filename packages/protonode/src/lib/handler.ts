@@ -58,3 +58,11 @@ export const handler: Handler = fn => async (req:any, res:any, next:any) => {
         }
     }
 };
+
+export const requireAdmin = () => handler(async (req, res, session, next) => {
+    if(!session || !session.user.admin) {
+        res.status(401).send({error: "Unauthorized"})
+        return
+    }
+    next()
+})

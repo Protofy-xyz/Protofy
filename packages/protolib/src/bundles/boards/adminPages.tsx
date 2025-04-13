@@ -28,6 +28,7 @@ import BoardPreview from '../../components/board/BoardPreview'
 import { Monaco } from '../../components/Monaco'
 import { usePageParams } from '../../next'
 
+
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress, ...props }) => {
   return <Tinted>
@@ -464,10 +465,10 @@ export default {
         {board.status == 'loaded' && <Board board={data} icons={icons} />}
       </AdminPage>)
     },
-    getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async () => {
+    getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
       return {
-        board: await API.get(`/api/core/v1/boards/${context.params.board}`),
-        icons: (await API.get('/api/core/v1/icons'))?.data?.icons ?? []
+        board: await API.get(`/api/core/v1/boards/${context.params.board}/?token=${session?.token}`),
+        icons: (await API.get(`/api/core/v1/icons?token=${session?.token}`))?.data?.icons ?? []
       }
     }))
   }

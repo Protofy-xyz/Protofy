@@ -4,7 +4,7 @@ import { API, getLogger, ProtoMemDB, set } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
-import { getServiceToken } from "protonode";
+import { getServiceToken, requireAdmin } from "protonode";
 import { addAction } from '../actions/context/addAction';
 import { removeActions } from "../actions/context/removeActions";
 import fileActions from "../files/fileActions";
@@ -311,7 +311,8 @@ const BoardsAutoAPI = AutoAPI({
     initialData: {},
     skipDatabaseIndexes: true,
     getDB: getDB,
-    prefix: '/api/core/v1/'
+    prefix: '/api/core/v1/',
+    requiresAdmin: ['*']
 })
 
 class HttpError extends Error {
@@ -405,6 +406,7 @@ export const BoardsAPI = (app, context) => {
                 ${getStateValue()}
                 ${fileContent.rulesCode}
             `);
+
             await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
             // console.log(prevStates)
             prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId] ?? {}))
