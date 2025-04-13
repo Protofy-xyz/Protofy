@@ -18,7 +18,7 @@ import { Tinted } from '../../components/Tinted'
 import React from 'react'
 import { useProtoStates } from '../protomemdb/lib/useProtoStates'
 import { CardSelector } from '../../components/board/CardSelector'
-import { ActionRunner } from '../../components/ActionRunner'
+
 import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
 import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
@@ -27,7 +27,10 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from '../../components/board/BoardPreview'
 import { Monaco } from '../../components/Monaco'
 import { usePageParams } from '../../next'
+import { jsonToDiv } from '../../lib/jsonToDiv'
 
+import dynamic from 'next/dynamic'
+const ActionRunner = dynamic(() => import('../../components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
 
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress, ...props }) => {
@@ -47,8 +50,8 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps={} }) => {
-  return <CenterCard title={title} id={id}  containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit}/>} >
+const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
       Icon={icon ?? 'tag'}
       value={value ?? 'N/A'}
@@ -130,12 +133,7 @@ const Board = ({ board, icons }) => {
       const response = await window['onRunListeners'][card](card, cleanedParams);
       const responseElement = document.getElementById(card + '_response');
       if (responseElement) {
-        //check if response is a string
-        if (typeof response == 'string' || typeof response == 'number' || typeof response == 'boolean') {
-          responseElement['value'] = response;
-        } else {
-          responseElement['value'] = JSON.stringify(response, null, 2);
-        }
+        responseElement.innerHTML = jsonToDiv(response, 0, 2);
       }
     };
   }, [])
@@ -228,8 +226,8 @@ const Board = ({ board, icons }) => {
           setIsEditing(true)
           setCurrentCard(item)
           setEditedCard(item)
-        }} 
-        containerProps={item.containerProps}
+        }}
+          containerProps={item.containerProps}
         />
       }
     } else if (item.type == 'action') {
