@@ -114,11 +114,11 @@ export const autopilot = ({context, app, agentName, model}) => {
       },
       app: app,
       onRun: async (params, res) => {
-        const rules = await context.state.get({ group: 'boards', tag: agentName, name: 'rules', defaultValue: [], token: getServiceToken() });
+        const rules = await context.state.get({ group: 'boards', tag: agentName, name: 'rules', defaultValue: []});
         //check if the rule is already in the list
         if (params.rule && params.rule.length > 1 && rules.indexOf(params.rule) === -1) {
           rules.push(params.rule);
-          context.state.set({ group: 'boards', tag: agentName, name: 'rules', value: rules, emitEvent: true, token: getServiceToken() });
+          context.state.set({ group: 'boards', tag: agentName, name: 'rules', value: rules, emitEvent: true});
           res.send({result: 'rule added'});
         } else {
           res.send({result: 'rule already exists'});
@@ -137,12 +137,12 @@ export const autopilot = ({context, app, agentName, model}) => {
       tags: [agentName],
       app: app,
       onRun: async (params, res) => {
-        const rules = await context.state.get({ group: 'boards', tag: agentName, name: 'rules', defaultValue: [], token: getServiceToken() });
+        const rules = await context.state.get({ group: 'boards', tag: agentName, name: 'rules', defaultValue: []});
         const index = parseInt(params.rule);
         if (index > -1) {
           rules.splice(index, 1);
         }
-        context.state.set({ group: 'boards', tag: agentName, name: 'rules', value: rules, emitEvent: true, token: getServiceToken() });
+        context.state.set({ group: 'boards', tag: agentName, name: 'rules', value: rules, emitEvent: true});
         res.send({result: 'rule removed'});
       }
     });
@@ -156,7 +156,7 @@ export const autopilot = ({context, app, agentName, model}) => {
       app: app,
       onRun: async (params, res) => {
         clearInterval(timer)
-        context.state.set({ group: 'boards', tag: agentName, name: 'autopilot', value: 'ON', emitEvent: true, token: getServiceToken() });
+        context.state.set({ group: 'boards', tag: agentName, name: 'autopilot', value: 'ON', emitEvent: true});
         timer = setInterval(() => context.executeAutomation(agentName+'/autopilot/step', () => { }, () => { }), 100);
         res.send('ai control automation started');
       }
@@ -170,7 +170,7 @@ export const autopilot = ({context, app, agentName, model}) => {
       tags: [agentName+'-user'],
       app: app,
       onRun: async (params, res) => {
-        context.state.set({ group: 'boards', tag: agentName, name: 'autopilot', value: 'OFF', emitEvent: true, token: getServiceToken() });
+        context.state.set({ group: 'boards', tag: agentName, name: 'autopilot', value: 'OFF', emitEvent: true});
         clearInterval(timer);
         res.send('ai control automation disabled');
       }

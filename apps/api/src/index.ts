@@ -9,7 +9,7 @@ const logger = getLogger()
 const axios = require('axios')
 import http from 'http';
 global.defaultRoute = '/api/v1'
-
+global.appName = 'api'
 //@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';

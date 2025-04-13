@@ -3,14 +3,15 @@ import {getServiceToken} from 'protonode';
 import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
+const inCore = global.appName == 'core'
+
 export const setContext = async (options: {
     chunk?: string,
     group?: string,
     tag: string,
     name: string,
     value: any,
-    emitEvent?: boolean,
-    token?: boolean
+    emitEvent?: boolean
 }) => {
     const group = options.group || 'system'
     const name = options.name
@@ -28,9 +29,9 @@ export const setContext = async (options: {
         return
     }
 
-    if(options.token) {
+    if(!inCore) {
         // console.log('Setting value using api: ', value, 'for', group, tag, name)
-        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+options.token, {value: value??''}) 
+        const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+getServiceToken(), {value: value??''}) 
         
         if(result && result.status == 'loaded' && result.data.changed && options.emitEvent) {
             generateEvent({

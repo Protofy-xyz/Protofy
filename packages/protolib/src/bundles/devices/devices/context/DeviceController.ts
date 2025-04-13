@@ -27,9 +27,9 @@ export const deviceController = async ({
     });
 
     sensors.forEach((sensor) => {
-        context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.initialValue, token: getServiceToken() });
+        context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.initialValue});
         context.deviceState(context, device, sensor.subsystem, sensor.monitor, (status) => {
-            context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.value(status), emitEvent: true, token: getServiceToken() });
+            context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.value(status), emitEvent: true});
         });
     });
 
@@ -37,8 +37,7 @@ export const deviceController = async ({
         context.state.set({
             group: 'boards',
             tag: device,
-            ...state,
-            token: getServiceToken()
+            ...state
         });
     });
 

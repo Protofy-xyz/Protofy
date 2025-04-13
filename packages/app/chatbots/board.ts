@@ -32,7 +32,6 @@ export default Protofy("code", async (app:Application, context: typeof APIContex
           tag: "messages",
           name: "lastMessage",
           value: body.messages[body.messages.length - 1].content,
-          token: getServiceToken(),
           emitEvent: true
         })
 

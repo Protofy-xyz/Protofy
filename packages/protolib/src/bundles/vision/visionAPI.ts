@@ -132,7 +132,7 @@ export const VisionAPI = async (app: Application, context: typeof APIContext) =>
             const url = params.url;
             const response = await sendPromptWithImage(preprompt + params.prompt, url);
             if (params.stateName) {
-                context.state.set({ group: 'vision', tag: 'describe', name: params.stateName, value: response, emitEvent: true, token: getServiceToken() });
+                context.state.set({ group: 'vision', tag: 'describe', name: params.stateName, value: response, emitEvent: true });
             }
             res.json(response);
         } catch (e) {

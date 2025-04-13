@@ -290,9 +290,9 @@ export const AutoActions = ({
         context.mqtt,
         context,
         async (event) => {
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data, token: getServiceToken() });
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event, token: getServiceToken() });
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id});
         },
         modelName + "/create/#"
     )
@@ -318,9 +318,9 @@ export const AutoActions = ({
         context.mqtt,
         context,
         async (event) => {
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data, token: getServiceToken() });
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event, token: getServiceToken() });
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id, token: getServiceToken() });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id});
         },
         modelName + "/update/#"
     )

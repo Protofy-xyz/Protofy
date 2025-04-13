@@ -6,6 +6,7 @@ import { pathToFileURL } from 'url';
 // get config vars
 dotenv.config({ path: '../../.env' });
 global.defaultRoute = '/api/core/v1'
+global.appName = 'core'
 import { getServiceToken, getApp, getMQTTClient } from 'protonode'
 setConfig(getBaseConfig("core", process, getServiceToken()))
 import adminModules from './api'
