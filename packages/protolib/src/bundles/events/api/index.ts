@@ -3,7 +3,7 @@ import { generateEvent } from "../eventsLibrary"
 import { API } from "protobase";
 
 export const onEvent = (mqtt, context, cb, path?, from?) => {
-    context.topicSub(mqtt, 'notifications/event/create/#', (async (message: string, topic: string) => {
+    context.topicSub(mqtt, 'notifications/event/create/'+(path??'#'), (async (message: string, topic: string) => {
         try {
             if (typeof message == 'string') {
                 message = JSON.parse(message)
@@ -11,9 +11,6 @@ export const onEvent = (mqtt, context, cb, path?, from?) => {
         } catch (e) {}
         try {
             if (message) {
-                if (path && message['path'] != path) {
-                    return
-                }
                 if (from && message['from'] != from) {
                     return
                 }
