@@ -23,7 +23,7 @@ use the chat if in doubt
 */
 
 import { Objects } from "app/bundles/objects";
-import { AutoAPI, getAuth } from "protonode";
+import { AutoAPI, getAuth, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from "express";

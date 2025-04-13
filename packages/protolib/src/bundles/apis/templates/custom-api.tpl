@@ -18,7 +18,7 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-import { getAuth } from "protonode";
+import { getAuth, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from 'express';
