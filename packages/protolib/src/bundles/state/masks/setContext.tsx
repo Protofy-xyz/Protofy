@@ -3,7 +3,7 @@ import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
 import { FileText } from '@tamagui/lucide-icons';
 
 const SetContext = ({ node = {}, nodeData = {}, children }: any) => {
-    const color = useColorFromPalette(3);
+    const color = useColorFromPalette(8);
     return (
         <Node icon={FileText} node={node} isPreview={!node.id} title='Set Context' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
