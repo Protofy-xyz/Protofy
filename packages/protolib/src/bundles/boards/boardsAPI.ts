@@ -407,7 +407,7 @@ export const BoardsAPI = (app, context) => {
                 ${fileContent.rulesCode}
             `);
 
-            await wrapper(states.boards[boardId] ?? {}, token, API, prevStates[boardId] ?? {});
+            await wrapper(states?.boards && states?.boards[boardId] ? states.boards[boardId] : {}, token, API, prevStates[boardId] ?? {});
             // console.log(prevStates)
             prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId] ?? {}))
 
@@ -428,10 +428,11 @@ export const BoardsAPI = (app, context) => {
     }
     BoardsAutoAPI(app, context)
 
-    app.get('/api/core/v1/autopilot/actions', async (req, res) => {
+    app.get('/api/core/v1/autopilot/actions', requireAdmin(), async (req, res) => {
         res.send(await getActions());
     });
-    app.post('/api/core/v1/autopilot/getValueCode', async (req, res) => {
+
+    app.post('/api/core/v1/autopilot/getValueCode', requireAdmin(), async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
@@ -442,7 +443,7 @@ export const BoardsAPI = (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
-    app.post('/api/core/v1/autopilot/getActionCode', async (req, res) => {
+    app.post('/api/core/v1/autopilot/getActionCode', requireAdmin(), async (req, res) => {
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
@@ -453,7 +454,7 @@ export const BoardsAPI = (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
-    app.post('/api/core/v1/autopilot/getBoardCode', async (req, res) => {
+    app.post('/api/core/v1/autopilot/getBoardCode', requireAdmin(), async (req, res) => {
         //we need to look for configParams in the action. If there is a config for the param, we need to check
         //if the param is visible. If its not visible, we should not include it in the params object
         Object.keys(req.body.actions).map(k => {
@@ -478,7 +479,7 @@ export const BoardsAPI = (app, context) => {
     })
 
 
-    app.get('/api/core/v1/boards/:boardId/actions/:action', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
         try {
             const board = await getBoard(req.params.boardId);
             if (!board.cards || !Array.isArray(board.cards)) {
@@ -515,7 +516,7 @@ export const BoardsAPI = (app, context) => {
         }
     })
 
-    app.get('/api/core/v1/boards/:boardId', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId', requireAdmin(), async (req, res) => {
         try {
             const values = ProtoMemDB('states').getByTag('boards', req.params.boardId);
             const board = await getBoard(req.params.boardId);
@@ -543,19 +544,19 @@ export const BoardsAPI = (app, context) => {
         }
     })
 
-    app.get('/api/core/v1/boards/:boardId/autopilot/on', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId/autopilot/on', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
         autopilotState[boardId] = true;
         res.send({ message: "Autopilot enabled for board: " + boardId });
     })
 
-    app.get('/api/core/v1/boards/:boardId/autopilot/off', async (req, res) => {
+    app.get('/api/core/v1/boards/:boardId/autopilot/off', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
         autopilotState[boardId] = false;
         res.send({ message: "Autopilot disabled for board: " + boardId });
     })
 
-    app.get('/api/core/v1/autopilot/llm', async (req, res) => {
+    app.get('/api/core/v1/autopilot/llm', requireAdmin(), async (req, res) => {
         if (!req.query.prompt) {
             res.status(400).send('Missing prompt parameter')
             return
@@ -646,7 +647,7 @@ export const BoardsAPI = (app, context) => {
     })
 
     
-    app.get('/api/core/v1/board/question', async (req, res) => {
+    app.get('/api/core/v1/board/question', requireAdmin(), async (req, res) => {
         if (!req.query.prompt) {
             res.status(400).send('Missing prompt parameter')
             return
