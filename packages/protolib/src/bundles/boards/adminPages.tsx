@@ -130,7 +130,12 @@ const Board = ({ board, icons }) => {
       const response = await window['onRunListeners'][card](card, cleanedParams);
       const responseElement = document.getElementById(card + '_response');
       if (responseElement) {
-        responseElement['value'] = JSON.stringify(response, null, 2);
+        //check if response is a string
+        if (typeof response == 'string' || typeof response == 'number' || typeof response == 'boolean') {
+          responseElement['value'] = response;
+        } else {
+          responseElement['value'] = JSON.stringify(response, null, 2);
+        }
       }
     };
   }, [])
