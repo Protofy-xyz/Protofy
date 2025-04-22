@@ -63,8 +63,8 @@ const WledAction = (node: any = {}, nodeData = {}) => {
                 />
             </div>
             <FallbackPortList
-                height={'70px'}
-                startPosX={250}
+                height={'30px'}
+                startPosX={230}
                 node={node}
                 fallbacks={[{
                     "name": "ondone",
