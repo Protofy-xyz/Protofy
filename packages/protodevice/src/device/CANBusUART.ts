@@ -1,17 +1,17 @@
-class CANBus {
+class CANBusUART {
     name; 
     platform;
     id;
-    spiBusId;
-    csPin;
+    txPin;
+    rxPin;
     defaultCANId;
     bitRate;
-    constructor(id, spiBusId, csPin, defaultCANId, bitRate) {
+    constructor(id, txPin, rxPin, defaultCANId, bitRate) {
         this.name = "canbus",
-        this.platform = "mcp2515",
+        this.platform = "esp32_can",
         this.id = id
-        this.spiBusId = spiBusId
-        this.csPin = csPin
+        this.txPin = txPin
+        this.rxPin = rxPin
         this.defaultCANId = defaultCANId
         this.bitRate = bitRate
     }
@@ -23,9 +23,9 @@ class CANBus {
                 config: {
                     platform: this.platform,
                     id: this.id,
-                    cs_pin: this.csPin,
+                    tx_pin: this.txPin,
+                    rx_pin: this.rxPin,
                     can_id: this.defaultCANId,
-                    spi_id: this.spiBusId,
                     bit_rate: this.bitRate,
                 },
                 subsystem: this.getSubsystem()
@@ -50,6 +50,6 @@ class CANBus {
     }
 }
 
-export function canBus(id, spiBusId, csPin, defaultCANId, bitRate) { 
-    return new CANBus(id, spiBusId, csPin, defaultCANId, bitRate)
+export function canBusUART(id, txPin, rxPin, defaultCANId, bitRate) { 
+    return new CANBusUART(id, txPin, rxPin, defaultCANId, bitRate)
 }

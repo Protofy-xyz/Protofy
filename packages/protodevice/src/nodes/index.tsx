@@ -32,7 +32,7 @@ import I2cADC_ADS1115 from './I2cADC_ADS1115';
 import Servo from './Servo';
 import DallasBus from './OneWireBus';
 import SPIBus from './SPIBus';
-import CANBus from './CANBus';
+import CANBusSPI from './CANBusSPI';
 import MKSServo42D from './MKSServo42D';
 import Msa3xx from './Msa3xx';
 import ODrive from './ODrive';
@@ -48,6 +48,7 @@ import BMP280 from './BMP280';
 import NeopixelsDisplay from './NeopixelsDisplay';
 import ST7789V from './ST7789V';
 import Modem from './Modem';
+import CANBusUART from './CANBusUART';
 
 const deviceMasks = [
   Wifi,
@@ -82,7 +83,7 @@ const deviceMasks = [
   Servo,
   DallasBus,
   SPIBus,
-  CANBus,
+  CANBusSPI,
   MKSServo42D,
   Msa3xx,
   ODrive,
@@ -97,7 +98,8 @@ const deviceMasks = [
   BMP280,
   NeopixelsDisplay,
   ST7789V,
-  Modem
+  Modem,
+  CANBusUART
 ]
 
 const masksLength = deviceMasks.length
