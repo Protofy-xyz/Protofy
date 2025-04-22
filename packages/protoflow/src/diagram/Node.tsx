@@ -81,7 +81,7 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
                     backgroundColor: color,
                     borderRadius: isPreview ? '6px' : '5px 5px 0 0',
                     borderBottom: mode === 'column' && !isPreview ? `${borderWidth} solid ${borderColor}` : '0px',
-                    height: '24px',
+                    height: isPreview ? '30px':'24px',
                     padding: '0 12px',
                     gap: '6px',
                     position: 'relative',
