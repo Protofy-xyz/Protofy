@@ -28,6 +28,8 @@ Check the [getting started](docs/getting-started.md) guide to run Protofy on you
 
 ![dashboard](https://github.com/Protofy-xyz/Protofy/blob/assets/dashboard/system.png?raw=true)
 
+![sequence](https://github.com/Protofy-xyz/Protofy/blob/assets/pages/sequence-view.png?raw=true)
+
 ## 😎 Node-based UI
 
 ![codeedit](https://github.com/Protofy-xyz/Protofy/assets/5052882/98c071cf-c934-4891-90e7-ad2d05602aad)
