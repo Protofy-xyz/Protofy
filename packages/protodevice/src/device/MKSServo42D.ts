@@ -159,29 +159,33 @@ id(${this.canBusId}).send_data(${this.motorId}, false, data);
                   can_id: this.motorId,
                   then: {
                     lambda:
-  `std::string b(x.begin(), x.end());
-  ESP_LOGD("can id 1", "%s", &b[0] );
-  
-  if(x.size() > 0 & x[0] == 0xfc) {
-    char motor_states[4][100] = {"run fail", "run starting", "run complete", "end limit stoped"};
-    switch(x[1]) {
-        ESP_LOGD("MKS SERVO42D","Step control response = %X", x[1] );
-        case 0x00: id(${this.name}_step_state).publish_state(motor_states[0]); break;
-        case 0x02: id(${this.name}_step_state).publish_state(motor_states[1]); break;
-        case 0x04: id(${this.name}_step_state).publish_state(motor_states[2]); break;
-        case 0x08: id(${this.name}_step_state).publish_state(motor_states[3]); break;
-      }
+`if (x.size() == 0) return;
+
+ESP_LOGD("can id ${this.motorId}", "Received data:");
+for (size_t i = 0; i < x.size(); i++) {
+  ESP_LOGD("can id 1", "[%d] = 0x%02X", i, x[i]);
+}
+
+if (x[0] == 0xFE) {
+  char motor_states[4][30] = {"run fail", "run starting", "run complete", "end limit stopped"};
+  ESP_LOGD("MKS SERVO42D", "Step control response = 0x%02X", x[1]);
+  switch (x[1]) {
+    case 0x00: id(${this.name}_step_state).publish_state(motor_states[0]); break;
+    case 0x01: id(${this.name}_step_state).publish_state(motor_states[1]); break;
+    case 0x02: id(${this.name}_step_state).publish_state(motor_states[2]); break;
+    case 0x03: id(${this.name}_step_state).publish_state(motor_states[3]); break;
   }
-  
-  if(x.size() > 0 & x[0] == 0x22) {
-    char homing_states[3][100] = {"go home fail", "go home start", "go home sucess"};
-    switch(x[1]) {
-        ESP_LOGD("MKS SERVO42D","Homing response = %X", x[1] );
-        case 0x00: id(${this.name}_home_state).publish_state(homing_states[0]); break;
-        case 0x03: id(${this.name}_home_state).publish_state(homing_states[1]); break;
-        case 0x05: id(${this.name}_home_state).publish_state(homing_states[2]); break;
-      }
+}
+
+if (x[0] == 0x91) {
+  char homing_states[3][30] = {"go home fail", "go home start", "go home success"};
+  ESP_LOGD("MKS SERVO42D", "Homing response = 0x%02X", x[1]);
+  switch (x[1]) {
+    case 0x00: id(${this.name}_home_state).publish_state(homing_states[0]); break;
+    case 0x01: id(${this.name}_home_state).publish_state(homing_states[1]); break;
+    case 0x02: id(${this.name}_home_state).publish_state(homing_states[2]); break;
   }
+}
   `
                   }
                 }
