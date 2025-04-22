@@ -9,12 +9,11 @@ const OnDeviceEventMask = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Cable} node={node} isPreview={!node.id} title='On Device Event' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Event Path', field: 'param-4', type: 'input' }]} />
-            <div style={{ height: '20px' }} />
+
             <div style={{ paddingBottom: "30px" }}>
-                <FlowPort id={node.id} type='input' label='On Event (event)' style={{ top: '120px' }} handleId={'request'} />
+                <FlowPort id={node.id} type='input' label='On Event (event)' style={{ top: '70px' }} handleId={'request'} />
                 <FallbackPort node={node} port={'param-3'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (event) => " postText="" />
             </div>
-            <div style={{ height: '50px' }} />
         </Node>
     )
 }
