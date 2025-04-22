@@ -27,7 +27,8 @@ const NodeSelect = (props) => {
 					flex: 1,
 					display: 'flex',
 					borderRadius: '0.5ch',
-					appearance: 'none'
+					appearance: 'none',
+					height: '22px',
 				}}
 			>
 				<option value="" disabled selected={props?.value === undefined}>{'Select an option'}</option>
