@@ -304,6 +304,28 @@ id(${this.canBusId}).send_data(${this.motorId}, false, data);
                 value: 'OFF',
               },
             },
+            {
+              name: 'enable_limit_remap',
+              label: 'Enable limit remap',
+              description: 'Enables limit remap',
+              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'ON',
+              },
+            },
+            {
+              name: 'disable_limit_remap',
+              label: 'Disable limit remap',
+              description: 'Disables limit remap',
+              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'OFF',
+              },
+            }
           ],
           monitors:[
             {
