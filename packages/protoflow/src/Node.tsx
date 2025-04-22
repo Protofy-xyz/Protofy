@@ -256,7 +256,7 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                 const initColor = nodeData[param.field] ? pre(nodeData[param.field]) : "#404040"
 
                 return (<div style={{ cursor: "pointer" }}>
-                    <div style={{ width: "36px", height: "36px", backgroundColor: initColor.value, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
+                    <div style={{ width: "23px", height: "23px", backgroundColor: initColor.value, border: colorPickerVisible ? borderWidth + " solid " + borderColor : "1px #cccccc solid", borderRadius: 5 }} onClick={() => { setColorPickerVisible(!colorPickerVisible) }}></div>
                     <div style={{ cursor: "pointer", position: "absolute", zIndex: 1100 }}>
                         {colorPickerVisible
                             ? <SketchPicker
