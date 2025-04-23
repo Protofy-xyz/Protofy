@@ -8,8 +8,8 @@ const OnEventMask = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Cable} node={node} isPreview={!node.id} title='On Event' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Event Path', field: 'param-4', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'From', field: 'param-5', type: 'input' }]} />
-            <div style={{ paddingBottom: "30px" }}>
-                <FlowPort id={node.id} type='input' label='On Event (event)' style={{ top: '170px' }} handleId={'request'} />
+            <div style={{ paddingBottom: "26px" }}>
+                <FlowPort id={node.id} type='input' label='On Event (event)' style={{ top: '95px' }} handleId={'request'} />
                 <FallbackPort node={node} port={'param-3'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (event) => " postText="" />
             </div>
         </Node>
