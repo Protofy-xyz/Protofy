@@ -14,10 +14,10 @@ const FlowEdgeDetector = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'High value', field: 'param-2', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Low value',  field: 'param-3', type: 'input' }]} />
 
-            <div style={{ marginTop: "120px" }}>
-                    <FlowPort id={node.id} type='output' label='rising (value)' style={{ top: '160px' }} handleId={'rising'} />
+            <div style={{ marginTop: "55px" }}>
+                    <FlowPort id={node.id} type='output' label='rising (value)' style={{ top: '120px' }} handleId={'rising'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'rising'} portType={"_"} preText="async (value) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='falling (value)' style={{ top: '190px' }} handleId={'falling'} />
+                    <FlowPort id={node.id} type='output' label='falling (value)' style={{ top: '145px' }} handleId={'falling'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-6'} type={"target"} fallbackPort={'falling'} portType={"_"} preText="async (value) => " postText="" />
             </div>
         </Node>
