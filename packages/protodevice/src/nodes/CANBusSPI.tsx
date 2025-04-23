@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Node, Field, NodeParams, FlowStoreContext } from 'protoflow';
 import { getColor } from ".";
 
-const CANBus = ({ node = {}, nodeData = {}, children, color }: any) => {
+const CANBusSPI = ({ node = {}, nodeData = {}, children, color }: any) => {
     const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
     const useFlowsStore = useContext(FlowStoreContext)
@@ -30,20 +30,20 @@ const CANBus = ({ node = {}, nodeData = {}, children, color }: any) => {
         },
     ] as Field[]
     return (
-        <Node node={node} isPreview={!node.id} title='CAN Bus' color={color} id={node.id} skipCustom={true}>
+        <Node node={node} isPreview={!node.id} title='CAN Bus SPI' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )
 }
 
 export default {
-    id: 'CANBus',
+    id: 'CANBusSPI',
     type: 'CallExpression',
     category: "bus",
     keywords: ["can", "bus", "device"],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('canBus'),
-    getComponent: (node, nodeData, children) => <CANBus color={getColor('CANBus')} node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'canBus', 
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('canBusSPI'),
+    getComponent: (node, nodeData, children) => <CANBusSPI color={getColor('CANBusSPI')} node={node} nodeData={nodeData} children={children} />,
+    getInitialData: () => { return { to: 'canBusSPI', 
         "param-1": { value: "", kind: "StringLiteral" }, 
         "param-2": { value: "", kind: "StringLiteral" }, 
         "param-3": { value: "", kind: "StringLiteral" },

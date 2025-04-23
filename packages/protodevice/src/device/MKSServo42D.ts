@@ -50,6 +50,108 @@ class MKSServo42 {
     attach(pin, deviceComponents) {
         const componentObjects = [
           {
+            name: 'script',
+            config: [
+              {
+                id: `${this.name}_send_set_target`,
+                parameters: {
+                  speed: 'int',
+                  acc: 'int',
+                  pulse: 'int',
+                },
+                then: {
+                  lambda: 
+`if (pulse > 8388607) pulse = 8388607;
+if (pulse < -8388607) pulse = -8388607;
+
+uint8_t pulse_high = (uint8_t)((pulse & 0x00FF0000) >> 16);
+uint8_t pulse_mid = (uint8_t)((pulse & 0x0000FF00) >> 8);
+uint8_t pulse_low = (uint8_t)(pulse & 0x000000FF);
+
+std::vector<uint8_t> data = {
+  0xFE,
+  (uint8_t)((speed & 0xFF00) >> 8),
+  (uint8_t)(speed & 0x00FF),
+  acc,
+  pulse_high,
+  pulse_mid,
+  pulse_low
+};
+
+uint8_t crc = 1;
+for (int i = 0; i < data.size(); i++) {
+  crc += data[i];
+}
+crc &= 0xFF;
+data.push_back(crc);
+
+id(${this.canBusId}).send_data(${this.motorId}, false, data);
+`
+                }
+              },
+              {
+                id: `${this.name}_send_home`,
+                then: {
+                  "canbus.send": {
+                    can_id: this.motorId,
+                    data: '@[0x91, 0x92]@',
+                  }
+                }
+              },
+              {
+                id: `${this.name}_send_enable_rotation`,
+                parameters: {
+                  state: 'string',
+                },
+                then: {
+                  lambda:
+`std::vector<uint8_t> data = {0xF3, 0x00};
+if (state == "ON") {
+  data[1] += 1;
+}
+
+uint8_t crc = 1;
+for (int i = 0; i < data.size(); i++) {
+  crc += data[i];
+}
+crc &= 0xFF;
+data.push_back(crc);
+
+id(${this.canBusId}).send_data(${this.motorId}, false, data);
+`
+                }
+              },
+              {
+                id: `${this.name}_send_limit_remap`,
+                parameters: {
+                  state: 'string',
+                },
+                then: {
+                  lambda: 
+`std::vector<uint8_t> data = {0x9E, 0x00};
+if (state == "ON") {
+  data[1] = 0x01;
+} else if (state == "OFF") {
+  data[1] = 0x00;
+} else {
+  ESP_LOGW("MKS SERVO42D", "Invalid payload for set_limit_remap: %s", state.c_str());
+  return;
+}
+
+uint8_t crc = 1;
+for (int i = 0; i < data.size(); i++) {
+  crc += data[i];
+}
+crc &= 0xFF;
+data.push_back(crc);
+
+id(${this.canBusId}).send_data(${this.motorId}, false, data);
+`
+                }
+              }
+            ]
+          },
+          {
             name: this.type,
             config: {
               on_frame: [
@@ -57,29 +159,33 @@ class MKSServo42 {
                   can_id: this.motorId,
                   then: {
                     lambda:
-  `std::string b(x.begin(), x.end());
-  ESP_LOGD("can id 1", "%s", &b[0] );
-  
-  if(x.size() > 0 & x[0] == 0xfc) {
-    char motor_states[4][100] = {"run fail", "run starting", "run complete", "end limit stoped"};
-    switch(x[1]) {
-        ESP_LOGD("MKS SERVO42D","Step control response = %X", x[1] );
-        case 0x00: id(${this.name}_step_state).publish_state(motor_states[0]); break;
-        case 0x02: id(${this.name}_step_state).publish_state(motor_states[1]); break;
-        case 0x04: id(${this.name}_step_state).publish_state(motor_states[2]); break;
-        case 0x08: id(${this.name}_step_state).publish_state(motor_states[3]); break;
-      }
+`if (x.size() == 0) return;
+
+ESP_LOGD("can id ${this.motorId}", "Received data:");
+for (size_t i = 0; i < x.size(); i++) {
+  ESP_LOGD("can id 1", "[%d] = 0x%02X", i, x[i]);
+}
+
+if (x[0] == 0xFE) {
+  char motor_states[4][30] = {"run fail", "run starting", "run complete", "end limit stopped"};
+  ESP_LOGD("MKS SERVO42D", "Step control response = 0x%02X", x[1]);
+  switch (x[1]) {
+    case 0x00: id(${this.name}_step_state).publish_state(motor_states[0]); break;
+    case 0x01: id(${this.name}_step_state).publish_state(motor_states[1]); break;
+    case 0x02: id(${this.name}_step_state).publish_state(motor_states[2]); break;
+    case 0x03: id(${this.name}_step_state).publish_state(motor_states[3]); break;
   }
-  
-  if(x.size() > 0 & x[0] == 0x22) {
-    char homing_states[3][100] = {"go home fail", "go home start", "go home sucess"};
-    switch(x[1]) {
-        ESP_LOGD("MKS SERVO42D","Homing response = %X", x[1] );
-        case 0x00: id(${this.name}_home_state).publish_state(homing_states[0]); break;
-        case 0x03: id(${this.name}_home_state).publish_state(homing_states[1]); break;
-        case 0x05: id(${this.name}_home_state).publish_state(homing_states[2]); break;
-      }
+}
+
+if (x[0] == 0x91) {
+  char homing_states[3][30] = {"go home fail", "go home start", "go home success"};
+  ESP_LOGD("MKS SERVO42D", "Homing response = 0x%02X", x[1]);
+  switch (x[1]) {
+    case 0x00: id(${this.name}_home_state).publish_state(homing_states[0]); break;
+    case 0x01: id(${this.name}_home_state).publish_state(homing_states[1]); break;
+    case 0x02: id(${this.name}_home_state).publish_state(homing_states[2]); break;
   }
+}
   `
                   }
                 }
@@ -94,90 +200,33 @@ class MKSServo42 {
                 {
                   topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_target`,
                   then: {
-                    lambda:
+                    lambda: 
+`id(${this.name}_send_set_target)->execute((int)x["speed"], (int)x["acc"], (int)x["pulses"]);
 `
-uint16_t speed = x["speed"];
-uint8_t acc = x["acc"];
-int32_t pulse = x["pulses"];
-
-// Ensure pulse is within the int24_t range
-if (pulse > 8388607) pulse = 8388607;
-if (pulse < -8388607) pulse = -8388607;
-
-// Convert the 24-bit signed integer to 3 bytes
-uint8_t pulse_high = (uint8_t)((pulse & 0x00FF0000) >> 16);
-uint8_t pulse_mid = (uint8_t)((pulse & 0x0000FF00) >> 8);
-uint8_t pulse_low = (uint8_t)(pulse & 0x000000FF);
-
-// Prepare data vector
-std::vector<uint8_t> data = {
-  0xFE,
-  (uint8_t)((speed & 0xFF00) >> 8),
-  (uint8_t)(speed & 0x00FF),
-  acc,
-  pulse_high,
-  pulse_mid,
-  pulse_low
-};
-
-// Calculate CRC
-uint8_t crc = ${this.motorId}; // Starting value for CRC
-ESP_LOGD("PATATA", "data.size() = %d", data.size());
-for (int i = 0; i < data.size(); i++) {
-  crc += data[i];
-}
-crc &= 0xFF;
-
-// Append CRC to data
-data.push_back(crc);
-
-// Send data via CAN bus
-id(${this.canBusId}).send_data(${this.motorId}, false, data);
-`,
                   }
                 }
-              ]
-            }
-          },
-          {
-            name: 'mqtt',
-            config: {
+              ],
               on_message: [
                 {
                   topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/home`,
                   then: {
-                    "canbus.send":{
-                        can_id: this.motorId,
-                        data: '@[0x91, 0x92]@',
-                    }
+                    "script.execute": `${this.name}_send_home`
                   }
-                }
-              ]
-            }
-          },
-          {
-            name: 'mqtt',
-            config: {
-              on_message: [
+                },
                 {
                   topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/enable_rotation`,
                   then: {
-                    lambda:
+                    lambda: 
+`id(${this.name}_send_enable_rotation)->execute(x);
 `
-std::vector<uint8_t> data = {0xF3,0x00};
-if(x == "ON"){
-  data[1] += 1;
-}
-uint8_t crc = ${this.motorId}; // Starting value for CRC
-for (int i = 0; i < data.size(); i++) {
-  crc += data[i];
-}
-crc &= 0xFF;
-
-// Append CRC to data
-data.push_back(crc);
-id(${this.canBusId}).send_data(${this.motorId}, false, data);
-`,
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_limit_remap`,
+                  then: {
+                    lambda: 
+`id(${this.name}_send_limit_remap)->execute(x);
+`
                   }
                 }
               ]
@@ -259,6 +308,28 @@ id(${this.canBusId}).send_data(${this.motorId}, false, data);
                 value: 'OFF',
               },
             },
+            {
+              name: 'enable_limit_remap',
+              label: 'Enable limit remap',
+              description: 'Enables limit remap',
+              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'ON',
+              },
+            },
+            {
+              name: 'disable_limit_remap',
+              label: 'Disable limit remap',
+              description: 'Disables limit remap',
+              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'OFF',
+              },
+            }
           ],
           monitors:[
             {

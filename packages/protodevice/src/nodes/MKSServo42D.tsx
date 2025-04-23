@@ -38,6 +38,6 @@ export default {
     getInitialData: () => { return { to: 'mksServo42', 
         "param-1": { value: "", kind: "StringLiteral" }, 
         "param-2": { value: "", kind: "StringLiteral" }, 
-        "param-3": { value: "", kind: "NumericLiteral"}
+        "param-3": { value: "", kind: "StringLiteral"}
     } }
 }
