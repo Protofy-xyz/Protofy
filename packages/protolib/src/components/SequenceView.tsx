@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Chip } from '../components/Chip'
 import { Circle, Text, XStack, YStack, YStackProps } from '@my/ui'
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { z } from 'protobase'
+import { API, z } from 'protobase'
+import { usePageParams } from '../next';
 
 const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
     const modelItem = model.load(item)
@@ -61,7 +63,6 @@ const SequenceCard = ({ model, item, index, onSelectItem, getCard }) => {
     </Draggable>
 }
 
-
 export const SequenceView = ({
     items,
     onStageChange = () => { },
@@ -78,7 +79,7 @@ export const SequenceView = ({
     items: any
     onStageChange?: any
     onSelectItem?: any
-    model?: any
+    model: any
     getCard?: any
     getStageBottom?: any
     onDragEnd?: any
@@ -87,7 +88,25 @@ export const SequenceView = ({
     sort?: (a, b) => boolean
     [key: string]: any
 }) => {
-    const itemsList = (items.data.items ?? []).sort(sort)
+
+    const [positions, setPositions] = useState({})
+    const { query } = usePageParams({})
+    const queryString = new URLSearchParams(query).toString();
+
+    const positionsOrder = Object.keys(positions).reduce((acc, key) => {
+        return acc.concat(positions[key])
+    }, [])
+
+    const itemsList = (items.data.items ?? [])
+        .sort((a, b) => {
+            const aIndex = positionsOrder.indexOf(a[model.getIdField()])
+            const bIndex = positionsOrder.indexOf(b[model.getIdField()])
+            if (aIndex === -1 && bIndex === -1) return 0
+            if (aIndex === -1) return 1
+            if (bIndex === -1) return -1
+            return aIndex - bIndex
+        })
+        .sort(sort)
 
     const sequenceField = model.getSequeceField()
     const sequenceFieldDefRaw = model.getObjectSchema().getFieldDefinition(sequenceField)
@@ -101,24 +120,69 @@ export const SequenceView = ({
 
     const getItemsBySequenceStages = (stageName) => itemsList?.filter((item) => item[model.getSequeceField()] === stageName);
 
+    const saveNewOrder = (finalItems, movedItem, newItemData) => {
+        const positionsByColumn = finalItems.reduce((acc, item) => {
+            const col = item[sequenceField];
+            if (!acc[col]) acc[col] = [];
+            acc[col].push(item[model.getIdField()]);
+            return acc;
+        }, {});
+
+        setPositions(positionsByColumn);
+
+        API.post('/api/core/v1/sequences/' + model.getModelName() + '?' + queryString, positionsByColumn);
+
+        onStageChange(model.load(movedItem), { positionsByColumn });
+
+        onDragEnd({
+            error: false,
+            sourceData: movedItem,
+            destinationData: newItemData,
+            updatedItems: finalItems,
+            message: "Item moved",
+            positionsByColumn
+        });
+    }
+
     const onDragFinish = (result) => {
         const { source, destination } = result;
         if (!destination || (destination.droppableId === source.droppableId &&
             destination.index === source.index)) {
             return;
         }
-        const updatedItems = [...itemsList]
-        const [movedItem] = updatedItems.filter(a => a[sequenceField] == source.droppableId).splice(source.index, 1);
-        const modelItem = model.load(movedItem)
-        const newItemData = { ...movedItem, [sequenceField]: destination.droppableId }
 
-        if (!modelItem.canTransition(newItemData)) return onDragEnd({ error: true, message: "Invalid transition", sourceData: movedItem, destinationData: newItemData })
+        const updatedItems = [...itemsList];
+        const itemsInSourceCol = updatedItems.filter(i => i[sequenceField] === source.droppableId);
+        const [movedItem] = itemsInSourceCol.splice(source.index, 1);
+        const modelItem = model.load(movedItem);
+        const newItemData = { ...movedItem, [sequenceField]: destination.droppableId };
+
+        if (!modelItem.canTransition(newItemData)) {
+            return onDragEnd({
+                error: true,
+                message: "Invalid transition",
+                sourceData: movedItem,
+                destinationData: newItemData
+            });
+        }
 
         movedItem[sequenceField] = newItemData[sequenceField];
-        updatedItems.splice(destination.index, 0, movedItem);
 
-        onStageChange(model.load(movedItem))
-        onDragEnd({ error: false, sourceData: movedItem, destinationData: newItemData, updatedItems, message: "Item moved" })
+        if (source.droppableId === destination.droppableId) {
+            itemsInSourceCol.splice(destination.index, 0, movedItem);
+            const reorderedItems = updatedItems.filter(i => i[sequenceField] !== source.droppableId);
+            const merged = reorderedItems.concat(itemsInSourceCol);
+            saveNewOrder(merged, movedItem, newItemData);
+        } else {
+            const itemsInDestinationCol = updatedItems.filter(i => i[sequenceField] === destination.droppableId);
+            const indexInAll = updatedItems.findIndex(i => i[model.getIdField()] === movedItem[model.getIdField()]);
+            updatedItems.splice(indexInAll, 1);
+
+            itemsInDestinationCol.splice(destination.index, 0, movedItem);
+            const otherItems = updatedItems.filter(i => i[sequenceField] !== source.droppableId && i[sequenceField] !== destination.droppableId);
+            const merged = otherItems.concat(itemsInSourceCol, itemsInDestinationCol);
+            saveNewOrder(merged, movedItem, newItemData);
+        }
     };
 
     const themeNames = ["orange", "yellow", "green", "blue", "purple", "pink", "red"]
@@ -126,6 +190,18 @@ export const SequenceView = ({
     const getTheme = (index) => {
         return themeNames[index % themeNames.length]
     }
+
+    const getPostions = async () => {
+        const sequenceName = model.getModelName()
+        const res = await API.get('/api/core/v1/sequences/' + sequenceName + '?' + queryString)
+        if (!res.isError && res.data) {
+            setPositions(res.data)
+        }
+    }
+
+    useEffect(() => {
+        getPostions()
+    }, [queryString])
 
     return (
         <DragDropContext onDragEnd={onDragFinish}>

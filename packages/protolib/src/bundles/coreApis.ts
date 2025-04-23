@@ -32,7 +32,7 @@ import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
-import { DiscordAPI } from './discord/discordAPI'
+import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
@@ -69,5 +69,5 @@ export const AdminAPIBundles = (app, context) => {
   VisionAPI(app, context)
   MobileAPI(app, context)
   WhatsappAPI(app, context)
-  DiscordAPI(app, context)
+  SequencesAPI(app, context)
 }
