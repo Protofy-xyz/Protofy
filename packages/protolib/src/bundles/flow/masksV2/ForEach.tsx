@@ -8,7 +8,7 @@ const ForEach = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={IterationCcw} node={node} isPreview={!node.id} title='for Each' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'List', field: 'mask-list', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Mode', field: 'mask-mode', type: 'select', data: ["series", "parallel", "manual"] }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Each'} vars={['item', 'stop', 'next']} handleId={'mask-onEach'} />
             <NodeOutput id={node.id} type={'input'} label={'On Done'} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'On Error'} vars={['err']} handleId={'mask-onError'} />

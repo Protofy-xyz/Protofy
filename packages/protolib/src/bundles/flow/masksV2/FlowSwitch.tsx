@@ -9,7 +9,7 @@ const FlowSwitch = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Split} node={node} isPreview={!node.id} title='Flow Switch' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Condition', field: 'mask-condition', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Then'} handleId={'mask-then'} />
             <NodeOutput id={node.id} type={'input'} label={'Else'} handleId={'mask-otherwise'} />
             <NodeOutput id={node.id} type={'input'} label={'Finally'} handleId={'mask-after'} />
