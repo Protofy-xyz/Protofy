@@ -14,14 +14,14 @@ const FlowInRange = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Desired value', field: 'param-2', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Threshold (+/-)',  field: 'param-3', type: 'input' }]} />
 
-            <div style={{ marginTop: "160px" }}>
-                    <FlowPort id={node.id} type='output' label='above (delta)' style={{ top: '150px' }} handleId={'request'} />
+            <div style={{ marginTop: "105px" }}>
+                    <FlowPort id={node.id} type='output' label='above (delta)' style={{ top: '120px' }} handleId={'request'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-4'} type={"target"} fallbackPort={'request'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='below (delta)' style={{ top: '180px' }} handleId={'below'} />
+                    <FlowPort id={node.id} type='output' label='below (delta)' style={{ top: '145px' }} handleId={'below'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'below'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='range (delta)' style={{ top: '210px' }} handleId={'range'} />
+                    <FlowPort id={node.id} type='output' label='range (delta)' style={{ top: '170px' }} handleId={'range'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-6'} type={"target"} fallbackPort={'range'} portType={"_"} preText="async (delta) => " postText="" />
-                    <FlowPort id={node.id} type='output' label='error' style={{ top: '240px' }} handleId={'error'} />
+                    <FlowPort id={node.id} type='output' label='error' style={{ top: '195px' }} handleId={'error'} />
                     <FallbackPort fallbackText="null" node={node} port={'param-7'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async () => " postText="" />
             </div>
         </Node>
