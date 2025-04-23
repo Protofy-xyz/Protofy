@@ -10,7 +10,7 @@ const Log = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Data', field: 'mask-data', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Level', field: 'mask-level', type: 'select', data: ['info', 'error', 'warn', 'debug', 'trace', 'fatal'] }]} />
 
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'done'} handleId={'mask-done'} />
         </Node>
     )

@@ -12,7 +12,7 @@ const ScreenshotNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Full Page', field: 'mask-fullPage', type: 'boolean' },
                 { label: 'Page', field: 'mask-page', type: 'input' }
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>

@@ -10,7 +10,7 @@ const CopyDirectory = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Source Path', field: 'mask-sourcePath', type: 'input' },
                 { label: 'Destination Path', field: 'mask-destinationPath', type: 'input' }
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['path']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

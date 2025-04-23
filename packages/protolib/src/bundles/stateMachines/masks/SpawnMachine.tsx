@@ -27,7 +27,7 @@ const SpawnMachine = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Split} node={node} isPreview={!node.id} title='New State Machine' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Definition name', field: 'mask-definitionName', type: 'select', data: machineDefinitions }]} />
             <NodeParams id={node.id} params={[{ label: 'Instance name', field: 'mask-instanceName', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

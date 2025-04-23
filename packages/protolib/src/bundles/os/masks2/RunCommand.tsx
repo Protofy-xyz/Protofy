@@ -7,7 +7,7 @@ const RunCommand = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Terminal} node={node} isPreview={!node.id} title='Run command' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Command', field: 'mask-command', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Data'} vars={['data']} handleId={'mask-onData'} />
             <NodeOutput id={node.id} type={'input'} label={'On Error Data'} vars={['data']} handleId={'mask-onErrorData'} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['output']} handleId={'mask-onDone'} />

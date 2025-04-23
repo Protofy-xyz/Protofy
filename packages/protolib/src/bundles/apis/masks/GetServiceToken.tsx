@@ -6,7 +6,7 @@ const GetServiceToken = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(11)
     return (
         <Node icon={Key} node={node} isPreview={!node.id} title='Get Service Token' color={color} id={node.id} skipCustom={true} style={{minWidth: '250px'}}>
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Read'} vars={['key']} handleId={'mask-done'} />
         </Node>
     )

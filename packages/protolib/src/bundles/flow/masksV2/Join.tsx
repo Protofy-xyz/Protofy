@@ -10,7 +10,7 @@ const JoinNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'List', field: 'mask-list', type: 'input' },
                 { label: 'Separator', field: 'mask-separator', type: 'input' }
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>

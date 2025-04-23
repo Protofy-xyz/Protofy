@@ -10,7 +10,7 @@ const FilterNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'List', field: 'mask-list', type: 'input' },
             ]} />
             <NodeParams id={node.id} params={[{ label: 'Mode', field: 'mask-mode', type: 'select', data: ["series", "manual"] }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Filter'} vars={['item', 'accept', 'reject']} handleId={'mask-onFilter'} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['list']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />

@@ -9,7 +9,7 @@ const GetStateMachine = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Split} node={node} isPreview={!node.id} title='Get State Machine' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Instance name', field: 'mask-instanceName', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

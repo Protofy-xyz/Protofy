@@ -8,7 +8,7 @@ const GetBrowserNode = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Navigation} node={node} isPreview={!node.id} title='Get Browser' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Browser type', field: 'mask-browserType', type: 'select', data: ["chromium", "firefox", "webkit"] }]} />
             <NodeParams id={node.id} params={[{ label: 'Visible', field: 'mask-visible', type: 'boolean' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['browser', 'page']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>

@@ -7,7 +7,7 @@ const DeleteDirectory = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Trash2} node={node} isPreview={!node.id} title='Delete Directory' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'mask-path', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={[]} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

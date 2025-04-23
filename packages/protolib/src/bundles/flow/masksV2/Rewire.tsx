@@ -11,7 +11,7 @@ const Rewire = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Name', field: 'mask-name', type: 'input' },
                 { label: 'Value', field: 'mask-value', type: 'input' },
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={[nodeData['mask-name']?.value]} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>

@@ -8,7 +8,7 @@ const WriteFile = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Save} node={node} isPreview={!node.id} title='Write File' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Path', field: 'mask-path', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Content', field: 'mask-content', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

@@ -10,7 +10,7 @@ const OnStateMachineEvent = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Split} node={node} isPreview={!node.id} title='On State Machine Event' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Instance name', field: 'mask-instanceName', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'State', field: 'mask-state', type: 'input' }]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Event'} vars={['event']} handleId={'mask-onEventCb'} />
         </Node>
     )

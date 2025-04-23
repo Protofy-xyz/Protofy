@@ -10,7 +10,7 @@ const GetAttributeNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Element', field: 'mask-element', type: 'input' },
                 { label: 'Attribute', field: 'mask-attribute', type: 'input' }
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['value']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>

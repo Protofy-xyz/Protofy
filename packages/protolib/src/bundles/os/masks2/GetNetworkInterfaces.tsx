@@ -6,7 +6,7 @@ const GetNetworkInterfaces = ({ node = {}, nodeData = {}, children }: any) => {
     const color = useColorFromPalette(8)
     return (
         <Node icon={Network} node={node} isPreview={!node.id} title='Network Interfaces' color={color} id={node.id} skipCustom={true} style={{minWidth: '250px'}}>
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['interfaces']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

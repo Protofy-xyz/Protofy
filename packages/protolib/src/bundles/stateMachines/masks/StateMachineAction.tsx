@@ -12,7 +12,7 @@ const StateMachineAction = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[{ label: 'Instance name', field: 'mask-instanceName', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Action', field: 'mask-emitType', type: 'input'}]} />
             <NodeParams id={node.id} params={[{ label: 'Payload', field: 'mask-payload', type: 'input'}]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['result']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
         </Node>

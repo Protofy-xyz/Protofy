@@ -9,7 +9,7 @@ const InnerHTMLNode = ({ node = {}, nodeData = {}, children }: any) => {
             <NodeParams id={node.id} params={[
                 { label: 'Element', field: 'mask-element', type: 'input' }
             ]} />
-            <div style={{height: '30px'}} />
+            <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'Done'} vars={['html']} handleId={'mask-onDone'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
         </Node>
