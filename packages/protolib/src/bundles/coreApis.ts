@@ -33,6 +33,7 @@ import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
+import { ArduinosAutoAPI } from './arduino/arduinosAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
@@ -70,4 +71,5 @@ export const AdminAPIBundles = (app, context) => {
   MobileAPI(app, context)
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
+  ArduinosAutoAPI(app, context)
 }

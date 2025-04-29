@@ -15,6 +15,7 @@ import servicesPages from './services/adminPages'
 import stateMachinePages from './stateMachines/adminPages'
 import dashboardPages from './dashboard/adminPages'
 import boardsPages from './boards/adminPages'
+import arduinosPages from './arduino/adminPages'
 
 export const AdminPagesBundles = {
     ...devicePages,
@@ -33,5 +34,6 @@ export const AdminPagesBundles = {
     ...servicesPages,
     ...stateMachinePages,
     ...dashboardPages,
-    ...boardsPages
+    ...boardsPages,
+    ...arduinosPages
 }
