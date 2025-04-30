@@ -3,9 +3,14 @@ import { ProtoModel, SessionDataType, API, Schema, z } from 'protobase'
 export const ArduinosSchema = Schema.object({
   name: z.string().hint("Device name").static().regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").id().search().label("Name"),
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
+  transportConfig: z.record(z.string(), z.any()).optional().hidden(),
 })
 export type ArduinosType = z.infer<typeof ArduinosSchema>;
 
+/* transportConfig = {
+  physicalLayer: ["usb", "wifi", "bluetooth"], 
+}
+*/
 
 export class ArduinosModel extends ProtoModel<ArduinosModel> {
   constructor(data: ArduinosType, session?: SessionDataType, ) {

@@ -32,11 +32,21 @@ import {
 } from '../bundles/widgets'
 
 
-const enableBoards = true   
+const enableBoards = true
+const enableArduinos = false   
 
 export default ({ pages, boards, objects }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && !p.object)
     const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
+
+    const integrations = [
+        { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
+        { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
+        { "name": "Objects", "icon": Boxes, "href": "/workspace/objects" },
+        { "name": "Pages", "icon": "layout", "href": "/workspace/pages" }
+    ]
+    enableArduinos? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }):null
+
     return {
         "default": "/workspace/",
         "label": "Admin panel",
@@ -121,12 +131,7 @@ export default ({ pages, boards, objects }) => {
                     return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Wrench, "href": page.route }
                 })
             } : {}),
-            "Integrations": [
-                { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
-                { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
-                { "name": "Objects", "icon": Boxes, "href": "/workspace/objects" },
-                { "name": "Pages", "icon": "layout", "href": "/workspace/pages" }
-            ],
+            "Integrations": integrations,
             "System": [
                 { "name": "Users", "icon": "users", "href": "/workspace/users" },
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
