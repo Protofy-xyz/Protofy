@@ -89,7 +89,7 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
-  const [boarCode, setBoardCode] = useState(JSON.stringify(board))
+  const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
 
@@ -176,7 +176,7 @@ const Board = ({ board, icons }) => {
 
   const onEditBoard = async () => {
     try {
-      const newBoard = JSON.parse(boarCode)
+      const newBoard = JSON.parse(boardCode)
       const boardRes = await API.post(`/api/core/v1/boards/${board.name}`, newBoard)
       if (!boardRes.isError) {
         boardRef.current = newBoard
@@ -388,7 +388,7 @@ const Board = ({ board, icons }) => {
               ? <Monaco
                 language='json'
                 darkMode={resolvedTheme === 'dark'}
-                sourceCode={getParsedJSON(boarCode)}
+                sourceCode={getParsedJSON(boardCode)}
                 onChange={setBoardCode}
                 options={{
                   formatOnPaste: true,
