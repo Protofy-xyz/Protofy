@@ -149,7 +149,7 @@ const Board = ({ board, icons }) => {
 
   const deleteCard = async (card) => {
     const newItems = items.filter(item => item.key != card.key)
-    if (newItems.length == 0) newItems.push(addCard)
+    // if (newItems.length == 0) newItems.push(addCard) // non necessary
     setItems(newItems)
     boardRef.current.cards = newItems
     await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
