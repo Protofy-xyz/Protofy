@@ -1,121 +1,223 @@
-import { YStack, Stack, XStack, Paragraph, H2, StackProps, Text } from "@my/ui"
+import {
+  YStack, Stack, XStack, Paragraph, H2, StackProps, Text
+} from "@my/ui"
 import { AlertTriangle } from '@tamagui/lucide-icons'
-import { useMemo, useRef, useState } from "react"
-import Map, { Marker, Popup, NavigationControl, FullscreenControl, GeolocateControl } from 'react-map-gl';
+import { useRef, useState, useMemo, useEffect, useCallback } from "react"
+import {
+  Map as MapGL,
+  Marker, Popup, NavigationControl, FullscreenControl, GeolocateControl
+} from 'react-map-gl'
+import mapboxgl from 'mapbox-gl'
 import { useThemeSetting } from '@tamagui/next-theme'
-import { EditableObject } from "./EditableObject";
-import { getPendingResult } from "protobase";
-import { Tinted } from "./Tinted";
-import { useTint } from "../lib/Tints";
+import { EditableObject } from "./EditableObject"
+import { getPendingResult } from "protobase"
+import { Tinted } from "./Tinted"
+import { useTint } from "../lib/Tints"
 import Center from './Center'
 
-export const MapView = ({ items, model, sourceUrl, extraFields, icons, customFields, onDelete, deleteable, extraMenuActions, ...props }: any & StackProps) => {
+function metersToDegrees(lat: number, dx: number, dy: number) {
+  const R = 6378137
+  const dLat = (dy / R) * (180 / Math.PI)
+  const dLon = (dx / R) * (180 / Math.PI) / Math.cos(lat * Math.PI / 180)
+  return { dLat, dLon }
+}
+
+function createBox(lat: number, lon: number, w: number, h: number) {
+  const { dLat, dLon } = metersToDegrees(lat, w / 2, h / 2)
+  return [
+    [lon - dLon, lat - dLat],
+    [lon + dLon, lat - dLat],
+    [lon + dLon, lat + dLat],
+    [lon - dLon, lat + dLat],
+    [lon - dLon, lat - dLat],
+  ]
+}
+
+export const MapView = ({
+  items, layerToggle = true, model, sourceUrl, extraFields,
+  icons, customFields, onDelete, deleteable, extraMenuActions, ...props
+}: any & StackProps) => {
   const { resolvedTheme } = useThemeSetting()
-  const containerRef = useRef(null)
   const { tint } = useTint()
-  const [popupInfo, setPopupInfo] = useState<any>({ location: { lat: '', lon: '' } });
+  const mapRef = useRef<mapboxgl.Map | null>(null)
+  const [popupInfo, setPopupInfo] = useState<any>(null)
+  const [satellite, setSatellite] = useState(false)
 
-  const locationItems = items.data.items.map(item => {
-    const modelItem = model.load(item)
-    return {
-      modelItem,
-      location: modelItem.getLocation()
-    }
-  }).filter(item => item.location)
+  // 🌍 Viewport (posición/zoom)
+  const [viewport, setViewport] = useState({
+    latitude: 41.3875,
+    longitude: 2.1688,
+    zoom: 16
+  })
 
+  const locationItems = useMemo(() =>
+    items.data.items
+      .map((raw: any) => ({ modelItem: model.load(raw) }))
+      .map(it => ({ ...it, location: it.modelItem.getLocation() }))
+      .filter(it => it.location)
+  , [items.data.items])
 
-  const pins = useMemo(
-    () =>
-      locationItems.map((item, index) => (
+  const pins = useMemo(() =>
+    locationItems
+      .filter(it => it.location.options?.mode !== 'geo')
+      .map((it, i) => (
         <Marker
-          color={"var(--" + tint + "10)"}
-          key={`marker-${index}`}
-          longitude={item.location.lon}
-          latitude={item.location.lat}
-          anchor="bottom"
+          key={i}
+          longitude={parseFloat(it.location.lon)}
+          latitude={parseFloat(it.location.lat)}
+          anchor="center"
           onClick={e => {
-            // If we let the click event propagates to the map, it will immediately close the popup
-            // with `closeOnClick: true`
-            e.originalEvent.stopPropagation();
-            setPopupInfo(item);
+            e.originalEvent.stopPropagation()
+            setPopupInfo(it)
           }}
         >
+          <div style={{
+            width : 20,
+            height: 20,
+            borderRadius: '50%',
+            backgroundColor: `var(--${tint}10)`,
+            border : `2px solid var(--${tint}8)`,
+            boxShadow: `0 0 4px var(--${tint}6)`,
+            cursor: 'pointer',
+            ...it.location.style
+          }}/>
         </Marker>
       ))
-    , [items.data.items, tint]
-  );
+  , [locationItems, tint])
 
-  const width = 300
+  const geojson = useMemo(() => ({
+    type: 'FeatureCollection',
+    features: locationItems
+      .filter(it => it.location.options?.mode === 'geo')
+      .map(it => {
+        const { lat, lon, options = {} } = it.location
+        const width = options.width || 100
+        const height = options.height || 100
+        return {
+          type: 'Feature',
+          geometry: {
+            type: 'Polygon',
+            coordinates: [createBox(parseFloat(lat), parseFloat(lon), width, height)]
+          },
+          properties: { id: it.modelItem.getId() }
+        }
+      })
+  }), [locationItems])
+
+  const addGeoLayer = useCallback(() => {
+    const map = mapRef.current
+    if (!map || !map.isStyleLoaded()) return
+
+    try {
+      if (map.getLayer('geo-areas-layer')) map.removeLayer('geo-areas-layer')
+      if (map.getSource('geo-areas')) map.removeSource('geo-areas')
+    } catch {}
+
+    map.addSource('geo-areas', {
+      type: 'geojson',
+      data: geojson
+    })
+
+    const symbolLayer = map.getStyle().layers?.find(l => l.type === 'symbol')
+
+    map.addLayer({
+      id: 'geo-areas-layer',
+      type: 'fill',
+      source: 'geo-areas',
+      paint: {
+        'fill-color': '#00aaff',
+        'fill-opacity': 0.5,
+        'fill-outline-color': '#0088dd'
+      }
+    }, symbolLayer?.id)
+  }, [geojson])
 
   return (
-    <Stack ref={containerRef} f={1} {...props}>
-      {(process.env.NEXT_PUBLIC_MAPBOX_TOKEN && process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== "PUT_HERE_YOUR_API_KEY") ?
-        <Map
+    <Stack f={1} {...props}>
+      {layerToggle && (
+        <YStack pos="absolute" t={10} l={10} zi={10}>
+          <button onClick={() => setSatellite(s => !s)}>
+            {satellite ? '🗺️' : '🛰️'}
+          </button>
+        </YStack>
+      )}
+
+      {process.env.NEXT_PUBLIC_MAPBOX_TOKEN &&
+        process.env.NEXT_PUBLIC_MAPBOX_TOKEN !== 'PUT_HERE_YOUR_API_KEY' ? (
+        <MapGL
+          key={`map-${satellite}-${resolvedTheme}`} // 🔁 Forzar remount
+          ref={map => {
+            if (map && map.getMap) {
+              mapRef.current = map.getMap()
+            }
+          }}
+          onLoad={() => addGeoLayer()}
+          onMove={evt => {
+            const v = evt.viewState
+            setViewport({ latitude: v.latitude, longitude: v.longitude, zoom: v.zoom })
+          }}
           mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
           mapLib={import('mapbox-gl')}
-          initialViewState={{
-            latitude: 41.3947846,
-            longitude: 2.1939663,
-            zoom: 12
-          }}
-          style={{}}
-          //mapStyle="mapbox://styles/mapbox/streets-v9"
-          mapStyle={(resolvedTheme == 'dark') ? 'mapbox://styles/mapbox/dark-v9' : "mapbox://styles/mapbox/light-v9"}
+          initialViewState={viewport}
+          mapStyle={
+            satellite
+              ? "mapbox://styles/mapbox/satellite-streets-v12"
+              : (resolvedTheme === 'dark'
+                  ? 'mapbox://styles/mapbox/dark-v11'
+                  : 'mapbox://styles/mapbox/light-v11')
+          }
         >
           <GeolocateControl position="top-right" />
           <FullscreenControl position="top-right" />
           <NavigationControl position="top-right" />
-          <Tinted>
-            {pins}
-          </Tinted>
+          <Tinted>{pins}</Tinted>
 
-
-          {popupInfo && popupInfo.modelItem && (
+          {popupInfo && (
             <Popup
-              style={{ minWidth: (width + 20) + "px" }}
               anchor="top"
-              longitude={Number(popupInfo.location.lon)}
-              latitude={Number(popupInfo.location.lat)}
-              onClose={() => setPopupInfo({ location: { lat: '', lon: '' } })}
+              longitude={+popupInfo.location.lon}
+              latitude={+popupInfo.location.lat}
+              onClose={() => setPopupInfo(null)}
               closeButton={false}
+              style={{ minWidth: 320 }}
             >
               <XStack f={1} ai="center">
                 <EditableObject
-                  initialData={getPendingResult("loaded", popupInfo.modelItem.read())}
+                  initialData={getPendingResult('loaded', popupInfo.modelItem.read())}
                   name={popupInfo.modelItem.getId()}
                   spinnerSize={15}
-                  loadingText={<YStack ai="center" jc="center">Loading data...<Paragraph fontWeight={"bold"}></Paragraph></YStack>}
+                  loadingText={<YStack ai="center">Loading...</YStack>}
                   objectId={popupInfo.modelItem.getId()}
-                  sourceUrl={sourceUrl + '/' + popupInfo.modelItem.getId()}
-                  mode={'preview'}
+                  sourceUrl={`${sourceUrl}/${popupInfo.modelItem.getId()}`}
+                  mode="preview"
                   model={model}
                   extraFields={extraFields}
                   icons={icons}
                   customFields={customFields}
-                  columnWidth={width - 30}
+                  columnWidth={290}
                   onDelete={onDelete}
                   deleteable={deleteable}
                   extraMenuActions={extraMenuActions}
-                  onSave={()=>{}}
+                  onSave={() => {}}
                 />
               </XStack>
             </Popup>
-
           )}
-        </Map> :
-        <YStack flex={1} alignItems="center" justifyContent="center" space="$4">
+        </MapGL>
+      ) : (
+        <YStack f={1} ai="center" jc="center" space="$4">
           <Center>
             <AlertTriangle size="$7" />
             <H2 mt="$6">
               <Text>Missing </Text>
-              <Tinted><Text color='var(--color10)'>API Key</Text></Tinted>
+              <Tinted><Text color="var(--color10)">API Key</Text></Tinted>
             </H2>
-            <Paragraph ta="center" mt="$6" size={"$7"}>Map rendering is unavailable without a Mapbox access token.</Paragraph>
-            <Tinted>
-              <Paragraph ta="center" size={"$7"}>Please visit <a style={{ fontWeight: "bold", color: `var(--color10)` }} href="https://www.mapbox.com" target="_blank" rel="noopener noreferrer">Mapbox</a> to create your token and enable map features.</Paragraph>
-            </Tinted>
+            <Paragraph ta="center" mt="$6" size="$7">
+              Map rendering is unavailable without a Mapbox access token.
+            </Paragraph>
           </Center>
         </YStack>
-      }
-    </Stack >)
+      )}
+    </Stack>
+  )
 }
