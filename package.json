@@ -72,6 +72,7 @@
   "dependencies": {
     "@babel/runtime": "^7.24.6",
     "@manypkg/cli": "^0.21.4",
+    "@react-google-maps/api": "^2.20.6",
     "adm-zip": "^0.5.16",
     "async": "3.2.5",
     "check-dependency-version-consistency": "^4.1.0",
