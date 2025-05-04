@@ -22,7 +22,7 @@ interface ZodExtensions {
     after(field: string): this;
     datePicker(type?: 'single' | 'month' | 'year'): this; // TODO: add types: 'multiple' | 'range' 
     dependsOn(field: string, value?: any): this;
-    location(latKey: string, lonKey: string): this;
+    location(latKey: string, lonKey: string, locationType?: "point" | "boxarea", locationOptions?: any, locationStyle?: any): this;
     generateOptions(call: Function): this;
     visible(visibilityCheck: Function): this;
     sequence(): this;
@@ -245,10 +245,13 @@ function extendZodTypePrototype(type: any) {
         return this;
     };
 
-    type.prototype.location = function (latKey, lonKey) {
+    type.prototype.location = function (latKey, lonKey, type = 'point', options = {}, style = {}) {
         this._def.latKey = latKey;
         this._def.lonKey = lonKey;
         this._def.location = true;
+        this._def.locationType = type;
+        this._def.locationOptions = options;
+        this._def.locationStyle = style;
         return this;
     };
 

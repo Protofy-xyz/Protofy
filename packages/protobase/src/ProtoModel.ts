@@ -159,7 +159,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.modelName
     }
 
-    getLocation() : {lat: string, lon: string} | undefined {
+    getLocation() : {lat: string, lon: string, type: string, style: any, options: any} | undefined {
         const locationFields = this.objectSchema.is('location').getFields()
         if (!locationFields.length) {
             throw "Model error: " + this.getModelName() + " doesn't have location information"
@@ -172,6 +172,9 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
 
         return {
+            type: this.objectSchema.getFieldKeyDefinition(field, 'locationType'),
+            style: this.objectSchema.getFieldKeyDefinition(field, 'locationStyle'),
+            options: this.objectSchema.getFieldKeyDefinition(field, 'locationOptions'),
             lat: this.data[field][latKey],
             lon: this.data[field][lonKey]
         }
