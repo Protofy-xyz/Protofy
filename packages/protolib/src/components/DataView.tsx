@@ -388,6 +388,19 @@ const DataViewInternal = forwardRef(({
                     await API.get(`${sourceUrl}/${key}/delete`);
                     onDelete({ sourceUrl, selected, key })
                 },
+                onSave: async (value,element) => {
+                    // console.log("Saving: ", {value,element, sourceUrl})
+                    const id = element.getId()
+                    const result = await API.post(sourceUrl + '/' + id, value)
+                    if (result.isError) {
+                        throw result.error
+                    }
+                    const { item, ...rest } = state;
+                    setState(rest)
+                    toast.show(name + ' updated', {
+                        message: "Saved new settings for: " + id
+                    })
+                },
                 disableItemSelection,
                 ...dataTableRawProps
             }

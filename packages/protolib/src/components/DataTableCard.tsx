@@ -7,6 +7,7 @@ const GridElementCard = ({ index, data, width }) => {
     const element = data.element
     const modelItem = data.model.load(element)
     const onDelete = data.onDelete;
+    const onSave = data.onSave;
 
     return <Stack key={element.key} width={width}>
         <DataCard
@@ -17,7 +18,10 @@ const GridElementCard = ({ index, data, width }) => {
                 mx: "$3",
             }}
             onDelete={onDelete}
-            // onSave={(content) => onSave(content, element.key)}
+            onSave={(content) => {
+                //console.log("OnSave: ", {content,data});
+                onSave? onSave(content, modelItem):null
+            }}
             json={element}
             name={modelItem.getId()}
             isTemplate={false}
@@ -33,7 +37,8 @@ export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin
             id: 'item_'+i,
             element,
             model,
-            onDelete: props.onDelete
+            onDelete: props.onDelete,
+            onSave: props.onSave
         }
     })
 
