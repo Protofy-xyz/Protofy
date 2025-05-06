@@ -71,6 +71,7 @@ if (process.env.NODE_ENV != 'production') {
     '../../data/automations/**',
     '../../packages/app/bundles/**',
     '../../packages/app/apis/**',
+    '../../packages/app/objects/**',
     '../../packages/app/chatbots/**',
     '../../packages/protolib/dist/**',
     '../../system.js',
