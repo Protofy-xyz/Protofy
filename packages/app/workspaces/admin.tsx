@@ -122,7 +122,7 @@ export default ({ pages, boards, objects }) => {
                 }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
             } : {},
             ...(objectsWithPage.length ? {
-                "CMS Objects": objectsWithPage.map((obj) => {
+                "Objects": objectsWithPage.map((obj) => {
                     return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic?'/workspace/':'/admin/')+obj.features.adminPage }
                 })
             } : {}),
