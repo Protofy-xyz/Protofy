@@ -26,7 +26,7 @@ const apiDev = {
     script: 'src/index.ts',
     interpreter: 'node',
     interpreter_args: '--import tsx',
-    watch: false,
+    watch: ["../../packages/app"],
     autorestart: true,
     windowsHide: true,
     env: {
