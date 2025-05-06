@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { AdminPage } from "../../components/AdminPage"
 import { useRouter } from 'solito/navigation';
 import { DataView, DataViewActionButton } from "../../components/DataView"
@@ -6,15 +7,18 @@ import { withSession } from "../../lib/Session"
 import { API } from 'protobase'
 import { ArduinosModel } from "./arduinosSchemas";
 import { DataTable2 } from "../../components/DataTable2"
-import { YStack, Text, XStack, ScrollView, Spacer } from "@my/ui";
+import { YStack, Text, XStack, ScrollView, Spacer, Button } from "@my/ui";
 import { useState } from 'react'
 import { BookOpen } from '@tamagui/lucide-icons'
 import { AlertDialog } from "../../components/AlertDialog"
 import {Slides} from "../../components/Slides"
+import { useSubscription } from "protolib/lib/mqtt";
 
 
 
 const sourceUrl = '/api/core/v1/arduinos'
+const eventsPath = 'notifications/event/create/arduinos/#'
+const apiUrl = '/api/core/v1/arduinos'
 
 const ArduinoPreview = ({ element, width, onDelete, onPress, ...props }: any)=>{
   console.log("ArduinoPreview: ", element)
@@ -22,6 +26,61 @@ const ArduinoPreview = ({ element, width, onDelete, onPress, ...props }: any)=>{
     <YStack><Text>{`Name: ${element.name}`}</Text></YStack>
   )
 }
+
+const EventsSubscription = ({...props})=>{
+  const message = useSubscription(eventsPath, { qos: 1 })
+  React.useEffect(() => {
+    if(message?.message) {
+      // console.log("message received: ",message?.message)
+      const topic = message.message?.topic
+      if(topic.includes(props?.deviceId)){
+        if(topic.includes("connected")){
+          props.setIsConnected(true)
+        }
+        if(topic.includes("disconnected")){
+          props.setIsConnected(false)
+        }
+        if(topic.includes("received")){
+          console.log("Message received: ", JSON.parse(message.message.message).payload)
+        }
+      }
+    }
+  }, [message])
+  return (<>{props?.children}</>)
+}
+
+const ArduinoView = (props)=>{
+  // console.log("ArduinoView: ", props)
+  // const message = useSubscription(eventsPath, { qos: 1 })
+  const [isConnected, setIsConnected] = useState(false)
+  const deviceId = props.arduino.name
+
+  API.get(`/api/core/v1/arduinos/connectedDevices`).then((res)=>{
+    res.data?.connectedDevices.forEach((device)=>{
+      console.log(device)
+      if(device === props.arduino.name){
+        setIsConnected(true)
+        return;
+      }else{
+        setIsConnected(false)
+      }
+    })
+  }).catch((err)=>{
+    console.error("Error getting connected devices: ", err)
+  })
+
+  return (
+    <YStack>
+      <EventsSubscription setIsConnected={setIsConnected} deviceId={deviceId}>
+        <Text>{`Arduino Component`}</Text>
+      </EventsSubscription>
+      <Text>{`Status: ${isConnected}`}</Text>
+      <Button onPress={()=>{API.get(`/api/core/v1/arduinos/${deviceId}/connect`)}}>Connect</Button>
+      <Button onPress={()=>{API.get(`/api/core/v1/arduinos/${deviceId}/disconnect`)}}>Disconnect</Button>              
+    </YStack>
+  )
+}
+
 const SelectGrid = ({ children }) => {
   return <XStack jc="center" ai="center" gap={25} flexWrap='wrap'>
       {children}
@@ -53,7 +112,7 @@ const SecondSlide = ({ data, setData, error, setError, objects }) => {
 
 const FirstSlide = ({ selected, setSelected }) => {
   return <YStack>
-      <ScrollView mah={"500px"}>
+      <ScrollView height={"250px"}>
           {/* <SelectGrid>
               {Object.entries(apiTemplates).map(([templateId, template]) => (
                   <TemplateCard
@@ -86,7 +145,7 @@ const addDialog = (setAddOpen, addOpen, apiTemplates, data, setData,...props)=>{
       <XStack mr="$5">
           <Slides
               lastButtonCaption="Create"
-              id='apis'
+              id='arduinos'
               onFinish={async () => {
                   // try {
                   //     //TODO: when using custom data and setData in editablectObject
@@ -116,10 +175,12 @@ const addDialog = (setAddOpen, addOpen, apiTemplates, data, setData,...props)=>{
                   {
                       name: "Create new Arduino",
                       title: "Select your Template",
-                      component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
+                      //component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
+                      component: <FirstSlide selected={""} setSelected={(add)=>{console.log("Add: ",add)}} />
+
                   },
                   {
-                      name: apiTemplates[data?.data['template']]['name'],
+                      name: "Arduino",
                       title: "Configure your Arduino",
                       //component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
                       component: <SecondSlide error={""} objects={""} setError={""} data={""} setData={""}></SecondSlide>
@@ -140,9 +201,8 @@ export default {
         const [addOpen, setAddOpen] = useState(false)
 
 
-  
         return (<AdminPage title="Arduinos" workspace={workspace} pageSession={pageSession}>
-          {/* {addDialog(setAddOpen, addOpen, {}, data, setData)} */}
+          {addDialog(setAddOpen, addOpen, {}, data, setData)}
           <DataView
             entityName={"arduinos"}
             itemData={itemData}
@@ -150,8 +210,10 @@ export default {
             sourceUrl={sourceUrl}
             initialItems={initialItems}
             numColumnsForm={1}
+            // onAddButton={async () => {
+            //   setAddOpen(true)
+            // }}
             onAdd={(data) => { 
-              // setAddOpen(true);
               //router.push(`/arduinos/${data.name}`); 
               return data
             }}
@@ -180,11 +242,13 @@ export default {
       component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, arduino, icons }: any) => {
         const { data } = arduino
         console.log("Arduino: ", data)
-        return( <YStack><Text>Arduino Component</Text></YStack>)
+        return( <AdminPage title="Arduinos" workspace={workspace} pageSession={pageSession}>
+           <ArduinoView arduino={data} />
+          </AdminPage>)
       },
       getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
         return {
-          board: await API.get(`/api/core/v1/arduinos/${context.params.board}/?token=${session?.token}`),
+          arduino: await API.get(`/api/core/v1/arduinos/${context.params.arduino}/?token=${session?.token}`),
           icons: (await API.get(`/api/core/v1/icons?token=${session?.token}`))?.data?.icons ?? []
         }
       }))
