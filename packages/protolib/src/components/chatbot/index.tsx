@@ -3,11 +3,8 @@ import Navbar from "./components/Navbar/Navbar"
 import DefaultIdeas from "./components/DefaultIdea/DefaultIdeas"
 import UserQuery from "./components/UserInput/UserQuery"
 import { Plus, Menu, PanelLeft } from "lucide-react"
-import useChat, { chatsLength, useAuth, useSettings } from "./store/store"
-import classNames from "classnames"
+import useChat, { chatsLength, useSettings } from "./store/store"
 import Chats from "./components/Chat/Chats"
-import Modal from "./components/modals/Modal"
-import Apikey from "./components/modals/Apikey"
 import { useThemeSetting } from "@tamagui/next-theme"
 import { Stack } from "@my/ui"
 
@@ -27,7 +24,6 @@ function App({ apiUrl }: AppProps) {
   const [active, setActive] = useState(false)
   const isChatsVisible = useChat(chatsLength)
   const addNewChat = useChat((state) => state.addNewChat)
-  let userHasApiKey = useAuth((state) => state.apikey)
   const { resolvedTheme } = useThemeSetting()
   const menu = true //toggle to show/hide the menu
 
@@ -106,9 +102,6 @@ function App({ apiUrl }: AppProps) {
             </div>
           </div>
         </div>
-        <Modal visible={!Boolean(userHasApiKey)}>
-          <Apikey />
-        </Modal>
       </div>
     </Stack>
   )
