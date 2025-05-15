@@ -2,7 +2,7 @@ import { DatePicker } from './datepickers';
 import { Tinted } from './Tinted'
 import { SelectList } from './SelectList'
 import { Filter, Check, X } from '@tamagui/lucide-icons'
-import { XStack, Button, Popover, Text, Label, YStack, Checkbox } from '@my/ui'
+import { XStack, Button, Popover, Text, Label, YStack, Checkbox, Tooltip } from '@my/ui'
 import { useState } from 'react';
 import { usePageParams } from '../next';
 import { Chip } from './Chip';
@@ -23,11 +23,36 @@ export const QueryFilters = ({ state, extraFilters }) => {
 
     return <XStack gap="$2" mt="$2" flexWrap='wrap' f={1}>
         {
-            queryFilters.map((q, i) => <Chip color={"$color6"} text={q.replace('filter[', '').replace(']', '')} gap="$2" pl="$1" pr="$3" py="$1" textProps={{ fontSize: 14, color: "$color12", fow: "400" }}>
+            queryFilters.map((q, i) => <Tooltip>
+                <Tooltip.Trigger cursor='pointer' >
+                    <Chip color={"$color6"} text={q.replace('filter[', '').replace(']', '')} textProps={{ fontWeight: '600', fontSize: 12 }} gap="$2" pl="$1" pr="$3" py="$1">
                 <Button onPress={() => removePush(q)} size="$1" circular={true}>
                     <X size={12} color={"var(--color8)"}></X>
                 </Button>
-            </Chip>)
+                    </Chip>
+                </Tooltip.Trigger>
+                <Tooltip.Content
+                    enterStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+                    exitStyle={{ x: 0, y: -5, opacity: 0, scale: 0.9 }}
+                    scale={1}
+                    backgroundColor={"$color9"}
+                    x={0}
+                    y={5}
+                    opacity={1}
+                    zIndex={9999999999}
+                    animation={[
+                        'quick',
+                        {
+                            opacity: {
+                                overshootClamping: true,
+                            },
+                        },
+                    ]}
+                >
+                    <Text fontSize={12} color={"white"}>{query[q]}</Text>
+                </Tooltip.Content>
+            </Tooltip>
+            )
         }
     </XStack>
 }
