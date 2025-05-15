@@ -83,7 +83,6 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                         boardRef.current.rulesCode = rulesCode.data.jsCode
                         savedCode.current = rulesCode.data.jsCode
                         await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                        await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
 
                         // boardRef.current.rules = []
                         // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
