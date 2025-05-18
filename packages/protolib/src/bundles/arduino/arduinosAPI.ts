@@ -6,7 +6,7 @@ import { EventEmitter } from 'events'
 import { generateEvent } from "../events/eventsLibrary";
 
 const eventsPath = "arduinos"
-
+const useChatGPT = true
 export const ArduinosAutoAPI = AutoAPI({
     modelName: 'arduinos',
     modelType: ArduinosModel,
@@ -14,13 +14,41 @@ export const ArduinosAutoAPI = AutoAPI({
     skipDatabaseIndexes: true
 })
 
+const callModel = async (prompt, context) => {
+    let reply;
+    if (useChatGPT) {
+        reply = await context.chatGPT.chatGPTPrompt({
+            message: prompt
+        })
+
+        let content = reply[0]
+
+        if (reply.isError) {
+            content = "// Error: " + reply.data.error.message
+        }
+
+        reply = {
+            choices: [
+                {
+                    message: {
+                        content
+                    }
+                }
+            ]
+        }
+    } else {
+        reply = await context.lmstudio.chatWithModel(prompt, 'qwen2.5-coder-32b-instruct')
+    }
+    return reply
+}
+
 export const ArduinosAPI = (app, context) => {
     ArduinosAutoAPI(app, context)
 
     // const transport = new ProtofySerial({ port: 'COM16', baudRate: 115200 })
     const serialManager = new SerialManager()
     serialManager.startPortScan(2000)
-    serialManager.addDevice({ id: 'arduino1', port: 'COM16', baudRate: 115200, autoReconnect: true })
+    serialManager.addDevice({ id: 'arduino1', port: 'COM3', baudRate: 115200, autoReconnect: true,})
     serialManager.on('deviceConnected', async (id) => {
         console.log(`Dispositivo ${id} conectado`) 
         generateEvent(
@@ -113,6 +141,34 @@ export const ArduinosAPI = (app, context) => {
         }
         serialManager.connectDevice(name)
         return res.status(200).json({ message: 'Connected' })        
+    })
+
+    app.get('/api/core/v1/arduinos/:name/transport/send/:data', async (req, res) => {
+        const name = req.params.name
+        const data = req.params.data
+        const arduino = ArduinosModel.load({ name })
+        if (!arduino) {
+            return res.status(404).json({ error: 'Arduino not found' })
+        }
+        serialManager.sendTo(name, data)
+        return res.status(200).json({ message: 'Connected' })        
+    })
+
+    app.get('/api/core/v1/transports/serial/ports/available', async (req, res) => {
+        const ports = serialManager.getKnownPorts()
+        if (!ports) {
+            return res.status(404).json({ error: 'No ports found' })
+        }
+        return res.status(200).json(Array.from(ports))
+    })
+
+    app.post('/api/core/v1/arduinos/:name/generateCode', async (req, res) => { 
+        const prompt = req.body.prompt
+        if (!prompt) {
+            return res.status(400).json({ error: 'Prompt is required' })
+        }
+        const reply = await callModel(prompt, context)
+        return res.status(200).json(reply)
     })
 }
 
@@ -255,19 +311,24 @@ export class SerialManager extends EventEmitter {
         // Inicializa knownPorts
         this.updateKnownPorts(this.knownPorts);
         this.scanInterval = setInterval(async () => {
+        // console.log("Escaneo de puertos");
         const ports = await SerialPort.list();
         const current = new Set(ports.map(p => p.path));
+        // console.log("Puertos actuales: ", current);
         // Detecta nuevos puertos
         for (const path of current) {
+            // console.log("Puerto encontrado: ", path);
             if (!this.knownPorts.has(path)) {
-            this.knownPorts.add(path);
-            this.emit('portDiscovered', path);
-            // Reconecta dispositivos que coincidan
-            for (const [id, serial] of this.devices) {
-                if (serial['portPath'] === path) {
-                serial.connect().catch();
+                this.knownPorts.add(path);
+                // console.log("Nuevo puerto encontrado: ", path);
+                this.emit('portDiscovered', path);
+                // Reconecta dispositivos que coincidan
+                for (const [id, serial] of this.devices) {
+                    // console.log("Reconecting: ", id, serial['portPath'], path);
+                    if (serial['portPath'] === path) {
+                        serial.connect().catch();
+                    }
                 }
-            }
             }
         }
         // Actualiza knownPorts
@@ -361,5 +422,9 @@ export class SerialManager extends EventEmitter {
     async updateKnownPorts(set: Set<string>): Promise<void> {
         const ports = await SerialPort.list();
         for (const p of ports) set.add(p.path);
+    }
+
+    getKnownPorts(): Set<string> {
+        return this.knownPorts;
     }
 }
