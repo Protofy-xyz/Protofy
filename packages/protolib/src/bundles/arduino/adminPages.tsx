@@ -199,13 +199,13 @@ const ArduinoView = (props)=>{
           {/* <TextArea ref={behaviourTextAreaRef.current} value={behaviourTextAreaContent} onChangeText={(t)=>{setBehaviourTextAreaContent(t)}}></TextArea>   */}
           <YStack mt="auto" pt="$3">
             <Button onPress={async ()=>{
-              console.log("Arduino: ", props.arduino); 
-              console.log("savedRules: ",savedRules); 
-              console.log("descriptionTextAreaContent: ",savedPhysicalRules);
+              // console.log("Arduino: ", props.arduino); 
+              // console.log("savedRules: ",savedRules); 
+              // console.log("descriptionTextAreaContent: ",savedPhysicalRules);
               const newArduino ={...props.arduino, rules: savedRules, physicalRules: savedPhysicalRules}
-              console.log("new Arduino: ", newArduino)
+              // console.log("new Arduino: ", newArduino)
               const saveResponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}`, {...newArduino})
-              console.log("Save response: ", saveResponse)
+              // console.log("Save response: ", saveResponse)
                 
               const llmData = { templateName: "agentRules",rules: newArduino.rules.join("\n"), physicalRules: newArduino.physicalRules.join("\n"), transport: newArduino.transport }
               const chatGPTresponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/generateCode`, llmData)
