@@ -5,7 +5,7 @@ export const ArduinosSchema = Schema.object({
   subsystem: z.record(z.string(), z.any()).optional().hidden(),
   transportConfig: z.record(z.string(), z.any()).optional().hidden(),
   actions: z.record(z.string(), z.any()).optional().hidden(),
-  value: z.record(z.string(), z.any()).optional().hidden()
+  values: z.record(z.string(), z.any()).optional().hidden()
 })
 export type ArduinosType = z.infer<typeof ArduinosSchema>;
 
