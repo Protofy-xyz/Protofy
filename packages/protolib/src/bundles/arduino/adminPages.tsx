@@ -75,9 +75,9 @@ const ArduinoView = (props)=>{
   const [savedRules, setSavedRules] = useState(props.arduino.rules ?? [])
   const [visiblePhysicalDescription, setVisiblePhysicalDescription] = useState(true)
   const [visibleRules, setVisibleRules] = useState(true)
-  const [actualCode, setActualCode] = useState("")
+  const [arduinoRawCode, setArduinoRawCode] = useState("")
   const deviceId = props.arduino.name
-  const descriptionTextAreaRef = useRef(null)
+  const arduinoRawCodeRef = useRef(null)
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
 
@@ -213,19 +213,20 @@ const ArduinoView = (props)=>{
               // console.log("ChatGPT response: ", chatGPTresponse.data.choices[0].message.content)
               const codeString = chatGPTresponse.data.choices[0].message.content
               const rawCode = codeString.replace(/^```javascript\s*/, '').replace(/```$/, '').trim();
-              function newArduinoCode(code) {
+              function newCode(code) {
                 return code;
               }
               function evaluateArduinoCode(inputCode) {
-                const wrapped = new Function('newArduinoCode', `"use strict"; return ${inputCode}`);
-                return wrapped(newArduinoCode);
+                const wrapped = new Function('newCode', `"use strict"; return ${inputCode}`);
+                return wrapped(newCode);
               }
 
               const arduinoCode = evaluateArduinoCode(rawCode);
+              setArduinoRawCode(arduinoCode)
               console.log("ARDUINO CODE: ",arduinoCode);
               const prepromtBoard = `
               Dado este codigo de arduino:
-              ${rawCode}
+              ${arduinoCode}
               Quiero que generes un html que me permita testear las intereacciones del dispositivo.
               La parte de js damela tambien teniendo en cuenta que tienes estas funciones en js: 
               - sendTo("device1","name",["value1","value2"]);
@@ -243,7 +244,9 @@ const ArduinoView = (props)=>{
             }}>Apply</Button>
           </YStack>
         </YStack>
+        <TextArea f={1} ref={arduinoRawCodeRef.current} value={arduinoRawCode}></TextArea>
       </Tinted>
+
     </YStack>
 )}
 

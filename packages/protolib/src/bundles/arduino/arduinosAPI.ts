@@ -177,6 +177,7 @@ export const ArduinosAPI = (app, context) => {
         const rules = req.body.rules
         const physicalRules = req.body.physicalRules
         const transport = req.body.transport
+        const agent = {type: "arduino"}
 
         if (!templateName) {
             return res.status(400).json({ error: 'templateName is required' })
@@ -192,7 +193,7 @@ export const ArduinosAPI = (app, context) => {
         }
         const transportCodeArduino = (await API.get('/api/core/v1/transports/serial/arduino'))
         console.log("Transport code: ", transportCodeArduino.data.code)
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: templateName,  rules: rules, physicalRules: physicalRules, transportType: transport.type, transportConfig: JSON.stringify(transport.config), transportCode:transportCodeArduino.data.code });
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: templateName, agent:agent, rules: rules, physicalRules: physicalRules, transportType: transport.type, transportConfig: JSON.stringify(transport.config), transportCode:transportCodeArduino.data.code });
         console.log("Prompt: ", prompt)
         const reply = await callModel(prompt, context)
         return res.status(200).json(reply)
