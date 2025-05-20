@@ -9,7 +9,7 @@ import { ArduinosModel } from "./arduinosSchemas";
 import { DataTable2 } from "../../components/DataTable2"
 import { YStack, Text, XStack, ScrollView, Spacer, Button, TextArea, Paragraph,Switch, Input, useToastController} from "@my/ui";
 import { useState } from 'react'
-import { BookOpen, Sparkles} from '@tamagui/lucide-icons'
+import { BookOpen, Sparkles, ChevronsDown, ChevronsUp} from '@tamagui/lucide-icons'
 import { AlertDialog } from "../../components/AlertDialog"
 import {Slides} from "../../components/Slides"
 import { TemplateCard } from '../apis/TemplateCard';
@@ -20,6 +20,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { Tinted } from '../../components/Tinted'
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { SelectList } from "../../components/SelectList";
+import { IconContainer } from "../../components/IconContainer";
 
 
   const apiTemplates={
@@ -68,15 +69,14 @@ const EventsSubscription = ({...props})=>{
 
 const ArduinoView = (props)=>{
   console.log("ArduinoView: ", props)
-  // const message = useSubscription(eventsPath, { qos: 1 })
   const [isConnected, setIsConnected] = useState(false)
   const [rulesOpened, setRulesOpened] = useState(true)
   const [savedPhysicalRules, setSavedPhysicalRules] = useState(props.arduino.physicalRules ?? [])
   const [savedRules, setSavedRules] = useState(props.arduino.rules ?? [])
+  const [visiblePhysicalDescription, setVisiblePhysicalDescription] = useState(true)
+  const [visibleRules, setVisibleRules] = useState(true)
+  const [actualCode, setActualCode] = useState("")
   const deviceId = props.arduino.name
-  // const [descriptionTextAreaContent, setDescriptionTextAreaContent] = useState(props.arduino.physicalDescription)
-  // const [behaviourTextAreaContent, setBehaviourTextAreaContent] = useState(props.arduino.behaviourDescription)
-  // const behaviourTextAreaRef = useRef(null)
   const descriptionTextAreaRef = useRef(null)
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
@@ -108,7 +108,6 @@ const ArduinoView = (props)=>{
   }).catch((err)=>{
     console.error("Error getting connected devices: ", err)
   })
-  // console.log("aadasd: ", {current:props.arduino})
   return (
     <YStack f={1} padding="$4" gap={20}>
       
@@ -145,22 +144,13 @@ const ArduinoView = (props)=>{
       </XStack>
       </>:<> </>
       }
-      <Text mt="$4" fow="600">Digital twin</Text>
-      <Tinted><Text fontSize="$5" color="$bgContentDark" fow="600">Aqui va un board</Text></Tinted>
-      {/* <DashboardGrid
-                items={cards}
-                layouts={layouts}
-                borderRadius={10}
-                padding={10}
-                backgroundColor="white"
-                onLayoutChange={(layout, layouts) => {
-                  // boardRef.current.layouts = layouts
-                  // API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                }}
-              /> */}
-      <Text mt="$4" fow="600">Physical description</Text>
-      {/* <TextArea ref={descriptionTextAreaRef.current} value={descriptionTextAreaContent} onChangeText={(t)=>{setDescriptionTextAreaContent(t)}}></TextArea> */}
-      <Tinted>
+      {/* <Text mt="$4" fow="600">Digital twin</Text>
+      <Tinted><Text fontSize="$5" color="$bgContentDark" fow="600">Aqui va un board</Text></Tinted> */}
+      <XStack mt="$4" jc={"space-between"}>
+        <Text  fow="600">Physical description</Text>
+        <IconContainer onPress={()=>{setVisiblePhysicalDescription(!visiblePhysicalDescription)}}>{visiblePhysicalDescription? <ChevronsUp/>:<ChevronsDown/>}</IconContainer>
+      </XStack>
+      {visiblePhysicalDescription?<Tinted>
         <YStack height="10" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" >
           <Rules
               rules={savedPhysicalRules ?? []}
@@ -178,16 +168,13 @@ const ArduinoView = (props)=>{
               loadingIndex={-1}
           />
         </YStack>
-      </Tinted>
-      {/* <Text mt="$4" fow="600">Behaviour</Text>
-      <TextArea ref={behaviourTextAreaRef.current} value={behaviourTextAreaContent} onChangeText={(t)=>{setBehaviourTextAreaContent(t)}}></TextArea> */}
-      {/* <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={130} width={810} height="80vh">
-        <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? 'black' : 'white'} opacity={0.9}></XStack>
-        <RulesSideMenu boardRef={{current:props.arduino}} board={props.arduino} applyRulesAction={(newRules)=>{console.log("newRules: ", newRules)}}></RulesSideMenu>
-      </XStack> */}
+      </Tinted>:<> </>}
       {/* <RulesSideMenu boardRef={{current:props.arduino}} board={props.arduino} applyRulesAction={(newRules)=>{console.log("newRules: ", newRules)}}></RulesSideMenu> */}
-      <Text mt="$4" fow="600">Rules</Text>
-      <Tinted>
+      <XStack mt="$4" jc={"space-between"}>
+        <Text fow="600">Rules</Text>
+        <IconContainer onPress={()=>{setVisibleRules(!visibleRules)}}>{visibleRules? <ChevronsUp/>:<ChevronsDown/>}</IconContainer>
+      </XStack>
+      {visibleRules?<Tinted>
         <YStack height="10" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" >
           <Rules
               rules={savedRules ?? []}
@@ -204,142 +191,55 @@ const ArduinoView = (props)=>{
               }}
               loadingIndex={-1}
           />
-
-          
+        </YStack>
+      </Tinted>:<> </>}
+      
+      <Tinted>
+       <YStack height="10" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" >
+          {/* <TextArea ref={behaviourTextAreaRef.current} value={behaviourTextAreaContent} onChangeText={(t)=>{setBehaviourTextAreaContent(t)}}></TextArea>   */}
           <YStack mt="auto" pt="$3">
             <Button onPress={async ()=>{
               console.log("Arduino: ", props.arduino); 
               console.log("savedRules: ",savedRules); 
-              console.log("descriptionTextAreaContent: ",savedPhysicalRules)
+              console.log("descriptionTextAreaContent: ",savedPhysicalRules);
               const newArduino ={...props.arduino, rules: savedRules, physicalRules: savedPhysicalRules}
               console.log("new Arduino: ", newArduino)
-              const prepromt = `You are an expert in Arduino programming. 
-              Minimize the use of external libraries.
-              You have to create a code for the Arduino with the following rules: ${newArduino.rules.join(", ")}. 
-              The physical description of the board is: ${newArduino.physicalRules.join(", ")}.
-              The transport for comunicating the arduino with the server is ${newArduino.transport.type} with the following config: ${JSON.stringify(newArduino.transport.config)}.
-              To avoid errors with the transport layer, it's better to use this transport layer available just using #include "protofy.hpp" in your code:
-              #pragma once
-#include <Arduino.h>
-
-class ProtofyWriter {
-public:
-  virtual void print(const String& msg) = 0;
-  virtual void println(const String& msg) {
-    print(msg + "\n");
-  }
-};
-
-class StreamWriter : public ProtofyWriter {
-public:
-  StreamWriter(Stream& stream) : _stream(stream) {}
-  void print(const String& msg) override {
-    _stream.print(msg);
-  }
-private:
-  Stream& _stream;
-};
-
-typedef void (*ProtofyCallback)(const String* params, size_t count);
-
-#define MAX_CALLBACKS 10
-
-class Protofy {
-public:
-  Protofy(Stream& stream) : _stream(stream), _writer(new StreamWriter(stream)), _callbackCount(0) {}
-
-  template <typename T>
-  void send(const String& deviceName, const String& name, const T& value) {
-    _writer->print("PFY->" + deviceName + "->" + name + "->" + String(value) + "\n");
-  }
-
-  void on(const char* name, ProtofyCallback cb) {
-    if (_callbackCount < MAX_CALLBACKS) {
-      _callbacks[_callbackCount].name = name;
-      _callbacks[_callbackCount].callback = cb;
-      _callbackCount++;
-    }
-  }
-
-  String loop() {
-    String nonProtofy = "";
-    while (_stream.available()) {
-      char c = _stream.read();
-      _inputBuffer += c;
-
-      if (c == '\n') {
-        if (_inputBuffer.startsWith("PFY->")) {
-          handleProtofyLine(_inputBuffer);
-        } else {
-          nonProtofy += _inputBuffer;
-        }
-        _inputBuffer = "";
-      }
-    }
-    return nonProtofy;
-  }
-
-private:
-  struct CallbackEntry {
-    const char* name;
-    ProtofyCallback callback;
-  };
-
-  CallbackEntry _callbacks[MAX_CALLBACKS];
-  uint8_t _callbackCount;
-  ProtofyWriter* _writer;
-  Stream& _stream;
-  String _inputBuffer;
-
-  void handleProtofyLine(const String& line) {
-    String tokens[10];
-    size_t count = 0;
-    int start = 5;
-
-    while (count < 10) {
-      int end = line.indexOf("->", start);
-      if (end == -1) {
-        String last = line.substring(start);
-        last.trim();
-        tokens[count++] = last;
-        break;
-      }
-      tokens[count++] = line.substring(start, end);
-      start = end + 2;
-    }
-
-    if (count < 1) return;
-    String funcName = tokens[0];
-
-    for (uint8_t i = 0; i < _callbackCount; ++i) {
-      if (funcName == _callbacks[i].name) {
-        _callbacks[i].callback(&tokens[1], count - 1);
-        return;
-      }
-    }
-
-    _writer->println("Unknown PFY function: " + funcName);
-  }
-};
-              `
-              const postprompt = `
-              You're in a middle of a connection system in order to work you need to give me a js function: newArduinoCode("here as an String all the code for the Arduino").
-              Any response that includes text or any other structure than javascrip, won't work.
-              Your response will be procesed not by a human or AI will be procesed by nodejs script
-              `
-              console.log("prompt: ", prepromt+ " "+postprompt)
               const saveResponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}`, {...newArduino})
               console.log("Save response: ", saveResponse)
                 
-              const chatGPTresponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/generateCode`, {prompt: prepromt+ " "+postprompt})
-              console.log("ChatGPT response: ", chatGPTresponse)
-              console.log("ChatGPT response: ", chatGPTresponse.data.choices[0].message.content)
-              
-//               Tengo una Romeo Board con un ESP32 S3.
-// He conectado un motor DC
-// El pin 12 es la velocidad.
-// El pin 13 es la direccion.
+              const llmData = { templateName: "agentRules",rules: newArduino.rules.join("\n"), physicalRules: newArduino.physicalRules.join("\n"), transport: newArduino.transport }
+              const chatGPTresponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/generateCode`, llmData)
+              // console.log("ChatGPT response: ", chatGPTresponse)
+              // console.log("ChatGPT response: ", chatGPTresponse.data.choices[0].message.content)
+              const codeString = chatGPTresponse.data.choices[0].message.content
+              const rawCode = codeString.replace(/^```javascript\s*/, '').replace(/```$/, '').trim();
+              function newArduinoCode(code) {
+                return code;
+              }
+              function evaluateArduinoCode(inputCode) {
+                const wrapped = new Function('newArduinoCode', `"use strict"; return ${inputCode}`);
+                return wrapped(newArduinoCode);
+              }
 
+              const arduinoCode = evaluateArduinoCode(rawCode);
+              console.log("ARDUINO CODE: ",arduinoCode);
+              const prepromtBoard = `
+              Dado este codigo de arduino:
+              ${rawCode}
+              Quiero que generes un html que me permita testear las intereacciones del dispositivo.
+              La parte de js damela tambien teniendo en cuenta que tienes estas funciones en js: 
+              - sendTo("device1","name",["value1","value2"]);
+              - receiveFrom("device1", "varName");
+              Dame el html por separado del js.
+              Eres parte de un sistema automatizado que va a procesar el html y el js.
+              No me des nada mas que el html y el js.
+              `
+              const chatGPTresponseBoard = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/genericPrompt`, {prompt: prepromtBoard})
+              console.log("ChatGPT response board: ", chatGPTresponseBoard)
+
+              /*
+              
+               */
             }}>Apply</Button>
           </YStack>
         </YStack>
