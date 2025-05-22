@@ -44,7 +44,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
 
             </YStack>
         </AlertDialog>
-        <Popover onOpenChange={setMenuOpened} open={menuOpened} placement="bottom">
+        <Popover onOpenChange={setMenuOpened} open={menuOpened} allowFlip>
             <Popover.Trigger>
                 <InteractiveIcon id={`more-btn-${sourceUrl.split("/").slice(-1)}`} Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} ml={"$3"}></InteractiveIcon>
             </Popover.Trigger>
