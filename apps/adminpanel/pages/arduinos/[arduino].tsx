@@ -18,4 +18,5 @@ export default function Page(props: any) {
     )
 }
 
-export const getServerSideProps = ArduinoPage.view.getServerSideProps
+// Uncomment the following line if you want to recover SSR
+// export const getServerSideProps = ArduinoPage.view.getServerSideProps
