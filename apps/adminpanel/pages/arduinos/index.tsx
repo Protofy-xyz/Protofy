@@ -15,4 +15,4 @@ export default function Page(props:any) {
   )
 }
 
-export const getServerSideProps = ArduinosPage.arduinos.getServerSideProps
+// export const getServerSideProps = ArduinosPage.arduinos.getServerSideProps
