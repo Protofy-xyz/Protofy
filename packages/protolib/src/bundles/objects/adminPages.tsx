@@ -7,17 +7,61 @@ import { AdminPage } from '../../components/AdminPage';
 import { Pencil, Boxes, Tag } from '@tamagui/lucide-icons';
 import { usePageParams } from '../../next';
 import { XStack, Text } from "@my/ui";
-import { z } from 'protobase'
+import { getPendingResult, z } from 'protobase'
 import ErrorMessage from "../../components/ErrorMessage"
 import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import { API, ProtoModel } from 'protobase'
+import { usePendingEffect } from '../../lib/usePendingEffect';
+import { useState } from 'react';
+import { useRouter } from 'next/router'
+import { AsyncView } from '../../components/AsyncView';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons = {}
 const rowsPerPage = 20
 
 const sourceUrl = '/api/core/v1/objects'
+
+const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, object }: any) => {
+    const objExists = object ? true : false
+    let objModel = null
+    let apiUrl = null
+    if (objExists) {
+        objModel = ProtoModel.getClassFromDefinition(object)
+        const { name, prefix } = objModel.getApiOptions()
+        console.log("Object API options", { name, prefix })
+        apiUrl = prefix + name
+    }
+
+    // const {name, prefix} = Objects.inventory.getApiOptions()
+    // const apiUrl = prefix + name
+    return (<AdminPage title={"Object " + object?.name} workspace={workspace} pageSession={pageSession}>
+        {!objExists ? <ErrorMessage msg="Object not found" /> : null}
+        {objExists ? <DataView
+            rowIcon={Tag}
+            sourceUrl={apiUrl}
+            initialItems={initialItems}
+            numColumnsForm={1}
+            name={object?.name}
+            model={objModel}
+            pageState={pageState}
+            hideFilters={false}
+        /> : null}
+    </AdminPage>)
+}
+
+const ObjectViewLoader = (props) => {
+    const objectUrl = `/api/core/v1/objects/${props.object}`
+    const [data, setData] = useState(props.objectData ?? getPendingResult('pending'))
+    usePendingEffect((s) => { API.get({ url: objectUrl }, s) }, setData, props.objectData)
+    return <AsyncView atom={data} >
+        <ObjectView
+            {...props}
+            object={...data.isLoaded ? data.data : {}}
+        />
+    </AsyncView>
+}
 
 export default {
     'objects': {
@@ -90,37 +134,13 @@ export default {
         getServerSideProps: PaginatedData(sourceUrl, ['admin'])
     },
     view: {
-        component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, object }: any) => {
-            const objExists = object ? true : false
-            let objModel = null
-            let apiUrl = null
-            if(objExists) {
-                objModel = ProtoModel.getClassFromDefinition(object)
-                const {name, prefix} = objModel.getApiOptions()
-                console.log("Object API options", {name, prefix})
-                apiUrl = prefix + name
-            }
-
-            // const {name, prefix} = Objects.inventory.getApiOptions()
-            // const apiUrl = prefix + name
-            return (<AdminPage title={"Object " + object?.name} workspace={workspace} pageSession={pageSession}>
-                {!objExists ? <ErrorMessage msg="Object not found" /> : null}
-                {objExists ? <DataView
-                    rowIcon={Tag}
-                    sourceUrl={apiUrl}
-                    initialItems={initialItems}
-                    numColumnsForm={1}
-                    name={object?.name}
-                    model={objModel}
-                    pageState={pageState}
-                    hideFilters={false}
-                /> : null}
-            </AdminPage>)
-        },
-        getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
-            return {
-                object: (await API.get(`/api/core/v1/objects/${context.params.object}?token=` + session?.token))?.data
-            }
-        }))
+        component: (props: any) => {
+            const router = useRouter()
+            const { object } = router.query
+            if (!object) return <></>
+            return <AsyncView ready={router.isReady}>
+                <ObjectViewLoader {...props} object={object}/>
+            </AsyncView>
+        }
     }
 }
