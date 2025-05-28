@@ -28,7 +28,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
 
   return (
-    <Page ref={ref} title={projectName + " - " + title} backgroundColor={'$bgPanel'}>
+    <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgPanel'}>
       <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
         <AdminPanel>
           {children}

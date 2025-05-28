@@ -18,6 +18,7 @@ import { ElevatedArea } from 'protolib/components/ElevatedArea'
 import { BackgroundGradient } from 'protolib/components/BackgroundGradient'
 import { Page } from 'protolib/components/Page'
 import { LogoIcon } from 'protolib/components/LogoIcon'
+import { useIsLoggedIn } from 'protolib/lib/useIsLoggedIn'
 
 export function SignInPage(props) {
   return (
@@ -72,12 +73,11 @@ function SignIn() {
     }
   }, [authState])
 
-  useEffect(() => {
-    if (session.loggedIn) {
-      //@ts-ignore
-      router.push(query.return ?? '/');
-    }
-  }, [session])
+  useIsLoggedIn((session) => {
+    //@ts-ignore
+    document.location.href = query.return || '/'
+  })
+
 
   const handleSignin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

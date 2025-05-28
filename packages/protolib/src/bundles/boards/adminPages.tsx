@@ -1,6 +1,6 @@
 import { ArrowLeft, BookOpen, Plus, Save, Settings, Sparkles, Tag, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API } from 'protobase'
+import { API, getPendingResult } from 'protobase'
 import { DataTable2 } from "../../components/DataTable2"
 import { DataView, DataViewActionButton } from "../../components/DataView"
 import { AdminPage } from "../../components/AdminPage"
@@ -28,6 +28,11 @@ import BoardPreview from '../../components/board/BoardPreview'
 import { Monaco } from '../../components/Monaco'
 import { usePageParams } from '../../next'
 import { jsonToDiv } from '../../lib/jsonToDiv'
+import { usePendingEffect } from '../../lib/usePendingEffect'
+import { createParam } from 'solito'
+import { AsyncView } from '../../components/AsyncView'
+
+const { useParam, useParams } = createParam()
 
 import dynamic from 'next/dynamic'
 const ActionRunner = dynamic(() => import('../../components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
@@ -421,6 +426,26 @@ const Board = ({ board, icons }) => {
   )
 }
 
+const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
+  const { params } = useParams()
+  const [boardData, setBoardData] = useState(board ?? getPendingResult('pending'))
+  usePendingEffect((s) => { API.get({ url: `/api/core/v1/boards/${params.board}/` }, s) }, setBoardData, board)
+
+  const [iconsData, setIconsData] = useState(icons ?? getPendingResult('pending'))
+  usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
+
+
+  return (<AsyncView ready={boardData.status == 'loaded' && iconsData.status == 'loaded'}>
+    <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
+          {boardData.status == 'error' && <ErrorMessage
+            msg="Error loading board"
+            details={board.error.result}
+          />}
+          {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
+        </AdminPage>
+  </AsyncView>)
+}
+
 export default {
   boards: {
     component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
@@ -458,15 +483,12 @@ export default {
     getServerSideProps: PaginatedData(sourceUrl, ['admin'])
   },
   view: {
-    component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
-      const { data } = board
-      return (<AdminPage title="Board" workspace={workspace} pageSession={pageSession}>
-        {board.status == 'error' && <ErrorMessage
-          msg="Error loading board"
-          details={board.error.result}
-        />}
-        {board.status == 'loaded' && <Board board={data} icons={icons} />}
-      </AdminPage>)
+    component: (props: any) => {
+      const { params } = useParams()
+
+      return <AsyncView ready={params.board ? true : false}>
+        <BoardView {...props} />
+      </AsyncView>
     },
     getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
       return {
