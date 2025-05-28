@@ -14,5 +14,3 @@ export default function Page(props:any) {
     </>
   )
 }
-
-export const getServerSideProps = MessagesPage.messages.getServerSideProps
