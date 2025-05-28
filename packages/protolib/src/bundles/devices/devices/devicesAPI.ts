@@ -287,7 +287,7 @@ export const DevicesAPI = (app, context) => {
         const devicePath = path.join(devicesPath, req.params.device)
         if(!fs.existsSync(devicePath)) fs.mkdirSync(devicePath)
         fs.writeFileSync(path.join(devicePath,"config.yaml"),yaml)
-        fs.writeFileSync(path.join(devicePath,"config_"+ moment().format("DD_MM_YYYY_HH_mm_ss")+".yaml"),yaml)
+        //fs.writeFileSync(path.join(devicePath,"config_"+ moment().format("DD_MM_YYYY_HH_mm_ss")+".yaml"),yaml)
 
         res.send({value: yaml})
     }))
