@@ -15,5 +15,3 @@ export default function Page(props: any) {
     </>
   )
 }
-
-export const getServerSideProps = StateMachinesPages['stateMachines/**'].getServerSideProps
