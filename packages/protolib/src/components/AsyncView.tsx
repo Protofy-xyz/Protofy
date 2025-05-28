@@ -7,6 +7,7 @@ import { useTimeout } from 'usehooks-ts'
 type AsyncViewType = {
     atom?: any,
     forceLoad?: boolean,
+    forceWait?: boolean,
     waitForLoading?: number,
     spinnerSize?: any,
     ready?: boolean,
@@ -19,7 +20,8 @@ type AsyncViewType = {
 export const AsyncView = React.forwardRef(({
     atom,
     ready,
-    forceLoad, 
+    forceLoad,
+    forceWait,
     waitForLoading=250, 
     spinnerSize, 
     error, 
@@ -39,7 +41,7 @@ export const AsyncView = React.forwardRef(({
         return <ErrorMessage details={atom.error?.result??atom.error} />
     }
 
-    if ((!atom && !ready) || (atom && !atom.isLoaded)) {
+    if ((!atom && !ready) || (atom && !atom.isLoaded) || forceWait) {
         if(!loadingVisible) return <></>
         //@ts-ignore
         return loading ? loading : <Stack ref={ref} mt="$10" ai="center" jc="center" f={1} {...props}><Tinted><Spinner color="$color6" size={spinnerSize??'large'} /></Tinted>
