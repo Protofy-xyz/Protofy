@@ -1,12 +1,12 @@
+// pages/boards/[board].tsx
 import BoardsPage from 'protolib/bundles/boards/adminPages'
-import Head from 'next/head'
-import { SiteConfig } from 'app/conf'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
 export default function Page(props: any) {
-    return (
-        <>
-            <BoardsPage.view.component {...props} />
-        </>
-    )
+  const router = useRouter()
+  const board = router.query.board
+
+  if (!board || typeof board !== 'string') return <></>
+
+  return <BoardsPage.view.component board={board} />
 }

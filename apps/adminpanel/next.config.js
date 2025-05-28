@@ -28,7 +28,7 @@ const plugins = [
     // experiment - reduced bundle size react-native-web
     useReactNativeWebLite: false,
     shouldExtract: (path) => {
-      if (path.includes(join('packages', 'app')) || path.includes(join('packages', 'protolib')) ) {
+      if (path.includes(join('packages', 'app')) || path.includes(join('packages', 'protolib'))) {
         return true
       }
     },
@@ -38,9 +38,11 @@ const plugins = [
 
 module.exports = function () {
   /** @type {import('next').NextConfig} */
+  const buildMode = process.env.BUILD_MODE || 'standalone'; // default
+
   let config = {
     basePath: '/workspace',
-    output: 'standalone',
+    output: buildMode === 'export' ? 'export' : 'standalone',
     typescript: {
       ignoreBuildErrors: true,
     },
@@ -66,7 +68,7 @@ module.exports = function () {
           resourceRegExp: /^perf_hooks$/,
         })
       );
-  
+
       if (!options.isServer) {
         config.ignoreWarnings = [
           /critical dependency:/i,
@@ -75,7 +77,7 @@ module.exports = function () {
         ];
       }
       config.resolve.alias['protolib'] = resolve(__dirname, '../../packages/protolib/src');
-      
+
       return config;
     }
   }
@@ -87,7 +89,7 @@ module.exports = function () {
     }
   }
 
-  
+
 
   return withBundleAnalyzer(config)
 }
