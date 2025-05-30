@@ -487,7 +487,7 @@ export default {
       const { params } = useParams()
 
       return <AsyncView ready={params.board ? true : false}>
-        <BoardView {...props} />
+        <BoardView {...props} board={undefined} />
       </AsyncView>
     },
     getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
