@@ -7,17 +7,17 @@ const config = {
             "name": "core",
             "description": "Core services for protofy",
             "route": (req) => {
-                const url = req.url.split('?')[0]
-                const queryString = req.url.split('?')[1]
-                const query = queryString ? queryString.split('&').reduce((acc, val) => {
-                    const [key, value] = val.split('=')
-                    acc[key] = value
-                    return acc
-                }, {}) : {}
-
-                if (url.startsWith('/api/core/') || url == '/api/core') {
+                if (req.url.startsWith('/api/core/') || req.url == '/api/core') {
                     return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
-                } else if (url == '/websocket') {
+                }
+            }
+        },
+        {
+            "name": "core-websocket",
+            "type": "route",
+            "description": "Websocket service for protofy",
+            "route": (req) => {
+                if (req.url == '/websocket') {
                     return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
                 }
             }

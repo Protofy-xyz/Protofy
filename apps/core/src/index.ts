@@ -11,6 +11,7 @@ import { getServiceToken, getApp, getMQTTClient } from 'protonode'
 setConfig(getBaseConfig("core", process, getServiceToken()))
 import adminModules from './api'
 require('events').EventEmitter.defaultMaxListeners = 100;
+const { createExpressProxy, handleUpgrade } = require('app/proxy.js')
 
 import http from 'http';
 
@@ -63,8 +64,9 @@ export const startCore = (ready?) => {
   } catch (error) {
     logger.error({ error: error.toString() }, "Server error")
   }
-
+  app.use( createExpressProxy('core') )
   const server = http.createServer(app);
+  handleUpgrade(server, 'core')
   const PORT = 3002
   server.listen(PORT, () => {
     logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
