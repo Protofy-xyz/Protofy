@@ -5,12 +5,14 @@ import BundleContext from 'app/bundles/apiContext'
 import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 import { pathToFileURL } from 'url';
 import fs from 'fs'
+const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()
 const subscriptions = {}
 const isProduction = process.env.NODE_ENV === 'production';
 const serviceName = isProduction ? 'api' : 'api-dev'
-const app = getApp()
+
+const app = getApp((app) => app.use( createExpressProxy('api') ))
 
 //wait for mqtt before starting api server
 const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {

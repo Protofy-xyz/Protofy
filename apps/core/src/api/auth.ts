@@ -4,10 +4,10 @@ import moment from 'moment';
 import { getLogger, API, UserModel, LoginSchema, RegisterSchema, LoginRequest, RegisterRequest } from 'protobase';
 import {SiteConfig} from 'app/conf'
 import { getDBOptions } from 'protonode';
-
+const { createExpressProxy } = require('app/proxy.js')
 const logger = getLogger()
 
-const app = getApp()
+const app = getApp((app) => app.use( createExpressProxy('core') ))
 
 logger.debug(`API Module loaded: ${__filename.split('.')[0]}`);
 

@@ -11,9 +11,10 @@ import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
 import { addAction } from 'protolib/bundles/actions/context/addAction';
 import { addCard } from 'protolib/bundles/cards/context/addCard';
+const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()
-const app = getApp()
+const app = getApp((app) => app.use( createExpressProxy('core') ))
 
 const generateEvent = async (event, token='') => {
     try {

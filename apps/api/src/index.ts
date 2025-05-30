@@ -13,6 +13,7 @@ global.appName = 'api'
 //@ts-ignore
 import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
+const { handleUpgrade } = require('app/proxy.js')
 
 const isProduction = process.env.NODE_ENV === 'production';
 const serviceName = isProduction?'api':'api-dev'
@@ -26,6 +27,7 @@ const start = async () => {
   //dynamic import of app from ./api.ts
   const module = await import('./api.js')
   const server = http.createServer(module.default);
+  handleUpgrade(server, 'api')
   server.listen(PORT, () => {
     logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
   });

@@ -2,10 +2,11 @@ import * as fs from 'fs';
 import { handler, getApp} from 'protonode'
 import { connectDB } from 'app/bundles/storageProviders'
 import { getLogger, templates } from 'protobase';
+const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()
 
-const app = getApp()
+const app = getApp((app) => app.use( createExpressProxy('core') ))
 
 logger.debug(`API Module loaded: ${__filename.split('.')[0]}`)
 

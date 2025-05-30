@@ -25,7 +25,7 @@ export const startCore = (ready?) => {
   const config = getConfig()
   const logger = getLogger()
 
-  const app = getApp()
+  const app = getApp((app) => app.use( createExpressProxy('core') ))
 
   process.on('uncaughtException', function (err) {
     logger.error({ err }, 'Uncaught Exception: ', err.message)
@@ -64,7 +64,7 @@ export const startCore = (ready?) => {
   } catch (error) {
     logger.error({ error: error.toString() }, "Server error")
   }
-  app.use( createExpressProxy('core') )
+
   const server = http.createServer(app);
   handleUpgrade(server, 'core')
   const PORT = 3002

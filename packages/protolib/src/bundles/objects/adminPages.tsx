@@ -58,7 +58,7 @@ const ObjectViewLoader = (props) => {
     return <AsyncView atom={data} >
         <ObjectView
             {...props}
-            object={...data.isLoaded ? data.data : {}}
+            object={data.isLoaded ? data.data : {}}
         />
     </AsyncView>
 }

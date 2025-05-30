@@ -7,11 +7,12 @@ import { handler } from './handler'
 import listEndpoints from "express-list-endpoints";
 let app;
 
-export const getApp = () => {
+export const getApp = (fn=(app) => {}) => {
     if(!app) {
         const logger = getLogger()
         const config = getConfig()
         app = express();
+        fn(app)
         app.set('json spaces', 2);
         app.use(cors());
         app.use(cookieParser());

@@ -51,7 +51,7 @@ function serve404(res) {
 }
 
 // ─── Core HTTP handler ──────────────────────────────────────────────────────
-function handleHttp(name, req, res, fallback) {
+function handleHttp(name, req, res, fallback, proxy, logger) {
   // 1) public files
   if (req.url.startsWith('/public/')) {
     const rel = decodeURIComponent(req.url.replace(/\.\.\//g, ''))
@@ -66,8 +66,6 @@ function handleHttp(name, req, res, fallback) {
     return true
   }
 
-  //dynamic proxy
-  const { proxy, logger } = createProxyServer(name)
   const resolver = findResolver(name, req)
   if (resolver) {
     if (resolver.name !== name) {
@@ -110,7 +108,7 @@ function handleHttp(name, req, res, fallback) {
 
 // ─── Next.js style setup ────────────────────────────────────────────────────
 function setupProxyHandler(name, subscribe, handle, server) {
-  const { proxy } = createProxyServer(name)
+  const { proxy, logger } = createProxyServer(name)
   // WS upgrade
   server.on('upgrade', (req, socket, head) => {
     const resolver = findResolver(name, req)
@@ -127,16 +125,17 @@ function setupProxyHandler(name, subscribe, handle, server) {
   })
   // HTTP
   subscribe((req, res) => {
-    handleHttp(name, req, res, handle)
+    handleHttp(name, req, res, handle, proxy, logger)
   })
 }
 
 // ─── Express middleware ─────────────────────────────────────────────────────
 function createExpressProxy(name) {
+  const { proxy, logger } = createProxyServer(name)
   return (req, res, next) => {
     handleHttp(name, req, res, () => {
       next()
-    })
+    }, proxy, logger)
   }
 }
 
