@@ -87,15 +87,6 @@ function handleHttp(name, req, res, fallback) {
       }
     }
 
-    if(p.startsWith('/workspace/boards/')) {
-      //remove the final part of the path and replace it with [board].html
-      htmlFile = path.join(__dirname, '../../data/pages/workspace/boards/[board].html')
-    }
-
-    if(p.startsWith('/workspace/objects/')) {
-      //remove the final part of the path and replace it with [board].html
-      htmlFile = path.join(__dirname, '../../data/pages/workspace/objects/[object].html')
-    }
     //if the path is a file, check if it has an extension
     if (!path.extname(htmlFile)) {
       //if not, assume it's an HTML file
@@ -123,8 +114,14 @@ function setupProxyHandler(name, subscribe, handle, server) {
   // WS upgrade
   server.on('upgrade', (req, socket, head) => {
     const resolver = findResolver(name, req)
-    if (resolver || resolver.name === name && req.url.endsWith('/webpack-hmr')) {
-        return
+    if (!resolver || resolver.name === name) {
+        if(resolver.name === name && req.url.endsWith('/webpack-hmr')) {
+            //let nextjs handle its own websocket
+            return
+        }
+        console.log('No resolver found for WebSocket request: ' + req.url);
+        socket.destroy();
+        return;
     }
     proxy.ws(req, socket, head, { target: resolver.route(req) })
   })

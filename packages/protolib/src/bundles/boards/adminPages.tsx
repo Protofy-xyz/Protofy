@@ -428,6 +428,7 @@ const Board = ({ board, icons }) => {
 
 const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
   const { params } = useParams()
+
   const [boardData, setBoardData] = useState(board ?? getPendingResult('pending'))
   usePendingEffect((s) => { API.get({ url: `/api/core/v1/boards/${params.board}/` }, s) }, setBoardData, board)
 
@@ -487,7 +488,7 @@ export default {
       const { params } = useParams()
 
       return <AsyncView ready={params.board ? true : false}>
-        <BoardView {...props} board={undefined} />
+        <BoardView key={params.board} {...props} board={undefined} />
       </AsyncView>
     },
     getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {

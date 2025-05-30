@@ -139,7 +139,7 @@ export default {
             const { object } = router.query
             if (!object) return <></>
             return <AsyncView ready={router.isReady}>
-                <ObjectViewLoader {...props} object={object}/>
+                <ObjectViewLoader key={object} {...props} object={object}/>
             </AsyncView>
         }
     }

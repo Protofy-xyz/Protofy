@@ -118,7 +118,7 @@ export default ({ pages, boards, objects }) => {
         "menu": {
             ...(enableBoards) ? {
                 "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
-                    return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/'+board.name }
+                    return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name }
                 }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
             } : {},
             ...(objectsWithPage.length ? {

@@ -187,7 +187,7 @@ const getDB = (path, req, session) => {
         }
         value.features = {
           AutoAPI: value.api ? value.api : false,
-          adminPage: '/objects/'+value.name
+          adminPage: '/objects/view?object='+value.name
         }
         delete value.api
         delete value.adminPage
