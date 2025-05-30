@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 import { useRouter } from 'next/router';
-import ArduinoPage from 'protolib/bundles/arduino/adminPages'
+// import ArduinoPage from 'protolib/bundles/arduino/adminPages'
 
 
 export default function Page(props: any) {
@@ -13,7 +13,7 @@ export default function Page(props: any) {
             <Head>
                 <title>{arduino+" Board"}</title>
             </Head>
-            <ArduinoPage.view.component {...props} />
+            {/* <ArduinoPage.view.component {...props} /> */}
         </>
     )
 }

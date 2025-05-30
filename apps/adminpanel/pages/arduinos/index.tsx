@@ -1,4 +1,4 @@
-import ArduinosPage from 'protolib/bundles/arduino/adminPages'
+// import ArduinosPage from 'protolib/bundles/arduino/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
@@ -10,7 +10,7 @@ export default function Page(props:any) {
       <Head>
         <title>{projectName + " - Arduinos"}</title>
       </Head>
-      <ArduinosPage.arduinos.component {...props} />
+      {/* <ArduinosPage.arduinos.component {...props} /> */}
     </>
   )
 }
