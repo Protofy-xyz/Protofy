@@ -11,6 +11,8 @@
         "dist"
     ],
     "dependencies": {
+        "bcryptjs": "3.0.2",
+        "jsonwebtoken": "^9.0.2",
         "handlebars": "4.7.8",
         "pino": "9.2.0",
         "pino-pretty": "11.2.1"
