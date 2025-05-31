@@ -19,7 +19,6 @@
     "@my/config": "*",
     "aedes": "^0.50.0",
     "app": "*",
-    "bcrypt": "^5.1.1",
     "chokidar": "^3.5.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
