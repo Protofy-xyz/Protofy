@@ -1,6 +1,5 @@
-import { API, getLogger, ProtoMemDB } from 'protobase';
+import { API, getLogger, ProtoMemDB, generateEvent } from 'protobase';
 import {getServiceToken} from 'protonode';
-import { generateEvent } from "../../events/eventsLibrary";
 const logger = getLogger();
 
 export const addAction = async (options: {

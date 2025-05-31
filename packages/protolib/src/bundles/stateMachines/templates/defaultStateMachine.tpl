@@ -1,5 +1,4 @@
-import { Protofy } from 'protobase'
-import { generateEvent } from "protolib/bundles/events/eventsLibrary";
+import { Protofy, generateEvent } from 'protobase'
 import { getServiceToken } from "protonode";
 import { assign } from "protolib/bundles/stateMachines/handlers";
 

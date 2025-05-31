@@ -20,6 +20,7 @@
     "@monaco-editor/react": "4.4.6",
     "@my/ui": "0.0.1",
     "@protocraft/core": "0.2.4-2",
+    "@react-google-maps/api": "^2.20.6",
     "@react-three/drei": "9.77.3",
     "@react-three/fiber": "8.8.10",
     "@rehookify/datepicker": "6.6.1",

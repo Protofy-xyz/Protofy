@@ -1,6 +1,5 @@
 import { getServiceToken } from 'protonode'
-import { generateEvent } from "../eventsLibrary"
-import { API } from "protobase";
+import { API, generateEvent } from "protobase";
 
 export const onEvent = (mqtt, context, cb, path?, from?) => {
     context.topicSub(mqtt, 'notifications/event/create/'+(path??'#'), (async (message: string, topic: string) => {

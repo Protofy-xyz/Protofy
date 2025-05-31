@@ -1,7 +1,7 @@
 import { UserModel } from './users/usersSchemas'
 import { GroupModel } from './groups/groupsSchemas'
 import { KeyModel} from './keys/keysSchemas'
-import { EventModel } from './events/eventsSchemas'
+import { EventModel } from 'protobase'
 import { ObjectModel } from './objects/objectsSchemas'
 import { WorkspaceModel } from './workspaces/WorkspaceModel'
 import { APIModel } from './apis/APISchemas'

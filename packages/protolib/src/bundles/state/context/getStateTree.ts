@@ -1,5 +1,4 @@
-import { API, getLogger, ProtoMemDB } from 'protobase';
-import { generateEvent } from "../../events/eventsLibrary";
+import { API, getLogger, ProtoMemDB, generateEvent } from 'protobase';
 const logger = getLogger();
 
 export const getStateTree = async (options: {

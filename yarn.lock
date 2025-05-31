@@ -10228,6 +10228,8 @@ __metadata:
     app: "npm:0.0.0"
     compare-versions: "npm:^3.4.0"
     dotenv: "npm:^16.3.1"
+    electron: "npm:29.4.6"
+    electron-builder: "npm:24.13.3"
     eslint-config-next: "npm:^14.2.3"
     expo-constants: "npm:~16.0.2"
     expo-modules-core: "npm:2.2.2"
@@ -17396,21 +17398,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^10.2.5":
-  version: 10.3.6
-  resolution: "glob@npm:10.3.6"
-  dependencies:
-    foreground-child: "npm:^3.1.0"
-    jackspeak: "npm:^2.0.3"
-    minimatch: "npm:^9.0.1"
-    minipass: "npm:^5.0.0 || ^6.0.2 || ^7.0.0"
-    path-scurry: "npm:^1.10.1"
-  bin:
-    glob: dist/cjs/src/bin.js
-  checksum: 10/5d0b097c9a38a78df565d2e322a85527f9133a57a22155aef8bb25057880ff79d567f3a3d89b7a841b4ab92bcf36a5879d38432ff636cfa3cb48868c711f5c3f
-  languageName: node
-  linkType: hard
-
 "glob@npm:^7.0.0, glob@npm:^7.0.5, glob@npm:^7.1.1, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
@@ -19207,19 +19194,6 @@ __metadata:
   peerDependencies:
     react: ">=18.0"
   checksum: 10/3b9dc466888743932e3e92e3e4c08a50379166b01ba4c97cece7531d3bc2afb20ff1370946c860876b7f0923128be856bec7a28852f8d69cf4a1b1a5370f8fa7
-  languageName: node
-  linkType: hard
-
-"jackspeak@npm:^2.0.3":
-  version: 2.3.3
-  resolution: "jackspeak@npm:2.3.3"
-  dependencies:
-    "@isaacs/cliui": "npm:^8.0.2"
-    "@pkgjs/parseargs": "npm:^0.11.0"
-  dependenciesMeta:
-    "@pkgjs/parseargs":
-      optional: true
-  checksum: 10/a4c7c1a3ffea90bbcaa2f7a0d2885861e94138982aef0ced8efd299b32ccb69645b49d27f5e3e81c57005002674dd7e2b5d08a4287e9110534e512ada53557b2
   languageName: node
   linkType: hard
 
@@ -24743,6 +24717,7 @@ __metadata:
     "@monaco-editor/react": "npm:4.4.6"
     "@my/ui": "npm:0.0.1"
     "@protocraft/core": "npm:0.2.4-2"
+    "@react-google-maps/api": "npm:^2.20.6"
     "@react-three/drei": "npm:9.77.3"
     "@react-three/fiber": "npm:8.8.10"
     "@rehookify/datepicker": "npm:6.6.1"
@@ -26792,17 +26767,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^5.0.1":
-  version: 5.0.1
-  resolution: "rimraf@npm:5.0.1"
-  dependencies:
-    glob: "npm:^10.2.5"
-  bin:
-    rimraf: dist/cjs/src/bin.js
-  checksum: 10/0691e4d7482f2de2af8628976413e146cd6b204f52ab88be91a3bb69cb9c8669ee795ef7c1e964e8ec6bfeaec0212326287d53ec3eef26dac406c8f19c97f0c4
-  languageName: node
-  linkType: hard
-
 "rimraf@npm:~2.6.2":
   version: 2.6.3
   resolution: "rimraf@npm:2.6.3"
@@ -27684,7 +27648,6 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.24.6"
     "@manypkg/cli": "npm:^0.21.4"
-    "@react-google-maps/api": "npm:^2.20.6"
     "@types/adm-zip": "npm:^0"
     adm-zip: "npm:^0.5.16"
     async: "npm:3.2.5"
@@ -27701,8 +27664,8 @@ __metadata:
     npm-run-all: "npm:^4.1.5"
     pm2: "npm:^5.3.0"
     prettier: "npm:^2.8.1"
-    rimraf: "npm:^5.0.1"
     semver: "npm:^7.5.4"
+    shx: "npm:^0.3.4"
     tar: "npm:^7.4.3"
     ts-node: "npm:10.9.1"
     turbo: "npm:^1.13.3"

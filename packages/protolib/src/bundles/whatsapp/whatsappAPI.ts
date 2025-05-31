@@ -1,6 +1,5 @@
-import { API } from "protobase";
+import { API, generateEvent } from "protobase";
 import { AutoAPI, handler, getServiceToken} from 'protonode'
-import { generateEvent } from "../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';

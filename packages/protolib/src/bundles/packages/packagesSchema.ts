@@ -1,5 +1,4 @@
-import { ProtoModel, Schema, z } from 'protobase'
-import { SessionDataType } from "protonode";
+import { ProtoModel, Schema, z, SessionDataType } from 'protobase'
 
 export const PackageSchema = Schema.object({
     name: z.string().search().id()

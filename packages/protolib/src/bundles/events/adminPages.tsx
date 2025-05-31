@@ -1,4 +1,4 @@
-import { EventModel } from '.'
+import { EventModel } from 'protobase'
 import { Chip } from '../../components/Chip'
 import { DataTable2 } from '../../components/DataTable2'
 import { DataView } from '../../components/DataView'

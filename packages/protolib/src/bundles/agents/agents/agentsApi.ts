@@ -1,8 +1,7 @@
-import { API } from "protobase";
+import { API, generateEvent } from "protobase";
 import { AgentsModel } from ".";
 import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { getDB } from '@my/config/dist/storageProviders';
-import { generateEvent } from "../../events/eventsLibrary";
 import { getLogger } from 'protobase';
 import { network } from "../network/networkApi";
 

@@ -1,8 +1,7 @@
 import { getApp, getMQTTClient, getServiceToken } from 'protonode'
-import { getLogger, getConfig } from 'protobase';
+import { getLogger, getConfig, generateEvent } from 'protobase';
 import { getConfigWithoutSecrets } from '@my/config'
 import BundleContext from 'app/bundles/apiContext'
-import { generateEvent } from 'protolib/bundles/events/eventsLibrary';
 import { pathToFileURL } from 'url';
 import fs from 'fs'
 const { createExpressProxy } = require('app/proxy.js')

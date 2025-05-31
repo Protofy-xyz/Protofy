@@ -1,6 +1,10 @@
+import {API} from './Api'
 import moment from "moment";
-import { SessionDataType } from "protonode";
-import { ProtoModel, z, Protofy, BaseSchema} from "protobase";
+import { BaseSchema, z } from './BaseSchema';
+import { Protofy } from './Protofy';
+import { ProtoModel } from './ProtoModel';
+import { SessionDataType } from './lib/perms';
+
 
 export const BaseEventSchema = z.object(Protofy("schema", {
     path: z.string().search().groupIndex("path", "return data.path.split('/').reduce((acc, curr, index) => (acc.push(index === 0 ? curr : acc[index - 1] + '/' + curr), acc), [])"), //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
@@ -50,3 +54,13 @@ export class EventModel extends ProtoModel<EventModel> {
         return new EventModel(data, session);
     }
 }
+
+
+export const generateEvent = async (event: EventType, token='') => {
+    try {
+        await API.post('/api/core/v1/events?token='+token, event, undefined, true)
+    } catch(e) {
+        //console.error("Failed to send event: ", e)
+    }
+}
+

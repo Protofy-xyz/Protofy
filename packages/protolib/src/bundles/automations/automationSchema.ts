@@ -1,5 +1,4 @@
-import { ProtoModel, Schema, optional, z } from 'protobase'
-import { SessionDataType } from "protonode";
+import { ProtoModel, Schema, optional, z, SessionDataType } from 'protobase'
 
 export const AutomationSchema = Schema.object({
     name: z.string().search().id(),

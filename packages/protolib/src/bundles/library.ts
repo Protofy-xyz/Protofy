@@ -1,1 +1,1 @@
-export * from './events/eventsLibrary'
+export {generateEvent} from 'protobase';

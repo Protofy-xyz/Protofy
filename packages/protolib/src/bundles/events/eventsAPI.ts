@@ -1,7 +1,6 @@
-import { EventModel } from ".";
 import { AutoAPI, getDBOptions, getServiceToken } from 'protonode'
 import { connectDB, getDB } from '@my/config/dist/storageProviders';
-import { API } from 'protobase'
+import { API, EventModel } from 'protobase'
 
 export const EventsAPI = async (app, context) => {
     const EventAPI = AutoAPI({

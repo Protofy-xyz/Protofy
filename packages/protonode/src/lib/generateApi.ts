@@ -1,6 +1,6 @@
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
-import { API, getEnv, getLogger } from 'protobase';
+import { API, getEnv, getLogger, generateEvent } from 'protobase';
 import { leveldbProvider, getDBOptions } from './db';
 
 const logger = getLogger()
@@ -20,14 +20,6 @@ const _connectDB = leveldbProvider.connectDB;
     operations: list of provided operations, by default ['create', 'read', 'update', 'delete', 'list']
     single: most apis are used to expose a list of things. Single means a single entity, not a list of things. So /api/v1/test returns the entity, not a list of things
 */
-
-const generateEvent = async (event, token='') => {
-    try {
-        await API.post('/api/core/v1/events?token='+token, event, undefined, true)
-    } catch(e) {
-        //console.error("Failed to send event: ", e)
-    }
-}
 
 type AutoAPIOptions = {
     modelName: string,

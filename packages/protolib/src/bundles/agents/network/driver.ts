@@ -1,9 +1,9 @@
 import { getDB } from '@my/config/dist/storageProviders';
 import { AgentsModel } from '../agents/agentsSchemas';
 import { MonitorType, SubsystemsSchema, SubsystemType } from '../subsystems/subsystemSchemas';
-import { generateEvent } from "../../events/eventsLibrary";
 import { getServiceToken } from 'protonode';
-import { heartbeatTimeout, defMonitorEndpoint } from './networkConfig'
+import { heartbeatTimeout, defMonitorEndpoint } from './networkConfig';
+import { generateEvent } from 'protobase';
 
 const registerMonitors = ({
     agentName,

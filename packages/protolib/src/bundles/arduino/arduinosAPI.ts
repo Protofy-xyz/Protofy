@@ -1,8 +1,7 @@
 import { ArduinosModel } from './arduinosSchemas';
 import { AutoAPI, handler, getServiceToken } from 'protonode'
 import { SerialManager } from './serialport/serialManager';
-import { generateEvent } from "../events/eventsLibrary";
-import { API } from 'protobase'
+import { API, generateEvent } from 'protobase'
 
 const eventsPath = "arduinos"
 const useChatGPT = true

@@ -1,8 +1,7 @@
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import { API } from 'protobase'
+import { API, EventModel } from 'protobase'
 import { useRemoteStateList } from '../../lib/useRemoteState';
-import { EventModel } from './eventsSchemas';
 import AsyncView from '../../components/AsyncView';
 import { DashboardCard } from '../../components/DashboardCard';
 import { YStack, XStack, Text, Card } from '@my/ui';
