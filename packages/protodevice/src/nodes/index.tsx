@@ -49,6 +49,7 @@ import NeopixelsDisplay from './NeopixelsDisplay';
 import ST7789V from './ST7789V';
 import Modem from './Modem';
 import CANBusUART from './CANBusUART';
+import I2c_MCP23008 from './I2c_MCP23008';
 
 const deviceMasks = [
   Wifi,
@@ -99,7 +100,8 @@ const deviceMasks = [
   NeopixelsDisplay,
   ST7789V,
   Modem,
-  CANBusUART
+  CANBusUART,
+  I2c_MCP23008
 ]
 
 const masksLength = deviceMasks.length
