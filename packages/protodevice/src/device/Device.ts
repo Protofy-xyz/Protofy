@@ -53,11 +53,11 @@ class Device {
                     let componentSubsystem = component.getSubsystem()
                     if(Array.isArray(componentSubsystem)){
                         componentSubsystem.forEach((subsystem)=>{
-                            this.subsystemsTree.push({generateEvent: subsystem.generateEvent??true, ...subsystem})
+                            this.subsystemsTree.push({...subsystem})
                         })
                     }
                     else{
-                        this.subsystemsTree.push({generateEvent: componentSubsystem.generateEvent??true, ...componentSubsystem})
+                        this.subsystemsTree.push({...componentSubsystem})
                     }
                 } catch {
 
@@ -65,11 +65,18 @@ class Device {
             }
         })
 
-
-
-            
-        
-
+        this.subsystemsTree.forEach((subsystem)=>{
+            if(Object.keys(subsystem).length==0){
+                console.warn("Subsystem is empty, removing it", subsystem)
+                return
+            }
+            if(subsystem.monitors){
+                subsystem.monitors = subsystem.monitors.map((monitor)=>{
+                    monitor["ephemeral"] = true
+                    return monitor
+                })
+            }
+        })
         this.subsystemsTree = this.subsystemsTree.sort((a,b)=>{
             if(a.name=="mqtt"){
                 return -1
