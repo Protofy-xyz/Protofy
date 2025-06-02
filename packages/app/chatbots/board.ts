@@ -1,6 +1,6 @@
-import { getAuth, getServiceToken } from 'protonode'
+import { getAuth } from 'protonode'
 import { APIContext } from "protolib/bundles/apiContext"
-import { Protofy, getLogger } from "protobase";
+import { Protofy, getLogger, getServiceToken } from "protobase";
 import { Application } from 'express';
 import path from "path";
 import { createChatbot } from "protolib/bundles/chatbots/createChatbot";
