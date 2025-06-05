@@ -440,7 +440,7 @@ const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, 
     <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
           {boardData.status == 'error' && <ErrorMessage
             msg="Error loading board"
-            details={board.error.result}
+            details={board?.error?.result}
           />}
           {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
         </AdminPage>
@@ -460,7 +460,7 @@ export default {
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}
-          onAdd={(data) => { router.push(`/boards/${data.name}`); return data }}
+          onAdd={(data) => { router.push(`/boards/view?board=${data.name}`); return data }}
           name="Board"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
           onSelectItem={(item) => router.push(`/boards/view?board=${item.data.name}`)}
