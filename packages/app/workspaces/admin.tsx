@@ -7,7 +7,8 @@ import {
     Box,
     LayoutDashboard,
     Zap,
-    Wrench
+    Wrench,
+    Blocks
 } from '@tamagui/lucide-icons'
 import { MonitorCog as RawMonitorCog } from 'lucide-react'
 import { styled } from 'tamagui'
@@ -133,6 +134,7 @@ export default ({ pages, boards, objects }) => {
             } : {}),
             "Integrations": integrations,
             "System": [
+                { "name": "Assets", "icon": Blocks, "href": "/workspace/files?path=%2Fdata%2Fassets", "path": "" },
                 { "name": "Users", "icon": "users", "href": "/workspace/users" },
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
                 { "name": "Events", "icon": "activity", "href": "/workspace/events" },
