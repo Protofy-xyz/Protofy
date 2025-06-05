@@ -31,6 +31,7 @@
     "@tamagui/font-inter": "^1.101.7",
     "@tamagui/font-munro": "^1.101.7",
     "@tamagui/font-silkscreen": "^1.101.7",
+    "adm-zip": "0.5.16",
     "archiver": "7.0.1",
     "classnames": "2.3.2",
     "cookie": "^0.6.0",

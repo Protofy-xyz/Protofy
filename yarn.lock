@@ -10199,7 +10199,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:^0.5.16":
+"adm-zip@npm:0.5.16, adm-zip@npm:^0.5.16":
   version: 0.5.16
   resolution: "adm-zip@npm:0.5.16"
   checksum: 10/e167d1b9e60cde37334efda828fa514680af9facbd4183952f36526390e5c7da9a90ca1e6880dfd3aba7b3517f1506c6178e0dc29cd630b26b98c795f97fc599
@@ -24602,7 +24602,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "protobase@workspace:packages/protobase"
   dependencies:
+    bcryptjs: "npm:3.0.2"
     handlebars: "npm:4.7.8"
+    jsonwebtoken: "npm:^9.0.2"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
     typescript: "npm:5.8.2"
@@ -24723,6 +24725,7 @@ __metadata:
     "@types/react-dom": "npm:18.3.0"
     "@types/react-grid-layout": "npm:^1"
     "@types/react-syntax-highlighter": "npm:15.5.11"
+    adm-zip: "npm:0.5.16"
     archiver: "npm:7.0.1"
     autoprefixer: "npm:^10.4.16"
     classnames: "npm:2.3.2"
