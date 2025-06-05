@@ -9,7 +9,7 @@ const Seeed_xiao_esp32s3 = ({ node = {}, nodeData = {}, topics = {}, color }: an
     const { id, type } = node
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const offsetY = 99 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 81 //This value is for setting the initial point where the available pins start to draw
     const spacing = 30.4
     const edges = useEdges();
     const metadata = useFlowsStore(state => state.metadata)
