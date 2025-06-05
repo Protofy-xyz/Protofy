@@ -1,6 +1,6 @@
 import Dropzone from 'react-dropzone-uploader'
 
-export const Uploader = ({ path, onUpload, setShowUploadDialog, accept = "image/*,audio/*,video/*" }) => {
+export const Uploader = ({ path, onUpload, setShowUploadDialog, accept = "image/*,audio/*,video/*,.zip" }) => {
   // specify upload params and url for your files
   const getUploadParams = ({ meta }) => { return { url: '/api/core/v1/files/' + path } }
 
