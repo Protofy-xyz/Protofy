@@ -63,7 +63,7 @@ class LEDCOutput {
             {
               name: 'set_pwm_percentage',
               label: 'Set pwm percentage',
-              description: 'Set the pwm level in percentage 0-100',
+              description: 'Set the pwm level in percentage 0-1',
               endpoint: "/"+this.type+"/"+this.name+"/command",
               connectionType: 'mqtt',
               payload: {
