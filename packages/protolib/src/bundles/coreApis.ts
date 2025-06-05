@@ -74,5 +74,6 @@ export const AdminAPIBundles = (app, context) => {
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
   ArduinosAPI(app, context)
-  AssetsAPI(app, context)
+  AssetsAPI(app, context),
+  DiscordAPI(app, context)
 }
