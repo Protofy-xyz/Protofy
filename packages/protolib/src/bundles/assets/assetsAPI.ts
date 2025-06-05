@@ -1,4 +1,4 @@
-import { getAuth,handler, getServiceToken } from "protonode";
+import { getAuth, handler, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import { Application } from "express";
 import * as fs from 'fs';
@@ -11,7 +11,7 @@ const root = path.join(process.cwd(), "..", "..");
 const logger = getLogger();
 
 
-const assetsDir = "/data/assets"
+const assetsDir = "data/assets"
 const assetsRoot = path.join(root, assetsDir);
 
 
@@ -79,7 +79,48 @@ const waitForFolderReady = async (folderPath, retries = 10, delay = 200) => {
     throw new Error(`Timeout waiting for folder to be ready: ${folderPath}`);
 };
 
+const installAsset = async (context, zipFile) => {
+        const zipPath = path.join(assetsRoot, zipFile);
+        const assetName = zipFile.replace(".zip", "");
+        const assetPath = path.join(assetsRoot, assetName);
+
+        await decompressZip({
+            zipPath,
+            outputPath: assetPath,
+            done: async (outputPath) => {
+                console.log(`Decompressed ${zipFile} to ${outputPath}`);
+
+                await waitForFolderReady(assetPath);
+
+                await context.os2.deleteFile({
+                    path: `${assetsDir}/${zipFile}`,
+                });
+
+                copyFolderStructure(assetPath, root);
+            },
+            error: (err) => {
+                console.error(`Error decompressing ${zipFile}:`, err);
+            },
+        });
+    };
+
 export const AssetsAPI = (app, context) => {
+
+    // on upload file to assets folder, install the asset
+    context.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            // call the install
+            const payload = event.payload || {};
+            if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
+                await installAsset(context, payload.filename);
+            }
+
+        },
+        "files/write/file",
+        "core"
+    )
 
     app.get('/api/core/v1/assets/install/all', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
@@ -101,37 +142,7 @@ export const AssetsAPI = (app, context) => {
                 );
 
                 for (const zipFile of zipFiles) {
-                    const assetName = zipFile.replace(".zip", "");
-                    const assetPath = path.join(
-                        assetsRoot,
-                        assetName
-                    );
-
-                    await decompressZip({
-                        zipPath: `${assetsRoot}/${zipFile}`,
-                        outputPath: `${assetsRoot}`,
-                        done: async (outputPath) => {
-                            console.log(
-                                `Decompressed ${zipFile} to ${outputPath}`
-                            );
-
-                            await waitForFolderReady(assetPath);
-
-                            // Delete the zip file after extraction
-                            await context.os2.deleteFile({
-                                path: `${assetsDir}/${zipFile}`,
-                            });
-
-                            copyFolderStructure(assetPath, root);
-                        },
-                        error: (err) => {
-                            console.error(
-                                `Error decompressing ${zipFile}:`,
-                                err
-                            );
-                        },
-                    });
-
+                    await installAsset(context, zipFile);
                 }
 
                 list = list.filter(
@@ -141,11 +152,11 @@ export const AssetsAPI = (app, context) => {
                 console.log("Assets after decompression:", list);
 
                 for (const asset of list) {
-                    copyFolderStructure(root +assetsDir + '/' + asset, root);
+                    copyFolderStructure(root + assetsDir + '/' + asset, root);
                 }
             },
         })
         // TODO: return all the installed assets
-        res.send({"result": "All assets installed successfully."});
+        res.send({ "result": "All assets installed successfully." });
     }))
 }
