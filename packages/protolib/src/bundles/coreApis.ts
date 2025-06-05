@@ -34,6 +34,7 @@ import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
 import { ArduinosAPI } from './arduino/arduinosAPI'
+import { AssetsAPI } from './assets/assetsAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
@@ -72,4 +73,5 @@ export const AdminAPIBundles = (app, context) => {
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
   ArduinosAPI(app, context)
+  AssetsAPI(app, context)
 }
