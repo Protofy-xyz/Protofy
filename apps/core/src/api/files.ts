@@ -142,7 +142,7 @@ const handleFilesWriteRequest = async (req, res, session) => {
         path: 'files/write/file', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
         from: 'core', // system entity where the event was generated (next, api, cmd...)
         user: session.user.id, // the original user that generates the action, 'system' if the event originated in the system itself
-        payload: {'path': name} // event payload, event-specific data
+        payload: {'path': name, "filename": req.file?.filename, mimetype: req.file?.mimetype } // event payload, event-specific data
     }, getServiceToken())
     res.status(200).send({result: "uploaded"});
 };
