@@ -463,7 +463,7 @@ export default {
           onAdd={(data) => { router.push(`/boards/${data.name}`); return data }}
           name="Board"
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
-          onSelectItem={(item) => router.push(`/boards/${item.data.name}`)}
+          onSelectItem={(item) => router.push(`/boards/view?board=${item.data.name}`)}
           columns={DataTable2.columns(
             DataTable2.column("name", row => row.name, "name")
           )}
@@ -474,7 +474,7 @@ export default {
               onDelete={async () => {
                 await API.get(`${sourceUrl}/${element.name}/delete`);
               }}
-              onPress={() => router.push(`/boards/${element.name}`)}
+              onPress={() => router.push(`/boards/view?board=${element.name}`)}
               element={element} width={width} />,
           }}
           defaultView={"grid"}
