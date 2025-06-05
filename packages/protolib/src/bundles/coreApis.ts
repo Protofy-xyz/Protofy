@@ -35,6 +35,7 @@ import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
 import { ArduinosAPI } from './arduino/arduinosAPI'
 import { AssetsAPI } from './assets/assetsAPI'
+import { DiscordAPI } from './discord/discordAPI'
 
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
