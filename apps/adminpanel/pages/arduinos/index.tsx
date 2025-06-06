@@ -1,4 +1,4 @@
-// import ArduinosPage from 'protolib/bundles/arduino/adminPages'
+// import ArduinosPage from '@bundles/arduino/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

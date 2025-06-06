@@ -1,26 +1,26 @@
 import React, { useEffect, useRef} from "react";
-import { AdminPage } from "../../components/AdminPage"
+import { AdminPage } from "protolib/components/AdminPage"
 import { useRouter } from 'solito/navigation';
-import { DataView, DataViewActionButton } from "../../components/DataView"
-import { PaginatedData, SSR } from "../../lib/SSR"
-import { withSession } from "../../lib/Session"
+import { DataView, DataViewActionButton } from "protolib/components/DataView"
+import { PaginatedData, SSR } from "protolib/lib/SSR"
+import { withSession } from "protolib/lib/Session"
 import { API } from 'protobase'
 import { ArduinosModel } from "./arduinosSchemas";
-import { DataTable2 } from "../../components/DataTable2"
+import { DataTable2 } from "protolib/components/DataTable2"
 import { YStack, Text, XStack, ScrollView, Spacer, Button, TextArea, Paragraph,Switch, Input, useToastController} from "@my/ui";
 import { useState } from 'react'
 import { BookOpen, Sparkles, ChevronsDown, ChevronsUp} from '@tamagui/lucide-icons'
-import { AlertDialog } from "../../components/AlertDialog"
-import {Slides} from "../../components/Slides"
+import { AlertDialog } from "protolib/components/AlertDialog"
+import {Slides} from "protolib/components/Slides"
 import { TemplateCard } from '@bundles/apis/TemplateCard';
 import { useSubscription } from "protolib/lib/mqtt";
-import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
-import { Rules } from '../../components/autopilot/Rules'
+import { RulesSideMenu } from 'protolib/components/autopilot/RulesSideMenu'
+import { Rules } from 'protolib/components/autopilot/Rules'
 import { useThemeSetting } from '@tamagui/next-theme'
-import { Tinted } from '../../components/Tinted'
-import { DashboardGrid } from '../../components/DashboardGrid';
-import { SelectList } from "../../components/SelectList";
-import { IconContainer } from "../../components/IconContainer";
+import { Tinted } from 'protolib/components/Tinted'
+import { DashboardGrid } from 'protolib/components/DashboardGrid';
+import { SelectList } from "protolib/components/SelectList";
+import { IconContainer } from "protolib/components/IconContainer";
 
 
   const apiTemplates={

@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 import { useRouter } from 'next/router';
-// import ArduinoPage from 'protolib/bundles/arduino/adminPages'
+// import ArduinoPage from '@bundles/arduino/adminPages'
 
 
 export default function Page(props: any) {

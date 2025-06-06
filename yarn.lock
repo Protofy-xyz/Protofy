@@ -2400,6 +2400,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bundles/arduino@workspace:packages/bundles/arduino":
+  version: 0.0.0-use.local
+  resolution: "@bundles/arduino@workspace:packages/bundles/arduino"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/pages@workspace:packages/bundles/pages":
   version: 0.0.0-use.local
   resolution: "@bundles/pages@workspace:packages/bundles/pages"
