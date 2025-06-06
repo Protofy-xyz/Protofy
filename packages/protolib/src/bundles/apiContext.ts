@@ -21,7 +21,6 @@ import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import agents from './agents/agents/context'
 import stateContext from './state/context'
-import actions from './actions/context'
 import cards from './cards/context'
 import lmstudio from './lmstudio/context'
 import protomemdb from './protomemdb/context'
@@ -62,7 +61,6 @@ export const APIContext = {
     sm: stateMachines, 
     agents,
     state: stateContext,
-    actions,
     cards,
     lmstudio,
     protomemdb,

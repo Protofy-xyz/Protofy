@@ -2,7 +2,7 @@ import { getServiceToken } from "protonode";
 import { APIContext } from "../apiContext";
 import { Application } from "express";
 import axios from "axios";
-import { addAction } from "../actions/context/addAction";
+import { addAction } from "@bundles/actions/context/addAction";
 import { addCard } from "../cards/context/addCard";
 
 async function getImageBase64(url) {

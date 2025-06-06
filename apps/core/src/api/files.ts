@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getRoot, handler, requireAdmin } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
-import { addAction } from 'protolib/bundles/actions/context/addAction';
+import { addAction } from '@bundles/actions/context/addAction';
 import { addCard } from 'protolib/bundles/cards/context/addCard';
 const { createExpressProxy } = require('app/proxy.js')
 

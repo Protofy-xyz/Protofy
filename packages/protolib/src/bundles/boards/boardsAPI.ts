@@ -5,8 +5,8 @@ import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { getServiceToken, requireAdmin } from "protonode";
-import { addAction } from '../actions/context/addAction';
-import { removeActions } from "../actions/context/removeActions";
+import { addAction } from '@bundles/actions/context/addAction';
+import { removeActions } from "@bundles/actions/context/removeActions";
 import fileActions from "../files/fileActions";
 import { addCard } from "../cards/context/addCard";
 

@@ -1,6 +1,6 @@
 import { API, getLogger } from 'protobase';
 import {getServiceToken} from 'protonode'
-import {addAction} from '../../actions/context/addAction';
+import {addAction} from '@bundles/actions/context/addAction';
 import {addCard} from '../../cards/context/addCard';
 
 const logger = getLogger();

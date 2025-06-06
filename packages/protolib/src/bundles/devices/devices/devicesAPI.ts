@@ -6,7 +6,7 @@ import { getLogger, generateEvent } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
-import { addAction } from "../../actions/context/addAction";
+import { addAction } from "@bundles/actions/context/addAction";
 import { addCard } from "../../cards/context/addCard";
 import { downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 

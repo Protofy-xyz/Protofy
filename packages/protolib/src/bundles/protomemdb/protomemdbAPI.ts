@@ -1,6 +1,6 @@
 import { ProtoMemDB } from 'protobase';
 import {getServiceToken, handler} from 'protonode';
-import { addAction } from '../actions/context/addAction';
+import { addAction } from '@bundles/actions/context/addAction';
 import { addCard } from '../cards/context/addCard';
 import { generateEvent } from '../library';
 

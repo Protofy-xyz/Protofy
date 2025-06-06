@@ -2390,6 +2390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bundles/actions@workspace:packages/bundles/actions":
+  version: 0.0.0-use.local
+  resolution: "@bundles/actions@workspace:packages/bundles/actions"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/pages@workspace:packages/bundles/pages":
   version: 0.0.0-use.local
   resolution: "@bundles/pages@workspace:packages/bundles/pages"
