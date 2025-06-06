@@ -1,5 +1,5 @@
 import { getLogger } from "protobase";
-import { getServiceToken } from '../../apis/context';
+import { getServiceToken } from '@bundles/apis/context';
 import { getKey } from "../../keys/context";
 import OpenAI from 'openai';
 

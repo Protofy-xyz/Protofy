@@ -1,5 +1,4 @@
 import { onEvent, emitEvent, getLastEvent } from './events/api'
-import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from './apis/context/'
 import {createSchedule} from './automations/schedule'
 import {createPeriodicSchedule} from './automations/periodicSchedule'
 import { sendMailWithResend } from './resend/context'
@@ -33,15 +32,10 @@ export const APIContext = {
     onEvent,
     emitEvent,
     getLastEvent,
-    automation,
-    automationResponse,
-    getServiceToken,
-    serviceToken,
     fetch,
     createSchedule,
     createPeriodicSchedule,
     sendMailWithResend,
-    executeAutomation,
     ...deviceContext,
     ...wledContext,
     keys,

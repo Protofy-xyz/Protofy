@@ -4,7 +4,7 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protobase'
 import { StateMachineDefinitionModel } from "./stateMachineDefinitionSchema";
-import { getServiceToken } from '../../apis/context';
+import { getServiceToken } from '@bundles/apis/context';
 import { params, paramsHandlers } from '../handlers';
 
 const StateMachineDefinitionsDir = (root) => fspath.join(root, "/packages/app/stateMachines/")

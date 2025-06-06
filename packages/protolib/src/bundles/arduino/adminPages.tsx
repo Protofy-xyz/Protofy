@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { BookOpen, Sparkles, ChevronsDown, ChevronsUp} from '@tamagui/lucide-icons'
 import { AlertDialog } from "../../components/AlertDialog"
 import {Slides} from "../../components/Slides"
-import { TemplateCard } from '../apis/TemplateCard';
+import { TemplateCard } from '@bundles/apis/TemplateCard';
 import { useSubscription } from "protolib/lib/mqtt";
 import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
 import { Rules } from '../../components/autopilot/Rules'

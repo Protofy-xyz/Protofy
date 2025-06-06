@@ -1,4 +1,4 @@
-import { getServiceToken } from '../../apis/context';
+import { getServiceToken } from '@bundles/apis/context';
 import { getKey } from '../../keys/context';
 import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } from 'discord.js'
 

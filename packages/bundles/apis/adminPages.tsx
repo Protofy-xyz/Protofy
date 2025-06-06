@@ -2,23 +2,23 @@ import { APIModel } from '.'
 import { YStack, Text, Stack, XStack, Accordion, Spacer, Square, ScrollView, useToastController, Spinner, Paragraph, SizableText } from "@my/ui";
 import { ToyBrick, Eye, ChevronDown, UploadCloud, CheckCircle, Package, AlertTriangle } from '@tamagui/lucide-icons'
 import { z, getPendingResult, API } from 'protobase'
-import { usePageParams } from '../../next'
-import { usePrompt } from '../../context/PromptAtom'
-import { Chip } from '../../components/Chip'
-import { DataTable2 } from '../../components/DataTable2'
-import { DataView, DataViewActionButton } from '../../components/DataView'
-import { AlertDialog } from '../../components/AlertDialog'
-import { AdminPage } from '../../components/AdminPage'
+import { usePageParams } from 'protolib/next'
+import { usePrompt } from 'protolib/context/PromptAtom'
+import { Chip } from 'protolib/components/Chip'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { DataView, DataViewActionButton } from 'protolib/components/DataView'
+import { AlertDialog } from 'protolib/components/AlertDialog'
+import { AdminPage } from 'protolib/components/AdminPage'
 import { useEffect, useState } from 'react'
-import Center from '../../components/Center'
-import { Tinted } from '../../components/Tinted';
-import { usePendingEffect } from '../../lib/usePendingEffect';
-import { PaginatedData } from '../../lib/SSR';
-import { Slides } from '../../components/Slides';
-import { apiTemplates } from '../templates'
+import Center from 'protolib/components/Center'
+import { Tinted } from 'protolib/components/Tinted';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
+import { PaginatedData } from 'protolib/lib/SSR';
+import { Slides } from 'protolib/components/Slides';
+import { apiTemplates } from './templates'
 import { TemplateCard } from './TemplateCard';
-import { EditableObject } from '../../components/EditableObject';
-import { useSubscription } from '../../lib/mqtt';
+import { EditableObject } from 'protolib/components/EditableObject';
+import { useSubscription } from 'protolib/lib/mqtt';
 
 const APIIcons = {}
 

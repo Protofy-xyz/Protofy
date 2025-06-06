@@ -6,7 +6,7 @@ import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
-import { APIModel } from '../apis/APISchemas'
+import { APIModel } from '@bundles/apis/APISchemas'
 import { PageModel } from '@bundles/pages/pagesSchemas'
 
 const indexFile = "/packages/app/objects/index.ts"

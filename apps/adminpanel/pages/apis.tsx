@@ -1,4 +1,4 @@
-import ApisPage from 'protolib/bundles/apis/adminPages'
+import ApisPage from '@bundles/apis/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

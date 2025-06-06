@@ -2058,11 +2058,9 @@ __metadata:
   linkType: hard
 
 "@babel/runtime@npm:^7.16.7, @babel/runtime@npm:^7.20.13":
-  version: 7.26.10
-  resolution: "@babel/runtime@npm:7.26.10"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10/9d7ff8e96abe3791047c1138789c742411e3ef19c4d7ca18ce916f83cec92c06ec5dc64401759f6dd1e377cf8a01bbd2c62e033eb7550f435cf6579768d0d4a5
+  version: 7.27.6
+  resolution: "@babel/runtime@npm:7.27.6"
+  checksum: 10/cc957a12ba3781241b83d528eb69ddeb86ca5ac43179a825e83aa81263a6b3eb88c57bed8a937cdeacfc3192e07ec24c73acdfea4507d0c0428c8e23d6322bfe
   languageName: node
   linkType: hard
 
@@ -2393,6 +2391,12 @@ __metadata:
 "@bundles/actions@workspace:packages/bundles/actions":
   version: 0.0.0-use.local
   resolution: "@bundles/actions@workspace:packages/bundles/actions"
+  languageName: unknown
+  linkType: soft
+
+"@bundles/apis@workspace:packages/bundles/apis":
+  version: 0.0.0-use.local
+  resolution: "@bundles/apis@workspace:packages/bundles/apis"
   languageName: unknown
   linkType: soft
 
@@ -4821,8 +4825,8 @@ __metadata:
   linkType: hard
 
 "@microlink/react-json-view@npm:^1.26.1":
-  version: 1.26.1
-  resolution: "@microlink/react-json-view@npm:1.26.1"
+  version: 1.26.2
+  resolution: "@microlink/react-json-view@npm:1.26.2"
   dependencies:
     react-base16-styling: "npm:~0.9.0"
     react-lifecycles-compat: "npm:~3.0.4"
@@ -4830,7 +4834,7 @@ __metadata:
   peerDependencies:
     react: ">= 15"
     react-dom: ">= 15"
-  checksum: 10/8244503c0076e4851c8676661a4e09c541abed9ef01e1a670762a5855cb4adcde51fad33a94390987389419941e110c3e51a04d49f1191435290fde5229ce7c2
+  checksum: 10/59a34d28d06cfa2161543615e333f49e7215fe7adb7f223edc181ce6ca3ed2852b4562a1fcbb58c7fb50ca1dae526ec9c6917b1990da764ce1246e5c37b33dff
   languageName: node
   linkType: hard
 
@@ -9279,9 +9283,9 @@ __metadata:
   linkType: hard
 
 "@types/lodash@npm:^4.14.178":
-  version: 4.17.16
-  resolution: "@types/lodash@npm:4.17.16"
-  checksum: 10/9a8bb7471a7521bd65d528e1bd14f79819a3eeb6f8a35a8a44649a7d773775c0813e93fd93bd32ccf350bb076c0bf02c6d47877c4625f526f6dd4d283c746aec
+  version: 4.17.17
+  resolution: "@types/lodash@npm:4.17.17"
+  checksum: 10/496459a3cb1a0733bb60532de3899ad6297717af0b9b26ad6821154b2005fec86f29ccd47a2e6f4da4a8c7c818bb8ae73901144e8057ea86b7b02a3d7bb9d13f
   languageName: node
   linkType: hard
 
@@ -10356,14 +10360,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"agents@workspace:packages/agents":
-  version: 0.0.0-use.local
-  resolution: "agents@workspace:packages/agents"
-  dependencies:
-    mqtt: "npm:^5.2.1"
-  languageName: unknown
-  linkType: soft
-
 "aggregate-error@npm:^3.0.0":
   version: 3.1.0
   resolution: "aggregate-error@npm:3.1.0"
@@ -10405,18 +10401,6 @@ __metadata:
   peerDependencies:
     ajv: ^8.8.2
   checksum: 10/5021f96ab7ddd03a4005326bd06f45f448ebfbb0fe7018b1b70b6c28142fa68372bda2057359814b83fd0b2d4c8726c297f0a7557b15377be7b56ce5344533d8
-  languageName: node
-  linkType: hard
-
-"ajv@npm:8.17.1":
-  version: 8.17.1
-  resolution: "ajv@npm:8.17.1"
-  dependencies:
-    fast-deep-equal: "npm:^3.1.3"
-    fast-uri: "npm:^3.0.1"
-    json-schema-traverse: "npm:^1.0.0"
-    require-from-string: "npm:^2.0.2"
-  checksum: 10/ee3c62162c953e91986c838f004132b6a253d700f1e51253b99791e2dbfdb39161bc950ebdc2f156f8568035bb5ed8be7bd78289cd9ecbf3381fe8f5b82e3f33
   languageName: node
   linkType: hard
 
@@ -16368,13 +16352,6 @@ __metadata:
   version: 2.2.0
   resolution: "fast-sort@npm:2.2.0"
   checksum: 10/609210b138df35fb0fa79c1ff1fccd28e4c07ef98ec1f62263cc99d7ffc8d0fabbcfbeeae25eb717c35215c546639a091669c998cccee6f4d03db5be095deaa7
-  languageName: node
-  linkType: hard
-
-"fast-uri@npm:^3.0.1":
-  version: 3.0.3
-  resolution: "fast-uri@npm:3.0.3"
-  checksum: 10/92487c75848b03edc45517fca0148287d342c30818ce43d556391db774d8e01644fb6964315a3336eec5a90f301b218b21f71fb9b2528ba25757435a20392c95
   languageName: node
   linkType: hard
 
@@ -24688,25 +24665,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"protofy@workspace:packages/protofy":
-  version: 0.0.0-use.local
-  resolution: "protofy@workspace:packages/protofy"
-  dependencies:
-    "@microlink/react-json-view": "npm:^1.26.1"
-    "@types/jest": "npm:~29.5.5"
-    aedes: "npm:^0.50.0"
-    ajv: "npm:8.17.1"
-    axios: "npm:^1.7.7"
-    express: "npm:^4.18.2"
-    jest: "npm:~29.7.0"
-    mqtt: "npm:^5.2.1"
-    ts-jest: "npm:~29.1.1"
-    typescript: "npm:5.8.2"
-    zod: "npm:^3.22.2"
-    zod-to-json-schema: "npm:3.23.5"
-  languageName: unknown
-  linkType: soft
-
 "protolib@npm:*, protolib@npm:0.0.1, protolib@workspace:packages/protolib":
   version: 0.0.0-use.local
   resolution: "protolib@workspace:packages/protolib"
@@ -24717,6 +24675,7 @@ __metadata:
     "@dnd-kit/sortable": "npm:^7.0.2"
     "@hello-pangea/dnd": "npm:18.0.1"
     "@jest/globals": "npm:~29.7.0"
+    "@microlink/react-json-view": "npm:^1.26.1"
     "@monaco-editor/react": "npm:4.4.6"
     "@my/ui": "npm:0.0.1"
     "@protocraft/core": "npm:0.2.4-2"
@@ -25893,15 +25852,15 @@ __metadata:
   linkType: hard
 
 "react-textarea-autosize@npm:~8.5.7":
-  version: 8.5.8
-  resolution: "react-textarea-autosize@npm:8.5.8"
+  version: 8.5.9
+  resolution: "react-textarea-autosize@npm:8.5.9"
   dependencies:
     "@babel/runtime": "npm:^7.20.13"
     use-composed-ref: "npm:^1.3.0"
     use-latest: "npm:^1.2.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10/34defccab18888cbea7126c16b1792e8c40160696b3f96d6a1bce26cd5389caeb7c8ae9ca5350bc6b744cbda2eb9ff913f72d8aa41aad84e528c0c48661228ab
+  checksum: 10/9babf6d667e93ea4629c79dce837551634f2b3309d191013908d781a98cd4bf211ea8e529ea5eb4f0046f6ea1e3c985272c1309fe09390917eb2e5c86ba75b72
   languageName: node
   linkType: hard
 
@@ -30200,14 +30159,14 @@ __metadata:
   linkType: hard
 
 "use-isomorphic-layout-effect@npm:^1.1.1":
-  version: 1.2.0
-  resolution: "use-isomorphic-layout-effect@npm:1.2.0"
+  version: 1.2.1
+  resolution: "use-isomorphic-layout-effect@npm:1.2.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 10/84fc1074b4e3ee2886fde944baef4ec210453fc78861429fe50ae97be8209e492f18c059c6b2ff1a21df231d72d1638707dabca889bd9d7bee36f21c196a0d19
+  checksum: 10/a52155ffa7d67a5107ef2033ae2c63f5290c3e3b198de30d4d4f78cd7921e1ab1ea31eeec387defb67ef61adb672d3b8d25b54b7dcc089bacc4f885abde96e9d
   languageName: node
   linkType: hard
 
@@ -31319,15 +31278,6 @@ __metadata:
     compress-commons: "npm:^6.0.2"
     readable-stream: "npm:^4.0.0"
   checksum: 10/aa5abd6a89590eadeba040afbc375f53337f12637e5e98330012a12d9886cde7a3ccc28bd91aafab50576035bbb1de39a9a316eecf2411c8b9009c9f94f0db27
-  languageName: node
-  linkType: hard
-
-"zod-to-json-schema@npm:3.23.5":
-  version: 3.23.5
-  resolution: "zod-to-json-schema@npm:3.23.5"
-  peerDependencies:
-    zod: ^3.23.3
-  checksum: 10/53d07a419f0f194e0b96711dc11e7e6fa52a366b0ed5fceb405dc55f13252a1bf433712e4fb496c2a5fdc851018ee1acba7b39c2265c43d6fbb180e12c110c3b
   languageName: node
   linkType: hard
 

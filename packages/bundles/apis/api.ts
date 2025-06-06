@@ -5,7 +5,7 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
-import { ObjectModel } from '../objects/objectsSchemas'
+import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
 
 const APIDirPath = "/packages/app/apis/"
 const DynamicAPIDirPath = "/data/automations/"
@@ -220,7 +220,7 @@ const getDB = (path, req, session) => {
         name: value.name + extension,
         data: {
           options: {
-            template: `/packages/protolib/src/bundles/apis/templates/${template}.tpl`, variables: {
+            template: `/packages/bundles/apis/templates/${template}.tpl`, variables: {
               codeName: codeName,
               name: computedName,
               codeNameLowerCase: codeNameLowerCase,

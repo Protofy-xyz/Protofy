@@ -1,5 +1,5 @@
 import { YStack, Text } from '@my/ui'
-import { Tinted } from '../../components/Tinted'
+import { Tinted } from 'protolib/components/Tinted'
 import { createElement } from 'react'
 
 export const TemplateCard = ({ template, isSelected, onPress }) => {

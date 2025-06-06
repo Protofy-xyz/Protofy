@@ -1,7 +1,7 @@
 import devicesEditorMasks from 'protodevice/src/nodes'
 import customVisualUIMasks from '../masks/custom.masks'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
-import apiMasks from 'protolib/bundles/apis/masks';
+import apiMasks from '@bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import wledMasks from '../../protolib/src/bundles/wled/masks';
 import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
@@ -63,7 +63,6 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...playwrightMasks,
         ...networkMasks,
         ...stateMachineMasks, 
-        ...agentsMasks,
         ...stateMasks
     ]
     return []

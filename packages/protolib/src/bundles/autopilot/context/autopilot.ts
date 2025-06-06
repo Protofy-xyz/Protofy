@@ -1,4 +1,4 @@
-import { getServiceToken } from "../../apis/context"
+import { getServiceToken } from "@bundles/apis/context"
 
 const availableModels = [
     "fluentlylm-prinum",  //perfect score on tank v2 in 1.5s

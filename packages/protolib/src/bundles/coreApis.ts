@@ -3,7 +3,6 @@ import { EventsAPI } from './events/eventsAPI'
 import { GroupsAPI } from './groups/groupsAPI'
 import { ObjectsAPI } from './objects/objectsAPI'
 import { KeysAPI } from './keys/keysAPI'
-import { APIsAPI } from './apis/api'
 import { DevicesAPI } from './devices/devices/devicesAPI'
 import { WledAPI } from './wled/api/wledApi'
 import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
@@ -45,7 +44,6 @@ export const AdminAPIBundles = (app, context) => {
   GroupsAPI(app, context)
   ObjectsAPI(app, context)
   KeysAPI(app, context)
-  APIsAPI(app, context)
   DevicesAPI(app, context)
   WledAPI(app, context)
   DeviceSdksAPI(app, context)

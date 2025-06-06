@@ -4,7 +4,6 @@ import { KeyModel} from './keys/keysSchemas'
 import { EventModel } from 'protobase'
 import { ObjectModel } from './objects/objectsSchemas'
 import { WorkspaceModel } from './workspaces/WorkspaceModel'
-import { APIModel } from './apis/APISchemas'
 import { TokenModel } from './tokens/tokensSchemas'
 import { BoardModel } from './boards/boardsSchemas'
 
@@ -15,7 +14,6 @@ export default {
     object: ObjectModel,
     key: KeyModel,
     workspace: WorkspaceModel,
-    api: APIModel,
     token: TokenModel,
     board: BoardModel
 }

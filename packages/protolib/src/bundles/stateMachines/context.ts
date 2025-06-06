@@ -1,4 +1,4 @@
-import { getServiceToken } from "../apis/context"
+import { getServiceToken } from "@bundles/apis/context"
 import { API } from 'protobase'
 import { onEvent } from "../events/api"
 
