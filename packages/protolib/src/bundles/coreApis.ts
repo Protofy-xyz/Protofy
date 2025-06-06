@@ -21,7 +21,6 @@ import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
-import { AgentsAPI } from './agents/agents/agentsApi'
 import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 import { AutomationsAPI } from './automations/automationsAPI'
 import { BoardsAPI } from './boards/boardsAPI'
@@ -49,7 +48,6 @@ export const AdminAPIBundles = (app, context) => {
   APIsAPI(app, context)
   DevicesAPI(app, context)
   WledAPI(app, context)
-  AgentsAPI(app, context)
   DeviceSdksAPI(app, context)
   DeviceCoresAPI(app, context)
   DeviceBoardsAPI(app, context)

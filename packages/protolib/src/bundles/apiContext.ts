@@ -19,7 +19,6 @@ import network from './network/context'
 import deviceContext from './devices/devices/context'
 import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
-import agents from './agents/agents/context'
 import stateContext from './state/context'
 import cards from './cards/context'
 import lmstudio from './lmstudio/context'
@@ -58,8 +57,7 @@ export const APIContext = {
     playwright,
     automations,
     network,
-    sm: stateMachines, 
-    agents,
+    sm: stateMachines,
     state: stateContext,
     cards,
     lmstudio,

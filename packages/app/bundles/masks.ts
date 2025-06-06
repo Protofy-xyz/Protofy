@@ -23,7 +23,6 @@ import logsMasks from 'protolib/bundles/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
 import networkMasks from 'protolib/bundles/network/masks'
 import stateMachineMasks from 'protolib/bundles/stateMachines/masks'
-import agentsMasks from 'protolib/bundles/agents/agents/masks'
 import stateMasks from 'protolib/bundles/state/masks'
 import { paths } from './flows';
 
