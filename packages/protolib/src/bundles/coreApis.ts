@@ -30,7 +30,6 @@ import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
-import { AssetsAPI } from './assets/assetsAPI'
 import { DiscordAPI } from './discord/discordAPI'
 
 export const AdminAPIBundles = (app, context) => {
@@ -66,6 +65,5 @@ export const AdminAPIBundles = (app, context) => {
   MobileAPI(app, context)
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
-  AssetsAPI(app, context),
   DiscordAPI(app, context)
 }

@@ -2406,6 +2406,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bundles/assets@workspace:packages/bundles/assets":
+  version: 0.0.0-use.local
+  resolution: "@bundles/assets@workspace:packages/bundles/assets"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/pages@workspace:packages/bundles/pages":
   version: 0.0.0-use.local
   resolution: "@bundles/pages@workspace:packages/bundles/pages"
