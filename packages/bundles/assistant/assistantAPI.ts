@@ -1,6 +1,6 @@
 
 import { handler } from 'protonode'
-import { chatGPTSession } from '../chatgpt/context'
+import { chatGPTSession } from '@bundles/chatgpt/context'
 
 export function AssistantAPI(app, context) {
     app.post('/api/core/v1/assistant', handler(async (req: any, res: any) => {

@@ -2412,6 +2412,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bundles/assistant@workspace:packages/bundles/assistant":
+  version: 0.0.0-use.local
+  resolution: "@bundles/assistant@workspace:packages/bundles/assistant"
+  languageName: unknown
+  linkType: soft
+
+"@bundles/chatgpt@workspace:packages/bundles/chatgpt":
+  version: 0.0.0-use.local
+  resolution: "@bundles/chatgpt@workspace:packages/bundles/chatgpt"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/pages@workspace:packages/bundles/pages":
   version: 0.0.0-use.local
   resolution: "@bundles/pages@workspace:packages/bundles/pages"

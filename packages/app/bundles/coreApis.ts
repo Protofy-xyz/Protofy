@@ -3,6 +3,7 @@ import { PagesAPI } from '@bundles/pages/pagesAPI'
 import { APIsAPI } from '@bundles/apis/api'
 import { ArduinosAPI } from '@bundles/arduino/arduinosAPI'
 import { AssetsAPI } from '@bundles/assets/assetsAPI'
+import { AssistantAPI } from '@bundles/assistant/assistantAPI'
 
 export default (app, context) => {
   AdminAPIBundles(app, context)
@@ -10,4 +11,5 @@ export default (app, context) => {
   APIsAPI(app, context)
   ArduinosAPI(app, context)
   AssetsAPI(app, context)
+  AssistantAPI(app, context)
 }
