@@ -8,7 +8,7 @@ import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
 import baseMasks from 'protolib/bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from '../masks'
-import automationMasks from 'protolib/bundles/automations/masks';
+import automationMasks from '@bundles/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
 import flowMasks from 'protolib/bundles/flow/masks';
 import flowMasks2 from 'protolib/bundles/flow/masksV2';

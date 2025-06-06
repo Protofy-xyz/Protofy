@@ -1,6 +1,5 @@
 import { onEvent, emitEvent, getLastEvent } from './events/api'
-import {createSchedule} from './automations/schedule'
-import {createPeriodicSchedule} from './automations/periodicSchedule'
+
 import { sendMailWithResend } from './resend/context'
 import object from './objects/context'
 import flow from './flow/context'
@@ -12,7 +11,6 @@ import keys from './keys/context'
 import discord from './discord/context'
 import logs from './logs/context'
 import playwright from './playwright/context'
-import automations from './automations/context'
 import network from './network/context'
 import deviceContext from './devices/devices/context'
 import wledContext from './wled/context'
@@ -26,14 +24,11 @@ import chatbots from './chatbots/context'
 import twilio from './twilio/context'
 import whatsapp from './whatsapp/context'
 
-
 export const APIContext = {
     onEvent,
     emitEvent,
     getLastEvent,
     fetch,
-    createSchedule,
-    createPeriodicSchedule,
     sendMailWithResend,
     ...deviceContext,
     ...wledContext,
@@ -47,7 +42,6 @@ export const APIContext = {
     utils,
     logs,
     playwright,
-    automations,
     network,
     sm: stateMachines,
     state: stateContext,
