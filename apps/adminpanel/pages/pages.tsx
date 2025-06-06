@@ -1,4 +1,4 @@
-import PagesPage from 'protolib/bundles/pages/adminPages'
+import PagesPage from '@bundles/pages/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

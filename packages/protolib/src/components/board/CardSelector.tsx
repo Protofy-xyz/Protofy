@@ -1,7 +1,6 @@
 import { YStack, XStack, Spacer, ScrollView, useThemeName, Input, Text } from '@my/ui'
 import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
-import { TemplatePreview } from '../../bundles/pages/TemplatePreview';
 import { useEffect, useMemo, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';

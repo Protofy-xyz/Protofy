@@ -1,4 +1,4 @@
-import { ListItems } from '../../components/ListItems';
+import { ListItems } from 'protolib/components/ListItems';
 import { PageModel } from './pagesSchemas';
 
 export const ListPages = ({ title, id }) => (

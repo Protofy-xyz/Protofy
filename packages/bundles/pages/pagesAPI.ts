@@ -5,12 +5,9 @@ import * as syncFs from 'fs';
 import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken, handler } from 'protonode'
-import { API } from 'protobase'
-import { ObjectModel } from "../objects/objectsSchemas";
-import admin from "app/workspaces/admin";
-import path from 'path';
+import { API, generateEvent } from 'protobase'
+import { ObjectModel } from "protolib/bundles/objects/objectsSchemas";
 import { v4 as uuidv4 } from 'uuid';
-import { generateEvent } from '../library';
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -133,12 +130,12 @@ const getDB = (path, req, session) => {
         // console.log('File: ' + filePath + ' already exists, not executing template')
       } catch (error) {
         // console.log('permissions: ', value.permissions ? JSON.stringify(value.permissions) : '[]', value.permissions)
-        // console.log('executing template: ', `/packages/protolib/src/bundles/pages/templates/${template}.tpl`)
+        // console.log('executing template: ', `/packages/bundles/pages/templates/${template}.tpl`)
         const result = await API.post('/api/core/v1/templates/file?token=' + getServiceToken(), {
           name: fspath.basename(value.name + '.tsx'),
           data: {
             options: {
-              template: `/packages/protolib/src/bundles/pages/templates/${template}.tpl`,
+              template: `/packages/bundles/pages/templates/${template}.tpl`,
               variables: {
                 ...value,
                 route: route,
@@ -208,7 +205,7 @@ const getDB = (path, req, session) => {
             name: route + '.tsx',
             data: {
               options: {
-                template: `/packages/protolib/src/bundles/pages/templates/nextPage.tpl`,
+                template: `/packages/bundles/pages/templates/nextPage.tpl`,
                 variables: {
                   ...value,
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''
@@ -239,7 +236,7 @@ const getDB = (path, req, session) => {
             name: value.route + '.tsx',
             data: {
               options: {
-                template: `/packages/protolib/src/bundles/pages/templates/electronPage.tpl`,
+                template: `/packages/bundles/pages/templates/electronPage.tpl`,
                 variables: {
                   ...value,
                   upperName: value.name ? value.name.charAt(0).toUpperCase() + value.name.slice(1) : ''

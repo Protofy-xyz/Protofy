@@ -7,7 +7,7 @@ import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { APIModel } from '../apis/APISchemas'
-import { PageModel } from '../pages/pagesSchemas'
+import { PageModel } from '@bundles/pages/pagesSchemas'
 
 const indexFile = "/packages/app/objects/index.ts"
 

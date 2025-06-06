@@ -1,7 +1,7 @@
-import { NextLink } from '../../components/NextLink'
+import { NextLink } from 'protolib/components/NextLink'
 import { Paragraph, XStack, YStack } from '@my/ui'
 import { useState } from 'react'
-import { Tinted } from '../../components/Tinted'
+import { Tinted } from 'protolib/components/Tinted'
 import { Button, Image } from '@my/ui'
 
 export const TemplatePreview = ({ from, template, isSelected, onPress, theme }) => {

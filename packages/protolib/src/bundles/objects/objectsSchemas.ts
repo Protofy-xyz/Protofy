@@ -103,7 +103,7 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
     return result
   }
 
-  static getDefaultSchemaFilePath(name, id, dynamic = false) {
+  static getDefaultSchemaFilePath(name, id = false, dynamic = false) {
     if (dynamic) {
       return '/data/objects/' + id + '.json'
     }

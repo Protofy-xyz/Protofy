@@ -2390,6 +2390,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bundles/pages@workspace:packages/bundles/pages":
+  version: 0.0.0-use.local
+  resolution: "@bundles/pages@workspace:packages/bundles/pages"
+  languageName: unknown
+  linkType: soft
+
 "@craftjs/core@npm:0.2.0-beta.8":
   version: 0.2.0-beta.8
   resolution: "@craftjs/core@npm:0.2.0-beta.8"

@@ -2,7 +2,6 @@ import { UsersAPI } from './users/usersAPI'
 import { EventsAPI } from './events/eventsAPI'
 import { GroupsAPI } from './groups/groupsAPI'
 import { ObjectsAPI } from './objects/objectsAPI'
-import { PagesAPI } from './pages/pagesAPI'
 import { KeysAPI } from './keys/keysAPI'
 import { APIsAPI } from './apis/api'
 import { DevicesAPI } from './devices/devices/devicesAPI'
@@ -47,7 +46,6 @@ export const AdminAPIBundles = (app, context) => {
   GroupsAPI(app, context)
   ObjectsAPI(app, context)
   KeysAPI(app, context)
-  PagesAPI(app, context)
   APIsAPI(app, context)
   DevicesAPI(app, context)
   WledAPI(app, context)
