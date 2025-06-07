@@ -5,7 +5,6 @@ import { EventModel } from 'protobase'
 import { ObjectModel } from './objects/objectsSchemas'
 import { WorkspaceModel } from './workspaces/WorkspaceModel'
 import { TokenModel } from './tokens/tokensSchemas'
-import { BoardModel } from './boards/boardsSchemas'
 
 export default {
     event: EventModel,
@@ -14,6 +13,5 @@ export default {
     object: ObjectModel,
     key: KeyModel,
     workspace: WorkspaceModel,
-    token: TokenModel,
-    board: BoardModel
+    token: TokenModel
 }

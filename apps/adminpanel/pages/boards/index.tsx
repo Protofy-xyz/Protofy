@@ -1,4 +1,4 @@
-import BoardsPage from 'protolib/bundles/boards/adminPages'
+import BoardsPage from '@extensions/boards/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

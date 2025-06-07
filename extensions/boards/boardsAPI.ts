@@ -7,8 +7,8 @@ import * as fspath from 'path';
 import { getServiceToken, requireAdmin } from "protonode";
 import { addAction } from '@extensions/actions/context/addAction';
 import { removeActions } from "@extensions/actions/context/removeActions";
-import fileActions from "../files/fileActions";
-import { addCard } from "../cards/context/addCard";
+import fileActions from "protolib/bundles/files/fileActions";
+import { addCard } from "protolib/bundles/cards/context/addCard";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds

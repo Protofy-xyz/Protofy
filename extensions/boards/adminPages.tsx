@@ -1,41 +1,41 @@
 import { ArrowLeft, BookOpen, Plus, Save, Settings, Sparkles, Tag, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult } from 'protobase'
-import { DataTable2 } from "../../components/DataTable2"
-import { DataView, DataViewActionButton } from "../../components/DataView"
-import { AdminPage } from "../../components/AdminPage"
-import { PaginatedData, SSR } from "../../lib/SSR"
-import { withSession } from "../../lib/Session"
-import ErrorMessage from "../../components/ErrorMessage"
+import { DataTable2 } from "protolib/components/DataTable2"
+import { DataView, DataViewActionButton } from "protolib/components/DataView"
+import { AdminPage } from "protolib/components/AdminPage"
+import { PaginatedData, SSR } from "protolib/lib/SSR"
+import { withSession } from "protolib/lib/Session"
+import ErrorMessage from "protolib/components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
-import { DashboardGrid } from '../../components/DashboardGrid';
-import { AlertDialog } from '../../components/AlertDialog';
-import { CardValue, CenterCard } from '../widgets'
+import { DashboardGrid } from 'protolib/components/DashboardGrid';
+import { AlertDialog } from 'protolib/components/AlertDialog';
+import { CardValue, CenterCard } from 'protolib/bundles/widgets'
 import { useEffect, useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
-import { Tinted } from '../../components/Tinted'
+import { Tinted } from 'protolib/components/Tinted'
 import React from 'react'
-import { useProtoStates } from '../protomemdb/lib/useProtoStates'
-import { CardSelector } from '../../components/board/CardSelector'
+import { useProtoStates } from 'protolib/bundles/protomemdb/lib/useProtoStates'
+import { CardSelector } from 'protolib/components/board/CardSelector'
 
-import { ValueCardSettings } from '../../components/autopilot/ValueCardSettings'
-import { ActionCardSettings } from '../../components/autopilot/ActionCardSettings'
-import { RulesSideMenu } from '../../components/autopilot/RulesSideMenu'
+import { ValueCardSettings } from 'protolib/components/autopilot/ValueCardSettings'
+import { ActionCardSettings } from 'protolib/components/autopilot/ActionCardSettings'
+import { RulesSideMenu } from 'protolib/components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
-import BoardPreview from '../../components/board/BoardPreview'
-import { Monaco } from '../../components/Monaco'
-import { usePageParams } from '../../next'
-import { jsonToDiv } from '../../lib/jsonToDiv'
-import { usePendingEffect } from '../../lib/usePendingEffect'
+import BoardPreview from 'protolib/components/board/BoardPreview'
+import { Monaco } from 'protolib/components/Monaco'
+import { usePageParams } from 'protolib/next'
+import { jsonToDiv } from 'protolib/lib/jsonToDiv'
+import { usePendingEffect } from 'protolib/lib/usePendingEffect'
 import { createParam } from 'solito'
-import { AsyncView } from '../../components/AsyncView'
+import { AsyncView } from 'protolib/components/AsyncView'
 
 const { useParam, useParams } = createParam()
 
 import dynamic from 'next/dynamic'
-const ActionRunner = dynamic(() => import('../../components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
+const ActionRunner = dynamic(() => import('protolib/components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
 
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress, ...props }) => {

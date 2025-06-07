@@ -1,7 +1,7 @@
 import { YStack, Text, XStack, Tooltip, Paragraph } from '@my/ui';
 import { Tinted } from '../Tinted';
 import { Sparkles } from "@tamagui/lucide-icons";
-import { BoardModel } from 'protolib/bundles/boards/boardsSchemas';
+import { BoardModel } from '@extensions/boards/boardsSchemas';
 import { useRouter } from 'solito/navigation';
 import { getIconUrl } from '../IconSelect';
 import { ItemMenu } from '../ItemMenu';

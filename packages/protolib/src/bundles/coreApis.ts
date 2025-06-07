@@ -20,7 +20,6 @@ import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinit
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
 import { ChatbotsAPI } from './chatbots/chatbotsAPI'
-import { BoardsAPI } from './boards/boardsAPI'
 import { CardsAPI } from './cards/cardsAPI'
 import { IconsAPI } from './icons/iconsAPI'
 import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
@@ -33,7 +32,6 @@ import { DiscordAPI } from './discord/discordAPI'
 export const AdminAPIBundles = (app, context) => {
   EventsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
-  BoardsAPI(app, context)
   CardsAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)

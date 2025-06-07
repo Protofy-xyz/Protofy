@@ -1,5 +1,5 @@
 // pages/boards/[board].tsx
-import BoardsPage from 'protolib/bundles/boards/adminPages'
+import BoardsPage from '@extensions/boards/adminPages'
 import { useRouter } from 'next/router'
 
 export default function Page(props: any) {
