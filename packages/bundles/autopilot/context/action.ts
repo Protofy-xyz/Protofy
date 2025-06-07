@@ -1,5 +1,4 @@
-import { API, getLogger } from 'protobase';
-import {getServiceToken} from 'protonode'
+import { getLogger } from 'protobase';
 import { automation } from '@bundles/automations/context/automation';
 
 const logger = getLogger();

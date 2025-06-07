@@ -4,6 +4,7 @@ import chatGPT from '@bundles/chatgpt/context'
 import automations from '@bundles/automations/context'
 import {createSchedule} from '@bundles/automations/schedule'
 import {createPeriodicSchedule} from '@bundles/automations/periodicSchedule'
+import autopilot from '@bundles/autopilot/context'
 
 export default {
     actions,
@@ -16,5 +17,6 @@ export default {
     chatGPT,
     createSchedule,
     createPeriodicSchedule,
-    automations
+    automations,
+    autopilot
 }

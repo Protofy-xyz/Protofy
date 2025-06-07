@@ -4,7 +4,7 @@ import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { withSession } from 'protolib/lib/Session';
 import { XStack, YStack } from '@my/ui';
 import { Tag, ArrowDownCircle, Lock, Lightbulb, Fan, Cog, GaugeCircle, Unlock, Paintbrush, ArrowRight, PowerOff, MoveUpLeft, ArrowLeft } from '@tamagui/lucide-icons';
-import { computeLayout } from 'protolib/bundles/autopilot/layout';
+import { computeLayout } from '@bundles/autopilot/layout';
 import { useAutopilotAgent } from 'protolib/lib/useAutopilotAgent';
 
 const isProtected = Protofy("protected", true)

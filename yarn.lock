@@ -2424,6 +2424,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bundles/autopilot@workspace:packages/bundles/autopilot":
+  version: 0.0.0-use.local
+  resolution: "@bundles/autopilot@workspace:packages/bundles/autopilot"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/chatgpt@workspace:packages/bundles/chatgpt":
   version: 0.0.0-use.local
   resolution: "@bundles/chatgpt@workspace:packages/bundles/chatgpt"

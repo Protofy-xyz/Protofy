@@ -19,7 +19,6 @@ import stateContext from './state/context'
 import cards from './cards/context'
 import lmstudio from './lmstudio/context'
 import protomemdb from './protomemdb/context'
-import autopilot from './autopilot/context'
 import chatbots from './chatbots/context'
 import twilio from './twilio/context'
 import whatsapp from './whatsapp/context'
@@ -48,7 +47,6 @@ export const APIContext = {
     cards,
     lmstudio,
     protomemdb,
-    autopilot,
     chatbots,
     twilio,
     whatsapp

@@ -8,7 +8,7 @@ import { PaginatedData, SSR } from "../../lib/SSR"
 import { withSession } from "../../lib/Session"
 import ErrorMessage from "../../components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button } from '@my/ui'
-import { computeLayout } from '../autopilot/layout';
+import { computeLayout } from '@bundles/autopilot/layout';
 import { DashboardGrid } from '../../components/DashboardGrid';
 import { AlertDialog } from '../../components/AlertDialog';
 import { CardValue, CenterCard } from '../widgets'
