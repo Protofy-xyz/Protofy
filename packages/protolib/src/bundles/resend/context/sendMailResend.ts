@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
 import { getLogger } from 'protobase';
 
-import { getServiceToken } from '@bundles/apis/context';
+import { getServiceToken } from '@extensions/apis/context';
 import { getKey } from "../../keys/context";
 
 

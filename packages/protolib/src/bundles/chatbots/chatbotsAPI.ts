@@ -5,7 +5,7 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
-import { addAction } from "@bundles/actions/context/addAction";
+import { addAction } from "@extensions/actions/context/addAction";
 import { addCard } from "../cards/context/addCard";
 
 const chatbotDirPath = "/packages/app/chatbots/"

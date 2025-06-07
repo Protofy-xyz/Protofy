@@ -1,10 +1,10 @@
-import actions from '@bundles/actions/context'
-import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from '@bundles/apis/context/'
-import chatGPT from '@bundles/chatgpt/context'
-import automations from '@bundles/automations/context'
-import {createSchedule} from '@bundles/automations/schedule'
-import {createPeriodicSchedule} from '@bundles/automations/periodicSchedule'
-import autopilot from '@bundles/autopilot/context'
+import actions from '@extensions/actions/context'
+import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from '@extensions/apis/context/'
+import chatGPT from '@extensions/chatgpt/context'
+import automations from '@extensions/automations/context'
+import {createSchedule} from '@extensions/automations/schedule'
+import {createPeriodicSchedule} from '@extensions/automations/periodicSchedule'
+import autopilot from '@extensions/autopilot/context'
 
 export default {
     actions,

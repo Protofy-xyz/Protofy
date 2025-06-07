@@ -2,7 +2,7 @@ import { handler } from 'protonode'
 import { getLogger } from 'protobase';
 import fs from 'fs';
 import path from 'path';
-import { addAction } from "@bundles/actions/context/addAction";
+import { addAction } from "@extensions/actions/context/addAction";
 import { addCard } from "../cards/context/addCard";
 
 const logger = getLogger()

@@ -1,5 +1,5 @@
 import twilio from "twilio";
-import { getServiceToken } from '@bundles/apis/context';
+import { getServiceToken } from '@extensions/apis/context';
 import {getKey} from "../../keys/context";
 
 

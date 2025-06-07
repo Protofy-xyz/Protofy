@@ -10,7 +10,7 @@
     "apps/adminpanel",
     "apps/python",
     "packages/*",
-    "packages/bundles/*",
+    "extensions/*",
     "scripts",
     "./tests"
   ],

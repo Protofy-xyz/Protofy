@@ -2388,66 +2388,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bundles/actions@workspace:packages/bundles/actions":
-  version: 0.0.0-use.local
-  resolution: "@bundles/actions@workspace:packages/bundles/actions"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/apis@workspace:packages/bundles/apis":
-  version: 0.0.0-use.local
-  resolution: "@bundles/apis@workspace:packages/bundles/apis"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/arduino@workspace:packages/bundles/arduino":
-  version: 0.0.0-use.local
-  resolution: "@bundles/arduino@workspace:packages/bundles/arduino"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/assets@workspace:packages/bundles/assets":
-  version: 0.0.0-use.local
-  resolution: "@bundles/assets@workspace:packages/bundles/assets"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/assistant@workspace:packages/bundles/assistant":
-  version: 0.0.0-use.local
-  resolution: "@bundles/assistant@workspace:packages/bundles/assistant"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/automations@workspace:packages/bundles/automations":
-  version: 0.0.0-use.local
-  resolution: "@bundles/automations@workspace:packages/bundles/automations"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/autopilot@workspace:packages/bundles/autopilot":
-  version: 0.0.0-use.local
-  resolution: "@bundles/autopilot@workspace:packages/bundles/autopilot"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/basemasks@workspace:packages/bundles/basemasks":
-  version: 0.0.0-use.local
-  resolution: "@bundles/basemasks@workspace:packages/bundles/basemasks"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/chatgpt@workspace:packages/bundles/chatgpt":
-  version: 0.0.0-use.local
-  resolution: "@bundles/chatgpt@workspace:packages/bundles/chatgpt"
-  languageName: unknown
-  linkType: soft
-
-"@bundles/pages@workspace:packages/bundles/pages":
-  version: 0.0.0-use.local
-  resolution: "@bundles/pages@workspace:packages/bundles/pages"
-  languageName: unknown
-  linkType: soft
-
 "@craftjs/core@npm:0.2.0-beta.8":
   version: 0.2.0-beta.8
   resolution: "@craftjs/core@npm:0.2.0-beta.8"
@@ -3643,6 +3583,66 @@ __metadata:
   checksum: 10/0942d5a356f590e8dc795761456cc48b3e2d6a38ad2a02d6774efcdc5a70424e05623b4e3e5d2fec0cdc30f40dde05c14391c781607eed3971bf8676518bfd9d
   languageName: node
   linkType: hard
+
+"@extensions/actions@workspace:extensions/actions":
+  version: 0.0.0-use.local
+  resolution: "@extensions/actions@workspace:extensions/actions"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/apis@workspace:extensions/apis":
+  version: 0.0.0-use.local
+  resolution: "@extensions/apis@workspace:extensions/apis"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/arduino@workspace:extensions/arduino":
+  version: 0.0.0-use.local
+  resolution: "@extensions/arduino@workspace:extensions/arduino"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/assets@workspace:extensions/assets":
+  version: 0.0.0-use.local
+  resolution: "@extensions/assets@workspace:extensions/assets"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/assistant@workspace:extensions/assistant":
+  version: 0.0.0-use.local
+  resolution: "@extensions/assistant@workspace:extensions/assistant"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/automations@workspace:extensions/automations":
+  version: 0.0.0-use.local
+  resolution: "@extensions/automations@workspace:extensions/automations"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/autopilot@workspace:extensions/autopilot":
+  version: 0.0.0-use.local
+  resolution: "@extensions/autopilot@workspace:extensions/autopilot"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/basemasks@workspace:extensions/basemasks":
+  version: 0.0.0-use.local
+  resolution: "@extensions/basemasks@workspace:extensions/basemasks"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/chatgpt@workspace:extensions/chatgpt":
+  version: 0.0.0-use.local
+  resolution: "@extensions/chatgpt@workspace:extensions/chatgpt"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/pages@workspace:extensions/pages":
+  version: 0.0.0-use.local
+  resolution: "@extensions/pages@workspace:extensions/pages"
+  languageName: unknown
+  linkType: soft
 
 "@fastify/busboy@npm:^2.0.0":
   version: 2.1.1

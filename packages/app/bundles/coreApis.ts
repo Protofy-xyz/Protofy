@@ -1,10 +1,10 @@
 import {AdminAPIBundles} from 'protolib/bundles/coreApis'
-import { PagesAPI } from '@bundles/pages/pagesAPI'
-import { APIsAPI } from '@bundles/apis/api'
-import { ArduinosAPI } from '@bundles/arduino/arduinosAPI'
-import { AssetsAPI } from '@bundles/assets/assetsAPI'
-import { AssistantAPI } from '@bundles/assistant/assistantAPI'
-import { AutomationsAPI } from '@bundles/automations/automationsAPI'
+import { PagesAPI } from '@extensions/pages/pagesAPI'
+import { APIsAPI } from '@extensions/apis/api'
+import { ArduinosAPI } from '@extensions/arduino/arduinosAPI'
+import { AssetsAPI } from '@extensions/assets/assetsAPI'
+import { AssistantAPI } from '@extensions/assistant/assistantAPI'
+import { AutomationsAPI } from '@extensions/automations/automationsAPI'
 
 export default (app, context) => {
   AdminAPIBundles(app, context)

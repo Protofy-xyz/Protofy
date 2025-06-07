@@ -1,4 +1,4 @@
-import PagesPage from '@bundles/pages/adminPages'
+import PagesPage from '@extensions/pages/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

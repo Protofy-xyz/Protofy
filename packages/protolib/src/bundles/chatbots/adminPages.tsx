@@ -13,7 +13,7 @@ import { useState } from 'react'
 import { PaginatedData } from '../../lib/SSR';
 import { Slides } from '../../components/Slides';
 import { chatbotTemplates } from '../templates'
-import { TemplateCard } from '@bundles/apis/TemplateCard';
+import { TemplateCard } from '@extensions/apis/TemplateCard';
 import { EditableObject } from '../../components/EditableObject';
 
 const ChatbotIcons = {}

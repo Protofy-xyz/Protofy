@@ -4,7 +4,7 @@ import { getLogger } from 'protobase';
 import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
-import { addAction } from "@bundles/actions/context/addAction";
+import { addAction } from "@extensions/actions/context/addAction";
 import { addCard } from "../cards/context/addCard";
 import {getKey} from "../keys/context";
 
