@@ -2430,6 +2430,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bundles/basemasks@workspace:packages/bundles/basemasks":
+  version: 0.0.0-use.local
+  resolution: "@bundles/basemasks@workspace:packages/bundles/basemasks"
+  languageName: unknown
+  linkType: soft
+
 "@bundles/chatgpt@workspace:packages/bundles/chatgpt":
   version: 0.0.0-use.local
   resolution: "@bundles/chatgpt@workspace:packages/bundles/chatgpt"

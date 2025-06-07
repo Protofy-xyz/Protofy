@@ -5,7 +5,7 @@ import apiMasks from '@bundles/apis/masks';
 import devicesMasks from 'protolib/bundles/devices/devices/masks';
 import wledMasks from '../../protolib/src/bundles/wled/masks';
 import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
-import baseMasks from 'protolib/bundles/basemasks';
+import baseMasks from '@bundles/basemasks';
 import customEventMasks from 'protolib/bundles/events/masks'
 import customMasks from '../masks'
 import automationMasks from '@bundles/automations/masks';
