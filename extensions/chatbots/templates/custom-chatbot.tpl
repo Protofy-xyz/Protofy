@@ -4,7 +4,7 @@ import { API, Protofy, getLogger } from "protobase";
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";
-import { createChatbot } from "protolib/bundles/chatbots/createChatbot";
+import { createChatbot } from "@extensions/chatbots/createChatbot";
 
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()

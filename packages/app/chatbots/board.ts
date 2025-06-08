@@ -3,7 +3,7 @@ import { APIContext } from "protolib/bundles/apiContext"
 import { Protofy, getLogger, getServiceToken, generateEvent } from "protobase";
 import { Application } from 'express';
 import path from "path";
-import { createChatbot } from "protolib/bundles/chatbots/createChatbot";
+import { createChatbot } from "@extensions/chatbots/createChatbot";
 
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()

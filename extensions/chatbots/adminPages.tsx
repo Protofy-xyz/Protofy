@@ -2,19 +2,19 @@ import { ChatbotModel } from './ChatbotSchemas';
 import { YStack, Text, XStack, Spacer, ScrollView, useToastController } from "@my/ui";
 import { ToyBrick } from '@tamagui/lucide-icons'
 import { z, getPendingResult, API } from 'protobase'
-import { usePageParams } from '../../next'
-import { usePrompt } from '../../context/PromptAtom'
-import { Chip } from '../../components/Chip'
-import { DataTable2 } from '../../components/DataTable2'
-import { DataView } from '../../components/DataView'
-import { AlertDialog } from '../../components/AlertDialog'
-import { AdminPage } from '../../components/AdminPage'
+import { usePageParams } from 'protolib/next'
+import { usePrompt } from 'protolib/context/PromptAtom'
+import { Chip } from 'protolib/components/Chip'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { DataView } from 'protolib/components/DataView'
+import { AlertDialog } from 'protolib/components/AlertDialog'
+import { AdminPage } from 'protolib/components/AdminPage'
 import { useState } from 'react'
-import { PaginatedData } from '../../lib/SSR';
-import { Slides } from '../../components/Slides';
-import { chatbotTemplates } from '../templates'
+import { PaginatedData } from 'protolib/lib/SSR';
+import { Slides } from 'protolib/components/Slides';
+import { chatbotTemplates } from './templates'
 import { TemplateCard } from '@extensions/apis/TemplateCard';
-import { EditableObject } from '../../components/EditableObject';
+import { EditableObject } from 'protolib/components/EditableObject';
 
 const ChatbotIcons = {}
 

@@ -1,4 +1,4 @@
-import ChatbotsPage from 'protolib/bundles/chatbots/adminPages'
+import ChatbotsPage from '@extensions/chatbots/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

@@ -18,7 +18,6 @@ import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
-import { ChatbotsAPI } from './chatbots/chatbotsAPI'
 import { IconsAPI } from './icons/iconsAPI'
 import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
@@ -47,7 +46,6 @@ export const AdminAPIBundles = (app, context) => {
   PackagesAPI(app, context)
   StateMachinesDefinitionsApi(app, context)
   FlowAPI(app, context)
-  ChatbotsAPI(app, context)
   IconsAPI(app, context)
   VisionAPI(app, context)
   MobileAPI(app, context)

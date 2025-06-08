@@ -9,6 +9,7 @@ import { AssistantAPI } from '@extensions/assistant/assistantAPI'
 import { AutomationsAPI } from '@extensions/automations/automationsAPI'
 import { BoardsAPI } from '@extensions/boards/boardsAPI'
 import { CardsAPI } from '@extensions/cards/cardsAPI'
+import { ChatbotsAPI } from '@extensions/chatbots/chatbotsAPI'
 
 export default (app, context) => {
   EventsAPI(app, context)
@@ -22,4 +23,5 @@ export default (app, context) => {
   AssistantAPI(app, context)
   AutomationsAPI(app, context)
   BoardsAPI(app, context)
+  ChatbotsAPI(app, context)
 }

@@ -21,4 +21,3 @@ export const chatbotTemplates = {
     //     icon: PencilRuler
     // }
 }
-

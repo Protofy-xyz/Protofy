@@ -15,7 +15,6 @@ import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import stateContext from './state/context'
 import lmstudio from './lmstudio/context'
-import chatbots from './chatbots/context'
 import twilio from './twilio/context'
 import whatsapp from './whatsapp/context'
 
@@ -38,7 +37,6 @@ export const APIContext = {
     sm: stateMachines,
     state: stateContext,
     lmstudio,
-    chatbots,
     twilio,
     whatsapp
 }

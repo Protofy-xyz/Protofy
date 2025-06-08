@@ -105,7 +105,7 @@ const getDB = (path, req, session) => {
         name: value.name + extension,
         data: {
           options: {
-            template: `/packages/protolib/src/bundles/chatbots/templates/${template}.tpl`, variables: {
+            template: `/extensions/chatbots/templates/${template}.tpl`, variables: {
               codeName: codeName,
               name: computedName,
               codeNameLowerCase: codeNameLowerCase,

@@ -3644,6 +3644,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/chatbots@workspace:extensions/chatbots":
+  version: 0.0.0-use.local
+  resolution: "@extensions/chatbots@workspace:extensions/chatbots"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/chatgpt@workspace:extensions/chatgpt":
   version: 0.0.0-use.local
   resolution: "@extensions/chatgpt@workspace:extensions/chatgpt"

@@ -8,6 +8,7 @@ import {createSchedule} from '@extensions/automations/schedule'
 import {createPeriodicSchedule} from '@extensions/automations/periodicSchedule'
 import autopilot from '@extensions/autopilot/context'
 import cards from '@extensions/cards/context'
+import chatbots from '@extensions/chatbots/context'
 
 export default {
     onEvent,
@@ -26,5 +27,6 @@ export default {
     createPeriodicSchedule,
     automations,
     autopilot,
-    cards
+    cards,
+    chatbots
 }
