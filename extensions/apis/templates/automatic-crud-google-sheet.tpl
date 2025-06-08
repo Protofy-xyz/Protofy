@@ -27,7 +27,7 @@ import { AutoAPI, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from "express";
-import {GoogleSheetClient} from 'protolib/bundles/google/googleSheetClient'
+import {GoogleSheetClient} from '@extensions/google/googleSheetClient'
 import fsPath from "path";
 
 const root = fsPath.join(process.cwd(), '..', '..')
