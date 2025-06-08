@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import useChat from "../../store/store";
 import BotMessage from "./BotMessage";
 import UserMessage from "./UserMessage";
-import { useEventEffect } from "../../../../bundles/events/hooks";
+import { useEventEffect } from "@extensions/events/hooks";
 import { createMessage } from "../../utils/createMessage";
 
 export default function Chats() {

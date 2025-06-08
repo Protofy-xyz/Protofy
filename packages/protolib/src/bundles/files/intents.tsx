@@ -20,7 +20,7 @@ import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
-import { useEventEffect } from '../../bundles/events/hooks'
+import { useEventEffect } from '@extensions/events/hooks'
 import { useTint } from '../../lib/Tints'
 import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
 import { Tinted } from '../../components/Tinted';

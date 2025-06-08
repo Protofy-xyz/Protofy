@@ -1,5 +1,4 @@
 import { UsersAPI } from './users/usersAPI'
-import { EventsAPI } from './events/eventsAPI'
 import { GroupsAPI } from './groups/groupsAPI'
 import { ObjectsAPI } from './objects/objectsAPI'
 import { KeysAPI } from './keys/keysAPI'
@@ -20,9 +19,7 @@ import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinit
 import { PackagesAPI } from './packages/packagesAPI'
 import { FlowAPI } from './flow/flowAPI';
 import { ChatbotsAPI } from './chatbots/chatbotsAPI'
-import { CardsAPI } from './cards/cardsAPI'
 import { IconsAPI } from './icons/iconsAPI'
-import { ProtoMemDBAPI } from './protomemdb/protomemdbAPI'
 import { VisionAPI } from './vision/visionAPI'
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
@@ -30,9 +27,6 @@ import { SequencesAPI } from './sequences/sequencesAPI'
 import { DiscordAPI } from './discord/discordAPI'
 
 export const AdminAPIBundles = (app, context) => {
-  EventsAPI(app, context)
-  ProtoMemDBAPI(app, context, true)
-  CardsAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)
   ObjectsAPI(app, context)

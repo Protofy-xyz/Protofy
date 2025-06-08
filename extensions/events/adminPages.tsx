@@ -1,14 +1,14 @@
 import { EventModel } from 'protobase'
-import { Chip } from '../../components/Chip'
-import { DataTable2 } from '../../components/DataTable2'
-import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { Chip } from 'protolib/components/Chip'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
 import moment from 'moment'
 import { ClipboardList } from '@tamagui/lucide-icons';
-import { JSONView } from '../../components/JSONView'
-import { usePrompt } from '../../context/PromptAtom'
-import { SSR } from '../../lib/SSR';
-import { withSession } from '../../lib/Session';
+import { JSONView } from 'protolib/components/JSONView'
+import { usePrompt } from 'protolib/context/PromptAtom'
+import { SSR } from 'protolib/lib/SSR';
+import { withSession } from 'protolib/lib/Session';
 
 const format = 'HH:mm:ss DD-MM-YYYY'
 const EventIcons = {}

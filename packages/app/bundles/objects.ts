@@ -8,6 +8,6 @@ export const Objects = {
     ...ProtolibObjects,
     ...LocalObjects,
     page: PageModel,
-    api: APIModel
+    api: APIModel,
     board: BoardModel
 }

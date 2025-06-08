@@ -1,11 +1,11 @@
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API, EventModel } from 'protobase'
-import { useRemoteStateList } from '../../lib/useRemoteState';
-import AsyncView from '../../components/AsyncView';
-import { DashboardCard } from '../../components/DashboardCard';
+import { useRemoteStateList } from 'protolib/lib/useRemoteState';
+import AsyncView from 'protolib/components/AsyncView';
+import { DashboardCard } from 'protolib/components/DashboardCard';
 import { YStack, XStack, Text, Card } from '@my/ui';
-import { TotalItems } from '../../components/TotalItems';
+import { TotalItems } from 'protolib/components/TotalItems';
 import { ClipboardList } from '@tamagui/lucide-icons';
 
 export const TotalEvents = ({ title, id }) => (

@@ -1,7 +1,7 @@
 import { API, getLogger } from 'protobase';
 import {getServiceToken} from 'protonode'
 import {addAction} from '@extensions/actions/context/addAction';
-import {addCard} from 'protolib/bundles/cards/context/addCard';
+import {addCard} from '@extensions/cards/context/addCard';
 
 const logger = getLogger();
 

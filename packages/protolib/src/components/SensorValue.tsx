@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react"
 import { API } from 'protobase'
 import { DeviceCollection } from '../bundles/devices/models/DeviceModel';
 import { DeviceSubsystemMonitor } from '../bundles/devices/devices';
-import { useLastEvent } from '../bundles/events/hooks';
+import { useLastEvent } from '@extensions/events/hooks';
 
 type Props = {
     device: string,

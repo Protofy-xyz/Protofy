@@ -1,8 +1,8 @@
 import { ProtoMemDB } from 'protobase';
 import {getServiceToken, handler} from 'protonode';
 import { addAction } from '@extensions/actions/context/addAction';
-import { addCard } from '../cards/context/addCard';
-import { generateEvent } from '../library';
+import { addCard } from '@extensions/cards/context/addCard';
+import { generateEvent } from 'protobase';
 
 export const ProtoMemDBAPI = (app, context, inCore?) => {
     const part = inCore ? '/core' : ''

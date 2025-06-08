@@ -20,7 +20,7 @@ import { TemplatePreview } from './TemplatePreview'
 import { pageTemplates } from './templates'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 import { PaginatedData } from 'protolib/lib/SSR'
-import { useEventEffect } from 'protolib/bundles/events/hooks/useEventEffect'
+import { useEventEffect } from '@extensions/events/hooks/useEventEffect'
 import { Tinted } from 'protolib/components/Tinted'
 
 const PageIcons = {}

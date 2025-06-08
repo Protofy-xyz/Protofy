@@ -10,7 +10,7 @@ import { getRoot, handler, requireAdmin } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
 import { addAction } from '@extensions/actions/context/addAction';
-import { addCard } from 'protolib/bundles/cards/context/addCard';
+import { addCard } from '@extensions/cards/context/addCard';
 const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()

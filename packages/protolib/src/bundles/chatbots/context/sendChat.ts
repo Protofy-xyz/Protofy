@@ -1,4 +1,4 @@
-import { generateEvent } from '../../library';
+import { generateEvent } from 'protobase';
 export const sendChat = async (token: string, to: string, message: string) => {
     return generateEvent({
         path: 'chat/notifications/' + to,

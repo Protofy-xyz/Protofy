@@ -1,6 +1,6 @@
 import { Text, TextProps } from '@my/ui'
 import React, { useState } from "react"
-import { useEventEffect, useLastEvent } from '../bundles/events/hooks';
+import { useEventEffect, useLastEvent } from '@extensions/events/hooks';
 
 type Props = {
     object: string,

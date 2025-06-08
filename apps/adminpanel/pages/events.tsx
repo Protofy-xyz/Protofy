@@ -1,4 +1,4 @@
-import EventsPage from 'protolib/bundles/events/adminPages'
+import EventsPage from '@extensions/events/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getActionsFromAutomations } from '../bundles/automations/context/getActionsFromAutomations';
-import { getStatesFromProtoMemDB } from '../bundles/protomemdb/context/getStatesFromProtoMemDB';
-import { useEventEffect } from '../bundles/events/hooks';
+import { getStatesFromProtoMemDB } from '@extensions/protomemdb/context/getStatesFromProtoMemDB';
+import { useEventEffect } from '@extensions/events/hooks';
 import { AutopilotCard, RulesCard } from '../components/dashboard';
 import { ActionRunner } from '../components/ActionRunner';
 import { BasicCard, CardValue, CenterCard } from '../bundles/widgets';

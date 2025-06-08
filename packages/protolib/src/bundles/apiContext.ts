@@ -1,5 +1,3 @@
-import { onEvent, emitEvent, getLastEvent } from './events/api'
-
 import { sendMailWithResend } from './resend/context'
 import object from './objects/context'
 import flow from './flow/context'
@@ -16,17 +14,12 @@ import deviceContext from './devices/devices/context'
 import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import stateContext from './state/context'
-import cards from './cards/context'
 import lmstudio from './lmstudio/context'
-import protomemdb from './protomemdb/context'
 import chatbots from './chatbots/context'
 import twilio from './twilio/context'
 import whatsapp from './whatsapp/context'
 
 export const APIContext = {
-    onEvent,
-    emitEvent,
-    getLastEvent,
     fetch,
     sendMailWithResend,
     ...deviceContext,
@@ -44,9 +37,7 @@ export const APIContext = {
     network,
     sm: stateMachines,
     state: stateContext,
-    cards,
     lmstudio,
-    protomemdb,
     chatbots,
     twilio,
     whatsapp

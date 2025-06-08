@@ -6,7 +6,7 @@ import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 import { addAction } from "@extensions/actions/context/addAction";
-import { addCard } from "../cards/context/addCard";
+import { addCard } from "@extensions/cards/context/addCard";
 
 const chatbotDirPath = "/packages/app/chatbots/"
 const ChatbotDir = (root) => fspath.join(root, chatbotDirPath)

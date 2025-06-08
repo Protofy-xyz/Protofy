@@ -4,7 +4,7 @@ import { Slides } from '../../components/Slides'
 import { useEffect, useMemo, useState } from 'react';
 import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
-import { useProtoStates } from '../../bundles/protomemdb/lib/useProtoStates'
+import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { AlignLeft, Braces, Copy, Search, ArrowBigDownDash, Activity } from "@tamagui/lucide-icons";
 import { Tinted } from '../Tinted';
 import { getIconUrl } from '../IconSelect';

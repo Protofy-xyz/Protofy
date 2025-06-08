@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { API } from 'protobase'
-import { useEventEffect } from '../../events/hooks/useEventEffect'
+import { useEventEffect } from '@extensions/events/hooks/useEventEffect'
 
 export const useProtoStates = (initialState, filter='states/#', chunk='states') => {
   const [state, setState] = useState(initialState);

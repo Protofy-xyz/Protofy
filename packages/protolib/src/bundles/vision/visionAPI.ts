@@ -3,7 +3,7 @@ import { APIContext } from "../apiContext";
 import { Application } from "express";
 import axios from "axios";
 import { addAction } from "@extensions/actions/context/addAction";
-import { addCard } from "../cards/context/addCard";
+import { addCard } from "@extensions/cards/context/addCard";
 
 async function getImageBase64(url) {
     const response = await axios.get(url, { responseType: 'arraybuffer' });

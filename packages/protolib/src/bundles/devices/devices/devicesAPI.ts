@@ -7,7 +7,7 @@ import moment from 'moment';
 import fs from 'fs';
 import path from 'path';
 import { addAction } from "@extensions/actions/context/addAction";
-import { addCard } from "../../cards/context/addCard";
+import { addCard } from "@extensions/cards/context/addCard";
 import { downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 
 export const DevicesAutoAPI = AutoAPI({

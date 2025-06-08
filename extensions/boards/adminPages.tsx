@@ -16,7 +16,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from 'protolib/components/Tinted'
 import React from 'react'
-import { useProtoStates } from 'protolib/bundles/protomemdb/lib/useProtoStates'
+import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { CardSelector } from 'protolib/components/board/CardSelector'
 
 import { ValueCardSettings } from 'protolib/components/autopilot/ValueCardSettings'
