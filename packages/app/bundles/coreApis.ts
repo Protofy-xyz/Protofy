@@ -11,6 +11,8 @@ import { BoardsAPI } from '@extensions/boards/boardsAPI'
 import { CardsAPI } from '@extensions/cards/cardsAPI'
 import { ChatbotsAPI } from '@extensions/chatbots/chatbotsAPI'
 import { IconsAPI } from '@extensions/icons/iconsAPI'
+import { DatabasesAPI } from '@extensions/databases/databasesAPI'
+
 export default (app, context) => {
   EventsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
@@ -25,4 +27,5 @@ export default (app, context) => {
   BoardsAPI(app, context)
   ChatbotsAPI(app, context)
   IconsAPI(app, context)
+  DatabasesAPI(app, context)
 }

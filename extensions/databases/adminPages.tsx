@@ -1,18 +1,18 @@
 import { DatabaseEntryModel, DatabaseModel } from '.'
-import { DataView } from '../../components/DataView';
+import { DataView } from 'protolib/components/DataView';
 import { API } from 'protobase';
-import { AdminPage } from '../../components/AdminPage';
-import { AlertDialog } from '../../components/AlertDialog';
-import { Tinted } from '../../components/Tinted';
-import { Center } from '../../components/Center';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { AlertDialog } from 'protolib/components/AlertDialog';
+import { Tinted } from 'protolib/components/Tinted';
+import { Center } from 'protolib/components/Center';
 import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { Spinner, YStack } from '@my/ui'
-import { DataCard } from '../../components/DataCard'
+import { DataCard } from 'protolib/components/DataCard'
 import { useState } from 'react'
 import { Database, DatabaseBackup } from '@tamagui/lucide-icons'
-import { usePrompt } from '../../context/PromptAtom'
-import { SSR } from '../../lib/SSR'
-import { withSession } from '../../lib/Session'
+import { usePrompt } from 'protolib/context/PromptAtom'
+import { SSR } from 'protolib/lib/SSR'
+import { withSession } from 'protolib/lib/Session'
 
 const DatabaseIcons = {}
 const databasesSourceUrl = '/api/core/v1/databases'
@@ -96,7 +96,7 @@ export default {
                     entityName={'Databases'}
                     name="database"
                     onSelectItem={(item) => {
-                        router.push('./view?database=' + item.getId())
+                        router.push('/databases/view?database=' + item.getId())
                     }}
                     // hideAdd={true}
                     model={DatabaseModel}

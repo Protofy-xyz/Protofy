@@ -139,7 +139,7 @@ export default ({ pages, boards, objects }) => {
                 { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
                 { "name": "Events", "icon": "activity", "href": "/workspace/events" },
                 { "name": "Services", "icon": Cog, "href": "/workspace/services" },
-                { "name": "Databases", "icon": Database, "type": "databases", "path": "/system" },
+                { "name": "Databases", "icon": Database, href: "/workspace/databases" },
                 { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
             ],
 

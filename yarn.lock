@@ -3662,6 +3662,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/databases@workspace:extensions/databases":
+  version: 0.0.0-use.local
+  resolution: "@extensions/databases@workspace:extensions/databases"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/events@workspace:extensions/events":
   version: 0.0.0-use.local
   resolution: "@extensions/events@workspace:extensions/events"
