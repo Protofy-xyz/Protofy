@@ -10,7 +10,7 @@ import { AutomationsAPI } from '@extensions/automations/automationsAPI'
 import { BoardsAPI } from '@extensions/boards/boardsAPI'
 import { CardsAPI } from '@extensions/cards/cardsAPI'
 import { ChatbotsAPI } from '@extensions/chatbots/chatbotsAPI'
-
+import { IconsAPI } from '@extensions/icons/iconsAPI'
 export default (app, context) => {
   EventsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
@@ -24,4 +24,5 @@ export default (app, context) => {
   AutomationsAPI(app, context)
   BoardsAPI(app, context)
   ChatbotsAPI(app, context)
+  IconsAPI(app, context)
 }
