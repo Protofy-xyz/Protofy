@@ -3656,6 +3656,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/dashboard@workspace:extensions/dashboard":
+  version: 0.0.0-use.local
+  resolution: "@extensions/dashboard@workspace:extensions/dashboard"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/events@workspace:extensions/events":
   version: 0.0.0-use.local
   resolution: "@extensions/events@workspace:extensions/events"

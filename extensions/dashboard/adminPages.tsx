@@ -1,10 +1,10 @@
-import { AdminPage } from '../../components/AdminPage';
-import { DashboardGrid } from '../../components/DashboardGrid';
-import { withSession } from '../../lib/Session';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { DashboardGrid } from 'protolib/components/DashboardGrid';
+import { withSession } from 'protolib/lib/Session';
 import { YStack } from '@my/ui';
 import { Protofy } from 'protobase'
-import { SSR } from '../../lib/SSR';
-import { useWorkspace } from '../../lib/useWorkspace';
+import { SSR } from 'protolib/lib/SSR';
+import { useWorkspace } from 'protolib/lib/useWorkspace';
 
 const isProtected = Protofy("protected", true)
 

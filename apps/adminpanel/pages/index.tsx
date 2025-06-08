@@ -1,4 +1,4 @@
-import DashboardPage from 'protolib/bundles/dashboard/adminPages'
+import DashboardPage from '@extensions/dashboard/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
