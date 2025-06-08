@@ -1,4 +1,4 @@
-import MessagesPage from 'protolib/bundles/messages/adminPages'
+import MessagesPage from '@extensions/messages/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
