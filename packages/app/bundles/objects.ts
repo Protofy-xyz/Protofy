@@ -2,6 +2,7 @@ import ProtolibObjects from 'protolib/bundles/objects'
 import {PageModel} from '@extensions/pages/pagesSchemas'
 import { APIModel } from '@extensions/apis/APISchemas'
 import { BoardModel } from '@extensions/boards/boardsSchemas'
+import { WorkspaceModel } from '@extensions/workspaces/WorkspaceModel'
 import LocalObjects from '../objects'
 
 export const Objects = {
@@ -9,5 +10,6 @@ export const Objects = {
     ...LocalObjects,
     page: PageModel,
     api: APIModel,
-    board: BoardModel
+    board: BoardModel,
+    workspace: WorkspaceModel
 }
