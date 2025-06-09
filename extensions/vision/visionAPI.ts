@@ -1,5 +1,5 @@
 import { getServiceToken } from "protonode";
-import { APIContext } from "../apiContext";
+import APIContext from "app/bundles/coreApiContext";
 import { Application } from "express";
 import axios from "axios";
 import { addAction } from "@extensions/actions/context/addAction";
