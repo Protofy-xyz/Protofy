@@ -47,8 +47,6 @@ export const DashboardCard = ({ children, id, title, cardActions = <></>, titleP
 
                 <YStack
                     flex={1}
-                    paddingHorizontal={15}
-                    paddingBottom={15}
                     style={{ overflowY: 'auto', maxHeight: '100%' }}
                 >
                     {children}
