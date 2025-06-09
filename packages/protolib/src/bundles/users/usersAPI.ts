@@ -1,7 +1,8 @@
 import { UserModel } from "./";
 import { AutoAPI, hash} from 'protonode'
+import { addCard } from "@extensions/cards/context/addCard";
 
-export const UsersAPI = AutoAPI({
+const UsersAutoAPI = AutoAPI({
     modelName: 'accounts',
     modelType: UserModel,
     prefix: '/api/core/v1/',
@@ -31,3 +32,23 @@ export const UsersAPI = AutoAPI({
     },
     requiresAdmin: ['*']
 })
+
+export const UsersAPI = (app, context) => {
+    UsersAutoAPI(app, context)
+
+    addCard({
+        group: 'users',
+        tag: "table",
+        id: 'users_table',
+        templateName: "Interactive users table",
+        name: "users_table",
+        defaults: {
+            name: "Users Table",
+            icon: "user-round",
+            description: "Interactive users table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"/workspace/users?mode=embed\" />`, padding: '3px'\n});\n",
+        },
+        emitEvent: true
+    })
+}
