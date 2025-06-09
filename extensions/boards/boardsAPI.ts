@@ -705,6 +705,22 @@ export const BoardsAPI = (app, context) => {
         emitEvent: true,
     })
 
+    addCard({
+        group: 'board',
+        tag: "iframe",
+        id: 'show',
+        templateName: "Display a link in an iframe",
+        name: "board_iframe",
+        defaults: {
+            name: "Frame",
+            icon: "monitor-stop",
+            description: "Display a link in an iframe",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"${data.value}\" />`, padding: '3px'\n});\n",
+        },
+        emitEvent: true
+    })
+
     setInterval(async () => {
         const boards = await getBoards()
         // console.log("Boards: ", boards)
