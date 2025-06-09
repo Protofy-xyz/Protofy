@@ -48,6 +48,23 @@ export default ({ pages, boards, objects }) => {
     ]
     enableArduinos? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }):null
 
+    const systemBoard = { "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }
+    const manageBoards = { "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }
+
+    const boardsGroupByCategory = boards ? boards.reduce((acc, board) => {
+        const category = board.category || 'Boards';
+        if (!acc[category]) {
+            acc[category] = [];
+        }
+        acc[category].push({ "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name });
+        return acc;
+    }, {Boards:[]}) : {Boards: []};
+
+    if (enableBoards) {
+        boardsGroupByCategory['Boards'].unshift(systemBoard);
+        boardsGroupByCategory['Boards'].push(manageBoards);
+    }
+    
     return {
         "default": "/workspace/",
         "label": "Admin panel",
@@ -117,11 +134,13 @@ export default ({ pages, boards, objects }) => {
             "label": "Dashboard"
         }],
         "menu": {
-            ...(enableBoards) ? {
-                "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
-                    return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name }
-                }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
-            } : {},
+            // ...(enableBoards) ? {
+            //     "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
+            //         return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name }
+            //     }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
+            // } : {},
+
+            ...(enableBoards ? boardsGroupByCategory : {}),
             ...(objectsWithPage.length ? {
                 "Objects": objectsWithPage.map((obj) => {
                     return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic?'/workspace/':'/admin/')+obj.features.adminPage }
