@@ -8,7 +8,6 @@ import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
 import { DeviceCoresAPI } from './devices/devicecores/devicecoresAPI'
 import { DeviceBoardsAPI } from './devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from './devices/deviceDefinitions/deviceDefinitionsAPI'
-import { WorkspacesAPI } from './workspaces/workspacesAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
 import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
@@ -33,7 +32,6 @@ export const AdminAPIBundles = (app, context) => {
   DeviceCoresAPI(app, context)
   DeviceBoardsAPI(app, context)
   DeviceDefinitionsAPI(app, context)
-  WorkspacesAPI(app, context)
   ResourcesAPI(app, context)
   MasksAPI(app, context)
   LogsAPI(app, context)

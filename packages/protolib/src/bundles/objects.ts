@@ -3,7 +3,6 @@ import { GroupModel } from './groups/groupsSchemas'
 import { KeyModel} from './keys/keysSchemas'
 import { EventModel } from 'protobase'
 import { ObjectModel } from './objects/objectsSchemas'
-import { WorkspaceModel } from './workspaces/WorkspaceModel'
 import { TokenModel } from './tokens/tokensSchemas'
 
 export default {
@@ -12,6 +11,5 @@ export default {
     group: GroupModel,
     object: ObjectModel,
     key: KeyModel,
-    workspace: WorkspaceModel,
     token: TokenModel
 }

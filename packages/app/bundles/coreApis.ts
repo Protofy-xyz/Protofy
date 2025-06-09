@@ -13,6 +13,7 @@ import { ChatbotsAPI } from '@extensions/chatbots/chatbotsAPI'
 import { IconsAPI } from '@extensions/icons/iconsAPI'
 import { DatabasesAPI } from '@extensions/databases/databasesAPI'
 import { VisionAPI } from '@extensions/vision/visionAPI'
+import { WorkspacesAPI } from '@extensions/workspaces/workspacesAPI'
 
 export default (app, context) => {
   EventsAPI(app, context)
@@ -30,4 +31,5 @@ export default (app, context) => {
   IconsAPI(app, context)
   DatabasesAPI(app, context)
   VisionAPI(app, context)
+  WorkspacesAPI(app, context)
 }

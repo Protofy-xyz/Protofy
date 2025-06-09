@@ -3710,6 +3710,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/workspaces@workspace:extensions/workspaces":
+  version: 0.0.0-use.local
+  resolution: "@extensions/workspaces@workspace:extensions/workspaces"
+  languageName: unknown
+  linkType: soft
+
 "@fastify/busboy@npm:^2.0.0":
   version: 2.1.1
   resolution: "@fastify/busboy@npm:2.1.1"
