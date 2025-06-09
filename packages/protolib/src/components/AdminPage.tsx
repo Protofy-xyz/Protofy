@@ -4,12 +4,21 @@ import { Tinted } from './Tinted';
 import { usePrompt } from '../context/PromptAtom';
 import { SearchContext } from '../context/SearchContext';
 import { AdminPanel } from './AdminPanel';
-import { forwardRef, useState, useContext } from 'react';
+import { forwardRef, useState, useContext, useEffect } from 'react';
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { BubbleChat } from './BubbleChat';
+import { useRouter } from 'next/router'
 
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)
+  const router = useRouter()
+
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (router.isReady) setReady(true);
+  }, [router.isReady]);
+
   const [search, setSearch] = useState('')
   const [searchName, setSearchName] = useState('')
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
@@ -26,6 +35,14 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   const settingsAssistantEnabled = settingsAssistant === undefined ? true : settingsAssistant
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
+
+  if(!ready) {
+    return <></>
+  } 
+
+  if(router.query.mode === 'embed') {
+    return children
+  }
 
   return (
     <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgPanel'}>
