@@ -1,4 +1,4 @@
-import DatabasesPage from 'protolib/bundles/databases/adminPages'
+import DatabasesPage from '@extensions/databases/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
