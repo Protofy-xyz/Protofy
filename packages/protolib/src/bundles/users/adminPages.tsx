@@ -61,16 +61,6 @@ export default {
             return (<AdminPage title="Users" pageSession={pageSession}>
                 <DataView
                     key={all ? 'all' : 'filtered'}
-                    toolBarContent={
-                        <XStack mr={"$2"} f={1} space="$1.5" ai="center" jc='flex-end'>
-                            <Button onPress={() => {
-                                router.push('groups')
-                            }} height={'$3'}>
-                                <Tinted><Users color="$color8" /></Tinted>
-                                Groups
-                            </Button>
-                        </XStack>
-                    }
                     enableAddToInitialData
                     entityName={'accounts'}
                     itemData={itemData}
