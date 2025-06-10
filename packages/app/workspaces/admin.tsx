@@ -16,7 +16,7 @@ const MonitorCog = styled(RawMonitorCog, {
     name: 'MonitorCog',
     size: '$true',
     color: 'currentColor',
-  }
+}
 )
 import {
     ServiceMemoryUsageChart,
@@ -32,9 +32,7 @@ import {
     TotalEvents
 } from '../bundles/widgets'
 
-
-const enableBoards = true
-const enableArduinos = false   
+const enableArduinos = false
 
 export default ({ pages, boards, objects }) => {
     const adminPages = pages.filter(p => p.pageType == 'admin' && !p.object)
@@ -46,25 +44,51 @@ export default ({ pages, boards, objects }) => {
         { "name": "Objects", "icon": Boxes, "href": "/workspace/objects" },
         { "name": "Pages", "icon": "layout", "href": "/workspace/pages" }
     ]
-    enableArduinos? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }):null
+    enableArduinos ? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }) : null
 
     const systemBoard = { "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }
     const manageBoards = { "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }
+
+    const systemMenu = [
+        { "name": "Assets", "icon": Blocks, "href": "/workspace/files?path=%2Fdata%2Fassets", "path": "" },
+        { "name": "Users", "icon": "users", "href": "/workspace/users" },
+        { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
+        { "name": "Events", "icon": "activity", "href": "/workspace/events" },
+        { "name": "Services", "icon": Cog, "href": "/workspace/services" },
+        { "name": "Databases", "icon": Database, href: "/workspace/databases" },
+        { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
+    ]
+
+    const objectsMenu = objectsWithPage.length ? objectsWithPage.map((obj) => {
+        return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic ? '/workspace/' : '/admin/') + obj.features.adminPage }
+    }) : [];
+
+    const adminMenu = adminPages.map((page) => {
+        return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Wrench, "href": page.route }
+    })
+
+    const initialData = {
+        Boards: [],
+        ...(objectsMenu.length ? { Objects: objectsMenu } : {}),
+        ...(adminMenu.length ? { Admin: adminMenu } : {}),
+        Integrations: integrations,
+        System: systemMenu
+    }
 
     const boardsGroupByCategory = boards ? boards.reduce((acc, board) => {
         const category = board.category || 'Boards';
         if (!acc[category]) {
             acc[category] = [];
         }
-        acc[category].push({ "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name });
+        acc[category].push({ "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": board.icon ?? LayoutDashboard, "href": '/workspace/boards/view?board=' + board.name });
         return acc;
-    }, {Boards:[]}) : {Boards: []};
+    }, initialData) : initialData;
 
-    if (enableBoards) {
-        boardsGroupByCategory['Boards'].unshift(systemBoard);
-        boardsGroupByCategory['Boards'].push(manageBoards);
-    }
-    
+
+    boardsGroupByCategory['Boards'].unshift(systemBoard);
+    boardsGroupByCategory['Boards'].push(manageBoards);
+
+
     return {
         "default": "/workspace/",
         "label": "Admin panel",
@@ -79,7 +103,7 @@ export default ({ pages, boards, objects }) => {
                 { key: 'totalusers', content: <TotalUsers title='Total users' id={'totalusers'} /> },
                 { key: 'lastevents', content: <LastEvents title='Last Events' id={'lastevents'} /> },
                 { key: 'listpages', content: <ListPages title='Pages' id={'listpages'} /> },
-                {key: 'listgroups', content: <ListGroups title='Groups' id={'listgroups'} />},
+                { key: 'listgroups', content: <ListGroups title='Groups' id={'listgroups'} /> },
                 { key: 'totalobjects', content: <TotalObjects title='Total objects' id={'totalobjects'} /> },
                 { key: 'listlatestusers', content: <ListLatestUsers title='Latest Users' id={'listlatestusers'} /> },
                 { key: 'totalgroups', content: <TotalGroups title='Total groups' id={'totalgroups'} /> },
@@ -134,34 +158,7 @@ export default ({ pages, boards, objects }) => {
             "label": "Dashboard"
         }],
         "menu": {
-            // ...(enableBoards) ? {
-            //     "Boards": [{ "name": "System", "icon": LayoutDashboard, "href": "/workspace/dashboard" }].concat((boards ? boards.map((board) => {
-            //         return { "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": LayoutDashboard, "href": '/workspace/boards/view?board='+board.name }
-            //     }) : []).concat([{ "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }]))
-            // } : {},
-
-            ...(enableBoards ? boardsGroupByCategory : {}),
-            ...(objectsWithPage.length ? {
-                "Objects": objectsWithPage.map((obj) => {
-                    return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic?'/workspace/':'/admin/')+obj.features.adminPage }
-                })
-            } : {}),
-            ...(adminPages.length ? {
-                "Administration": adminPages.map((page) => {
-                    return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Wrench, "href": page.route }
-                })
-            } : {}),
-            "Integrations": integrations,
-            "System": [
-                { "name": "Assets", "icon": Blocks, "href": "/workspace/files?path=%2Fdata%2Fassets", "path": "" },
-                { "name": "Users", "icon": "users", "href": "/workspace/users" },
-                { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
-                { "name": "Events", "icon": "activity", "href": "/workspace/events" },
-                { "name": "Services", "icon": Cog, "href": "/workspace/services" },
-                { "name": "Databases", "icon": Database, href: "/workspace/databases" },
-                { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
-            ],
-
+            ...boardsGroupByCategory,
         }
     }
 }
