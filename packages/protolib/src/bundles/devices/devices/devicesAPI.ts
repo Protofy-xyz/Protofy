@@ -335,4 +335,20 @@ export const DevicesAPI = (app, context) => {
     }
 
     topicSub(mqtt, 'devices/#', (message, topic) => processMessage(message, topic))
+
+    addCard({
+        group: 'devices',
+        tag: "table",
+        id: 'devices_table',
+        templateName: "Interactive devices table",
+        name: "devices_table",
+        defaults: {
+            name: "Devices Table",
+            icon: "router",
+            description: "Interactive devices table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/devices?mode=embed'}), mode: 'slim'\n});\n",
+        },
+        emitEvent: true
+    })
 }
