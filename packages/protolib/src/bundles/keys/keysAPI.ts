@@ -3,6 +3,7 @@ import { AutoAPI, getRoot } from 'protonode'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
+import { addCard } from "@extensions/cards/context/addCard";
 
 
 const dataDir = (root) => fspath.join(root, "/data/keys/")
@@ -63,7 +64,7 @@ const getDB = (path, req, session) => {
     return db;
 }
 
-export const KeysAPI = AutoAPI({
+const KeysAutoAPI = AutoAPI({
     modelName: 'keys',
     modelType: KeyModel, 
     prefix: '/api/core/v1/',
@@ -71,3 +72,23 @@ export const KeysAPI = AutoAPI({
     getDB: getDB,
     requiresAdmin: ['*']
 })
+
+export const KeysAPI = (app, context) => {
+    KeysAutoAPI(app, context)
+
+    addCard({
+        group: 'keys',
+        tag: "table",
+        id: 'keys_table',
+        templateName: "Interactive keys table",
+        name: "keys_table",
+        defaults: {
+            name: "Keys Table",
+            icon: "key-round",
+            description: "Interactive keys table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/keys?mode=embed'}), mode: 'slim'\n});\n",
+        },
+        emitEvent: true
+    })
+}
