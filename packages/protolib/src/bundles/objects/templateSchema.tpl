@@ -22,8 +22,8 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
 
     public static getApiOptions() {
         return Protofy("api", {
-            "name": '{{lowername}}',
-            "prefix": '/api/v1/'
+            "name": "{{lowername}}",
+            "prefix": "/api/v1/"
         })
     }
 

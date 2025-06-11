@@ -1,5 +1,6 @@
 import { GroupModel } from "./";
 import { AutoAPI } from 'protonode'
+import { addCard } from "@extensions/cards/context/addCard";
 
 const initialData = {
     admin: {"name": "admin", "workspaces": ["admin", "editor"], "admin": true},
@@ -7,7 +8,7 @@ const initialData = {
     user: {"name": "user", "workspaces": []}
 }
 
-export const GroupsAPI = AutoAPI({
+const GroupsAutoAPI = AutoAPI({
     modelName: 'groups',
     modelType: GroupModel, 
     initialData: initialData,
@@ -15,3 +16,22 @@ export const GroupsAPI = AutoAPI({
     dbName: 'auth_groups',
     requiresAdmin: ['create', 'update']
 })
+
+export const GroupsAPI = (app, context) => {
+    GroupsAutoAPI(app, context)
+    addCard({
+        group: 'groups',
+        tag: "table",
+        id: 'groups_table',
+        templateName: "Interactive groups table",
+        name: "groups_table",
+        defaults: {
+            name: "Groups Table",
+            icon: "users",
+            description: "Interactive groups table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"/workspace/groups?mode=embed\" />`, padding: '3px'\n});\n",
+        },
+        emitEvent: true
+    })
+}
