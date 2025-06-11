@@ -95,6 +95,7 @@ const Board = ({ board, icons }) => {
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
+  const breakpointRef = useRef('lg')
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
 
@@ -163,10 +164,14 @@ const Board = ({ board, icons }) => {
   }
 
   const layouts = {
-    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 6, doubleH: 12 }, { layout: board?.layouts?.lg }),
-    md: computeLayout(items, { totalCols: 10, normalW: 10, normalH: 12, doubleW: 10, doubleH: 12 }, { layout: board?.layouts?.md }),
-    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 6, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm })
+    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 4, doubleH: 12 }, { layout: board?.layouts?.lg }),
+    md: computeLayout(items, { totalCols: 12, normalW: 6, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.md }),
+    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm }),
+    xs: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.xs }),
+    xxs: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 4, doubleW: 4, doubleH: 8 }, { layout: board?.layouts?.xxs })
   }
+
+  boardRef.current.layouts = layouts
 
   const addWidget = async (card) => {
     setItems(prevItems => {
@@ -407,8 +412,12 @@ const Board = ({ board, icons }) => {
                 padding={10}
                 backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
-                  boardRef.current.layouts = layouts
+                  boardRef.current.layouts[breakpointRef.current] = layout
                   API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                }}
+                onBreakpointChange={(bp) => {
+                  console.log('Breakpoint changed to: ', bp)
+                  breakpointRef.current = bp
                 }}
               />
           }
