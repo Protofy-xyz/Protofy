@@ -8,6 +8,7 @@ import { getServiceToken, handler } from 'protonode'
 import { API, generateEvent } from 'protobase'
 import { ObjectModel } from "protolib/bundles/objects/objectsSchemas";
 import { v4 as uuidv4 } from 'uuid';
+import { addCard } from "@extensions/cards/context/addCard";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -26,7 +27,7 @@ const getPage = (pagePath, req) => {
   if (pageType) {
     pageTypeValue = pageType.getText().replace(/^["']|["']$/g, '')
   }
-  
+
   const prot = getDefinition(sourceFile, '"protected"')
   let permissions = getDefinition(sourceFile, '"permissions"')
   const nextFilePath = fspath.join(nextPagesDir(getRoot(req)), (routeValue == '/' ? 'index' : routeValue) + '.tsx')
@@ -295,7 +296,7 @@ export const PagesAPI = (app, context) => {
       _generateEvent('start')
       //run the package command
       const { exec } = require('child_process');
-      exec('npm run publish', { cwd: path,  env: {...process.env, NODE_ENV:'production'}, windowsHide: true  }, (error, stdout, stderr) => {
+      exec('npm run publish', { cwd: path, env: { ...process.env, NODE_ENV: 'production' }, windowsHide: true }, (error, stdout, stderr) => {
         if (error) {
           console.error(`Error publishing pages: ${error}, stderr: ${stderr}`);
           _generateEvent('error', { error })
@@ -305,7 +306,7 @@ export const PagesAPI = (app, context) => {
 
         res.status(200).send({ message: "Pages published" });
         console.log(`stdout: ${stdout}`);
-        _generateEvent('done', {output:stdout})
+        _generateEvent('done', { output: stdout })
       });
     } catch (e) {
       console.error(`Error publishing pages: ${e}`);
@@ -313,4 +314,20 @@ export const PagesAPI = (app, context) => {
       res.status(500).send({ error: "Error2 publishing pages" });
     }
   }));
+
+  addCard({
+    group: 'pages',
+    tag: "table",
+    id: 'pages_table',
+    templateName: "Interactive pages table",
+    name: "pages_table",
+    defaults: {
+      name: "Pages Table",
+      icon: "panels-top-left",
+      description: "Interactive pages table",
+      type: 'value',
+      html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/pages?mode=embed'}), mode: 'slim'\n});\n",
+    },
+    emitEvent: true
+  })
 }
