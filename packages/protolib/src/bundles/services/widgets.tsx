@@ -195,6 +195,10 @@ const card = ({ content, style = '', padding = '10px' }) => {
     \`;
 };
 
+const iframe = ({ src }) => {
+    return \`<iframe style="width: 100%;height:100%;" src= "\${src}" />\`
+}
+
 const cardAction = ({ data }) => {
     const margin = 10;
     const allKeys = Object.keys(data.params || {});
