@@ -178,12 +178,20 @@ function jsonToDiv(json, indent, expandedDepth) {
     "</div>";
 }
 
-const card = ({ content, style = '', padding = '10px' }) => {
+const card = ({ content, style = '', padding = false, mode = 'normal' }) => {
+    let padd = padding
+    if (!padd) {
+        if (mode === 'normal') {
+            padd = '10px'; 
+        } else if (mode === 'slim') {
+            padd = '3px';
+        } 
+    }  
     return \`
         <div style="
             height: 100%;
             width: 100%;
-            padding: \${padding};
+            padding: \${padd};
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -198,6 +206,7 @@ const card = ({ content, style = '', padding = '10px' }) => {
 const iframe = ({ src }) => {
     return \`<iframe style="width: 100%;height:100%;" src= "\${src}" />\`
 }
+
 
 const cardAction = ({ data }) => {
     const margin = 10;
