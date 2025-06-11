@@ -45,7 +45,9 @@ export function findSpaceInRows(occupied, startRow, w, h) {
  */
 export function placeWidget(occupied, w, h) {
     let row = 0;
-    while (true) {
+    const maxRows = 1000; // 🔧 PATCH: límite de seguridad
+
+    while (row < maxRows) { // 🔧 PATCH: antes era while (true)
         // Aseguramos que existan suficientes filas en 'occupied' para verificar row..row+h-1
         while (row + h > occupied.length) {
             // Añadimos más filas al final
@@ -66,6 +68,8 @@ export function placeWidget(occupied, w, h) {
         // Si no encontramos hueco, incrementamos la fila y volvemos a probar
         row++;
     }
+
+    throw new Error(`No se pudo colocar el widget de tamaño w=${w}, h=${h} tras ${maxRows} filas.`); // 🔧 PATCH
 }
 
 /**
@@ -102,6 +106,12 @@ export function computeLayout(items, config, options:any={}) {
             w = normalW;
             h = normalH;
         }
+
+        if (w > totalCols) { // 🔧 PATCH: evita freeze si el widget no cabe
+            console.warn(`El widget '${widget.key}' con w=${w} no cabe en totalCols=${totalCols}. Se omite.`);
+            continue;
+        }
+
         // Obtenemos la posición donde se puede colocar
         const { x, y, w: finalW, h: finalH } = placeWidget(occupied, w, h);
         newlayout.push({
