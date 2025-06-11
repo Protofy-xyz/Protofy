@@ -30,7 +30,7 @@ export const GroupsAPI = (app, context) => {
             icon: "users",
             description: "Interactive groups table",
             type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"/workspace/groups?mode=embed\" />`, padding: '3px'\n});\n",
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/groups?mode=embed'}), mode: 'slim'\n});\n",
         },
         emitEvent: true
     })
