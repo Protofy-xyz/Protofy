@@ -6,6 +6,7 @@ import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
+import { addCard } from "@extensions/cards/context/addCard";
 
 const APIDirPath = "/packages/app/apis/"
 const DynamicAPIDirPath = "/data/automations/"
@@ -264,7 +265,7 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-export const APIsAPI = AutoAPI({
+const APIsAutoAPI = AutoAPI({
   modelName: 'apis',
   modelType: APIModel,
   prefix: '/api/core/v1/',
@@ -272,3 +273,23 @@ export const APIsAPI = AutoAPI({
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })
+
+export const APIsAPI = (app, context) => {
+    APIsAutoAPI(app, context)
+
+    addCard({
+        group: 'apis',
+        tag: "table",
+        id: 'apis_table',
+        templateName: "Interactive automations table",
+        name: "apis_table",
+        defaults: {
+            name: "Automations Table",
+            icon: "zap",
+            description: "Interactive automations table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/apis?mode=embed'}), mode: 'slim'\n});\n",
+        },
+        emitEvent: true
+    })
+}
