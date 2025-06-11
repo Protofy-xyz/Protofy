@@ -47,7 +47,7 @@ export const UsersAPI = (app, context) => {
             icon: "user-round",
             description: "Interactive users table",
             type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"/workspace/users?mode=embed\" />`, padding: '3px'\n});\n",
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/users?mode=embed'}), mode: 'slim'\n});\n",
         },
         emitEvent: true
     })
