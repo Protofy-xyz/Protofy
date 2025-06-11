@@ -202,7 +202,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
             {/* Rigth panel */}
             <Panel defaultSize={70} minSize={50}>
                 <PanelGroup direction="vertical">
-                    <Panel defaultSize={100} minSize={20} maxSize={100}>
+                    <Panel defaultSize={66} minSize={20} maxSize={100}>
                         <YStack
                             flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Rules
@@ -214,7 +214,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                         </YStack>
                     </Panel>
                     <CustomPanelResizeHandle direction="horizontal" />
-                    <Panel defaultSize={0} minSize={0} maxSize={80}>
+                    <Panel defaultSize={34} minSize={0} maxSize={80}>
                         <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Monaco
                                 path={'autopilot-rules.ts'}
