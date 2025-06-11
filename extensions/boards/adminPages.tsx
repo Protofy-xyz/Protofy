@@ -84,6 +84,8 @@ const ActionCard = ({ id, displayResponse, html, name, title, params, icon = und
 }
 
 const Board = ({ board, icons }) => {
+  const breakpointCancelRef = useRef(null) as any
+  const dedupRef = useRef() as any
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
   const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
@@ -165,10 +167,8 @@ const Board = ({ board, icons }) => {
 
   const layouts = {
     lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 4, doubleH: 12 }, { layout: board?.layouts?.lg }),
-    md: computeLayout(items, { totalCols: 12, normalW: 6, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.md }),
-    sm: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.sm }),
-    xs: computeLayout(items, { totalCols: 12, normalW: 12, normalH: 12, doubleW: 12, doubleH: 12 }, { layout: board?.layouts?.xs }),
-    xxs: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 4, doubleW: 4, doubleH: 8 }, { layout: board?.layouts?.xxs })
+    md: computeLayout(items, { totalCols: 6, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.md }),
+    sm: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 12, doubleW: 1, doubleH: 12 }, { layout: board?.layouts?.sm }),
   }
 
   boardRef.current.layouts = layouts
@@ -412,12 +412,26 @@ const Board = ({ board, icons }) => {
                 padding={10}
                 backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
-                  boardRef.current.layouts[breakpointRef.current] = layout
-                  API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                  if(breakpointCancelRef.current == breakpointRef.current) {
+                    console.log('Layout change cancelled for breakpoint: ', breakpointRef.current)
+                    breakpointCancelRef.current = null
+                    return
+                  }
+                  console.log('programming layout change: ', breakpointRef.current)
+                  clearInterval(dedupRef.current)
+                  //small dedup to avoid multiple saves in a short time
+                  dedupRef.current = setTimeout(() => {
+                    console.log('Layout changed: ', breakpointRef.current)
+                    boardRef.current.layouts[breakpointRef.current] = layout
+                    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                  }, 1000)
                 }}
                 onBreakpointChange={(bp) => {
+                  clearInterval(dedupRef.current)
                   console.log('Breakpoint changed to: ', bp)
                   breakpointRef.current = bp
+                  //after changing breakpoint a onLaoutChange is triggered but its not necessary to save the layout
+                  breakpointCancelRef.current = bp
                 }}
               />
           }
