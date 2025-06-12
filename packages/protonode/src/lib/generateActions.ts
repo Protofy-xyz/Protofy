@@ -174,7 +174,7 @@ export const AutoActions = ({
         tag: modelName,
         name: 'create',
         id: 'object_' + modelName + '_create',
-        templateName: 'Create' + modelName + ' in the storage',
+        templateName: 'Create ' + modelName + ' in the storage',
         defaults: {
             width: 4,
             height: 8,
