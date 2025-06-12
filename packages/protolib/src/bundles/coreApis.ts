@@ -1,4 +1,3 @@
-import { UsersAPI } from './users/usersAPI'
 import { GroupsAPI } from './groups/groupsAPI'
 import { ObjectsAPI } from './objects/objectsAPI'
 import { KeysAPI } from './keys/keysAPI'
@@ -22,7 +21,6 @@ import { SequencesAPI } from './sequences/sequencesAPI'
 import { DiscordAPI } from './discord/discordAPI'
 
 export const AdminAPIBundles = (app, context) => {
-  UsersAPI(app, context)
   GroupsAPI(app, context)
   ObjectsAPI(app, context)
   KeysAPI(app, context)

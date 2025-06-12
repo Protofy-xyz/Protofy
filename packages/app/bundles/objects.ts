@@ -3,6 +3,8 @@ import {PageModel} from '@extensions/pages/pagesSchemas'
 import { APIModel } from '@extensions/apis/APISchemas'
 import { BoardModel } from '@extensions/boards/boardsSchemas'
 import { WorkspaceModel } from '@extensions/workspaces/WorkspaceModel'
+import { UserModel } from '@extensions/users/usersSchemas'
+
 import LocalObjects from '../objects'
 
 export const Objects = {
@@ -11,5 +13,6 @@ export const Objects = {
     page: PageModel,
     api: APIModel,
     board: BoardModel,
-    workspace: WorkspaceModel
+    workspace: WorkspaceModel,
+    user: UserModel
 }

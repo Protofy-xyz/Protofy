@@ -1,5 +1,5 @@
-import { TotalItems } from '../../components/TotalItems';
-import { ListItems } from '../../components/ListItems';
+import { TotalItems } from 'protolib/components/TotalItems';
+import { ListItems } from 'protolib/components/ListItems';
 import { UserModel } from './usersSchemas';
 import { User2 } from 'lucide-react';
 

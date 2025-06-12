@@ -3704,6 +3704,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/users@workspace:extensions/users":
+  version: 0.0.0-use.local
+  resolution: "@extensions/users@workspace:extensions/users"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/vision@workspace:extensions/vision":
   version: 0.0.0-use.local
   resolution: "@extensions/vision@workspace:extensions/vision"

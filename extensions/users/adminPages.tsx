@@ -1,21 +1,21 @@
 import { UserModel } from '.'
 import { z } from 'protobase'
-import { usePrompt } from '../../context/PromptAtom';
-import { DataTable2 } from '../../components/DataTable2';
-import { Chip } from '../../components/Chip';
-import { DataView } from '../../components/DataView';
-import { AdminPage } from '../../components/AdminPage';
+import { usePrompt } from 'protolib/context/PromptAtom';
+import { DataTable2 } from 'protolib/components/DataTable2';
+import { Chip } from 'protolib/components/Chip';
+import { DataView } from 'protolib/components/DataView';
+import { AdminPage } from 'protolib/components/AdminPage';
 import moment from 'moment';
 import { Mail, Tag, Key, User, Users } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
-import { SelectList } from '../../components/SelectList'
+import { SelectList } from 'protolib/components/SelectList'
 import { useState } from 'react';
 import { getPendingResult } from 'protobase';
-import { usePendingEffect } from '../../lib/usePendingEffect';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 import { Switch, XStack, Text } from '@my/ui';
-import { Tinted } from '../../components/Tinted';
-import { SSR } from '../../lib/SSR'
-import { withSession } from '../../lib/Session'
+import { Tinted } from 'protolib/components/Tinted';
+import { SSR } from 'protolib/lib/SSR'
+import { withSession } from 'protolib/lib/Session'
 import {Button} from '@my/ui'
 import { useRouter } from 'solito/navigation';
 
