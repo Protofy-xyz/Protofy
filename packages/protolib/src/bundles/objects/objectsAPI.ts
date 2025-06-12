@@ -8,7 +8,6 @@ import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { APIModel } from '@extensions/apis/APISchemas'
 import { PageModel } from '@extensions/pages/pagesSchemas'
-import { addCard } from "@extensions/cards/context/addCard";
 
 const indexFile = "/packages/app/objects/index.ts"
 
@@ -337,19 +336,4 @@ const ObjectsAutoAPI = AutoAPI({
 
 export const ObjectsAPI = (app, context) => {
     ObjectsAutoAPI(app, context)
-    addCard({
-        group: 'objects',
-        tag: "table",
-        id: 'objects_table',
-        templateName: "Interactive objects table",
-        name: "objects_table",
-        defaults: {
-            name: "Objects Table",
-            icon: "boxes",
-            description: "Interactive objects table",
-            type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/objects?mode=embed'}), mode: 'slim'\n});\n",
-        },
-        emitEvent: true
-    })
 }
