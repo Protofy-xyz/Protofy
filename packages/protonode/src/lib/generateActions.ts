@@ -89,7 +89,7 @@ export const AutoActions = ({
         name: 'read', //get last path element
         url: actionUrlPrefix + '/read',
         tag: modelName,
-        description: `Read a ${modelName} given an id. Returns an object with the data of the ${modelName} if it exists, false otherwise.`,
+        description: `Read ${modelName} given an id. Returns an object with the data of the ${modelName} if it exists, false otherwise.`,
         params: { id: `id of the ${modelName} to read` },
         token: getServiceToken(),
         emitEvent: true
@@ -100,7 +100,7 @@ export const AutoActions = ({
         tag: modelName,
         name: 'read',
         id: 'object_' + modelName + '_read',
-        templateName: 'Read a ' + modelName + ' from the storage',
+        templateName: 'Read ' + modelName + ' from the storage',
         defaults: {
             width: 4,
             height: 8,
@@ -108,7 +108,7 @@ export const AutoActions = ({
             displayResponse: true,
             name: `read ${modelName}`,
             type: 'action',
-            description: `Reads a ${modelName} given an id. Returns the content of the object if it exists, false otherwise.`,
+            description: `Reads${modelName} given an id. Returns the content of the object if it exists, false otherwise.`,
             params: {
                 id: `id of the ${modelName} to read`
             },
@@ -162,7 +162,7 @@ export const AutoActions = ({
         name: 'create', //get last path element
         url: actionUrlPrefix + '/create',
         tag: modelName,
-        description: `Creates a new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
+        description: `Creates new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
         params: params,
         token: getServiceToken(),
         emitEvent: true,
@@ -174,7 +174,7 @@ export const AutoActions = ({
         tag: modelName,
         name: 'create',
         id: 'object_' + modelName + '_create',
-        templateName: 'Create a ' + modelName + ' in the storage',
+        templateName: 'Create' + modelName + ' in the storage',
         defaults: {
             width: 4,
             height: 8,
@@ -213,7 +213,7 @@ export const AutoActions = ({
         name: 'delete', //get last path element
         url: actionUrlPrefix + '/delete',
         tag: modelName,
-        description: `Deletes a ${modelName} given an id. Returns true if it was deleted, false otherwise.`,
+        description: `Deletes ${modelName} given an id. Returns true if it was deleted, false otherwise.`,
         params: { id: "id of the " + modelName + " to delete" },
         token: getServiceToken(),
         emitEvent: true
@@ -224,13 +224,13 @@ export const AutoActions = ({
         tag: modelName,
         name: 'delete',
         id: 'object_' + modelName + '_delete',
-        templateName: 'Delete a ' + modelName + ' from the storage',
+        templateName: 'Delete ' + modelName + ' from the storage',
         defaults: {
             icon: 'trash',
             displayResponse: true,
             name: `delete ${modelName}`,
             type: 'action',
-            description: `Deletes a ${modelName} by id. Returns true if it was deleted, false otherwise.`,
+            description: `Deletes ${modelName} by id. Returns true if it was deleted, false otherwise.`,
             params: {
                 id: 'id of the ' + modelName + ' to delete'
             },
@@ -275,7 +275,7 @@ export const AutoActions = ({
         name: 'update', //get last path element
         url: actionUrlPrefix + '/update',
         tag: modelName,
-        description: `Updates a ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
+        description: `Updates ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
         params: updateParams,
         token: getServiceToken(),
         emitEvent: true
@@ -286,7 +286,7 @@ export const AutoActions = ({
         tag: modelName,
         name: 'update',
         id: 'object_' + modelName + '_update',
-        templateName: 'Updates a ' + modelName + ' in the storage',
+        templateName: 'Updates ' + modelName + ' in the storage',
         defaults: {
             width: 4,
             height: 8,
