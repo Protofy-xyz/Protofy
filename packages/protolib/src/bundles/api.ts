@@ -3,6 +3,7 @@ import { PhpAPI } from './php/phpApi'
 import { ObjectUserAPI } from './objects/objectsUserAPI'
 import { UsersActions } from './users/usersActions'
 import { DevicesActions } from './devices/devices/devicesActions'
+import { GroupsActions } from './groups/groupsActions'
 
 export const APIBundles = (app, context) => {
     StateMachinesAPI(app, context)
@@ -10,4 +11,5 @@ export const APIBundles = (app, context) => {
     ObjectUserAPI(app, context)
     UsersActions(app, context)
     DevicesActions(app, context)
+    GroupsActions(app, context)
 }
