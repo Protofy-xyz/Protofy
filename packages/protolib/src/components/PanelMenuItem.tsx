@@ -15,14 +15,14 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
   return (
     <XStack
       ref={ref}
-      paddingHorizontal={"$8"}
+      paddingHorizontal={"$4"}
       paddingVertical={7}
       hoverStyle={{
-        backgroundColor: "$gray3"
+        backgroundColor: resolvedTheme == 'dark'? '$color1': "$color3"
       }}
       ai="center"
-      btrr={"$10"}
-      bbrr={"$10"}
+      br="$4"
+      h={40}
       f={1}
       onPress={onPress}
       cursor='pointer'
@@ -31,10 +31,10 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       } : {})}
       {...props}
     >
-      {icon ? <Stack marginRight={text?"$4":"$0"}>
-        {icon}
+      {icon ? <Stack marginRight={text?"$3":"$0"}>
+        {React.cloneElement(icon, { ...icon.props, color: selected ? '$color8' : icon.props?.color })}
       </Stack> : null}
-      {text ? <SizableText selectable={false}  pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected?"600":"500"}>
+      {text ? <SizableText selectable={false}  pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected?"400":"400"}>
         {text}
       </SizableText> : null}
       {children}

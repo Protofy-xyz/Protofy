@@ -33,7 +33,8 @@ import {
     ServerCog,
     ClipboardList,
     AlertTriangle,
-    Layers
+    Layers,
+    Minus
 } from '@tamagui/lucide-icons'
 import { Accordion, Input, Paragraph, SizableText, Square, ScrollView } from '@my/ui'
 import { usePathname, useSearchParams } from 'solito/navigation';
@@ -45,10 +46,11 @@ import { Tinted } from './Tinted';
 import { PanelMenuItem } from './PanelMenuItem';
 import { SelectList } from './SelectList';
 import { useQueryState } from '../next'
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const opacity = 0.8
 const strokeWidth = 2
-const color = '$color8'
+const color = '$gray9'
 const size = 20
 
 const appId = process.env.NEXT_PUBLIC_APP_ID;
@@ -91,12 +93,19 @@ const iconTable = {
 
 const replaceFirstCharIfSlash = (str) => (str.startsWith('/') ? str.replace(/^./, '') : str);
 const healthCheckLinkRoute = (str) => {
-    if(appId == 'adminpanel' && str.startsWith('/workspace/')) {
+    if (appId == 'adminpanel' && str.startsWith('/workspace/')) {
         //remove /workspace/ from the start of the string
         str = str.replace('/workspace/', '/')
     }
     return str.startsWith('/') ? str : ("/" + str)
 };
+
+const getSubtabHref = (subtab) => subtab.href ?? (subtab.type + subtab.path).replace(/\/+/g, '/')
+const isSubtabSelected = (href, pathname) => href.includes(pathname) && pathname != '/'
+const isTabSelected = (subtabs) => subtabs.some((subtab) => {
+    const href = getSubtabHref(subtab)
+    return isSubtabSelected(href, usePathname())
+})
 
 const getIcon = (Icon) => {
     if (typeof Icon === "string") {
@@ -155,21 +164,26 @@ const CreateDialog = ({ subtab }) => {
     </XStack>
 }
 
-const Subtabs = ({ tabs, subtabs }: any) => {
+const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
     const pathname = usePathname();
 
     return (
         <>
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
-                let href = subtab.href ?? (subtab.type + subtab.path).replace(/\/+/g, '/')
+                let href = getSubtabHref(subtab)
                 const originalHref = href
 
                 const content = <Tinted>
                     <PanelMenuItem
-                        selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
+                        selected={isSubtabSelected(href, pathname)}
+                        // selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
                         icon={getIcon(subtab.icon)}
-                        text={subtab.name}
+                        text={!collapsed ? subtab.name : ""}
+                        {...collapsed ? {
+                            paddingHorizontal: "$2",
+                            jc: "center"
+                        } : {}}
                     />
                 </Tinted>
                 if (subtab.external || (!subtab.href?.startsWith('/workspace/') && appId == 'adminpanel')) {
@@ -185,7 +199,8 @@ const Subtabs = ({ tabs, subtabs }: any) => {
         </>)
 }
 
-const Tabs = ({ tabs, environ }: any) => {
+const Tabs = ({ tabs, environ, collapsed }: any) => {
+    const { resolvedTheme } = useThemeSetting()
     return (tabs ?
         <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
@@ -195,7 +210,7 @@ const Tabs = ({ tabs, environ }: any) => {
                 const tabContent = tabs[tab].filter(t => !t.visibility || t.visibility.includes(environ))
                 if (!tabContent.length) return <></>
                 return (
-                    <Accordion defaultValue={["a" + index]} br={"$6"} overflow="hidden" type="multiple" key={index}>
+                    <Accordion value={collapsed ? ("a" + index) : undefined} collapsible={!collapsed} defaultValue={"a" + index} br={"$6"} overflow="hidden" type="single" key={index}>
                         <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
                                 p={"$2"}
@@ -204,18 +219,22 @@ const Tabs = ({ tabs, environ }: any) => {
                                 hoverStyle={{ backgroundColor: '$backgroundTransparent' }}
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
-                                    <XStack f={1} jc="center">
+                                    //@ts-ignore
+                                    <XStack f={1} h="40px" jc="center" p={"$2"} animateOnly={['backgroundColor']} animation="bouncy" br="$4" backgroundColor={isTabSelected(tabContent) && !open ? (resolvedTheme == "dark" ? '$color2' : '$color4') : '$backgroundTransparent'}>
+                                        {!collapsed && <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>}
                                         {/* @ts-ignore */}
-                                        <Square animation="quick" rotate={open ? '0deg' : '-90deg'}>
-                                            <ChevronDown size={20} />
+                                        <Square animation="bouncy" rotate={open ? '180deg' : '0deg'}>
+                                            {
+                                                collapsed 
+                                                    ? <Minus color="$gray6" size={20}/>
+                                                    : <ChevronDown color={isTabSelected(tabContent) && !open ? '$color8' : '$color'} size={20} />
+                                            }
                                         </Square>
-                                        <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>
-
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content position="relative" left={-10} pl="$0" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
-                                <Subtabs tabs={tabs} subtabs={tabContent} />
+                            <Accordion.Content position="relative" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
+                                <Subtabs collapsed={collapsed} tabs={tabs} subtabs={tabContent} />
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>
@@ -225,7 +244,7 @@ const Tabs = ({ tabs, environ }: any) => {
     );
 };
 const disableEnvSelector = true
-export const PanelMenu = ({ workspace }) => {
+export const PanelMenu = ({ workspace, collapsed }) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const [environ, setEnviron] = useState()
@@ -278,8 +297,9 @@ export const PanelMenu = ({ workspace }) => {
             </YStack>
             {/* <Separator f={1} borderBottomWidth={4} /> */}
         </Tinted>
-
-        <ScrollView pl={"$2"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} /></ScrollView>
+        <Tinted>
+            <ScrollView showsVerticalScrollIndicator={false} pl={"$0"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} collapsed={collapsed}/></ScrollView>
+        </Tinted>
 
     </YStack>)
 }
