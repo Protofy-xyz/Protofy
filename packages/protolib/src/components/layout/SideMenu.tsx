@@ -9,7 +9,7 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
     const [collapsed, setCollapsed] = useState(false)
     const width = collapsed ? 80 : 260
 
-    return <YStack bw={0} bc={sideBarColor} {...props}>
+    return <YStack bw={0} bc={sideBarColor} {...props} onDoubleClick={() => setCollapsed(!collapsed)}>
         <YStack
             animateOnly={["width"]}
             // @ts-ignore
