@@ -13,19 +13,22 @@ export const AutoActions = ({
     const actionUrlPrefix = `${prefix}actions/${modelName}`;
 
     //exists
-    app.get(actionUrlPrefix + '/exists', async (req, res) => {
+    app.get(actionUrlPrefix + '/exists', handler(async (req, res, session) => {
         const params = req.query;
         const id = params.id;
         try {
-            const result = await API.get(`${urlPrefix}/${id}`);
+            const result = await API.get(`${urlPrefix}/${id}?token=${session.token}`);
             if (result.isLoaded) {
-                return res.json(true);
+                res.json(true);
+                return
             }
-            return res.json(false);
+            res.json(false);
+            return
         } catch (e) {
-            return res.status(500).json(false);
+            res.status(500).json(false);
+            return
         }
-    });
+    }))
 
     await context.actions.add({
         group: 'objects',
@@ -62,20 +65,23 @@ export const AutoActions = ({
     })
 
     //read
-    app.get(actionUrlPrefix + '/read', async (req, res) => {
+    app.get(actionUrlPrefix + '/read', handler(async (req, res, session) => {
         const params = req.query;
         const id = params.id;
         try {
-            const result = await API.get(`${urlPrefix}/${id}`);
+            const result = await API.get(`${urlPrefix}/${id}?token=${session.token}`);
             if (result.isLoaded) {
                 fixValues(result.data, modelType);
-                return res.json(result.data);
+                res.json(result.data);
+                return
             }
-            return res.json(false);
+            res.json(false);
+            return
         } catch (e) {
-            return res.status(500).json(false);
+            res.status(500).json(false);
+            return
         }
-    });
+    }))
 
 
     await context.actions.add({
@@ -125,21 +131,24 @@ export const AutoActions = ({
         })
     }
 
-    app.post(actionUrlPrefix + '/create', async (req, res) => {
+    app.post(actionUrlPrefix + '/create', handler(async (req, res, session) => {
         const params = req.body;
         console.log(JSON.stringify(params));
         fixValues(params, modelType);
         try {
-            const result = await API.post(`${urlPrefix}`, params);
+            const result = await API.post(`${urlPrefix}?token=${session.token}`, params);
             console.log(result)
             if (result.isLoaded) {
-                return res.json(result.data);
+                res.json(result.data);
+                return
             }
-            return res.json(false);
+            res.json(false);
+            return
         } catch (e) {
-            return res.status(500).json(false);
+            res.status(500).json(false);
+            return
         }
-    });
+    }))
 
     const def = modelType.getObjectFieldsDefinition()
     const params = Object.keys(def).map((key) => {
@@ -182,19 +191,22 @@ export const AutoActions = ({
     })
 
     //delete
-    app.get(actionUrlPrefix + '/delete', async (req, res) => {
+    app.get(actionUrlPrefix + '/delete', handler(async (req, res, session) => {
         const params = req.query;
         const id = params.id;
         try {
-            const result = await API.get(`${urlPrefix}/${id}/delete`);
+            const result = await API.get(`${urlPrefix}/${id}/delete?token=${session.token}`);
             if (result.isLoaded) {
-                return res.json(true);
+                res.json(true);
+                return
             }
-            return res.json(false);
+            res.json(false);
+            return
         } catch (e) {
-            return res.status(500).json(false);
+            res.status(500).json(false);
+            return
         }
-    });
+    }))
 
     await context.actions.add({
         group: 'objects',
@@ -229,7 +241,7 @@ export const AutoActions = ({
     })
 
     //update
-    app.get(actionUrlPrefix + '/update', async (req, res) => {
+    app.get(actionUrlPrefix + '/update', handler(async (req, res, session) => {
         const params = req.query;
         fixValues(params, modelType);
         const id = params.id;
@@ -240,15 +252,17 @@ export const AutoActions = ({
             if (result.isLoaded) {
                 const data = result.data;
                 data[field] = value;
-                const resultUpdate = await API.post(`${urlPrefix}/${id}`, data);
+                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${session.token}`, data);
                 if (resultUpdate.isLoaded) {
-                    return res.json(resultUpdate.data);
+                    res.json(resultUpdate.data);
+                    return
                 }
             }
         } catch (e) {
-            return res.status(500).json(false);
+            res.status(500).json(false);
+            return
         }
-    });
+    }))
 
     const updateParams = {
         id: `id of the ${modelName} to update`,
