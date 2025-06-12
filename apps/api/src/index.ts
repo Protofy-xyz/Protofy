@@ -72,6 +72,7 @@ if (process.env.NODE_ENV != 'production') {
     'src/**',
     '../../extensions/**',
     '../../data/automations/**',
+    '../../data/objects/**',
     '../../packages/app/bundles/**',
     '../../packages/app/apis/**',
     '../../packages/app/objects/**',
