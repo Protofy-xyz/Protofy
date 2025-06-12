@@ -6,7 +6,6 @@ import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
 import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
-import { addCard } from "@extensions/cards/context/addCard";
 
 const APIDirPath = "/packages/app/apis/"
 const DynamicAPIDirPath = "/data/automations/"
@@ -260,20 +259,4 @@ const APIsAutoAPI = AutoAPI({
 
 export const APIsAPI = (app, context) => {
     APIsAutoAPI(app, context)
-
-    addCard({
-        group: 'apis',
-        tag: "table",
-        id: 'apis_table',
-        templateName: "Interactive automations table",
-        name: "apis_table",
-        defaults: {
-            name: "Automations Table",
-            icon: "zap",
-            description: "Interactive automations table",
-            type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/apis?mode=embed'}), mode: 'slim'\n});\n",
-        },
-        emitEvent: true
-    })
 }

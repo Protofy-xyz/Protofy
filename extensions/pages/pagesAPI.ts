@@ -8,7 +8,6 @@ import { getServiceToken, handler } from 'protonode'
 import { API, generateEvent } from 'protobase'
 import { ObjectModel } from "protolib/bundles/objects/objectsSchemas";
 import { v4 as uuidv4 } from 'uuid';
-import { addCard } from "@extensions/cards/context/addCard";
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")
 const nextPagesDir = (root) => fspath.join(root, "/apps/next/pages/")
@@ -314,20 +313,4 @@ export const PagesAPI = (app, context) => {
       res.status(500).send({ error: "Error2 publishing pages" });
     }
   }));
-
-  addCard({
-    group: 'pages',
-    tag: "table",
-    id: 'pages_table',
-    templateName: "Interactive pages table",
-    name: "pages_table",
-    defaults: {
-      name: "Pages Table",
-      icon: "panels-top-left",
-      description: "Interactive pages table",
-      type: 'value',
-      html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/pages?mode=embed'}), mode: 'slim'\n});\n",
-    },
-    emitEvent: true
-  })
 }
