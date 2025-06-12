@@ -1,7 +1,6 @@
 import { AutoAPI, getDBOptions, getServiceToken } from 'protonode'
 import { connectDB, getDB } from '@my/config/dist/storageProviders';
 import { API, EventModel } from 'protobase'
-import { addCard } from "@extensions/cards/context/addCard";
 
 export const EventsAPI = async (app, context) => {
     const EventAPI = AutoAPI({
@@ -30,20 +29,4 @@ export const EventsAPI = async (app, context) => {
         }
     })
     EventAPI(app, context)
-
-    addCard({
-        group: 'events',
-        tag: "table",
-        id: 'events_table',
-        templateName: "Interactive events table",
-        name: "events_table",
-        defaults: {
-            name: "Events Table",
-            icon: "clipboard-list",
-            description: "Interactive events table",
-            type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'/workspace/events?mode=embed'}), mode: 'slim'\n});\n",
-        },
-        emitEvent: true
-    })
 }
