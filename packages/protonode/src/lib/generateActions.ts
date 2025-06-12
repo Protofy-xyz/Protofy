@@ -1,5 +1,5 @@
 import { API } from "protobase";
-import {handler} from "protonode";
+import {handler} from "../lib/handler";
 import { getServiceToken } from "./serviceToken";
 
 export const AutoActions = ({
@@ -245,7 +245,7 @@ export const AutoActions = ({
         const params = req.query;
         fixValues(params, modelType);
         const id = params.id;
-        const field = params.field;
+        const field: any = params.field;
         const value = params.value;
         try {
             const result = await API.get(`${urlPrefix}/${id}`);

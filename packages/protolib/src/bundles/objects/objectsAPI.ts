@@ -1,5 +1,5 @@
 import { ObjectModel } from ".";
-import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports } from 'protonode'
+import { getImport, getSourceFile, extractChainCalls, addImportToSourceFile, ImportType, addObjectLiteralProperty, getDefinition, AutoAPI, getRoot, removeFileWithImports, addFeature } from 'protonode'
 import { promises as fs } from 'fs';
 import syncFs from 'fs';
 import * as fspath from 'path';
@@ -19,7 +19,7 @@ const getSchemas = async (req, sourceFile?) => {
   );
 
   let schemas = []
-
+  //no dynamic objects
   if (node) {
     if (node instanceof ObjectLiteralExpression) {
       const schemaPromises = node.getProperties().map(prop => {
@@ -38,48 +38,92 @@ const getSchemas = async (req, sourceFile?) => {
     }
   }
 
-  const dataSchemas = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.json'))
-  dataSchemas.forEach(file => {
+  //dynamic ts objects
+  const tsFiles = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.ts'))
+  tsFiles.forEach(async (file) => {
     const filePath = fspath.join(getRoot(req), 'data/objects', file)
-    const fileContent = syncFs.readFileSync(filePath, 'utf8')
-    let data = {} as any
-    try {
-      data = JSON.parse(fileContent)
-    } catch (e) {
-      console.error("Ignoring schema in file: ", file, "because of an error: ", e)
-      console.error("File content producing the error: ", fileContent)
-    }
-    if (data['id'] && data['name']) {
-      const { keys, ...rest } = data
-      schemas.push(rest)
+    const idSchema = file.replace('.ts', 'Model')
+    const schemaName = file.replace('.ts', '')
+
+    const objectData = await getSchemaDynamicTs(filePath, idSchema, schemaName)
+    if (objectData) {
+      schemas.push(objectData)
+    } else {
+      console.error("Ignoring dynamic schema in file: ", file, "because it could not be parsed")
     }
   })
   return schemas;
 }
 
+const getSchemaDynamicTs = async (filePath, idSchema, schemaName) => {
+  let sourceFile
+  try {
+    sourceFile = getSourceFile(filePath)
+  } catch (e) {
+    return
+  }
+  const node = getDefinition(sourceFile, '"schema"')
+  let keys = {}
+  if (node) {
+    if (node instanceof ObjectLiteralExpression) {
+      node.getProperties().forEach(prop => {
+        if (prop instanceof PropertyAssignment) {
+          // obj[prop.getName()] = prop.getInitializer().getText();
+          const chain = extractChainCalls(prop.getInitializer())
+          if (chain.length) {
+            const typ = chain.shift()
+            keys[prop.getName()] = {
+              type: typ.name,
+              params: typ.params,
+              modifiers: chain
+            }
+          }
+        }
+      });
+    }
+  }
+  const featuresNode = getDefinition(sourceFile, '"features"')
+  let features = {}
+  if (featuresNode instanceof ObjectLiteralExpression) {
+    try {
+      features = JSON.parse(featuresNode.getText())
+    } catch (e) {
+      console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
+      console.error("Features text producing the error: ", featuresNode.getText())
+    }
+  }
+
+  const apiOptionsNode = getDefinition(sourceFile, '"api"')
+  let options = {
+    name: idSchema,
+    prefix: '/api/v1/'
+  }
+
+  if (apiOptionsNode instanceof ObjectLiteralExpression) {
+    try {
+      options = JSON.parse(apiOptionsNode.getText().replaceAll(/'/g, '"'))
+    } catch (e) {
+      console.error("Ignoring api options in object: ", idSchema, "because of an error: ", e)
+      console.error("Api options text producing the error: ", apiOptionsNode.getText())
+    }
+  }
+  return { name: schemaName, features, id: idSchema, keys, apiOptions: options, dynamic: true }
+}
+
+
 const getSchema = async (idSchema, schemas, req, name?) => {
   //list all objects in data/objects folder and check if any has a name matching the idSchema
   //if so, return that object
-  const files = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.json'))
-  for(const file of files) {
-    const filePath = fspath.join(getRoot(req), 'data/objects', file)
-    const fileContent = syncFs.readFileSync(filePath, 'utf8')
-    let data = {} as any
-    try {
-      data = JSON.parse(fileContent)
-    } catch (e) {
-      console.error("Ignoring schema in file: ", file, "because of an error: ", e)
-      console.error("File content producing the error: ", fileContent)
-    }
-    if (data['name'] == idSchema || data['id'] == idSchema) {
-      return data
-    }
+  // dynamic ts objects
+  const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
+  const tsFile = fspath.join(getRoot(req), 'data/objects', schemaName + '.ts')
+  const tsData = await getSchemaDynamicTs(tsFile, idSchema, schemaName)
+  if (tsData) {
+    return tsData
   }
 
   let SchemaFile = fspath.join(getRoot(req), indexFile)
   let sourceFile = getSourceFile(SchemaFile)
-
-  const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
 
   sourceFile = getSourceFile(fspath.join("../../packages/app/objects/", getImport(sourceFile, idSchema)) + ".ts")
   const node = getDefinition(sourceFile, '"schema"')
@@ -143,6 +187,8 @@ const setSchema = (path, content, value, req) => {
   secondArgument.replaceWithText(content);
   sourceFile.saveSync();
 
+  if (value.dynamic) return // skip index
+
   //link in index.ts
   sourceFile = getSourceFile(fspath.join(getRoot(req), indexFile))
   addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
@@ -166,8 +212,8 @@ const getDB = (path, req, session) => {
 
     async del(key, value) {
       value = JSON.parse(value)
-      if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value.id + '.json'))) {
-        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value.id + '.json'))
+      if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))) {
+        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))
       } else {
         removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
       }
@@ -180,7 +226,7 @@ const getDB = (path, req, session) => {
         name: value.name.replace(/\s/g, ""),
         id: value.id.replace(/\s/g, "")
       }
-      if(value.dynamic) {
+      if (value.dynamic) {
         value.initialData = {}
         value.apiOptions = {
           name: value.name,
@@ -188,19 +234,21 @@ const getDB = (path, req, session) => {
         }
         value.features = {
           AutoAPI: value.api ? value.api : false,
-          adminPage: '/objects/view?object='+value.name
+          adminPage: '/objects/view?object=' + value.name + "Model"
         }
-        delete value.api
+        // delete value.api
         delete value.adminPage
 
         //its a dynamic object, so we need to create a file in data/objects folder
-        const filePath = fspath.join(getRoot(req), 'data/objects', value.id + '.json')
-        syncFs.writeFileSync(filePath, JSON.stringify(value, null, 2))
-        await API.get('/api/v1/objects/reload?token=' + getServiceToken())
-        return
+        // const filePath = fspath.join(getRoot(req), 'data/objects', value.id + '.json')
+        // syncFs.writeFileSync(filePath, JSON.stringify(value, null, 2))
+        // await API.get('/api/v1/objects/reload?token=' + getServiceToken())
+        // return
       }
 
-      const filePath = getRoot(req) + 'packages/app/objects/' + fspath.basename(value.name) + '.ts'
+      // if the object is dynamic, we need to create a file in data/objects folder
+      const relPath = value.dynamic ? "/data/objects/" : "/packages/app/objects/"
+      const filePath = getRoot(req) + relPath + fspath.basename(value.name) + '.ts'
       let exists
       try {
         await fs.access(filePath, fs.constants.F_OK)
@@ -216,26 +264,38 @@ const getDB = (path, req, session) => {
           name: value.name + '.ts',
           data: {
             options: { template: '/packages/protolib/src/bundles/objects/templateSchema.tpl', variables: { lowername: value.name.toLowerCase(), name: value.name.charAt(0).toUpperCase() + value.name.slice(1) } },
-            path: '/packages/app/objects'
+            path: relPath
           }
         })
 
         if (result.isError) {
           throw result.error
         }
+        
       }
-
+      
       const result = ObjectModel.load(value).getSourceCode()
-
+  
       await setSchema(filePath, result, value, req)
+     
+      if (value.dynamic) {
+        let ObjectSourceFile = getSourceFile(filePath)
+        if (value.features.AutoAPI) await addFeature(ObjectSourceFile, '"AutoAPI"', `"${value.features.AutoAPI}"`)
+        if (value.features.adminPage) await addFeature(ObjectSourceFile, '"adminPage"', `"${value.features.adminPage}"`)
+        
+        await API.get('/api/v1/objects/reload?token=' + getServiceToken())
+      }
+ 
       //if api is selected, create an autoapi for the object
-      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : value.databaseType === "LevelDB" ? "automatic-crud" : "automatic-crud-storage"
+      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "LevelDB" || value.dynamic) ? "automatic-crud" : "automatic-crud-storage"
       if (value.api && session) {
         const objectApi = APIModel.load({
           name: value.name,
           object: value.name,
           template: templateName,
           param: value.param,
+          dynamic: value.dynamic,
+          modelName: value.id
         })
         await API.post("/api/core/v1/apis?token=" + session.token, objectApi.create().getData())
         if (value.adminPage) {

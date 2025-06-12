@@ -189,7 +189,7 @@ const getDB = (path, req, session) => {
       if(value.dynamic) {
         if(!fsSync.existsSync(getRoot(req) + DynamicAPIDirPath)) {
           fsSync.mkdirSync(getRoot(req) + DynamicAPIDirPath, { recursive: true });
-        }
+        } 
         filePath = getRoot(req) + DynamicAPIDirPath + fspath.basename(value.name)
       } else {
         filePath = getRoot(req) + 'packages/app/apis/' + fspath.basename(value.name)
@@ -201,11 +201,6 @@ const getDB = (path, req, session) => {
         return
       }
 
-      if (template.startsWith("automatic-crud")) {
-        const objectPath = fspath.join(getRoot(), ObjectModel.getDefaultSchemaFilePath(value.object))
-        ObjectSourceFile = getSourceFile(objectPath)
-        exists = hasFeature(ObjectSourceFile, '"AutoAPI"')
-      }
 
       if (template == "automatic-crud-google-sheet") {
         const regex = /\/d\/([a-zA-Z0-9-_]+)/;
@@ -227,9 +222,11 @@ const getDB = (path, req, session) => {
               codeNameLowerCase: codeNameLowerCase,
               object: value.object,
               param: value.param,
+              useDirectImport: value.dynamic,
+              modelName: value.modelName
             }
           },
-          path: value.dynamic ? DynamicAPIDirPath : APIDirPath
+          path: DynamicAPIDirPath//value.dynamic ? DynamicAPIDirPath : APIDirPath
         }
       })
 
@@ -241,19 +238,6 @@ const getDB = (path, req, session) => {
       if (value.object && template.startsWith("automatic-crud")) {
         console.log('Adding feature AutoAPI to object: ', value.object)
         await addFeature(ObjectSourceFile, '"AutoAPI"', "true")
-      }
-
-      //link in index.ts
-      if (extension == '.ts' && !value.dynamic) {
-        const sourceFile = getSourceFile(indexFile(getRoot(req)))
-        addImportToSourceFile(sourceFile, codeName + 'Api', ImportType.DEFAULT, './' + codeName)
-
-        const arg = getDefinition(sourceFile, '"apis"')
-        if (!arg) {
-          throw "No link definition schema marker found for file: " + path
-        }
-        addObjectLiteralProperty(arg, codeName, codeName + 'Api')
-        sourceFile.saveSync();
       }
     },
 
