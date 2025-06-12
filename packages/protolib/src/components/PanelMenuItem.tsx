@@ -34,7 +34,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, ic
       {icon ? <Stack marginRight={text?"$3":"$0"}>
         {React.cloneElement(icon, { ...icon.props, color: selected ? '$color8' : icon.props?.color })}
       </Stack> : null}
-      {text ? <SizableText selectable={false}  pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected?"400":"400"}>
+      {text ? <SizableText numberOfLines={1} ellipsizeMode="tail" selectable={false}  pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected?"400":"400"}>
         {text}
       </SizableText> : null}
       {children}

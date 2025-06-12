@@ -227,7 +227,7 @@ const Tabs = ({ tabs, environ, collapsed }: any) => {
                                             {
                                                 collapsed 
                                                     ? <Minus color="$gray6" size={20}/>
-                                                    : <ChevronDown color={isTabSelected(tabContent) && !open ? '$color8' : '$color'} size={20} />
+                                                    : <ChevronDown color={isTabSelected(tabContent) && !open ? '$color8' : '$gray9'} size={20} />
                                             }
                                         </Square>
                                     </XStack>
