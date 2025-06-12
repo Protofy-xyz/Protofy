@@ -5,24 +5,27 @@ import { API, Protofy, getLogger } from "protobase";
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";
+{{#if useDirectImport}}
+import { {{modelName}} } from '../objects/{{object}}'
+{{/if}}
 
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
 Protofy("type", "AutoAPI")
 Protofy("object", "{{object}}")
-const {name, prefix} = Objects.{{object}}.getApiOptions()
+const {name, prefix} = {{#if useDirectImport}}{{modelName}}{{else}}Objects.{{object}}{{/if}}.getApiOptions()
 
 const {{codeName}}API = AutoAPI({
     modelName: name,
-    modelType: Objects.{{object}},
+    modelType: {{#if useDirectImport}}{{modelName}}{{else}}Objects.{{object}}{{/if}},
     initialData: {},
     prefix: prefix
 })
 
 const {{codeName}}Actions = AutoActions({
     modelName: name,
-    modelType: Objects.{{object}},
+    modelType: {{#if useDirectImport}}{{modelName}}{{else}}Objects.{{object}}{{/if}},
     prefix: prefix
 })
 
