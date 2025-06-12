@@ -1,6 +1,5 @@
 import { UserModel } from "./";
 import { AutoAPI, hash, AutoActions} from 'protonode'
-import { addCard } from "@extensions/cards/context/addCard";
 
 const prefix = '/api/core/v1/'
 

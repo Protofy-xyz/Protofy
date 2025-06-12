@@ -1,6 +1,5 @@
 import { GroupModel } from "./";
 import { AutoAPI } from 'protonode'
-import { addCard } from "@extensions/cards/context/addCard";
 
 const initialData = {
     admin: {"name": "admin", "workspaces": ["admin", "editor"], "admin": true},
