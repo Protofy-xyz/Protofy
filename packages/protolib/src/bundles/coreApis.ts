@@ -18,7 +18,6 @@ import { FlowAPI } from './flow/flowAPI';
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
-import { DiscordAPI } from './discord/discordAPI'
 
 export const AdminAPIBundles = (app, context) => {
   GroupsAPI(app, context)
@@ -41,5 +40,4 @@ export const AdminAPIBundles = (app, context) => {
   MobileAPI(app, context)
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
-  DiscordAPI(app, context)
 }

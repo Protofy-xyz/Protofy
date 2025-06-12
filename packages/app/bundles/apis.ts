@@ -5,6 +5,7 @@ import { ProtoMemDBAPI } from '@extensions/protomemdb/protomemdbAPI'
 import {EventsActions} from '@extensions/events/eventsActions'
 import { AutomationsActions } from '@extensions/apis/automationsActions'
 import { PagesActions } from '@extensions/pages/pagesActions'
+import { DiscordAPI } from '@extensions/discord/discordAPI'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -14,4 +15,5 @@ export default (app, context) => {
     EventsActions(app, context)
     AutomationsActions(app, context)
     PagesActions(app, context)
+    DiscordAPI(app, context)
 }

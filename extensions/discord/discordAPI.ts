@@ -11,7 +11,7 @@ const registerActions = async (context) => {
     addAction({
         group: 'discord',
         name: 'message',
-        url: `/api/core/v1/discord/send/message`,
+        url: `/api/v1/discord/send/message`,
         tag: "send",
         description: "send a discord message to a phone number",
         params: { channelId: "Id of the discord channel. Example: 1265288881511596073", message: "message value to send" },
@@ -110,7 +110,7 @@ const registerCards = async (context) => {
             icon: "discord",
             color: "#5865F2",
             description: "send a discord message to a channel",
-            rulesCode: `return execute_action("/api/core/v1/discord/send/message", { channelId: userParams.channelId, message: userParams.message, channelName: userParams.channelName });`,
+            rulesCode: `return execute_action("/api/v1/discord/send/message", { channelId: userParams.channelId, message: userParams.message, channelName: userParams.channelName });`,
             params: { channelId: "channelId", message: "message", channelName: "channelName" },
             type: 'action'
         },
@@ -194,7 +194,7 @@ export const DiscordAPI = async (app, context) => {
     //     "api"
     // )
 
-    app.get('/api/core/v1/discord/send/message', handler(async (req, res, session) => {
+    app.get('/api/v1/discord/send/message', handler(async (req, res, session) => {
         const { channelId: channel_id, message, channelName } = req.query
         let channelId = channel_id
 
@@ -225,7 +225,7 @@ export const DiscordAPI = async (app, context) => {
             })
             res.send({ result: "done" })
         } catch (e) {
-            logger.error("WhatsappAPI error", e)
+            logger.error("Discord API error", e)
             res.send({ result: "error" })
         }
     }))

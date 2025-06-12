@@ -6,7 +6,7 @@ import os from './os/context'
 import os2 from './os/context2'
 import utils from './utils/context'
 import keys from './keys/context'
-import discord from './discord/context'
+
 import logs from './logs/context'
 import playwright from './playwright/context'
 import network from './network/context'
@@ -24,7 +24,6 @@ export const APIContext = {
     ...deviceContext,
     ...wledContext,
     keys,
-    discord,
     flow,
     flow2,
     object,
