@@ -92,6 +92,7 @@ export const startCore = (ready?) => {
   if (isFullDev) {
     const pathsToWatch = [
       'src/**',
+      '../../extensions/**',
       '../../packages/app/conf.ts',
       '../../packages/protolib/dist/**',
       '../../packages/app/bundles/coreApis.ts',

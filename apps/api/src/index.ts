@@ -70,6 +70,7 @@ if(waitForCore) {
 if (process.env.NODE_ENV != 'production') {
   const pathsToWatch = [
     'src/**',
+    '../../extensions/**',
     '../../data/automations/**',
     '../../packages/app/bundles/**',
     '../../packages/app/apis/**',
