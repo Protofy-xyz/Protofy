@@ -9,7 +9,7 @@ import baseMasks from '@extensions/basemasks';
 import customEventMasks from '@extensions/events/masks'
 import customMasks from '../masks'
 import automationMasks from '@extensions/automations/masks';
-import resendMasks from 'protolib/bundles/resend/masks';
+import resendMasks from '@extensions/resend/masks';
 import flowMasks from '@extensions/flow/masks';
 import flowMasks2 from '@extensions/flow/masksV2';
 import objectMasks from '@extensions/objects/masks';

@@ -3788,6 +3788,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/resend@workspace:extensions/resend":
+  version: 0.0.0-use.local
+  resolution: "@extensions/resend@workspace:extensions/resend"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/users@workspace:extensions/users":
   version: 0.0.0-use.local
   resolution: "@extensions/users@workspace:extensions/users"
