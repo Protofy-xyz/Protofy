@@ -11,6 +11,7 @@ import logs from '@extensions/logs/context'
 import network from '@extensions/network/context'
 import os from '@extensions/os/context'
 import os2 from '@extensions/os/context2'
+import playwright from '@extensions/playwright/context'
 
 export default {
     ...APIContext,
@@ -30,4 +31,5 @@ export default {
     network,
     os,
     os2,
+    playwright,
 }

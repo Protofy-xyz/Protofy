@@ -3770,6 +3770,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/playwright@workspace:extensions/playwright":
+  version: 0.0.0-use.local
+  resolution: "@extensions/playwright@workspace:extensions/playwright"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/protomemdb@workspace:extensions/protomemdb":
   version: 0.0.0-use.local
   resolution: "@extensions/protomemdb@workspace:extensions/protomemdb"
