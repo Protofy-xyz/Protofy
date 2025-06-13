@@ -11,6 +11,7 @@ import { WhatsappAPI } from '@extensions/whatsapp/whatsappAPI'
 import { FlowAPI } from '@extensions/flow/flowAPI'
 import { KeysActions } from '@extensions/keys/keysActions'
 import { DevicesActions } from '@extensions/devices/devices/devicesActions'
+import { PhpAPI } from '@extensions/php/phpApi'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -26,4 +27,5 @@ export default (app, context) => {
     WhatsappAPI(app, context)
     FlowAPI(app, context)
     DevicesActions(app, context)
+    PhpAPI(app, context)
 }

@@ -3722,6 +3722,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/logs@workspace:extensions/logs":
+  version: 0.0.0-use.local
+  resolution: "@extensions/logs@workspace:extensions/logs"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/messages@workspace:extensions/messages":
   version: 0.0.0-use.local
   resolution: "@extensions/messages@workspace:extensions/messages"
@@ -3731,6 +3737,12 @@ __metadata:
 "@extensions/pages@workspace:extensions/pages":
   version: 0.0.0-use.local
   resolution: "@extensions/pages@workspace:extensions/pages"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/php@workspace:extensions/php":
+  version: 0.0.0-use.local
+  resolution: "@extensions/php@workspace:extensions/php"
   languageName: unknown
   linkType: soft
 

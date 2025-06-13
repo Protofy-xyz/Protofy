@@ -22,6 +22,7 @@ import { DeviceCoresAPI } from '@extensions/devices/devicecores/devicecoresAPI'
 import { DeviceBoardsAPI } from '@extensions/devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from '@extensions/devices/deviceDefinitions/deviceDefinitionsAPI'
 import { DevicesAPI } from '@extensions/devices/devices/devicesAPI'
+import { LogsAPI } from '@extensions/logs/logsAPI'
 
 export default (app, context) => {
   KeysAPI(app, context)
@@ -48,4 +49,5 @@ export default (app, context) => {
   DatabasesAPI(app, context)
   VisionAPI(app, context)
   WorkspacesAPI(app, context)
+  LogsAPI(app, context)
 }
