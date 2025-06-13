@@ -3800,6 +3800,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/sequences@workspace:extensions/sequences":
+  version: 0.0.0-use.local
+  resolution: "@extensions/sequences@workspace:extensions/sequences"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/users@workspace:extensions/users":
   version: 0.0.0-use.local
   resolution: "@extensions/users@workspace:extensions/users"
