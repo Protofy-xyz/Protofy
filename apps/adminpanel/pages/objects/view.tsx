@@ -1,4 +1,4 @@
-import ObjectsPage from 'protolib/bundles/objects/adminPages'
+import ObjectsPage from '@extensions/objects/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 import { useRouter } from 'next/router';

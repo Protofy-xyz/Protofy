@@ -13,6 +13,8 @@ import { KeysActions } from '@extensions/keys/keysActions'
 import { DevicesActions } from '@extensions/devices/devices/devicesActions'
 import { PhpAPI } from '@extensions/php/phpApi'
 import { MobileAPI } from '@extensions/mobile/mobileAPI'
+import { ObjectUserAPI } from '@extensions/objects/objectsUserAPI'
+import { ObjectsActions } from '@extensions/objects/objectsActions'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -30,4 +32,6 @@ export default (app, context) => {
     DevicesActions(app, context)
     PhpAPI(app, context)
     MobileAPI(app, context)
+    ObjectUserAPI(app, context)
+    ObjectsActions(app, context)
 }

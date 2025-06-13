@@ -1,7 +1,7 @@
 import { fetch, actionFetch, navigate, onRender, actionNavigate } from 'protolib/bundles/ui/context';
 import flow from '@extensions/flow/context'
 import deviceContext from '@extensions/devices/devices/uiContext'
-import object from 'protolib/bundles/objects/context'
+import object from '@extensions/objects/context'
 import os from 'protolib/bundles/os/context'
 import flow2 from '@extensions/flow/contextV2'
 import twilio from 'protolib/bundles/twilio/uiContext'

@@ -1,4 +1,4 @@
-import { TotalItems } from '../../components/TotalItems';
+import { TotalItems } from 'protolib/components/TotalItems';
 import { ObjectModel } from './objectsSchemas';
 import { Box } from 'lucide-react';
 import { API } from 'protobase';

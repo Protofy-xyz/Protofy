@@ -1,4 +1,4 @@
-import { update } from "protolib/bundles/objects/context/objectUpdate";
+import { update } from "@extensions/objects/context/objectUpdate";
 
 class ST7789V {
     name;

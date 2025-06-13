@@ -1,5 +1,4 @@
 import { sendMailWithResend } from './resend/context'
-import object from './objects/context'
 import utils from './utils/context'
 import playwright from './playwright/context'
 import wledContext from './wled/context'
@@ -11,7 +10,6 @@ export const APIContext = {
     fetch,
     sendMailWithResend,
     ...wledContext,
-    object,
     utils,
     playwright,
     sm: stateMachines,

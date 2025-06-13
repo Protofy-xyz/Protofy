@@ -1,5 +1,6 @@
 import ProtolibObjects from 'protolib/bundles/objects'
-import {PageModel} from '@extensions/pages/pagesSchemas'
+import { ObjectModel } from '@extensions/objects/objectsSchemas'
+import { PageModel } from '@extensions/pages/pagesSchemas'
 import { APIModel } from '@extensions/apis/APISchemas'
 import { BoardModel } from '@extensions/boards/boardsSchemas'
 import { WorkspaceModel } from '@extensions/workspaces/WorkspaceModel'
@@ -18,5 +19,6 @@ export const Objects = {
     workspace: WorkspaceModel,
     user: UserModel,
     group: GroupModel,
-    key: KeyModel
+    key: KeyModel,
+    object: ObjectModel
 }
