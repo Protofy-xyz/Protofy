@@ -25,6 +25,7 @@ import { DeviceDefinitionsAPI } from '@extensions/devices/deviceDefinitions/devi
 import { DevicesAPI } from '@extensions/devices/devices/devicesAPI'
 import { LogsAPI } from '@extensions/logs/logsAPI'
 import { PackagesAPI } from '@extensions/packages/packagesAPI'
+import { SequencesAPI } from '@extensions/sequences/sequencesAPI'
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -54,4 +55,5 @@ export default (app, context) => {
   WorkspacesAPI(app, context)
   LogsAPI(app, context)
   PackagesAPI(app, context)
+  SequencesAPI(app, context)
 }

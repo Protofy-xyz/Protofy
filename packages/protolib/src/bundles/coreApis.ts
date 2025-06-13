@@ -3,7 +3,7 @@ import { MasksAPI } from './visualui/masksAPI';
 import { ServicesAPI } from './services/servicesAPI'
 import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
-import { SequencesAPI } from './sequences/sequencesAPI'
+
 
 export const AdminAPIBundles = (app, context) => {
   WledAPI(app, context)
@@ -11,5 +11,4 @@ export const AdminAPIBundles = (app, context) => {
   ServicesAPI(app, context)
   TokensAPI(app, context)
   StateMachinesDefinitionsApi(app, context)
-  SequencesAPI(app, context)
 }

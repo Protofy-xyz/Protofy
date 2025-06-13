@@ -3809,6 +3809,9 @@ __metadata:
 "@extensions/resources@workspace:extensions/resources":
   version: 0.0.0-use.local
   resolution: "@extensions/resources@workspace:extensions/resources"
+"@extensions/sequences@workspace:extensions/sequences":
+  version: 0.0.0-use.local
+  resolution: "@extensions/sequences@workspace:extensions/sequences"
   languageName: unknown
   linkType: soft
 
