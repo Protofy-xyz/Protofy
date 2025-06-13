@@ -13,6 +13,7 @@ import os from '@extensions/os/context'
 import os2 from '@extensions/os/context2'
 import playwright from '@extensions/playwright/context'
 import { sendMailWithResend } from '@extensions/resend/context'
+import wledContext from '@extensions/wled/context'
 
 export default {
     ...APIContext,
@@ -33,5 +34,6 @@ export default {
     os,
     os2,
     playwright,
-    sendMailWithResend
+    sendMailWithResend,
+    ...wledContext,
 }

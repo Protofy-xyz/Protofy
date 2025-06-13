@@ -3,7 +3,7 @@ import customVisualUIMasks from '../masks/custom.masks'
 import uiBundleMasks from '@extensions/ui/masks';
 import apiMasks from '@extensions/apis/masks';
 import devicesMasks from '@extensions/devices/devices/masks';
-import wledMasks from '../../protolib/src/bundles/wled/masks';
+import wledMasks from '@extensions/wled/masks';
 import devicesUIMasks from '@extensions/devices/devices/uiMasks';
 import baseMasks from '@extensions/basemasks';
 import customEventMasks from '@extensions/events/masks'

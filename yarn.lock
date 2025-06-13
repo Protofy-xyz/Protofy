@@ -3872,6 +3872,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/wled@workspace:extensions/wled":
+  version: 0.0.0-use.local
+  resolution: "@extensions/wled@workspace:extensions/wled"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/workspaces@workspace:extensions/workspaces":
   version: 0.0.0-use.local
   resolution: "@extensions/workspaces@workspace:extensions/workspaces"
