@@ -3,7 +3,7 @@ import flow from '@extensions/flow/context'
 import deviceContext from '@extensions/devices/devices/uiContext'
 import object from '@extensions/objects/context'
 import flow2 from '@extensions/flow/contextV2'
-import twilio from 'protolib/bundles/twilio/uiContext'
+import twilio from '@extensions/twilio/uiContext'
 
 export const context = {
     fetch,

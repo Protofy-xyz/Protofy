@@ -14,6 +14,7 @@ import os2 from '@extensions/os/context2'
 import playwright from '@extensions/playwright/context'
 import { sendMailWithResend } from '@extensions/resend/context'
 import wledContext from '@extensions/wled/context'
+import twilio from '@extensions/twilio/context'
 
 export default {
     ...APIContext,
@@ -36,4 +37,5 @@ export default {
     playwright,
     sendMailWithResend,
     ...wledContext,
+    twilio
 }

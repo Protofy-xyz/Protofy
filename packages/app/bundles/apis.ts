@@ -37,5 +37,5 @@ export default (app, context) => {
     ObjectUserAPI(app, context)
     ObjectsActions(app, context)
     ResourcesAPI(app, context)
-        StateMachinesAPI(app, context)
+    StateMachinesAPI(app, context)
 }
