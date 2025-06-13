@@ -1,4 +1,4 @@
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useWakeLock } from 'react-screen-wake-lock';
 import { Button } from "@my/ui";
 import { useUpdateEffect } from 'usehooks-ts';

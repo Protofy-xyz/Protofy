@@ -5,16 +5,16 @@ if you call paginated apis, you will need to wait for result.isLoaded and look i
 Paginated apis return an object like: {"itemsPerPage": 25, "items": [...], "total": 20, "page": 0, "pages": 1}
 */
 
-import { withSession } from '../../lib/Session';
-import { Page } from '../../components/Page';
+import { withSession } from 'protolib/lib/Session';
+import { Page } from 'protolib/components/Page';
 import { API, Protofy } from 'protobase';
-import { SSR } from '../../lib/SSR';
-import { Center } from '../../components/Center';
+import { SSR } from 'protolib/lib/SSR';
+import { Center } from 'protolib/components/Center';
 import dynamic from "next/dynamic";
 // import ReactAccelorometerValue from 'reactaccelerometervalue'
 import useCompass from "react-world-compass"
 import { useInterval } from 'usehooks-ts';
-import { useMqttState } from '../../lib/mqtt';
+import { useMqttState } from 'protolib/lib/mqtt';
 const ActiveFullScreen = dynamic(() =>
     import('./components/ActiveFullScreen').then(module => module.ActiveFullScreen),
     { ssr: false }
@@ -23,7 +23,7 @@ const ActiveFullScreen = dynamic(() =>
 const Accelerometer = ({ state, degrees }) => {
     const {client} = useMqttState()
     useInterval(() => {
-        // API.get("/api/core/v1/mobile/data?degrees=" + degrees + "&x=" + state.x + "&y=" + state.y + "&z=" + state.z + "&alpha=" + state.rotation.alpha + "&beta=" + state.rotation.beta + "&gamma=" + state.rotation.gamma)
+        // API.get("/api/v1/mobile/data?degrees=" + degrees + "&x=" + state.x + "&y=" + state.y + "&z=" + state.z + "&alpha=" + state.rotation.alpha + "&beta=" + state.rotation.beta + "&gamma=" + state.rotation.gamma)
         client.publish("mobile/data", JSON.stringify({degrees: degrees, x: state.x, y: state.y, z: state.z, alpha: state.rotation.alpha, beta: state.rotation.beta, gamma: state.rotation.gamma}))
     }, 100)
     return <div>

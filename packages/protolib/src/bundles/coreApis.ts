@@ -6,7 +6,6 @@ import { ServicesAPI } from './services/servicesAPI'
 import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
-import { MobileAPI } from './mobile/mobileAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
@@ -18,6 +17,5 @@ export const AdminAPIBundles = (app, context) => {
   TokensAPI(app, context)
   PackagesAPI(app, context)
   StateMachinesDefinitionsApi(app, context)
-  MobileAPI(app, context)
   SequencesAPI(app, context)
 }

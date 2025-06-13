@@ -13,7 +13,7 @@ export const MobileAPI = (app, context) => {
 
     topicSub(mqtt, 'mobile/#', (message, topic) => processMessage(message, topic))
 
-    app.get('/api/core/v1/mobile/data', async (req, res) => {
+    app.get('/api/v1/mobile/data', async (req, res) => {
         const params = req.query;
         context.state.set({ group: 'mobile', tag: 'data', name: 'degrees', value: params.degrees });
         context.state.set({ group: 'mobile', tag: 'data', name: 'x', value: params.x });

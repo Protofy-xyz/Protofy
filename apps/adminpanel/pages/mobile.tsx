@@ -1,4 +1,4 @@
-import MobilePage from 'protolib/bundles/mobile/mobilePage'
+import MobilePage from '@extensions/mobile/mobilePage'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

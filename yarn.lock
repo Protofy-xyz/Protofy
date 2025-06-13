@@ -3740,6 +3740,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/mobile@workspace:extensions/mobile":
+  version: 0.0.0-use.local
+  resolution: "@extensions/mobile@workspace:extensions/mobile"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/network@workspace:extensions/network":
   version: 0.0.0-use.local
   resolution: "@extensions/network@workspace:extensions/network"
