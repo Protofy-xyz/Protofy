@@ -1,5 +1,5 @@
 import { z } from 'protobase'
-import { processFilesIntent } from '../bundles/files/intents'
+import { processFilesIntent } from '@extensions/files/intents'
 
 export const IntentSchema = z.object({
     action: z.string(),

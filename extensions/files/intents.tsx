@@ -1,35 +1,35 @@
 import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from '@my/ui'
 import React, { useEffect, useRef, useCallback, useState, useContext } from 'react';
 import { useSearchParams, usePathname } from 'solito/navigation';
-import { DataCard } from '../../components/DataCard'
-import AsyncView from '../../components/AsyncView'
-import { useFileFromAPI } from '../../lib/useFileFromAPI'
-import { IconContainer } from '../../components/IconContainer'
+import { DataCard } from 'protolib/components/DataCard'
+import AsyncView from 'protolib/components/AsyncView'
+import { useFileFromAPI } from 'protolib/lib/useFileFromAPI'
+import { IconContainer } from 'protolib/components/IconContainer'
 import { Save, Workflow, Code, Ban, Check, X } from '@tamagui/lucide-icons';
 import { useThemeSetting } from '@tamagui/next-theme'
-// import GLTFViewer from '../../adminpanel/features/components/ModelViewer'
-import { Monaco } from '../../components/Monaco'
-import { IntentType } from '../../lib/Intent'
-import Center from '../../components/Center'
+// import GLTFViewer from 'protolib/adminpanel/features/components/ModelViewer'
+import { Monaco } from 'protolib/components/Monaco'
+import { IntentType } from 'protolib/lib/Intent'
+import Center from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { API } from 'protobase';
-import { usePrompt, promptCmd } from '../../context/PromptAtom';
+import { usePrompt, promptCmd } from 'protolib/context/PromptAtom';
 import { useInterval, useUpdateEffect } from 'usehooks-ts';
-import Flows from '../../adminpanel/features/components/Flows';
+import Flows from 'protolib/adminpanel/features/components/Flows';
 import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import parserTypeScript from "prettier/parser-typescript.js";
 import prettier from "prettier/standalone.js";
 import { useEventEffect } from '@extensions/events/hooks'
-import { useTint } from '../../lib/Tints'
-import { AppConfContext, SiteConfigType } from '../../providers/AppConf';
-import { Tinted } from '../../components/Tinted';
+import { useTint } from 'protolib/lib/Tints'
+import { AppConfContext, SiteConfigType } from 'protolib/providers/AppConf';
+import { Tinted } from 'protolib/components/Tinted';
 import { useToastController } from '@my/ui';
 import { getFlowsCustomSnippets } from "app/bundles/snippets"
 import { getFlowsMenuConfig } from "app/bundles/flows"
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 
-const GLTFViewer = dynamic(() => import('../../adminpanel/features/components/ModelViewer'), {
+const GLTFViewer = dynamic(() => import('protolib/adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
     <Spinner size={'large'} scale={3} top={-50} />
     Loading

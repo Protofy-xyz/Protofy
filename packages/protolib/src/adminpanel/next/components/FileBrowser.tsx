@@ -9,7 +9,7 @@ import { useUpdateEffect } from 'usehooks-ts'
 import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
 import { useState } from 'react';
 import { Explorer } from './Explorer';
-import FileActions from '../../../bundles/files/fileActions';
+import FileActions from '@extensions/files/fileActions';
 import { getLogger, API, getPendingResult } from "protobase"
 import { usePendingEffect } from '../../../lib/usePendingEffect';
 import { usePrompt } from '../../../context/PromptAtom';
