@@ -13,6 +13,7 @@ import keys from '@extensions/keys/context'
 import deviceContext from '@extensions/devices/devices/context'
 import object from '@extensions/objects/context'
 import stateContext from '@extensions/state/context'
+import utils from '@extensions/utils/context'
 
 export default {
     onEvent,
@@ -36,5 +37,6 @@ export default {
     keys,
     object,
     state: stateContext,
+    utils,
     ...deviceContext
 }
