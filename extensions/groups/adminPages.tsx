@@ -1,14 +1,14 @@
 import { GroupModel } from '.'
 import { z } from 'protobase'
-import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
 import { Users } from '@tamagui/lucide-icons';
 import { API } from 'protobase'
-import { usePrompt } from '../../context/PromptAtom'
+import { usePrompt } from 'protolib/context/PromptAtom'
 import { useState } from 'react';
 import { getPendingResult } from 'protobase';
-import { usePendingEffect } from '../../lib/usePendingEffect';
-import { PaginatedData } from '../../lib/SSR';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
+import { PaginatedData } from 'protolib/lib/SSR';
 
 const GroupIcons = {}
 const sourceUrl = '/api/core/v1/groups'

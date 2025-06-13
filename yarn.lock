@@ -3698,6 +3698,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/groups@workspace:extensions/groups":
+  version: 0.0.0-use.local
+  resolution: "@extensions/groups@workspace:extensions/groups"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/icons@workspace:extensions/icons":
   version: 0.0.0-use.local
   resolution: "@extensions/icons@workspace:extensions/icons"

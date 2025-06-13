@@ -1,4 +1,4 @@
-import GroupsPage from 'protolib/bundles/groups/adminPages'
+import GroupsPage from '@extensions/groups/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

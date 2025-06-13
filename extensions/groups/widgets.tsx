@@ -1,5 +1,5 @@
-import { ListItems } from '../../components/ListItems';
-import { TotalItems } from '../../components/TotalItems';
+import { ListItems } from 'protolib/components/ListItems';
+import { TotalItems } from 'protolib/components/TotalItems';
 import { GroupModel } from './groupsSchemas';
 import { Tag } from 'lucide-react';
 

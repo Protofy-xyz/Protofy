@@ -1,5 +1,6 @@
 import {AdminAPIBundles} from 'protolib/bundles/coreApis'
 import { UsersAPI } from '@extensions/users/usersAPI'
+import { GroupsAPI } from '@extensions/groups/groupsAPI'
 import { EventsAPI } from '@extensions/events/eventsAPI'
 import { ProtoMemDBAPI } from '@extensions/protomemdb/protomemdbAPI'
 import { PagesAPI } from '@extensions/pages/pagesAPI'
@@ -18,6 +19,7 @@ import { WorkspacesAPI } from '@extensions/workspaces/workspacesAPI'
 
 export default (app, context) => {
   UsersAPI(app, context)
+  GroupsAPI(app, context)
   EventsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
   CardsAPI(app, context)

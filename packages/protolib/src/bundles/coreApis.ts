@@ -1,4 +1,3 @@
-import { GroupsAPI } from './groups/groupsAPI'
 import { ObjectsAPI } from './objects/objectsAPI'
 import { KeysAPI } from './keys/keysAPI'
 import { DevicesAPI } from './devices/devices/devicesAPI'
@@ -19,7 +18,6 @@ import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
-  GroupsAPI(app, context)
   ObjectsAPI(app, context)
   KeysAPI(app, context)
   DevicesAPI(app, context)
