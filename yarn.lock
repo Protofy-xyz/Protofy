@@ -3710,6 +3710,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/lmstudio@workspace:extensions/lmstudio":
+  version: 0.0.0-use.local
+  resolution: "@extensions/lmstudio@workspace:extensions/lmstudio"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/messages@workspace:extensions/messages":
   version: 0.0.0-use.local
   resolution: "@extensions/messages@workspace:extensions/messages"
