@@ -23,7 +23,7 @@ import logsMasks from '@extensions/logs/masks'
 import playwrightMasks from '@extensions/playwright/masks'
 import networkMasks from '@extensions/network/masks'
 import stateMachineMasks from 'protolib/bundles/stateMachines/masks'
-import stateMasks from 'protolib/bundles/state/masks'
+import stateMasks from '@extensions/state/masks'
 import { paths } from './flows';
 
 export const getFlowsCustomComponents = (path: string, queryParams: {}) => {

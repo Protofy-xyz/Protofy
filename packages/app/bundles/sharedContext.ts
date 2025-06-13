@@ -12,6 +12,7 @@ import chatbots from '@extensions/chatbots/context'
 import keys from '@extensions/keys/context'
 import deviceContext from '@extensions/devices/devices/context'
 import object from '@extensions/objects/context'
+import stateContext from '@extensions/state/context'
 
 export default {
     onEvent,
@@ -34,5 +35,6 @@ export default {
     chatbots,
     keys,
     object,
+    state: stateContext,
     ...deviceContext
 }

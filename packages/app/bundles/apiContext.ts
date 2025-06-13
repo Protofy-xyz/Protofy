@@ -33,5 +33,5 @@ export default {
     os,
     os2,
     playwright,
-    sendMailWithResend,
+    sendMailWithResend
 }
