@@ -1,4 +1,4 @@
-import flowSnippets from 'protolib/bundles/flow/snippets';
+import flowSnippets from '@extensions/flow/snippets';
 import customSnippets from '../snippets';
 import { paths } from './flows';
 

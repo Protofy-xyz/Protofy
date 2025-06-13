@@ -3686,6 +3686,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/flow@workspace:extensions/flow":
+  version: 0.0.0-use.local
+  resolution: "@extensions/flow@workspace:extensions/flow"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/google@workspace:extensions/google":
   version: 0.0.0-use.local
   resolution: "@extensions/google@workspace:extensions/google"

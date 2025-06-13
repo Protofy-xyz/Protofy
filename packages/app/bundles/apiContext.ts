@@ -3,6 +3,8 @@ import {Objects} from './objects'
 import machineDefinitions from './stateMachines'
 import context from './sharedContext'
 import discord from '@extensions/discord/context'
+import flow from '@extensions/flow/context'
+import flow2 from '@extensions/flow/contextV2'
 
 export default {
     ...APIContext,
@@ -13,5 +15,7 @@ export default {
         ...Objects
     },
     ...context,
-    discord
+    discord,
+    flow,
+    flow2
 }

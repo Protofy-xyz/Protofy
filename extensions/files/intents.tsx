@@ -42,7 +42,7 @@ const onGenerateSnippset = async (name, code, cb, onError) => {
     onError("")
     return
   };
-  const res = await API.post("/api/core/v1/flow/snippet", { name, code });
+  const res = await API.post("/api/v1/flow/snippet", { name, code });
   if (res?.error) {
     onError(res?.error?.error)
     return

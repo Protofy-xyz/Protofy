@@ -1,7 +1,5 @@
 import { sendMailWithResend } from './resend/context'
 import object from './objects/context'
-import flow from './flow/context'
-import flow2 from './flow/contextV2'
 import os from './os/context'
 import os2 from './os/context2'
 import utils from './utils/context'
@@ -24,8 +22,6 @@ export const APIContext = {
     ...deviceContext,
     ...wledContext,
     keys,
-    flow,
-    flow2,
     object,
     os,
     os2,

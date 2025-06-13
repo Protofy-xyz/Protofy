@@ -14,7 +14,6 @@ import { ServicesAPI } from './services/servicesAPI'
 import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 import { PackagesAPI } from './packages/packagesAPI'
-import { FlowAPI } from './flow/flowAPI';
 import { MobileAPI } from './mobile/mobileAPI'
 import { WhatsappAPI } from './whatsapp/whatsappAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
@@ -36,7 +35,6 @@ export const AdminAPIBundles = (app, context) => {
   TokensAPI(app, context)
   PackagesAPI(app, context)
   StateMachinesDefinitionsApi(app, context)
-  FlowAPI(app, context)
   MobileAPI(app, context)
   WhatsappAPI(app, context)
   SequencesAPI(app, context)
