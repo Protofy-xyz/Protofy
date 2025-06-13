@@ -168,7 +168,7 @@ const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
     const pathname = usePathname();
 
     return (
-        <>
+        <YStack f={1} gap="$1">
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 let href = getSubtabHref(subtab)
@@ -176,14 +176,11 @@ const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
 
                 const content = <Tinted>
                     <PanelMenuItem
+                        collapsed={collapsed}
                         selected={isSubtabSelected(href, pathname)}
                         // selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
                         icon={getIcon(subtab.icon)}
-                        text={!collapsed ? subtab.name : ""}
-                        {...collapsed ? {
-                            paddingHorizontal: "$2",
-                            jc: "center"
-                        } : {}}
+                        text={subtab.name}
                     />
                 </Tinted>
                 if (subtab.external || (!subtab.href?.startsWith('/workspace/') && appId == 'adminpanel')) {
@@ -196,7 +193,7 @@ const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
                 </Link>
 
             })}
-        </>)
+        </YStack>)
 }
 
 const Tabs = ({ tabs, environ, collapsed }: any) => {
