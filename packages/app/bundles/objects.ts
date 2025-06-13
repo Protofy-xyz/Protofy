@@ -7,6 +7,7 @@ import { WorkspaceModel } from '@extensions/workspaces/WorkspaceModel'
 import { UserModel } from '@extensions/users/usersSchemas'
 import { GroupModel } from '@extensions/groups/groupsSchemas'
 import { KeyModel} from '@extensions/keys/keysSchemas'
+import { TokenModel } from '@extensions/tokens/tokensSchemas'
 
 import LocalObjects from '../objects'
 
@@ -20,5 +21,6 @@ export const Objects = {
     user: UserModel,
     group: GroupModel,
     key: KeyModel,
-    object: ObjectModel
+    object: ObjectModel,
+    token: TokenModel
 }

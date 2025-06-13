@@ -1,6 +1,5 @@
 import { TokenModel } from "./tokensSchemas";
 import { handler, AutoAPI, getServiceToken,getDeviceToken } from 'protonode'
-import { API } from 'protobase'
 
 
 export const tokensAutoAPI = AutoAPI({

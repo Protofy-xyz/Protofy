@@ -27,6 +27,7 @@ import { LogsAPI } from '@extensions/logs/logsAPI'
 import { PackagesAPI } from '@extensions/packages/packagesAPI'
 import { SequencesAPI } from '@extensions/sequences/sequencesAPI'
 import { ServicesAPI } from '@extensions/services/servicesAPI'
+import { TokensAPI } from '@extensions/tokens/tokensAPI'
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -58,4 +59,5 @@ export default (app, context) => {
   PackagesAPI(app, context)
   SequencesAPI(app, context)
   ServicesAPI(app, context)
+  TokensAPI(app, context)
 }
