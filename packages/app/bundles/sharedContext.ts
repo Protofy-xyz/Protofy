@@ -14,6 +14,7 @@ import deviceContext from '@extensions/devices/devices/context'
 import object from '@extensions/objects/context'
 import stateContext from '@extensions/state/context'
 import utils from '@extensions/utils/context'
+import stateMachines from '@extensions/stateMachines/context'
 
 export default {
     onEvent,
@@ -38,5 +39,6 @@ export default {
     object,
     state: stateContext,
     utils,
+    sm: stateMachines,
     ...deviceContext
 }

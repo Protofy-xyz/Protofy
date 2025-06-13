@@ -22,7 +22,7 @@ import discordMasks from '@extensions/discord/masks';
 import logsMasks from '@extensions/logs/masks'
 import playwrightMasks from '@extensions/playwright/masks'
 import networkMasks from '@extensions/network/masks'
-import stateMachineMasks from 'protolib/bundles/stateMachines/masks'
+import stateMachineMasks from '@extensions/stateMachines/masks'
 import stateMasks from '@extensions/state/masks'
 import { paths } from './flows';
 

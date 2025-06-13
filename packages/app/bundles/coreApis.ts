@@ -30,6 +30,7 @@ import { ServicesAPI } from '@extensions/services/servicesAPI'
 import { TokensAPI } from '@extensions/tokens/tokensAPI'
 import { MasksAPI } from '@extensions/visualui/masksAPI'
 import { WledAPI } from '@extensions/wled/api/wledApi'
+import { StateMachinesDefinitionsApi } from '@extensions/stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -64,4 +65,5 @@ export default (app, context) => {
   TokensAPI(app, context)
   MasksAPI(app, context)
   WledAPI(app, context)
+  StateMachinesDefinitionsApi(app, context)
 }

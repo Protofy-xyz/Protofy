@@ -3830,6 +3830,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/statemachines@workspace:extensions/stateMachines":
+  version: 0.0.0-use.local
+  resolution: "@extensions/statemachines@workspace:extensions/stateMachines"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/tokens@workspace:extensions/tokens":
   version: 0.0.0-use.local
   resolution: "@extensions/tokens@workspace:extensions/tokens"
