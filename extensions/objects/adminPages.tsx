@@ -1,21 +1,20 @@
 
 import { ObjectModel } from './objectsSchemas'
-import { DataView } from '../../components/DataView';
-import { DataTable2 } from '../../components/DataTable2';
-import { Chip } from '../../components/Chip';
-import { AdminPage } from '../../components/AdminPage';
+import { DataView } from 'protolib/components/DataView';
+import { DataTable2 } from 'protolib/components/DataTable2';
+import { Chip } from 'protolib/components/Chip';
+import { AdminPage } from 'protolib/components/AdminPage';
 import { Pencil, Boxes, Tag } from '@tamagui/lucide-icons';
-import { usePageParams } from '../../next';
+import { usePageParams } from 'protolib/next';
 import { XStack, Text } from "@my/ui";
 import { getPendingResult, z } from 'protobase'
-import ErrorMessage from "../../components/ErrorMessage"
-import { PaginatedData, SSR } from "../../lib/SSR"
-import { withSession } from "../../lib/Session"
+import ErrorMessage from "protolib/components/ErrorMessage"
+import { PaginatedData } from "protolib/lib/SSR"
 import { API, ProtoModel } from 'protobase'
-import { usePendingEffect } from '../../lib/usePendingEffect';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 import { useState } from 'react';
 import { useRouter } from 'next/router'
-import { AsyncView } from '../../components/AsyncView';
+import { AsyncView } from 'protolib/components/AsyncView';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons = {}

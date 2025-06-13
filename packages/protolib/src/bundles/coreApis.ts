@@ -1,4 +1,3 @@
-import { ObjectsAPI } from './objects/objectsAPI'
 import { WledAPI } from './wled/api/wledApi'
 import { ResourcesAPI } from './resources/resourcesAPI'
 import { MasksAPI } from './visualui/masksAPI';
@@ -9,7 +8,6 @@ import { PackagesAPI } from './packages/packagesAPI'
 import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
-  ObjectsAPI(app, context)
   WledAPI(app, context)
   ResourcesAPI(app, context)
   MasksAPI(app, context)

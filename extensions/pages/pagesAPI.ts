@@ -6,7 +6,7 @@ import * as fspath from 'path';
 import { ArrayLiteralExpression } from 'ts-morph';
 import { getServiceToken, handler } from 'protonode'
 import { API, generateEvent } from 'protobase'
-import { ObjectModel } from "protolib/bundles/objects/objectsSchemas";
+import { ObjectModel } from "@extensions/objects/objectsSchemas";
 import { v4 as uuidv4 } from 'uuid';
 
 const pagesDir = (root) => fspath.join(root, "/packages/app/pages/")

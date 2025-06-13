@@ -1,3 +1,4 @@
+import { ObjectsAPI } from '@extensions/objects/objectsAPI'
 import {AdminAPIBundles} from 'protolib/bundles/coreApis'
 import { UsersAPI } from '@extensions/users/usersAPI'
 import { GroupsAPI } from '@extensions/groups/groupsAPI'
@@ -25,6 +26,7 @@ import { DevicesAPI } from '@extensions/devices/devices/devicesAPI'
 import { LogsAPI } from '@extensions/logs/logsAPI'
 
 export default (app, context) => {
+  ObjectsAPI(app, context)
   KeysAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)

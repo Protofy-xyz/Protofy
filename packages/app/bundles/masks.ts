@@ -12,7 +12,7 @@ import automationMasks from '@extensions/automations/masks';
 import resendMasks from 'protolib/bundles/resend/masks';
 import flowMasks from '@extensions/flow/masks';
 import flowMasks2 from '@extensions/flow/masksV2';
-import objectMasks from 'protolib/bundles/objects/masks';
+import objectMasks from '@extensions/objects/masks';
 import osMasks from '@extensions/os/masks'
 import osMasks2 from '@extensions/os/masks2'
 import utilsMasks from 'protolib/bundles/utils/masks'

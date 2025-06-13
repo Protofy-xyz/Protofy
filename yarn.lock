@@ -3752,6 +3752,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/objects@workspace:extensions/objects":
+  version: 0.0.0-use.local
+  resolution: "@extensions/objects@workspace:extensions/objects"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/os@workspace:extensions/os":
   version: 0.0.0-use.local
   resolution: "@extensions/os@workspace:extensions/os"

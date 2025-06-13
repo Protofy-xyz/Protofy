@@ -5,7 +5,7 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { API } from 'protobase'
 import { getServiceToken } from "protonode";
-import { ObjectModel } from 'protolib/bundles/objects/objectsSchemas'
+import { ObjectModel } from '@extensions/objects/objectsSchemas'
 
 const APIDirPath = "/packages/app/apis/"
 const DynamicAPIDirPath = "/data/automations/"
