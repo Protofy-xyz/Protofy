@@ -14,7 +14,6 @@ import stateMachines from './stateMachines/context'
 import stateContext from './state/context'
 import lmstudio from './lmstudio/context'
 import twilio from './twilio/context'
-import whatsapp from './whatsapp/context'
 
 export const APIContext = {
     fetch,
@@ -32,6 +31,5 @@ export const APIContext = {
     sm: stateMachines,
     state: stateContext,
     lmstudio,
-    twilio,
-    whatsapp
+    twilio
 }

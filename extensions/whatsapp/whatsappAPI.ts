@@ -1,13 +1,8 @@
 import { API, generateEvent } from "protobase";
 import { AutoAPI, handler, getServiceToken} from 'protonode'
 import { getLogger } from 'protobase';
-import moment from 'moment';
-import fs from 'fs';
-import path from 'path';
 import { addAction } from "@extensions/actions/context/addAction";
 import { addCard } from "@extensions/cards/context/addCard";
-import {getKey} from "../keys/context";
-
 
 const ONLY_LAST_MESSAGE = true
 const MESSAGE_AND_PHONE_TOGETHER = false
@@ -15,7 +10,6 @@ const MESSAGE_AND_PHONE_TOGETHER = false
 const logger = getLogger()
 
 const qrImg = async (context)=>{
-    
     try {
         const base64Img = await context.whatsapp.generateWhatsappQrCode(
             process.env.WHATSAPP_PHONE,
@@ -33,7 +27,7 @@ const registerActions = async (context)=>{
     addAction({
         group: 'whatsapp',
         name: 'message',
-        url: `/api/core/v1/whatsapp/send/message`,
+        url: `/api/v1/whatsapp/send/message`,
         tag: "send",
         description: "send a whatsapp message to a phone number",
         params: {phone: "E.164 format phone number started by + and country code. Example: +34666666666", message: "message value to send"},
@@ -43,20 +37,20 @@ const registerActions = async (context)=>{
 const registerCards = async (context)=>{
     if(!ONLY_LAST_MESSAGE){
         addCard({
-        group: 'whatsapp',
-        tag: "received",
-        id: 'whatsapp_received_messages',
-        templateName: "whatsapp received messages",
-        name: "messages",
-        defaults: {
-            name: "whatsapp_received_messages",
-            icon: "whatsapp",
-            color: "#25d366",
-            description: "received whatsapp messages",
-            rulesCode: `return states.whatsapp.received.messages.map(msg => msg.from + ' -> ' + msg.content).join('<br>');`,
-            type: 'value'
-        },
-        emitEvent: true
+            group: 'whatsapp',
+            tag: "received",
+            id: 'whatsapp_received_messages',
+            templateName: "whatsapp received messages",
+            name: "messages",
+            defaults: {
+                name: "whatsapp_received_messages",
+                icon: "whatsapp",
+                color: "#25d366",
+                description: "received whatsapp messages",
+                rulesCode: `return states.whatsapp.received.messages.map(msg => msg.from + ' -> ' + msg.content).join('<br>');`,
+                type: 'value'
+            },
+            emitEvent: true
         })
     }
     if(MESSAGE_AND_PHONE_TOGETHER){
@@ -126,7 +120,7 @@ const registerCards = async (context)=>{
             icon: "whatsapp",
             color: "#25d366",
             description: "send a whatsapp message to a phone number",
-            rulesCode: `return execute_action("/api/core/v1/whatsapp/send/message", { phone: userParams.phone, message: userParams.message });`,
+            rulesCode: `return execute_action("/api/v1/whatsapp/send/message", { phone: userParams.phone, message: userParams.message });`,
             params: {phone: "phone number", message: "message"},
             type: 'action'
         },
@@ -177,7 +171,7 @@ export const WhatsappAPI = (app, context) => {
     const devicesPath = '../../data/devices/'
     const { topicSub, topicPub, mqtt } = context;
     
-    app.get('/api/core/v1/whatsapp/send/message', handler(async (req, res, session) => {
+    app.get('/api/v1/whatsapp/send/message', handler(async (req, res, session) => {
         const { phone, message } = req.query
         // console.log("phone", phone)
         // console.log("message", message)
@@ -200,7 +194,7 @@ export const WhatsappAPI = (app, context) => {
         }
     }))
     
-    app.get('/api/core/v1/whatsapp/qr/:phone/:message', handler(async (req, res, session) => {
+    app.get('/api/v1/whatsapp/qr/:phone/:message', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
             res.status(401).send({error: "Unauthorized"})
             return
@@ -255,6 +249,4 @@ export const WhatsappAPI = (app, context) => {
     })
 
     registerActionsAndCards(context)
-
-    
 }

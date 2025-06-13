@@ -3740,6 +3740,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/whatsapp@workspace:extensions/whatsapp":
+  version: 0.0.0-use.local
+  resolution: "@extensions/whatsapp@workspace:extensions/whatsapp"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/workspaces@workspace:extensions/workspaces":
   version: 0.0.0-use.local
   resolution: "@extensions/workspaces@workspace:extensions/workspaces"

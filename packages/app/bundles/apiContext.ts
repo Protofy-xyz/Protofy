@@ -5,6 +5,7 @@ import context from './sharedContext'
 import discord from '@extensions/discord/context'
 import flow from '@extensions/flow/context'
 import flow2 from '@extensions/flow/contextV2'
+import whatsapp from '@extensions/whatsapp/context'
 
 export default {
     ...APIContext,
@@ -17,5 +18,6 @@ export default {
     ...context,
     discord,
     flow,
-    flow2
+    flow2,
+    whatsapp
 }
