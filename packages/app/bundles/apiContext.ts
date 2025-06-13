@@ -9,6 +9,8 @@ import whatsapp from '@extensions/whatsapp/context'
 import lmstudio from '@extensions/lmstudio/context'
 import logs from '@extensions/logs/context'
 import network from '@extensions/network/context'
+import os from '@extensions/os/context'
+import os2 from '@extensions/os/context2'
 
 export default {
     ...APIContext,
@@ -26,4 +28,6 @@ export default {
     lmstudio,
     logs,
     network,
+    os,
+    os2,
 }

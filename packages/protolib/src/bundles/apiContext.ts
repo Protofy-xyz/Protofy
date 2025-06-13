@@ -1,7 +1,5 @@
 import { sendMailWithResend } from './resend/context'
 import object from './objects/context'
-import os from './os/context'
-import os2 from './os/context2'
 import utils from './utils/context'
 import playwright from './playwright/context'
 import wledContext from './wled/context'
@@ -14,8 +12,6 @@ export const APIContext = {
     sendMailWithResend,
     ...wledContext,
     object,
-    os,
-    os2,
     utils,
     playwright,
     sm: stateMachines,
