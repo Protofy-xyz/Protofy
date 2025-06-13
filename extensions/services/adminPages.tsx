@@ -1,12 +1,12 @@
-import { DataView } from '../../components/DataView';
-import { AdminPage } from '../../components/AdminPage';
-import { CardBody } from '../../components/CardBody';
+import { DataView } from 'protolib/components/DataView';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { CardBody } from 'protolib/components/CardBody';
 import { Cog, ScrollText, LineChart, RotateCw, Cpu, Activity} from '@tamagui/lucide-icons';
 import { ServiceModel } from './servicesSchema';
 import { YStack, Stack, SizableText, XStack } from '@my/ui'
-import { usePageParams } from '../../next';
+import { usePageParams } from 'protolib/next';
 import moment from 'moment';
-import { PaginatedData } from '../../lib/SSR';
+import { PaginatedData } from 'protolib/lib/SSR';
 
 const sourceUrl = '/api/core/v1/services'
 

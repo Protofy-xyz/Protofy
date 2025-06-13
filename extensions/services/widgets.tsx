@@ -3,11 +3,11 @@ import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
 import { useState, useEffect } from 'react';
-import { useRemoteStateList } from '../../lib/useRemoteState';
+import { useRemoteStateList } from 'protolib/lib/useRemoteState';
 import { ServiceModel } from './servicesSchema';
-import AsyncView from '../../components/AsyncView';
-import { DashboardCard } from '../../components/DashboardCard';
-import { PieChart } from '../../components/PieChart';
+import AsyncView from 'protolib/components/AsyncView';
+import { DashboardCard } from 'protolib/components/DashboardCard';
+import { PieChart } from 'protolib/components/PieChart';
 import { LineChart, Cpu } from 'lucide-react'
 import React from 'react';
 
