@@ -5,6 +5,7 @@ import { BoardModel } from '@extensions/boards/boardsSchemas'
 import { WorkspaceModel } from '@extensions/workspaces/WorkspaceModel'
 import { UserModel } from '@extensions/users/usersSchemas'
 import { GroupModel } from '@extensions/groups/groupsSchemas'
+import { KeyModel} from '@extensions/keys/keysSchemas'
 
 import LocalObjects from '../objects'
 
@@ -16,5 +17,6 @@ export const Objects = {
     board: BoardModel,
     workspace: WorkspaceModel,
     user: UserModel,
-    group: GroupModel
+    group: GroupModel,
+    key: KeyModel
 }

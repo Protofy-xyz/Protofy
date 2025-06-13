@@ -1,4 +1,4 @@
-import KeysPage from 'protolib/bundles/keys/adminPages'
+import KeysPage from '@extensions/keys/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

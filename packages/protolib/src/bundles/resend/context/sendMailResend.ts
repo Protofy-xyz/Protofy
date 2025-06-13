@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 import { getLogger } from 'protobase';
 
 import { getServiceToken } from '@extensions/apis/context';
-import { getKey } from "../../keys/context";
+import { getKey } from "@extensions/keys/context";
 
 
 

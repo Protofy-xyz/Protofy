@@ -1,5 +1,4 @@
 import { ObjectsAPI } from './objects/objectsAPI'
-import { KeysAPI } from './keys/keysAPI'
 import { DevicesAPI } from './devices/devices/devicesAPI'
 import { WledAPI } from './wled/api/wledApi'
 import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
@@ -18,7 +17,6 @@ import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
   ObjectsAPI(app, context)
-  KeysAPI(app, context)
   DevicesAPI(app, context)
   WledAPI(app, context)
   DeviceSdksAPI(app, context)

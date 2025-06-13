@@ -16,8 +16,10 @@ import { IconsAPI } from '@extensions/icons/iconsAPI'
 import { DatabasesAPI } from '@extensions/databases/databasesAPI'
 import { VisionAPI } from '@extensions/vision/visionAPI'
 import { WorkspacesAPI } from '@extensions/workspaces/workspacesAPI'
+import { KeysAPI } from '@extensions/keys/keysAPI'
 
 export default (app, context) => {
+  KeysAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)
   EventsAPI(app, context)

@@ -8,7 +8,8 @@ import { AutomationsActions } from '@extensions/apis/automationsActions'
 import { PagesActions } from '@extensions/pages/pagesActions'
 import { DiscordAPI } from '@extensions/discord/discordAPI'
 import { WhatsappAPI } from '@extensions/whatsapp/whatsappAPI'
-import { FlowAPI } from '@extensions/flow/flowAPI';
+import { FlowAPI } from '@extensions/flow/flowAPI'
+import { KeysActions } from '@extensions/keys/keysActions'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -17,6 +18,7 @@ export default (app, context) => {
     UsersActions(app, context)
     GroupsActions(app, context)
     EventsActions(app, context)
+    KeysActions(app, context)
     AutomationsActions(app, context)
     PagesActions(app, context)
     DiscordAPI(app, context)

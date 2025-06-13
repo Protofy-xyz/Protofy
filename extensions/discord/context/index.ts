@@ -1,5 +1,5 @@
 import { getServiceToken } from '@extensions/apis/context';
-import { getKey } from 'protolib/bundles/keys/context';
+import { getKey } from '@extensions/keys/context';
 import { Client, GatewayIntentBits, REST, Routes, SlashCommandBuilder } from 'discord.js'
 
 type connectProps = {

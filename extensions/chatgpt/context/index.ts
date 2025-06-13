@@ -1,6 +1,6 @@
 import { getLogger } from "protobase";
 import { getServiceToken } from '@extensions/apis/context';
-import { getKey } from "protolib/bundles/keys/context";
+import { getKey } from "@extensions/keys/context";
 import OpenAI from 'openai';
 
 const logger = getLogger()

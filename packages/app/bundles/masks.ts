@@ -16,7 +16,7 @@ import objectMasks from 'protolib/bundles/objects/masks';
 import osMasks from 'protolib/bundles/os/masks'
 import osMasks2 from 'protolib/bundles/os/masks2'
 import utilsMasks from 'protolib/bundles/utils/masks'
-import keyMasks from 'protolib/bundles/keys/masks'
+import keyMasks from '@extensions/keys/masks'
 import chatGPTMasks from '@extensions/chatgpt/masks'
 import discordMasks from '@extensions/discord/masks';
 import logsMasks from 'protolib/bundles/logs/masks'

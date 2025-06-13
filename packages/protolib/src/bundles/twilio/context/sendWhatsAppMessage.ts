@@ -1,6 +1,6 @@
 import twilio from "twilio";
 import { getServiceToken } from '@extensions/apis/context';
-import {getKey} from "../../keys/context";
+import {getKey} from "@extensions/keys/context";
 
 
 export const sendWhatsAppMessage  = async ({message, from,to,TWILIO_ACCOUNT_SID,TWILIO_AUTH_TOKEN}) => {

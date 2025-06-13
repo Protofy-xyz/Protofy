@@ -3,8 +3,6 @@ import object from './objects/context'
 import os from './os/context'
 import os2 from './os/context2'
 import utils from './utils/context'
-import keys from './keys/context'
-
 import logs from './logs/context'
 import playwright from './playwright/context'
 import network from './network/context'
@@ -20,7 +18,6 @@ export const APIContext = {
     sendMailWithResend,
     ...deviceContext,
     ...wledContext,
-    keys,
     object,
     os,
     os2,
