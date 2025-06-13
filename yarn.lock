@@ -3668,6 +3668,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/devices@workspace:extensions/devices":
+  version: 0.0.0-use.local
+  resolution: "@extensions/devices@workspace:extensions/devices"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/discord@workspace:extensions/discord":
   version: 0.0.0-use.local
   resolution: "@extensions/discord@workspace:extensions/discord"
