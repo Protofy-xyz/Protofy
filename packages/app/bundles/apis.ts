@@ -15,6 +15,7 @@ import { PhpAPI } from '@extensions/php/phpApi'
 import { MobileAPI } from '@extensions/mobile/mobileAPI'
 import { ObjectUserAPI } from '@extensions/objects/objectsUserAPI'
 import { ObjectsActions } from '@extensions/objects/objectsActions'
+import { ResourcesAPI } from '@extensions/resources/resourcesAPI'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -34,4 +35,5 @@ export default (app, context) => {
     MobileAPI(app, context)
     ObjectUserAPI(app, context)
     ObjectsActions(app, context)
+    ResourcesAPI(app, context)
 }
