@@ -1,4 +1,4 @@
-import ServicesPage from 'protolib/bundles/services/adminPages'
+import ServicesPage from '@extensions/services/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

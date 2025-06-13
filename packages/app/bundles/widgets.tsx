@@ -1,6 +1,6 @@
-export * from 'protolib/bundles/widgets'
 export * from '@extensions/pages/widgets'
 export * from '@extensions/events/widgets'
 export * from '@extensions/users/widgets'
 export * from '@extensions/groups/widgets'
 export * from '@extensions/objects/widgets'
+export * from '@extensions/services/widgets'

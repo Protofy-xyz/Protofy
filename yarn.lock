@@ -3818,6 +3818,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/services@workspace:extensions/services":
+  version: 0.0.0-use.local
+  resolution: "@extensions/services@workspace:extensions/services"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/state@workspace:extensions/state":
   version: 0.0.0-use.local
   resolution: "@extensions/state@workspace:extensions/state"
