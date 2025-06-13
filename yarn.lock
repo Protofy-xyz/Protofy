@@ -3788,6 +3788,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/protoinfra@workspace:extensions/protoinfra":
+  version: 0.0.0-use.local
+  resolution: "@extensions/protoinfra@workspace:extensions/protoinfra"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/protomemdb@workspace:extensions/protomemdb":
   version: 0.0.0-use.local
   resolution: "@extensions/protomemdb@workspace:extensions/protomemdb"

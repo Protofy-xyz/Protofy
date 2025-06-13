@@ -1,7 +1,7 @@
 
 import { getLogger } from 'protobase';
-import protoInfraUrls from 'protolib/bundles/protoinfra/utils/protoInfraUrls'
-import { createMqttClient } from 'protolib/bundles/protoinfra/utils/mqttTransportLayer'
+import protoInfraUrls from '@extensions/protoinfra/utils/protoInfraUrls'
+import { createMqttClient } from '@extensions/protoinfra/utils/mqttTransportLayer'
 
 const logger = getLogger()
 
