@@ -6,6 +6,7 @@ import discord from '@extensions/discord/context'
 import flow from '@extensions/flow/context'
 import flow2 from '@extensions/flow/contextV2'
 import whatsapp from '@extensions/whatsapp/context'
+import lmstudio from '@extensions/lmstudio/context'
 
 export default {
     ...APIContext,
@@ -19,5 +20,6 @@ export default {
     discord,
     flow,
     flow2,
-    whatsapp
+    whatsapp,
+    lmstudio
 }

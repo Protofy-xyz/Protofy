@@ -10,7 +10,6 @@ import deviceContext from './devices/devices/context'
 import wledContext from './wled/context'
 import stateMachines from './stateMachines/context'
 import stateContext from './state/context'
-import lmstudio from './lmstudio/context'
 import twilio from './twilio/context'
 
 export const APIContext = {
@@ -27,6 +26,5 @@ export const APIContext = {
     network,
     sm: stateMachines,
     state: stateContext,
-    lmstudio,
     twilio
 }
