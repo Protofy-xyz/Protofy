@@ -15,7 +15,7 @@ import flowMasks2 from '@extensions/flow/masksV2';
 import objectMasks from '@extensions/objects/masks';
 import osMasks from '@extensions/os/masks'
 import osMasks2 from '@extensions/os/masks2'
-import utilsMasks from 'protolib/bundles/utils/masks'
+import utilsMasks from '@extensions/utils/masks'
 import keyMasks from '@extensions/keys/masks'
 import chatGPTMasks from '@extensions/chatgpt/masks'
 import discordMasks from '@extensions/discord/masks';

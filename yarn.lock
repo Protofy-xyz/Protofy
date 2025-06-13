@@ -3860,6 +3860,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/visualui@workspace:extensions/visualui":
+  version: 0.0.0-use.local
+  resolution: "@extensions/visualui@workspace:extensions/visualui"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/whatsapp@workspace:extensions/whatsapp":
   version: 0.0.0-use.local
   resolution: "@extensions/whatsapp@workspace:extensions/whatsapp"

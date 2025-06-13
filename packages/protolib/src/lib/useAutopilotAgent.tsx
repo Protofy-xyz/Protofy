@@ -4,7 +4,7 @@ import { getStatesFromProtoMemDB } from '@extensions/protomemdb/context/getState
 import { useEventEffect } from '@extensions/events/hooks';
 import { AutopilotCard, RulesCard } from '../components/dashboard';
 import { ActionRunner } from '../components/ActionRunner';
-import { BasicCard, CardValue, CenterCard } from '../bundles/widgets';
+import { BasicCard, CardValue, CenterCard } from 'app/bundles/widgets';
 import { Tag } from '@tamagui/lucide-icons';
 import { runAction } from './runAction';
 import { Input } from '@my/ui';

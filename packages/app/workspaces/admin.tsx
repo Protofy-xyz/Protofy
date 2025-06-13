@@ -30,7 +30,7 @@ import {
     TotalGroups,
     ListGroups,
     TotalEvents
-} from '../bundles/widgets'
+} from 'app/bundles/widgets'
 
 const enableArduinos = false
 

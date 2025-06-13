@@ -28,6 +28,7 @@ import { PackagesAPI } from '@extensions/packages/packagesAPI'
 import { SequencesAPI } from '@extensions/sequences/sequencesAPI'
 import { ServicesAPI } from '@extensions/services/servicesAPI'
 import { TokensAPI } from '@extensions/tokens/tokensAPI'
+import { MasksAPI } from '@extensions/visualui/masksAPI';
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -60,4 +61,5 @@ export default (app, context) => {
   SequencesAPI(app, context)
   ServicesAPI(app, context)
   TokensAPI(app, context)
+  MasksAPI(app, context)
 }
