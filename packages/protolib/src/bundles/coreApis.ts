@@ -7,7 +7,6 @@ import { DeviceBoardsAPI } from './devices/deviceBoards/deviceBoardsAPI'
 import { DeviceDefinitionsAPI } from './devices/deviceDefinitions/deviceDefinitionsAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
 import { MasksAPI } from './visualui/masksAPI';
-import { LogsAPI } from './logs/logsAPI'
 import { ServicesAPI } from './services/servicesAPI'
 import { TokensAPI } from './tokens/tokensAPI'
 import { StateMachinesDefinitionsApi } from './stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
@@ -25,7 +24,6 @@ export const AdminAPIBundles = (app, context) => {
   DeviceDefinitionsAPI(app, context)
   ResourcesAPI(app, context)
   MasksAPI(app, context)
-  LogsAPI(app, context)
   ServicesAPI(app, context)
   TokensAPI(app, context)
   PackagesAPI(app, context)

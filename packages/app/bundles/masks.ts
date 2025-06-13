@@ -19,7 +19,7 @@ import utilsMasks from 'protolib/bundles/utils/masks'
 import keyMasks from '@extensions/keys/masks'
 import chatGPTMasks from '@extensions/chatgpt/masks'
 import discordMasks from '@extensions/discord/masks';
-import logsMasks from 'protolib/bundles/logs/masks'
+import logsMasks from '@extensions/logs/masks'
 import playwrightMasks from 'protolib/bundles/playwright/masks'
 import networkMasks from 'protolib/bundles/network/masks'
 import stateMachineMasks from 'protolib/bundles/stateMachines/masks'

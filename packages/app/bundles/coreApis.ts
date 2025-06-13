@@ -17,6 +17,7 @@ import { DatabasesAPI } from '@extensions/databases/databasesAPI'
 import { VisionAPI } from '@extensions/vision/visionAPI'
 import { WorkspacesAPI } from '@extensions/workspaces/workspacesAPI'
 import { KeysAPI } from '@extensions/keys/keysAPI'
+import { LogsAPI } from '@extensions/logs/logsAPI'
 
 export default (app, context) => {
   KeysAPI(app, context)
@@ -38,4 +39,5 @@ export default (app, context) => {
   DatabasesAPI(app, context)
   VisionAPI(app, context)
   WorkspacesAPI(app, context)
+  LogsAPI(app, context)
 }

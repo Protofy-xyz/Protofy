@@ -3722,6 +3722,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/logs@workspace:extensions/logs":
+  version: 0.0.0-use.local
+  resolution: "@extensions/logs@workspace:extensions/logs"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/messages@workspace:extensions/messages":
   version: 0.0.0-use.local
   resolution: "@extensions/messages@workspace:extensions/messages"
