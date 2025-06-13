@@ -24,6 +24,7 @@ import { DeviceBoardsAPI } from '@extensions/devices/deviceBoards/deviceBoardsAP
 import { DeviceDefinitionsAPI } from '@extensions/devices/deviceDefinitions/deviceDefinitionsAPI'
 import { DevicesAPI } from '@extensions/devices/devices/devicesAPI'
 import { LogsAPI } from '@extensions/logs/logsAPI'
+import { PackagesAPI } from '@extensions/packages/packagesAPI'
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -52,4 +53,5 @@ export default (app, context) => {
   VisionAPI(app, context)
   WorkspacesAPI(app, context)
   LogsAPI(app, context)
+  PackagesAPI(app, context)
 }
