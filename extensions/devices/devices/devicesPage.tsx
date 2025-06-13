@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { BookOpen, Tag, Router } from '@tamagui/lucide-icons';
 import { DevicesModel } from './devicesSchemas';
 import { API } from 'protobase';
-import { DataTable2 } from '../../../components/DataTable2';
-import { DataView } from '../../../components/DataView';
-import { ButtonSimple } from '../../../components/ButtonSimple';
-import { AdminPage } from '../../../components/AdminPage';
-import { usePendingEffect } from '../../../lib/usePendingEffect';
-import { CardBody } from '../../../components/CardBody';
-import { ItemMenu } from '../../../components/ItemMenu';
-import { Tinted } from '../../../components/Tinted';
-import { useSubscription, Connector } from '../../../lib/mqtt';
+import { DataTable2 } from 'protolib/components/DataTable2';
+import { DataView } from 'protolib/components/DataView';
+import { ButtonSimple } from 'protolib/components/ButtonSimple';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
+import { CardBody } from 'protolib/components/CardBody';
+import { ItemMenu } from 'protolib/components/ItemMenu';
+import { Tinted } from 'protolib/components/Tinted';
+import { useSubscription, Connector } from 'protolib/lib/mqtt';
 import { flash, connectSerialPort } from "../devicesUtils";
 import DeviceModal from 'protodevice/src/DeviceModal'
 import * as deviceFunctions from 'protodevice/src/device'
@@ -18,11 +18,11 @@ import { Subsystems } from 'protodevice/src/Subsystem'
 import { Paragraph, TextArea, XStack, YStack, Text, Button } from '@my/ui';
 import { getPendingResult } from "protobase";
 import { Pencil, UploadCloud, Navigation, Bug } from '@tamagui/lucide-icons';
-import { usePageParams } from '../../../next';
+import { usePageParams } from 'protolib/next';
 import { closeSerialPort, onlineCompilerSecureWebSocketUrl, postYamlApiEndpoint, compileActionUrl, compileMessagesTopic, downloadDeviceFirmwareEndpoint } from "../devicesUtils";
-import { SSR } from '../../../lib/SSR'
-import { withSession } from '../../../lib/Session'
-import { SelectList } from '../../../components/SelectList';
+import { SSR } from 'protolib/lib/SSR'
+import { withSession } from 'protolib/lib/Session'
+import { SelectList } from 'protolib/components/SelectList';
 
 const MqttTest = ({ onSetStage, onSetModalFeedback, compileSessionId, stage }) => {
   var isDoneCompiling = false

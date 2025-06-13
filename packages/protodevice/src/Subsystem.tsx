@@ -6,7 +6,7 @@ import { Chip } from 'protolib/components/Chip';
 import { Megaphone, MegaphoneOff, ChevronDown, Check } from "@tamagui/lucide-icons"
 import { useMqttState, useSubscription } from 'protolib/lib/mqtt';
 import { useFetch } from 'protolib/lib/useFetch'
-import { DeviceSubsystemMonitor, getPeripheralTopic } from 'protolib/bundles/devices/devices/devicesSchemas';
+import { DeviceSubsystemMonitor, getPeripheralTopic } from '@extensions/devices/devices/devicesSchemas';
 
 const Monitor = ({ deviceName, monitorData, subsystem }) => {
     const monitor = new DeviceSubsystemMonitor(deviceName, subsystem.name, monitorData)

@@ -4,18 +4,18 @@ import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
 import { DeviceBoardModel } from "../deviceBoards"
-import { usePendingEffect } from "../../../lib/usePendingEffect"
-import { Chip } from "../../../components/Chip"
-import { DataTable2 } from "../../../components/DataTable2"
-import { DataView } from "../../../components/DataView"
-import { AdminPage } from "../../../components/AdminPage"
-import { PaginatedData } from "../../../lib/SSR"
+import { usePendingEffect } from "protolib/lib/usePendingEffect"
+import { Chip } from "protolib/components/Chip"
+import { DataTable2 } from "protolib/components/DataTable2"
+import { DataView } from "protolib/components/DataView"
+import { AdminPage } from "protolib/components/AdminPage"
+import { PaginatedData } from "protolib/lib/SSR"
 import { ConfigComponent } from "./ConfigComponent" //TODO: Delete this file when WLED case integrated on ConfigEditor
 import { ConfigEditor } from "./ConfigEditor"
 import { Button, Input, XStack } from '@my/ui'
-import { Tinted } from "../../../components/Tinted"
-import { usePageParams } from "../../../next"
-import { InteractiveIcon } from "../../../components/InteractiveIcon"
+import { Tinted } from "protolib/components/Tinted"
+import { usePageParams } from "protolib/next"
+import { InteractiveIcon } from "protolib/components/InteractiveIcon"
 
 const DeviceDefitionIcons = {
   name: Tag,

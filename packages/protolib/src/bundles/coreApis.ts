@@ -1,10 +1,5 @@
 import { ObjectsAPI } from './objects/objectsAPI'
-import { DevicesAPI } from './devices/devices/devicesAPI'
 import { WledAPI } from './wled/api/wledApi'
-import { DeviceSdksAPI } from './devices/deviceSdks/deviceSdksAPI'
-import { DeviceCoresAPI } from './devices/devicecores/devicecoresAPI'
-import { DeviceBoardsAPI } from './devices/deviceBoards/deviceBoardsAPI'
-import { DeviceDefinitionsAPI } from './devices/deviceDefinitions/deviceDefinitionsAPI'
 import { ResourcesAPI } from './resources/resourcesAPI'
 import { MasksAPI } from './visualui/masksAPI';
 import { LogsAPI } from './logs/logsAPI'
@@ -17,12 +12,7 @@ import { SequencesAPI } from './sequences/sequencesAPI'
 
 export const AdminAPIBundles = (app, context) => {
   ObjectsAPI(app, context)
-  DevicesAPI(app, context)
   WledAPI(app, context)
-  DeviceSdksAPI(app, context)
-  DeviceCoresAPI(app, context)
-  DeviceBoardsAPI(app, context)
-  DeviceDefinitionsAPI(app, context)
   ResourcesAPI(app, context)
   MasksAPI(app, context)
   LogsAPI(app, context)

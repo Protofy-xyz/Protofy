@@ -1,4 +1,4 @@
-import DevicesPages from 'protolib/bundles/devices/adminPages'
+import DevicesPages from '@extensions/devices/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 

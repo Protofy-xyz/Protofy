@@ -2,9 +2,9 @@ import devicesEditorMasks from 'protodevice/src/nodes'
 import customVisualUIMasks from '../masks/custom.masks'
 import uiBundleMasks from 'protolib/bundles/ui/masks';
 import apiMasks from '@extensions/apis/masks';
-import devicesMasks from 'protolib/bundles/devices/devices/masks';
+import devicesMasks from '@extensions/devices/devices/masks';
 import wledMasks from '../../protolib/src/bundles/wled/masks';
-import devicesUIMasks from 'protolib/bundles/devices/devices/uiMasks';
+import devicesUIMasks from '@extensions/devices/devices/uiMasks';
 import baseMasks from '@extensions/basemasks';
 import customEventMasks from '@extensions/events/masks'
 import customMasks from '../masks'

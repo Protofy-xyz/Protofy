@@ -10,6 +10,7 @@ import { DiscordAPI } from '@extensions/discord/discordAPI'
 import { WhatsappAPI } from '@extensions/whatsapp/whatsappAPI'
 import { FlowAPI } from '@extensions/flow/flowAPI'
 import { KeysActions } from '@extensions/keys/keysActions'
+import { DevicesActions } from '@extensions/devices/devices/devicesActions'
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -24,4 +25,5 @@ export default (app, context) => {
     DiscordAPI(app, context)
     WhatsappAPI(app, context)
     FlowAPI(app, context)
+    DevicesActions(app, context)
 }

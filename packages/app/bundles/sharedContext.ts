@@ -10,6 +10,7 @@ import autopilot from '@extensions/autopilot/context'
 import cards from '@extensions/cards/context'
 import chatbots from '@extensions/chatbots/context'
 import keys from '@extensions/keys/context'
+import deviceContext from '@extensions/devices/devices/context'
 
 export default {
     onEvent,
@@ -30,5 +31,6 @@ export default {
     autopilot,
     cards,
     chatbots,
-    keys
+    keys,
+    ...deviceContext
 }

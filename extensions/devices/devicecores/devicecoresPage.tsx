@@ -1,12 +1,12 @@
 import { Cpu, Layers, Tag } from '@tamagui/lucide-icons';
 import { DeviceCoreModel } from './devicecoresSchemas';
 import { API, z, getPendingResult } from 'protobase';
-import { Chip } from '../../../components/Chip';
-import { DataTable2 } from '../../../components/DataTable2';
-import { DataView } from '../../../components/DataView';
-import { AdminPage } from '../../../components/AdminPage';
-import { PaginatedDataSSR } from '../../../lib/SSR';
-import { usePendingEffect } from '../../../lib/usePendingEffect';
+import { Chip } from 'protolib/components/Chip';
+import { DataTable2 } from 'protolib/components/DataTable2';
+import { DataView } from 'protolib/components/DataView';
+import { AdminPage } from 'protolib/components/AdminPage';
+import { PaginatedDataSSR } from 'protolib/lib/SSR';
+import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 import { DeviceSdkModel } from '../deviceSdks';
 import { useState } from 'react';
 

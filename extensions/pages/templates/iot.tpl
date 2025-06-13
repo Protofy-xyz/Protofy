@@ -14,7 +14,7 @@ import { withSession } from 'protolib/lib/Session';
 import { SSR, PaginatedDataSSR } from 'protolib/lib/SSR';
 import React from 'react'
 import { Router } from '@tamagui/lucide-icons';
-import { DevicesModel } from 'protolib/bundles/devices/devices';
+import { DevicesModel } from '@extensions/devices/devices';
 import Subsystem from 'protodevice/src/Subsystem'
 import { useRouter } from "solito/navigation";
 

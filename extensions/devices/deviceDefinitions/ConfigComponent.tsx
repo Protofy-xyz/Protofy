@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Button, XStack, YStack, Text } from '@my/ui'
-import { AlertDialog } from '../../../components/AlertDialog'
-import { SelectList } from '../../../components/SelectList'
+import { AlertDialog } from 'protolib/components/AlertDialog'
+import { SelectList } from 'protolib/components/SelectList'
 import { ConfigEditor } from './ConfigEditor'
 
 export const ConfigComponent = ({ data, setData, mode, originalData, boards }) => {

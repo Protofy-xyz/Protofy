@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { Button, XStack, YStack, Text, Stack } from '@my/ui'
-import Flows from '../../../adminpanel/features/components/Flows'
+import Flows from 'protolib/adminpanel/features/components/Flows'
 import { getFlowsCustomSnippets } from 'app/bundles/snippets'
 import { getFlowsMenuConfig } from 'app/bundles/flows'
 import { getFlowMasks, getFlowsCustomComponents } from 'app/bundles/masks'
@@ -8,7 +8,7 @@ import { useThemeSetting } from '@tamagui/next-theme'
 import { useSearchParams, usePathname } from 'solito/navigation'
 import layout from './DeviceLayout'
 import { X, Save } from "@tamagui/lucide-icons"
-import { Tinted } from '../../../components/Tinted'
+import { Tinted } from 'protolib/components/Tinted'
 
 const ActionButton = ({ ...props }) => {
 

@@ -17,12 +17,22 @@ import { DatabasesAPI } from '@extensions/databases/databasesAPI'
 import { VisionAPI } from '@extensions/vision/visionAPI'
 import { WorkspacesAPI } from '@extensions/workspaces/workspacesAPI'
 import { KeysAPI } from '@extensions/keys/keysAPI'
+import { DeviceSdksAPI } from '@extensions/devices/deviceSdks/deviceSdksAPI'
+import { DeviceCoresAPI } from '@extensions/devices/devicecores/devicecoresAPI'
+import { DeviceBoardsAPI } from '@extensions/devices/deviceBoards/deviceBoardsAPI'
+import { DeviceDefinitionsAPI } from '@extensions/devices/deviceDefinitions/deviceDefinitionsAPI'
+import { DevicesAPI } from '@extensions/devices/devices/devicesAPI'
 
 export default (app, context) => {
   KeysAPI(app, context)
   UsersAPI(app, context)
   GroupsAPI(app, context)
   EventsAPI(app, context)
+  DevicesAPI(app, context)
+  DeviceSdksAPI(app, context)
+  DeviceCoresAPI(app, context)
+  DeviceBoardsAPI(app, context)
+  DeviceDefinitionsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
   CardsAPI(app, context)
   AdminAPIBundles(app, context)

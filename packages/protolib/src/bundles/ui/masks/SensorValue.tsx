@@ -2,9 +2,9 @@ import { Node, getFieldValue, CustomFieldsList } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import { Timer } from '@tamagui/lucide-icons';
 import { useEffect, useState } from 'react';
-import { DeviceCollection } from '../../devices/models/DeviceModel';
+import { DeviceCollection } from '@extensions/devices/models/DeviceModel';
 import { DimensionProps, LayoutProps, TextProps } from './PropsLists';
-import { DeviceRepository } from '../../devices/repositories/deviceRepository';
+import { DeviceRepository } from '@extensions/devices/repositories/deviceRepository';
 
 const deviceRepository = new DeviceRepository()
 

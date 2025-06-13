@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { YStack, Paragraph, Text, XStack, Button } from '@my/ui';
 import { Tinted } from 'protolib/components/Tinted';
 import { RefreshCcw, Download } from '@tamagui/lucide-icons';
-import { resetDevice, downloadLogs } from "protolib/bundles/devices/devicesUtils";
+import { resetDevice, downloadLogs } from "@extensions/devices/devicesUtils";
 
 
 const ANSI_REGEX = /((?:\x1b|\u001b)\[[0-9;]*m)/g;
