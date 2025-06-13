@@ -8,6 +8,7 @@ import flow2 from '@extensions/flow/contextV2'
 import whatsapp from '@extensions/whatsapp/context'
 import lmstudio from '@extensions/lmstudio/context'
 import logs from '@extensions/logs/context'
+import network from '@extensions/network/context'
 
 export default {
     ...APIContext,
@@ -24,4 +25,5 @@ export default {
     whatsapp,
     lmstudio,
     logs,
+    network,
 }
