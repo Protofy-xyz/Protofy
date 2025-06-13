@@ -3734,6 +3734,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/php@workspace:extensions/php":
+  version: 0.0.0-use.local
+  resolution: "@extensions/php@workspace:extensions/php"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/protomemdb@workspace:extensions/protomemdb":
   version: 0.0.0-use.local
   resolution: "@extensions/protomemdb@workspace:extensions/protomemdb"
