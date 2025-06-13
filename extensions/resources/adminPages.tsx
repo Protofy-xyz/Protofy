@@ -1,15 +1,15 @@
 
 import { ResourceModel } from '.'
-import { DataTable2 } from '../../components/DataTable2'
-import { Chip } from '../../components/Chip'
-import { DataView } from '../../components/DataView'
-import { AdminPage } from '../../components/AdminPage'
-import { InteractiveIcon } from '../../components/InteractiveIcon'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { Chip } from 'protolib/components/Chip'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
+import { InteractiveIcon } from 'protolib/components/InteractiveIcon'
 import { ExternalLink, Link } from '@tamagui/lucide-icons'
-import { PaginatedData } from '../../lib/SSR'
+import { PaginatedData } from 'protolib/lib/SSR'
 
 const ResourceIcons = {}
-const sourceUrl = '/api/core/v1/resources'
+const sourceUrl = '/api/v1/resources'
 export default {
     'resources': {
         component: ({ pageState, initialItems, pageSession }: any) => {
@@ -36,6 +36,6 @@ export default {
                 />
             </AdminPage>)
         },
-        getServerSideProps: PaginatedData('/api/core/v1/resources', ['admin'])
+        getServerSideProps: PaginatedData('/api/v1/resources', ['admin'])
     }
 }
