@@ -1,6 +1,6 @@
 import { Protofy, generateEvent } from 'protobase'
 import { getServiceToken } from "protonode";
-import { assign } from "protolib/bundles/stateMachines/handlers";
+import { assign } from "@extensions/stateMachines/handlers";
 
 /*
     Generated State Machine definition from
