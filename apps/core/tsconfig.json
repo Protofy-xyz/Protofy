@@ -34,7 +34,6 @@
     "./app/bundles/coreApiContext.ts",
     "./app/bundles/coreApis.ts",
     "./app/bundles/objects.ts",
-    "./app/bundles/library.ts",
     "./app/bundles/storageProviders.ts",
     "./app/bundles/stateMachines.ts",
     "./app/conf.ts",

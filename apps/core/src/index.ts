@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import { setConfig, getConfig, getLogger } from 'protobase';
+import { setConfig, getConfig, getLogger, generateEvent } from 'protobase';
 import { getBaseConfig, getConfigWithoutSecrets } from '@my/config'
 import { pathToFileURL } from 'url';
 
@@ -17,8 +17,6 @@ import http from 'http';
 
 import chokidar from 'chokidar';
 import BundleContext from 'app/bundles/coreApiContext'
-//@ts-ignore
-import { generateEvent } from 'app/bundles/library'
 import { startMqtt } from './mqtt';
 
 export const startCore = (ready?) => {

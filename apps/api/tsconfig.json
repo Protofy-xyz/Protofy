@@ -33,7 +33,6 @@
     "./app/bundles/apiContext.ts",
     "./app/bundles/apis.ts",
     "./app/bundles/objects.ts",
-    "./app/bundles/library.ts",
     "./app/bundles/storageProviders.ts",
     "./app/initialData.ts",
   ],

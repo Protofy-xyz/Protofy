@@ -1,6 +1,6 @@
 import { Text, YStack } from '@my/ui';
 import { Fan } from '@tamagui/lucide-icons';
-import { CenterCard } from '../../bundles/widgets';
+import { CenterCard } from 'app/bundles/widgets';
 
 export const MotorCard = ({ value }) => {
     const fan = () => {

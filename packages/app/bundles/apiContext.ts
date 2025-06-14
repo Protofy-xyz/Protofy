@@ -1,4 +1,3 @@
-import { APIContext } from 'protolib/bundles/apiContext'
 import {Objects} from './objects'
 import machineDefinitions from './stateMachines'
 import context from './sharedContext'
@@ -13,9 +12,10 @@ import os from '@extensions/os/context'
 import os2 from '@extensions/os/context2'
 import playwright from '@extensions/playwright/context'
 import { sendMailWithResend } from '@extensions/resend/context'
+import wledContext from '@extensions/wled/context'
+import twilio from '@extensions/twilio/context'
 
 export default {
-    ...APIContext,
     machineDefinitions: {
         ...machineDefinitions
     },
@@ -33,5 +33,7 @@ export default {
     os,
     os2,
     playwright,
-    sendMailWithResend
+    sendMailWithResend,
+    ...wledContext,
+    twilio
 }

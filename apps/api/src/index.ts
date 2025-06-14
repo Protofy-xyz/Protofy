@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protonode'
-import { setConfig, getLogger } from 'protobase';
+import { setConfig, getLogger, generateEvent } from 'protobase';
 import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig('api', process, getServiceToken()))
 require('events').EventEmitter.defaultMaxListeners = 100;
@@ -10,8 +10,6 @@ const axios = require('axios')
 import http from 'http';
 global.defaultRoute = '/api/v1'
 global.appName = 'api'
-//@ts-ignore
-import { generateEvent } from 'app/bundles/library'
 import chokidar from 'chokidar';
 const { handleUpgrade } = require('app/proxy.js')
 

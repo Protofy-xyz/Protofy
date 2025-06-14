@@ -1,6 +1,6 @@
 import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, TextArea } from '@my/ui';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getHTML } from '../bundles/widgets';
+import { getHTML } from 'app/bundles/widgets';
 
 const enableHTML = true
 

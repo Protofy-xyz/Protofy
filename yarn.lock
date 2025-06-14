@@ -3830,9 +3830,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/statemachines@workspace:extensions/stateMachines":
+  version: 0.0.0-use.local
+  resolution: "@extensions/statemachines@workspace:extensions/stateMachines"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/tokens@workspace:extensions/tokens":
   version: 0.0.0-use.local
   resolution: "@extensions/tokens@workspace:extensions/tokens"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/twilio@workspace:extensions/twilio":
+  version: 0.0.0-use.local
+  resolution: "@extensions/twilio@workspace:extensions/twilio"
   languageName: unknown
   linkType: soft
 
@@ -3860,9 +3872,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/visualui@workspace:extensions/visualui":
+  version: 0.0.0-use.local
+  resolution: "@extensions/visualui@workspace:extensions/visualui"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/whatsapp@workspace:extensions/whatsapp":
   version: 0.0.0-use.local
   resolution: "@extensions/whatsapp@workspace:extensions/whatsapp"
+  languageName: unknown
+  linkType: soft
+
+"@extensions/wled@workspace:extensions/wled":
+  version: 0.0.0-use.local
+  resolution: "@extensions/wled@workspace:extensions/wled"
   languageName: unknown
   linkType: soft
 

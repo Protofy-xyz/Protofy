@@ -1,5 +1,4 @@
 import { ObjectsAPI } from '@extensions/objects/objectsAPI'
-import {AdminAPIBundles} from 'protolib/bundles/coreApis'
 import { UsersAPI } from '@extensions/users/usersAPI'
 import { GroupsAPI } from '@extensions/groups/groupsAPI'
 import { EventsAPI } from '@extensions/events/eventsAPI'
@@ -28,6 +27,9 @@ import { PackagesAPI } from '@extensions/packages/packagesAPI'
 import { SequencesAPI } from '@extensions/sequences/sequencesAPI'
 import { ServicesAPI } from '@extensions/services/servicesAPI'
 import { TokensAPI } from '@extensions/tokens/tokensAPI'
+import { MasksAPI } from '@extensions/visualui/masksAPI'
+import { WledAPI } from '@extensions/wled/api/wledApi'
+import { StateMachinesDefinitionsApi } from '@extensions/stateMachines/stateMachineDefinitions/stateMachineDefinitionApi'
 
 export default (app, context) => {
   ObjectsAPI(app, context)
@@ -42,7 +44,6 @@ export default (app, context) => {
   DeviceDefinitionsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
   CardsAPI(app, context)
-  AdminAPIBundles(app, context)
   PagesAPI(app, context)
   APIsAPI(app, context)
   ArduinosAPI(app, context)
@@ -60,4 +61,7 @@ export default (app, context) => {
   SequencesAPI(app, context)
   ServicesAPI(app, context)
   TokensAPI(app, context)
+  MasksAPI(app, context)
+  WledAPI(app, context)
+  StateMachinesDefinitionsApi(app, context)
 }
