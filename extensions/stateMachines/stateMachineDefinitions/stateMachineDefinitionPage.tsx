@@ -1,10 +1,10 @@
 import { StateMachineDefinitionModel } from './stateMachineDefinitionSchema'
-import { DataTable2 } from '../../../components/DataTable2'
-import { DataView } from '../../../components/DataView'
-import { AdminPage } from '../../../components/AdminPage'
-import { InteractiveIcon } from '../../../components/InteractiveIcon'
+import { DataTable2 } from 'protolib/components/DataTable2'
+import { DataView } from 'protolib/components/DataView'
+import { AdminPage } from 'protolib/components/AdminPage'
+import { InteractiveIcon } from 'protolib/components/InteractiveIcon'
 import { ExternalLink, Link, FileBox } from '@tamagui/lucide-icons'
-import { PaginatedData } from '../../../lib/SSR'
+import { PaginatedData } from 'protolib/lib/SSR'
 
 
 const sourceUrl = '/api/core/v1/statemachinedefinition'
