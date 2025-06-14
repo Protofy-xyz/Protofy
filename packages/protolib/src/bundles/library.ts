@@ -1,1 +1,0 @@
-export {generateEvent} from 'protobase';

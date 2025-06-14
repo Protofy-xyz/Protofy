@@ -1,4 +1,3 @@
-import {APIBundles} from 'protolib/bundles/api'
 import CustomAPI from '../apis'
 import { UsersActions } from '@extensions/users/usersActions'
 import { GroupsActions } from '@extensions/groups/groupsActions'
@@ -20,7 +19,6 @@ import { StateMachinesAPI } from '@extensions/stateMachines/stateMachines/stateM
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
-    APIBundles(app, context)
     CustomAPI(app, context)
     UsersActions(app, context)
     GroupsActions(app, context)

@@ -1,4 +1,3 @@
-import { APIContext } from 'protolib/bundles/apiContext'
 import {Objects} from './objects'
 import machineDefinitions from './stateMachines'
 import context from './sharedContext'
@@ -17,7 +16,6 @@ import wledContext from '@extensions/wled/context'
 import twilio from '@extensions/twilio/context'
 
 export default {
-    ...APIContext,
     machineDefinitions: {
         ...machineDefinitions
     },

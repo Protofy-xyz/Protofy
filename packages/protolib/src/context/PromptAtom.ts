@@ -66,7 +66,6 @@ export const PromptAtom = atom<PromptContext[]>([{
         - packages/app/bundles/CoreApiContext.ts to add variables that will be context-accessible from core apis, so core apis don't need to use import
         - packages/app/bundles/apiContext.ts to add variables that will be context-accessible from apis, so apis don't need to use import
         - packages/app/bundles/flows.ts to configure the lowcode visual nodes editor for javascript and typescript (protoflow) menus
-        - packages/app/bundles/library.ts to add functions accesible through and part of the system without directly importing the function from its location (only used by events bundle, providing generateEvent function through this bundle port)
         - packages/app/bundles/masks.ts to add masks to the protoflow visual editor environment. A mask is a customization of a visual node in the flows editor, or a customization of a group of nodes into a single visual nodes.
         - packages/app/bundles/menu.tsx to configure the website menu
         - packages/app/bundles/objects.ts to make objects from your bundle accessible to other bundles without directly impoting them, getting them instead through an object exported through this file, wher imports are centrlaized

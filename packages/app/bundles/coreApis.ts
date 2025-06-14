@@ -1,5 +1,4 @@
 import { ObjectsAPI } from '@extensions/objects/objectsAPI'
-import {AdminAPIBundles} from 'protolib/bundles/coreApis'
 import { UsersAPI } from '@extensions/users/usersAPI'
 import { GroupsAPI } from '@extensions/groups/groupsAPI'
 import { EventsAPI } from '@extensions/events/eventsAPI'
@@ -45,7 +44,6 @@ export default (app, context) => {
   DeviceDefinitionsAPI(app, context)
   ProtoMemDBAPI(app, context, true)
   CardsAPI(app, context)
-  AdminAPIBundles(app, context)
   PagesAPI(app, context)
   APIsAPI(app, context)
   ArduinosAPI(app, context)
