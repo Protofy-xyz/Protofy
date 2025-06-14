@@ -22,6 +22,8 @@ const rowsPerPage = 20
 
 const sourceUrl = '/api/core/v1/objects'
 
+export const hasHTMLCompiler = process.env.NODE_ENV !== "production";
+
 const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, object }: any) => {
     const objExists = object ? true : false
     let objModel = null
@@ -62,8 +64,6 @@ const ObjectViewLoader = (props) => {
     </AsyncView>
 }
 
-const hasNextAvailable = true // TODO: implement logic to check if there is a next service available to compile the admin page
-
 export default {
     'objects': {
         component: ({ pageState, initialItems, pageSession }: any) => {
@@ -94,7 +94,7 @@ export default {
                             .after("keys")
                             .label("customizable admin page")
                             .defaultValue(false)
-                            .visible((displayType, object) => hasNextAvailable),
+                            .visible((displayType, object) => hasHTMLCompiler),
                     }}
                     // hideAdd={true}
                     model={ObjectModel}
