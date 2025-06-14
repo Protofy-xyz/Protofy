@@ -1,6 +1,5 @@
 import { Protofy, generateEvent } from "protobase";
 import { getServiceToken } from "protonode";
-import { assign } from "@extensions/stateMachines/handlers";
 
 export default Protofy("machineDefinition", {
     context: {
