@@ -1,4 +1,4 @@
-import StateMachinesPages from 'protolib/bundles/stateMachines/adminPages'
+import StateMachinesPages from '@extensions/stateMachines/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
