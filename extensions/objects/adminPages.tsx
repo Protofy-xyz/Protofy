@@ -62,6 +62,8 @@ const ObjectViewLoader = (props) => {
     </AsyncView>
 }
 
+const hasNextAvailable = true // TODO: implement logic to check if there is a next service available to compile the admin page
+
 export default {
     'objects': {
         component: ({ pageState, initialItems, pageSession }: any) => {
@@ -79,27 +81,20 @@ export default {
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
-                        dynamic: z.boolean().after("keys").label("dynamic data object").defaultValue(true),
-                        api: z.boolean()
-                            .after("keys")
-                            .label("automatic crud api")
-                            .defaultValue(true)
-                            .visible((displayType, object) => !object?.data?.dynamic),
                         databaseType: z.union([z.literal("LevelDB"), z.literal("Google Sheets"), z.literal("JSON File")])
                             .after("keys")
                             .label("database type")
-                            .defaultValue("LevelDB")
-                            .visible((displayType, object) => object?.data?.api && !object?.data?.dynamic),
+                            .defaultValue("LevelDB"),
                         param: z.string()
                             .after("keys")
                             .label("Google Sheet Link")
                             .hint("https://docs.google.com/spreadsheets/d/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/edit?usp=sharing")
-                            .visible((displayType, object) => object?.data?.api && object?.data?.databaseType === "Google Sheets"),
+                            .visible((displayType, object) => object?.data?.databaseType === "Google Sheets"),
                         adminPage: z.boolean()
                             .after("keys")
-                            .label("admin page")
-                            .defaultValue(true)
-                            .visible((displayType, object) => object?.data?.api && !object?.data?.dynamic),
+                            .label("customizable admin page")
+                            .defaultValue(false)
+                            .visible((displayType, object) => hasNextAvailable),
                     }}
                     // hideAdd={true}
                     model={ObjectModel}
@@ -108,13 +103,13 @@ export default {
                     deleteable={(element) => {
                         if (Array.isArray(element)) {
                             for (const ele of element) {
-                                if (ele.dynamic || Object.keys(ele.features).length !== 0) {
+                                if (Object.keys(ele.features).length !== 0) {
                                     return false;
                                 }
                             }
                             return true;
                         } else {
-                            return element.data.dynamic || Object.keys(element.data.features).length === 0
+                            return Object.keys(element.data.features).length === 0
                         }
                     }
                     }

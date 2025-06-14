@@ -82,7 +82,7 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
   }
 
   getDefaultSchemaFilePath() {
-    return ObjectModel.getDefaultSchemaFilePath(this.data.name, this.data.id, this.data.dynamic);
+    return ObjectModel.getDefaultSchemaFilePath(this.data.name, this.data.id);
   }
 
   static load(data: any, session?: SessionDataType): ObjectModel {
@@ -103,11 +103,8 @@ export class ObjectModel extends ProtoModel<ObjectModel> {
     return result
   }
 
-  static getDefaultSchemaFilePath(name, id = false, dynamic = false) {
-    if (dynamic) {
-      return '/data/objects/' + id + '.json'
-    }
-    return '/packages/app/objects/' + name + '.ts'
+  static getDefaultSchemaFilePath(name, id = false) {
+    return '/data/objects/' + id + '.json'
   }
 
   create(data?) {

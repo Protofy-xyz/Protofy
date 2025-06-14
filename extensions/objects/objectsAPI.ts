@@ -12,49 +12,24 @@ import { PageModel } from '@extensions/pages/pagesSchemas'
 const indexFile = "/packages/app/objects/index.ts"
 
 const getSchemas = async (req, sourceFile?) => {
-  const node = getDefinition(
-    sourceFile ?? getSourceFile(fspath.join(getRoot(req), indexFile)),
-    '"objects"'
-  );
-
   let schemas = []
-  //no dynamic objects
-  if (node) {
-    if (node instanceof ObjectLiteralExpression) {
-      const schemaPromises = node.getProperties().map(prop => {
-        if (prop instanceof PropertyAssignment) {
-          const schemaId = prop.getInitializer().getText();
-          return getSchema(schemaId, [], req, prop.getName()).then(schema => ({
-            name: prop.getName(),
-            features: schema.features,
-            apiOptions: schema.apiOptions,
-            id: schemaId
-          }));
-        }
-      }).filter(p => p);
-
-      schemas = await Promise.all(schemaPromises);
-    }
-  }
-
-  //dynamic ts objects
   const tsFiles = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.ts'))
   tsFiles.forEach(async (file) => {
     const filePath = fspath.join(getRoot(req), 'data/objects', file)
     const idSchema = file.replace('.ts', 'Model')
     const schemaName = file.replace('.ts', '')
 
-    const objectData = await getSchemaDynamicTs(filePath, idSchema, schemaName)
+    const objectData = await getSchemaTS(filePath, idSchema, schemaName)
     if (objectData) {
       schemas.push(objectData)
     } else {
-      console.error("Ignoring dynamic schema in file: ", file, "because it could not be parsed")
+      console.error("Ignoring schema in file: ", file, "because it could not be parsed")
     }
   })
   return schemas;
 }
 
-const getSchemaDynamicTs = async (filePath, idSchema, schemaName) => {
+const getSchemaTS = async (filePath, idSchema, schemaName) => {
   let sourceFile
   try {
     sourceFile = getSourceFile(filePath)
@@ -106,73 +81,21 @@ const getSchemaDynamicTs = async (filePath, idSchema, schemaName) => {
       console.error("Api options text producing the error: ", apiOptionsNode.getText())
     }
   }
-  return { name: schemaName, features, id: idSchema, keys, apiOptions: options, dynamic: true }
+  return { name: schemaName, features, id: idSchema, keys, apiOptions: options}
 }
 
 
 const getSchema = async (idSchema, schemas, req, name?) => {
   //list all objects in data/objects folder and check if any has a name matching the idSchema
   //if so, return that object
-  // dynamic ts objects
   const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
   const tsFile = fspath.join(getRoot(req), 'data/objects', schemaName + '.ts')
-  const tsData = await getSchemaDynamicTs(tsFile, idSchema, schemaName)
+  const tsData = await getSchemaTS(tsFile, idSchema, schemaName)
   if (tsData) {
     return tsData
   }
 
-  let SchemaFile = fspath.join(getRoot(req), indexFile)
-  let sourceFile = getSourceFile(SchemaFile)
-
-  sourceFile = getSourceFile(fspath.join("../../packages/app/objects/", getImport(sourceFile, idSchema)) + ".ts")
-  const node = getDefinition(sourceFile, '"schema"')
-  let keys = {}
-  if (node) {
-    if (node instanceof ObjectLiteralExpression) {
-      node.getProperties().forEach(prop => {
-        if (prop instanceof PropertyAssignment) {
-          // obj[prop.getName()] = prop.getInitializer().getText();
-          const chain = extractChainCalls(prop.getInitializer())
-          if (chain.length) {
-            const typ = chain.shift()
-            keys[prop.getName()] = {
-              type: typ.name,
-              params: typ.params,
-              modifiers: chain
-            }
-          }
-        }
-      });
-    }
-  }
-  const featuresNode = getDefinition(sourceFile, '"features"')
-  let features = {}
-  if (featuresNode instanceof ObjectLiteralExpression) {
-    console.log('features', featuresNode.getText())
-    try {
-      features = JSON.parse(featuresNode.getText())
-    } catch (e) {
-      console.error("Ignoring features in object: ", idSchema, "because of an error: ", e)
-      console.error("Features text producing the error: ", featuresNode.getText())
-    }
-  }
-
-  const apiOptionsNode = getDefinition(sourceFile, '"api.options"')
-  let options = {
-    name: schemaName,
-    prefix: '/api/v1/'
-  }
-
-  if (apiOptionsNode instanceof ObjectLiteralExpression) {
-    console.log('api options', apiOptionsNode.getText())
-    try {
-      options = JSON.parse(apiOptionsNode.getText())
-    } catch (e) {
-      console.error("Ignoring api options in object: ", idSchema, "because of an error: ", e)
-      console.error("Api options text producing the error: ", apiOptionsNode.getText())
-    }
-  }
-  return { name: schemaName, features, id: idSchema, keys, apiOptions: options }
+  throw "Schema with id " + idSchema + " not found in schemas";
 }
 
 
@@ -184,19 +107,6 @@ const setSchema = (path, content, value, req) => {
   }
 
   secondArgument.replaceWithText(content);
-  sourceFile.saveSync();
-
-  if (value.dynamic) return // skip index
-
-  //link in index.ts
-  sourceFile = getSourceFile(fspath.join(getRoot(req), indexFile))
-  addImportToSourceFile(sourceFile, value.id, ImportType.NAMED, './' + value.name)
-
-  const arg = getDefinition(sourceFile, '"objects"')
-  if (!arg) {
-    throw "No link definition schema marker found for file: " + path
-  }
-  addObjectLiteralProperty(arg, value.name, value.id)
   sourceFile.saveSync();
 }
 
@@ -213,9 +123,7 @@ const getDB = (path, req, session) => {
       value = JSON.parse(value)
       if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))) {
         syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))
-      } else {
-        removeFileWithImports(getRoot(req), value, '"objects"', indexFile, req, fs);
-      }
+      } 
     },
 
     async put(key, value) {
@@ -225,28 +133,19 @@ const getDB = (path, req, session) => {
         name: value.name.replace(/\s/g, ""),
         id: value.id.replace(/\s/g, "")
       }
-      if (value.dynamic) {
-        value.initialData = {}
-        value.apiOptions = {
-          name: value.name,
-          prefix: '/api/v1/'
-        }
-        value.features = {
-          AutoAPI: value.api ? value.api : false,
-          adminPage: '/objects/view?object=' + value.name + "Model"
-        }
-        // delete value.api
-        delete value.adminPage
 
-        //its a dynamic object, so we need to create a file in data/objects folder
-        // const filePath = fspath.join(getRoot(req), 'data/objects', value.id + '.json')
-        // syncFs.writeFileSync(filePath, JSON.stringify(value, null, 2))
-        // await API.get('/api/v1/objects/reload?token=' + getServiceToken())
-        // return
+      value.initialData = {}
+      value.apiOptions = {
+        name: value.name,
+        prefix: '/api/v1/'
       }
-
-      // if the object is dynamic, we need to create a file in data/objects folder
-      const relPath = value.dynamic ? "/data/objects/" : "/packages/app/objects/"
+      value.features = {
+        AutoAPI: value.api ? value.api : false,
+        adminPage: '/objects/view?object=' + value.name + "Model"
+      }
+      // delete value.api
+      delete value.adminPage
+      const relPath = "/data/objects/"
       const filePath = getRoot(req) + relPath + fspath.basename(value.name) + '.ts'
       let exists
       try {
@@ -276,27 +175,25 @@ const getDB = (path, req, session) => {
       const result = ObjectModel.load(value).getSourceCode()
   
       await setSchema(filePath, result, value, req)
-     
-      if (value.dynamic) {
-        let ObjectSourceFile = getSourceFile(filePath)
-        if (value.features.AutoAPI) await addFeature(ObjectSourceFile, '"AutoAPI"', `"${value.features.AutoAPI}"`)
-        if (value.features.adminPage) await addFeature(ObjectSourceFile, '"adminPage"', `"${value.features.adminPage}"`)
-        
-        await API.get('/api/v1/objects/reload?token=' + getServiceToken())
-      }
+      let ObjectSourceFile = getSourceFile(filePath)
+      if (value.features.AutoAPI) await addFeature(ObjectSourceFile, '"AutoAPI"', `"${value.features.AutoAPI}"`)
+      if (value.features.adminPage) await addFeature(ObjectSourceFile, '"adminPage"', `"${value.features.adminPage}"`)
+      
+      await API.get('/api/v1/objects/reload?token=' + getServiceToken())
+      
  
       //if api is selected, create an autoapi for the object
-      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "LevelDB" || value.dynamic) ? "automatic-crud" : "automatic-crud-storage"
-      if (value.api && session) {
+      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "LevelDB") ? "automatic-crud" : "automatic-crud-storage"
+      if (session) {
         const objectApi = APIModel.load({
           name: value.name,
           object: value.name,
           template: templateName,
           param: value.param,
-          dynamic: value.dynamic,
           modelName: value.id
         })
         await API.post("/api/core/v1/apis?token=" + session.token, objectApi.create().getData())
+
         if (value.adminPage) {
           const objectApi = PageModel.load({
             name: value.name,

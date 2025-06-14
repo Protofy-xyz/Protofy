@@ -60,7 +60,7 @@ export default ({ pages, boards, objects }) => {
     ]
 
     const objectsMenu = objectsWithPage.length ? objectsWithPage.map((obj) => {
-        return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": (obj.dynamic ? '/workspace/' : '/admin/') + obj.features.adminPage }
+        return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": ('/workspace/') + obj.features.adminPage }
     }) : [];
 
     const adminMenu = adminPages.map((page) => {
