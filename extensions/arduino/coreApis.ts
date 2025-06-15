@@ -40,7 +40,7 @@ const callModel = async (prompt, context) => {
     return reply
 }
 
-export const ArduinosAPI = (app, context) => {
+export default (app, context) => {
     ArduinosAutoAPI(app, context)
 
     // const transport = new ProtofySerial({ port: 'COM16', baudRate: 115200 })

@@ -104,7 +104,7 @@ const installAsset = async (context, zipFile) => {
         });
     };
 
-export const AssetsAPI = (app, context) => {
+export default (app, context) => {
 
     // on upload file to assets folder, install the asset
     context.onEvent(

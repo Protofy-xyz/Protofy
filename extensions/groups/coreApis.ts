@@ -16,6 +16,6 @@ const GroupsAutoAPI = AutoAPI({
     requiresAdmin: ['create', 'update']
 })
 
-export const GroupsAPI = (app, context) => {
+export default (app, context) => {
     GroupsAutoAPI(app, context)
 }

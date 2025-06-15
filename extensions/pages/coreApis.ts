@@ -271,7 +271,7 @@ const PagesAutoAPI = AutoAPI({
 })
 
 const root = getRoot();
-export const PagesAPI = (app, context) => {
+export default (app, context) => {
   PagesAutoAPI(app, context)
   app.get('/api/core/v1/publish/pages', handler(async (req, res, session) => {
     if (!session || !session.user.admin) {

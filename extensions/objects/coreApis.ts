@@ -222,7 +222,7 @@ const getDB = (path, req, session) => {
   return db;
 }
 
-const ObjectsAutoAPI = AutoAPI({
+export default AutoAPI({
   modelName: 'objects',
   modelType: ObjectModel,
   prefix: '/api/core/v1/',
@@ -230,7 +230,3 @@ const ObjectsAutoAPI = AutoAPI({
   connectDB: () => new Promise(resolve => resolve(null)),
   requiresAdmin: ['*']
 })
-
-export const ObjectsAPI = (app, context) => {
-    ObjectsAutoAPI(app, context)
-}

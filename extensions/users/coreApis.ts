@@ -42,7 +42,7 @@ const UsersActions = AutoActions({
     pageSrc: '/workspace/users?mode=embed'
 })
 
-export const UsersAPI = (app, context) => {
+export default (app, context) => {
     UsersAutoAPI(app, context)
     UsersActions(app, context)
 }

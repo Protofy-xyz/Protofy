@@ -204,6 +204,6 @@ const APIsAutoAPI = AutoAPI({
   requiresAdmin: ['*']
 })
 
-export const APIsAPI = (app, context) => {
+export default (app, context) => {
     APIsAutoAPI(app, context)
 }
