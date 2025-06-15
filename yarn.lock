@@ -3653,6 +3653,8 @@ __metadata:
 "@extensions/chatgpt@workspace:extensions/chatgpt":
   version: 0.0.0-use.local
   resolution: "@extensions/chatgpt@workspace:extensions/chatgpt"
+  dependencies:
+    openai: "npm:4.68.4"
   languageName: unknown
   linkType: soft
 
@@ -25017,7 +25019,6 @@ __metadata:
     mqtt: "npm:^5.2.1"
     mqtt-pattern: "npm:^1.2.0"
     multer: "npm:1.4.5-lts.1"
-    openai: "npm:4.68.4"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
     pm2: "npm:5.3.1"
