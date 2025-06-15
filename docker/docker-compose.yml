@@ -5,7 +5,6 @@ services:
       image: "protofy/workspace"
       command: -c "yarn dev"
       ports:
-        - 3000:3000
         - 8000:8000
         - 1883:1883
       volumes:
