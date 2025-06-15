@@ -22,7 +22,7 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-import { AutoAPI, getAuth, getServiceToken } from "protonode";
+import { AutoActions, AutoAPI, getAuth, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import APIContext from "app/bundles/context";
 import { Application } from "express";
@@ -47,6 +47,13 @@ export default Protofy("code", async (app: Application, context: typeof APIConte
         }
         return JSON.parse(fs.readFileSync(jsonPath).toString())
     }
+
+    const {{codeName}}Actions = AutoActions({
+        modelName: name,
+        modelType: {{modelName}},
+        prefix: prefix,
+        pageSrc: '/workspace/objects/view?object={{object}}Model&mode=embed'
+    })
 
     const {{codeName}}API = AutoAPI({
         modelName: name,
@@ -79,5 +86,6 @@ export default Protofy("code", async (app: Application, context: typeof APIConte
         },
     });
 
+    {{codeName}}Actions(app, context)
     {{codeName}}API(app, context)   
 })

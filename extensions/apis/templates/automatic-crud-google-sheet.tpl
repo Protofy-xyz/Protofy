@@ -23,7 +23,7 @@ use the chat if in doubt
 */
 
 
-import { AutoAPI, getServiceToken } from "protonode";
+import { AutoActions, AutoAPI, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import APIContext from "app/bundles/context";
 import { Application } from "express";
@@ -53,6 +53,14 @@ const getCredentials = async () => {
 }
 
 export default Protofy("code", async (app: Application, context: typeof APIContext) => {
+
+    const {{codeName}}Actions = AutoActions({
+        modelName: name,
+        modelType: {{modelName}},
+        prefix: prefix,
+        pageSrc: '/workspace/objects/view?object={{object}}Model&mode=embed'
+    })
+
     const {{codeName}}API = AutoAPI({
         modelName: name,
         modelType: {{modelName}},
@@ -89,4 +97,5 @@ export default Protofy("code", async (app: Application, context: typeof APIConte
     });
 
     {{codeName}}API(app, context)
+    {{codeName}}Actions(app, context)
 })
