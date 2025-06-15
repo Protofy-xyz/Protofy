@@ -3677,6 +3677,8 @@ __metadata:
 "@extensions/discord@workspace:extensions/discord":
   version: 0.0.0-use.local
   resolution: "@extensions/discord@workspace:extensions/discord"
+  dependencies:
+    discord.js: "npm:^14.16.1"
   languageName: unknown
   linkType: soft
 
@@ -24996,7 +24998,6 @@ __metadata:
     autoprefixer: "npm:^10.4.16"
     classnames: "npm:2.3.2"
     cookie: "npm:^0.6.0"
-    discord.js: "npm:^14.16.1"
     express-list-endpoints: "npm:^6.0.0"
     framer-motion: "npm:6.5.1"
     googleapis: "npm:137.1.0"
