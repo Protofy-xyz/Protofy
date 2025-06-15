@@ -3753,6 +3753,8 @@ __metadata:
 "@extensions/mobile@workspace:extensions/mobile":
   version: 0.0.0-use.local
   resolution: "@extensions/mobile@workspace:extensions/mobile"
+  dependencies:
+    react-full-screen: "npm:1.1.1"
   languageName: unknown
   linkType: soft
 
@@ -24866,7 +24868,6 @@ __metadata:
     react-contenteditable: "npm:3.3.7"
     react-data-table-component: "npm:^7.5.4"
     react-data-table-component-extensions: "npm:^1.6.0"
-    react-full-screen: "npm:1.1.1"
     react-grid-layout: "npm:^1.4.4"
     react-map-gl: "npm:^7.1.7"
     react-markdown: "npm:^9.0.1"
