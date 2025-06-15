@@ -23,7 +23,8 @@ const {{codeName}}API = AutoAPI({
 const {{codeName}}Actions = AutoActions({
     modelName: name,
     modelType: {{modelName}},
-    prefix: prefix
+    prefix: prefix,
+    pageSrc: '/workspace/objects/view?object={{object}}Model&mode=embed'
 })
 
 export default Protofy("code", async (app:Application, context: typeof APIContext) => {
