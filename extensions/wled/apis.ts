@@ -2,8 +2,6 @@ import { API, getLogger } from "protobase";
 const logger = getLogger();
 
 export default (app, context) => {
-  logger.info("wledApi started");
-
   app.get("/api/v1/wled/state", async (req, res) => {
     const { address } = req.params;
     const state = await API.get(`http://${address}/json/state`)
