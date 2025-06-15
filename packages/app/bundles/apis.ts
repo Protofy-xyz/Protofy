@@ -1,36 +1,44 @@
-import UsersActions from '@extensions/users/apis'
-import GroupsActions from '@extensions/groups/apis'
-import ProtoMemDBAPI from '@extensions/protomemdb/apis'
-import EventsActions from '@extensions/events/apis'
-import AutomationsActions from '@extensions/apis/apis'
-import PagesActions from '@extensions/pages/apis'
-import DiscordAPI from '@extensions/discord/apis'
-import WhatsappAPI from '@extensions/whatsapp/apis'
-import FlowAPI from '@extensions/flow/apis'
-import KeysActions from '@extensions/keys/apis'
-import DevicesActions from '@extensions/devices/devices/apis'
-import PhpAPI from '@extensions/php/apis'
-import MobileAPI from '@extensions/mobile/apis'
-import ObjectUserAPI from '@extensions/objects/apis'
-import ResourcesAPI from '@extensions/resources/apis'
-import StateMachinesAPI from '@extensions/stateMachines/stateMachines/apis'
+import fs from 'fs';
+import path from 'path';
 
+const extensionsPath = '../../extensions';
+const apis: Record<string, any> = {};
 
-export default (app, context) => {
-    ProtoMemDBAPI(app, context)
-    UsersActions(app, context)
-    GroupsActions(app, context)
-    EventsActions(app, context)
-    KeysActions(app, context)
-    AutomationsActions(app, context)
-    PagesActions(app, context)
-    DiscordAPI(app, context)
-    WhatsappAPI(app, context)
-    FlowAPI(app, context)
-    DevicesActions(app, context)
-    PhpAPI(app, context)
-    MobileAPI(app, context)
-    ObjectUserAPI(app, context)
-    ResourcesAPI(app, context)
-    StateMachinesAPI(app, context)
+async function loadApis() {
+    const files = fs.readdirSync(extensionsPath);
+    
+    await Promise.all(
+        files.map(async (extension) => {
+            const filePath = path.join(extensionsPath, extension, 'apis');
+            if (fs.existsSync(filePath+'.ts')) {
+                try {
+                    const apiModule = await import('@extensions/'+extension+'/apis');
+                    if (typeof apiModule.default === 'function') {
+                        apis[extension] = apiModule.default;
+                    } else {
+                        console.warn(`API module in ${filePath} is not a function`);
+                    }
+                } catch (error) {
+                    console.error(`Error loading API from ${filePath}:`, error);
+                }
+            }
+        })
+    );
+}
+
+export default async (app, context) => {
+    await loadApis();
+    Object.keys(apis).forEach((apiName) => {
+        try {
+            const api = apis[apiName];
+            if (typeof api === 'function') {
+                console.log(`Initializing API: ${apiName}`);
+                api(app, context);
+            } else {
+                console.warn(`API ${apiName} is not a function`);
+            }
+        } catch (error) {
+            console.error(`Error initializing API ${apiName}:`, error);
+        }
+    });
 }

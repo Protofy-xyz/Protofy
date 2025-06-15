@@ -41,7 +41,7 @@ const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
         const BundleAPI = await import(pathToFileURL(require.resolve('app/bundles/apis')).href);
         const BundleChatbotsAPI = await import(pathToFileURL(require.resolve('app/bundles/chatbots')).href);
         //wait for mqtt before starting API
-        BundleAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
+        await BundleAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
         BundleChatbotsAPI.default(app, { mqtt, topicPub, topicSub, ...BundleContext })
     } catch (error) {
         generateEvent({
