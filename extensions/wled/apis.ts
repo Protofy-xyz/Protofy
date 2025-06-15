@@ -4,13 +4,13 @@ const logger = getLogger();
 export default (app, context) => {
   logger.info("wledApi started");
 
-  app.get("/api/core/v1/wled/state", async (req, res) => {
+  app.get("/api/v1/wled/state", async (req, res) => {
     const { address } = req.params;
     const state = await API.get(`http://${address}/json/state`)
     res.send(state);
   });
 
-  app.post("/api/core/v1/wled/action/:address", async (req, res) => {
+  app.post("/api/v1/wled/action/:address", async (req, res) => {
     let result
     const { address } = req.params;
     const { payload } = req.body;

@@ -8,7 +8,7 @@ const useChatGPT = true
 export const ArduinosAutoAPI = AutoAPI({
     modelName: 'arduinos',
     modelType: ArduinosModel,
-    prefix: '/api/core/v1/',
+    prefix: '/api/v1/',
     skipDatabaseIndexes: true
 })
 
@@ -116,12 +116,12 @@ export default (app, context) => {
     //     console.log('Received data: ', line)
     // })
 
-    app.get('/api/core/v1/arduinos/connectedDevices', async (req, res) => {
+    app.get('/api/v1/arduinos/connectedDevices', async (req, res) => {
         const connectedDevices = serialManager.getConnectedDevices()
         return res.status(200).json({ connectedDevices })
     })
 
-    app.get('/api/core/v1/arduinos/:name/disconnect', async (req, res) => {
+    app.get('/api/v1/arduinos/:name/disconnect', async (req, res) => {
         const name = req.params.name
         const arduino = ArduinosModel.load({ name })
         if (!arduino) {
@@ -131,7 +131,7 @@ export default (app, context) => {
         return res.status(200).json({ message: 'Disconnected' })
     })
 
-    app.get('/api/core/v1/arduinos/:name/connect', async (req, res) => {
+    app.get('/api/v1/arduinos/:name/connect', async (req, res) => {
         const name = req.params.name
         const arduino = ArduinosModel.load({ name })
         if (!arduino) {
@@ -141,7 +141,7 @@ export default (app, context) => {
         return res.status(200).json({ message: 'Connected' })        
     })
 
-    app.get('/api/core/v1/arduinos/:name/transport/send/:data', async (req, res) => {
+    app.get('/api/v1/arduinos/:name/transport/send/:data', async (req, res) => {
         const name = req.params.name
         const data = req.params.data
         const arduino = ArduinosModel.load({ name })
@@ -152,7 +152,7 @@ export default (app, context) => {
         return res.status(200).json({ message: 'Connected' })        
     })
 
-    app.get('/api/core/v1/transports/serial/ports/available', async (req, res) => {
+    app.get('/api/v1/transports/serial/ports/available', async (req, res) => {
         const ports = serialManager.getKnownPorts()
         if (!ports) {
             return res.status(404).json({ error: 'No ports found' })
@@ -160,7 +160,7 @@ export default (app, context) => {
         return res.status(200).json(Array.from(ports))
     })
 
-    app.post('/api/core/v1/arduinos/:name/genericPrompt', async (req, res) => { 
+    app.post('/api/v1/arduinos/:name/genericPrompt', async (req, res) => { 
         const prompt = req.body.prompt
         if (!prompt) {
             return res.status(400).json({ error: 'Prompt is required' })
@@ -169,7 +169,7 @@ export default (app, context) => {
         return res.status(200).json(reply)
     })
 
-    app.post('/api/core/v1/arduinos/:name/generateCode', async (req, res) => { 
+    app.post('/api/v1/arduinos/:name/generateCode', async (req, res) => { 
         const templateName = req.body.templateName
         const rules = req.body.rules
         const physicalRules = req.body.physicalRules
@@ -188,7 +188,7 @@ export default (app, context) => {
         if(!transport) {
             return res.status(400).json({ error: 'transport is required' })
         }
-        const transportCodeArduino = (await API.get('/api/core/v1/transports/serial/arduino'))
+        const transportCodeArduino = (await API.get('/api/v1/transports/serial/arduino'))
         console.log("Transport code: ", transportCodeArduino.data.code)
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: templateName, agent:agent, rules: rules, physicalRules: physicalRules, transportType: transport.type, transportConfig: JSON.stringify(transport.config), transportCode:transportCodeArduino.data.code });
         console.log("Prompt: ", prompt)
@@ -196,7 +196,7 @@ export default (app, context) => {
         return res.status(200).json(reply)
     })
 
-    app.get('/api/core/v1/transports/serial/arduino', async (req, res) => {
+    app.get('/api/v1/transports/serial/arduino', async (req, res) => {
         return res.status(200).json({
             code: `
              #pragma once

@@ -11,7 +11,7 @@ import customMasks from '../masks'
 import automationMasks from '@extensions/automations/masks';
 import resendMasks from '@extensions/resend/masks';
 import flowMasks from '@extensions/flow/masks';
-import flowMasks2 from '@extensions/flow/masksV2';
+import flowMasks2 from '@extensions/flow2/masks';
 import objectMasks from '@extensions/objects/masks';
 import osMasks from '@extensions/os/masks'
 import osMasks2 from '@extensions/os/masks2'

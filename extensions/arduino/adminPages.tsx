@@ -34,9 +34,9 @@ import { IconContainer } from "protolib/components/IconContainer";
       description: "Create a new project from scratch",
     }
   }
-const sourceUrl = '/api/core/v1/arduinos'
+const sourceUrl = '/api/v1/arduinos'
 const eventsPath = 'notifications/event/create/arduinos/#'
-const apiUrl = '/api/core/v1/arduinos'
+const apiUrl = '/api/v1/arduinos'
 
 const ArduinoPreview = ({ element, width, onDelete, onPress, ...props }: any)=>{
   console.log("ArduinoPreview: ", element)
@@ -81,7 +81,7 @@ const ArduinoView = (props)=>{
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
 
-  API.get(`/api/core/v1/arduinos/connectedDevices`).then((res)=>{
+  API.get(`/api/v1/arduinos/connectedDevices`).then((res)=>{
     res.data?.connectedDevices.forEach((device)=>{
       console.log(device)
       if(device === props.arduino.name){
@@ -95,7 +95,7 @@ const ArduinoView = (props)=>{
     console.error("Error getting connected devices: ", err)
   })
 
-  API.get(`/api/core/v1/arduinos/connectedDevices`).then((res)=>{
+  API.get(`/api/v1/arduinos/connectedDevices`).then((res)=>{
     res.data?.connectedDevices.forEach((device)=>{
       console.log(device)
       if(device === props.arduino.name){
@@ -139,8 +139,8 @@ const ArduinoView = (props)=>{
         </YStack>
       </XStack>
       <XStack width={"$size.10"} gap={5}>
-        <Button  onPress={()=>{API.get(`/api/core/v1/arduinos/${deviceId}/connect`)}}>Connect</Button>
-        <Button  onPress={()=>{API.get(`/api/core/v1/arduinos/${deviceId}/disconnect`)}}>Disconnect</Button>
+        <Button  onPress={()=>{API.get(`/api/v1/arduinos/${deviceId}/connect`)}}>Connect</Button>
+        <Button  onPress={()=>{API.get(`/api/v1/arduinos/${deviceId}/disconnect`)}}>Disconnect</Button>
       </XStack>
       </>:<> </>
       }
@@ -204,11 +204,11 @@ const ArduinoView = (props)=>{
               // console.log("descriptionTextAreaContent: ",savedPhysicalRules);
               const newArduino ={...props.arduino, rules: savedRules, physicalRules: savedPhysicalRules}
               // console.log("new Arduino: ", newArduino)
-              const saveResponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}`, {...newArduino})
+              const saveResponse = await API.post(`/api/v1/arduinos/${props.arduino.name}`, {...newArduino})
               // console.log("Save response: ", saveResponse)
                 
               const llmData = { templateName: "agentRules",rules: newArduino.rules.join("\n"), physicalRules: newArduino.physicalRules.join("\n"), transport: newArduino.transport }
-              const chatGPTresponse = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/generateCode`, llmData)
+              const chatGPTresponse = await API.post(`/api/v1/arduinos/${props.arduino.name}/generateCode`, llmData)
               // console.log("ChatGPT response: ", chatGPTresponse)
               // console.log("ChatGPT response: ", chatGPTresponse.data.choices[0].message.content)
               const codeString = chatGPTresponse.data.choices[0].message.content
@@ -235,7 +235,7 @@ const ArduinoView = (props)=>{
               Eres parte de un sistema automatizado que va a procesar el html y el js.
               No me des nada mas que el html y el js.
               `
-              const chatGPTresponseBoard = await API.post(`/api/core/v1/arduinos/${props.arduino.name}/genericPrompt`, {prompt: prepromtBoard})
+              const chatGPTresponseBoard = await API.post(`/api/v1/arduinos/${props.arduino.name}/genericPrompt`, {prompt: prepromtBoard})
               console.log("ChatGPT response board: ", chatGPTresponseBoard)
 
               /*
@@ -259,7 +259,7 @@ const SelectGrid = ({ children }) => {
 const SecondSlide = ({ data, setData, error, setError, objects }) => {
   const [serialPorts, setSerialPorts] = useState([]);
   const searchSerialPorts = async ()=>{
-    const ports = await API.get('/api/core/v1/transports/serial/ports/available')
+    const ports = await API.get('/api/v1/transports/serial/ports/available')
     // console.log("Serial ports: ", ports)
     if(ports.isLoaded){
       setSerialPorts(ports.data)
@@ -344,7 +344,7 @@ const addDialog = (setAddOpen, addOpen, apiTemplates, data, setData,...props)=>{
               id='arduinos'
               onFinish={async () => {
                 console.log("Finish: ", data.data)
-                const res = await API.post( `/api/core/v1/arduinos`, {name:data.data.name,projectPath: data.data.path ,transport: {type: "serial", config: {port: data.data.serialPort, baudrate: 115200, autoconnect: true}}})
+                const res = await API.post( `/api/v1/arduinos`, {name:data.data.name,projectPath: data.data.path ,transport: {type: "serial", config: {port: data.data.serialPort, baudrate: 115200, autoconnect: true}}})
                 console.log("Response: ", res)
                   // try {
                   //     //TODO: when using custom data and setData in editablectObject
@@ -450,7 +450,7 @@ export default {
       },
       getServerSideProps: SSR(async (context) => withSession(context, ['admin'], async (session) => {
         return {
-          arduino: await API.get(`/api/core/v1/arduinos/${context.params.arduino}/?token=${session?.token}`),
+          arduino: await API.get(`/api/v1/arduinos/${context.params.arduino}/?token=${session?.token}`),
           icons: (await API.get(`/api/core/v1/icons?token=${session?.token}`))?.data?.icons ?? []
         }
       }))
