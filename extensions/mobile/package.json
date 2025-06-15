@@ -2,6 +2,7 @@
   "name": "@extensions/mobile",
   "version": "1.0.0",
   "dependencies": {
-    "react-full-screen": "1.1.1"
+    "react-full-screen": "1.1.1",
+    "react-screen-wake-lock": "3.0.2"
   }
 }

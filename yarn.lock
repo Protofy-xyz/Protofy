@@ -3757,6 +3757,7 @@ __metadata:
   resolution: "@extensions/mobile@workspace:extensions/mobile"
   dependencies:
     react-full-screen: "npm:1.1.1"
+    react-screen-wake-lock: "npm:3.0.2"
   languageName: unknown
   linkType: soft
 
@@ -25034,7 +25035,6 @@ __metadata:
     react-grid-layout: "npm:^1.4.4"
     react-map-gl: "npm:^7.1.7"
     react-markdown: "npm:^9.0.1"
-    react-screen-wake-lock: "npm:3.0.2"
     react-select: "npm:5.8.0"
     react-speech-recognition: "npm:4.0.0"
     react-spinners: "npm:^0.13.8"
