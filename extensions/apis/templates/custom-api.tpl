@@ -20,7 +20,7 @@ use the chat if in doubt
 
 import { getAuth, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
-import APIContext from "app/bundles/apiContext";
+import APIContext from "app/bundles/context";
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";

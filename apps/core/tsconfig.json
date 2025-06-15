@@ -30,8 +30,8 @@
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "./app/bundles/apiContext.ts",
-    "./app/bundles/coreApiContext.ts",
+    "./app/bundles/context.ts",
+    "./app/bundles/coreContext.ts",
     "./app/bundles/coreApis.ts",
     "./app/bundles/storageProviders.ts",
     "./app/bundles/stateMachines.ts",

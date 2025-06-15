@@ -1,5 +1,5 @@
 import { getAuth } from 'protonode'
-import APIContext from "app/bundles/apiContext";
+import APIContext from "app/bundles/context";
 import { Protofy, getLogger, getServiceToken, generateEvent } from "protobase";
 import { Application } from 'express';
 import path from "path";

@@ -30,7 +30,7 @@
   "include": [
     "./src/**/*.ts",
     "../../.types/*.ts",
-    "./app/bundles/apiContext.ts",
+    "./app/bundles/context.ts",
     "./app/bundles/apis.ts",
     "./app/bundles/storageProviders.ts",
     "./app/initialData.ts",

@@ -63,8 +63,8 @@ export const PromptAtom = atom<PromptContext[]>([{
         Similar central bundle files are used to aggregate elements from different bundles in different places, into the system:
 
         - packages/app/bundles/coreApis.tsx to add core api endpoints at apps/core (with preffix /api/core/v1 in reverse proxy)
-        - packages/app/bundles/CoreApiContext.ts to add variables that will be context-accessible from core apis, so core apis don't need to use import
-        - packages/app/bundles/apiContext.ts to add variables that will be context-accessible from apis, so apis don't need to use import
+        - packages/app/bundles/coreContext.ts to add variables that will be context-accessible from core apis, so core apis don't need to use import
+        - packages/app/bundles/context.ts to add variables that will be context-accessible from apis, so apis don't need to use import
         - packages/app/bundles/flows.ts to configure the lowcode visual nodes editor for javascript and typescript (protoflow) menus
         - packages/app/bundles/masks.ts to add masks to the protoflow visual editor environment. A mask is a customization of a visual node in the flows editor, or a customization of a group of nodes into a single visual nodes.
         - packages/app/bundles/menu.tsx to configure the website menu

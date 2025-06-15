@@ -16,7 +16,7 @@ const { createExpressProxy, handleUpgrade } = require('app/proxy.js')
 import http from 'http';
 
 import chokidar from 'chokidar';
-import BundleContext from 'app/bundles/coreApiContext'
+import BundleContext from 'app/bundles/coreContext'
 import { startMqtt } from './mqtt';
 
 export const startCore = (ready?) => {
@@ -94,7 +94,7 @@ export const startCore = (ready?) => {
       '../../packages/app/conf.ts',
       '../../packages/protolib/dist/**',
       '../../packages/app/bundles/coreApis.ts',
-      '../../packages/app/bundles/coreApiContext.ts',
+      '../../packages/app/bundles/coreContext.ts',
       '../../packages/protonode/dist/**',
       '../../packages/protobase/dist/**',
     ];
