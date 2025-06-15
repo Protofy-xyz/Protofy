@@ -4,11 +4,7 @@
   "private": true,
   "version": "0.0.1",
   "workspaces": [
-    "apps/core",
-    "apps/api",
-    "apps/next",
-    "apps/adminpanel",
-    "apps/python",
+    "apps/*",
     "packages/*",
     "extensions/*",
     "scripts",

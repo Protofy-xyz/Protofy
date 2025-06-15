@@ -2,72 +2,27 @@ const isProduction = process.env.NODE_ENV === 'production';
 const disableProdApi = false
 
 const config = {
-    "services": [
-        {
-            "name": "core",
-            "description": "Core services for protofy",
-            "route": (req) => {
-                if (req.url.startsWith('/api/core/') || req.url == '/api/core') {
-                    return process.env.ADMIN_API_URL ?? 'http://localhost:3002'
-                }
-            }
-        },
-        {
-            "name": "core-websocket",
-            "type": "route",
-            "description": "Websocket service for protofy",
-            "route": (req) => {
-                if (req.url == '/websocket') {
-                    return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
-                }
-            }
-        },
-        {
-            "name": "api",
-            "description": "API services for protofy",
-            "route": (req) => {
-                if (req.url.startsWith('/api/v1/') || req.url == '/api/v1') {
-                    return process.env.API_URL ?? 'http://localhost:3001'
-                }
-            }
-        },
-        {
-            "name": "nextra",
-            "disabled": true,
-            "description": "Documentation service, providing the documentation based on nextra",
-            "route": (req) => {
-                if (req.url.startsWith('/documentation/') || req.url == '/documentation') {
-                    return process.env.DOCS_SITE_URL ?? 'http://localhost:7600'
-                }
-            }
-        },
-        {
-            "name": "python",
-            "description": "Python integration services",
-            "disabled": true,
-            "route": (req) => {
-                if (req.url.startsWith('/pyapi/') || req.url == '/pyapi') {
-                    return process.env.API_URL ?? 'http://localhost:5000'
-                }
-            }
-        },
-        {
-            "name": "adminpanel",
-            "disabled": true,
-            "description": "Admin panel UI to manage and interact with core services",
-            "route": (req) => {
-                if(req.url.startsWith('/workspace/') || req.url == '/workspace') {
-                    return process.env.ADMIN_PANEL_URL ?? 'http://localhost:8000'
-                }
-            } 
-        },
-        {
-            "name": "next",
-            "disabled": true,
-            "description": "Frontend services, providing the web user interface based on nextjs",
-            "route": (req) => process.env.SITE_URL ?? 'http://localhost:3000'
-        }
-    ]
+    "services": [] // This will be populated with services from apps/services.js files
 }
+
+//iterate over apps/ and for each directory, if it has a services.js file, require it and add its services to the config.services array
+const fs = require('fs');
+const path = require('path');
+const appsDir = path.join(__dirname, 'apps');
+fs.readdirSync(appsDir).forEach((app) => {
+    const appPath = path.join(appsDir, app);
+    if (fs.statSync(appPath).isDirectory()) {
+        const servicesPath = path.join(appPath, 'services.js');
+        if (fs.existsSync(servicesPath)) {
+            const appServices = require(servicesPath);
+            if (Array.isArray(appServices)) {
+                const enabledServices = appServices.filter(service => !service.disabled);
+                config.services.push(...enabledServices);
+            } else {
+                console.warn(`Invalid services format in ${servicesPath}`);
+            }
+        }
+    }
+});
 
 module.exports = config
