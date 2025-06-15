@@ -4,7 +4,7 @@ const path = require('path')
 
 const fast = process.argv[2] === '--fast'
 
-if (!fs.existsSync('./dist/apps/adminpanel/server.js')) {
+if (!fs.existsSync('../../data/pages/workspace/index.html')) {
     //run yarn package
     const { exec } = require('child_process');
     console.log("Compiling adminpanel app...")
@@ -15,8 +15,4 @@ if (!fs.existsSync('./dist/apps/adminpanel/server.js')) {
         }
         console.log(stdout);
     });
-}
-
-if(fs.existsSync('dist/')) {
-    fs.copyFileSync('../../system.js', 'dist/system.js')
 }
