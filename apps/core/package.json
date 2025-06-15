@@ -23,6 +23,7 @@
   "dependencies": {
     "@my/config": "*",
     "app": "*",
+    "archiver": "7.0.1",
     "chokidar": "^3.5.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
