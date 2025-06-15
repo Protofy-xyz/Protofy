@@ -3862,6 +3862,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@extensions/twilio@workspace:extensions/twilio"
   dependencies:
+    qrcode: "npm:1.4.4"
     twilio: "npm:5.5.0"
   languageName: unknown
   linkType: soft
@@ -3899,6 +3900,8 @@ __metadata:
 "@extensions/whatsapp@workspace:extensions/whatsapp":
   version: 0.0.0-use.local
   resolution: "@extensions/whatsapp@workspace:extensions/whatsapp"
+  dependencies:
+    qrcode: "npm:1.4.4"
   languageName: unknown
   linkType: soft
 
@@ -24859,7 +24862,6 @@ __metadata:
     pm2: "npm:5.3.1"
     postcss: "npm:^8.4.21"
     protoflow: "npm:*"
-    qrcode: "npm:1.4.4"
     react-color: "npm:2.19.3"
     react-contenteditable: "npm:3.3.7"
     react-data-table-component: "npm:^7.5.4"
