@@ -3,7 +3,6 @@ import { Mail } from '@tamagui/lucide-icons';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme'
 import NodeText from 'protoflow/src/diagram/NodeText';
 import {Link} from 'protolib/components/Link';
-// import { sendMailWithResend } from 'protonode';
 
 const SendMailResend = (node: any = {}, nodeData = {}) => {
     const color = useColorFromPalette(9)
@@ -39,11 +38,11 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.to == 'context.sendMailWithResend')
+            && (nodeData.to == 'context.resend.sendMailWithResend')
         )
     },
     category: "api",
     keywords: ["api", "rest", "http", "automation", "email", "mail", "sendMail", "resend"],
     getComponent: SendMailResend,
-    getInitialData: () => { return { to: 'context.sendMailWithResend', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": { value: "", kind: "StringLiteral" }, await: true } }
+    getInitialData: () => { return { to: 'context.resend.sendMailWithResend', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, "param-4": { value: "", kind: "StringLiteral" }, await: true } }
 }

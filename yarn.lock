@@ -3709,6 +3709,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/flow2@workspace:extensions/flow2":
+  version: 0.0.0-use.local
+  resolution: "@extensions/flow2@workspace:extensions/flow2"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/flow@workspace:extensions/flow":
   version: 0.0.0-use.local
   resolution: "@extensions/flow@workspace:extensions/flow"
