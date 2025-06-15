@@ -14,7 +14,7 @@ const services = [
         "description": "Websocket service for protofy",
         "route": (req) => {
             if (req.url == '/websocket') {
-                return process.env.WEBSOCKET_URL ?? 'http://localhost:8000'
+                return process.env.WEBSOCKET_URL ?? 'http://localhost:3003'
             }
         }
     },
