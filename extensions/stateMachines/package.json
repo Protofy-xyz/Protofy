@@ -2,6 +2,6 @@
   "name": "@extensions/statemachines",
   "version": "1.0.0",
   "dependencies": {
-        "xstate": "5.14.0"
+    "xstate": "5.14.0"
   }
 }
