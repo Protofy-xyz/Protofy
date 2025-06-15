@@ -3845,6 +3845,8 @@ __metadata:
 "@extensions/twilio@workspace:extensions/twilio":
   version: 0.0.0-use.local
   resolution: "@extensions/twilio@workspace:extensions/twilio"
+  dependencies:
+    twilio: "npm:5.5.0"
   languageName: unknown
   linkType: soft
 
@@ -13498,7 +13500,6 @@ __metadata:
     pino-pretty: "npm:11.2.1"
     pm2: "npm:^5.3.0"
     protobase: "npm:*"
-    protolib: "npm:*"
     protonode: "npm:*"
     shx: "npm:^0.3.4"
     subleveldown: "npm:^6.0.1"
@@ -25040,7 +25041,6 @@ __metadata:
     tailwindcss: "npm:^3.3.3"
     tamagui: "npm:^1.101.7"
     ts-jest: "npm:~29.1.1"
-    twilio: "npm:5.5.0"
     use-debounce: "npm:^9.0.4"
     usehooks-ts: "npm:^2.9.1"
     xstate: "npm:5.14.0"

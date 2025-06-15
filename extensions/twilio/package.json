@@ -1,4 +1,7 @@
 {
   "name": "@extensions/twilio",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "twilio": "5.5.0"
+  }
 }
