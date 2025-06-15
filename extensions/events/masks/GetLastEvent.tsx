@@ -19,8 +19,8 @@ export default {
     keywords: ["event", 'last', 'device', 'get'],
     check: (node, nodeData) => {
         return node.type == "CallExpression"
-            && nodeData.to == 'context.getLastEvent'
+            && nodeData.to == 'context.events.getLastEvent'
     },
     getComponent: (node, nodeData, children) => <GetLastEventMask node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.getLastEvent', "param-1": { value: '{path: "services/api/start"}', kind: "Identifier" } } }
+    getInitialData: () => { return { to: 'context.events.getLastEvent', "param-1": { value: '{path: "services/api/start"}', kind: "Identifier" } } }
 }

@@ -302,7 +302,7 @@ export const AutoActions = ({
         token: getServiceToken()
     })
 
-    context.onEvent(
+    context.events.onEvent(
         context.mqtt,
         context,
         async (event) => {
@@ -330,7 +330,7 @@ export const AutoActions = ({
         token: getServiceToken()
     })
 
-    context.onEvent(
+    context.events.onEvent(
         context.mqtt,
         context,
         async (event) => {

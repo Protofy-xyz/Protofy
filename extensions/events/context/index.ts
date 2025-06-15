@@ -52,3 +52,9 @@ export const getLastEvent = async (eventFilter?: { path?: string, from?: string,
     if (!event) return
     return event
 }
+
+export default {
+    onEvent,
+    emitEvent,
+    getLastEvent
+}

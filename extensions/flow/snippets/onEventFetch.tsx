@@ -1,7 +1,7 @@
 export default {
     name: 'onEvent/Fetch',
     // category: 'events-snippets',
-    code: `context.onEvent(
+    code: `context.events.onEvent(
       context.mqtt,
       context,
       async (event) =>

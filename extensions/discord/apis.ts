@@ -178,7 +178,7 @@ export default async (app, context) => {
         connectDiscord(context)
     }, 3000)
 
-    context.onEvent(
+    context.events.onEvent(
         context.mqtt,
         context,
         async (event) => connectDiscord(context),
@@ -186,7 +186,7 @@ export default async (app, context) => {
         "api"
     )
     // TODO: on upate doesn't delete the old token
-    // context.onEvent(
+    // context.events.onEvent(
     //     context.mqtt,
     //     context,
     //     async (event) => connectDiscord(context),

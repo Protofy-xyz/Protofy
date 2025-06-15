@@ -26,7 +26,7 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression" &&
-            nodeData.to == 'context.onEvent' &&
+            nodeData.to == 'context.events.onEvent' &&
             (getFieldValue('param-3', nodeData)?.startsWith('(event) =>') ||
                 getFieldValue('param-3', nodeData)?.startsWith('async (event) =>')) &&
             getFieldValue('param-5', nodeData) != "device"
@@ -37,7 +37,7 @@ export default {
     ),
     getInitialData: () => {
         return {
-            to: 'context.onEvent',
+            to: 'context.events.onEvent',
             "param-1": { value: 'context.mqtt', kind: "Identifier" },
             "param-2": { value: 'context', kind: "Identifier" },
             "param-3": { value: 'async (event) =>', kind: "Identifier" },

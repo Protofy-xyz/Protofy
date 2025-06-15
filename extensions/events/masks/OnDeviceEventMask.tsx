@@ -25,13 +25,13 @@ export default {
     keywords: ["automation", 'esp32', 'device', 'iot', 'trigger'],
     check: (node, nodeData) => {
         return node.type == "CallExpression" 
-        && nodeData.to == 'context.onEvent'
+        && nodeData.to == 'context.events.onEvent'
         && ( getFieldValue('param-3', nodeData)?.startsWith('(event) =>') || getFieldValue('param-3', nodeData)?.startsWith('async (event) =>') ) 
         && nodeData["param-5"] 
         && getFieldValue('param-5', nodeData) == "device"
     },
     getComponent: (node, nodeData, children) => <OnDeviceEventMask node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.onEvent', "param-1": { value: 'context.mqtt', kind: "Identifier" }, "param-2": { value: 'context', kind: "Identifier" },  "param-3": { value: 'async (event) =>', kind: "Identifier" }, "param-4": { value: "", kind: "StringLiteral" }, "param-5": { value: 'device', kind: "StringLiteral" } } },
+    getInitialData: () => { return { to: 'context.events.onEvent', "param-1": { value: 'context.mqtt', kind: "Identifier" }, "param-2": { value: 'context', kind: "Identifier" },  "param-3": { value: 'async (event) =>', kind: "Identifier" }, "param-4": { value: "", kind: "StringLiteral" }, "param-5": { value: 'device', kind: "StringLiteral" } } },
     filterChildren: filterCallback('3'),
     restoreChildren: restoreCallback('3'),
 }

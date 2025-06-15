@@ -1,4 +1,4 @@
-import { onEvent, emitEvent, getLastEvent } from '@extensions/events/api'
+import events from '@extensions/events/context'
 import protomemdb from '@extensions/protomemdb/context'
 import actions from '@extensions/actions/context'
 import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from '@extensions/apis/context/'
@@ -17,9 +17,7 @@ import utils from '@extensions/utils/context'
 import stateMachines from '@extensions/stateMachines/context'
 
 export default {
-    onEvent,
-    emitEvent,
-    getLastEvent,
+    events,
     protomemdb,
     actions,
     automation,

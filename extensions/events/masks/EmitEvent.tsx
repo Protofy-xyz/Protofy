@@ -18,13 +18,13 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.to == 'context.emitEvent')
+            && (nodeData.to == 'context.events.emitEvent')
         )
     },
     getComponent: emitEvent,
     category: "events",
     keywords: ["generateEvent", "emit", "event"],
     getInitialData: () => {
-        return { to: 'context.emitEvent', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "api", kind: "StringLiteral" }, "param-3": { value: "system", kind: "StringLiteral" }, "param-4": { value: "{}", kind: "ObjectLiteralExpression", await: true } }
+        return { to: 'context.events.emitEvent', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "api", kind: "StringLiteral" }, "param-3": { value: "system", kind: "StringLiteral" }, "param-4": { value: "{}", kind: "ObjectLiteralExpression", await: true } }
     }
 }
