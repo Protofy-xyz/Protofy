@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { z, Schema, BaseSchema, AutoModel, ProtoModel } from 'protobase';
 import { AutoActions, AutoAPI } from 'protonode'
+import { ObjectsActions } from './objectsActions';
 
 const reloadObjectAPIs = async (app, context) => {
     // list all objects
@@ -36,8 +37,10 @@ const reloadObjectAPIs = async (app, context) => {
         }
     });
 }
-export const ObjectUserAPI = (app, context) => {
+
+export default (app, context) => {
     reloadObjectAPIs(app, context)
+    ObjectsActions(app, context)
     app.get('/api/v1/objects/reload', async (req, res) => {
         reloadObjectAPIs(app, context)
         res.json({ status: 'ok' })

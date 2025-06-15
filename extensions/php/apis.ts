@@ -9,7 +9,7 @@ const phpApisRoot = (root) => fspath.join(root, "/packages/app/apis/")
 // fix: here file var could be populated with ../../../ and it will be a path traversing
 const phpApisAbsolutePath = (root, file) => fspath.join(process.cwd(), phpApisRoot(getRoot(root)), file)
 
-export const PhpAPI = (app, context) => {
+export default (app, context) => {
     const listPhpFiles = async (req) => {
         return (await fs.readdir(phpApisRoot(getRoot(req)))).filter(file => file.split(".")[1] === "php")
     }

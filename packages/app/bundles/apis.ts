@@ -3,18 +3,18 @@ import GroupsActions from '@extensions/groups/apis'
 import ProtoMemDBAPI from '@extensions/protomemdb/apis'
 import EventsActions from '@extensions/events/apis'
 import AutomationsActions from '@extensions/apis/apis'
-import { PagesActions } from '@extensions/pages/pagesActions'
-import { DiscordAPI } from '@extensions/discord/discordAPI'
-import { WhatsappAPI } from '@extensions/whatsapp/whatsappAPI'
-import { FlowAPI } from '@extensions/flow/flowAPI'
-import { KeysActions } from '@extensions/keys/keysActions'
-import { DevicesActions } from '@extensions/devices/devices/devicesActions'
-import { PhpAPI } from '@extensions/php/phpApi'
-import { MobileAPI } from '@extensions/mobile/mobileAPI'
-import { ObjectUserAPI } from '@extensions/objects/objectsUserAPI'
-import { ObjectsActions } from '@extensions/objects/objectsActions'
-import { ResourcesAPI } from '@extensions/resources/resourcesAPI'
-import { StateMachinesAPI } from '@extensions/stateMachines/stateMachines/stateMachinesApi'
+import PagesActions from '@extensions/pages/apis'
+import DiscordAPI from '@extensions/discord/apis'
+import WhatsappAPI from '@extensions/whatsapp/apis'
+import FlowAPI from '@extensions/flow/apis'
+import KeysActions from '@extensions/keys/apis'
+import DevicesActions from '@extensions/devices/devices/apis'
+import PhpAPI from '@extensions/php/apis'
+import MobileAPI from '@extensions/mobile/apis'
+import ObjectUserAPI from '@extensions/objects/apis'
+import ResourcesAPI from '@extensions/resources/apis'
+import StateMachinesAPI from '@extensions/stateMachines/stateMachines/apis'
+
 
 export default (app, context) => {
     ProtoMemDBAPI(app, context)
@@ -31,7 +31,6 @@ export default (app, context) => {
     PhpAPI(app, context)
     MobileAPI(app, context)
     ObjectUserAPI(app, context)
-    ObjectsActions(app, context)
     ResourcesAPI(app, context)
     StateMachinesAPI(app, context)
 }

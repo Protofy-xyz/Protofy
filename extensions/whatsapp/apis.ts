@@ -167,7 +167,7 @@ const registerActionsAndCards = async (context)=>{
     registerCards(context)
 }
 
-export const WhatsappAPI = (app, context) => {
+export default (app, context) => {
     const devicesPath = '../../data/devices/'
     const { topicSub, topicPub, mqtt } = context;
     

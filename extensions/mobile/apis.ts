@@ -1,4 +1,4 @@
-export const MobileAPI = (app, context) => {
+export default (app, context) => {
     const { topicSub, topicPub, mqtt } = context;
     const processMessage = (message, topic) =>{
         const data = JSON.parse(message);

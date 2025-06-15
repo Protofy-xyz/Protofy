@@ -6,7 +6,7 @@ const SnippetsDir = (root) => path.join(root, "/packages/app/snippets/")
 const indexFile = (root) => SnippetsDir(root) + "index.ts"
 const indexFilePath = "/packages/app/snippets/index.ts"
 
-export const FlowAPI = (app, context) => {
+export default (app, context) => {
   app.post('/api/v1/flow/snippet', handler(async (req, res, session) => {
     const { name, code } = req.body;
     if (!name || !code) throw new Error("Error creating snippet, you must provide a name and the snippet code")
@@ -35,5 +35,3 @@ export const FlowAPI = (app, context) => {
     res.send({message: 'OK'})
   }))
 }
-
-export default FlowAPI

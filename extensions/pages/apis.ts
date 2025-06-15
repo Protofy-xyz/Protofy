@@ -3,7 +3,7 @@ import {AutoActions} from 'protonode'
 
 const prefix = '/api/v1/'
 
-export const PagesActions = AutoActions({
+export default AutoActions({
     modelName: 'page',
     modelType: PageModel,
     prefix, //where the API for the actions will be created

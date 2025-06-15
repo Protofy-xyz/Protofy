@@ -171,7 +171,7 @@ const connectDiscord = async (context) => {
     });
 }
 
-export const DiscordAPI = async (app, context) => {
+export default async (app, context) => {
 
     // timeout required to connect successfully
     setTimeout(async () => {

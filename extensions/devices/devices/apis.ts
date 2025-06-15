@@ -3,7 +3,7 @@ import {AutoActions} from 'protonode'
 
 const prefix = '/api/v1/'
 
-export const DevicesActions = AutoActions({
+export default AutoActions({
     modelName: 'devices',
     modelType: DevicesModel,
     prefix, //where the API for the actions will be created

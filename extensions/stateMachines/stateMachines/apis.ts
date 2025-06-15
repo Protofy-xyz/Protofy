@@ -5,7 +5,7 @@ import { StateMachine } from './stateMachine'
 import { AutoAPI } from 'protonode'
 import { StateMachineModel } from './stateMachineSchema'
 
-export const StateMachinesAPI = (app, context) => {
+export default (app, context) => {
   const runtimeMachines: { [key: string]: StateMachine } = {}
   const machineDefinitions = context.machineDefinitions
 
