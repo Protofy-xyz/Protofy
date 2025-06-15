@@ -32,7 +32,7 @@ export default (app, context) => {
   GroupsAPI(app, context)
   EventsAPI(app, context)
   DevicesAPI(app, context)
-  ProtoMemDBAPI(app, context, true)
+  ProtoMemDBAPI(app, context)
   CardsAPI(app, context)
   PagesAPI(app, context)
   APIsAPI(app, context)
