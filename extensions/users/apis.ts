@@ -5,6 +5,7 @@ const prefix = '/api/v1/'
 
 export default AutoActions({
     modelName: 'user',
+    pluralName: 'users',
     modelType: UserModel,
     prefix, //where the API for the actions will be created
     pageSrc: '/workspace/users?mode=embed', //what to display to the user in the list view

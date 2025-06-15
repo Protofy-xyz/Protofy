@@ -5,6 +5,7 @@ const prefix = '/api/v1/'
 
 export default AutoActions({
     modelName: 'automation',
+    pluralName: 'automations',
     modelType: APIModel,
     prefix, //where the API for the actions will be created
     pageSrc: '/workspace/apis?mode=embed', //what to display to the user in the list view
