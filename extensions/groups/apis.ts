@@ -3,7 +3,7 @@ import {AutoActions} from 'protonode'
 
 const prefix = '/api/v1/'
 
-export const GroupsActions = AutoActions({
+export default AutoActions({
     modelName: 'group',
     modelType: GroupModel,
     prefix, //where the API for the actions will be created

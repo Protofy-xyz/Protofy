@@ -4,7 +4,7 @@ import { addAction } from '@extensions/actions/context/addAction';
 import { addCard } from '@extensions/cards/context/addCard';
 import { generateEvent } from 'protobase';
 
-export const ProtoMemDBAPI = (app, context, inCore?) => {
+export default (app, context, inCore?) => {
     const part = inCore ? '/core' : ''
     app.get('/api'+part+'/v1/protomemdb/:chunk', handler(async (req, res, session) => {
         if(!session || !session.user.admin) {
