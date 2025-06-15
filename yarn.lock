@@ -10991,8 +10991,6 @@ __metadata:
   resolution: "app@workspace:packages/app"
   dependencies:
     "@types/react": "npm:^18.0.27"
-    handlebars: "npm:4.7.8"
-    moment: "npm:2.29.4"
     zod: "npm:^3.22.2"
   languageName: unknown
   linkType: soft
@@ -24913,6 +24911,7 @@ __metadata:
     bcryptjs: "npm:3.0.2"
     handlebars: "npm:4.7.8"
     jsonwebtoken: "npm:^9.0.2"
+    moment: "npm:2.29.4"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
     typescript: "npm:5.8.2"
