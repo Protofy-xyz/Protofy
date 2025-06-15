@@ -3787,6 +3787,8 @@ __metadata:
 "@extensions/playwright@workspace:extensions/playwright":
   version: 0.0.0-use.local
   resolution: "@extensions/playwright@workspace:extensions/playwright"
+  dependencies:
+    playwright: "npm:1.41.0"
   languageName: unknown
   linkType: soft
 
@@ -25018,7 +25020,6 @@ __metadata:
     openai: "npm:4.68.4"
     pino: "npm:9.2.0"
     pino-pretty: "npm:11.2.1"
-    playwright: "npm:1.41.0"
     pm2: "npm:5.3.1"
     postcss: "npm:^8.4.21"
     protoflow: "npm:*"
