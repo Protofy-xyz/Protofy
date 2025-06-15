@@ -7,10 +7,12 @@ export const AutoActions = ({
     modelType,
     apiUrl = undefined,
     prefix = "/api/v1/",
-    pageSrc = undefined
+    pageSrc = undefined,
+    notificationsName = undefined
 }) => async (app, context) => {
     const urlPrefix = apiUrl ?? `${prefix}${modelName}`;
     const actionUrlPrefix = `${prefix}actions/${modelName}`;
+    const notiName = notificationsName ?? modelName;
 
     const loadTotal = async () => {
         try {
@@ -211,7 +213,7 @@ export const AutoActions = ({
             loadTotal();
             context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id});
         },
-        modelName + "/delete/#"
+        notiName + "/delete/#"
     )
     app.get(actionUrlPrefix + '/delete', handler(async (req, res, session) => {
         const params = req.query;
@@ -333,7 +335,7 @@ export const AutoActions = ({
             context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event});
             context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id});
         },
-        modelName + "/create/#"
+        notiName + "/create/#"
     )
 
     context.cards.add({
@@ -361,7 +363,7 @@ export const AutoActions = ({
             context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event});
             context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id});
         },
-        modelName + "/update/#"
+        notiName + "/update/#"
     )
 
     context.cards.add({

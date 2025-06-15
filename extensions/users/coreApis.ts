@@ -1,5 +1,5 @@
 import { UserModel } from "./";
-import { AutoAPI, hash, AutoActions} from 'protonode'
+import { AutoAPI, hash} from 'protonode'
 
 const prefix = '/api/core/v1/'
 
