@@ -65,7 +65,7 @@ export const startCore = (ready?) => {
 
   const server = http.createServer(app);
   handleUpgrade(server, 'core')
-  const PORT = 3002
+  const PORT = 8000
   server.listen(PORT, () => {
     logger.debug({ service: { protocol: "http", port: PORT } }, "Service started: HTTP")
     if(ready) {

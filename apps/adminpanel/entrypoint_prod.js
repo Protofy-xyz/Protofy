@@ -45,7 +45,7 @@ if (fs.existsSync(path.join(__dirname, 'server.js'))) {
   const content = fs.readFileSync(path.join(__dirname, 'server.js'), 'utf8');
   const nextConfig = extractNextConfig(content)
 
-  const currentPort = parseInt(process.env.PORT, 10) || 8000
+  const currentPort = parseInt(process.env.PORT, 10) || 3002
   const hostname = process.env.HOSTNAME || '0.0.0.0'
 
   let keepAliveTimeout = parseInt(process.env.KEEP_ALIVE_TIMEOUT, 10)
