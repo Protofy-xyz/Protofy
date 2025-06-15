@@ -1,8 +1,8 @@
 import { API, generateEvent } from "protobase";
 import { AutoAPI, handler, getServiceToken} from 'protonode'
 import { getLogger } from 'protobase';
-import { addAction } from "@extensions/actions/context/addAction";
-import { addCard } from "@extensions/cards/context/addCard";
+import { addAction } from "@extensions/actions/coreContext/addAction";
+import { addCard } from "@extensions/cards/coreContext/addCard";
 
 const ONLY_LAST_MESSAGE = true
 const MESSAGE_AND_PHONE_TOGETHER = false

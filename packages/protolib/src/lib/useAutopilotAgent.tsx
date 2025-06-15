@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { getActionsFromAutomations } from '@extensions/automations/context/getActionsFromAutomations';
-import { getStatesFromProtoMemDB } from '@extensions/protomemdb/context/getStatesFromProtoMemDB';
+import { getActionsFromAutomations } from '@extensions/automations/coreContext/getActionsFromAutomations';
+import { getStatesFromProtoMemDB } from '@extensions/protomemdb/coreContext/getStatesFromProtoMemDB';
 import { useEventEffect } from '@extensions/events/hooks';
 import { AutopilotCard, RulesCard } from '../components/dashboard';
 import { ActionRunner } from '../components/ActionRunner';

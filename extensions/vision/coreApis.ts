@@ -2,8 +2,8 @@ import { getServiceToken } from "protonode";
 import APIContext from "app/bundles/coreContext";
 import { Application } from "express";
 import axios from "axios";
-import { addAction } from "@extensions/actions/context/addAction";
-import { addCard } from "@extensions/cards/context/addCard";
+import { addAction } from "@extensions/actions/coreContext/addAction";
+import { addCard } from "@extensions/cards/coreContext/addCard";
 
 async function getImageBase64(url) {
     const response = await axios.get(url, { responseType: 'arraybuffer' });

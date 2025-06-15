@@ -1,33 +1,35 @@
-import events from '@extensions/events/context'
-import protomemdb from '@extensions/protomemdb/context'
-import actions from '@extensions/actions/context'
-import apis from '@extensions/apis/context/'
-import chatGPT from '@extensions/chatgpt/context'
-import automations from '@extensions/automations/context'
-import autopilot from '@extensions/autopilot/context'
-import cards from '@extensions/cards/context'
-import chatbots from '@extensions/chatbots/context'
-import keys from '@extensions/keys/context'
-import devices from '@extensions/devices/devices/context'
-import object from '@extensions/objects/context'
-import state from '@extensions/state/context'
-import utils from '@extensions/utils/context'
-import stateMachines from '@extensions/stateMachines/context'
+import fs from 'fs';
+import path from 'path';
 
-export default {
-    events,
-    protomemdb,
-    actions,
-    apis,
-    chatGPT,
-    automations,
-    autopilot,
-    cards,
-    chatbots,
-    keys,
-    object,
-    state,
-    utils,
-    stateMachines,
-    devices
+const extensionsPath = '../../extensions';
+const contexts: Record<string, any> = {};
+
+const folders = fs.readdirSync(extensionsPath);
+
+for (const folder of folders) {
+    // Comprobamos si hay context.ts o context.js en dos posibles ubicaciones
+    const tryPaths = [
+        `@extensions/${folder}/coreContext`,
+    ];
+
+    for (const tryPath of tryPaths) {
+        try {
+            // require falla si el archivo no existe, así que envolvemos
+            const mod = require(tryPath);
+            console.log(`${tryPath} provides context:`);
+            const content = mod.default || mod;
+            contexts[folder] = content;
+            Object.keys(content).forEach((key) => {
+                console.log("\tcontext."+folder+'.'+key)
+            });
+            break; // si uno carga bien, no seguimos buscando
+        } catch (err: any) {
+            // Solo ignoramos si es MODULE_NOT_FOUND en ese path
+            if (!err.message.includes(tryPath)) {
+                console.error(`Error loading ${tryPath}:`, err);
+            }
+        }
+    }
 }
+
+export default contexts;

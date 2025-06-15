@@ -1,4 +1,4 @@
-import { update } from "@extensions/objects/context/objectUpdate";
+import { update } from "@extensions/objects/coreContext/objectUpdate";
 
 class ST7789V {
     name;

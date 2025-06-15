@@ -5,10 +5,10 @@ import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { getServiceToken, requireAdmin } from "protonode";
-import { addAction } from '@extensions/actions/context/addAction';
-import { removeActions } from "@extensions/actions/context/removeActions";
+import { addAction } from '@extensions/actions/coreContext/addAction';
+import { removeActions } from "@extensions/actions/coreContext/removeActions";
 import fileActions from "@extensions/files/fileActions";
-import { addCard } from "@extensions/cards/context/addCard";
+import { addCard } from "@extensions/cards/coreContext/addCard";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds

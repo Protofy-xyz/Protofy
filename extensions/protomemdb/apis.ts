@@ -1,7 +1,7 @@
 import { ProtoMemDB } from 'protobase';
 import {getServiceToken, handler} from 'protonode';
-import { addAction } from '@extensions/actions/context/addAction';
-import { addCard } from '@extensions/cards/context/addCard';
+import { addAction } from '@extensions/actions/coreContext/addAction';
+import { addCard } from '@extensions/cards/coreContext/addCard';
 import { generateEvent } from 'protobase';
 
 export default (app, context, inCore?) => {

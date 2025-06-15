@@ -1,6 +1,6 @@
-import { getServiceToken } from "@extensions/apis/context"
+import { getServiceToken } from "@extensions/apis/coreContext"
 import { API } from 'protobase'
-import { onEvent } from "@extensions/events/context"
+import { onEvent } from "@extensions/events/coreContext"
 
 
 const spawnStateMachine = async (options: {

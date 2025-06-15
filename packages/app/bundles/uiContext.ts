@@ -1,8 +1,8 @@
 import { fetch, actionFetch, navigate, onRender, actionNavigate } from '@extensions/ui/context';
 import flow from '@extensions/flow/context'
 import deviceContext from '@extensions/devices/devices/uiContext'
-import object from '@extensions/objects/context'
-import flow2 from '@extensions/flow/contextV2'
+import object from '@extensions/objects/coreContext'
+import flow2 from '@extensions/flow2/context'
 import twilio from '@extensions/twilio/uiContext'
 
 export const context = {

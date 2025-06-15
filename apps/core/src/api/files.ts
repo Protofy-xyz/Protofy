@@ -9,8 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { getRoot, handler, requireAdmin } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
-import { addAction } from '@extensions/actions/context/addAction';
-import { addCard } from '@extensions/cards/context/addCard';
+import { addAction } from '@extensions/actions/coreContext/addAction';
+import { addCard } from '@extensions/cards/coreContext/addCard';
 const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()

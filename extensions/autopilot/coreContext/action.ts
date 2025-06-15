@@ -1,5 +1,5 @@
 import { getLogger } from 'protobase';
-import { automation } from '@extensions/automations/context/automation';
+import { automation } from '@extensions/automations/coreContext/automation';
 
 const logger = getLogger();
 
