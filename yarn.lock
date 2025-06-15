@@ -3835,6 +3835,8 @@ __metadata:
 "@extensions/statemachines@workspace:extensions/stateMachines":
   version: 0.0.0-use.local
   resolution: "@extensions/statemachines@workspace:extensions/stateMachines"
+  dependencies:
+    xstate: "npm:5.14.0"
   languageName: unknown
   linkType: soft
 
@@ -5244,7 +5246,13 @@ __metadata:
     "@tamagui/animations-moti": "npm:^1.101.7"
     "@tamagui/animations-react-native": "npm:^1.101.7"
     "@tamagui/build": "npm:^1.101.7"
+    "@tamagui/font-cherry-bomb": "npm:^1.101.7"
+    "@tamagui/font-dm-sans": "npm:^1.101.7"
+    "@tamagui/font-dm-serif-display": "npm:^1.101.7"
+    "@tamagui/font-fira-mono": "npm:^1.101.7"
     "@tamagui/font-inter": "npm:^1.101.7"
+    "@tamagui/font-munro": "npm:^1.101.7"
+    "@tamagui/font-silkscreen": "npm:^1.101.7"
     "@tamagui/react-native-media-driver": "npm:^1.101.7"
     "@tamagui/shorthands": "npm:^1.101.7"
     "@tamagui/themes": "npm:^1.101.7"
@@ -24981,13 +24989,6 @@ __metadata:
     "@react-three/fiber": "npm:8.8.10"
     "@rehookify/datepicker": "npm:6.6.1"
     "@tamagui/build": "npm:^1.101.7"
-    "@tamagui/font-cherry-bomb": "npm:^1.101.7"
-    "@tamagui/font-dm-sans": "npm:^1.101.7"
-    "@tamagui/font-dm-serif-display": "npm:^1.101.7"
-    "@tamagui/font-fira-mono": "npm:^1.101.7"
-    "@tamagui/font-inter": "npm:^1.101.7"
-    "@tamagui/font-munro": "npm:^1.101.7"
-    "@tamagui/font-silkscreen": "npm:^1.101.7"
     "@types/jest": "npm:~29.5.5"
     "@types/react": "npm:^18.0.27"
     "@types/react-dom": "npm:18.3.0"
@@ -25044,7 +25045,6 @@ __metadata:
     ts-jest: "npm:~29.1.1"
     use-debounce: "npm:^9.0.4"
     usehooks-ts: "npm:^2.9.1"
-    xstate: "npm:5.14.0"
     zustand: "npm:4.5.2"
   languageName: unknown
   linkType: soft
