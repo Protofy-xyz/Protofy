@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { CenterCard } from 'app/bundles/widgets';
+import { CenterCard } from '@extensions/services/widgets';
 import { Text, YStack, Label, Switch } from '@my/ui';
 import { Bot } from '@tamagui/lucide-icons';
 

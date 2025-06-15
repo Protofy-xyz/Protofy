@@ -4,7 +4,7 @@ import { Panel, PanelGroup } from "react-resizable-panels";
 import { useThemeSetting } from '@tamagui/next-theme';
 import { Monaco } from "../Monaco";
 import { useEffect, useState } from "react";
-import { getHTML } from "app/bundles/widgets";
+import { getHTML } from "@extensions/services/widgets";
 
 export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
     const [code, setCode] = useState(htmlCode);

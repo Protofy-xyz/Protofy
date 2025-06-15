@@ -12,25 +12,19 @@ import {
 } from '@tamagui/lucide-icons'
 import { MonitorCog as RawMonitorCog } from 'lucide-react'
 import { styled } from 'tamagui'
+
 const MonitorCog = styled(RawMonitorCog, {
     name: 'MonitorCog',
     size: '$true',
     color: 'currentColor',
-}
-)
-import {
-    ServiceMemoryUsageChart,
-    TotalMemoryUsage,
-    TotalCPUUsage,
-    TotalUsers,
-    LastEvents,
-    ListPages,
-    TotalObjects,
-    ListLatestUsers,
-    TotalGroups,
-    ListGroups,
-    TotalEvents
-} from 'app/bundles/widgets'
+})
+
+import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from '@extensions/services/widgets'
+import { TotalUsers, ListLatestUsers } from '@extensions/users/widgets'
+import { LastEvents, TotalEvents } from '@extensions/events/widgets'
+import { ListPages } from '@extensions/pages/widgets'
+import { TotalObjects } from '@extensions/objects/widgets'
+import { TotalGroups, ListGroups } from '@extensions/groups/widgets'
 
 const enableArduinos = false
 

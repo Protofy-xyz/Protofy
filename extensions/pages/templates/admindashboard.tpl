@@ -10,7 +10,13 @@ import { AdminPage } from 'protolib/components/AdminPage'
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { withSession } from 'protolib/lib/Session';
 import { YStack } from '@my/ui';
-import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage, TotalUsers, LastEvents, ListPages, TotalObjects, ListLatestUsers, TotalGroups, ListGroups, TotalEvents } from 'app/bundles/widgets';
+
+import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from '@extensions/services/widgets'
+import { TotalUsers, ListLatestUsers } from '@extensions/users/widgets'
+import { LastEvents, TotalEvents } from '@extensions/events/widgets'
+import { ListPages } from '@extensions/pages/widgets'
+import { TotalObjects } from '@extensions/objects/widgets'
+import { TotalGroups, ListGroups } from '@extensions/groups/widgets'
 
 const isProtected = Protofy("protected", {{protected}})
 const permissions = isProtected ? Protofy("permissions", []) : null

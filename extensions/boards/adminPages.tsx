@@ -11,7 +11,7 @@ import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch,
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
-import { CardValue, CenterCard } from 'app/bundles/widgets'
+import { CardValue, CenterCard } from '@extensions/services/widgets'
 import { useEffect, useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from 'protolib/components/Tinted'
