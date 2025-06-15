@@ -3783,6 +3783,8 @@ __metadata:
 "@extensions/packages@workspace:extensions/packages":
   version: 0.0.0-use.local
   resolution: "@extensions/packages@workspace:extensions/packages"
+  dependencies:
+    short-uuid: "npm:5.2.0"
   languageName: unknown
   linkType: soft
 
@@ -3841,6 +3843,8 @@ __metadata:
 "@extensions/services@workspace:extensions/services":
   version: 0.0.0-use.local
   resolution: "@extensions/services@workspace:extensions/services"
+  dependencies:
+    short-uuid: "npm:5.2.0"
   languageName: unknown
   linkType: soft
 
@@ -25042,7 +25046,6 @@ __metadata:
     react-syntax-highlighter: "npm:^15.5.0"
     react-use-keypress: "npm:1.3.1"
     recharts: "npm:^2.12.7"
-    short-uuid: "npm:5.2.0"
     tailwindcss: "npm:^3.3.3"
     tamagui: "npm:^1.101.7"
     ts-jest: "npm:~29.1.1"
