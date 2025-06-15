@@ -2,15 +2,14 @@ import { API, getLogger, ProtoMemDB, generateEvent } from 'protobase';
 import {getServiceToken} from 'protonode';
 const logger = getLogger();
 
-
-
-export const setContext = async (options: {
+export const appendContext = async (options: {
     chunk?: string,
     group?: string,
     tag: string,
     name: string,
     value: any,
     emitEvent?: boolean,
+    limit?: number,
     done?: (value) => {},
     error?: (err) => {}
 }) => {
@@ -22,6 +21,7 @@ export const setContext = async (options: {
     const chunk = options.chunk || 'states'
     const done = options.done || ((value) => {});
     const error = options.error;
+    const limit = options.limit || 100;
 
     if(!name) {
         logger.error({}, "State name is required");
@@ -35,26 +35,19 @@ export const setContext = async (options: {
 
     try {
         if(!inCore) {
-            // console.log('Setting value using api: ', value, 'for', group, tag, name)
-            const result = await API.post(`/api/core/v1/protomemdb/${chunk}/${group}/${tag}/${name}?token=`+getServiceToken(), {value: value??''}) 
-            
-            if(result && result.status == 'loaded' && result.data.changed && options.emitEvent) {
-                generateEvent({
-                    path: `${chunk}/${group}/${tag}/${name}/update`, 
-                    from: "states",
-                    user: 'system',
-                    payload:{value: value},
-                    ephemeral: true
-                }, getServiceToken())
-            }
-            done(value)
+            throw new Error("appendContext is not supported outside core environments. Use setContext instead.");
         } else {
-            const prevData = ProtoMemDB(chunk).get(group, tag, name)
-            //deep compare
-            if(JSON.stringify(prevData) === JSON.stringify(value)) {
-                return
+            let prevData = ProtoMemDB(chunk).get(group, tag, name)
+            if(!prevData || !Array.isArray(prevData)) {
+                prevData = [];
             }
-            ProtoMemDB(chunk).set(group, tag, name, value)
+            //append the new value and limit the size, removing the oldest if necessary
+            prevData.push(value);
+            if(prevData.length > limit) {
+                prevData = prevData.slice(-limit);
+            }
+
+            ProtoMemDB(chunk).set(group, tag, name, prevData)
             // console.log('setting locally', value, 'for', group, tag, name)
             if(options.emitEvent) {
                 generateEvent({
