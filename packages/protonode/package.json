@@ -24,6 +24,7 @@
         "jsonwebtoken": "^9.0.2",
         "mqtt": "^5.2.1",
         "pino-http": "9.0.0",
-        "protobase": "*"
+        "protobase": "*",
+        "ts-morph": "20.0.0"
     }
 }
