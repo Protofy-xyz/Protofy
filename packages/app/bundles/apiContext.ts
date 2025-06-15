@@ -1,5 +1,5 @@
 import machineDefinitions from './stateMachines'
-import context from './sharedContext'
+import context from './coreApiContext'
 import discord from '@extensions/discord/context'
 import flow from '@extensions/flow/context'
 import flow2 from '@extensions/flow/contextV2'
