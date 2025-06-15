@@ -1,4 +1,7 @@
 {
   "name": "@extensions/mobile",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "dependencies": {
+    "react-full-screen": "1.1.1"
+  }
 }
