@@ -28,6 +28,7 @@
     "@tamagui/next-plugin": "^1.101.7",
     "@tamagui/next-theme": "^1.101.7",
     "app": "0.0.0",
+    "@my/ui": "0.0.1",
     "compare-versions": "^3.4.0",
     "dotenv": "^16.3.1",
     "expo-constants": "~16.0.2",

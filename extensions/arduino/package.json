@@ -1,4 +1,7 @@
 {
   "name": "@extensions/arduino",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "extensions": {
+    "serialport": "13.0.0"
+  }
 }
