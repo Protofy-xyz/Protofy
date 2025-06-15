@@ -44,7 +44,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' p="$3" br={9} boxShadow="0 0 10px rgba(0,0,0,0.1)">
         <Tinted>
             <PanelGroup direction="vertical">
-                <Panel defaultSize={100} minSize={20} maxSize={100}>
+                <Panel defaultSize={75} minSize={20} maxSize={100}>
                     <YStack
                         flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         <Rules
@@ -68,7 +68,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     </YStack>
                 </Panel>
                 <CustomPanelResizeHandle direction="horizontal" />
-                <Panel defaultSize={0} minSize={0} maxSize={80}>
+                <Panel defaultSize={25} minSize={0} maxSize={80}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         {monacoEditor}
                     </YStack>
@@ -96,12 +96,12 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                 }}>
                     {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
                 </Button>
-                {/* <Button onPress={() => {
+                <Button onPress={() => {
                     boardRef.current.rulesCode = editedCode.current
                     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                 }}>
                     Save
-                </Button> */}
+                </Button>
             </XStack>
         </Tinted>
     </YStack>
