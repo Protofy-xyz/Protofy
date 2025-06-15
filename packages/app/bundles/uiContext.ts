@@ -1,4 +1,4 @@
-import { fetch, actionFetch, navigate, onRender, actionNavigate } from '@extensions/ui/context';
+import { fetch, actionFetch, navigate, onRender, actionNavigate } from '@extensions/ui/uiContext';
 import flow from '@extensions/flow/context'
 import deviceContext from '@extensions/devices/devices/uiContext'
 import object from '@extensions/objects/coreContext'

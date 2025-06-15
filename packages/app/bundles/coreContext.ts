@@ -1,5 +1,4 @@
 import fs from 'fs';
-import path from 'path';
 
 const extensionsPath = '../../extensions';
 const contexts: Record<string, any> = {};

@@ -3787,6 +3787,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/os2@workspace:extensions/os2":
+  version: 0.0.0-use.local
+  resolution: "@extensions/os2@workspace:extensions/os2"
+  dependencies:
+    archiver: "npm:7.0.1"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/os@workspace:extensions/os":
   version: 0.0.0-use.local
   resolution: "@extensions/os@workspace:extensions/os"

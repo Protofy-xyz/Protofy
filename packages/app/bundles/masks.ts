@@ -14,7 +14,7 @@ import flowMasks from '@extensions/flow/masks';
 import flowMasks2 from '@extensions/flow2/masks';
 import objectMasks from '@extensions/objects/masks';
 import osMasks from '@extensions/os/masks'
-import osMasks2 from '@extensions/os/masks2'
+import osMasks2 from '@extensions/os2/masks'
 import utilsMasks from '@extensions/utils/masks'
 import keyMasks from '@extensions/keys/masks'
 import chatGPTMasks from '@extensions/chatgpt/masks'

@@ -90,7 +90,7 @@ export default {
     id: 'WledAction',
     type: 'CallExpression',
     check: (node, nodeData) => {
-        return node.type === 'CallExpression' && nodeData.to === 'context.wledAction';
+        return node.type === 'CallExpression' && nodeData.to === 'context.wled.wledAction';
     },
     category: 'ioT',
     keywords: ['action', 'automation', 'esp32', 'device', 'iot', 'wled'],
@@ -150,7 +150,7 @@ export default {
     },
     getInitialData: () => {
         return {
-            to: "context.wledAction",
+            to: "context.wled.wledAction",
             "param-1": { value: "", kind: "StringLiteral" },
             "mask-on": { value: true, kind: "BooleanLiteral" },
             "mask-segment": { value: 0, kind: "NumericLiteral" },

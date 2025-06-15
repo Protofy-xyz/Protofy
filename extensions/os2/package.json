@@ -1,0 +1,7 @@
+{
+  "name": "@extensions/os2",
+  "version": "1.0.0",
+  "dependencies": {
+    "archiver": "7.0.1"
+  }
+}
