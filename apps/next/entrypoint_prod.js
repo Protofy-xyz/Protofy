@@ -5,9 +5,9 @@ process.env.NODE_ENV = 'production'
 process.chdir(__dirname)
 const setupProxyHandler = require('../../packages/app/proxy')
 
-if(!fs.existsSync(path.join(__dirname, '../../node_modules/@my/protolib'))) {
-  fs.mkdirSync(path.join(__dirname, '../../node_modules/@my/protolib/lib'), { recursive: true })
-  fs.copyFileSync(path.join(__dirname, '../../packages/protolib/lib/RemoteTransport.ts'), path.join(__dirname, '../../node_modules/@my/protolib/lib/RemoteTransport.ts'))
+if(!fs.existsSync(path.join(__dirname, '../../node_modules/@my/protobase'))) {
+  fs.mkdirSync(path.join(__dirname, '../../node_modules/@my/protobase/lib'), { recursive: true })
+  fs.copyFileSync(path.join(__dirname, '../../packages/protobase/lib/RemoteTransport.ts'), path.join(__dirname, '../../node_modules/@my/protobase/lib/RemoteTransport.ts'))
 }
 
 function extractNextConfig(script) {
