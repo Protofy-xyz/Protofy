@@ -34,15 +34,6 @@ const UsersAutoAPI = AutoAPI({
     requiresAdmin: ['*']
 })
 
-
-const UsersActions = AutoActions({
-    modelName: 'users',
-    modelType: UserModel,
-    prefix,
-    pageSrc: '/workspace/users?mode=embed'
-})
-
 export default (app, context) => {
     UsersAutoAPI(app, context)
-    UsersActions(app, context)
 }

@@ -12,6 +12,19 @@ export const AutoActions = ({
     const urlPrefix = apiUrl ?? `${prefix}${modelName}`;
     const actionUrlPrefix = `${prefix}actions/${modelName}`;
 
+    const loadTotal = async () => {
+        try {
+            const result = await API.get(`${urlPrefix}?token=${getServiceToken()}`);
+            if (result.isLoaded && result.data && result.data.total) {
+                context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total});
+            }
+        } catch (e) {
+            console.error("Error loading total for " + modelName, e);
+        }
+        return 0;
+    }
+    setTimeout(() => loadTotal(), 1000);
+
     //exists
     app.get(actionUrlPrefix + '/exists', handler(async (req, res, session) => {
         const params = req.query;
@@ -191,6 +204,15 @@ export const AutoActions = ({
     })
 
     //delete
+    context.events.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            loadTotal();
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id});
+        },
+        modelName + "/delete/#"
+    )
     app.get(actionUrlPrefix + '/delete', handler(async (req, res, session) => {
         const params = req.query;
         const id = params.id;
@@ -306,6 +328,7 @@ export const AutoActions = ({
         context.mqtt,
         context,
         async (event) => {
+            loadTotal();
             context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data});
             context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event});
             context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id});
