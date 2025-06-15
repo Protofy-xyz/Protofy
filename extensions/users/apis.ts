@@ -1,9 +1,9 @@
-import { UserModel } from "./";
+import { UserModel } from ".";
 import {AutoActions} from 'protonode'
 
 const prefix = '/api/v1/'
 
-export const UsersActions = AutoActions({
+export default AutoActions({
     modelName: 'users',
     modelType: UserModel,
     prefix, //where the API for the actions will be created
