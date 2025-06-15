@@ -75,7 +75,6 @@ if (process.env.NODE_ENV != 'production') {
     '../../packages/app/objects/**',
     '../../packages/app/chatbots/**',
     '../../packages/protolib/dist/**',
-    '../../system.js',
     '../../packages/app/conf.ts',
     '../../packages/protonode/dist/**',
     '../../packages/protobase/dist/**',

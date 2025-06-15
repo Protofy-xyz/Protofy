@@ -17,11 +17,11 @@ if (!fs.existsSync('./../../.env')) {
     }
 }
 
-if (!fs.existsSync('../../data/pages/')) {
+if (!fs.existsSync('../../data/pages')) {
     //run yarn package
     const { exec } = require('child_process');
     console.log("Compiling nextjs app...")
-    exec('yarn publish', (err, stdout, stderr) => {
+    exec('yarn package', (err, stdout, stderr) => {
         if (err) {
             console.error(err);
             return;

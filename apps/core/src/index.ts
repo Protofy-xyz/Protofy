@@ -95,7 +95,6 @@ export const startCore = (ready?) => {
       '../../packages/protolib/dist/**',
       '../../packages/app/bundles/coreApis.ts',
       '../../packages/app/bundles/coreApiContext.ts',
-      '../../system.js',
       '../../packages/protonode/dist/**',
       '../../packages/protobase/dist/**',
     ];
