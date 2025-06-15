@@ -8,8 +8,10 @@ export const AutoActions = ({
     apiUrl = undefined,
     prefix = "/api/v1/",
     pageSrc = undefined,
-    notificationsName = undefined
+    notificationsName = undefined,
+    pluralName = undefined
 }) => async (app, context) => {
+    const plurName = pluralName ?? modelName
     const urlPrefix = apiUrl ?? `${prefix}${modelName}`;
     const actionUrlPrefix = `${prefix}actions/${modelName}`;
     const notiName = notificationsName ?? modelName;
@@ -383,6 +385,22 @@ export const AutoActions = ({
         token: getServiceToken()
     })
 
+    context.cards.add({
+        group: 'objects',
+        tag: modelName,
+        name: 'totalItems',
+        templateName: 'Total ' + plurName,
+        id: 'object_' + modelName + '_totalitems',
+        defaults: {
+            type: "value",
+            icon: 'boxes',
+            name: `Total ${plurName}`,
+            description: `Total ${plurName}`,
+            rulesCode: `return states.objects?.${modelName}.total;`,
+        },
+        emitEvent: true,
+        token: getServiceToken()
+    })
 
     app.get(actionUrlPrefix + '/list', handler(async (req, res, session) => {
         const params = req.query;
