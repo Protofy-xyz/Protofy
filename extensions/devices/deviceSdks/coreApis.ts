@@ -18,7 +18,7 @@ const initialData = {
     }
 }
 
-export const DeviceSdksAPI = AutoAPI({
+export default AutoAPI({
     modelName: 'devicesdks',
     modelType: DeviceSdkModel,
     initialData,

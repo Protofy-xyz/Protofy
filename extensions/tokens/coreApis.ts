@@ -10,7 +10,7 @@ export const tokensAutoAPI = AutoAPI({
     requiresAdmin: ['*']
 })
 
-export const TokensAPI = (app, context) => {
+export default (app, context) => {
     tokensAutoAPI(app, context)
 
     app.get('/api/core/v1/tokens/:type/create', handler(async (req, res, session) => {

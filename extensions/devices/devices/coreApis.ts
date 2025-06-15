@@ -29,7 +29,7 @@ export const DevicesAutoAPI = AutoAPI({
 const logger = getLogger()
 
 
-export const DevicesAPI = (app, context) => {
+export default (app, context) => {
     const devicesPath = '../../data/devices/'
     const { topicSub, topicPub, mqtt } = context;
     DevicesAutoAPI(app, context)

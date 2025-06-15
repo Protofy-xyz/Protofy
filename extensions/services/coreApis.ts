@@ -161,7 +161,7 @@ const getServicePath = async (service) => {
   });
 }
 
-export const ServicesAPI = (app, context) => {
+export default (app, context) => {
   monitorServices(context)
   serviceAutoAPI(app, context)
   app.get('/api/core/v1/services/:service/restart', handler(async (req, res, session) => {

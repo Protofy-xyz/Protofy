@@ -93,7 +93,7 @@ const packageAutoAPI = AutoAPI({
   requiresAdmin: ['*']
 })
 
-export const PackagesAPI = (app, context) => {
+export default (app, context) => {
   packageAutoAPI(app, context)
   monitorPackages()
   app.get('/api/core/v1/packages/:pkg/build', handler(async (req, res, session) => {

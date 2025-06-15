@@ -342,7 +342,7 @@ const initialData = {
     }
 }
 
-export const DeviceBoardsAPI = AutoAPI({
+export default AutoAPI({
     modelName: 'deviceboards',
     modelType: DeviceBoardModel,
     initialData,

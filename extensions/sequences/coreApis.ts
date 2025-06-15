@@ -118,7 +118,7 @@ class HttpError extends Error {
     }
 }
 
-export const SequencesAPI = (app, context) => {
+export default (app, context) => {
 
     app.get('/api/core/v1/sequences/:sequenceId', async (req, res) => {
         const sequenceId = req.params.sequenceId

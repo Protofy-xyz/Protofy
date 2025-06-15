@@ -104,7 +104,7 @@ const getDB = (path, req, session) => {
 
     return db;
 }
-export const StateMachinesDefinitionsApi = (app, context) => {
+export default (app, context) => {
     const autoAPI = AutoAPI({
         modelName: 'statemachinedefinition',
         modelType: StateMachineDefinitionModel,

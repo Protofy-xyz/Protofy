@@ -55,7 +55,7 @@ const initialData = {
     }
 }
 
-export const DeviceCoresAPI = AutoAPI({
+export default AutoAPI({
     modelName: 'devicecores',
     modelType: DeviceCoreModel,
     initialData,

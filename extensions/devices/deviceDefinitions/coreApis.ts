@@ -88,7 +88,7 @@ const getDB = (path, req, session) => {
     return db;
 }
 
-export const DeviceDefinitionsAPI = AutoAPI({
+export default AutoAPI({
     modelName: 'devicedefinitions',
     modelType: DeviceDefinitionModel,
     initialData,

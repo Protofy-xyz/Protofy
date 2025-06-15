@@ -1,7 +1,7 @@
 import { API, getLogger } from "protobase";
 const logger = getLogger();
 
-export const WledAPI = (app, context) => {
+export default (app, context) => {
   logger.info("wledApi started");
 
   app.get("/api/core/v1/wled/state", async (req, res) => {
