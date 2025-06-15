@@ -6,9 +6,6 @@
   "sideEffects": [
     "*.css"
   ],
-  "dependencies": {
-
-  },
   "devDependencies": {
     "@types/react": "^18.0.27"
   }
