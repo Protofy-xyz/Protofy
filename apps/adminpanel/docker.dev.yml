@@ -5,7 +5,7 @@ services:
     image: "protofy/workspace"
     entrypoint: "sh -c 'cd apps/adminpanel && yarn prepare-dev && yarn dev-standalone'"
     ports:
-      - 8000:8000
+      - 3002:3002
     environment:
       - PROXY_API_URL=http://localhost:8000
       - NODE_ENV=development

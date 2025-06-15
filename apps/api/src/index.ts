@@ -18,7 +18,7 @@ const serviceName = isProduction?'api':'api-dev'
 
 const PORT = 3001
 const waitForCore = true
-const coreAddr = process.env.CORE_URL || 'http://localhost:3002/api/core/v1/boards?token='+getServiceToken()
+const coreAddr = process.env.CORE_URL || 'http://localhost:8000/api/core/v1/boards?token='+getServiceToken()
 
 
 const start = async () => {

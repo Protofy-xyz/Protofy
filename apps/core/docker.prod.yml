@@ -11,7 +11,7 @@ services:
     environment:
       - MQTT_URL=mqtt://localhost:1883
       - PROXY_API_URL=http://core:8080
-      - ADMIN_API_URL=http://core:3002
+      - ADMIN_API_URL=http://core:8000
       - API_URL=http://api:4001
       - SITE_URL=http://next:4000 
       - ADMIN_SITE_URL=http://admin:4003 
