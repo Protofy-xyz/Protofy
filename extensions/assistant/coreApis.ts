@@ -2,7 +2,7 @@
 import { handler } from 'protonode'
 import { chatGPTSession } from '@extensions/chatgpt/context'
 
-export function AssistantAPI(app, context) {
+export default (app, context) => {
     app.post('/api/core/v1/assistant', handler(async (req: any, res: any) => {
         let { messages, gptModel } = req.body;
 

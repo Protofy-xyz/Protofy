@@ -151,7 +151,7 @@ const ChatbotsAutoAPI = AutoAPI({
   requiresAdmin: ['*']
 })
 
-export const ChatbotsAPI = (app, context) => {
+export default (app, context) => {
   ChatbotsAutoAPI(app, context)
 
   app.get('/api/core/v1/chatbot/send', async (req, res) => {

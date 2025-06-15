@@ -41,7 +41,7 @@ const locks = {
     "count": false
 }
 
-export const VisionAPI = async (app: Application, context: typeof APIContext) => {
+export default async (app: Application, context: typeof APIContext) => {
 
     addCard({
         group: 'vision',

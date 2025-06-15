@@ -72,6 +72,6 @@ const KeysAutoAPI = AutoAPI({
     requiresAdmin: ['*']
 })
 
-export const KeysAPI = (app, context) => {
+export default (app, context) => {
     KeysAutoAPI(app, context)
 }

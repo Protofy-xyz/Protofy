@@ -36,7 +36,7 @@ const getDB = (path, req, session) => {
     return db;
 }
 
-export const AutomationsAPI = AutoAPI({
+export default AutoAPI({
     modelName: 'automations',
     modelType: AutomationModel,
     prefix: '/api/core/v1/',

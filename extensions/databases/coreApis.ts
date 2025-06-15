@@ -94,7 +94,7 @@ const EventAPI = AutoAPI({
   paginatedRead: { model: DatabaseEntryModel }
 })
 
-export const DatabasesAPI = (app, context) => {
+export default (app, context) => {
   EventAPI(app, context) //register basic crud
 
   app.post('/api/core/v1/backup/databases', handler(async (req, res, session) => {
@@ -140,4 +140,3 @@ export const DatabasesAPI = (app, context) => {
   }))
 }
 
-export default DatabasesAPI

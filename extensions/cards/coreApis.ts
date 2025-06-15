@@ -1,4 +1,4 @@
-export const CardsAPI = (app, context) => {
+export default (app, context) => {
     app.get('/api/core/v1/cards', async (req, res) => {
         const cards = await context.state.getStateTree({ chunk: 'cards' });
         res.send(cards);

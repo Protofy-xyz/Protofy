@@ -26,7 +26,7 @@ const customGetDB = (path, req, session) => {
   return db;
 }
 
-export const WorkspacesAPI = AutoAPI({
+export default AutoAPI({
   modelName: 'workspaces',
   modelType: WorkspaceModel,
   prefix: '/api/core/v1/',
@@ -36,5 +36,3 @@ export const WorkspacesAPI = AutoAPI({
   getDB: customGetDB,
   operations: ['list']
 })
-
-export default WorkspacesAPI

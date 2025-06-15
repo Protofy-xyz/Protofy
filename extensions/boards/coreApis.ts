@@ -322,7 +322,7 @@ class HttpError extends Error {
     }
 }
 
-export const BoardsAPI = (app, context) => {
+export default (app, context) => {
     class HttpError extends Error {
         constructor(public status: number, message: string) {
             super(message);
