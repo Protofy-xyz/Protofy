@@ -1,5 +1,5 @@
-const system = require('../../system.js')
-const python = system.services.find((s => s.name === 'python'))
+const services = require('./services.js')
+const python = services.find((s => s.name === 'python'))
 if(python.disabled) {
     //exit with code 1
     console.log('Skipping python setup due to disabled service')

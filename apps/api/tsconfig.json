@@ -23,7 +23,7 @@
     ],
 
     "paths": {
-      "protolib/*": ["protolib/src/*"], 
+      "protolib/*": ["protolib/src/*"],
       "app/*": ["app/*"]
     }
   },
@@ -32,7 +32,6 @@
     "../../.types/*.ts",
     "./app/bundles/apiContext.ts",
     "./app/bundles/apis.ts",
-    "./app/bundles/objects.ts",
     "./app/bundles/storageProviders.ts",
     "./app/initialData.ts",
   ],

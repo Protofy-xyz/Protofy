@@ -22,22 +22,23 @@ the session argument is a session object, with the following shape:
 use the chat if in doubt
 */
 
-import { Objects } from "app/bundles/objects";
+
 import { AutoAPI, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
 import APIContext from "app/bundles/apiContext";
 import { Application } from "express";
 import {GoogleSheetClient} from '@extensions/google/googleSheetClient'
 import fsPath from "path";
+import { {{modelName}} } from '../objects/{{object}}'
 
 const root = fsPath.join(process.cwd(), '..', '..')
 const logger = getLogger();
 
 Protofy("type", "AutoAPI");
 Protofy("object", "{{object}}");
-const { name, prefix } = Objects.{{object}}.getApiOptions();
+const { name, prefix } = {{modelName}}.getApiOptions();
 
-const idField = Objects.{{object}}.getIdField()
+const idField = {{modelName}}.getIdField()
 
 const spreadsheetId = '{{param}}';
 
@@ -54,13 +55,13 @@ const getCredentials = async () => {
 export default Protofy("code", async (app: Application, context: typeof APIContext) => {
     const {{codeName}}API = AutoAPI({
         modelName: name,
-        modelType: Objects.{{object}},
+        modelType: {{modelName}},
         initialData: {},
         prefix: prefix,
         getDB: (path, req, session) => {
             const db = {
                 async *iterator() {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, {{modelName}}.getObjectFields())
                     const elements = await client.getSpreadSheetElements()
                     for (const element of elements) {
                         yield [element.id, JSON.stringify(element)];
@@ -68,17 +69,17 @@ export default Protofy("code", async (app: Application, context: typeof APIConte
                 },
 
                 async put(key, value) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, {{modelName}}.getObjectFields())
                     return client.put(key, value)
                 },
 
                 async get(key) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, {{modelName}}.getObjectFields())
                     return client.get(key)
                 },
 
                 async del(key) {
-                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, Objects.{{object}}.getObjectFields())
+                    const client = new GoogleSheetClient(await getCredentials(), spreadsheetId, "{{object}}", idField, {{modelName}}.getObjectFields())
                     client.deleteId(key)
                 }
             };

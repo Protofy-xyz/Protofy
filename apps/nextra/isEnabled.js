@@ -1,5 +1,5 @@
-const system = require('../../system.js')
-const nextra = system.services.find((s => s.name === 'nextra'))
+const services = require('./services.js')
+const nextra = services.find((s => s.name === 'nextra'))
 if(nextra.disabled) {
     //exit with code 1
     console.log('Skipping nextra documentation build due to disabled service')

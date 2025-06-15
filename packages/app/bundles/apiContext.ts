@@ -1,4 +1,3 @@
-import {Objects} from './objects'
 import machineDefinitions from './stateMachines'
 import context from './sharedContext'
 import discord from '@extensions/discord/context'
@@ -18,9 +17,6 @@ import twilio from '@extensions/twilio/context'
 export default {
     machineDefinitions: {
         ...machineDefinitions
-    },
-    objects: {
-        ...Objects
     },
     ...context,
     discord,

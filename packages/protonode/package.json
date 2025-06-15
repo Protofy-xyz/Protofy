@@ -22,8 +22,8 @@
         "express": "^4.18.2",
         "express-list-endpoints": "^6.0.0",
         "jsonwebtoken": "^9.0.2",
-        "mrmime": "1.0.1",
         "mqtt": "^5.2.1",
+        "mrmime": "1.0.1",
         "pino-http": "9.0.0",
         "protobase": "*",
         "ts-morph": "20.0.0"

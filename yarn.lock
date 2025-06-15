@@ -3784,6 +3784,8 @@ __metadata:
 "@extensions/os@workspace:extensions/os":
   version: 0.0.0-use.local
   resolution: "@extensions/os@workspace:extensions/os"
+  dependencies:
+    archiver: "npm:7.0.1"
   languageName: unknown
   linkType: soft
 
@@ -13880,6 +13882,7 @@ __metadata:
     "@types/express": "npm:^4.17.17"
     "@types/node": "npm:20.6.0"
     app: "npm:*"
+    archiver: "npm:7.0.1"
     axios: "npm:^1.7.7"
     chokidar: "npm:^3.5.3"
     cookie-parser: "npm:^1.4.6"
@@ -27100,8 +27103,10 @@ __metadata:
     express-list-endpoints: "npm:^6.0.0"
     jsonwebtoken: "npm:^9.0.2"
     mqtt: "npm:^5.2.1"
+    mrmime: "npm:1.0.1"
     pino-http: "npm:9.0.0"
     protobase: "npm:*"
+    ts-morph: "npm:20.0.0"
     typescript: "npm:5.8.2"
   languageName: unknown
   linkType: soft
