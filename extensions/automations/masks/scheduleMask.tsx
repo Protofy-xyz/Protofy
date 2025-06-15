@@ -28,7 +28,7 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && nodeData.to == 'context.createSchedule'
+            && nodeData.to == 'context.automations.createSchedule'
             && nodeData["param-1"] && nodeData["param-5"]
             && nodeData["param-3"] && nodeData["param-4"]
             && nodeData["param-2"]
@@ -38,7 +38,7 @@ export default {
     getComponent: (node, nodeData, children) => <ScheduleMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => {
         return {
-            "to": 'context.createSchedule',
+            "to": 'context.automations.createSchedule',
             "param-1": { value: "12:30", kind: "StringLiteral" },
             "param-2": { value: "async () =>", kind: "Identifier" },
             "param-3": { value: "5", kind: "StringLiteral" },

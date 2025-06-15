@@ -55,7 +55,7 @@ export default {
     type: 'CallExpression',
     category: "ioT",
     keywords: ["automation", 'esp32', 'device', 'iot', 'trigger', 'subscribe'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceSub'),
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devices.deviceSub'),
     getComponent: (node, nodeData, children) => (
         <DeviceSub node={node} nodeData={nodeData} children={children} />
     ),
@@ -63,7 +63,7 @@ export default {
     restoreChildren: restoreCallback("6"),
     getInitialData: () => {
         return {
-            to: 'context.deviceSub',
+            to: 'context.devices.deviceSub',
             "param-1": { value: "context.mqtt", kind: "Identifier" },
             "param-2": { value: "context", kind: "Identifier" },
             "param-3": { value: "", kind: "StringLiteral" },

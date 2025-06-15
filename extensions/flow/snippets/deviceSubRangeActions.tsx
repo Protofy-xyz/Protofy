@@ -1,7 +1,7 @@
 export default {
     name: 'Device Sub/Range/Actions',
     // category: 'device-snippets',
-    code: `context.deviceSub(
+    code: `context.devices.deviceSub(
   context.mqtt,
   context,
   " ",
@@ -13,11 +13,11 @@ export default {
       1.5,
       0.3,
       async (delta) =>
-        await context.deviceAction("", "", "", undefined, null, null),
+        await context.devices.deviceAction("", "", "", undefined, null, null),
       async (delta) =>
-        await context.deviceAction("", "", "", undefined, null, null),
+        await context.devices.deviceAction("", "", "", undefined, null, null),
       async (delta) =>
-        await context.deviceAction("", "", "", undefined, null, null),
+        await context.devices.deviceAction("", "", "", undefined, null, null),
       null
     );
   }

@@ -30,14 +30,14 @@ Protofy("type", "IOTRouter")
 
 export default Protofy("code", async (app, context) => {
     ///PUT YOUR ROUTER LOGIC HERE
-    //context.deviceAction function allows to communicate with devices via mqtt
-    //contextdeviceSub allows to receive notifications from devices via mqtt
+    //context.devices.deviceAction function allows to communicate with devices via mqtt
+    //context.devices.deviceSub allows to receive notifications from devices via mqtt
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection
 
     logger.info("IOT Router {{name}} started")
     app.get("/api/v1/action", async (req, res) => {
-        await context.deviceAction("", "", "");
+        await context.devices.deviceAction("", "", "");
         res.send("Action Done");
     });
 })

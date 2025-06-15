@@ -51,7 +51,7 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.to == 'context.fetch')
+            && (nodeData.to == 'context.apis.fetch')
         )
     },
     filterChildren: (node, childScope, edges) => {
@@ -69,7 +69,7 @@ export default {
     keywords: ["api", "rest", "http", "automation", 'fetch', 'get', 'post'],
     getInitialData: () => {
         return {
-            to: 'context.fetch',
+            to: 'context.apis.fetch',
             await: true,
             "param-1": { value: "get", kind: "StringLiteral" },
             "param-2": { value: "/api/v1/", kind: "StringLiteral" },

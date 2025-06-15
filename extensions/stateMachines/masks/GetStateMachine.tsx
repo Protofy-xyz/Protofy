@@ -22,7 +22,7 @@ export default {
     category: "StateMachines",
     keywords: ["machine", "state machine", "state", "get", "read"],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.sm.getStateMachine')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.stateMachines.getStateMachine')
     },
     getComponent: (node, nodeData, children) => <GetStateMachine node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
@@ -38,7 +38,7 @@ export default {
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.sm.getStateMachine',
+            to: 'context.stateMachines.getStateMachine',
             "mask-instanceName": {
               value: "",
               kind: "StringLiteral"

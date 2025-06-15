@@ -40,7 +40,7 @@ export default {
     category: "StateMachines",
     keywords: ["machine", "state machine", "state", "spawn"],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.sm.spawnStateMachine')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.stateMachines.spawnStateMachine')
     },
     getComponent: (node, nodeData, children) => <SpawnMachine node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
@@ -58,7 +58,7 @@ export default {
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.sm.spawnStateMachine',
+            to: 'context.stateMachines.spawnStateMachine',
             "mask-definitionName": {
                 value: "",
                 kind: "StringLiteral"

@@ -58,7 +58,7 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression" &&
-            nodeData.to == 'context.deviceAction'
+            nodeData.to == 'context.devices.deviceAction'
         );
     },
     category: "ioT",
@@ -76,7 +76,7 @@ export default {
     },
     getInitialData: () => {
         return {
-            to: 'context.deviceAction',
+            to: 'context.devices.deviceAction',
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "", kind: "StringLiteral" },
             "param-3": { value: "", kind: "StringLiteral" },

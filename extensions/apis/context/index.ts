@@ -74,3 +74,12 @@ export const executeAutomation = async (automation, cb, errorCb, hasSarviceToken
         return fetch("get", '/api/v1/automations/' + automation + (params?'?'+params:''), {}, cb, errorCb, hasSarviceToken)
     }
 }
+
+export default {
+    automation,
+    fetch,
+    automationResponse,
+    executeAutomation,
+    getServiceToken,
+    serviceToken
+}

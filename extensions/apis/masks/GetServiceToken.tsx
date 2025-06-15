@@ -18,7 +18,7 @@ export default {
     category: "System",
     keywords: ["key", "api", "token", "service", "get", "secret", "gettoken"],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.getServiceToken')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.apis.getServiceToken')
     },
     getComponent: (node, nodeData, children) => <GetServiceToken node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({keys: {
@@ -30,7 +30,7 @@ export default {
     getInitialData: () => {
         return {
             await: false,
-            to: 'context.getServiceToken'
+            to: 'context.apis.getServiceToken'
         }
     }
 }

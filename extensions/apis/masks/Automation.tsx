@@ -41,7 +41,7 @@ export default {
         var param2Val = getFieldValue('param-2', nodeData)
         return (
             node.type == "CallExpression"
-            && nodeData.to == 'context.automation'
+            && nodeData.to == 'context.apis.automation'
         )
     },
     category: "automation",
@@ -51,7 +51,7 @@ export default {
     restoreChildren: restoreCallback('2'),
     getInitialData: () => {
         return {
-            to: 'context.automation',
+            to: 'context.apis.automation',
             "param-1": { value: 'app', kind: 'Identifier' },
             "param-2": { value: 'null', kind: 'Identifier' },
             "param-3": { value: "", kind: "StringLiteral" },

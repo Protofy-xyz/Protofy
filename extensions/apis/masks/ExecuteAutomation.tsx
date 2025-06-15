@@ -62,7 +62,7 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression"
-            && (nodeData.to == 'context.executeAutomation')
+            && (nodeData.to == 'context.apis.executeAutomation')
         )
     },
     filterChildren: (node, childScope, edges) => {
@@ -80,7 +80,7 @@ export default {
     keywords: ["api", "rest", "http", "automation", 'fetch', 'get', 'execute', "run"],
     getInitialData: () => {
         return {
-            to: 'context.executeAutomation',
+            to: 'context.apis.executeAutomation',
             "param-1": { value: "", kind: "StringLiteral" },
             "param-2": { value: "null", kind: "Identifier" },
             "param-3": { value: "null", kind: "Identifier" },

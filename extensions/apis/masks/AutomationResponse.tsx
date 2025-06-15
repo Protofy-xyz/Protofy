@@ -19,7 +19,7 @@ export default {
     type: 'CallExpression',
     category: "automation",
     keywords: ["api", "rest", "http", "trigger", "automation", 'response'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.automationResponse'), //TODO: Change output function name
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.apis.automationResponse'), //TODO: Change output function name
     getComponent: (node, nodeData, children) => <AutomationResponse node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.automationResponse', "param-1": { value: "res", kind: "Identifier"} , "param-2": { value: "Automation executed", kind: "StringLiteral" }  }}
+    getInitialData: () => { return { to: 'context.apis.automationResponse', "param-1": { value: "res", kind: "Identifier"} , "param-2": { value: "Automation executed", kind: "StringLiteral" }  }}
 }

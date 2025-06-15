@@ -55,7 +55,7 @@ export default {
     type: 'CallExpression',
     category: "ioT",
     keywords: ["automation", 'esp32', 'device', 'iot', 'read sensor', 'read', 'sensor', 'value'],
-    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.deviceMonitor'),
+    check: (node, nodeData) => node.type == "CallExpression" && nodeData.to?.startsWith('context.devices.deviceMonitor'),
     getComponent: (node, nodeData, children) => <DeviceMonitor node={node} nodeData={nodeData} children={children} />,
-    getInitialData: () => { return { to: 'context.deviceMonitor', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, await: true } }
+    getInitialData: () => { return { to: 'context.devices.deviceMonitor', "param-1": { value: "", kind: "StringLiteral" }, "param-2": { value: "", kind: "StringLiteral" }, "param-3": { value: "", kind: "StringLiteral" }, await: true } }
 }

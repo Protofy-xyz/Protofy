@@ -25,9 +25,9 @@ export const autopilot = ({context, app, agentName, model}) => {
       app: app,
       onRun: async (params, res) => {
         const templateName = "v2";
-        const actions = await context.automations.getActionsFromAutomations(agentName, context.serviceToken);
+        const actions = await context.automations.getActionsFromAutomations(agentName, context.apis.serviceToken);
         const memoryStates = await context.protomemdb.getStatesFromProtoMemDB('states', 'boards', agentName);
-        const chatStates = await context.chatbots.getChatState(context.serviceToken, 1);
+        const chatStates = await context.chatbots.getChatState(context.apis.serviceToken, 1);
 
         if((!lastChatMessage || chatStates.getData()?.chats[0]?.message?.message === lastChatMessage) && lastSeenState && JSON.stringify(lastSeenState) === JSON.stringify(memoryStates.getData())) {
           res.send({result: 'No new state detected, skipping step'})
@@ -157,7 +157,7 @@ export const autopilot = ({context, app, agentName, model}) => {
       onRun: async (params, res) => {
         clearInterval(timer)
         context.state.set({ group: 'boards', tag: agentName, name: 'autopilot', value: 'ON', emitEvent: true});
-        timer = setInterval(() => context.executeAutomation(agentName+'/autopilot/step', () => { }, () => { }), 100);
+        timer = setInterval(() => context.apis.executeAutomation(agentName+'/autopilot/step', () => { }, () => { }), 100);
         res.send('ai control automation started');
       }
     });

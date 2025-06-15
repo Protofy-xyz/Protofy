@@ -23,12 +23,12 @@ export const deviceController = async ({
     actions
 }: DeviceControllerProps) => {
     startActions.forEach((action) => {
-        context.deviceAction(device, action.subsystem, action.action, action.params, null, null);
+        context.devices.deviceAction(device, action.subsystem, action.action, action.params, null, null);
     });
 
     sensors.forEach((sensor) => {
         context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.initialValue});
-        context.deviceState(context, device, sensor.subsystem, sensor.monitor, (status) => {
+        context.devices.deviceState(context, device, sensor.subsystem, sensor.monitor, (status) => {
             context.state.set({ group: 'boards', tag: device, name: sensor.stateName, value: sensor.value(status), emitEvent: true});
         });
     });

@@ -1,18 +1,16 @@
 import events from '@extensions/events/context'
 import protomemdb from '@extensions/protomemdb/context'
 import actions from '@extensions/actions/context'
-import { automation, fetch, automationResponse, executeAutomation, getServiceToken, serviceToken } from '@extensions/apis/context/'
+import apis from '@extensions/apis/context/'
 import chatGPT from '@extensions/chatgpt/context'
 import automations from '@extensions/automations/context'
-import {createSchedule} from '@extensions/automations/schedule'
-import {createPeriodicSchedule} from '@extensions/automations/periodicSchedule'
 import autopilot from '@extensions/autopilot/context'
 import cards from '@extensions/cards/context'
 import chatbots from '@extensions/chatbots/context'
 import keys from '@extensions/keys/context'
-import deviceContext from '@extensions/devices/devices/context'
+import devices from '@extensions/devices/devices/context'
 import object from '@extensions/objects/context'
-import stateContext from '@extensions/state/context'
+import state from '@extensions/state/context'
 import utils from '@extensions/utils/context'
 import stateMachines from '@extensions/stateMachines/context'
 
@@ -20,23 +18,16 @@ export default {
     events,
     protomemdb,
     actions,
-    automation,
-    fetch,
-    automationResponse,
-    executeAutomation,
-    getServiceToken,
-    serviceToken,
+    apis,
     chatGPT,
-    createSchedule,
-    createPeriodicSchedule,
     automations,
     autopilot,
     cards,
     chatbots,
     keys,
     object,
-    state: stateContext,
+    state,
     utils,
-    sm: stateMachines,
-    ...deviceContext
+    stateMachines,
+    devices
 }

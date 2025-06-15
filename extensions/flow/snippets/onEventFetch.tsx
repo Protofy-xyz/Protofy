@@ -5,7 +5,7 @@ export default {
       context.mqtt,
       context,
       async (event) =>
-        context.fetch(
+        context.apis.fetch(
           "get",
           "/api/v1/",
           null,

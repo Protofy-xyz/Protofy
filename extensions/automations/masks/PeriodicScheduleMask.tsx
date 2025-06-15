@@ -41,13 +41,13 @@ export default {
     check: (node, nodeData) => {
         return (
             node.type == "CallExpression" &&
-            nodeData.to == 'context.createPeriodicSchedule'
+            nodeData.to == 'context.automations.createPeriodicSchedule'
         )
     },
     getComponent: (node, nodeData, children) => <PeriodicScheduleMask node={node} nodeData={nodeData} children={children} />,
     getInitialData: () => {
         return {
-            "to": 'context.createPeriodicSchedule',
+            "to": 'context.automations.createPeriodicSchedule',
             "param-1": { value: '13', kind: "StringLiteral" }, // hours
             "param-2": { value: '00', kind: "StringLiteral" }, // minutes
             "param-3": { value: "null", kind: "Identifier" }, // callback inicializado correctamente
