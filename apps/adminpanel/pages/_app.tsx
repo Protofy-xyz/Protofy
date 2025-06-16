@@ -27,6 +27,7 @@ import { Provider } from 'app/provider'
 import { Tinted } from 'protolib/components/Tinted'; 
 import { DataView} from 'protolib/components/DataView';
 import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
+import { MqttWrapper } from 'protolib/components/MqttWrapper';
 import { API, ProtoModel } from 'protobase'
 
 if (typeof window !== 'undefined') {
@@ -39,7 +40,8 @@ if (typeof window !== 'undefined') {
     DataView,
     ObjectViewLoader,
     API,
-    ProtoModel
+    ProtoModel,
+    MqttWrapper
   };
 }
 // ---------------------------------------------------------

@@ -402,7 +402,7 @@ const cardValue = ({ value, style = '' }) => {
 }
 
 const reactCard = (jsx, root) => {
-    const { Button, Text, View, Provider, Tinted, DataView, ObjectViewLoader, API, ProtoModel } = window.TamaguiComponents;
+    const { Button, Text, View, Provider, Tinted, DataView, ObjectViewLoader, API, ProtoModel, MqttWrapper } = window.TamaguiComponents;
 
     const jsxCode = `
   function WidgetRoot({children}) {
@@ -452,12 +452,14 @@ const dataView = (object, root) => {
 
   function Widget() {
     return (
-        <Tinted>
-          <View className="no-drag">
-            {/* you can use data.value here to access the value */}
-            <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
-          </View>
-        </Tinted>
+        <MqttWrapper>
+            <Tinted>
+            <View className="no-drag">
+                {/* you can use data.value here to access the value */}
+                <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
+            </View>
+            </Tinted>
+        </MqttWrapper>
     );
   }
 
