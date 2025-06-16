@@ -11,6 +11,8 @@ import { PieChart } from 'protolib/components/PieChart';
 import { LineChart, Cpu } from 'lucide-react'
 import React from 'react';
 import { useUpdateEffect } from 'usehooks-ts'
+import { v4 as uuidv4 } from 'uuid';
+import { useRootTheme } from '@tamagui/next-theme'
 
 const fetch = async (fn) => {
     const services = await API.get('/api/core/v1/services')
@@ -65,10 +67,6 @@ export const BasicCard = ({ title, id, children }) => {
 
 export const getHTML = (html, viewLib, data) => {
     try {
-        // if (!viewLibCache) {
-        //     viewLibCache = await API.get('/api/core/v1/viewLib')
-        // }
-        //console.log('Card HTML templates:', viewLibCache.data);
         const wrapper = new Function('data', `
             ${viewLib}
             ${html}
@@ -94,7 +92,7 @@ const requestViewLib = (cb) => {
     }
 
     pendingViewLibRequest = [cb];
-    API.get('/api/core/v1/viewLib').then((res) => {
+    API.get('/api/core/v1/viewLib', null, true).then((res) => {
         viewLib = res.data;
         pendingViewLibRequest.forEach((callback) => callback(viewLib));
         pendingViewLibRequest = null;
@@ -107,6 +105,8 @@ const requestViewLib = (cb) => {
 
 export const HTMLView = ({ html, data, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
+    const [uuid, setuuid] = useState(() => uuidv4());
+    const [theme, setTheme] = useRootTheme()
     //TODO: loading?
     useEffect(() => {
         if(!loaded) {
@@ -122,7 +122,7 @@ export const HTMLView = ({ html, data, ...props }) => {
     }, []);
     if(!viewLib) return <></>
     return (
-        <div {...props} dangerouslySetInnerHTML={{ __html: getHTML(html, viewLib, data) }} /> 
+        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? getHTML(html, viewLib, {...data, theme, domId: uuid}) : '' }} /> 
     )
 }
 

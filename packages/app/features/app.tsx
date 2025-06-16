@@ -38,45 +38,49 @@ import Workspaces from 'app/bundles/workspaces'
 import { PanelLayout } from 'app/layout/PanelLayout'
 import { useRouter } from 'next/router';
 
-const getApp = (AppConfig, options={disablePreviewMode: false}) => {
-    return function MyApp({ Component, pageProps }: SolitoAppProps) {
-        //@ts-ignore
-        const [session] = useSession(pageProps['pageSession'])
-        const projectName = SiteConfig.projectName
-        const brokerUrl = getBrokerUrl()
-        return (
-          <>
-            <Head>
-              <title>{projectName + " - AI Driven Machine Automation Platform"}</title>
-              <meta name="description" content="Natural Language Autopilot system for smart and industrial devices" />
-              {/* <link rel="icon" href="/favicon.ico" /> */}
-            </Head>
-            <JotaiProvider>
-              <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
-                <ThemeProvider {...options}>
-                  <AppConfContext.Provider value={{
-                    ...AppConfig,
-                    bundles: {
-                      workspaces: Workspaces,
-                    },
-                    layout: {
-                      PanelLayout
-                    }
-                  }}>
-                    <Component {...pageProps} />
-                  </AppConfContext.Provider>
-                </ThemeProvider>
-              </Connector>
-            </JotaiProvider>
-          </>
-        )
-      }
+const getApp = (AppConfig, options = { disablePreviewMode: false }) => {
+  return function MyApp({ Component, pageProps }: SolitoAppProps) {
+    //@ts-ignore
+    const [session] = useSession(pageProps['pageSession'])
+    const projectName = SiteConfig.projectName
+    const brokerUrl = getBrokerUrl()
+    return (
+      <>
+        <Head>
+          <title>{projectName + " - AI Driven Machine Automation Platform"}</title>
+          <meta name="description" content="Natural Language Autopilot system for smart and industrial devices" />
+          {/* <link rel="icon" href="/favicon.ico" /> */}
+        </Head>
+        <JotaiProvider>
+          <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
+            <ThemeProvider {...options}>
+              <AppConfContext.Provider value={{
+                ...AppConfig,
+                bundles: {
+                  workspaces: Workspaces,
+                },
+                layout: {
+                  PanelLayout
+                }
+              }}>
+                <Component {...pageProps} />
+              </AppConfContext.Provider>
+            </ThemeProvider>
+          </Connector>
+        </JotaiProvider>
+      </>
+    )
+  }
 }
-
 
 function ThemeProvider({ children, disablePreviewMode }: { children: React.ReactNode }) {
   const router = useRouter();
   const [theme, setTheme] = useRootTheme()
+
+  if (typeof window !== 'undefined') {
+    window.TamaguiTheme = theme
+  }
+
   const forcedTheme = SiteConfig.ui.forcedTheme
   const currentUrl = router.asPath;
   const containsChatbot = currentUrl.includes('/chatbot');

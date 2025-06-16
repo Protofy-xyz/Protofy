@@ -753,6 +753,22 @@ export default (app, context) => {
 
     addCard({
         group: 'board',
+        tag: "react",
+        id: 'show',
+        templateName: "Display a React component",
+        name: "board_react",
+        defaults: {
+            name: "React",
+            icon: "table-properties",
+            description: "Display a React component",
+            type: 'value',
+            html: "reactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            {/* you can use data.value here to access the value */}\n            <center><Text>Hello from react</Text></center>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n"
+        },
+        emitEvent: true
+    })
+
+    addCard({
+        group: 'board',
         tag: "table",
         id: 'show',
         templateName: "Display an array of objects in a table",
