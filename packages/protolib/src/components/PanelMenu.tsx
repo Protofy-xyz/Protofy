@@ -168,70 +168,48 @@ const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
 }
 
 const Tabs = ({ tabs, environ, collapsed }: any) => {
-    const { resolvedTheme } = useThemeSetting();
-
-    return tabs ? (
+    const { resolvedTheme } = useThemeSetting()
+    return (tabs ?
         <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
-                const tabData = tabs[tab];
-                const subtabs = Array.isArray(tabData) ? tabData : tabData?.items ?? [];
-                const shouldCollapse = !Array.isArray(tabData) && tabData?.collapsed;
-
-                const tabContent = subtabs.filter((t) => !t.visibility || t.visibility.includes(environ));
-                if (!tabContent.length) return null;
-
-                if (tabContent.length === 1) {
-                    return <Subtabs tabs={tabs} subtabs={tabContent} collapsed={collapsed} key={index} />;
+                if (tabs[tab].length === undefined) {
+                    return <Subtabs tabs={tabs} subtabs={[tabs[tab]]} />
                 }
-
+                const tabContent = tabs[tab].filter(t => !t.visibility || t.visibility.includes(environ))
+                if (!tabContent.length) return <></>
                 return (
-                    <Accordion key={index} type="single" collapsible br="$6" overflow="hidden" defaultValue={shouldCollapse ? undefined : `a${index}`} >
-                        <Accordion.Item value={`a${index}`}>
+                    <Accordion value={collapsed ? ("a" + index) : undefined} collapsible={!collapsed} defaultValue={"a" + index} br={"$6"} overflow="hidden" type="single" key={index}>
+                        <Accordion.Item value={"a" + index}>
                             <Accordion.Trigger
-                                p="$2"
-                                backgroundColor="$backgroundTransparent"
+                                p={"$2"}
+                                backgroundColor={"$backgroundTransparent"}
                                 focusStyle={{ backgroundColor: "$backgroundTransparent" }}
                                 hoverStyle={{ backgroundColor: '$backgroundTransparent' }}
-                                bw={0}
-                                flexDirection="row"
-                                justifyContent="space-between"
-                            >
+                                bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     //@ts-ignore
-                                    <XStack f={1} h="40px" jc="center" p="$2" animateOnly={['backgroundColor']} animation="bouncy" br="$4"
-                                        backgroundColor={
-                                            isTabSelected(tabContent) && !open
-                                                ? resolvedTheme === "dark"
-                                                    ? '$color2'
-                                                    : '$color4'
-                                                : '$backgroundTransparent'
-                                        }
-                                    >
-                                        {!collapsed && (
-                                            <SizableText f={1} ml="$2.5" fontWeight="bold" size="$5">
-                                                {tab}
-                                            </SizableText>
-                                        )}
+                                    <XStack f={1} h="40px" jc="center" p={"$2"} animateOnly={['backgroundColor']} animation="bouncy" br="$4" backgroundColor={isTabSelected(tabContent) && !open ? (resolvedTheme == "dark" ? '$color2' : '$color4') : '$backgroundTransparent'}>
+                                        {!collapsed && <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>}
                                         {/* @ts-ignore */}
                                         <Square animation="bouncy" rotate={open ? '180deg' : '0deg'}>
-                                            {collapsed ? (
-                                                <Minus color="$gray6" size={20} />
-                                            ) : (
-                                                <ChevronDown color={ isTabSelected(tabContent) && !open ? '$color8' : '$gray9' } size={20} />
-                                            )}
+                                            {
+                                                collapsed 
+                                                    ? <Minus color="$gray6" size={20}/>
+                                                    : <ChevronDown color={isTabSelected(tabContent) && !open ? '$color8' : '$gray9'} size={20} />
+                                            }
                                         </Square>
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
-                            <Accordion.Content position="relative" backgroundColor="$backgroundTransparent" pt="$0" pb="$2" >
+                            <Accordion.Content position="relative" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
                                 <Subtabs collapsed={collapsed} tabs={tabs} subtabs={tabContent} />
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>
-                );
+                )
             })}
-        </YStack>
-    ) : null;
+        </YStack> : <></>
+    );
 };
 
 const disableEnvSelector = true

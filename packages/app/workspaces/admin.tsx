@@ -66,7 +66,7 @@ export default ({ pages, boards, objects }) => {
         ...(objectsMenu.length ? { Storage: objectsMenu } : {}),
         ...(adminMenu.length ? { Admin: adminMenu } : {}),
         Integrations: integrations,
-        Settings: { collapsed: true, items: systemMenu }
+        Settings: systemMenu
     }
 
     const boardsGroupByCategory = boards ? boards.reduce((acc, board) => {
