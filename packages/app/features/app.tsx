@@ -32,6 +32,7 @@ import { useSession } from 'protolib/lib/useSession'
 import { AppConfContext } from 'protolib/providers/AppConf'
 import { getBrokerUrl } from 'protolib/lib/Broker'
 import { Connector } from 'protolib/lib/mqtt'
+import { MqttWrapper } from 'protolib/components/MqttWrapper'
 import { Toast, YStack } from '@my/ui'
 import { SiteConfig } from 'app/conf'
 import Workspaces from 'app/bundles/workspaces'
@@ -40,10 +41,7 @@ import { useRouter } from 'next/router';
 
 const getApp = (AppConfig, options = { disablePreviewMode: false }) => {
   return function MyApp({ Component, pageProps }: SolitoAppProps) {
-    //@ts-ignore
-    const [session] = useSession(pageProps['pageSession'])
     const projectName = SiteConfig.projectName
-    const brokerUrl = getBrokerUrl()
     return (
       <>
         <Head>
@@ -52,7 +50,7 @@ const getApp = (AppConfig, options = { disablePreviewMode: false }) => {
           {/* <link rel="icon" href="/favicon.ico" /> */}
         </Head>
         <JotaiProvider>
-          <Connector brokerUrl={brokerUrl} options={{ username: session?.user?.id, password: session?.token }}>
+          <MqttWrapper>
             <ThemeProvider {...options}>
               <AppConfContext.Provider value={{
                 ...AppConfig,
@@ -66,7 +64,7 @@ const getApp = (AppConfig, options = { disablePreviewMode: false }) => {
                 <Component {...pageProps} />
               </AppConfContext.Provider>
             </ThemeProvider>
-          </Connector>
+          </MqttWrapper>
         </JotaiProvider>
       </>
     )
