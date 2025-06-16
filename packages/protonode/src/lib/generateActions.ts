@@ -21,6 +21,7 @@ export const AutoActions = ({
             const result = await API.get(`${urlPrefix}?token=${getServiceToken()}`);
             if (result.isLoaded && result.data && result.data.total) {
                 context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total});
+                context.state.set({ group: 'objects', tag: modelName, name: 'lastEntries', value: result.data.items});
             }
         } catch (e) {
             console.error("Error loading total for " + modelName, e);
