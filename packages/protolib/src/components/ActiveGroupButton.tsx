@@ -9,6 +9,8 @@ export const ActiveGroupButton = React.forwardRef(({ activeId, onSetActive=(acti
         onPress={() => {onSetActive(activeId); setActive(activeId)}}
         theme={activeId === active ? 'active' : null}
         chromeless={activeId !== active}
+        bc={activeId === active ? '$gray6' : '$gray2'}
+        hoverStyle={{ backgroundColor: activeId === active ? '$gray6' : '$gray4' }}
         {...props}
     />
 })

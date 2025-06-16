@@ -63,6 +63,7 @@ export const Search = forwardRef(({ alwaysOpen = true, automatic = false, defaul
                 ref={input}
                 paddingLeft={50}
                 width={"100%"}
+                placeholderTextColor="$gray9"
                 placeholder={opened ? placeholder : ''}
                 onBlur={() => ((!alwaysOpen || media.xs) && !content) ? setOpened(false) : false}
                 onChangeText={(text) => {

@@ -661,7 +661,7 @@ const DataViewInternal = forwardRef(({
                                 </XStack>}
                             </XStack>
                             <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{display: 'none'}}>
-                                {!disableViewSelector && <ButtonGroup marginRight="$3">
+                                {!disableViewSelector && <ButtonGroup marginRight="$3" boc="$gray5">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
                                             {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}

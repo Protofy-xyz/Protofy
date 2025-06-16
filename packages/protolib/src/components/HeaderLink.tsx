@@ -10,9 +10,9 @@ export const HeadAnchor = styled(Paragraph, {
   fontFamily: "$heading",
   fontWeight: "600",
   opacity: 0.8,
-  color: "$color8",
+  color: "$color",
   //@ts-ignore
-  hoverStyle: { opacity: 1, color: '$color' }, pressStyle: { opacity: 0.25 },
+  hoverStyle: { opacity: 1, color: '$color8' }, pressStyle: { opacity: 0.25 },
   tabIndex: -1
 })
 
