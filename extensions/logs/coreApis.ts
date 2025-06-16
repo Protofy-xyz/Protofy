@@ -29,7 +29,17 @@ export default (app, context) => {
     }
     const apiId = parts[1] // Extract the API ID from the topic
     const level = levelTable[parts[2]] // Extract the log level from the topic
-    const value = JSON.parse(message.toString())
+    let value;
+    try {
+      value = JSON.parse(message.toString())
+      if(value.from && value.from.name && value.from.type) {
+        context.state.set({ group: 'logs', tag: value.from.name, name: 'last', value: value, emitEvent: true});
+        context.state.append({ group: 'logs', tag: value.from.name, name: level, value: value, emitEvent: true});
+      }
+    } catch (e) {
+      console.error('Failed to parse message as JSON:', e)
+      value = message.toString()
+    }
 
     context.state.set({ group: 'logs', tag: apiId, name: 'last', value: value, emitEvent: true});
     context.state.append({ group: 'logs', tag: apiId, name: level, value: value, emitEvent: true});
