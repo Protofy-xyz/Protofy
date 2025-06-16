@@ -159,10 +159,10 @@ export const AutoActions = ({
     const fixValues = (params, modelType) => {
         Object.keys(params).forEach((key) => {
             // checkea los tipos de parametros para convetiros a los tipos correctos
-            if (modelType.getObjectFieldsDefinition()[key].type === 'number') {
+            if (modelType.getObjectFieldsDefinition()[key]?.type === 'number') {
                 params[key] = Number(params[key]);
             }
-            if (modelType.getObjectFieldsDefinition()[key].type === 'boolean') {
+            if (modelType.getObjectFieldsDefinition()[key]?.type === 'boolean') {
                 params[key] = Boolean(params[key]);
             }
         })
@@ -170,11 +170,11 @@ export const AutoActions = ({
 
     app.post(actionUrlPrefix + '/create', handler(async (req, res, session) => {
         const params = req.body;
-        console.log(JSON.stringify(params));
+        // console.log("create params: ", JSON.stringify(params));
         fixValues(params, modelType);
         try {
             const result = await API.post(`${urlPrefix}?token=${session.token}`, params);
-            console.log(result)
+            // console.log("create result: ", result)
             if (result.isLoaded) {
                 res.json(result.data);
                 return
@@ -294,11 +294,11 @@ export const AutoActions = ({
         const field: any = params.field;
         const value = params.value;
         try {
-            const result = await API.get(`${urlPrefix}/${id}`);
+            const result = await API.get(`${urlPrefix}/${id}?token=${params.token? params.token: session.token}`);
             if (result.isLoaded) {
                 const data = result.data;
                 data[field] = value;
-                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${session.token}`, data);
+                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${params.token? params.token:session.token}`, data);
                 if (resultUpdate.isLoaded) {
                     res.json(resultUpdate.data);
                     return
