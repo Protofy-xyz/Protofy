@@ -721,6 +721,22 @@ export default (app, context) => {
         emitEvent: true
     })
 
+    addCard({
+        group: 'board',
+        tag: "table",
+        id: 'show',
+        templateName: "Display an array of objects in a table",
+        name: "board_table",
+        defaults: {
+            name: "Table",
+            icon: "table-properties",
+            description: "Display an array of objects in a table",
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
+        },
+        emitEvent: true
+    })
+
     setInterval(async () => {
         const boards = await getBoards()
         // console.log("Boards: ", boards)
