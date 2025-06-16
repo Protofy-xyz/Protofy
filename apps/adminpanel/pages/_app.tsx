@@ -26,6 +26,9 @@ import { Button, Text, View } from 'tamagui';
 import { Provider } from 'app/provider'
 import { Tinted } from 'protolib/components/Tinted'; 
 import { DataView} from 'protolib/components/DataView';
+import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
+import { API, ProtoModel } from 'protobase'
+
 if (typeof window !== 'undefined') {
   window.TamaguiComponents = {
     Button,
@@ -33,7 +36,10 @@ if (typeof window !== 'undefined') {
     View,
     Provider,
     Tinted,
-    DataView
+    DataView,
+    ObjectViewLoader,
+    API,
+    ProtoModel
   };
 }
 // ---------------------------------------------------------

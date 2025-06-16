@@ -7,7 +7,12 @@ const omitProp = (obj, prop) => {
 };
 
 export const useQueryState = (setState) => {
+    
     const searchParams = useSearchParams();
+    if(!searchParams) {
+        console.warn('useSearchParams is not available. Ensure you are using this hook within a Solito navigation context.');
+        return;
+    }
     const query = Object.fromEntries(searchParams.entries());
 
     useUpdateEffect(() => {
@@ -26,73 +31,87 @@ const navigate = (router, pathname, query, method) => {
 };
 
 export const usePageParams = (state) => {
-    const router = useRouter();
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
+    try {
+        const router = useRouter();
+        const searchParams = useSearchParams();
+        const pathname = usePathname();
 
-    const query = Object.fromEntries(searchParams.entries());
+        const query = Object.fromEntries(searchParams.entries());
 
-    const cleanState = () => Object.keys(state ?? {}).reduce((total, current) => {
-        if (state[current] !== '') {
-            return {
-                ...total,
-                [current]: state[current]
-            };
-        }
-        return total;
-    }, {});
+        const cleanState = () => Object.keys(state ?? {}).reduce((total, current) => {
+            if (state[current] !== '') {
+                return {
+                    ...total,
+                    [current]: state[current]
+                };
+            }
+            return total;
+        }, {});
 
-    return {
-        query,
+        return {
+            query,
 
-        push: (key, value) => {
-            const newQuery = {
-                ...query,
-                ...cleanState(),
-                [key]: value
-            };
-            navigate(router, pathname, newQuery, 'push');
-        },
+            push: (key, value) => {
+                const newQuery = {
+                    ...query,
+                    ...cleanState(),
+                    [key]: value
+                };
+                navigate(router, pathname, newQuery, 'push');
+            },
 
-        mergePush: (obj) => {
-            const newQuery = {
-                ...query,
-                ...cleanState(),
-                ...obj
-            };
-            navigate(router, pathname, newQuery, 'push');
-        },
+            mergePush: (obj) => {
+                const newQuery = {
+                    ...query,
+                    ...cleanState(),
+                    ...obj
+                };
+                navigate(router, pathname, newQuery, 'push');
+            },
 
-        removePush: (keys: string | string[]) => {
-            const keysArr = Array.isArray(keys) ? keys : [keys];
-            let newQuery = { ...query };
-            keysArr.forEach(key => {
-                newQuery = omitProp(newQuery, key);
-            });
-            navigate(router, pathname, newQuery, 'push');
-        },
+            removePush: (keys: string | string[]) => {
+                const keysArr = Array.isArray(keys) ? keys : [keys];
+                let newQuery = { ...query };
+                keysArr.forEach(key => {
+                    newQuery = omitProp(newQuery, key);
+                });
+                navigate(router, pathname, newQuery, 'push');
+            },
 
-        removeReplace: (key) => {
-            const newQuery = omitProp(query, key);
-            navigate(router, pathname, newQuery, 'replace');
-        },
+            removeReplace: (key) => {
+                const newQuery = omitProp(query, key);
+                navigate(router, pathname, newQuery, 'replace');
+            },
 
-        replace: (key, value) => {
-            const newQuery = {
-                ...query,
-                ...cleanState(),
-                [key]: value
-            };
-            navigate(router, pathname, newQuery, 'replace');
-        },
+            replace: (key, value) => {
+                const newQuery = {
+                    ...query,
+                    ...cleanState(),
+                    [key]: value
+                };
+                navigate(router, pathname, newQuery, 'replace');
+            },
 
-        mergeReplace: (obj) => {
-            const newQuery = {
-                ...cleanState(),
-                ...state,
-                ...obj
-            };
-            navigate(router, pathname, newQuery, 'replace');
-        }
-    };
+            mergeReplace: (obj) => {
+                const newQuery = {
+                    ...cleanState(),
+                    ...state,
+                    ...obj
+                };
+                navigate(router, pathname, newQuery, 'replace');
+            }
+        };
+    } catch(e) {
+        console.error('Error in usePageParams:', e);
+        return {
+            query: {},
+            push: () => {},
+            mergePush: () => {},
+            removePush: () => {},
+            removeReplace: () => {},
+            replace: () => {},
+            mergeReplace: () => {}
+        };
+    }
+    
 };

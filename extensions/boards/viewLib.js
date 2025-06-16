@@ -402,7 +402,7 @@ const cardValue = ({ value, style = '' }) => {
 }
 
 const reactCard = (jsx, root) => {
-    const { Button, Text, View, Provider, Tinted, DataView } = window.TamaguiComponents;
+    const { Button, Text, View, Provider, Tinted, DataView, ObjectViewLoader, API, ProtoModel } = window.TamaguiComponents;
 
     const jsxCode = `
   function WidgetRoot({children}) {
@@ -424,4 +424,42 @@ const reactCard = (jsx, root) => {
     }).code;
 
     eval(compiled);
+}
+
+const dataView = (object, root) => {
+    return reactCard(`
+  function InnerWidget(props) {
+    const object = props.object
+    const objExists = object ? true : false
+    let objModel = null
+    let apiUrl = null
+    if (objExists) {
+        objModel = ProtoModel.getClassFromDefinition(object)
+        const { name, prefix } = objModel.getApiOptions()
+        console.log("Object API options", { name, prefix })
+        apiUrl = prefix + name
+    }
+
+    return <DataView
+            disableRouting={true}
+            sourceUrl={apiUrl}
+            numColumnsForm={1}
+            name={object?.name}
+            model={objModel}
+            hideFilters={false}
+      />
+  }
+
+  function Widget() {
+    return (
+        <Tinted>
+          <View className="no-drag">
+            {/* you can use data.value here to access the value */}
+            <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
+          </View>
+        </Tinted>
+    );
+  }
+
+`, root)
 }
