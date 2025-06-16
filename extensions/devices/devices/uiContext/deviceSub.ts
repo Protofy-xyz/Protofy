@@ -3,7 +3,7 @@ import { API } from 'protobase';
 import mqtt from 'mqtt'
 import { useEffect, useRef } from 'react';
 import { useIsomorphicLayoutEffect } from 'usehooks-ts'
-import {getBrokerUrl} from '../../../../lib/Broker'
+import { getBrokerUrl } from 'protolib/lib/Broker'
 
 export const deviceSub = async (deviceName: string, subsystemName: string, monitorName: string, cb?) => {
     const savedCallback = useRef(cb)
