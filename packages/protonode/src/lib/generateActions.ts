@@ -82,6 +82,25 @@ export const AutoActions = ({
         token: getServiceToken()
     })
 
+    await context.cards.add({
+        group: 'objects',
+        tag: "modelName",
+        id: 'object_' + modelName + '_table',
+        templateName: "Last " + modelName + " table",
+        name: "board_table_" + modelName,
+        defaults: {
+            width: 4,
+            height: 8,
+            name: "Table",
+            icon: "table-properties",
+            description: "Displays a table with the last " + plurName,
+            type: 'value',
+            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
+            rulesCode: `return states.objects?.${modelName}.lastEntries;`,
+        },
+        emitEvent: true
+    })
+
     //read
     app.get(actionUrlPrefix + '/read', handler(async (req, res, session) => {
         const params = req.query;
