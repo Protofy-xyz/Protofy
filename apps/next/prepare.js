@@ -17,7 +17,7 @@ if (!fs.existsSync('./../../.env')) {
     }
 }
 
-if (!fs.existsSync('../../data/pages')) {
+if (!fs.existsSync('../../data/pages/404.html')) {
     //run yarn package
     const { exec } = require('child_process');
     console.log("Compiling nextjs app...")
