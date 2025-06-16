@@ -31,16 +31,18 @@ const logger = getLogger()
 Protofy("type", "CustomAPI")
 
 export default Protofy("code", async (app: Application, context: typeof APIContext) => {
-    //PUT YOUR API HERE
-    //context.devices.deviceAction function allows to communicate with devices via mqtt
-    //context.devices.deviceSub allows to receive notifications from devices via mqtt
+    //context allows to use extension functions without directly importing the extension.
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection
+    //this a wrapper around express, you can directly execute this automation in
+    // /api/v1/automations/{{codeNameLowerCase}}
+    // use query parameters in the url to pass parameters to the automation
     context.automations.automation({
         name: '{{codeNameLowerCase}}',
         responseMode: 'wait',
         app: app
     })
+    //app.get(...) is possible here to create normal express endpoints
 })
 
 
