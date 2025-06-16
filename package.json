@@ -53,7 +53,8 @@
     "app-package": "yarn download-binaries && electron-builder -c electron-builder.yml build",
     "download-binaries": "node download-bins.js",
     "clean-deps": "shx rm -rf node_modules",
-    "install-asset": "node install-asset.js"
+    "install-asset": "node install-asset.js",
+    "package-asset": "node package-asset.js"
   },
   "resolutions": {
     "react": "18.2.0",

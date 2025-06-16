@@ -1,3 +1,4 @@
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -16,6 +17,8 @@ if (!fs.existsSync(sourceDir)) {
 const targetDir = path.join(__dirname);
 
 copyFolderStructure(sourceDir, targetDir);
+
+execSync(`yarn`, { stdio: 'inherit' });
 
 function copyFolderStructure(sourceDir, targetDir) {
     if (!fs.existsSync(sourceDir)) {
