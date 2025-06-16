@@ -55,8 +55,7 @@ export const AutoActions = ({
         tag: modelName,
         description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
         params: { id: "id to look for" },
-        token: getServiceToken(),
-        emitEvent: true
+        token: getServiceToken()
     })
 
     await context.cards.add({
@@ -78,16 +77,17 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/exists", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
     await context.cards.add({
         group: 'objects',
-        tag: "modelName",
-        id: 'object_' + modelName + '_table',
+        tag: modelName,
+        name: 'table',
+        id: 'object_' + modelName + '_last_table',
         templateName: "Last " + modelName + " table",
-        name: "board_table_" + modelName,
+
         defaults: {
             width: 4,
             height: 8,
@@ -96,9 +96,10 @@ export const AutoActions = ({
             description: "Displays a table with the last " + plurName,
             type: 'value',
             html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
-            rulesCode: `return states.objects?.${modelName}.lastEntries;`,
+            rulesCode: `return states.objects?.${modelName}.lastEntries`
         },
-        emitEvent: true
+
+        token: getServiceToken()
     })
 
     //read
@@ -129,7 +130,6 @@ export const AutoActions = ({
         description: `Read ${modelName} given an id. Returns an object with the data of the ${modelName} if it exists, false otherwise.`,
         params: { id: `id of the ${modelName} to read` },
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -151,7 +151,7 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/read", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -202,7 +202,7 @@ export const AutoActions = ({
         description: `Creates new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
         params: params,
         token: getServiceToken(),
-        emitEvent: true,
+
         method: 'post'
     })
 
@@ -223,7 +223,7 @@ export const AutoActions = ({
             params,
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/create", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -261,8 +261,7 @@ export const AutoActions = ({
         tag: modelName,
         description: `Deletes ${modelName} given an id. Returns true if it was deleted, false otherwise.`,
         params: { id: "id of the " + modelName + " to delete" },
-        token: getServiceToken(),
-        emitEvent: true
+        token: getServiceToken()
     })
 
     await context.cards.add({
@@ -282,7 +281,7 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/delete", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -324,7 +323,6 @@ export const AutoActions = ({
         description: `Updates ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
         params: updateParams,
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -344,7 +342,7 @@ export const AutoActions = ({
             params: updateParams,
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/update", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -373,7 +371,7 @@ export const AutoActions = ({
             description: `Last Created ${modelName}`,
             rulesCode: `return states.objects?.${modelName}.lastCreated;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -401,7 +399,7 @@ export const AutoActions = ({
             description: `Last updated ${modelName}`,
             rulesCode: `return states.objects?.${modelName}.lastUpdated;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -418,7 +416,7 @@ export const AutoActions = ({
             description: `Total ${plurName}`,
             rulesCode: `return states.objects?.${modelName}.total;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -460,7 +458,6 @@ export const AutoActions = ({
             orderDirection: 'direction to order the results by (asc or desc) (optional)'
         },
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -485,7 +482,7 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/list", userParams)`
         },
-        emitEvent: true,
-        token: getServiceToken()
+        token: getServiceToken(),
+        emitEvent: true
     })
 }
