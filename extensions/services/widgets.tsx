@@ -203,6 +203,58 @@ const card = ({ content, style = '', padding = false, mode = 'normal' }) => {
     \`;
 };
 
+function cardTable(dataArray) {
+    if (!Array.isArray(dataArray)) {
+        return '<p>Input must be an array of objects</p>';
+    }
+
+    const allKeys = Array.from(
+        new Set(dataArray.flatMap(item => Object.keys(item)))
+    );
+
+    let html = \`
+    <div style="height: 100%; overflow: auto; width: 100%;">
+        <table style="
+            border-collapse: collapse;
+            width: 100%;
+            font-family: sans-serif;
+            font-size: 14px;
+        ">
+            <thead style="color: var(--color9); border-bottom: 2px solid var(--color4);">
+                <tr>\`;
+
+    for (const key of allKeys) {
+        html += \`<th style="padding: 8px; text-align: left;">\${key}</th>\`;
+    }
+
+    html += \`</tr></thead><tbody>\`;
+
+    dataArray.forEach((row, index) => {
+        html += \`<tr style="
+                border-bottom: 1px solid var(--color4);
+                transition: background-color 0.2s;
+            "
+            onmouseover="this.style.backgroundColor='var(--color2, rgba(0,0,0,0.05))'"
+            onmouseout="this.style.backgroundColor='transparent'"
+        >\`;
+
+        for (const key of allKeys) {
+            let value = row[key];
+            if (typeof value === 'object' && value !== null) {
+                value = \`<pre style="margin: 0; font-family: monospace; color: var(--color8);">\${JSON.stringify(value, null, 2)}</pre>\`;
+            }
+            html += \`<td style="padding: 8px; vertical-align: top;">\${value !== undefined ? value : ''}</td>\`;
+        }
+
+        html += '</tr>';
+    });
+
+    html += '</tbody></table></div>';
+    return html;
+}
+
+
+
 const iframe = ({ src }) => {
     return \`<iframe style="width: 100%;height:100%;" src= "\${src}" />\`
 }
