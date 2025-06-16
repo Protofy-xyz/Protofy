@@ -12,9 +12,11 @@ export default {
 
         },
         dark_gray: {
-            color8: "#dddddd",
-            bgPanel: "hsl(0, 0%, 17%)",
-            bgContent: "hsl(15, 0%, 11%)"
+            color2: "#151515",
+            color7: "#99f1ee",
+            color8: "#53EFEA",
+            bgPanel: "#000000",
+            bgContent: "hsl(0, 6%, 8%)"
         },
         dark_orange: {
             bgPanel: "hsl(20, 11.40%, 15.50%)",
