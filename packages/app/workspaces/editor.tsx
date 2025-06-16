@@ -18,12 +18,12 @@ export default (pages) => {
             "Content": [
                 { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/" },
                 { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
-                { "name": "Public", "icon": "doorOpen", "type": "/workspace/files?path=/apps/next/public"},
+                { "name": "Public", "icon": "door-open", "type": "/workspace/files?path=/apps/next/public"},
                 { "name": "Databases", "icon": DatabaseBackup, "href": "/workspace/databases" },
             ],
             "Devices": [
                 { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
-                { "name": "Definitions", "icon": "bookOpen", "href": "/workspace/deviceDefinitions" }
+                { "name": "Definitions", "icon": "book-open", "href": "/workspace/deviceDefinitions" }
             ]
         }
     }
