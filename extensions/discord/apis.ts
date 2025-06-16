@@ -160,11 +160,15 @@ const connectDiscord = async (context) => {
         },
         onConnect: async (client) =>
             await context.logs.log({
+                from: "extensions",
+                name: "discord",
                 message: "Discord bot successfully connected! ",
                 level: "info",
             }),
         onDisconnect: async (client) =>
             await context.logs.log({
+                from: "extensions",
+                name: "discord",
                 message: "Discord bot successfully disconnected! ",
                 level: "info",
             }),

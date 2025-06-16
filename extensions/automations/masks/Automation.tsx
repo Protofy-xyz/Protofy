@@ -20,7 +20,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
                 { label: 'Response', field: 'mask-responseMode', type: 'select', data: ['instant', 'wait', 'manual'], static: true},
             ]} />
             <div style={{height: '5px'}} />
-            <NodeOutput id={node.id} type={'input'} label={'Run'} vars={['params']} handleId={'mask-onRun'} />
+            <NodeOutput id={node.id} type={'input'} label={'Run'} vars={['params', 'name']} handleId={'mask-onRun'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-onError'} />
 
             <Button label={loading?<Spinner color={color} />:"Run"} onPress={async () => {
@@ -67,7 +67,7 @@ export default {
         tags: 'input',
         responseMode: 'input',
         app: 'input',
-        onRun: { params: {'param-params': { key: "params"}, 'param-res': { key: "res"}}},
+        onRun: { params: {'param-params': { key: "params"}, 'param-res': { key: "res"}, 'param-name': { key: "name"}}},
         onError: { params: { 'param-err': { key: "err"}}}
     }}),
     getInitialData: () => {

@@ -27,10 +27,12 @@ import path from "path";
 
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
+const name = "{{codeNameLowerCase}}"
+const origin = 'automations'
 
 Protofy("type", "CustomAPI")
 
-export default Protofy("code", async (app: Application, context: typeof APIContext) => {
+export default Protofy("code", async (app: Application, context) => {
     //context allows to use extension functions without directly importing the extension.
     //app is a normal expressjs object
     //context.mqtt is a mqttclient connection

@@ -29,12 +29,16 @@ export default {
             message: 'input',
             data: 'input',
             level: 'input',
+            from: 'input',
+            name: 'input',
             done: 'output'
     }}),
     restoreChildren: restoreObject({keys: {
         message: 'input',
         data: 'input',
         level: 'input',
+        from: 'input',
+        name: 'input',
         done: 'output'
     }}),
     getInitialData: () => {
@@ -52,6 +56,14 @@ export default {
             "mask-level": {
                 value: "info",
                 kind: "StringLiteral"
+            },
+            "mask-from": {
+                value: "origin",
+                kind: "Identifier"
+            },
+            "mask-name": {
+                value: "name",
+                kind: "Identifier"
             }
         }
     }

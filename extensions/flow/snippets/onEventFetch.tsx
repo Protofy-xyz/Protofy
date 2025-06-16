@@ -11,6 +11,8 @@ export default {
           null,
           async (data) =>
             await context.logs.log({
+              name: name,
+              from: origin,
               message: "response",
               level: "info",
             }),

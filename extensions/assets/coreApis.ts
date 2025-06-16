@@ -132,6 +132,8 @@ export default (app, context) => {
             path: assetsDir,
             done: async (list) => {
                 await context.logs.log({
+                    from: "extensions",
+                    name: "assets",
                     message: "assetsContent: ",
                     data: list,
                     level: "info",

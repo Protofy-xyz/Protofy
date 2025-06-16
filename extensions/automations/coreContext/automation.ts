@@ -13,7 +13,7 @@ export const automation = async (options: {
     displayName?: string,
     description?: string,
     app: any,
-    onRun?: (params, res) => void
+    onRun?: (params, res, name?) => void
     onError?: (err) => void
 }) => {
     const name = options.name
@@ -81,7 +81,7 @@ export const automation = async (options: {
                 if(responseMode == 'instant') {
                     res.send({result: "started"})
                 }
-                await onRun(req.query, res)
+                await onRun(req.query, res, name)
                 if(responseMode == 'wait') {
                     res.send({result: "done"})
                 }
