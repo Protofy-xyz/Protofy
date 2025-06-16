@@ -3877,9 +3877,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@extensions/statemachines@workspace:extensions/stateMachines":
+"@extensions/statemachines@workspace:extensions/statemachines":
   version: 0.0.0-use.local
-  resolution: "@extensions/statemachines@workspace:extensions/stateMachines"
+  resolution: "@extensions/statemachines@workspace:extensions/statemachines"
   dependencies:
     xstate: "npm:5.14.0"
   languageName: unknown

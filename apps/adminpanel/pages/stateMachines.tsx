@@ -1,4 +1,4 @@
-import StateMachinesPages from '@extensions/stateMachines/adminPages'
+import StateMachinesPages from '@extensions/statemachines/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
