@@ -220,7 +220,7 @@ function cardTable(dataArray) {
             font-family: sans-serif;
             font-size: 14px;
         ">
-            <thead style="color: var(--color9); border-bottom: 2px solid var(--color4);">
+            <thead style="color: var(--color9); border-bottom: 1px solid var(--color6);">
                 <tr>\`;
 
     for (const key of allKeys) {
@@ -231,7 +231,7 @@ function cardTable(dataArray) {
 
     dataArray.forEach((row, index) => {
         html += \`<tr style="
-                border-bottom: 1px solid var(--color4);
+                border-bottom: 1px solid var(--color6);
                 transition: background-color 0.2s;
             "
             onmouseover="this.style.backgroundColor='var(--color2, rgba(0,0,0,0.05))'"
