@@ -1,12 +1,12 @@
 import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, TextArea } from '@my/ui';
 import React, { useEffect, useMemo, useState } from 'react';
-import { getHTML } from "@extensions/services/widgets";
+import { HTMLView } from "@extensions/services/widgets";
 
 const enableHTML = true
 
-export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)' , ...props}) => {
+export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)', ...props }) => {
     useEffect(() => {
-        if(!window['onRunListeners']) window['onRunListeners'] = {}
+        if (!window['onRunListeners']) window['onRunListeners'] = {}
         window['onRunListeners'][name] = onRun
     }, [name])
     const [params, setParams] = useState({});
@@ -25,8 +25,8 @@ export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run
         <YStack f={1} width="100%" alignItems="center" justifyContent="center">
             {/* Si hay HTML, renderizarlo */}
             {html?.length > 0 && enableHTML && (
-                <div style={{ width: "100%", height: "100%" }}
-                    dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, ...data, icon, name, params: actionParams, color, displayResponse }) }} />
+                <HTMLView style={{ width: "100%", height: "100%" }}
+                    html={html} data={{ ...props, ...data, icon, name, params: actionParams, color, displayResponse }} />
             )}
 
             {/* Si NO hay HTML, usar el diseño clásico */}

@@ -10,6 +10,7 @@ import { DashboardCard } from 'protolib/components/DashboardCard';
 import { PieChart } from 'protolib/components/PieChart';
 import { LineChart, Cpu } from 'lucide-react'
 import React from 'react';
+import { useUpdateEffect } from 'usehooks-ts'
 
 export const viewLib = `
 
@@ -467,8 +468,14 @@ export const BasicCard = ({ title, id, children }) => {
     );
 }
 
+let viewLibCache = null;
+
 export const getHTML = (html, data) => {
     try {
+        // if (!viewLibCache) {
+        //     viewLibCache = await API.get('/api/core/v1/viewLib')
+        // }
+        //console.log('Card HTML templates:', viewLibCache.data);
         const wrapper = new Function('data', `
             ${viewLib}
             ${html}
@@ -480,10 +487,20 @@ export const getHTML = (html, data) => {
     }
 }
 
+export const HTMLView = ({ html, data, ...props }) => {
+    useUpdateEffect(() => {
+
+    },[data, html])
+    return (
+        <div {...props} dangerouslySetInnerHTML={{ __html: getHTML(html, data) }} /> 
+    )
+}
+
 export const CardValue = ({ Icon, value, html, color = "var(--color7)", ...props }) => {
+
     return (
         <YStack width="100%" height="100%" alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <div style={{width: "100%", height: '100%' }} dangerouslySetInnerHTML={{ __html: getHTML(html, { ...props, icon: Icon, value: value, color: color }) }} />}
+            {html?.length > 0 && <HTMLView style={{width: "100%", height: '100%' }} html = {html} data={ {...props, icon: Icon, value: value, color: color }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",
