@@ -36,7 +36,8 @@ export default ({ pages, boards, objects }) => {
         { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
         { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
         { "name": "Storage", "icon": Boxes, "href": "/workspace/objects" },
-        { "name": "Pages", "icon": "layout", "href": "/workspace/pages" }
+        { "name": "Pages", "icon": "layout", "href": "/workspace/pages" },
+        { "name": "Events", "icon": "activity", "href": "/workspace/events" },
     ]
     enableArduinos ? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }) : null
 
@@ -47,7 +48,6 @@ export default ({ pages, boards, objects }) => {
         { "name": "Assets", "icon": Blocks, "href": "/workspace/files?path=%2Fdata%2Fassets", "path": "" },
         { "name": "Users", "icon": "users", "href": "/workspace/users" },
         { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
-        { "name": "Events", "icon": "activity", "href": "/workspace/events" },
         { "name": "Services", "icon": Cog, "href": "/workspace/services" },
         { "name": "Databases", "icon": Database, href: "/workspace/databases" },
         { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
@@ -63,10 +63,10 @@ export default ({ pages, boards, objects }) => {
 
     const initialData = {
         Boards: [],
-        ...(objectsMenu.length ? { Objects: objectsMenu } : {}),
+        ...(objectsMenu.length ? { Storage: objectsMenu } : {}),
         ...(adminMenu.length ? { Admin: adminMenu } : {}),
         Integrations: integrations,
-        System: systemMenu
+        Settings: { collapsed: true, items: systemMenu }
     }
 
     const boardsGroupByCategory = boards ? boards.reduce((acc, board) => {
