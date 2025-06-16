@@ -139,7 +139,7 @@ const DeviceModal = ({ eraseBeforeFlash, setEraseBeforeFlash, consoleOutput, sta
                             }
                         </Text>
                         {
-                            !isError && images[themeName][isLoading ? 'loading' : stage] && (
+                            !isError && images[themeName] && images[themeName][isLoading ? 'loading' : stage] && (
                                 <img
                                     alt="protofito dancing"
                                     style={{

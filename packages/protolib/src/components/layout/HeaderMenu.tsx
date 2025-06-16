@@ -56,12 +56,13 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
 
       <Popover.Content
         bw={1}
-        boc="$borderColor"
+        boc="$gray4"
         enterStyle={{ x: 0, y: -10, o: 0 }}
         exitStyle={{ x: 0, y: -10, o: 0 }}
         x={0}
         y={0}
         o={1}
+        bc="$color1"
         //@ts-ignore
         animation={[
           'quick',
@@ -78,7 +79,7 @@ export const HeaderMenu = React.memo(function HeaderMenu({children, menuPlacemen
         zIndex={100000000}
 
       >
-        <Popover.Arrow borderWidth={1} boc="$borderColor" />
+        <Popover.Arrow borderWidth={1} boc="$gray4" />
 
         <Popover.ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
           {children}
