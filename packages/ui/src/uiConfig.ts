@@ -12,11 +12,9 @@ export default {
 
         },
         dark_gray: {
-            color2: "#151515",
-            color7: "#99f1ee",
-            color8: "#53EFEA",
-            bgPanel: "#000000",
-            bgContent: "hsl(0, 6%, 8%)"
+            color8: "#dddddd",
+            bgPanel: "hsl(0, 0%, 17%)",
+            bgContent: "hsl(15, 0%, 11%)"
         },
         dark_orange: {
             bgPanel: "hsl(20, 11.40%, 15.50%)",
@@ -69,8 +67,8 @@ export default {
             bgContent: "#FFFFFF",
         },
         dark_red: {
-            bgPanel: "#272727",
-            bgContent: "#1A1A1A"
+            bgPanel: "#000000",
+            bgContent: "hsl(0, 6%, 8%)"
         },
         light_red: {
             bgPanel: "#F3F4F6",
