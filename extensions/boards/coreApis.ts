@@ -49,7 +49,11 @@ async function execute_action(url, params={}) {
         }
     }
     if (action.method === 'post') {
-        const { token, ...data } = params;
+        let { token, ...data } = params;
+        if(action.token) {
+            token = action.token
+        }
+        //console.log('url: ', url+'?token='+token)
         const response = await API.post(url+'?token='+token, data);
         return response.data
     } else {
