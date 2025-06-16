@@ -50,46 +50,10 @@ import { useThemeSetting } from '@tamagui/next-theme'
 
 const opacity = 0.8
 const strokeWidth = 2
-const color = '$gray9'
+const color = 'var(--gray9)'
 const size = 20
 
 const appId = process.env.NEXT_PUBLIC_APP_ID;
-
-const iconTable = {
-    database: <Server color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    model: <Box color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    api: <Workflow color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    create: <Plus color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    users: <Users color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    events: <Zap color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    zap: <Zap color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    automation: <Repeat color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    groups: <Tag color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    library: <Library color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    lamp: <Lamp color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    function: <FunctionSquare color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    factory: <Factory color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    leaf: <Leaf color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    chart: <LineChart color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    replace: <Replace color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    replaceAll: <ReplaceAll color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    boxes: <Boxes color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    box: <Box color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    book: <Book color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    bottle: <Milk color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    layout: <Layout color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    doorOpen: <DoorOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    cpu: <Cpu color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    board: <CircuitBoard color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    layoutList: <LayoutList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    columns: <Columns color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    unplug: <Unplug color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    human: <PersonStanding color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    bookOpen: <BookOpen color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    serverConf: <ServerCog color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    activity: <ClipboardList color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />,
-    alert: <AlertTriangle color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
-}
 
 const replaceFirstCharIfSlash = (str) => (str.startsWith('/') ? str.replace(/^./, '') : str);
 const healthCheckLinkRoute = (str) => {
@@ -107,13 +71,20 @@ const isTabSelected = (subtabs) => subtabs.some((subtab) => {
     return isSubtabSelected(href, usePathname())
 })
 
+const InternalIcon = ({ name, color, size, opacity }) => <div
+    style={{
+        opacity: opacity,
+        width: size,
+        height: size,
+        backgroundColor: color,
+        WebkitMask: `url('/public/icons/${name}.svg') center / contain no-repeat`,
+        mask: `url('/public/icons/${name}.svg') center / contain no-repeat`,
+    }}
+></div>
+
 const getIcon = (Icon) => {
     if (typeof Icon === "string") {
-        if (!iconTable[Icon]) {
-            return <Folder color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
-        } else {
-            return iconTable[Icon]
-        }
+        return <InternalIcon name={Icon} color={color} size={size} opacity={opacity} />
     } else {
         return <Icon color={color} size={size} opacity={opacity} strokeWidth={strokeWidth} />
     }
@@ -318,7 +289,7 @@ export const PanelMenu = ({ workspace, collapsed }) => {
             {/* <Separator f={1} borderBottomWidth={4} /> */}
         </Tinted>
         <Tinted>
-            <ScrollView showsVerticalScrollIndicator={false} pl={"$0"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} collapsed={collapsed}/></ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false} pl={"$0"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} collapsed={collapsed} /></ScrollView>
         </Tinted>
 
     </YStack>)
