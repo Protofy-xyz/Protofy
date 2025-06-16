@@ -4,9 +4,9 @@ import { Panel, PanelGroup } from "react-resizable-panels";
 import { useThemeSetting } from '@tamagui/next-theme';
 import { Monaco } from "../Monaco";
 import { useEffect, useState } from "react";
-import { getHTML } from "@extensions/services/widgets";
+import { HTMLView } from "@extensions/services/widgets";
 
-export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
+export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
     const [code, setCode] = useState(htmlCode);
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
                     p="$3"
                     justifyContent="flex-start"
                 >
-                    <div dangerouslySetInnerHTML={{ __html: getHTML(code, data) }} />
+                    <HTMLView html={code} data={data} />
                 </YStack>
             </Panel>
             <CustomPanelResizeHandle direction="vertical" />
@@ -42,17 +42,17 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data}) => {
                     p="$3"
                 >
                     <Monaco
-                        path={'html-rules-'+data.name+'.ts'}
+                        path={'html-rules-' + data.name + '.ts'}
                         darkMode={resolvedTheme === 'dark'}
                         sourceCode={htmlCode}
-                        onChange={(newCode) => {setCode(newCode); setHTMLCode(newCode)}}
+                        onChange={(newCode) => { setCode(newCode); setHTMLCode(newCode) }}
                         options={{
                             folding: false,
                             lineDecorationsWidth: 0,
                             lineNumbersMinChars: 0,
                             lineNumbers: false,
                             minimap: { enabled: false }
-                          }}
+                        }}
                     />
                 </YStack>
             </Panel>
