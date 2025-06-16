@@ -402,7 +402,7 @@ const cardValue = ({ value, style = '' }) => {
 }
 
 const reactCard = (jsx, root) => {
-    const { Button, Text, View, Provider, Tinted } = window.TamaguiComponents;
+    const { Button, Text, View, Provider, Tinted, DataView } = window.TamaguiComponents;
 
     const jsxCode = `
   function WidgetRoot({children}) {

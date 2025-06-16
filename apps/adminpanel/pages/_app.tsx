@@ -25,13 +25,15 @@ if (typeof window !== 'undefined') {
 import { Button, Text, View } from 'tamagui';
 import { Provider } from 'app/provider'
 import { Tinted } from 'protolib/components/Tinted'; 
+import { DataView} from 'protolib/components/DataView';
 if (typeof window !== 'undefined') {
   window.TamaguiComponents = {
     Button,
     Text,
     View,
     Provider,
-    Tinted
+    Tinted,
+    DataView
   };
 }
 // ---------------------------------------------------------
