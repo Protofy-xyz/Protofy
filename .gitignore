@@ -4,6 +4,8 @@ data/*
 logs/*
 !logs/.keep
 !data/workspaces
+!data/assets
+data/assets/*.zip
 !data/automations
 !data/templates
 !data/devices
