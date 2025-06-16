@@ -18,7 +18,7 @@ import osMasks2 from '@extensions/os2/masks'
 import utilsMasks from '@extensions/utils/masks'
 import keyMasks from '@extensions/keys/masks'
 import chatGPTMasks from '@extensions/chatgpt/masks'
-import discordMasks from '@extensions/discord/masks';
+// import discordMasks from '@extensions/discord/masks';
 import logsMasks from '@extensions/logs/masks'
 import playwrightMasks from '@extensions/playwright/masks'
 import networkMasks from '@extensions/network/masks'
@@ -58,7 +58,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...keyMasks,
         ...utilsMasks,
         ...chatGPTMasks,
-        ...discordMasks,
+        // ...discordMasks,
         ...logsMasks,
         ...playwrightMasks,
         ...networkMasks,
