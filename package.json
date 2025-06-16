@@ -52,7 +52,8 @@
     "git-origin-setup": "node git-origin-setup.js",
     "app-package": "yarn download-binaries && electron-builder -c electron-builder.yml build",
     "download-binaries": "node download-bins.js",
-    "clean-deps": "shx rm -rf node_modules"
+    "clean-deps": "shx rm -rf node_modules",
+    "install-asset": "node install-asset.js"
   },
   "resolutions": {
     "react": "18.2.0",
