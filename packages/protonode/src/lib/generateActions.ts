@@ -84,7 +84,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_exists',
         templateName: 'Check if a ' + modelName + ' exists in the storage',
         defaults: {
-            html: getHTML('exists')
+            html: getHTML('exists'),
             width: 4,
             height: 8,
             icon: 'file-check',
