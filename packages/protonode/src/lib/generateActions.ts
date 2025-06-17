@@ -1,5 +1,5 @@
 import { API } from "protobase";
-import {handler} from "../lib/handler";
+import { handler } from "../lib/handler";
 import { getServiceToken } from "./serviceToken";
 
 export const AutoActions = ({
@@ -7,7 +7,7 @@ export const AutoActions = ({
     modelType,
     apiUrl = undefined,
     prefix = "/api/v1/",
-    pageSrc = undefined,
+    object = undefined,
     notificationsName = undefined,
     pluralName = undefined
 }) => async (app, context) => {
@@ -20,8 +20,8 @@ export const AutoActions = ({
         try {
             const result = await API.get(`${urlPrefix}?token=${getServiceToken()}`);
             if (result.isLoaded && result.data && result.data.total) {
-                context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total});
-                context.state.set({ group: 'objects', tag: modelName, name: 'lastEntries', value: result.data.items});
+                context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total });
+                context.state.set({ group: 'objects', tag: modelName, name: 'lastEntries', value: result.data.items });
             }
         } catch (e) {
             console.error("Error loading total for " + modelName, e);
@@ -233,7 +233,7 @@ export const AutoActions = ({
         context,
         async (event) => {
             loadTotal();
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id });
         },
         notiName + "/delete/#"
     )
@@ -293,11 +293,11 @@ export const AutoActions = ({
         const field: any = params.field;
         const value = params.value;
         try {
-            const result = await API.get(`${urlPrefix}/${id}?token=${params.token? params.token: session.token}`);
+            const result = await API.get(`${urlPrefix}/${id}?token=${params.token ? params.token : session.token}`);
             if (result.isLoaded) {
                 const data = result.data;
                 data[field] = value;
-                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${params.token? params.token:session.token}`, data);
+                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${params.token ? params.token : session.token}`, data);
                 if (resultUpdate.isLoaded) {
                     res.json(resultUpdate.data);
                     return
@@ -351,9 +351,9 @@ export const AutoActions = ({
         context,
         async (event) => {
             loadTotal();
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id });
         },
         notiName + "/create/#"
     )
@@ -379,9 +379,9 @@ export const AutoActions = ({
         context.mqtt,
         context,
         async (event) => {
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id });
         },
         notiName + "/update/#"
     )
@@ -444,7 +444,7 @@ export const AutoActions = ({
         }
     }))
 
-     await context.actions.add({
+    await context.actions.add({
         group: 'objects',
         name: 'list', //get last path element
         url: actionUrlPrefix + '/list',
@@ -452,7 +452,7 @@ export const AutoActions = ({
         description: `Returns a list of ${modelName} objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
         params: {
             itemsPerPage: 'number of items per page (optional)',
-            page: 'page number to retrieve (optional)' ,
+            page: 'page number to retrieve (optional)',
             search: 'search term to filter the results (optional)',
             orderBy: 'field to order the results by (optional)',
             orderDirection: 'direction to order the results by (asc or desc) (optional)'
@@ -470,12 +470,12 @@ export const AutoActions = ({
             icon: 'search',
             displayResponse: true,
             name: `list ${modelName}`,
-            ...(pageSrc ? {html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'"+pageSrc+"'}), mode: 'slim'\n});\n"}: {}),
+            ...(object ? { html: "return dataView('" + modelName + "', data.domId)" } : {}),
             type: 'action',
             description: `Returns a list of ${modelName} objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
             params: {
                 itemsPerPage: 'number of items per page (optional)',
-                page: 'page number to retrieve (optional)' ,
+                page: 'page number to retrieve (optional)',
                 search: 'search term to filter the results (optional)',
                 orderBy: 'field to order the results by (optional)',
                 orderDirection: 'direction to order the results by (asc or desc) (optional)'

@@ -58,7 +58,7 @@ export default Protofy("code", async (app: Application, context: typeof APIConte
         modelName: name,
         modelType: {{modelName}},
         prefix: prefix,
-        pageSrc: '/workspace/objects/view?object={{object}}Model&mode=embed'
+        object: '{{object}}'
     })
 
     const {{codeName}}API = AutoAPI({

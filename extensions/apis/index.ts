@@ -1,1 +1,1 @@
-export * from './APISchemas'
+export * from './apisSchemas'
