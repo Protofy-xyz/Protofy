@@ -15,7 +15,7 @@ export const ArduinosAutoAPI = AutoAPI({
 const callModel = async (prompt, context) => {
     let reply;
     if (useChatGPT) {
-        reply = await context.chatGPT.chatGPTPrompt({
+        reply = await context.chatgpt.chatGPTPrompt({
             message: prompt
         })
 

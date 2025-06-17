@@ -24,7 +24,7 @@ export default Protofy("code", async (app:Application, context: typeof APIContex
         const {metadata, ...body} = req.body
 
         const {session, token} = getAuth(req)
-        context.chatGPT.chatGPTPrompt({
+        context.chatgpt.chatGPTPrompt({
             ...body,
             messages: transformChats(body.messages, metadata.context),
             done: (response, message) => {
