@@ -1,38 +1,7 @@
 import { YStack, XStack } from '@my/ui'
 import {
-    Server,
-    Box,
     Boxes,
     ChevronDown,
-    Folder,
-    Plus,
-    Workflow,
-    Users,
-    Repeat,
-    Zap,
-    Tag,
-    Library,
-    Lamp,
-    FunctionSquare,
-    Factory,
-    Leaf,
-    LineChart,
-    Replace,
-    ReplaceAll,
-    Book,
-    Milk,
-    Layout,
-    DoorOpen,
-    Cpu,
-    CircuitBoard,
-    Columns,
-    LayoutList,
-    Unplug,
-    PersonStanding,
-    BookOpen,
-    ServerCog,
-    ClipboardList,
-    AlertTriangle,
     Layers,
     Minus
 } from '@tamagui/lucide-icons'
@@ -65,11 +34,26 @@ const healthCheckLinkRoute = (str) => {
 };
 
 const getSubtabHref = (subtab) => subtab.href ?? (subtab.type + subtab.path).replace(/\/+/g, '/')
-const isSubtabSelected = (href, pathname) => href.includes(pathname) && pathname != '/'
-const isTabSelected = (subtabs) => subtabs.some((subtab) => {
+const isSubtabMatch = (href: string, pathname: string) => {
+    return href.includes(pathname) && pathname != '/'
+};
+
+const isTabSelected = (subtabs, shortedMatch) => subtabs.some((subtab) => {
     const href = getSubtabHref(subtab)
-    return isSubtabSelected(href, usePathname())
+    return shortedMatch == href
 })
+
+const getShortestMatch = (tabs: string[], pathname: string, searchParams): string | null => {
+    const queryStr = searchParams.toString()
+    
+    let filteredTabs = tabs.filter(href => isSubtabMatch(href, pathname)).sort((a, b) => a.length - b.length);;
+    if (filteredTabs.length == 1) return filteredTabs[0];
+    else if (filteredTabs.length > 1) {
+        const filteredQueryTabs = filteredTabs.filter(href => href.includes(queryStr));
+        return filteredQueryTabs ? filteredQueryTabs[0] : filteredTabs[0];
+    }
+    return null
+}
 
 const InternalIcon = ({ name, color, size, opacity }) => <div
     style={{
@@ -135,20 +119,17 @@ const CreateDialog = ({ subtab }) => {
     </XStack>
 }
 
-const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
-    const pathname = usePathname();
-
+const Subtabs = ({ tabs, subtabs, collapsed, shortedMatch }: any) => {
     return (
         <YStack f={1} gap="$1">
             {subtabs.map((subtab, index) => {
                 if (subtab.type == 'create') return <CreateDialog subtab={subtab} key={index} />
                 let href = getSubtabHref(subtab)
                 const originalHref = href
-
                 const content = <Tinted>
                     <PanelMenuItem
                         collapsed={collapsed}
-                        selected={isSubtabSelected(href, pathname)}
+                        selected={shortedMatch == href}
                         // selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
@@ -169,6 +150,21 @@ const Subtabs = ({ tabs, subtabs, collapsed }: any) => {
 
 const Tabs = ({ tabs, environ, collapsed }: any) => {
     const { resolvedTheme } = useThemeSetting()
+    const searchParams = useSearchParams();
+
+    const spreadSubtabs = Object.keys(tabs).reduce((acc, key) => {
+        if (Array.isArray(tabs[key])) {
+            return acc.concat(tabs[key]);
+        }
+        if (typeof tabs[key] === 'object' && tabs[key] !== null) {
+            return acc.concat(tabs[key]);
+        }
+        return acc;
+    }, []);
+    
+    const hrefList = spreadSubtabs.map(subtab => getSubtabHref(subtab))
+    const shortedMatch = getShortestMatch(hrefList, usePathname(), searchParams);
+
     return (tabs ?
         <YStack f={1}>
             {Object.keys(tabs).map((tab, index) => {
@@ -188,21 +184,21 @@ const Tabs = ({ tabs, environ, collapsed }: any) => {
                                 bw={0} flexDirection="row" justifyContent="space-between">
                                 {({ open }) => (
                                     //@ts-ignore
-                                    <XStack f={1} h="40px" jc="center" p={"$2"} animateOnly={['backgroundColor']} animation="bouncy" br="$4" backgroundColor={isTabSelected(tabContent) && !open ? (resolvedTheme == "dark" ? '$color2' : '$color4') : '$backgroundTransparent'}>
+                                    <XStack f={1} h="40px" jc="center" p={"$2"} animateOnly={['backgroundColor']} animation="bouncy" br="$4" backgroundColor={isTabSelected(tabContent, shortedMatch) && !open ? (resolvedTheme == "dark" ? '$color2' : '$color4') : '$backgroundTransparent'}>
                                         {!collapsed && <SizableText f={1} ml={"$2.5"} fontWeight="bold" size={"$5"}>{tab}</SizableText>}
                                         {/* @ts-ignore */}
                                         <Square animation="bouncy" rotate={open ? '180deg' : '0deg'}>
                                             {
-                                                collapsed 
-                                                    ? <Minus color="$gray6" size={20}/>
-                                                    : <ChevronDown color={isTabSelected(tabContent) && !open ? '$color8' : '$gray9'} size={20} />
+                                                collapsed
+                                                    ? <Minus color="$gray6" size={20} />
+                                                    : <ChevronDown color={isTabSelected(tabContent, shortedMatch) && !open ? '$color8' : '$gray9'} size={20} />
                                             }
                                         </Square>
                                     </XStack>
                                 )}
                             </Accordion.Trigger>
                             <Accordion.Content position="relative" backgroundColor={"$backgroundTransparent"} pt={'$0'} pb={"$2"} >
-                                <Subtabs collapsed={collapsed} tabs={tabs} subtabs={tabContent} />
+                                <Subtabs collapsed={collapsed} tabs={tabs} subtabs={tabContent} shortedMatch={shortedMatch}/>
                             </Accordion.Content>
                         </Accordion.Item>
                     </Accordion>
