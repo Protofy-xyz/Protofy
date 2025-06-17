@@ -102,7 +102,7 @@ export const usePageParams = (state) => {
             }
         };
     } catch(e) {
-        console.error('Error in usePageParams:', e);
+        // console.error('Error in usePageParams:', e);
         return {
             query: {},
             push: () => {},
