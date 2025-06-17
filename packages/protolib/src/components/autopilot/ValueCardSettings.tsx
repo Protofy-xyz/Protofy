@@ -1,4 +1,4 @@
-import { Braces, Monitor, ClipboardList } from '@tamagui/lucide-icons'
+import { Braces, Monitor, ClipboardList, Sliders } from '@tamagui/lucide-icons'
 import { YStack, XStack, ToggleGroup, ScrollView, Text } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
@@ -7,6 +7,7 @@ import { CardSettings } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
 import { useThemeSetting } from '@tamagui/next-theme';
 import { Monaco } from '../Monaco'
+import { ParamsEditor } from './ParamsEditor'
 
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
@@ -39,6 +40,12 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                                     <Text>Value</Text>
                                 </XStack >
                             </ToggleGroup.Item>
+                            <ToggleGroup.Item value="params">
+                                <XStack gap={"$2"} ai={"center"}>
+                                    <Sliders size={"$1"} />
+                                    <Text>Params</Text>
+                                </XStack >
+                            </ToggleGroup.Item>
                             <ToggleGroup.Item value="view">
                                 <XStack gap={"$2"} ai={"center"}>
                                     <Monitor size={"$1"} />
@@ -69,6 +76,17 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             cardData={cardData}
                             setCardData={setCardData}
                         />}
+                        {tab == 'params' && <ParamsEditor
+                            mode={'value'}
+                            params={cardData.params || {}}
+                            setParams={(newParams) => {
+                                console.log("hacemos setParams", newParams)
+                                setCardData((prev) => ({
+                                    ...prev,
+                                    params: newParams,
+                                }))
+                            }}
+                        />}
                         {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, value: card.value }} />}
                         {tab == 'raw' && <Monaco
                             path={"card-" + cardData.name + ".ts"}
@@ -84,8 +102,8 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                             options={{
                                 scrollBeyondLastLine: false,
                                 scrollbar: {
-                                  vertical: 'auto',
-                                  horizontal: 'auto',
+                                    vertical: 'auto',
+                                    horizontal: 'auto',
                                 },
                                 folding: false,
                                 lineDecorationsWidth: 0,
