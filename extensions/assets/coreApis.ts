@@ -4,7 +4,7 @@ import { Application } from "express";
 import * as fs from 'fs';
 import { promises } from 'fs';
 import path from "path";
-
+import assets from "../../assets"
 import AdmZip from 'adm-zip';
 
 const root = path.join(process.cwd(), "..", "..");
@@ -13,36 +13,6 @@ const logger = getLogger();
 
 const assetsDir = "/data/assets"
 const assetsRoot = path.join(root, assetsDir);
-
-
-function copyFolderStructure(sourceDir, targetDir) {
-    if (!fs.existsSync(sourceDir)) {
-        console.error(`Source folder "${sourceDir}" does not exist.`);
-        return;
-    }
-
-    const entries = fs.readdirSync(sourceDir, { withFileTypes: true });
-
-    for (const entry of entries) {
-        const srcPath = path.join(sourceDir, entry.name);
-        const destPath = path.join(targetDir, entry.name);
-
-        if (entry.isDirectory()) {
-            // Create the directory in the destination if it doesn't exist
-            if (!fs.existsSync(destPath)) {
-                fs.mkdirSync(destPath, { recursive: true });
-            }
-            copyFolderStructure(srcPath, destPath);
-        } else if (entry.isFile()) {
-            // Copy the file if it doesn't exist in the destination
-            if (!fs.existsSync(destPath)) {
-                fs.copyFileSync(srcPath, destPath);
-            } else {
-                // If the file already exists, you can choose to skip or overwrite
-            }
-        }
-    }
-}
 
 const decompressZip = async (options) => {
     const zipPath = options.zipPath;
@@ -79,7 +49,7 @@ const waitForFolderReady = async (folderPath, retries = 10, delay = 200) => {
     throw new Error(`Timeout waiting for folder to be ready: ${folderPath}`);
 };
 
-const installAsset = async (context, zipFile) => {
+const decompressAndInstallAsset = async (context, zipFile) => {
         const zipPath = path.join(assetsRoot, zipFile);
         const assetName = zipFile.replace(".zip", "");
         const assetPath = path.join(assetsRoot, assetName);
@@ -96,7 +66,7 @@ const installAsset = async (context, zipFile) => {
                 //     path: `${assetsDir}/${zipFile}`,
                 // });
 
-                copyFolderStructure(assetPath, root);
+                assets.install(assetName)
             },
             error: (err) => {
                 console.error(`Error decompressing ${zipFile}:`, err);
@@ -114,7 +84,7 @@ export default (app, context) => {
             // call the install
             const payload = event.payload || {};
             if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
-                await installAsset(context, payload.filename);
+                await decompressAndInstallAsset(context, payload.filename);
             }
 
         },
@@ -144,7 +114,7 @@ export default (app, context) => {
                 );
 
                 for (const zipFile of zipFiles) {
-                    await installAsset(context, zipFile);
+                    await decompressAndInstallAsset(context, zipFile);
                 }
 
                 list = list.filter(
@@ -154,7 +124,7 @@ export default (app, context) => {
                 console.log("Assets after decompression:", list);
 
                 for (const asset of list) {
-                    copyFolderStructure(root + assetsDir + '/' + asset, root);
+                    assets.install(asset)
                 }
             },
         })
