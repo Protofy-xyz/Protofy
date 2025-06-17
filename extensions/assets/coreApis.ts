@@ -11,7 +11,7 @@ const root = path.join(process.cwd(), "..", "..");
 const logger = getLogger();
 
 
-const assetsDir = "data/assets"
+const assetsDir = "/data/assets"
 const assetsRoot = path.join(root, assetsDir);
 
 
@@ -92,9 +92,9 @@ const installAsset = async (context, zipFile) => {
 
                 await waitForFolderReady(assetPath);
 
-                await context.os2.deleteFile({
-                    path: `${assetsDir}/${zipFile}`,
-                });
+                // await context.os2.deleteFile({
+                //     path: `${assetsDir}/${zipFile}`,
+                // });
 
                 copyFolderStructure(assetPath, root);
             },
