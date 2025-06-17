@@ -12,6 +12,21 @@ export default AutoActions({
     apiUrl: '/api/core/v1/accounts', //the URL to the API that will be used
     notificationsName: 'accounts',
     html: {
-        "list": ``,
+        "list": `
+const groups = getStorage('group', 'lastEntries', [])
+
+reactCard(\`
+  function Widget() {
+    return (
+      <View className="no-drag">
+        <MqttWrapper>
+          <UsersView all="filtered" groups={{data:{items:groups}}} itemData={undefined} />
+        </MqttWrapper>
+      </View>
+    );
+  }
+
+\`, data.domId)
+`,
     }
 })
