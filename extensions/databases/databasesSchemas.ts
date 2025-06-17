@@ -5,10 +5,19 @@ export const DatabaseEntrySchema = Schema.object({
 	value: z.any()
 })
 
+Protofy("features", {
+    "adminPage": "/databases"
+})
+
 export const DatabaseSchema = Schema.object(Protofy("schema", {
 	name: z.string().id().search().static(),
 	entries: z.array(DatabaseEntrySchema).generate(()=>[])
 }))
+
+Protofy("api", {
+    "name": "databases",
+    "prefix": "/api/core/v1/"
+})
 
 export type DatabaseEntryType = z.infer<typeof DatabaseEntrySchema>;
 
