@@ -67,8 +67,8 @@ export default {
             bgContent: "#FFFFFF",
         },
         dark_red: {
-            bgPanel: "#272727",
-            bgContent: "#1A1A1A"
+            bgPanel: "#000000",
+            bgContent: "hsl(0, 6%, 8%)"
         },
         light_red: {
             bgPanel: "#F3F4F6",

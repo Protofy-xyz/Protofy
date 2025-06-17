@@ -24,7 +24,7 @@ const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
 const memory = {}
 
-const getExecuteAction = (actions, board='') => `
+const getExecuteAction = (actions, board = '') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
     console.log('Executing action: ', url, params);
@@ -49,7 +49,11 @@ async function execute_action(url, params={}) {
         }
     }
     if (action.method === 'post') {
-        const { token, ...data } = params;
+        let { token, ...data } = params;
+        if(action.token) {
+            token = action.token
+        }
+        //console.log('url: ', url+'?token='+token)
         const response = await API.post(url+'?token='+token, data);
         return response.data
     } else {
@@ -369,7 +373,7 @@ export default (app, context) => {
                         continue;
                     }
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
-                    if(!memory[card.key]) {
+                    if (!memory[card.key]) {
                         memory[card.key] = {}
                     }
                     const wrapper = new AsyncFunction('states', 'data', 'memory', `
@@ -550,6 +554,32 @@ export default (app, context) => {
         res.send({ message: "Autopilot enabled for board: " + boardId });
     })
 
+    app.get('/api/core/v1/viewLib', requireAdmin(), async (req, res) => {
+        //iterate over all directories in ../../extensions and for each directory
+        // check if it has a viewLib.js file
+        // if it does, read the contents and concatenate them into a single string
+
+        const extensionsPath = fspath.join(getRoot(), 'extensions')
+        let viewLib = ''
+        try {
+            const files = await fs.readdir(extensionsPath)
+            for (const file of files) {
+                const filePath = fspath.join(extensionsPath, file, 'viewLib.js')
+                if (fsSync.existsSync(filePath)) {
+                    const fileContent = await fs.readFile(filePath, 'utf8')
+                    viewLib += fileContent + '\n'
+                }
+            }
+        } catch (error) {
+            console.error("Error reading extensions folder: ", error)
+
+            res.status(500).send({ error: "Error reading extensions folder" })
+            return
+        }
+
+        res.send(viewLib)
+    })
+
     app.get('/api/core/v1/boards/:boardId/autopilot/off', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
         autopilotState[boardId] = false;
@@ -562,7 +592,7 @@ export default (app, context) => {
             return
         }
 
-        if(!req.query.board) {
+        if (!req.query.board) {
             res.status(400).send('Missing board parameter')
             return
         }
@@ -586,8 +616,8 @@ export default (app, context) => {
             Most probably you just need to write a single line of code calling await execute_action. Try to keep it as simple as possible.
             The simpler the better.
             Remember to always return a value from the generated code.
-        `+req.query.prompt
-        
+        `+ req.query.prompt
+
         const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "boardRules", rules: userprompt, states: JSON.stringify(states, null, 4), actions: JSON.stringify(actions, null, 4) });
         console.log('prompt: ', prompt)
         let reply = await callModel(prompt, context)
@@ -606,8 +636,8 @@ export default (app, context) => {
         `);
         try {
             const response = await wrapper(states ?? {}, token, API, prevStates[boardId] ?? {});
-            res.json( response )
-        } catch(e) {
+            res.json(response)
+        } catch (e) {
             console.error("Error executing generated code: ", e)
             res.send(`error: ${e.message}`)
         }
@@ -646,14 +676,14 @@ export default (app, context) => {
         emitEvent: true,
     })
 
-    
+
     app.get('/api/core/v1/board/question', requireAdmin(), async (req, res) => {
         if (!req.query.prompt) {
             res.status(400).send('Missing prompt parameter')
             return
         }
 
-        if(!req.query.board) {
+        if (!req.query.board) {
             res.status(400).send('Missing board parameter')
             return
         }
@@ -661,7 +691,7 @@ export default (app, context) => {
         const prompt = 'Recover and return the data necessary to answer the following question: ' + req.query.prompt
         const data = (await API.get(`/api/core/v1/autopilot/llm?prompt=${prompt}&board=${req.query.board}`)).data
 
-        const secondPrompt = 'Given the data: ' + JSON.stringify(data, null, 4) + ' answer the following question: ' + req.query.prompt+`.
+        const secondPrompt = 'Given the data: ' + JSON.stringify(data, null, 4) + ' answer the following question: ' + req.query.prompt + `.
         If the question is about a value of something, infere the answer just from the data.
         If data has only one value, return that value.
         If data has multiple values, return the most likely value.
@@ -717,6 +747,22 @@ export default (app, context) => {
             description: "Display a link in an iframe",
             type: 'value',
             html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"${data.value}\" />`, padding: '3px'\n});\n",
+        },
+        emitEvent: true
+    })
+
+    addCard({
+        group: 'board',
+        tag: "react",
+        id: 'show',
+        templateName: "Display a React component",
+        name: "board_react",
+        defaults: {
+            name: "React",
+            icon: "table-properties",
+            description: "Display a React component",
+            type: 'value',
+            html: "reactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            {/* you can use data.value here to access the value */}\n            <center><Text>Hello from react</Text></center>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n"
         },
         emitEvent: true
     })

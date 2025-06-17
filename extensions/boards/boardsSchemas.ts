@@ -1,4 +1,8 @@
-import { AutoModel, Schema, z } from 'protobase'
+import { AutoModel, Schema, z, Protofy } from 'protobase'
+
+Protofy("features", {
+    "adminPage": "/boards"
+})
 
 export const CardSchema = Schema.object({
     name: z.string().id(),
@@ -13,11 +17,16 @@ export const CardSchema = Schema.object({
 export type CardType = z.infer<typeof CardSchema>;
 export const CardModel = AutoModel.createDerived<CardType>("CardModel", CardSchema);
 
-export const BoardSchema = Schema.object({
+export const BoardSchema = Schema.object(Protofy("schema", {
     name: z.string().hint("room, system, controller, ...").regex(/^[a-z0-9_]+$/, "Only lower case chars, numbers or _").static().id(),
     layouts: z.any().optional().hidden(),
     cards: z.array(CardSchema).optional().hidden(),
     rules: z.array(z.string()).optional().hidden(),
+}))
+
+Protofy("api", {
+    "name": "boards",
+    "prefix": "/api/core/v1/"
 })
 
 export type BoardType = z.infer<typeof BoardSchema>;

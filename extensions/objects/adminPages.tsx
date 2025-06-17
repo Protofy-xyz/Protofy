@@ -15,6 +15,7 @@ import { usePendingEffect } from 'protolib/lib/usePendingEffect';
 import { useState } from 'react';
 import { useRouter } from 'next/router'
 import { AsyncView } from 'protolib/components/AsyncView';
+import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
 
 const format = 'YYYY-MM-DD HH:mm:ss'
 const ObjectIcons = {}
@@ -50,18 +51,6 @@ const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession,
             hideFilters={false}
         /> : null}
     </AdminPage>)
-}
-
-const ObjectViewLoader = (props) => {
-    const objectUrl = `/api/core/v1/objects/${props.object}`
-    const [data, setData] = useState(props.objectData ?? getPendingResult('pending'))
-    usePendingEffect((s) => { API.get({ url: objectUrl }, s) }, setData, props.objectData)
-    return <AsyncView atom={data} >
-        <ObjectView
-            {...props}
-            object={data.isLoaded ? data.data : {}}
-        />
-    </AsyncView>
 }
 
 export default {
@@ -133,7 +122,7 @@ export default {
             const { object } = router.query
             if (!object) return <></>
             return <AsyncView ready={router.isReady}>
-                <ObjectViewLoader key={object} {...props} object={object}/>
+                <ObjectViewLoader key={object} {...props} object={object} widget={ObjectView}/>
             </AsyncView>
         }
     }

@@ -1,5 +1,5 @@
 import { API } from "protobase";
-import {handler} from "../lib/handler";
+import { handler } from "../lib/handler";
 import { getServiceToken } from "./serviceToken";
 
 export const AutoActions = ({
@@ -7,7 +7,7 @@ export const AutoActions = ({
     modelType,
     apiUrl = undefined,
     prefix = "/api/v1/",
-    pageSrc = undefined,
+    object = undefined,
     notificationsName = undefined,
     pluralName = undefined
 }) => async (app, context) => {
@@ -20,8 +20,8 @@ export const AutoActions = ({
         try {
             const result = await API.get(`${urlPrefix}?token=${getServiceToken()}`);
             if (result.isLoaded && result.data && result.data.total) {
-                context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total});
-                context.state.set({ group: 'objects', tag: modelName, name: 'lastEntries', value: result.data.items});
+                context.state.set({ group: 'objects', tag: modelName, name: 'total', value: result.data.total });
+                context.state.set({ group: 'objects', tag: modelName, name: 'lastEntries', value: result.data.items });
             }
         } catch (e) {
             console.error("Error loading total for " + modelName, e);
@@ -55,8 +55,7 @@ export const AutoActions = ({
         tag: modelName,
         description: `Check if ${modelName} exists given an id. Returns true if it exists, false otherwise.`,
         params: { id: "id to look for" },
-        token: getServiceToken(),
-        emitEvent: true
+        token: getServiceToken()
     })
 
     await context.cards.add({
@@ -78,16 +77,17 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/exists", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
     await context.cards.add({
         group: 'objects',
-        tag: "modelName",
-        id: 'object_' + modelName + '_table',
+        tag: modelName,
+        name: 'table',
+        id: 'object_' + modelName + '_last_table',
         templateName: "Last " + modelName + " table",
-        name: "board_table_" + modelName,
+
         defaults: {
             width: 4,
             height: 8,
@@ -96,9 +96,10 @@ export const AutoActions = ({
             description: "Displays a table with the last " + plurName,
             type: 'value',
             html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
-            rulesCode: `return states.objects?.${modelName}.lastEntries;`,
+            rulesCode: `return states.objects?.${modelName}.lastEntries`
         },
-        emitEvent: true
+
+        token: getServiceToken()
     })
 
     //read
@@ -129,7 +130,6 @@ export const AutoActions = ({
         description: `Read ${modelName} given an id. Returns an object with the data of the ${modelName} if it exists, false otherwise.`,
         params: { id: `id of the ${modelName} to read` },
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -151,7 +151,7 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/read", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -159,10 +159,10 @@ export const AutoActions = ({
     const fixValues = (params, modelType) => {
         Object.keys(params).forEach((key) => {
             // checkea los tipos de parametros para convetiros a los tipos correctos
-            if (modelType.getObjectFieldsDefinition()[key].type === 'number') {
+            if (modelType.getObjectFieldsDefinition()[key]?.type === 'number') {
                 params[key] = Number(params[key]);
             }
-            if (modelType.getObjectFieldsDefinition()[key].type === 'boolean') {
+            if (modelType.getObjectFieldsDefinition()[key]?.type === 'boolean') {
                 params[key] = Boolean(params[key]);
             }
         })
@@ -170,11 +170,11 @@ export const AutoActions = ({
 
     app.post(actionUrlPrefix + '/create', handler(async (req, res, session) => {
         const params = req.body;
-        console.log(JSON.stringify(params));
+        // console.log("create params: ", JSON.stringify(params));
         fixValues(params, modelType);
         try {
             const result = await API.post(`${urlPrefix}?token=${session.token}`, params);
-            console.log(result)
+            // console.log("create result: ", result)
             if (result.isLoaded) {
                 res.json(result.data);
                 return
@@ -202,7 +202,7 @@ export const AutoActions = ({
         description: `Creates new ${modelName} given an object with the data. Returns the id of the new ${modelName}.`,
         params: params,
         token: getServiceToken(),
-        emitEvent: true,
+
         method: 'post'
     })
 
@@ -223,7 +223,7 @@ export const AutoActions = ({
             params,
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/create", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -233,7 +233,7 @@ export const AutoActions = ({
         context,
         async (event) => {
             loadTotal();
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastDeleteddId', value: event?.payload?.id });
         },
         notiName + "/delete/#"
     )
@@ -261,8 +261,7 @@ export const AutoActions = ({
         tag: modelName,
         description: `Deletes ${modelName} given an id. Returns true if it was deleted, false otherwise.`,
         params: { id: "id of the " + modelName + " to delete" },
-        token: getServiceToken(),
-        emitEvent: true
+        token: getServiceToken()
     })
 
     await context.cards.add({
@@ -282,7 +281,7 @@ export const AutoActions = ({
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/delete", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -294,11 +293,11 @@ export const AutoActions = ({
         const field: any = params.field;
         const value = params.value;
         try {
-            const result = await API.get(`${urlPrefix}/${id}`);
+            const result = await API.get(`${urlPrefix}/${id}?token=${params.token ? params.token : session.token}`);
             if (result.isLoaded) {
                 const data = result.data;
                 data[field] = value;
-                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${session.token}`, data);
+                const resultUpdate = await API.post(`${urlPrefix}/${id}?token=${params.token ? params.token : session.token}`, data);
                 if (resultUpdate.isLoaded) {
                     res.json(resultUpdate.data);
                     return
@@ -324,7 +323,6 @@ export const AutoActions = ({
         description: `Updates ${modelName} by id, changing field with a given value. Returns the updated ${modelName} if it was updated, false otherwise.`,
         params: updateParams,
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -344,7 +342,7 @@ export const AutoActions = ({
             params: updateParams,
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/update", userParams)`
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -353,9 +351,9 @@ export const AutoActions = ({
         context,
         async (event) => {
             loadTotal();
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreated', value: event?.payload?.data });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedMetadata', value: event });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastCreatedId', value: event?.payload?.id });
         },
         notiName + "/create/#"
     )
@@ -373,7 +371,7 @@ export const AutoActions = ({
             description: `Last Created ${modelName}`,
             rulesCode: `return states.objects?.${modelName}.lastCreated;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -381,9 +379,9 @@ export const AutoActions = ({
         context.mqtt,
         context,
         async (event) => {
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event});
-            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id});
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdated', value: event?.payload?.data });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedMetadata', value: event });
+            context.state.set({ group: 'objects', tag: modelName, name: 'lastUpdatedId', value: event?.payload?.id });
         },
         notiName + "/update/#"
     )
@@ -401,7 +399,7 @@ export const AutoActions = ({
             description: `Last updated ${modelName}`,
             rulesCode: `return states.objects?.${modelName}.lastUpdated;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -418,7 +416,7 @@ export const AutoActions = ({
             description: `Total ${plurName}`,
             rulesCode: `return states.objects?.${modelName}.total;`,
         },
-        emitEvent: true,
+
         token: getServiceToken()
     })
 
@@ -446,7 +444,7 @@ export const AutoActions = ({
         }
     }))
 
-     await context.actions.add({
+    await context.actions.add({
         group: 'objects',
         name: 'list', //get last path element
         url: actionUrlPrefix + '/list',
@@ -454,13 +452,12 @@ export const AutoActions = ({
         description: `Returns a list of ${modelName} objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
         params: {
             itemsPerPage: 'number of items per page (optional)',
-            page: 'page number to retrieve (optional)' ,
+            page: 'page number to retrieve (optional)',
             search: 'search term to filter the results (optional)',
             orderBy: 'field to order the results by (optional)',
             orderDirection: 'direction to order the results by (asc or desc) (optional)'
         },
         token: getServiceToken(),
-        emitEvent: true
     })
 
     await context.cards.add({
@@ -473,19 +470,19 @@ export const AutoActions = ({
             icon: 'search',
             displayResponse: true,
             name: `list ${modelName}`,
-            ...(pageSrc ? {html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: iframe({src:'"+pageSrc+"'}), mode: 'slim'\n});\n"}: {}),
+            ...(object ? { html: "return dataView('" + modelName + "', data.domId)" } : {}),
             type: 'action',
             description: `Returns a list of ${modelName} objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
             params: {
                 itemsPerPage: 'number of items per page (optional)',
-                page: 'page number to retrieve (optional)' ,
+                page: 'page number to retrieve (optional)',
                 search: 'search term to filter the results (optional)',
                 orderBy: 'field to order the results by (optional)',
                 orderDirection: 'direction to order the results by (asc or desc) (optional)'
             },
             rulesCode: `return execute_action("/api/v1/actions/${modelName}/list", userParams)`
         },
-        emitEvent: true,
-        token: getServiceToken()
+        token: getServiceToken(),
+        emitEvent: true
     })
 }

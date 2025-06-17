@@ -1,13 +1,23 @@
-import { ProtoModel, Schema, z, SessionDataType } from 'protobase'
+import { ProtoModel, Schema, z, SessionDataType, Protofy } from 'protobase'
 
-export const ServiceSchema = Schema.object({
+Protofy("features", {
+    "adminPage": "/services"
+})
+
+export const ServiceSchema = Schema.object(Protofy("schema", {
     name: z.string().search().id(),
     status: z.string().optional(),
     uptime: z.number().optional(),
     restarts: z.number().optional(),
     memory: z.number().optional(),
     cpu: z.number().optional(),
-}) 
+}))
+
+Protofy("api", {
+    "name": "services",
+    "prefix": "/api/core/v1/"
+})
+
 
 export type PageType = z.infer<typeof ServiceSchema>;
 

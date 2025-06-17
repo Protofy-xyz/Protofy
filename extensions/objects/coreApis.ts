@@ -6,20 +6,38 @@ import * as fspath from 'path';
 import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
-import { APIModel } from '@extensions/apis/APISchemas'
+import { APIModel } from '@extensions/apis/apisSchemas'
 import { PageModel } from '@extensions/pages/pagesSchemas'
+
 
 const indexFile = "/packages/app/objects/index.ts"
 
-const getSchemas = async (req, sourceFile?) => {
-  let schemas = []
-  const tsFiles = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.ts'))
-  tsFiles.forEach(async (file) => {
-    const filePath = fspath.join(getRoot(req), 'data/objects', file)
-    const idSchema = file.replace('.ts', 'Model')
-    const schemaName = file.replace('.ts', '')
+const getSchemas = async (req, displayAll?) => {
 
-    const objectData = await getSchemaTS(filePath, idSchema, schemaName)
+  let schemas = []
+  const tsFiles = syncFs.readdirSync(fspath.join(getRoot(req), 'data/objects')).filter(file => file.endsWith('.ts')).map(file => fspath.join(getRoot(req), 'data/objects', file))
+
+  if(displayAll || (req.query && req.query.display && req.query.display === 'all')) {
+    //iterate through all directories in ../../extensions and for each directory, check if there is a file named with the same name as the directory but ending in Schema.ts
+    //for example, if there is a directory named "patatas", check if there is a file named "patatasSchema.ts" in that directory
+    //if so, add the file to the list of tsFiles
+    const extensionsPath = fspath.join(getRoot(req), 'extensions')
+    const extensionDirs = syncFs.readdirSync(extensionsPath, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
+    extensionDirs.forEach(dir => {
+      const schemaFile = fspath.join(extensionsPath, dir, dir + 'Schemas.ts')
+      if (syncFs.existsSync(schemaFile)) {
+        tsFiles.push(schemaFile)
+      }
+    })
+  }
+  tsFiles.forEach(async (file) => {
+    const fileName = fspath.basename(file)
+    const idSchema = fileName.replace('Schemas.ts', 'Model').replace('.ts', 'Model')
+    const schemaName = fileName.replace('Schemas.ts', '').replace('.ts', '')
+
+    const objectData = await getSchemaTS(file, idSchema, schemaName)
     if (objectData) {
       schemas.push(objectData)
     } else {
@@ -81,15 +99,17 @@ const getSchemaTS = async (filePath, idSchema, schemaName) => {
       console.error("Api options text producing the error: ", apiOptionsNode.getText())
     }
   }
-  return { name: schemaName, features, id: idSchema, keys, apiOptions: options}
+  const normalizedPath = fspath.normalize(filePath).replace(/^(\.\.[\\/])+/, '').replace(/\\/g, '/');
+  return { name: schemaName, features, id: idSchema, keys, apiOptions: options, filePath: normalizedPath}
 }
 
 
 const getSchema = async (idSchema, schemas, req, name?) => {
   //list all objects in data/objects folder and check if any has a name matching the idSchema
   //if so, return that object
-  const schemaName = name ?? schemas.find(s => s.id == idSchema)?.name
-  const tsFile = fspath.join(getRoot(req), 'data/objects', schemaName + '.ts')
+  const schema = schemas.find(s => s.id == idSchema)
+  const schemaName = name ?? schema?.name
+  const tsFile = fspath.join(getRoot(req), schema.filePath)
   const tsData = await getSchemaTS(tsFile, idSchema, schemaName)
   if (tsData) {
     return tsData
@@ -212,9 +232,7 @@ const getDB = (path, req, session) => {
     },
 
     async get(key) {
-      let SchemaFile = fspath.join(getRoot(req), indexFile)
-      let sourceFile = getSourceFile(SchemaFile)
-      const schemas = await getSchemas(req, sourceFile)
+      const schemas = await getSchemas(req, true)
       return JSON.stringify(await getSchema(key, schemas, req))
     }
   };

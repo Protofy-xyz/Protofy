@@ -1,6 +1,6 @@
 
 import { AutoAPI } from 'protonode'
-import { AutomationModel } from './automationSchema'
+import { AutomationModel } from './automationsSchema'
 
 const automations = {}
 
