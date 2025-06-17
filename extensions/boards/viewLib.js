@@ -403,7 +403,10 @@ const cardValue = ({ value, style = '' }) => {
 
 const reactCard = (jsx, root) => {
     // This is a hack to make react available in the boards html
-    const { Button, Text, View, Provider, Tinted, DataView, ObjectViewLoader, API, ProtoModel, MqttWrapper } = window.TamaguiComponents;
+    //iterate each key of window.ProtoComponents and add it to the global window object
+    Object.keys(window.ProtoComponents || {}).forEach(key => {
+        window[key] = window.ProtoComponents[key];
+    });
 
     const jsxCode = `
   function WidgetRoot({children}) {

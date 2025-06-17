@@ -21,7 +21,7 @@ if (typeof window !== 'undefined') {
   (window as any).ReactDOM = ReactDOM;
 }
 
-// tamagui-globals.ts
+// components to expose to the app
 import { Button, Text, View } from 'tamagui';
 import { Provider } from 'app/provider'
 import { Tinted } from 'protolib/components/Tinted'; 
@@ -29,22 +29,18 @@ import { DataView} from 'protolib/components/DataView';
 import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
 import { MqttWrapper } from 'protolib/components/MqttWrapper';
 import { API, ProtoModel } from 'protobase'
+import { TransferComponent } from 'protolib/lib/transferComponent';
 
-if (typeof window !== 'undefined') {
-  window.TamaguiComponents = {
-    Button,
-    Text,
-    View,
-    Provider,
-    Tinted,
-    DataView,
-    ObjectViewLoader,
-    API,
-    ProtoModel,
-    MqttWrapper
-  };
-}
-// ---------------------------------------------------------
+TransferComponent(Button, 'Button');
+TransferComponent(Text, 'Text');
+TransferComponent(View, 'View');
+TransferComponent(Provider, 'Provider');
+TransferComponent(Tinted, 'Tinted');
+TransferComponent(DataView, 'DataView');
+TransferComponent(ObjectViewLoader, 'ObjectViewLoader');
+TransferComponent(API, 'API');
+TransferComponent(ProtoModel, 'ProtoModel');
+TransferComponent(MqttWrapper, 'MqttWrapper');
 
 const app = getApp(AppConfig, {disablePreviewMode: true})
 export default app
