@@ -3,12 +3,14 @@ import { Eye, Trash } from '@tamagui/lucide-icons'
 import { useState, useEffect, useCallback } from 'react'
 import { InteractiveIcon } from '../InteractiveIcon'
 import { nanoid } from 'nanoid'
+import { useUpdateEffect } from 'usehooks-ts'
 
 export const ParamsEditor = ({
   params = {},
   setParams,
   configParams = {},
-  setConfigParams,
+  setConfigParams = (x) => {},
+  mode = 'action'
 }) => {
   const [rows, setRows] = useState(() => {
     const allKeys = new Set([...Object.keys(params), ...Object.keys(configParams)])
@@ -22,10 +24,10 @@ export const ParamsEditor = ({
     }))
   })
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     const newParams = {}
     const newConfigParams = {}
-
+    console.log("rows", rows)
     rows.forEach(({ paramKey, description, visible, defaultValue }) => {
 
       if (!paramKey.trim()) return
@@ -34,10 +36,12 @@ export const ParamsEditor = ({
       newConfigParams[paramKey] = { visible, defaultValue }
     })
     console.log("params", newParams)
-    console.log("configParams", newConfigParams)
     setParams(newParams)
-    setConfigParams(newConfigParams)
-  }, [rows, setParams, setConfigParams])
+    if(mode == 'action') {
+      console.log("configParams", newConfigParams)
+      setConfigParams(newConfigParams)
+    }
+  }, [rows])
 
   const handleAddParam = useCallback(() => {
     setRows((prev) => [
@@ -105,13 +109,13 @@ export const ParamsEditor = ({
       <ScrollView mt="$3" flex={1}>
         {rows.map(({ rowId, paramKey, description, visible, defaultValue }) => (
           <XStack key={rowId} space="$2" alignItems="center" padding="$2" borderRadius="$2" >
-            <InteractiveIcon Icon={Eye} IconColor={visible ? 'var(--color10)' : 'var(--gray9)'} onPress={() => handleToggleVisible(rowId)} />
+            {mode == 'action' && <InteractiveIcon Icon={Eye} IconColor={visible ? 'var(--color10)' : 'var(--gray9)'} onPress={() => handleToggleVisible(rowId)} />}
 
-            <Input placeholder="Param Key" flex={2} value={paramKey} onChange={(e) => handleChangeParamKey(rowId, e.target.value)} />
+            <Input placeholder={mode == 'action' ? "Param Key": "name"} flex={2} value={paramKey} onChange={(e) => handleChangeParamKey(rowId, e.target.value)} />
 
-            <Input placeholder="Description" flex={4} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
+            <Input placeholder={mode == 'action' ? "Description": "value"} flex={4} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
 
-            <Input placeholder="Default Value" flex={2} value={defaultValue} onChange={(e) => handleChangeDefaultValue(rowId, e.target.value)} />
+            {mode == 'action' && <Input placeholder="Default Value" flex={2} value={defaultValue} onChange={(e) => handleChangeDefaultValue(rowId, e.target.value)} />}
 
             <InteractiveIcon Icon={Trash} IconColor="var(--red10)" onPress={() => handleRemoveParam(rowId)} />
           </XStack>
