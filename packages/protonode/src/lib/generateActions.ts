@@ -2,6 +2,17 @@ import { API } from "protobase";
 import { handler } from "../lib/handler";
 import { getServiceToken } from "./serviceToken";
 
+type AutoActionsParams = {
+    modelName: string;
+    modelType: any; // should be an instance of AutoModel
+    apiUrl?: string;  
+    prefix?: string; // where the API for the actions will be created
+    object?: string; // what to display to the user in the list view
+    notificationsName?: string; // name of the notifications to listen to
+    pluralName?: string; // plural name for the model, used in cards and actions
+    html?: Record<string, string>; // additional HTML content for cards
+}
+
 export const AutoActions = ({
     modelName,
     modelType,
@@ -9,12 +20,20 @@ export const AutoActions = ({
     prefix = "/api/v1/",
     object = undefined,
     notificationsName = undefined,
-    pluralName = undefined
-}) => async (app, context) => {
+    pluralName = undefined,
+    html = {}
+} : AutoActionsParams) => async (app, context) => {
     const plurName = pluralName ?? modelName
     const urlPrefix = apiUrl ?? `${prefix}${modelName}`;
     const actionUrlPrefix = `${prefix}actions/${modelName}`;
     const notiName = notificationsName ?? modelName;
+
+    const getHTML = (name: string, defaultValue?) => {
+        if (html[name]) {
+            return html[name];
+        }
+        return defaultValue;
+    }
 
     const loadTotal = async () => {
         try {
@@ -65,6 +84,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_exists',
         templateName: 'Check if a ' + modelName + ' exists in the storage',
         defaults: {
+            html: getHTML('exists')
             width: 4,
             height: 8,
             icon: 'file-check',
@@ -95,7 +115,7 @@ export const AutoActions = ({
             icon: "table-properties",
             description: "Displays a table with the last " + plurName,
             type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
+            html: getHTML("last_table", "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n"),
             rulesCode: `return states.objects?.${modelName}.lastEntries`
         },
 
@@ -139,6 +159,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_read',
         templateName: 'Read ' + modelName + ' from the storage',
         defaults: {
+            html: getHTML('read'),
             width: 4,
             height: 8,
             icon: 'file-search',
@@ -213,6 +234,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_create',
         templateName: 'Create ' + modelName + ' in the storage',
         defaults: {
+            html: getHTML('create'),
             width: 4,
             height: 8,
             icon: 'file-plus',
@@ -275,6 +297,7 @@ export const AutoActions = ({
             displayResponse: true,
             name: `delete ${modelName}`,
             type: 'action',
+            html: getHTML('delete'),
             description: `Deletes ${modelName} by id. Returns true if it was deleted, false otherwise.`,
             params: {
                 id: 'id of the ' + modelName + ' to delete'
@@ -332,6 +355,7 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_update',
         templateName: 'Updates ' + modelName + ' in the storage',
         defaults: {
+            html: getHTML('update'),
             width: 4,
             height: 8,
             icon: 'file-pen-line',
@@ -365,6 +389,7 @@ export const AutoActions = ({
         templateName: 'Last created ' + modelName,
         id: 'object_' + modelName + '_lastCreated',
         defaults: {
+            html: getHTML('lastCreated'),
             type: "value",
             icon: 'rss',
             name: `lastCreated ${modelName}`,
@@ -393,6 +418,7 @@ export const AutoActions = ({
         templateName: 'Last updated ' + modelName,
         id: 'object_' + modelName + '_lastUpdated',
         defaults: {
+            html: getHTML('lastUpdated'),
             type: "value",
             icon: 'rss',
             name: `lastUpdated ${modelName}`,
@@ -410,6 +436,7 @@ export const AutoActions = ({
         templateName: 'Total ' + plurName,
         id: 'object_' + modelName + '_totalitems',
         defaults: {
+            html: getHTML('totalItems'),
             type: "value",
             icon: 'boxes',
             name: `Total ${plurName}`,
@@ -470,7 +497,7 @@ export const AutoActions = ({
             icon: 'search',
             displayResponse: true,
             name: `list ${modelName}`,
-            ...(object ? { html: "return dataView('" + modelName + "', data.domId)" } : {}),
+            html: getHTML("list", "return dataView('" + (object ?? modelName) + "', data.domId)"),
             type: 'action',
             description: `Returns a list of ${modelName} objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
             params: {
