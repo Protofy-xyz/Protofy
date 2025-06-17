@@ -41,5 +41,44 @@ reactCard(\`
         },
         emitEvent: true,
         token: getServiceToken()
-    })
+    }),
+    context.cards.add({
+    group: 'charts',
+    tag: 'rechart',
+    name: 'bar',
+    id: 'charts_recharts_bar',
+    templateName: "Bar Chart",
+
+    defaults: {
+        width: 4,
+        height: 8,
+        name: "Bar Chart",
+        icon: "bar-chart-3",
+        description: "Displays a bar chart using Recharts",
+        type: 'value',
+        html: `
+reactCard(\`
+  function Widget() {
+    return (
+      <View className="no-drag">
+        <BarChart
+          colors={["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4"]}
+          title={"players score"}
+          id={"algo_random_bar"}
+          data={data.value}
+          dataKey="score"
+          nameKey="name"
+          isAnimationActive={false}
+        />
+      </View>
+    );
+  }
+\`, data.domId)
+        `,
+        rulesCode: ``
+    },
+    emitEvent: true,
+    token: getServiceToken()
+})
+
 }

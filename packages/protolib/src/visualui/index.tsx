@@ -5,7 +5,7 @@ import AnounceBubble from '../components/AnounceBubble'
 import AppBar from '../components/AppBar'
 import AsyncView from '../components/AsyncView'
 import BackgroundGradient from '../components/BackgroundGradient'
-import BarChart from '../components/BarChart'
+import SimpleBarChart from '../components/SimpleBarChart'
 import BigTitle from '../components/BigTitle'
 import BlockTitle from '../components/BlockTitle'
 import ButtonGroup from '../components/ButtonGroup'
@@ -189,7 +189,7 @@ export const miscellanyPalette = {
   ...cw(AppBar, 'CreditCard', 'AppBar'),
   ...cw(AsyncView, 'EyeOff', 'AsyncView', {}, nonDraggable),
   ...cw(BackgroundGradient, 'Scroll', 'BackgroundGradient'),
-  ...cw(BarChart, 'BarChartHorizontalBig', 'BarChart', {
+  ...cw(SimpleBarChart, 'BarChartHorizontalBig', 'SimpleBarChart', {
     data: [
       { color: '$pink9', name: 'one', value: 0.12 },
       { color: '$purple9', name: 'two', value: 0.063 },

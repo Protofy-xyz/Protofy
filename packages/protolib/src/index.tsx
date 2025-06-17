@@ -79,7 +79,7 @@ export { default as AnounceBubble } from "./components/AnounceBubble";
 export * from "./components/UL";
 export * from "./components/ThemeToggle";
 export * from "./components/ErrorBoundary";
-export { default as BarChart } from "./components/BarChart";
+export { default as SimpleBarChart } from "./components/SimpleBarChart";
 export { default as ButtonSimple } from "./components/ButtonSimple";
 export { default as SpotLight } from "./components/SpotLight";
 export * from "./components/FancyCard";
