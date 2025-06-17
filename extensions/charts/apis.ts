@@ -24,10 +24,10 @@ reactCard(\`
             <PieChart
               colors={["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4"]}
               title={"players score"}
-              id={"algo_random"}
+              id={"piechart"}
               data={data.value}
-              dataKey="score"
-              nameKey="name"
+              dataKey={data.params.dataKey}
+              nameKey={data.params.nameKey}
               isAnimationActive={false}
             />
           </View>
@@ -37,8 +37,13 @@ reactCard(\`
 \`, data.domId)
 
             `,
-            rulesCode: ``
+            rulesCode: ``,
+            params: {
+                nameKey: 'name', 
+                dataKey: 'value'
+            },
         },
+
         emitEvent: true,
         token: getServiceToken()
     }),
@@ -64,10 +69,10 @@ reactCard(\`
         <BarChart
           colors={["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4"]}
           title={"players score"}
-          id={"algo_random_bar"}
+          id={"barchart"}
           data={data.value}
-          dataKey="score"
-          nameKey="name"
+          dataKey={data.params.dataKey}
+          nameKey={data.params.nameKey}
           isAnimationActive={false}
         />
       </View>
@@ -75,6 +80,10 @@ reactCard(\`
   }
 \`, data.domId)
         `,
+        params: {
+            nameKey: 'name',
+            dataKey: 'value' 
+        },
         rulesCode: ``
     },
     emitEvent: true,
