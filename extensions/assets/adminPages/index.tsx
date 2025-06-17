@@ -32,6 +32,9 @@ function FilesPage({ initialFilesState, pageSession }: any) {
         explorer={{
           disableNavBar: true,
           getExtendedFileProps: f => ({
+            isDir: false,
+            name: f.name,
+            ext: "",
             thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
           }),
           onFileAction: (data) => {
