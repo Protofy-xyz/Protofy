@@ -8,8 +8,9 @@ function copyFolderStructure(sourceDir, targetDir) {
         return;
     }
 
-    const entries = fs.readdirSync(sourceDir, { withFileTypes: true });
-
+    // .vento is a config folder that should not be copied
+    const entries = fs.readdirSync(sourceDir, { withFileTypes: true }).filter(entry => entry.name != ".vento" );
+    
     for (const entry of entries) {
         const srcPath = path.join(sourceDir, entry.name);
         const destPath = path.join(targetDir, entry.name);
