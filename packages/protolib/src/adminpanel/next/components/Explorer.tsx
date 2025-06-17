@@ -21,7 +21,7 @@ const logger = getLogger()
 setChonkyDefaults({ iconComponent: ChonkyIconFA });
 const filesAtom = createApiAtom([])
 
-export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection, selection, filesState, fileFilter = () => true }: any) => {
+export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection, selection, filesState, fileFilter = () => true, ...props }: any) => {
     const theme = useTheme()
     const fileBrowserRef = useRef<any>()
     const borderColor = theme.color.val.replace(/^#/, '%23')
@@ -235,8 +235,8 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                 folderChain={folderChain}
                                 fileActions={myFileActions}
                             >
-                                <FileNavbar />
-                                <FileToolbar />
+                                {!props.disableNavBar && <FileNavbar />}
+                                {!props.disableFileToolbar && <FileToolbar />}
                                 <FileList onScroll={onScroll} />
                                 {/* <FileContextMenu/> */}
                             </FileBrowser>

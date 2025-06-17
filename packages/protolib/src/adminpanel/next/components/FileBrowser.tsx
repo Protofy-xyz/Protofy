@@ -23,9 +23,10 @@ type FileBrowserProps = {
     onChangeSelection?: Function
     selection?: Function
     fileFilter?: Function
+    explorer?: any
 }
 
-export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter }: FileBrowserProps) => {
+export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter, explorer }: FileBrowserProps) => {
     const router = useRouter()
     const searchParams = useSearchParams();
     const query = Object.fromEntries(searchParams.entries());
@@ -142,6 +143,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
                 onChangeSelection={onChangeSelection}
                 selection={selection}
                 fileFilter={fileFilter}
+                {...explorer}
             />
             <Dialog open={dialogOpen} onOpenChange={(state) => { setDialogOpen(state); setCurrentFile('') }}>
                 <Dialog.Portal>
