@@ -10,7 +10,7 @@
             "name": "discord_message_send",
             "color": "#5865F2",
             "description": "send a discord message to a channel",
-            "rulesCode": "return execute_action(\"/api/core/v1/discord/send/message\", { channelId: userParams.channelId, message: userParams.message, channelName: userParams.channelName });",
+            "rulesCode": "return execute_action(\"/api/v1/discord/send/message\", { channelId: userParams.channelId, message: userParams.message, channelName: userParams.channelName });",
             "params": {
                 "message": "message",
                 "channelName": "channelName"
