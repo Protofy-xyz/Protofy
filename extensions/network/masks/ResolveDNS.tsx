@@ -8,7 +8,7 @@ const resolveDnsMask: MaskDefinition = {
   category: 'Network',
   keywords: ['dns', 'network', 'resolve', 'hostname'],
   context: 'context.network.resolveDNS',
-
+  icon: 'globe',
   params: {
     hostname: {
       type: 'input',

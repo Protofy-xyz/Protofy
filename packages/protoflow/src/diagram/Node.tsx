@@ -89,10 +89,13 @@ const Node = ({ adaptiveTitleSize = true, mode = 'column', draggable = true, ico
             >
                 {icon && flowDirection === 'LEFT' && (
                     <div style={{ display: 'flex' }}>
-                    {React.createElement(icon, {
+                    
+                    {typeof icon !== "string" && React.createElement(icon, {
                         size: titleSize,
                         color: hColor,
                     })}
+
+                    {typeof icon === "string" && <img src={"/public/icons/"+icon+".svg"} style={{ opacity: 0.7, width: titleSize, height: titleSize, color: hColor }} alt="icon" />}
             </div>)}
             {title && (
                 <Text

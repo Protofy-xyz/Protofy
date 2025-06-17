@@ -7,7 +7,6 @@ import {
   restoreObject,
 } from 'protoflow';
 import { useColorFromPalette } from 'protoflow/src/diagram/Theme';
-import { Globe } from '@tamagui/lucide-icons';
 
 /* ────────────────────────────────
  * 1. GenericMask — renderiza un nodo en base
@@ -33,7 +32,7 @@ export type MaskDefinition = {
   id: string;
   from: string;
   title?: string;
-  icon?: React.ComponentType<any>;
+  icon?: string;
   params: Record<string, MaskParam>;
 };
 
@@ -79,7 +78,7 @@ export const buildAutoMask = (
 
 export const GenericMask: React.FC<GenericMaskProps> = ({ node = {}, nodeData = {}, children, def }) => {
   const color = useColorFromPalette(8);
-  const icon = def.icon ?? Globe;
+  const icon = def.icon ?? 'cross';
 
   const paramList = Object.entries(def.params)
     .filter(([, p]) => p.type === 'input' || p.type === 'select')
