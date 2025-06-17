@@ -9,7 +9,7 @@ import baseMasks from '@extensions/basemasks';
 import customEventMasks from '@extensions/events/masks'
 import customMasks from '../masks'
 import automationMasks from '@extensions/automations/masks';
-import resendMasks from '@extensions/resend/masks';
+// import resendMasks from '@extensions/resend/masks';
 import flowMasks from '@extensions/flow/masks';
 import flowMasks2 from '@extensions/flow2/masks';
 import objectMasks from '@extensions/objects/masks';
@@ -51,7 +51,7 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...devicesMasks,
         ...baseMasks.api,
         ...automationMasks,
-        ...resendMasks,
+        // ...resendMasks,
         ...objectMasks,
         ...osMasks,
         ...osMasks2,
