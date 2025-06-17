@@ -22,7 +22,7 @@ function FilesPage({ initialFilesState, pageSession }: any) {
     await API.post("/api/core/v1/assets/install", { assets: selectedFiles.map((f: any) => f.name) });
     setLoading(false);
     setCustomAction(false)
-    toast.show("Assets installed successfully")
+    toast.show("Assets installed successfully. Please refresh the page to see the changes.")
   }
 
   return (
@@ -32,6 +32,9 @@ function FilesPage({ initialFilesState, pageSession }: any) {
         explorer={{
           disableNavBar: true,
           getExtendedFileProps: f => ({
+            isDir: false,
+            name: f.name,
+            ext: "",
             thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
           }),
           onFileAction: (data) => {
