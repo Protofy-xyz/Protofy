@@ -197,6 +197,10 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                             <FileBrowser
                                 ref={fileBrowserRef}
                                 onFileAction={(data) => {
+                                    if (props.onFileAction && typeof props.onFileAction === 'function') {
+                                        const actionRes = props.onFileAction(data);
+                                        if (actionRes === false) return
+                                    }
                                     if (data.id == 'open_files') {
                                         onOpen(data.payload.targetFile)
                                     } else if (data.id == 'upload_files') {

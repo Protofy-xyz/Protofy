@@ -138,7 +138,7 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
             <Explorer
                 currentPath={currentPath}
                 filesState={filesState}
-                customActions={FileActions}
+                customActions={[...FileActions, ...explorer?.extraActions ?? []]}
                 onOpen={onOpen}
                 onChangeSelection={onChangeSelection}
                 selection={selection}
