@@ -1,7 +1,7 @@
 import { handler, AutoAPI, getServiceToken } from 'protonode'
 import fs from 'fs';
 import pm2 from 'pm2';
-import { ServiceModel } from './servicesSchema';
+import { ServiceModel } from './servicesSchemas';
 import { generateEvent } from 'protobase';
 import { generate as uuidv4 } from 'short-uuid'
 

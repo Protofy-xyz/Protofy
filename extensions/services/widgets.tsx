@@ -4,7 +4,7 @@ import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
 import { useState, useEffect } from 'react';
 import { useRemoteStateList } from 'protolib/lib/useRemoteState';
-import { ServiceModel } from './servicesSchema';
+import { ServiceModel } from './servicesSchemas';
 import AsyncView from 'protolib/components/AsyncView';
 import { DashboardCard } from 'protolib/components/DashboardCard';
 import { PieChart } from 'protolib/components/PieChart';
