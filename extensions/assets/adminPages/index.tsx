@@ -31,6 +31,9 @@ function FilesPage({ initialFilesState, pageSession }: any) {
         initialFilesState={initialFilesState}
         explorer={{
           disableNavBar: true,
+          getExtendedFileProps: f => ({
+            thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
+          }),
           onFileAction: (data) => {
             if (data.id == "mouse_click_file") {
               return false

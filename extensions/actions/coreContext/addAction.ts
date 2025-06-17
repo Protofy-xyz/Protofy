@@ -48,7 +48,8 @@ export const addAction = async (options: {
         url: url,
         name: name,
         method: method,
-        ...(receiveBoard && {receiveBoard: receiveBoard})
+        ...(receiveBoard && {receiveBoard: receiveBoard}),
+        token: options.token || null,
     }
     
     if(options.token) {

@@ -63,7 +63,8 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
     const parsedFiles = files && files.data ? files.data.filter(fileFilter).map((f: any) => {
         return {
             ...f,
-            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/api/core/v1/files/' + f.path : undefined
+            thumbnailUrl: (f.name.endsWith('.png') || f.name.endsWith('.jpg') || f.name.endsWith('.jpeg')) ? '/api/core/v1/files/' + f.path : undefined,
+            ...(props.getExtendedFileProps ? props.getExtendedFileProps(f) : {}),
         }
     }) : []
 
