@@ -1,0 +1,7 @@
+{
+  "name": "@extensions/charts",
+  "version": "1.0.0",
+  "dependencies": {
+    "recharts": "^2.12.7"
+  }
+}
