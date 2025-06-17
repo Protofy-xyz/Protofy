@@ -19,12 +19,12 @@ const ChatGPTPrompt = ({ node = {}, nodeData = {}, children }: any) => {
 }
 
 export default {
-    id: 'chatGPT.chatGPTPrompt',
+    id: 'chatgpt.chatGPTPrompt',
     type: 'CallExpression',
     category: "System",
     keywords: ["prompt", "chat", "gpt", "chatgpt", "openai", "ai", "bot"],
     check: (node, nodeData) => {
-        return node.type == "CallExpression" && nodeData.to?.startsWith('context.chatGPT.chatGPTPrompt')
+        return node.type == "CallExpression" && nodeData.to?.startsWith('context.chatgpt.chatGPTPrompt')
     },
     getComponent: (node, nodeData, children) => <ChatGPTPrompt node={node} nodeData={nodeData} children={children} />,
     filterChildren: filterObject({
@@ -67,7 +67,7 @@ export default {
     getInitialData: () => {
         return {
             await: true,
-            to: 'context.chatGPT.chatGPTPrompt',
+            to: 'context.chatgpt.chatGPTPrompt',
             "param-1": {
                 value: "{}",
                 kind: "Identifier"

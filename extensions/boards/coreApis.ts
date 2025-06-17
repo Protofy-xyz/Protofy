@@ -155,7 +155,7 @@ const token = getServiceToken()
 const callModel = async (prompt, context) => {
     let reply;
     if (useChatGPT) {
-        reply = await context.chatGPT.chatGPTPrompt({
+        reply = await context.chatgpt.chatGPTPrompt({
             message: prompt
         })
 
@@ -326,7 +326,7 @@ class HttpError extends Error {
     }
 }
 
-export default (app, context) => {
+export default  async (app, context) => {
     class HttpError extends Error {
         constructor(public status: number, message: string) {
             super(message);
@@ -597,7 +597,7 @@ export default (app, context) => {
             return
         }
 
-        const board = (await API.get(`/api/core/v1/boards/${req.query.board}`)).data
+        const board = (await API.get(`/api/core/v1/boards/${req.query.board}?token=${getServiceToken()}`)).data
         if (!board || !board.cards || !Array.isArray(board.cards)) {
             res.send({ error: "No actions found" });
             return;
@@ -653,7 +653,8 @@ export default (app, context) => {
             prompt: "the message to send"
         },
         emitEvent: true,
-        receiveBoard: true
+        receiveBoard: true,
+        token: await getServiceToken()
     })
 
     addCard({
@@ -674,6 +675,7 @@ export default (app, context) => {
             displayResponse: true
         },
         emitEvent: true,
+        token: await getServiceToken()
     })
 
 
@@ -819,7 +821,8 @@ export default (app, context) => {
                         description: card.description ?? "",
                         params: card.params ?? {},
                         configParams: card.configParams ?? undefined,
-                        emitEvent: i === actionsCards.length - 1
+                        emitEvent: i === actionsCards.length - 1,
+                        token: await getServiceToken()
                     })
                 }
             }
