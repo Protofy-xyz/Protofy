@@ -62,9 +62,9 @@ const decompressAndInstallAsset = async (context, zipFile) => {
 
             await waitForFolderReady(assetPath);
 
-            // await context.os2.deleteFile({
-            //     path: `${assetsDir}/${zipFile}`,
-            // });
+            await context.os2.deleteFile({
+                path: `${assetsDir}/${zipFile}`,
+            });
 
             assets.install(assetName)
         },
