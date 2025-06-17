@@ -105,7 +105,13 @@ const Board = ({ board, icons }) => {
   const darkMode = resolvedTheme == 'dark'
 
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
+
+  //@ts-ignore store the states in the window object to be used in the cards htmls
+  window['protoStates'] = states
+
+  //@ts-ignore store the actions in the window object to be used in the cards htmls
   const actions = useProtoStates({}, 'actions/boards/' + board.name + '/#', 'actions')
+  window['protoActions'] = actions
 
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/core/v1/boards/${board.name}`)

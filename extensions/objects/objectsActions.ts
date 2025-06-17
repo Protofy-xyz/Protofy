@@ -8,6 +8,6 @@ export const ObjectsActions = AutoActions({
     pluralName: 'objects',
     modelType: ObjectModel,
     prefix, //where the API for the actions will be created
-    pageSrc: '/workspace/objects?mode=embed', //what to display to the user in the list view
+    object: 'objects', //what to display to the user in the list view
     apiUrl: '/api/core/v1/objects' //the URL to the API that will be used
 })

@@ -8,6 +8,6 @@ export default AutoActions({
     pluralName: 'events',
     modelType: EventModel,
     prefix, //where the API for the actions will be created
-    pageSrc: '/workspace/events?mode=embed', //what to display to the user in the list view
+    object: 'events', //what to display to the user in the list view
     apiUrl: '/api/core/v1/events' //the URL to the API that will be used
 })

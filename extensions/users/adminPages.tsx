@@ -25,6 +25,70 @@ const UserIcons = { username: Mail, type: Tag, passwod: Key, repassword: Key }
 const sourceUrl = '/api/core/v1/accounts'
 const groupsSourceUrl = '/api/core/v1/groups'
 
+export const UsersView = ({ all, groups, itemData, initialItems, pageState }) => {
+    const getValue = (data) => {
+        const item = groups.data.items.map(obj => obj.name).find(item => item == data)
+        if (!item) {
+            return ''
+        }
+        return item
+    }
+
+    return (
+        <DataView
+            key={all ? 'all' : 'filtered'}
+            enableAddToInitialData
+            entityName={'accounts'}
+            itemData={itemData}
+            rowIcon={User}
+            sourceUrl={sourceUrl}
+            initialItems={initialItems}
+            numColumnsForm={1}
+            name="user"
+            defaultView={'list'}
+            onAdd={data => {
+                if (data.password != data.repassword) {
+                    throw "Passwords do not match"
+                }
+                const { repassword, ...finalData } = data
+                return finalData
+            }}
+            onEdit={data => {
+                if (data.password != data.repassword) {
+                    throw "Passwords do not match"
+                }
+                return data
+            }}
+            customFields={{
+                type: {
+                    component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
+                        //@ts-ignore
+                        f={1}
+                        title={'type'}
+                        elements={groups?.data?.items.map(obj => obj.name).map(item => item)}
+                        value={getValue(data)}
+                        setValue={(v) => setData(v)}
+                    /> : false
+                }
+            }}
+            columns={DataTable2.columns(
+                DataTable2.column("email", row => row.username, "username"),
+                DataTable2.column("type", row => row.type, "tyoe", row => <Chip text={row.type?.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
+                DataTable2.column("from", row => row.from, "from", row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
+                DataTable2.column("created", row => row.createdAt, "createdAt", row => moment(row.createdAt).format(format)),
+                DataTable2.column("last login", row => row.lastLogin, "lastLogin", row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
+            )}
+            extraFieldsForms={{
+                repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
+            }}
+            model={UserModel}
+            pageState={pageState}
+            icons={UserIcons}
+            dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
+        />
+    )
+}
+
 export default {
     'users': {
         component: ({ pageState, initialItems, itemData, pageSession, extraData }: any) => {
@@ -32,14 +96,6 @@ export default {
             const [groups, setGroups] = useState(extraData?.groups ?? getPendingResult("pending"))
             const router = useRouter()
             usePendingEffect((s) => { API.get(groupsSourceUrl, s) }, setGroups, extraData?.groups)
-
-            const getValue = (data) => {
-                const item = groups.data.items.map(obj => obj.name).find(item => item == data)
-                if (!item) {
-                    return ''
-                }
-                return item
-            }
 
             usePrompt(() => `At this moment the user is browsing the user management page. The user management page allows to list, create, read, update and delete users and allows to reset the user passwords, chahing the user privileges (admin true/false) and chaing the user types.
             The zod schema for the user object is:
@@ -58,60 +114,17 @@ export default {
                     initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
                 ))
 
-            return (<AdminPage title="Users" pageSession={pageSession}>
-                <DataView
-                    key={all ? 'all' : 'filtered'}
-                    enableAddToInitialData
-                    entityName={'accounts'}
-                    itemData={itemData}
-                    rowIcon={User}
-                    sourceUrl={sourceUrl}
-                    initialItems={initialItems}
-                    numColumnsForm={1}
-                    name="user"
-                    defaultView={'list'}
-                    onAdd={data => {
-                        if (data.password != data.repassword) {
-                            throw "Passwords do not match"
-                        }
-                        const { repassword, ...finalData } = data
-                        return finalData
-                    }}
-                    onEdit={data => {
-                        if (data.password != data.repassword) {
-                            throw "Passwords do not match"
-                        }
-                        // const { repassword, ...finalData } = data
-                        return data
-                    }}
-                    customFields={{
-                        type: {
-                            component: (path, data, setData, mode) => mode == 'add' || mode == 'edit' ? <SelectList
-                                //@ts-ignore
-                                f={1}
-                                title={'type'}
-                                elements={groups?.data?.items.map(obj => obj.name).map(item => item)}
-                                value={getValue(data)}
-                                setValue={(v) => setData(v)}
-                            /> : false
-                        }
-                    }}
-                    columns={DataTable2.columns(
-                        DataTable2.column("email", row => row.username, "username"),
-                        DataTable2.column("type", row => row.type, "tyoe", row => <Chip text={row.type?.toUpperCase()} color={row.type == 'admin' ? '$color5' : '$gray5'} />),
-                        DataTable2.column("from", row => row.from, "from", row => <Chip text={row.from?.toUpperCase()} color={row.from == 'cmd' ? '$blue5' : '$gray5'} />),
-                        DataTable2.column("created", row => row.createdAt, "createdAt", row => moment(row.createdAt).format(format)),
-                        DataTable2.column("last login", row => row.lastLogin, "lastLogin", row => row.lastLogin ? <Chip text={moment(row.lastLogin).format(format)} color={'$gray5'} /> : <Chip text={'never'} color={'$gray5'} />)
-                    )}
-                    extraFieldsForms={{
-                        repassword: z.string().min(6).label('repeat password').after('password').hint('**********').secret()
-                    }}
-                    model={UserModel}
-                    pageState={pageState}
-                    icons={UserIcons}
-                    dataTableGridProps={{ itemMinWidth: 300, spacing: 20 }}
-                />
-            </AdminPage>)
+            return (
+                <AdminPage title="Users" pageSession={pageSession}>
+                    <UsersView
+                        all={all}
+                        groups={groups}
+                        itemData={itemData}
+                        initialItems={initialItems}
+                        pageState={pageState}
+                    />
+                </AdminPage>
+            )
         },
         getServerSideProps: SSR(async (context) => withSession(context, ['admin']))
     }

@@ -466,3 +466,20 @@ const dataView = (object, root) => {
 
 `, root)
 }
+
+const getStates = () => {
+    return window.protoStates || {};
+}
+
+const getActions = () => {
+    return window.protoActions || {};
+}
+const getStorage = (modelName, key = null, defaultValue = {}) => {
+    const currentState = getStates();
+
+    const storage = currentState?.objects[modelName] ?? {}
+    if (key) {
+        return storage[key] ?? defaultValue;
+    }
+    return storage ?? defaultValue;
+}

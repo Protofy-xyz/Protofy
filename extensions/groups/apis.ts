@@ -8,6 +8,6 @@ export default AutoActions({
     pluralName: 'groups',
     modelType: GroupModel,
     prefix, //where the API for the actions will be created
-    pageSrc: '/workspace/groups?mode=embed', //what to display to the user in the list view
+    object: 'groups', //what to display to the user in the list view
     apiUrl: '/api/core/v1/groups' //the URL to the API that will be used
 })
