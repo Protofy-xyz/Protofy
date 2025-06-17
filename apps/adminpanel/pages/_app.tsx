@@ -3,6 +3,7 @@ import { getBaseConfig } from '@my/config'
 setConfig(getBaseConfig("next", process))
 import { AppConfig } from '../conf'
 import getApp from 'app/features/app'
+import { transferExtensionComponents } from 'app/bundles/sharedComponents';
 
 initSchemaSystem()
 
@@ -31,6 +32,7 @@ import { MqttWrapper } from 'protolib/components/MqttWrapper';
 import { API, ProtoModel } from 'protobase'
 import { TransferComponent } from 'protolib/lib/transferComponent';
 
+transferExtensionComponents()
 TransferComponent(Button, 'Button');
 TransferComponent(Text, 'Text');
 TransferComponent(View, 'View');
