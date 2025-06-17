@@ -50,29 +50,29 @@ const waitForFolderReady = async (folderPath, retries = 10, delay = 200) => {
 };
 
 const decompressAndInstallAsset = async (context, zipFile) => {
-        const zipPath = path.join(assetsRoot, zipFile);
-        const assetName = zipFile.replace(".zip", "");
-        const assetPath = path.join(assetsRoot, assetName);
+    const zipPath = path.join(assetsRoot, zipFile);
+    const assetName = zipFile.replace(".zip", "");
+    const assetPath = path.join(assetsRoot, assetName);
 
-        await decompressZip({
-            zipPath,
-            outputPath: assetPath,
-            done: async (outputPath) => {
-                console.log(`Decompressed ${zipFile} to ${outputPath}`);
+    await decompressZip({
+        zipPath,
+        outputPath: assetPath,
+        done: async (outputPath) => {
+            console.log(`Decompressed ${zipFile} to ${outputPath}`);
 
-                await waitForFolderReady(assetPath);
+            await waitForFolderReady(assetPath);
 
-                // await context.os2.deleteFile({
-                //     path: `${assetsDir}/${zipFile}`,
-                // });
+            // await context.os2.deleteFile({
+            //     path: `${assetsDir}/${zipFile}`,
+            // });
 
-                assets.install(assetName)
-            },
-            error: (err) => {
-                console.error(`Error decompressing ${zipFile}:`, err);
-            },
-        });
-    };
+            assets.install(assetName)
+        },
+        error: (err) => {
+            console.error(`Error decompressing ${zipFile}:`, err);
+        },
+    });
+};
 
 export default (app, context) => {
 
@@ -129,6 +129,26 @@ export default (app, context) => {
             },
         })
         // TODO: return all the installed assets
+        res.send({ "result": "All assets installed successfully." });
+    }))
+
+    app.post('/api/core/v1/assets/install', handler(async (req, res, session) => {
+        if (!session || !session.user.admin) {
+            res.status(401).send({ error: "Unauthorized" })
+            return
+        }
+
+        const assetsToInstall = req.body.assets || [];
+
+        if (!Array.isArray(assetsToInstall) || assetsToInstall.length === 0) {
+            res.status(400).send({ error: "No assets provided for installation." });
+            return;
+        }
+
+        for (const asset of assetsToInstall) {
+            assets.install(asset)
+        }
+
         res.send({ "result": "All assets installed successfully." });
     }))
 }
