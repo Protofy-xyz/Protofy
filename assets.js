@@ -48,6 +48,7 @@ function installAsset(assetName) {
 
     copyFolderStructure(sourceDir, targetDir);
     execSync(`yarn`, { stdio: 'inherit' });
+    execSync(`pm2 restart api-dev`, { stdio: 'inherit' });
 }
 
 function packageAsset(assetName) {

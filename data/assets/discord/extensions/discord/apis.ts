@@ -1,5 +1,5 @@
 import { handler } from 'protonode'
-import { getLogger } from 'protobase';
+import { getLogger, getServiceToken } from 'protobase';
 import fs from 'fs';
 import path from 'path';
 import { addAction } from "@extensions/actions/coreContext/addAction";
@@ -15,7 +15,8 @@ const registerActions = async (context) => {
         tag: "send",
         description: "send a discord message to a phone number",
         params: { channelId: "Id of the discord channel. Example: 1265288881511596073", message: "message value to send" },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 }
 
@@ -45,7 +46,8 @@ const registerCards = async (context) => {
             });
             `
         },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 
     addCard({
@@ -62,7 +64,8 @@ const registerCards = async (context) => {
             rulesCode: `return states?.discord?.received?.message?.content`,
             type: 'value'
         },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 
     addCard({
@@ -79,7 +82,8 @@ const registerCards = async (context) => {
             rulesCode: `return states?.discord?.received?.message?.author?.username`,
             type: 'value'
         },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 
     addCard({
@@ -96,7 +100,8 @@ const registerCards = async (context) => {
             rulesCode: `return states?.discord?.received?.message?.channelName`,
             type: 'value'
         },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 
     addCard({
@@ -114,7 +119,8 @@ const registerCards = async (context) => {
             params: { channelId: "channelId", message: "message", channelName: "channelName" },
             type: 'action'
         },
-        emitEvent: true
+        emitEvent: true,
+        token: await getServiceToken()
     })
 }
 
@@ -176,7 +182,6 @@ const connectDiscord = async (context) => {
 }
 
 export default async (app, context) => {
-
     // timeout required to connect successfully
     setTimeout(async () => {
         connectDiscord(context)
