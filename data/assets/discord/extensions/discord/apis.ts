@@ -125,7 +125,6 @@ const registerCards = async (context) => {
 }
 
 const registerActionsAndCards = async (context) => {
-    console.log("DEV: Registering Discord actions and cards...")
     registerActions(context)
     registerCards(context)
 }
@@ -183,8 +182,6 @@ const connectDiscord = async (context) => {
 }
 
 export default async (app, context) => {
-    console.log("DEV: 111111111 Registering Discord actions and cards...")
-
     // timeout required to connect successfully
     setTimeout(async () => {
         connectDiscord(context)
