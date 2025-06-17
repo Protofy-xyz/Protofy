@@ -1,6 +1,10 @@
-import { ProtoModel, Schema, optional, z, SessionDataType } from 'protobase'
+import { ProtoModel, Schema, optional, z, SessionDataType, Protofy } from 'protobase'
 
-export const PageSchema = Schema.object({
+Protofy("features", {
+    "adminPage": "/pages"
+})
+
+export const PageSchema = Schema.object(Protofy("schema", {
     name: z.string().search().id(),
     route: z.string().search(),
     permissions: z.array(z.string()).label("Permissions").generate(() => []),
@@ -15,7 +19,12 @@ export const PageSchema = Schema.object({
         electron: z.string().optional(),
         mobile: z.string().optional()
     }).optional().hidden()
-}) 
+}))
+
+Protofy("api", {
+    "name": "pages",
+    "prefix": "/api/core/v1/"
+})
 
 export type PageType = z.infer<typeof PageSchema>;
 
