@@ -20,18 +20,17 @@ use the chat if in doubt
 
 import { getAuth, getServiceToken } from "protonode";
 import { API, Protofy, getLogger } from "protobase";
-import { APIContext } from "protolib/bundles/apiContext"
 import { Application } from 'express';
 import fs from 'fs'
 import path from "path";
-import { getKey } from "protolib/bundles/keys/context";
+import { getKey } from "@extensions/keys/coreContext";
 
 const root = path.join(process.cwd(), '..', '..')
 const logger = getLogger()
 
 Protofy("type", "CustomAPI")
 
-export default Protofy("code", async (app: Application, context: typeof APIContext) => {
+export default Protofy("code", async (app: Application, context) => {
     const GUILD_ID = await getKey({ key: "DISCORD_GUILD_ID", token: getServiceToken() }) ?? process.env.DISCORD_GUILD_ID;
     const CLIENT_ID = await getKey({ key: "DISCORD_CLIENT_ID", token: getServiceToken() }) ?? process.env.DISCORD_CLIENT_ID;
     const DISCORD_APP_TOKEN = await getKey({ key: "DISCORD_APP_TOKEN", token: getServiceToken() }) ?? process.env.DISCORD_APP_TOKEN;
