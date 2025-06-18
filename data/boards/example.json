@@ -1,0 +1,312 @@
+{
+    "name": "Example",
+    "cards": [
+        {
+            "key": "value_1750203093478",
+            "width": 4,
+            "height": 8,
+            "icon": "circle-gauge",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n      <View className=\"no-drag\">\n        <RadialBarChart\n          colors={chartColors}\n          title={\"Progress per category\"}\n          id={\"radialbarchart\"}\n          data={data.value}\n          dataKey={data.params.dataKey}\n          nameKey={data.params.nameKey}\n          isAnimationActive={false}\n          startAngle={data.params.startAngle}\n          endAngle={data.params.endAngle}\n          displayLegend={data.params.displayLegend}\n          aspect={aspect}\n        />\n      </View>\n    );\n  }\n`, data.domId)\n    ",
+            "name": "Radial Bar Chart",
+            "description": "Displays a radial bar chart using Recharts",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score",
+                "displayLegend": "false",
+                "startAngle": "90",
+                "endAngle": "-270",
+                "aspect": "1.7"
+            },
+            "rulesCode": "return states.objects.players.lastEntries"
+        },
+        {
+            "key": "value_1750205567388",
+            "width": 4,
+            "height": 8,
+            "icon": "chart-pie",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n          <View className=\"no-drag\">\n            <PieChart\n              colors={chartColors}\n              title={\"players score\"}\n              id={\"piechart\"}\n              data={data.value}\n              dataKey={data.params.dataKey}\n              nameKey={data.params.nameKey}\n              isAnimationActive={false}\n              aspect={aspect}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n            ",
+            "name": "Pie Chart",
+            "description": "Displays a pie chart using Recharts",
+            "type": "value",
+            "rulesCode": "return states.objects.players.lastEntries",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score"
+            }
+        },
+        {
+            "key": "value_1750207235370",
+            "width": 4,
+            "height": 8,
+            "icon": "chart-column",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n      <View className=\"no-drag\">\n        <BarChart\n          colors={chartColors}\n          title={\"players score\"}\n          id={\"barchart\"}\n          data={data.value}\n          dataKey={data.params.dataKey}\n          nameKey={data.params.nameKey}\n          isAnimationActive={false}\n          aspect={aspect}\n        />\n      </View>\n    );\n  }\n`, data.domId)\n        ",
+            "name": "Bar Chart",
+            "description": "Displays a bar chart using Recharts",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score"
+            },
+            "rulesCode": "return states.objects.players.lastEntries"
+        },
+        {
+            "key": "value_1750208012341",
+            "width": 4,
+            "height": 8,
+            "icon": "chart-network",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n      <View className=\"no-drag\">\n        <RadarChart\n          colors={[\"#8884d8\", \"#82ca9d\"]}\n          id={\"radarchart\"}\n          data={data.value}\n          dataKey={data.params.dataKey}\n          nameKey={data.params.nameKey}\n          isAnimationActive={false}\n          aspect={aspect}\n          colors={chartColors}\n          color={chartColors[1]}\n        />\n      </View>\n    );\n  }\n`, data.domId)\n    ",
+            "name": "Radar Chart",
+            "description": "Displays a radar chart using Recharts",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score"
+            },
+            "rulesCode": "return states.objects.players.lastEntries"
+        },
+        {
+            "key": "value_1750208806989",
+            "width": 4,
+            "height": 8,
+            "icon": "chart-area",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n      <View className=\"no-drag\">\n        <AreaChart\n          colors={chartColors}\n          color={chartColors[0]}\n          title={\"players score\"}\n          id={\"areachart\"}\n          data={data.value}\n          dataKey={data.params.dataKey}\n          nameKey={data.params.nameKey}\n          isAnimationActive={false}\n          aspect={aspect}\n        />\n      </View>\n    );\n  }\n`, data.domId)\n    ",
+            "name": "Area Chart",
+            "description": "Displays an area chart using Recharts",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score"
+            },
+            "rulesCode": "return states.objects.players.lastEntries"
+        },
+        {
+            "key": "value_1750209418277",
+            "width": 4,
+            "height": 8,
+            "icon": "chart-line",
+            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n      <View className=\"no-drag\">\n        <LineChart\n          colors={chartColors}\n          color={chartColors[2]}\n          title={\"players score\"}\n          id={\"linechart\"}\n          data={data.value}\n          dataKey={data.params.dataKey}\n          nameKey={data.params.nameKey}\n          isAnimationActive={false}\n          aspect={aspect}\n        />\n      </View>\n    );\n  }\n`, data.domId)\n        ",
+            "name": "Line Chart",
+            "description": "Displays a line chart using Recharts",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "score"
+            },
+            "rulesCode": "return states.objects.players.lastEntries"
+        },
+        {
+            "key": "action_1750209841887",
+            "width": 2,
+            "height": 6,
+            "icon": "search",
+            "html": "return dataView('players', data.domId)",
+            "displayResponse": true,
+            "name": "list players",
+            "type": "action",
+            "description": "Returns a list of players objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.",
+            "params": {
+                "itemsPerPage": "number of items per page (optional)",
+                "page": "page number to retrieve (optional)",
+                "search": "search term to filter the results (optional)",
+                "orderBy": "field to order the results by (optional)",
+                "orderDirection": "direction to order the results by (asc or desc) (optional)"
+            },
+            "rulesCode": "return execute_action(\"/api/v1/actions/players/list\", userParams)"
+        },
+        {
+            "key": "value_1750210052045",
+            "width": 2,
+            "height": 6,
+            "icon": "table-properties",
+            "html": "reactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            {/* you can use data.value here to access the value */}\n            <center><Text></Text></center>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            "name": "",
+            "description": "Display a React component",
+            "type": "value"
+        },
+        {
+            "key": "value_1750210128858",
+            "width": 2,
+            "height": 6,
+            "icon": "table-properties",
+            "html": "reactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            {/* you can use data.value here to access the value */}\n            <center><Text>Vento</Text></center>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            "name": "",
+            "description": "Display a React component",
+            "type": "value"
+        }
+    ],
+    "layouts": {
+        "lg": [
+            {
+                "w": 3,
+                "h": 12,
+                "x": 6,
+                "y": 0,
+                "i": "value_1750203093478",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 3,
+                "h": 12,
+                "x": 0,
+                "y": 0,
+                "i": "value_1750205567388",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 3,
+                "h": 15,
+                "x": 3,
+                "y": 0,
+                "i": "value_1750207235370",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 3,
+                "h": 13,
+                "x": 0,
+                "y": 12,
+                "i": "value_1750208012341",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 4,
+                "h": 10,
+                "x": 3,
+                "y": 15,
+                "i": "value_1750208806989",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 3,
+                "h": 12,
+                "x": 9,
+                "y": 0,
+                "i": "value_1750209418277",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 5,
+                "h": 11,
+                "x": 7,
+                "y": 14,
+                "i": "action_1750209841887",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 5,
+                "h": 2,
+                "x": 7,
+                "y": 12,
+                "i": "value_1750210052045",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 3,
+                "x": 6,
+                "y": 12,
+                "i": "value_1750210128858",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            }
+        ],
+        "md": [
+            {
+                "i": "value_1750203093478",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750205567388",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750207235370",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750208012341",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750208806989",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750209418277",
+                "x": 0,
+                "y": 0,
+                "w": 4,
+                "h": 8,
+                "isResizable": true
+            },
+            {
+                "i": "action_1750209841887",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750210052045",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "value_1750210128858",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            }
+        ],
+        "sm": []
+    },
+    "autopilot": false,
+    "rules": [
+        "ejecuta la accion list"
+    ],
+    "rulesCode": "execute_action(\"/api/core/v1/boards/test/actions/list\", {});"
+}
