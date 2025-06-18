@@ -32,12 +32,12 @@ const FirstSlide = ({ selected, setSelected, options }) => {
       <XStack pb={8} mt={-15} mb={15} position="relative">
         <Search pos="absolute" left="$3" top={14} size={16} pointerEvents="none" />
         <Input
-          bg="$gray1"
+          bg="$gray3"
           color="$gray12"
           paddingLeft="$7"
-          bw={0}
+          bw={themeName === 'dark' ? 0 : 1}
           h="47px"
-          boc="$gray6"
+          boc={'$gray5'}
           w="100%"
           placeholder="search..."
           placeholderTextColor="$gray9"
@@ -47,7 +47,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
         />
       </XStack>
 
-      <ScrollView mah="500px" minHeight={500}>
+      <ScrollView mah="800px" h="50vh">
         <SelectGrid>
           {filteredOptions.map((option) => (
             <Tinted>
@@ -98,7 +98,7 @@ const iconTable = {
 }
 
 const SecondSlide = ({ card, selected, states, icons, actions, setCard }) => {
-  return <YStack mb={"$4"}>
+  return <YStack mb={"$4"} f={1} mah="1200px" h="64vh">
     {card?.type == "value" ?
       <ValueCardSettings states={states} icons={icons} card={card} onEdit={(data) => {
         setCard(data)
@@ -192,9 +192,9 @@ export const CardSelector = ({ defaults = {}, addOpened, setAddOpened, onFinish,
     description={""}
   >
     <YStack f={1} jc="center" ai="center" >
-      <XStack mr="$5" >
+      <XStack mr="$5">
         <Slides
-          styles={{ w: 1400, mah: "100vh" }}
+          styles={{ w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
           lastButtonCaption="Create"
           onFinish={async () => {
             await onFinish(card)
