@@ -12,7 +12,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   //@ts-ignore
   const SessionInfo = dynamic(() => import('./SessionInfo'), { ssr: false })
 
-  const projectName = SiteConfig.projectName ?? 'Protofy'
+  const projectName = SiteConfig.projectName ?? 'Vento'
 
   const [showMenu, setShowMenu] = useState(false)
   useEffect(() => {

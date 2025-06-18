@@ -31,9 +31,9 @@ export const AppConfContext = createContext<SiteConfigType>({
     SSR: false,
     useLocalDocumentation: false,
     signupEnabled: false,
-    defaultWorkspacePage: 'events',
+    defaultWorkspacePage: 'boards',
     assistant: true,
-    projectName: 'Protofy',
+    projectName: 'Vento',
     bundles: {
         flowsMenu: {
             getFlowsMenuConfig: (path: string, queryParams: {}) => {}

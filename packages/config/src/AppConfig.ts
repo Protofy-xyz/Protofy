@@ -9,7 +9,7 @@ const SiteConfig = {
     signupEnabled: false,
     defaultWorkspacePage: 'dashboard',
     assistant: true,
-    projectName: 'Protofy',
+    projectName: 'Vento',
     ui: {
         defaultTint: 'green', // 'gray', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'red'
         tintSwitcher: true,
