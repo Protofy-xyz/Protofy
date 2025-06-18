@@ -15,5 +15,5 @@ export const context = {
     onRender,
     actionNavigate,
     ...deviceContext,
-    twilio
+    // twilio
 }
