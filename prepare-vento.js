@@ -112,3 +112,22 @@ execSync(gitFetchCommand, (error, stdout, stderr) => {
     }
     console.log(`Git fetch stdout: ${stdout}`);
 });
+
+//remove unnecesary dependencies from node_modules:
+const dependenciesToRemove = [
+    'electron',
+    'electron-builder',
+    'electron-publish',
+    'electron-to-chromium',
+    'app-builder-bin'
+];
+
+dependenciesToRemove.forEach(dep => {
+    const depPath = path.join(__dirname, 'node_modules', dep);
+    if (fs.existsSync(depPath)) {
+        rimraf.sync(depPath);
+        console.log(`Removed ${dep} from node_modules`);
+    } else {
+        console.log(`${dep} not found in node_modules`);
+    }
+});
