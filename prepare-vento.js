@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
-const { exec } = require('child_process');
+const { execSync } = require('child_process');
 
 const packageVentoPath = path.join(__dirname, 'package-vento.json');
 const packagePath = path.join(__dirname, 'package.json');
@@ -24,7 +24,7 @@ if (fs.existsSync(nodeModulesPath)) {
 }
 
 //run yarn
-exec('yarn', (error, stdout, stderr) => {
+execSync('yarn', (error, stdout, stderr) => {
     if (error) {
         console.error(`Error executing yarn: ${error.message}`);
         return;
@@ -87,7 +87,7 @@ if (fs.existsSync(gitRefsPath)) {
 
 //run git init
 const gitInitCommand = 'git init';
-exec(gitInitCommand, (error, stdout, stderr) => {
+execSync(gitInitCommand, (error, stdout, stderr) => {
     if (error) {
         console.error(`Error executing git init: ${error.message}`);
         return;
@@ -101,7 +101,7 @@ exec(gitInitCommand, (error, stdout, stderr) => {
 
 //run git fetch --depth=1 origin main
 const gitFetchCommand = 'git fetch --depth=1 origin main';
-exec(gitFetchCommand, (error, stdout, stderr) => {
+execSync(gitFetchCommand, (error, stdout, stderr) => {
     if (error) {
         console.error(`Error executing git fetch: ${error.message}`);
         return;
