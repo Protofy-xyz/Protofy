@@ -4,7 +4,7 @@ import { useWorkspaces, useUserSettings } from '../lib/useSession';
 import { PanelMenu } from './PanelMenu';
 import { MainPanel } from './MainPanel';
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity } from '@tamagui/lucide-icons'
+import { Activity, Globe } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai';
 import { useContext, useEffect, useState } from 'react'
 import { atomWithStorage } from 'jotai/utils'
@@ -13,6 +13,7 @@ import { API } from 'protobase'
 import useSubscription from '../lib/mqtt/useSubscription'
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { useWorkspace } from '../lib/useWorkspace';
+import { isElectron } from '../lib/isElectron'
 
 const WorkspaceSelector = () => {
   const workspaces = useWorkspaces()
@@ -111,6 +112,7 @@ export const AdminPanel = ({ children }) => {
         <>
           <XStack ai="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
+            {isElectron?<InteractiveIcon $xs={{ display: "none" }} onPress={() => window.open("http://localhost:8000", "_blank")} IconColor="var(--color)" Icon={Globe}></InteractiveIcon>:null}
             {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
           </XStack>
         </>
