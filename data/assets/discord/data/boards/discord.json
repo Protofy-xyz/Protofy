@@ -2,8 +2,16 @@
     "name": "discord",
     "cards": [
         {
+            "key": "value_1749134314960",
+            "width": 10,
+            "height": 4,
+            "icon": "tag",
+            "html": "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n       <div> Note: Add DISCORD_APP_TOKEN, DISCORD_CLIENT_ID & DISCORD_GUILD_ID on \"keys\" to add Discord Bot support.</div> \n    `\n});\n",
+            "type": "value"
+        },
+        {
             "key": "action_1749132125008",
-            "width": 6,
+            "width": 5,
             "height": 3,
             "icon": "discord",
             "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
@@ -28,23 +36,15 @@
             }
         },
         {
-            "key": "value_1749134252222",
-            "width": 3,
-            "height": 9,
+            "key": "value_1750215476319",
+            "width": 5,
+            "height": 3,
             "icon": "discord",
             "html": "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value })}\n    `\n});\n",
-            "name": "discord_last_received_message_from",
+            "name": "discord_last_received_message_content",
             "color": "#5865F2",
-            "description": "discord last received message from",
-            "rulesCode": "return states?.discord?.received?.message?.author?.username",
-            "type": "value"
-        },
-        {
-            "key": "value_1749134314960",
-            "width": 3,
-            "height": 9,
-            "icon": "tag",
-            "html": "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n       <div> Note: Add DISCORD_APP_TOKEN, DISCORD_CLIENT_ID & DISCORD_GUILD_ID on \"keys\" to add Discord Bot support.</div> \n    `\n});\n",
+            "description": "discord last received message",
+            "rulesCode": "return states?.discord?.received?.message?.content",
             "type": "value"
         }
     ],

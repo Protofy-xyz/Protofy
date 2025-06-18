@@ -28,8 +28,8 @@ export const DefaultLayout = React.forwardRef((props: {
         <HeaderMenuContent />
       </HeaderMenu>} />
     </AppBar>}
-    title="Protofy"
-    description="Protofy"
+    title="Vento"
+    description="Vento: natural language machine automation platform"
     openGraph={{
       type: 'website',
       locale: 'en_US',

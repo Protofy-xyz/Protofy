@@ -10,7 +10,7 @@ const minimist = require('minimist');
 const args = minimist(process.argv.slice(1));
 const isDev = args.dev || false;
 const isFullDev = args.coredev || false;
-const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/dashboard';
+const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/boards';
 const fullscreen = args.fullscreen || false;
 
 // 🔧 Setear NODE_ENV solo si no estaba seteado ya

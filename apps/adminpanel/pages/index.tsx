@@ -1,4 +1,4 @@
-import DashboardPage from '@extensions/dashboard/adminPages'
+import DashboardPage from '@extensions/boards/adminPages'
 import Head from 'next/head'
 import { SiteConfig } from 'app/conf'
 
@@ -10,7 +10,7 @@ export default function Page(props:any) {
       <Head>
         <title>{projectName + " - Dashboard"}</title>
       </Head>
-      <DashboardPage.dashboard.component {...props} />
+      <DashboardPage.boards.component {...props} />
     </>
   )
 }

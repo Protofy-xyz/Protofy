@@ -25,7 +25,7 @@ export const BarChart: React.FC<BarChartProps> = ({
 }) => {
     return (
         <YStack flex={1}>
-            {data && data.length > 0 ? (
+            {Array.isArray(data) && data.length > 0 ? (
                 <ResponsiveContainer aspect={parseFloat(aspect)}>
                     <BarChartR data={data}>
                         <XAxis dataKey={nameKey} />

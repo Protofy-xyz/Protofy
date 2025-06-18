@@ -2,7 +2,7 @@
 const path = require('path')
 const fs = require('fs')
 const Module = require('module')
-const MONOREPO_ROOT = path.resolve(__dirname, '../../../../')
+const MONOREPO_ROOT = path.resolve(__dirname, '../../project')
 const ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
 const NODE_MODULES_PATH = path.join(MONOREPO_ROOT, 'node_modules')
 
