@@ -1,9 +1,8 @@
-import { chatGPTPrompt } from "./coreContext"
+import { chatGPTPrompt, getChatGPTApiKey} from "./coreContext"
 import { addAction } from "@extensions/actions/coreContext/addAction";
 import { addCard } from "@extensions/cards/coreContext/addCard";
 import { getLogger, getServiceToken } from 'protobase';
 import { handler } from 'protonode'
-
 
 
 export default (app, context) => {
@@ -32,7 +31,7 @@ export default (app, context) => {
             defaults: {
                 name: "chatGPT_last_chat_response",
                 icon: "openai",
-                color: "#FFFFFF",
+                color: "#74AA9C",
                 description: "chatGPT last chat response",
                 rulesCode: `return states?.chatGPT?.conversation?.chatResponse`,
                 type: 'value',
@@ -59,7 +58,7 @@ export default (app, context) => {
         defaults: {
             name: "chatGPT_message_send",
             icon: "openai",
-            color: "#FFFFFF",
+            color: "#74AA9C",
             description: "send a message to chatGPT",
             rulesCode: `return execute_action("/api/v1/chatgpt/send/prompt", { message: userParams.message});`,
             params: { message: "message",  },
@@ -80,13 +79,23 @@ export default (app, context) => {
             res.status(400).send({ error: "Message parameter is required" });
             return;
         }
+
+        try{
+            await getChatGPTApiKey()
+        }catch(err){
+            res.json({ error: "Failed to retrieve ChatGPT API key. Please check your configuration." });
+            return;
+        }
+
         chatGPTPrompt({
             message: message, done: (response, msg) => {
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "userMessage", value: message, emitEvent: true });
-                context.state.set({ group: 'chatGPT', tag: "conversation", name: "chatResponse", value: msg, emitEvent: true });                
+                context.state.set({ group: 'chatGPT', tag: "conversation", name: "chatResponse", value: msg, emitEvent: true });
+            },error: (err)=>{
+                context.state.set({ group: 'chatGPT', tag: "conversation", name: "chatResponse", value: err || "An error occurred", emitEvent: true });
             }
         })
-        res.json({ success: true, message: "Prompt sent to ChatGPT" });
+        res.json({ message: "Prompt sent to ChatGPT" });
     }))
     registerActions(context);
     registerCards(context);
