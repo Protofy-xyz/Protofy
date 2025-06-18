@@ -77,8 +77,6 @@
     "adm-zip": "^0.5.16",
     "async": "3.2.5",
     "check-dependency-version-consistency": "^4.1.0",
-    "electron": "29.4.6",
-    "electron-builder": "24.13.3",
     "eslint": "^9.3.0",
     "fdir": "6.1.1",
     "glob": "^10.3.10",
