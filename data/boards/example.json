@@ -1,5 +1,6 @@
 {
     "name": "example",
+    "icon": "chart-pie",
     "cards": [
         {
             "key": "value_1750203093478",
