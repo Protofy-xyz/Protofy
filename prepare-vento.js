@@ -52,6 +52,13 @@ if (fs.existsSync(outPath)) {
     console.log('out directory in apps/adminpanel has been removed');
 }
 
+//remove .yarn/cache
+const yarnCachePath = path.join(__dirname, '.yarn', 'cache');
+if (fs.existsSync(yarnCachePath)) {
+    rimraf.sync(yarnCachePath);
+    console.log('.yarn/cache directory has been removed');
+}
+
 
 //check if its running on windows and remove bin/node-linux and bin/node-macos
 const binPathLinux = path.join(__dirname, 'bin', 'node-linux');
