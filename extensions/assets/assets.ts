@@ -32,7 +32,7 @@ function copyFolderStructure(sourceDir, targetDir) {
     }
 }
 
-function installAsset(assetName) {
+export function installAsset(assetName) {
     if (!assetName) {
         console.error('Please provide the asset name as an argument.');
         process.exit(1);
@@ -51,28 +51,6 @@ function installAsset(assetName) {
     execSync(`pm2 restart api-dev`, { stdio: 'inherit' });
 }
 
-function packageAsset(assetName) {
+export function packageAsset(assetName) {
 
 }
-
-// check if directly run or is a module
-if (require.main === module) {
-    const command = process.argv[2];
-    const assetName = process.argv[3];
-
-    if (!assetName) {
-        console.error('Please provide the asset name as an argument.');
-        process.exit(1);
-    }
-
-    if (command == 'install') {
-        installAsset(assetName);
-    } else if (command === 'package') {
-        packageAsset(assetName);
-    }
-}
-
-module.exports = {
-    install: installAsset,
-    package: packageAsset
-};

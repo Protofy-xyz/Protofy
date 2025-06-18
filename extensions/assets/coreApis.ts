@@ -4,7 +4,7 @@ import { Application } from "express";
 import * as fs from 'fs';
 import { promises } from 'fs';
 import path from "path";
-import assets from "../../assets"
+import {installAsset} from "./assets"
 import AdmZip from 'adm-zip';
 
 const root = path.join(process.cwd(), "..", "..");
@@ -66,7 +66,7 @@ const decompressAndInstallAsset = async (context, zipFile) => {
                 path: `${assetsDir}/${zipFile}`,
             });
 
-            assets.install(assetName)
+            installAsset(assetName)
         },
         error: (err) => {
             console.error(`Error decompressing ${zipFile}:`, err);
@@ -124,7 +124,7 @@ export default (app, context) => {
                 console.log("Assets after decompression:", list);
 
                 for (const asset of list) {
-                    assets.install(asset)
+                    installAsset(asset)
                 }
             },
         })
@@ -146,7 +146,7 @@ export default (app, context) => {
         }
 
         for (const asset of assetsToInstall) {
-            assets.install(asset)
+            installAsset(asset)
         }
 
         res.send({ "result": "All assets installed successfully." });
