@@ -10,6 +10,7 @@
     "packages/config",
     "packages/protobase",
     "packages/protodevice",
+    "packages/protonode",
     "extensions/*",
     "scripts"
   ],
