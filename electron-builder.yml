@@ -1,6 +1,8 @@
-appId: com.example.protofy
-productName: Protofy
-executableName: Protofy
+appId: com.protofy.vento
+productName: Vento
+executableName: Vento
+directories:
+  output: ../dist
 mac:
   target:
     - target: dir
