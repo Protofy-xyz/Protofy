@@ -13,9 +13,6 @@ if (fs.existsSync(packageVentoPath)) {
     // Write the contents to package.json
     fs.writeFileSync(packagePath, packageVentoContent, 'utf8');
     console.log('package-vento.json has been moved to package.json');
-    // Remove package-vento.json
-    fs.unlinkSync(packageVentoPath);
-    console.log('package-vento.json has been removed');
 }
 
 // Remove node_modules directory
