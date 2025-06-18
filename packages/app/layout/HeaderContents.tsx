@@ -2,8 +2,8 @@ import { HeaderContents as ProtoHeaderContents, HeaderContentsProps } from 'prot
 import { HeaderLink } from 'protolib/components/HeaderLink'
 import { isElectron } from 'protolib/lib/isElectron'
 import { Tinted } from 'protolib/components/Tinted'
-import { Text } from '@my/ui'
-import { Paragraph, XStack } from '@my/ui';
+import { Text, useThemeName } from '@my/ui'
+import { Paragraph, XStack, Image } from '@my/ui';
 import dynamic from 'next/dynamic';
 import { SiteConfig } from '../conf';
 import { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   const SessionInfo = dynamic(() => import('./SessionInfo'), { ssr: false })
 
   const projectName = SiteConfig.projectName ?? 'Vento'
+  const themeName = useThemeName()
 
   const [showMenu, setShowMenu] = useState(false)
   useEffect(() => {
@@ -22,7 +23,15 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   }, []);
 
   return <ProtoHeaderContents
-    logo={<Paragraph mr={"$2"}><Text fontSize={20} fontWeight={"400"}>{props.headerTitle ?? projectName}</Text></Paragraph>}
+    logo={<Image
+      key={themeName}
+      style={{ filter: themeName?.startsWith("dark") ? "invert(70%) brightness(10)" : "invert(5%)", marginLeft: -20 }}
+      src={"/public/vento-logo.png"}
+      alt="Logo"
+      width={170}
+      height={50} 
+      resizeMode='contain'
+    />}
     rightArea={<XStack ai="center">
       {props.topBar}
       {showMenu && <XStack $xs={{ display: 'none' }}>
