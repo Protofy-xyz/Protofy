@@ -1,4 +1,3 @@
-
 const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     return `
         <div style="
@@ -485,4 +484,46 @@ const getStorage = (modelName, key = null, defaultValue = {}) => {
         return storage[key] ?? defaultValue;
     }
     return storage ?? defaultValue;
+}
+
+const getCardAspectRatio = (id) => {
+    const div = document.getElementById(id)
+    if (div) {
+        const rect = div.getBoundingClientRect();
+        const width = rect.width;
+        const height = rect.height;
+
+        const aspectRatio = width / height;
+
+        return aspectRatio
+    }
+    return 1
+}
+
+function useCardAspectRatio(id) {
+  const [aspectRatio, setAspectRatio] = React.useState(1);
+
+  React.useEffect(() => {
+    const div = document.getElementById(id);
+    if (!div) return;
+
+    const heightError = 20; // margin top
+    const updateAspectRatio = () => {
+      const rect = div.getBoundingClientRect();
+      if (rect.height !== 0) {
+        setAspectRatio(rect.width / (rect.height-heightError));
+      }
+    };
+
+    updateAspectRatio(); // calcular al montar
+
+    const resizeObserver = new ResizeObserver(updateAspectRatio);
+    resizeObserver.observe(div);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [id]);
+
+  return aspectRatio;
 }

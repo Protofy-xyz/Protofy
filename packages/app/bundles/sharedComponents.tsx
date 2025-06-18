@@ -3,12 +3,20 @@ import { UsersView } from '@extensions/users/adminPages';
 import { ServicesView } from '@extensions/services/adminPages';
 import { PieChart } from 'protolib/components/PieChart';
 import { BarChart } from 'protolib/components/BarChart';
+import { LineChart } from 'protolib/components/LineChart';
+import { AreaChart } from 'protolib/components/AreaChart';
+import {RadarChart} from 'protolib/components/RadarChart';
+import { RadialBarChart } from 'protolib/components/RadialBartChart';
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
     TransferComponent(ServicesView, 'ServicesView');
     TransferComponent(PieChart, 'PieChart');
     TransferComponent(BarChart, 'BarChart');
+    TransferComponent(LineChart, 'LineChart');
+    TransferComponent(AreaChart, 'AreaChart');
+    TransferComponent(RadarChart, 'RadarChart');
+    TransferComponent(RadialBarChart, 'RadialBarChart');
 }
 
 

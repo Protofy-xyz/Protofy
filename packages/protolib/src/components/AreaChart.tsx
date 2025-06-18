@@ -1,8 +1,16 @@
 import { YStack, Text } from '@my/ui';
-import { BarChart as BarChartR, Bar, XAxis, YAxis, Tooltip, Legend, Cell, ResponsiveContainer } from 'recharts';
+import {
+    AreaChart as AreaChartR,
+    Area,
+    XAxis,
+    YAxis,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+} from 'recharts';
 import { DashboardCard } from './DashboardCard';
 
-interface BarChartProps {
+interface AreaChartProps {
     title: string;
     id: string;
     data: any[];
@@ -11,35 +19,46 @@ interface BarChartProps {
     colors: string[];
     tooltipFormatter?: (value: number) => string;
     isAnimationActive?: boolean;
-    aspect?:any
+    aspect?: any;
+    color?: string;
 }
 
-export const BarChart: React.FC<BarChartProps> = ({
+export const AreaChart: React.FC<AreaChartProps> = ({
+    title,
+    id,
     data,
     dataKey,
     nameKey,
     colors,
+    color = '#8884d8',
     tooltipFormatter = (value) => `${value} MB`,
     isAnimationActive = false,
-    aspect = 1
+    aspect = 1,
 }) => {
     return (
-        <YStack flex={1}>
-            {data && data.length > 0 ? (
+        <YStack
+            borderRadius={10}
+            backgroundColor="$bgColor"
+            padding={10}
+            flex={1}
+            justifyContent="center"
+            alignItems="center"
+        >
+            {Array.isArray(data) && data.length > 0 ? (
                 <ResponsiveContainer aspect={parseFloat(aspect)}>
-                    <BarChartR data={data}>
+                    <AreaChartR data={data}>
                         <XAxis dataKey={nameKey} />
                         <YAxis />
                         <Tooltip formatter={tooltipFormatter} />
-                        <Bar
+                        {/* <Legend /> */}
+                        <Area
+                            type="monotone"
                             dataKey={dataKey}
+                            stroke={color}
+                            fill={color}
                             isAnimationActive={isAnimationActive}
-                        >
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                            ))}
-                        </Bar>
-                    </BarChartR>
+                        />
+                    </AreaChartR>
                 </ResponsiveContainer>
             ) : (
                 <YStack>

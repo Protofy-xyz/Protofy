@@ -1,10 +1,9 @@
 import { YStack, Text } from '@my/ui';
-import { PieChart as PieChartR, Pie, Tooltip, Cell, Legend } from "recharts";
+import { PieChart as PieChartR, Pie, Tooltip, Cell, Legend, ResponsiveContainer } from "recharts";
 import { DashboardCard } from './DashboardCard';
 
 interface PieChartProps {
     title: string;
-    id: string;
     data: any[];
     dataKey: string;
     nameKey: string;
@@ -12,18 +11,19 @@ interface PieChartProps {
     tooltipFormatter?: (value: number) => string;
     labelFormatter?: (props: any) => React.ReactNode;
     isAnimationActive?: boolean;
+    aspect?: any
 }
 
 export const PieChart: React.FC<PieChartProps> = ({
     title,
-    id,
     data,
     dataKey,
     nameKey,
     colors,
-    tooltipFormatter = (value) => `${value} MB`,
+    tooltipFormatter = (value) => `${value}`,
     labelFormatter,
     isAnimationActive = false,
+    aspect = 1
 }) => {
 
     const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
@@ -39,37 +39,40 @@ export const PieChart: React.FC<PieChartProps> = ({
         );
     };
 
-    return (
-        <DashboardCard title={title} id={id}>
-            <YStack borderRadius={10} backgroundColor="$bgColor" padding={10} flex={1} justifyContent='center' alignItems='center'>
-                {data && data.length > 0 ? (
-                    <PieChartR width={450} height={400}>
-                        <Pie
-                            data={data}
-                            dataKey={dataKey}
-                            nameKey={nameKey}
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={150}
-                            fill="#8884d8"
-                            label={labelFormatter ?? renderCustomizedLabel}
-                            labelLine={false}
-                            isAnimationActive={isAnimationActive}
-                        >
-                            {data.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
-                            ))}
-                        </Pie>
-                        <Tooltip formatter={tooltipFormatter} />
-                        <Legend />
-                    </PieChartR>
-                ) : (
-                    <YStack>
-                        <Text>No data available</Text>
-                    </YStack>
-                )
-                }
-            </YStack>
-        </DashboardCard>
-    );
+    return Array.isArray(data) && data.length > 0 ? (
+        <ResponsiveContainer aspect={parseFloat(aspect)}>
+            <PieChartR>
+                <Pie
+                    data={data}
+                    dataKey={dataKey}
+                    nameKey={nameKey}
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={150}
+                    fill="#8884d8"
+                    label={labelFormatter ?? renderCustomizedLabel}
+                    labelLine={false}
+                    isAnimationActive={isAnimationActive}
+                >
+                    {data.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                    ))}
+                </Pie>
+                <Tooltip formatter={tooltipFormatter} />
+                <Legend
+                    layout="vertical"
+                    verticalAlign="middle"
+                    align="right"
+                    wrapperStyle={{
+                        marginTop: -100, // reduce la separación entre gráfico y leyenda
+                        lineHeight: '20px'
+                    }}
+                />
+            </PieChartR>
+        </ResponsiveContainer>
+    ) : (
+        <YStack>
+            <Text>No data available</Text>
+        </YStack>
+    )
 };

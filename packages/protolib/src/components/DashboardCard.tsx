@@ -38,11 +38,11 @@ export const DashboardCard = ({ children, id, title, cardActions = <></>, titleP
                     {...titleProps}
                 >
                 {title ? (
-                    <Paragraph flex={1} fow="500" textOverflow={"ellipsis"} overflow="hidden" whiteSpace={"nowrap"}fos={"$4"}>{title}</Paragraph>
+                    <Paragraph flex={1} fow="500" textOverflow={"ellipsis"} textAlign="center" overflow="hidden" whiteSpace={"nowrap"}fos={"$4"}>{title}</Paragraph>
                 ) : null}
-                <XStack className="no-drag" f={1} mr="$6" jc="flex-end" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
-                    {cardActions}
-                </XStack>
+                    <XStack position="absolute" right={0} className="no-drag" mr="$6" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
+                        {cardActions}
+                    </XStack>
                 </XStack>}
 
                 <YStack
