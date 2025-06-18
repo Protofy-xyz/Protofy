@@ -5,10 +5,23 @@ import OpenAI from 'openai';
 
 const logger = getLogger()
 
+export const getChatGPTApiKey = async () => {
+    let apiKey = ""
+    try {
+        apiKey = await getKey({ key: "OPENAI_API_KEY", token: getServiceToken() });
+    } catch (err) {
+        const errorMessage = "Error fetching key: " + err;
+        console.error(errorMessage);
+        throw new Error(errorMessage);
+    }
+    return apiKey;
+
+}
+
 export const chatGPTSession = async ({
     apiKey = undefined,
     done = (response, message) => { },
-    chunk = (chunk:any) => { },
+    chunk = (chunk: any) => { },
     error = (error) => { },
     model = "gpt-4o",
     max_tokens = 4096,
@@ -56,18 +69,18 @@ export const chatGPTSession = async ({
         let fullResponse
 
         for await (const currentChunk of stream) {
-            if(!fullResponse) {
+            if (!fullResponse) {
                 fullResponse = Array.from({ length: currentChunk.choices.length }).map(() => "");
             }
             currentChunk.choices.forEach((choice, index) => {
-                if(choice.delta.content){
+                if (choice.delta.content) {
                     fullResponse[index] += choice.delta.content
                 }
             })
             await chunk(currentChunk); // Procesa el fragmento actual si lo necesitas en tiempo real
         }
 
-        done({choices: fullResponse}); // Procesa la respuesta completa
+        done({ choices: fullResponse }); // Procesa la respuesta completa
         return fullResponse;
     } catch (e) {
         logger.error({ error: e.message || e, stack: e.stack }, "Error in chatGPTSession");
@@ -96,6 +109,11 @@ export const chatGPTPrompt = async ({
                 message = response.choices[0]
             }
             if (props.done) props.done(response, message)
+        },
+        error: (err)=>{
+            if(props.error) {
+                props.error(err.message);
+            }
         }
     })
 
