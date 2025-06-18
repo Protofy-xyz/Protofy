@@ -3,7 +3,7 @@ import flow from '@extensions/flow/context'
 import deviceContext from '@extensions/devices/devices/uiContext'
 import object from '@extensions/objects/coreContext'
 import flow2 from '@extensions/flow2/context'
-import twilio from '@extensions/twilio/uiContext'
+// import twilio from '@extensions/twilio/uiContext'
 
 export const context = {
     fetch,
@@ -15,5 +15,5 @@ export const context = {
     onRender,
     actionNavigate,
     ...deviceContext,
-    twilio
+    // twilio
 }

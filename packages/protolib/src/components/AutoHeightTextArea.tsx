@@ -84,9 +84,9 @@ export const AutoHeightTextArea = ({
                 if (speechRecognitionEnabled) {
                     setSpeechRecognitionEnabled(false);
                     SpeechRecognition.stopListening();
-                    resetTranscript();
                     // Stop speech recognition logic here
                 } else {
+                    resetTranscript();
                     setSpeechRecognitionEnabled(true);
                     SpeechRecognition.startListening({ continuous: true });
                     // Start speech recognition logic here

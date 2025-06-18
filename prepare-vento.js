@@ -67,7 +67,7 @@ const removeNonVentoExtensions = (dir, validExtensions) => {
     });
 }
 
-removeNonVentoExtensions(extensionsDir, ventoExtensions);
+// removeNonVentoExtensions(extensionsDir, ventoExtensions);
 removeNonVentoExtensions(appsDir, ventoApps);
 removeNonVentoExtensions(packagesDir, ventoPackages);
 

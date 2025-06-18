@@ -45,6 +45,8 @@ const registerCards = async (context) => {
             templateName: "whatsapp received messages",
             name: "messages",
             defaults: {
+                width: 3,
+                height: 10,
                 name: "whatsapp_received_messages",
                 icon: "whatsapp",
                 color: "#25d366",
@@ -64,6 +66,8 @@ const registerCards = async (context) => {
             templateName: "whatsapp last received message",
             name: "message",
             defaults: {
+                width: 3,
+                height: 10,
                 name: "whatsapp_last_received_message",
                 icon: "whatsapp",
                 color: "#25d366",
@@ -83,6 +87,8 @@ const registerCards = async (context) => {
             templateName: "whatsapp last received message",
             name: "message",
             defaults: {
+                width: 3,
+                height: 10,
                 name: "whatsapp_last_received_message",
                 icon: "whatsapp",
                 color: "#25d366",
@@ -100,6 +106,8 @@ const registerCards = async (context) => {
             templateName: "whatsapp last received message from",
             name: "message_from",
             defaults: {
+                width: 3,
+                height: 10,
                 name: "whatsapp_last_received_message_from",
                 icon: "whatsapp",
                 color: "#25d366",
@@ -122,6 +130,8 @@ const registerCards = async (context) => {
         templateName: "whatsapp send message",
         name: "message_send",
         defaults: {
+            width: 3,
+            height: 10,
             name: "whatsapp_message_send",
             icon: "whatsapp",
             color: "#25d366",
@@ -144,6 +154,8 @@ const registerCards = async (context) => {
         templateName: "whatsapp oboarding qr",
         name: "qr",
         defaults: {
+            width: 3,
+            height: 10,
             name: "whatsapp_onboarding_qr",
             icon: "whatsapp",
             color: "#25d366",

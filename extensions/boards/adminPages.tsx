@@ -7,7 +7,7 @@ import { AdminPage } from "protolib/components/AdminPage"
 import { PaginatedData, SSR } from "protolib/lib/SSR"
 import { withSession } from "protolib/lib/Session"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -345,44 +345,47 @@ const Board = ({ board, icons }) => {
       </XStack>
 
       <CardSelector addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
-
-      <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
-        <Dialog.Portal zIndex={100000} overflow='hidden'>
-          <Dialog.Overlay />
-          <Dialog.Content
-            bordered
-            elevate
-            animateOnly={['transform', 'opacity']}
-            enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
-            exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
-            gap="$4"
-            maxWidth={1400}
-            minWidth={1400}
-            minHeight={750}
-          >
-            <Dialog.Title>Edit</Dialog.Title>
-            {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
-              setEditedCard(data)
-            }} />}
-            {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
-              setEditedCard(data)
-            }} />}
-            <Dialog.Close displayWhenAdapted asChild>
-              <Tinted><TamaButton onPress={async () => {
-                const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
-                setItems(newItems)
-                boardRef.current.cards = newItems
-                await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                setCurrentCard(null)
-                setIsEditing(false)
-                setEditedCard(null)
-              }}>
-                Save
-              </TamaButton></Tinted>
-            </Dialog.Close>
-          </Dialog.Content>
-        </Dialog.Portal>
-      </Dialog>
+      
+      <Theme reset>
+        <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
+          <Dialog.Portal zIndex={100000} overflow='hidden'>
+            <Dialog.Overlay />
+            <Dialog.Content
+              bordered
+              elevate
+              animateOnly={['transform', 'opacity']}
+              enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+              exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+              gap="$4"
+              w={"90vw"}
+              h={"90vh"}
+              mah={1200}
+              maw={1400}
+            >
+              <Dialog.Title>Edit</Dialog.Title>
+              {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+                setEditedCard(data)
+              }} />}
+              {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
+                setEditedCard(data)
+              }} />}
+              <Dialog.Close displayWhenAdapted asChild>
+                <Tinted><TamaButton onPress={async () => {
+                  const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
+                  setItems(newItems)
+                  boardRef.current.cards = newItems
+                  await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                  setCurrentCard(null)
+                  setIsEditing(false)
+                  setEditedCard(null)
+                }}>
+                  Save
+                </TamaButton></Tinted>
+              </Dialog.Close>
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog>
+      </Theme>
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
         p="$5"
