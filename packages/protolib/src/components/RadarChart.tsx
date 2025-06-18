@@ -36,6 +36,8 @@ export const RadarChart: React.FC<RadarChartProps> = ({
   isAnimationActive = false,
   aspect = 1,
 }) => {
+
+  
   return (
       <YStack
         borderRadius={10}
@@ -45,7 +47,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({
         justifyContent="center"
         alignItems="center"
       >
-        {data && data.length > 0 ? (
+        {Array.isArray(data) && data.length > 0 ? (
           <ResponsiveContainer aspect={aspect}>
             <RadarChartR data={data}>
               <PolarGrid />
