@@ -24,7 +24,6 @@ if (fs.existsSync(nodeModulesPath)) {
 }
 
 //run yarn
-const { exec } = require('child_process');
 exec('yarn', (error, stdout, stderr) => {
     if (error) {
         console.error(`Error executing yarn: ${error.message}`);
