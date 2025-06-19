@@ -14,3 +14,8 @@
     }
   });
 })();
+
+const { ipcRenderer } = require('electron');
+window.electronAPI = {
+  openExternal: (url) => ipcRenderer.send('open-external-url', url)
+};

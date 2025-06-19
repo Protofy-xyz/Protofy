@@ -1,5 +1,5 @@
 // 📦 main.js
-const { app, BrowserWindow, session, contextBridge, globalShortcut } = require('electron');
+const { app, BrowserWindow, session, ipcMain, globalShortcut, shell } = require('electron');
 const http = require('http');
 const net = require('net');
 const path = require('path');
@@ -221,4 +221,8 @@ app.whenReady().then(async () => {
     logToRenderer(`❌ Startup failed: ${err.message}`);
     process.exit(1);
   }
+});
+
+ipcMain.on('open-external-url', (_event, url) => {
+  shell.openExternal(url);
 });
