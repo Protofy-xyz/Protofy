@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, shell } = require('electron');
 
 contextBridge.exposeInMainWorld('logAPI', {
   onLog: (callback) => {
@@ -6,4 +6,8 @@ contextBridge.exposeInMainWorld('logAPI', {
       callback(message);
     });
   }
+});
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  openExternal: (url) => shell.openExternal(url)
 });

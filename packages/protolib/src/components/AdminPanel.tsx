@@ -112,7 +112,16 @@ export const AdminPanel = ({ children }) => {
         <>
           <XStack ai="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
-            {isElectron()?<InteractiveIcon $xs={{ display: "none" }} onPress={() => window.open("http://localhost:8000", "_blank")} IconColor="var(--color)" Icon={Globe}></InteractiveIcon>:null}
+            {isElectron() ? (
+              <InteractiveIcon
+                $xs={{ display: "none" }}
+                onPress={() => {
+                  window.electronAPI?.openExternal?.("http://localhost:8000");
+                }}
+                IconColor="var(--color)"
+                Icon={Globe}
+              />
+            ) : null}
             {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
           </XStack>
         </>
