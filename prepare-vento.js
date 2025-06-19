@@ -156,3 +156,49 @@ pathsToCheck.forEach(basePath => {
     }
 });
 
+//copy all folders inside ./extensions to node_modules/@extensions
+const extensionsPath = path.join(__dirname, 'extensions');
+const extensionsNodeModulesPath = path.join(__dirname, 'node_modules', '@extensions');
+if (fs.existsSync(extensionsPath)) {
+    fs.readdirSync(extensionsPath).forEach(folder => {
+        const folderPath = path.join(extensionsPath, folder);
+        const targetPath = path.join(extensionsNodeModulesPath, folder);
+        if (fs.lstatSync(folderPath).isDirectory()) {
+            if (fs.existsSync(targetPath)) {
+                rimraf.sync(targetPath);
+            }
+            fs.mkdirSync(targetPath, { recursive: true });
+            fs.cpSync(folderPath, targetPath, { recursive: true });
+            console.log(`Copied ${folder} to node_modules/@extensions`);
+        }
+    });
+}
+
+//copy packages/* to node_modules
+const packagesPath = path.join(__dirname, 'packages');
+if (fs.existsSync(packagesPath)) {
+    fs.readdirSync(packagesPath).forEach(folder => {
+        const folderPath = path.join(packagesPath, folder);
+        const targetPath = path.join(__dirname, 'node_modules', folder);
+        if (fs.lstatSync(folderPath).isDirectory()) {
+            if (fs.existsSync(targetPath)) {
+                rimraf.sync(targetPath);
+            }
+            fs.mkdirSync(targetPath, { recursive: true });
+            fs.cpSync(folderPath, targetPath, { recursive: true });
+            console.log(`Copied ${folder} to node_modules`);
+        }
+    });
+}
+//copy packages/config to node_modules/@my/config
+const configPath = path.join(__dirname, 'packages', 'config');
+const configNodeModulesPath = path.join(__dirname, 'node_modules', '@my', 'config');
+if (fs.existsSync(configPath)) {
+    if (fs.existsSync(configNodeModulesPath)) {
+        rimraf.sync(configNodeModulesPath);
+    }
+    fs.mkdirSync(configNodeModulesPath, { recursive: true });
+    fs.cpSync(configPath, configNodeModulesPath, { recursive: true });
+    console.log('Copied packages/config to node_modules/@my/config');
+}
+
