@@ -216,8 +216,8 @@ if (fs.existsSync(protobasePath)) {
 }
 
 //remove .env
-const envPath = path.join(__dirname, '.env');
-if (fs.existsSync(envPath)) {
-    fs.unlinkSync(envPath);
-    console.log('.env file has been removed');
-}
+// const envPath = path.join(__dirname, '.env');
+// if (fs.existsSync(envPath)) {
+//     fs.unlinkSync(envPath);
+//     console.log('.env file has been removed');
+// }
