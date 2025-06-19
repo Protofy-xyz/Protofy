@@ -3,6 +3,10 @@ const isFullDev = process.env.FULL_DEV === '1';
 const path = require('path');
 const currentDir = path.dirname(__filename);
 
+const commonEnv = {
+  PATH: `${path.resolve(currentDir, '../../bin')}${path.delimiter}${process.env.PATH}`
+};
+
 module.exports = {
     apps: [
         isFullDev ? {
@@ -14,7 +18,8 @@ module.exports = {
             autorestart: true,
             windowsHide: true,
             env: {
-                NODE_ENV: 'development'
+                NODE_ENV: 'development',
+                ...commonEnv
             },
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",
@@ -30,7 +35,8 @@ module.exports = {
             autorestart: true,
             windowsHide: true,
             env: {
-                NODE_ENV: 'production'
+                NODE_ENV: 'production',
+                ...commonEnv
             },
             cwd: currentDir,
             log_date_format: "YYYY-MM-DD HH:mm:ss",

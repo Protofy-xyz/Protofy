@@ -12,7 +12,7 @@ const baseUrl = `https://nodejs.org/dist/${version}`;
 const targets = {
   win: {
     url: `${baseUrl}/node-${version}-win-x64.zip`,
-    out: 'node-win.exe',
+    out: 'node.exe',
     extract: async (archivePath, outputPath) => {
       const zip = new AdmZip(archivePath);
       const entry = zip.getEntries().find(e => e.entryName.endsWith('node.exe'));

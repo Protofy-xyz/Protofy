@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const pm2 = require('pm2');
 
 function copyFolderStructure(sourceDir, targetDir) {
     if (!fs.existsSync(sourceDir)) {
@@ -35,22 +36,32 @@ function copyFolderStructure(sourceDir, targetDir) {
 export function installAsset(assetName) {
     if (!assetName) {
         console.error('Please provide the asset name as an argument.');
-        process.exit(1);
+        throw new Error('Please provide the asset name as an argument.');
     }
-    const sourceDir = path.join(__dirname, 'data', 'assets', assetName);
+    const sourceDir = path.join(__dirname, '..', '..', 'data', 'assets', assetName);
 
     if (!fs.existsSync(sourceDir)) {
         console.error(`Asset "${assetName}" does not exist in the source directory.`);
-        process.exit(1);
+        throw new Error(`Asset "${assetName}" does not exist in the source directory.`);
     }
 
-    const targetDir = path.join(__dirname);
+    const targetDir = path.join(__dirname, '..', '..');
 
     copyFolderStructure(sourceDir, targetDir);
-    execSync(`yarn`, { stdio: 'inherit' });
-    execSync(`pm2 restart api-dev`, { stdio: 'inherit' });
-}
-
-export function packageAsset(assetName) {
-
+    execSync(`node .yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
+    pm2.connect((err) => {
+        if (err) {
+            console.error('Error connecting to PM2:', err);
+            return;
+        }
+        pm2.restart('api-dev', (err) => {
+            if (err) {
+                console.error('Error restarting api-dev:', err);
+            } else {
+                console.log('api-dev restarted successfully.');
+            }
+            pm2.disconnect();
+        });
+    })
+    //execSync(`pm2 restart api-dev`, { stdio: 'inherit' });
 }

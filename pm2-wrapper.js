@@ -4,7 +4,7 @@ const path = require('path');
 process.chdir(__dirname);
 
 const platformBin = {
-  win32: 'node-win.exe',
+  win32: 'node.exe',
   linux: 'node-linux',
   darwin: 'node-macos',
 };
