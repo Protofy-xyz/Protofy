@@ -12,6 +12,13 @@ const isDev = args.dev || false;
 const isFullDev = args.coredev || false;
 const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/boards';
 const fullscreen = args.fullscreen || false;
+const dev = args.dev || false;
+
+process.env.NODE_ENV='development';
+if(dev) {
+  //set envar FULL_DEV=1
+  process.env.FULL_DEV = '1';
+}
 
 // 🔧 Setear NODE_ENV solo si no estaba seteado ya
 if (!process.env.NODE_ENV) {
