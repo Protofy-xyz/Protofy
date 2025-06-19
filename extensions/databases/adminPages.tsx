@@ -89,7 +89,6 @@ export default {
                     </YStack>
                 </AlertDialog>
                 <DataView
-                    rowIcon={Database}
                     sourceUrl={databasesSourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}

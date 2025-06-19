@@ -411,7 +411,6 @@ export default {
           </XStack>
         }
         itemData={itemData}
-        rowIcon={Router}
         sourceUrl={sourceUrl}
         initialItems={initialItems}
         name="device"

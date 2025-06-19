@@ -41,7 +41,6 @@ const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession,
     return (<AdminPage title={"Object " + object?.name} workspace={workspace} pageSession={pageSession}>
         {!objExists ? <ErrorMessage msg="Object not found" /> : null}
         {objExists ? <DataView
-            rowIcon={Tag}
             sourceUrl={apiUrl}
             initialItems={initialItems}
             numColumnsForm={1}
@@ -59,7 +58,6 @@ export default {
             const { replace } = usePageParams(pageState)
             return (<AdminPage title="Objects" pageSession={pageSession}>
                 <DataView
-                    rowIcon={Boxes}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={2}

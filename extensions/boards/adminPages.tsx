@@ -488,7 +488,6 @@ export default {
         <DataView
           entityName={"boards"}
           itemData={itemData}
-          rowIcon={BookOpen}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}

@@ -38,7 +38,6 @@ export default {
                     name="event"
                     disableViewSelector={false}
                     defaultView={'list'}
-                    rowIcon={ClipboardList}
                     quickRefresh={true}
                     columns={DataTable2.columns(
                         DataTable2.column("path", row => row.path, "path", undefined, true, '400px'),

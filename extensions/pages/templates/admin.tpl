@@ -28,7 +28,6 @@ export default {
     component: ({pageState, initialItems, pageSession, extraData}:any) => {
         return (<AdminPage title="{{object}}" pageSession={pageSession}>
             <DataView
-                rowIcon={Tag}
                 sourceUrl={apiUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}
