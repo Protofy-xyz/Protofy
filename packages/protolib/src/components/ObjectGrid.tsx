@@ -22,7 +22,17 @@ const GridElementCard = ({ index, data, width }) => {
         borderWidth={1}
         pointerEvents='none'
         pointerEventsControls="none"
-        onPress={() => data.onSelectItem(modelItem)}
+        onPress={(e) => {
+            // check upward to see if an ancestor has the class "is_DialogContent" and if so, do not call onSelectItem
+
+            if (data.disableItemSelection) return
+
+            console.log("onPress", e.target, e.currentTarget, e)
+            const dialogContent = e.target.closest('.is_DialogContent')
+            if (dialogContent) return
+            
+            data.onSelectItem(modelItem)
+        }}
         {...(data.getPicture ? {
             image: data.getPicture(element, width),
             hasPicture: true

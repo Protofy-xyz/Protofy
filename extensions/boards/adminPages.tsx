@@ -505,7 +505,11 @@ export default {
               onDelete={async () => {
                 await API.get(`${sourceUrl}/${element.name}/delete`);
               }}
-              onPress={() => router.push(`/boards/view?board=${element.name}`)}
+              onPress={(e) => {
+                const dialogContent = e.target.closest('.is_DialogContent')
+                if (dialogContent) return
+                router.push(`/boards/view?board=${element.name}`)
+              }}
               element={element} width={width} />,
           }}
           defaultView={"grid"}
