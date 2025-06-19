@@ -214,3 +214,10 @@ if (fs.existsSync(protobasePath)) {
     fs.cpSync(protobasePath, protobaseNodeModulesPath, { recursive: true });
     console.log('Copied packages/protobase to node_modules/@my/protobase');
 }
+
+//remove .env
+const envPath = path.join(__dirname, '.env');
+if (fs.existsSync(envPath)) {
+    fs.unlinkSync(envPath);
+    console.log('.env file has been removed');
+}
