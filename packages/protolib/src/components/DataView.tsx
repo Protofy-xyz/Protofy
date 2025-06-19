@@ -11,7 +11,7 @@ import { ActiveGroup } from './ActiveGroup';
 import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3 } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search } from '@tamagui/lucide-icons'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
@@ -24,6 +24,7 @@ import { ItemMenu } from './ItemMenu';
 import ErrorMessage from './ErrorMessage';
 import { Filters, QueryFilters } from './Filters';
 import dynamic from 'next/dynamic'
+import { SearchAIModalButton } from './SearchAIModalButton';
 
 const FileWidget = dynamic<any>(() =>
     import('../adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
@@ -668,6 +669,19 @@ const DataViewInternal = forwardRef(({
                                         </ActiveGroupButton>)
                                     }
                                 </ButtonGroup>}
+                                <SearchAIModalButton 
+                                    placeholder={"Search in " + name} 
+                                    initialState={search} 
+                                    defaultOpened={true} 
+                                    onSearch={setSearch}
+                                    trigger={
+                                        <DataViewActionButton
+                                        id="admin-dataview-add-btn"
+                                        icon={Search}
+                                        description={`Search in ${name}`}
+                                    />
+                                    }
+                                />
                                 {!hideAdd && <Tinted>
                                     <DataViewActionButton
                                         id="admin-dataview-add-btn"

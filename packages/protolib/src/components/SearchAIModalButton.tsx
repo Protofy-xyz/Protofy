@@ -45,9 +45,11 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
             ref={ref}
             br={20}
         >
-            <Button o={0.5} circular chromeless={true} onPress={onOpen} {...props}>
-                <IconSearch fillOpacity={0} color="var(--color)" />
-            </Button>
+            <YStack onPress={onOpen}>
+                {props.trigger ?? <Button o={0.5} circular chromeless={true} {...props}>
+                    <IconSearch fillOpacity={0} color="var(--color)" />
+                </Button>}
+            </YStack>
         </XStack>
         <AlertDialog
             open={open}
@@ -60,7 +62,14 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
             jc="flex-start"
             ai="flex-start"
         >
-            <YStack f={1} ai="flex-start" jc="flex-start" gap="$2" p="$2" style={{ position: "fixed", width: "100%" }}>
+            <YStack
+                f={1}
+                ai="flex-start"
+                jc="flex-start"
+                gap="$2"
+                br="$6"
+                style={{ position: "fixed", width: "100%", top: "-200px", boxShadow: "rgba(0, 0, 0, 0.1) 0 1px 10px" }}
+            >
                 <TextArea
                     ref={inputRef}
                     value={content}
@@ -101,8 +110,8 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                 />
                 <Tinted>
                     <XStack
-                        left={12}
-                        top={12}
+                        left={7}
+                        top={7}
                         pos="absolute"
                     >
                         <Button

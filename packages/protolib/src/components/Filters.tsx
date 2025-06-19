@@ -150,7 +150,7 @@ export const Filters = ({ model, state, customFilters, extraFilters }: FiltersTy
     >
         <Popover.Trigger>
             <Tinted>
-                <Button onPress={() => setOpen(!open)} transparent circular icon={<Filter fillOpacity={0} color={'$color10'} />} />
+                <Button onPress={() => setOpen(!open)} transparent circular icon={<Filter fillOpacity={0} color={'$color10'} size={16} />} />
             </Tinted>
         </Popover.Trigger>
         <Popover.Content
