@@ -27,7 +27,7 @@ export class EventModel extends ProtoModel<EventModel> {
         super(data, EventSchema, session, "Event");
     }
 
-    list(search?, session?, extraData?, params?): any {
+    list(search?, session?, extraData?, params?, jsCode?): any {
         if(params && params.filter && params.filter.path) {
             const {path, ...filter} = params.filter
             if(!this.data.path || !this.data.path.startsWith || !this.data.path.startsWith(path)) { 
@@ -42,7 +42,7 @@ export class EventModel extends ProtoModel<EventModel> {
             }
         }
 
-        return super.list(search, session, extraData, params)
+        return super.list(search, session, extraData, params, jsCode)
     }
 
     getNotificationsTopic(action: string): string {
