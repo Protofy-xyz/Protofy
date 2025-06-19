@@ -48,7 +48,7 @@ export const AlertDialog = forwardRef(({
                 {trigger}
             </Dialog.Trigger>}
             <Dialog.Portal >
-                <Dialog.Overlay />
+                <Dialog.Overlay {...props.overlayProps}/>
                 <Dialog.Content scale={1} p="$7" ai="flex-start" jc="flex-start" {...props}>
                     {/* {integratedChat && openState && <Tinted>
                     <BubbleChat/>
