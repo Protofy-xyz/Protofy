@@ -1,0 +1,7 @@
+{
+  "name": "@extensions/sketchcanvas",
+  "version": "1.0.0",
+  "dependencies": {
+    "react-canvas-draw": "1.2.1"
+  }
+}

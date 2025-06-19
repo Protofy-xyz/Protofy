@@ -3784,6 +3784,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/sketchcanvas@workspace:extensions/sketchcanvas":
+  version: 0.0.0-use.local
+  resolution: "@extensions/sketchcanvas@workspace:extensions/sketchcanvas"
+  dependencies:
+    react-canvas-draw: "npm:1.2.1"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/state@workspace:extensions/state":
   version: 0.0.0-use.local
   resolution: "@extensions/state@workspace:extensions/state"
@@ -12666,6 +12674,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"catenary-curve@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "catenary-curve@npm:1.0.1"
+  checksum: 10/4b68e56a198c807f2713039efb2db586ad44860849fab271420971e9d1639dd561ea5c0088439a05ecaa540d99567ec1a14b4e65e74048d2441c12c1a56c4d54
+  languageName: node
+  linkType: hard
+
 "catering@npm:^2.0.0, catering@npm:^2.1.0, catering@npm:^2.1.1":
   version: 2.1.1
   resolution: "catering@npm:2.1.1"
@@ -21301,6 +21316,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lazy-brush@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "lazy-brush@npm:1.0.1"
+  checksum: 10/1e056dd73b487c58c396b4e05602b7e81043a285fd0a9b5425de312b3fbbca996b302fb29e7b43853f4b32a7a982c8b72ee7763b59fb5fe2657028b63123319b
+  languageName: node
+  linkType: hard
+
 "lazy-val@npm:^1.0.4, lazy-val@npm:^1.0.5":
   version: 1.0.5
   resolution: "lazy-val@npm:1.0.5"
@@ -26882,6 +26904,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-canvas-draw@npm:1.2.1":
+  version: 1.2.1
+  resolution: "react-canvas-draw@npm:1.2.1"
+  dependencies:
+    catenary-curve: "npm:^1.0.1"
+    lazy-brush: "npm:^1.0.1"
+    prop-types: "npm:^15.6.2"
+    resize-observer-polyfill: "npm:^1.5.0"
+  peerDependencies:
+    react: 16.x || 17.x
+  checksum: 10/605e6835097b10aafbc944637c3b3ec877c54a38d385afde6865c506a52cca0aab861d3e4b9509bbb9cf93341cd41babf9c857854b830dd0d90e047380771180
+  languageName: node
+  linkType: hard
+
 "react-color@npm:2.19.3":
   version: 2.19.3
   resolution: "react-color@npm:2.19.3"
@@ -28429,7 +28465,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resize-observer-polyfill@npm:^1.5.1":
+"resize-observer-polyfill@npm:^1.5.0, resize-observer-polyfill@npm:^1.5.1":
   version: 1.5.1
   resolution: "resize-observer-polyfill@npm:1.5.1"
   checksum: 10/e10ee50cd6cf558001de5c6fb03fee15debd011c2f694564b71f81742eef03fb30d6c2596d1d5bf946d9991cb692fcef529b7bd2e4057041377ecc9636c753ce

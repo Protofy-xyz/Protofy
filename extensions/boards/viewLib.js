@@ -531,3 +531,12 @@ function useCardAspectRatio(id) {
 
   return aspectRatio;
 }
+
+const useActiveCard = () => {
+    const [activeCard, setActiveCard] = React.useState(false);
+
+    return [activeCard, {
+        onMouseEnter: () => setActiveCard(true),
+        onMouseLeave: () => setActiveCard(false),
+    }];
+}
