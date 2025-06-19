@@ -16,13 +16,17 @@ export default {
             bgPanel: "hsl(0, 0%, 17%)",
             bgContent: "hsl(15, 0%, 11%)"
         },
+        light_gray: {
+            bgPanel: "#FFFFFF",
+            bgContent: "#F8F8F8",
+        },
         dark_orange: {
             bgPanel: "hsl(20, 11.40%, 15.50%)",
             bgContent: "hsl(36, 31%, 10%)"
         },
         light_orange: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_yellow: {
             color1: "#30302e",
@@ -31,48 +35,48 @@ export default {
             bgContent: "#2A2D36"
         },
         light_yellow: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_green: {
             bgPanel: "#24252B",
             bgContent: "#1C1B21"
         },
         light_green: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_blue: {
             bgPanel: "hsl(215, 28%, 17%)",
             bgContent: "hsl(221, 41%, 11%)"
         },
         light_blue: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_purple: {
             bgPanel: "#353244",
             bgContent: "#292636"
         },
         light_purple: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_pink: {
             bgPanel: "#252A47",
             bgContent: "#1D233D"
         },
         light_pink: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         },
         dark_red: {
             bgPanel: "#000000",
             bgContent: "hsl(0, 6%, 8%)"
         },
         light_red: {
-            bgPanel: "#F3F4F6",
-            bgContent: "#FFFFFF",
+            bgPanel: "#FFFFFF",
+            bgContent: "#F3F4F6",
         }
         // feel free to expand this with the name of the topic you wish to expand on
     }

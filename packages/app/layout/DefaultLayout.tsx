@@ -3,7 +3,7 @@ import { HeaderContents } from './HeaderContents'
 import { DefaultLayout as ProtoDefaultLayout } from 'protolib/components/layout/DefaultLayout'
 import { AppBar } from 'protolib/components/AppBar'
 import React from 'react'
-import { StackProps } from '@my/ui'
+import { StackProps, Image, useThemeName } from '@my/ui'
 import { HeaderMenu } from './HeaderMenu'
 import { HeaderMenuContent } from './HeaderMenuContent'
 
@@ -19,14 +19,28 @@ export const DefaultLayout = React.forwardRef((props: {
   openGraph?: any;
   tintSwitcher?: boolean;
   themeSwitcher?: boolean;
-} & StackProps, ref: any) => <ProtoDefaultLayout
+} & StackProps, ref: any) => {
+
+  const themeName = useThemeName()
+
+  return <ProtoDefaultLayout
     ref={ref}
     sideMenu={null}
     footer={<Footer />}
     header={<AppBar>
       <HeaderContents tintSwitcher={props.tintSwitcher} themeSwitcher={props.themeSwitcher} headerTitle={props.headerTitle} menu={<HeaderMenu menuPlacement={'bottom'}>
         <HeaderMenuContent />
-      </HeaderMenu>} />
+      </HeaderMenu>}
+        logo={<Image
+            key={themeName}
+            style={{ filter: themeName?.startsWith("dark") ? "invert(70%) brightness(10)" : "invert(5%)" }}
+            src={"/public/vento-logo.png"}
+            alt="Logo"
+            width={180}
+            height={30}
+            resizeMode='contain'
+        />}
+      />
     </AppBar>}
     title="Vento"
     description="Vento: natural language machine automation platform"
@@ -41,4 +55,5 @@ export const DefaultLayout = React.forwardRef((props: {
         },
       ],
     }} {...props}>{props.children}</ProtoDefaultLayout>
+}
 )

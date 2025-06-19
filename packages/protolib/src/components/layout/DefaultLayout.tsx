@@ -72,27 +72,31 @@ export const DefaultLayout = React.forwardRef(({
       />
 
       <ToastProvider swipeDirection="horizontal">
-          <Tinted><ToastArea /></Tinted>
-          {header}
-          <XStack f={1}>
-            {sideMenu}
+        <Tinted><ToastArea /></Tinted>
+        <XStack f={1}>
+          {sideMenu}
+          <YStack f={1} px="$8">
+            <YStack>
+              {header}
+            </YStack>
             <YStack f={1}>
               {children}
             </YStack>
+          </YStack>
 
-          </XStack>
+        </XStack>
 
-          {footer}
+        {footer}
 
-          <ToastViewport flexDirection="column-reverse" top="$2" left={0} right={0} />
-          <ToastViewport
-            multipleToasts
-            name="viewport-multiple"
-            flexDirection="column-reverse"
-            top="$2"
-            left={0}
-            right={0}
-          />
+        <ToastViewport flexDirection="column-reverse" top="$2" left={0} right={0} />
+        <ToastViewport
+          multipleToasts
+          name="viewport-multiple"
+          flexDirection="column-reverse"
+          top="$2"
+          left={0}
+          right={0}
+        />
 
       </ToastProvider>
     </Stack>

@@ -281,14 +281,14 @@ const Board = ({ board, icons }) => {
 
   return (
     <YStack flex={1}>
-      <XStack px={"$5"} py={"$3"}>
+      <XStack py={"$3"}>
         <XStack f={1} alignItems='center' >
           <Tinted>
             <DataViewActionButton
               icon={(props) => <ArrowLeft {...props} color="var(--color10)" />}
               description="Back"
               onPress={() => router.push("/boards")}
-              mr="$5"
+              mr="$2"
             />
           </Tinted>
           <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
@@ -488,7 +488,6 @@ export default {
         <DataView
           entityName={"boards"}
           itemData={itemData}
-          rowIcon={BookOpen}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}

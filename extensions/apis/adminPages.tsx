@@ -307,8 +307,6 @@ export default {
                     onSelectItem={(item) => {
                         replace('editFile', item.data.filePath);
                     }}
-
-                    rowIcon={ToyBrick}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}

@@ -620,11 +620,11 @@ const DataViewInternal = forwardRef(({
                 </AlertDialog>
                 {!state.editFile && <>
                     <XStack pt="$3" px="$3" mb="$1">
-                        <XStack ml="$2" f={1} ai="center">
-                            {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' /></Tinted></Stack>}
+                        <XStack ml="$2" f={1} ai="center" gap="$2">
                             <Paragraph>
-                                <Text fontSize="$5" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
+                                <Text fontSize="$9" fontWeight="600" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
                             </Paragraph>
+                            {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' size={26} /></Tinted></Stack>}
                             {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
                             {!isXs && toolBarContent}
                         </XStack>
@@ -662,13 +662,6 @@ const DataViewInternal = forwardRef(({
                                 </XStack>}
                             </XStack>
                             <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{display: 'none'}}>
-                                {!disableViewSelector && <ButtonGroup marginRight="$3" boc="$gray5">
-                                    {
-                                        tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
-                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
-                                        </ActiveGroupButton>)
-                                    }
-                                </ButtonGroup>}
                                 <SearchAIModalButton 
                                     placeholder={"Search in " + name} 
                                     initialState={search} 
@@ -682,6 +675,13 @@ const DataViewInternal = forwardRef(({
                                     />
                                     }
                                 />
+                                {!hideFilters && <Filters
+                                    customFilters={customFilters}
+                                    model={model}
+                                    state={state}
+                                    extraFilters={extraFilters}
+                                />}
+                                {extraActions && extraActions.map((action, index) => action)}
                                 {!hideAdd && <Tinted>
                                     <DataViewActionButton
                                         id="admin-dataview-add-btn"
@@ -692,13 +692,13 @@ const DataViewInternal = forwardRef(({
                                         }}
                                     />
                                 </Tinted>}
-                                {!hideFilters && <Filters
-                                    customFilters={customFilters}
-                                    model={model}
-                                    state={state}
-                                    extraFilters={extraFilters}
-                                />}
-                                {extraActions && extraActions.map((action, index) => action)}
+                                {!disableViewSelector && <ButtonGroup marginLeft="$3" boc="$gray5">
+                                    {
+                                        tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
+                                            {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
+                                        </ActiveGroupButton>)
+                                    }
+                                </ButtonGroup>}
                             </XStack>
                         </XStack>
                     </XStack>

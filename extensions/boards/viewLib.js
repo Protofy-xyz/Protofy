@@ -243,6 +243,10 @@ const iframe = ({ src }) => {
     return `<iframe style="width: 100%;height:100%;" src= "${src}" />`
 }
 
+const boardImage = ({ src, alt = '' }) => {
+  return `<img src="${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: contain;" />`;
+};
+
 
 const cardAction = ({ data }) => {
     const margin = 10;

@@ -263,7 +263,7 @@ export const PanelMenu = ({ workspace, collapsed }) => {
             {/* <Separator f={1} borderBottomWidth={4} /> */}
         </Tinted>
         <Tinted>
-            <ScrollView showsVerticalScrollIndicator={false} pl={"$0"} pt={"$3"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} collapsed={collapsed} /></ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false} pl={"$0"} mt={"$8"} mah="calc( 100vh - 150px ) "><Tabs tabs={workspace.menu} collapsed={collapsed} /></ScrollView>
         </Tinted>
 
     </YStack>)

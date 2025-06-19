@@ -40,7 +40,6 @@ export const UsersView = ({ all, groups, itemData, initialItems, pageState }) =>
             enableAddToInitialData
             entityName={'accounts'}
             itemData={itemData}
-            rowIcon={User}
             sourceUrl={sourceUrl}
             initialItems={initialItems}
             numColumnsForm={1}

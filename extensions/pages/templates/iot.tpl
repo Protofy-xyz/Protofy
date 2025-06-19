@@ -32,7 +32,6 @@ export default {
           defaultView={"grid"}
           disableViews={["list", "raw"]}
           integratedChat
-          rowIcon={Router}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           name="device"

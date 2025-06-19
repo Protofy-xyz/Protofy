@@ -56,7 +56,6 @@ export default {
         ? <DataView
           entityName={"device definitions"}
           itemData={itemData}
-          rowIcon={BookOpen}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           onSelectItem={(item) => {

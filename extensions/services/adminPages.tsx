@@ -48,7 +48,6 @@ export const ServicesView = ({ initialItems, pageState }) => {
       hideAdd
       enableAddToInitialData
       defaultView={'grid'}
-      rowIcon={Cog}
       sourceUrl={sourceUrl}
       initialItems={initialItems}
       numColumnsForm={1}

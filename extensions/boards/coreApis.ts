@@ -326,7 +326,7 @@ class HttpError extends Error {
     }
 }
 
-export default  async (app, context) => {
+export default async (app, context) => {
     class HttpError extends Error {
         constructor(public status: number, message: string) {
             super(message);
@@ -748,10 +748,41 @@ export default  async (app, context) => {
             icon: "monitor-stop",
             description: "Display a link in an iframe",
             type: 'value',
-            html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `<iframe style=\"width: 100%;height:100%;\" src=\"${data.value}\" />`, padding: '3px'\n});\n",
+            html: `
+// data contains: data.value, data.icon and data.color
+return card({
+  content: iframe({ src: \`\${data.value}\` }),
+  padding: '3px'
+});
+`,
         },
         emitEvent: true
-    })
+    });
+
+
+    addCard({
+        group: 'board',
+        tag: "image",
+        id: 'image',
+        templateName: "Display an image",
+        name: "board_image",
+        defaults: {
+            name: "Image",
+            icon: "image",
+            description: "Display an image that scales without distortion",
+            type: 'value',
+            html: `
+// data contains: data.value, data.icon and data.color
+return card({
+  content: boardImage({ src: \`\${data.value}\` }),
+  padding: '3px'
+});
+`,
+        },
+        emitEvent: true
+    });
+
+
 
     addCard({
         group: 'board',

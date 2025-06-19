@@ -23,15 +23,6 @@ export const HeaderContents = (props: HeaderContentsProps & { headerTitle?: stri
   }, []);
 
   return <ProtoHeaderContents
-    logo={<Image
-      key={themeName}
-      style={{ filter: themeName?.startsWith("dark") ? "invert(70%) brightness(10)" : "invert(5%)", marginLeft: -20 }}
-      src={"/public/vento-logo.png"}
-      alt="Logo"
-      width={170}
-      height={50} 
-      resizeMode='contain'
-    />}
     rightArea={<XStack ai="center">
       {props.topBar}
       {showMenu && <XStack $xs={{ display: 'none' }}>

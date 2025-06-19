@@ -19,7 +19,6 @@ export default {
                 enableAddToInitialData
                 disableViews={["grid"]}
                 defaultView={'list'}
-                rowIcon={Key}
                 sourceUrl={sourceUrl}
                 initialItems={initialItems}
                 numColumnsForm={1}

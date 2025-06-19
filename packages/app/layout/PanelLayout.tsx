@@ -10,11 +10,11 @@ import { useContext } from 'react'
 
 export const PanelLayout = (props) => {
   const {search, setSearch, searchName} = useContext(SearchContext)
-  return <ProtoPanelLayout 
-    Layout={DefaultLayout} 
-    headerContents={<HeaderContents 
-        topBar={props.topBar}
-        menu={<HeaderMenu menuPlacement={'bottom'}><HeaderMenuContent /></HeaderMenu>} />} 
-        SideMenu={SideMenu} 
+  return <ProtoPanelLayout
+    Layout={DefaultLayout}
+    headerContents={<HeaderContents
+      topBar={props.topBar}
+      menu={<HeaderMenu menuPlacement={'bottom'}><HeaderMenuContent /></HeaderMenu>} />}
+      SideMenu={SideMenu}
     {...props}></ProtoPanelLayout>
 }
