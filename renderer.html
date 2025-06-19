@@ -1,27 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Starting Protofy...</title>
-  <link rel="stylesheet" href="data/public/fonts/inter-400.css">
+  <meta charset="UTF-8" />
+  <title>Vento is booting…</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <!-- Styles -->
   <style>
+    :root {
+      /* Protofy brand — yellow */
+      --brand-from: #f7b500;
+      --brand-to: #ffdc69;
+      /* Warm dark background */
+      --bg-start: #0d0a00;
+      --bg-end: #211600;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     html,
     body {
-      font-family: 'Inter', sans-serif;
+      height: 100%;
       margin: 0;
       padding: 0;
+      font-family: 'Inter', sans-serif;
+      color: #fff8e1;
+      font-size: 10px;
+      background: radial-gradient(circle at bottom, var(--bg-start) 0%, var(--bg-end) 100%);
       overflow: hidden;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      color: #ccc;
     }
 
     #particles {
       position: absolute;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       z-index: 0;
     }
 
@@ -29,56 +48,111 @@
     #logs {
       position: relative;
       z-index: 1;
+      width: 100%;
+      height: 100%;
     }
 
     #splash {
-      width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      text-align: center;
+      gap: 0.75rem;
+      padding: 1rem;
     }
 
-    #splash img {
-      width: 256px;
-      height: auto;
-      margin-bottom: 5px;
+    #logo {
+      width: 196px;
+      filter: drop-shadow(0 0 10px var(--brand-from));
+      animation: float 6s ease-in-out infinite;
+      margin-bottom: 2.5rem;
+      /* Add this line */
     }
 
-    #splash h1 {
-      font-size: 20px;
-      color: #CCC;
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: .5px;
+    }
+
+    /* Progress bar */
+    #progress {
+      width: 80%;
+      max-width: 360px;
+      height: 4px;
+      background: #ffffff25;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    #progress::before {
+      content: '';
+      display: block;
+      width: 40%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-from), var(--brand-to));
+      animation: progress 2s infinite ease-in-out;
+    }
+
+    @keyframes progress {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(300%);
+      }
     }
 
     #view-logs {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
-      font-size: 12px;
-      color: #ccc;
-      text-decoration: none;
+      bottom: 16px;
+      right: 20px;
+      font-size: 0.75rem;
+      color: #f7b500;
       cursor: pointer;
+      transition: color .2s ease;
     }
 
+    #view-logs:hover {
+      color: #fff;
+    }
+
+    /* Logs panel */
     #logs {
       display: none;
-      width: 100%;
-      height: 100%;
     }
 
     textarea {
       width: 100%;
       height: 100%;
-      background: transparent;
-      color: white;
+      background: #000000cc;
+      color: #fff9d0;
       border: none;
       resize: none;
-      padding: 10px;
-      font-size: 14px;
-      font-family: monospace;
-      box-sizing: border-box;
-      z-index: 1;
+      padding: 18px;
+      font-size: 0.85rem;
+      font-family: 'Fira Code', monospace;
+      line-height: 1.4;
+      backdrop-filter: blur(6px);
     }
   </style>
 </head>
@@ -86,71 +160,58 @@
 <body>
   <div id="particles"></div>
 
+  <!-- Splash -->
   <div id="splash">
-    <img src="data/public/images/loading.gif" alt="Protofy Logo">
-    <h1>Loading Protofy</h1>
-    <div id="view-logs">View Logs</div>
+    <img id="logo" src="data/public/vento-logo.png" alt="Vento logo"
+      style="filter: invert(1) drop-shadow(0 0 10px var(--brand-from));" />
+    <h1>Booting Vento, grab a coffee…</h1>
+    <div id="progress" aria-label="Loading progress bar"></div>
+    <span id="view-logs">view logs</span>
   </div>
 
+  <!-- Logs -->
   <div id="logs">
     <textarea id="log" readonly></textarea>
   </div>
 
-  <!-- tsParticles CDN -->
+  <!-- tsParticles -->
   <script src="data/public/vendor/tsparticles.bundle.min.js"></script>
   <script>
-    // Inicia la animación de partículas
+    /* Particles brand colors */
     tsParticles.load("particles", {
-      background: {
-        color: { value: "#000" }
-      },
+      fullScreen: { enable: false },
+      background: { color: { value: "transparent" } },
       fpsLimit: 60,
       particles: {
-        number: {
-          value: 50,
-          density: {
-            enable: true,
-            area: 800
-          }
-        },
-        color: {
-          value: "#FFFFFF"
-        },
+        number: { value: 35, density: { enable: true, area: 800 } },
+        color: { value: ["#f7b500", "#ffdc69"] },
         links: {
-          enable: true,
-          distance: 150,
-          color: "#FFFFFF",
-          opacity: 0.2,
-          width: 0.5
+          enable: false,
+          distance: 140,
+          color: "#ffffff",
+          opacity: 0.08,
+          width: 0.6
         },
-        move: {
-          enable: true,
-          speed: 0.5,
-          direction: "none",
-          outModes: { default: "bounce" }
-        },
-        size: {
-          value: { min: 1, max: 3 }
-        },
-        opacity: {
-          value: 0.5
-        }
+        move: { enable: true, speed: 0.8, outModes: { default: "bounce" } },
+        size: { value: { min: 1, max: 3 } },
+        opacity: { value: 0.45 }
       },
       detectRetina: true
     });
 
-    // Logs
-    const logBox = document.getElementById('log');
+    /* Simple log viewer switch */
     const splash = document.getElementById('splash');
-    const logs = document.getElementById('logs');
+    const logsPanel = document.getElementById('logs');
     const viewLogs = document.getElementById('view-logs');
+    const logBox = document.getElementById('log');
 
     viewLogs.addEventListener('click', () => {
       splash.style.display = 'none';
-      logs.style.display = 'block';
+      logsPanel.style.display = 'block';
     });
 
-    window.logAPI?.onLog((message) => {
+    /* Pipe logs coming from Electron preload */
+    window.logAPI?.onLog(message => {
       logBox.value += message + '\n';
       logBox.scrollTop = logBox.scrollHeight;
     });
