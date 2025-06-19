@@ -5,6 +5,13 @@ import { useThemeSetting } from '@tamagui/next-theme';
 import { useTheme } from '@my/ui';
 import { useTint } from '../lib/Tints'
 import { Tinted } from './Tinted'
+import { useEffect } from 'react';
+
+// loader.config({
+//     paths: {
+//         vs: '/public/monaco',
+//     },
+// });
 
 type Props = {
     darkMode?: boolean,
@@ -72,7 +79,10 @@ export const Monaco = ({
     let lightTokenColor = theme[tint + '7'].val
     lightTokenColor = lightTokenColor.startsWith('hsl') ? hslStringToHex(lightTokenColor) : lightTokenColor
     // console.log('token color: ', theme[tint+'10'].val, tokenColor)
-    if (monaco) {
+
+    useEffect(() => {
+        if (!monaco) return;
+
         monaco.editor.defineTheme(customThemeName, {
             base: resolvedTheme === 'dark' ? 'vs-dark' : 'vs',
             inherit: true,
@@ -86,19 +96,22 @@ export const Monaco = ({
             }
         });
 
-        monaco.languages.register({ id: 'gherkin' });
+        // Solo registrar si no se ha hecho ya
+        if (!monaco.languages.getLanguages().some(lang => lang.id === 'gherkin')) {
+            monaco.languages.register({ id: 'gherkin' });
 
-        monaco.languages.setMonarchTokensProvider('gherkin', {
-            tokenizer: {
-                root: [
-                    [/(Feature:|Scenario:|Rule:|Example:)/, 'comment'],
-                    [/(Given|When|Then|And|But)/, 'keyword'],
-                    [/"[^"]*"/, 'string'],
-                    [/#.*/, 'comment'],
-                ]
-            }
-        });
-    }
+            monaco.languages.setMonarchTokensProvider('gherkin', {
+                tokenizer: {
+                    root: [
+                        [/(Feature:|Scenario:|Rule:|Example:)/, 'comment'],
+                        [/(Given|When|Then|And|But)/, 'keyword'],
+                        [/"[^"]*"/, 'string'],
+                        [/#.*/, 'comment'],
+                    ]
+                }
+            });
+        }
+    }, [monaco, resolvedTheme, tokenColor, lightTokenColor]);
 
     const handleEditorDidMount = (editor, monaco) => {
 

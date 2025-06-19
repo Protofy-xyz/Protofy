@@ -38,7 +38,7 @@ TransferComponent(Text, 'Text');
 TransferComponent(View, 'View');
 TransferComponent(Provider, 'Provider');
 TransferComponent(Tinted, 'Tinted');
-TransferComponent(DataView, 'DataView');
+TransferComponent(DataView, 'ProtoDataView');
 TransferComponent(ObjectViewLoader, 'ObjectViewLoader');
 TransferComponent(API, 'API');
 TransferComponent(ProtoModel, 'ProtoModel');

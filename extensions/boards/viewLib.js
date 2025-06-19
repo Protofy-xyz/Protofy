@@ -443,7 +443,7 @@ const dataView = (object, root) => {
         apiUrl = prefix + name
     }
 
-    return <DataView
+    return <ProtoDataView
             disableRouting={true}
             sourceUrl={apiUrl}
             numColumnsForm={1}
