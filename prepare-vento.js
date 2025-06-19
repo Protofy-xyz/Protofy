@@ -202,3 +202,14 @@ if (fs.existsSync(configPath)) {
     console.log('Copied packages/config to node_modules/@my/config');
 }
 
+//copy packages/protobase to node_modules/@my/protobase
+const protobasePath = path.join(__dirname, 'packages', 'protobase');
+const protobaseNodeModulesPath = path.join(__dirname, 'node_modules', '@my', 'protobase');
+if (fs.existsSync(protobasePath)) {
+    if (fs.existsSync(protobaseNodeModulesPath)) {
+        rimraf.sync(protobaseNodeModulesPath);
+    }
+    fs.mkdirSync(protobaseNodeModulesPath, { recursive: true });
+    fs.cpSync(protobasePath, protobaseNodeModulesPath, { recursive: true });
+    console.log('Copied packages/protobase to node_modules/@my/protobase');
+}
