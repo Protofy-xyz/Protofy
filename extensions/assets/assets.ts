@@ -48,7 +48,7 @@ export function installAsset(assetName) {
     const targetDir = path.join(__dirname, '..', '..');
 
     copyFolderStructure(sourceDir, targetDir);
-    execSync(`node .yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
+    execSync(`node ../../.yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
     pm2.connect((err) => {
         if (err) {
             console.error('Error connecting to PM2:', err);
