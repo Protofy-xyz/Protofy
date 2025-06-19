@@ -1,9 +1,10 @@
 import { Button, Spinner, TextArea, XStack, YStack } from "@my/ui"
 import { Search as IconSearch, Sparkles } from '@tamagui/lucide-icons'
-import { useState, forwardRef, useRef, useEffect } from "react"
+import { useState, forwardRef, useRef, useEffect, useContext } from "react"
 import { Tinted } from "./Tinted"
 import { AlertDialog } from "./AlertDialog"
 import { usePageParams } from '../next/Params'
+import { SearchContext } from "../context/SearchContext"
 
 export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', ...props }: any, ref: any) => {
 
@@ -12,6 +13,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
     const [content, setContent] = useState(initialState)
     const [loading, setLoading] = useState("")
 
+    const { search, searchStatus } = useContext(SearchContext)
     const { query, push, removePush } = usePageParams({})
     const isAiMode = query?.mode === 'ai'
 
@@ -39,6 +41,13 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
     useEffect(() => {
         setLoading("")
     }, [isAiMode])
+
+    useEffect(() => {
+        if (!searchStatus && search) {
+            setOpen(false)
+            setContent('')
+        }
+    }, [searchStatus])
 
     return <>
         <XStack
@@ -91,6 +100,8 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                     style={{ transition: "all 0.2s ease-in-out", alignSelf: "flex-start" }}
                     placeholder={placeholder}
                     enterKeyHint="search"
+                    disabled={!!(loading || searchStatus === "loading")}
+                    color={searchStatus == "loading" ? "$gray11" : "$color"}
                     onChangeText={(text) => {
                         setContent(text);
                         if (!text) onSearch('')
@@ -100,9 +111,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                             onToggleAI(true)
                         }
                         else if (e.key === 'Enter') {
-                            setOpen(false)
                             onSearch(content)
-                            setContent('')
                             e.preventDefault();
                             e.stopPropagation();
                         }
@@ -124,7 +133,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                             hoverStyle={{ backgroundColor: "transparent" }}
                             pressStyle={{ backgroundColor: "transparent" }}
                         >
-                            {loading == "search" ? <Spinner /> : <IconSearch color={!isAiMode ? "$color10" : "$gray8"} size={24} />}
+                            {loading == "search" || searchStatus == "loading" ? <Spinner /> : <IconSearch color={!isAiMode ? "$color10" : "$gray8"} size={24} />}
                         </Button>
                         <Button
                             size="$3"

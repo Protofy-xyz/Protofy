@@ -4,12 +4,16 @@ type SearchState = {
     search: string,
     setSearch: any,
     searchName: string,
-    setSearchName: any
+    setSearchName: any,
+    searchStatus?: string | undefined,
+    setSearchStatus?: any
 }
 
 export const SearchContext = createContext<SearchState>({
     search: '',
     setSearch: () => {},
     searchName: '',
-    setSearchName: () => {}
+    setSearchName: () => {},
+    searchStatus: undefined,
+    setSearchStatus: () => {}
 });

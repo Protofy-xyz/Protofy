@@ -227,8 +227,10 @@ const DataViewInternal = forwardRef(({
     sourceUrl = URLTransform(sourceUrl)
 
     const fetch = async (fn) => {
+        setSearchStatus('loading')
         const data = await API.get({ url: sourceUrl, ...sourceUrlParams, ...state })
         fn(data)
+        setSearchStatus(undefined)
     }
 
     const [_items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh)
@@ -238,7 +240,7 @@ const DataViewInternal = forwardRef(({
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
-    const { search, setSearch, setSearchName } = useContext(SearchContext)
+    const { search, setSearch, setSearchName, setSearchStatus } = useContext(SearchContext)
     const hasGlobalMenu = extraMenuActions && extraMenuActions.some(action => action.menus && action.menus.includes("global"));
     const filters = Object.entries(state).filter((st) => st[0].startsWith('filter'))
     const extraFiltersKeys = extraFilters.map((f) => f.queryParam)

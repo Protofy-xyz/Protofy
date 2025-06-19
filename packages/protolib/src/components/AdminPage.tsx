@@ -21,6 +21,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
 
   const [search, setSearch] = useState('')
   const [searchName, setSearchName] = useState('')
+  const [searchStatus, setSearchStatus] = useState<any>()
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
   const { workspaces } = SiteConfig.bundles
   const projectName = SiteConfig.projectName
@@ -47,7 +48,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   return (
     <Tinted>
       <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgContent'}>
-        <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
+        <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName, searchStatus, setSearchStatus }}>
           <AdminPanel>
             {children}
           </AdminPanel>
