@@ -47,8 +47,8 @@ export class PlayersModel extends ProtoModel<PlayersModel> {
         return result
     }
 
-	list(search?, session?, extraData?, params?): PlayersType[] {
-        const result = super.list(search, session, extraData, params)
+	list(search?, session?, extraData?, params?, jsCode?): PlayersType[] {
+        const result = super.list(search, session, extraData, params, jsCode)
         return result
     }
 
