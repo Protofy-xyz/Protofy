@@ -46,7 +46,7 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
 
   return (
     <Tinted>
-      <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgPanel'}>
+      <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgContent'}>
         <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName }}>
           <AdminPanel>
             {children}

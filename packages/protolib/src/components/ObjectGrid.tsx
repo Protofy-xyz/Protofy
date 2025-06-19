@@ -16,7 +16,7 @@ const GridElementCard = ({ index, data, width }) => {
         height={data.itemHeight}
         cursor={data.disableItemSelection?"default":"pointer"}
         topBarOutSideScrollArea={false}
-        backgroundColor={"$color1"}
+        backgroundColor={"$bgPanel"}
         elevation={"$0"}
         hoverStyle={{...(data.disableItemSelection ? {} : { o: 0.8, backgroundColor: '$' + tint.tint + '1', elevation: "$1" })}}
         borderWidth={1}

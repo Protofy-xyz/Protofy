@@ -13,7 +13,7 @@ export default ({ element, width, onDelete, ...props }: any) => {
     return (
         <YStack
             cursor="pointer"
-            bg="$color2"
+            bg="$bgPanel"
             elevation={4}
             br="$4"
             width={'100%'}

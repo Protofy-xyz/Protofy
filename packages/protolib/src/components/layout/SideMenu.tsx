@@ -9,7 +9,7 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
     const [collapsed, setCollapsed] = useState(false)
     const width = collapsed ? 80 : 260
 
-    return <YStack bw={0} bc={sideBarColor} {...props} onDoubleClick={() => setCollapsed(!collapsed)}>
+    return <YStack bw={0} bc={sideBarColor} {...props} onDoubleClick={e => { setCollapsed(!collapsed); e.stopPropagation() }}>
         <YStack
             animateOnly={["width"]}
             // @ts-ignore
@@ -27,6 +27,12 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
             }}
             style={{ overflowY: 'auto' }}
         >
+            {props.logo && <YStack l="$5" t="$5" pos="absolute" display={props.collapsedLogo && collapsed ? 'none' : 'flex'}>
+                {props.logo}
+            </YStack>}
+            {props.collapsedLogo && <YStack l="$5" t="$5" pos="absolute" display={collapsed && props.collapsedLogo ? 'flex' : 'none'}>
+                {props.collapsedLogo}
+            </YStack>}
             {React.cloneElement(children, { ...children.props, collapsed })}
         </YStack>
         <YStack
