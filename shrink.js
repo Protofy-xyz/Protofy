@@ -1,4 +1,5 @@
-//move package-vento.json to package.json and rimraf node_modules
+//scricpt to shrink the project by removing unnecessary files and directories
+//useful to create a smaller package for distribution
 
 const fs = require('fs');
 const path = require('path');
