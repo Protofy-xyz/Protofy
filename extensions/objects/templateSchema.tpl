@@ -42,8 +42,8 @@ export class {{name}}Model extends ProtoModel<{{name}}Model> {
         return result
     }
 
-	list(search?, session?, extraData?, params?): {{name}}Type[] {
-        const result = super.list(search, session, extraData, params)
+	list(search?, session?, extraData?, params?, jsCode?): {{name}}Type[] {
+        const result = super.list(search, session, extraData, params, jsCode)
         return result
     }
 

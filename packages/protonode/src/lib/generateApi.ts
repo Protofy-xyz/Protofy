@@ -2,6 +2,7 @@ import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { API, getEnv, getLogger, generateEvent } from 'protobase';
 import { leveldbProvider, getDBOptions } from './db';
+import { ai } from './ai';
 
 const logger = getLogger()
 const _getDB = leveldbProvider.getDB;
@@ -233,10 +234,25 @@ export const AutoAPI = ({
         }
 
         const preListData = typeof extraData?.prelist == 'function' ? await extraData.prelist(session, req) : (extraData?.prelist ?? {})
+        const mode = req.query.mode;
+        let prompt, jsCode
+        if (search && mode == "ai") {
+            prompt = await context.autopilot.getPromptFromTemplate({ 
+                templateName: "aiSearch", 
+                search,
+                modelName,
+                modelType: modelType.toString(),
+                modelDefinition: JSON.stringify(modelType.getObjectFieldsDefinition()),
+                aditionalDecriptions: modelType.getAdditionalDescriptions(),
+            });
+            const reply = await ai.callModel(prompt, context, { useChatGPT: true });
+            jsCode = ai.cleanCode(reply.choices[0].message.content)
+        } 
+        
         const parseResult = async (value, skipFilters?) => {
             const model = modelType.unserialize(value, session);
             const extraListData = typeof extraData?.list == 'function' ? await extraData.list(session, model, req) : (extraData?.list ?? {})
-            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, !skipFilters ? await _onBeforeList(req.query, session, req) : undefined);
+            const listItem = await model.listTransformed(search, transformers, session, { ...preListData, ...extraListData }, !skipFilters ? await _onBeforeList(req.query, session, req) : undefined, jsCode);
             return listItem
         }
         const _itemsPerPage = Math.max(Number(req.query.itemsPerPage) || (itemsPerPage ?? 25), 1);

@@ -1,3 +1,36 @@
+<description>
+    You are integrated into another system and your mission is to generate javascript code. 
+    The code will be executed in a filter loop, and you need to program the code to check if a given element passes the filter.
+    The user has described what should be the filtering criteria, in natural language, and you need to provide the implementation.
+    IMPORTANT:
+    - by default try to be as much case insensitive as possible
+    - by default if some value to filter is empty and the filtering_criteria is not explicitly expecting empty values do not allow it to pass the filter
+    - by default if any method exists to get the properties of element_parameter use it before trying to get it directly
+    Generate a function with the following structure:
+
+    function filter_element(element, session, extraData){
+        // TODO: return true if the element passes the filter
+    }
+
+</description>
+<filtering_criteria>
+    {{{search}}}
+</filtering_criteria>
+<element_description>
+    The element parameter in the filter_element function is an instance of a {{{modelName}}} class.
+    The {{{modelName}}} class allows to manipulate and query data regarding a {{{modelName}}}.
+    Use the provided source code of the {{{modelName}}} class and its parent protomodel class to understand how to interact with the element parameter.
+</element_description>
+<aditional_decriptions>
+{{{aditionalDecriptions}}}
+</aditional_decriptions>
+<element_parameter_fields>
+{{{modelDefinition}}}
+</element_parameter_fields>
+<{{{modelName}}}_class>
+{{{modelType}}}
+</{{{modelName}}}_class>
+<ProtoModel.ts>
 import { createSession } from './Session'
 import { SessionDataType } from './lib/perms'
 import { BaseSchema, Schema, z, ZodObject } from './BaseSchema'
@@ -159,7 +192,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         return this.modelName
     }
 
-    getLocation() : {lat: string, lon: string, type: string, style: any, options: any} | undefined {
+    getLocation() : {lat: string, lon: string} | undefined {
         const locationFields = this.objectSchema.is('location').getFields()
         if (!locationFields.length) {
             throw "Model error: " + this.getModelName() + " doesn't have location information"
@@ -172,9 +205,6 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
 
         return {
-            type: this.objectSchema.getFieldKeyDefinition(field, 'locationType'),
-            style: this.objectSchema.getFieldKeyDefinition(field, 'locationStyle'),
-            options: this.objectSchema.getFieldKeyDefinition(field, 'locationOptions'),
             lat: this.data[field][latKey],
             lon: this.data[field][lonKey]
         }
@@ -232,6 +262,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
     list(search?, session?, extraData?, params?, jsCode?): any {
 
         if(params && params.filter) {
+            
             const allFiltersMatch = Object.keys(params.filter).every(key => {
                 if(params.filter[key].from || params.filter[key].to) {
                     let valid = true
@@ -252,17 +283,7 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
             if(!allFiltersMatch) return
         }
 
-        if (jsCode) {
-            try {
-                const fn = new Function('element', 'session', 'extraData', jsCode + "\n return filter_element(element, session, extraData);");
-                const result = fn(this, session, extraData);
-                if (result === false) return;
-            } catch (error) {
-                logger.error({ error }, `Error executing JS code: ${jsCode}`);
-                return;
-            }
-            return this.read();
-        } else if (search) {
+        if (search) {
             const { parsed, searchWithoutTags } = parseSearch(search);
 
             for (const [key, value] of Object.entries(parsed)) {
@@ -298,15 +319,11 @@ export abstract class ProtoModel<T extends ProtoModel<T>> {
         }
     }
 
-    async listTransformed(search?, transformers = {}, session?, extraData?, params?, jsCode?): Promise<any> {
-        const result = this.list(search, session, extraData, params, jsCode);
+    async listTransformed(search?, transformers = {}, session?, extraData?, params?): Promise<any> {
+        const result = this.list(search, session, extraData, params)
         if (result) {
             return await (this.getObjectSchema().apply('list', result, transformers));
         }
-    }
-
-    static getAdditionalDescriptions(): string {
-        return '';
     }
 
     create(data?): T {
@@ -452,3 +469,8 @@ export abstract class AutoModel<D> extends ProtoModel<AutoModel<D>> {
         return DerivedModel;
     }
 }
+</ProtoModel.ts>
+<final_reminder>
+    Generate only javascript code on your response and nothing else.
+    An automated sistem is conected to your output and will execute in JS VM your output
+</final_reminder>
