@@ -1,4 +1,4 @@
-import { ArrowLeft, BookOpen, Plus, Save, Settings, Sparkles, Tag, Trash2, X } from '@tamagui/lucide-icons'
+import { ClipboardList, Pause, Play, Plus, Save, Settings, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
@@ -31,10 +31,10 @@ import { jsonToDiv } from 'protolib/lib/jsonToDiv'
 import { usePendingEffect } from 'protolib/lib/usePendingEffect'
 import { createParam } from 'solito'
 import { AsyncView } from 'protolib/components/AsyncView'
+import dynamic from 'next/dynamic'
 
 const { useParam, useParams } = createParam()
 
-import dynamic from 'next/dynamic'
 const ActionRunner = dynamic(() => import('protolib/components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
 
 const sourceUrl = '/api/core/v1/boards'
@@ -83,6 +83,23 @@ const ActionCard = ({ id, displayResponse, html, name, title, params, icon = und
       html={html}
     />
   </CenterCard>
+}
+
+const FloatingButton = ({ Icon, beating = false, ...props }) => {
+  const size = 34
+  return <YStack
+    jc="center"
+    ai="center"
+    br="$4"
+    cursor='pointer'
+    scaleIcon={1.8}
+    w={size}
+    h={size}
+    hoverStyle={{ bg: '$gray2' }}
+    {...props}
+  >
+    <Icon size={20} fill={props.fill ? "var(--color)" : "transparent"} {...props.iconProps} />
+  </YStack>
 }
 
 const Board = ({ board, icons }) => {
@@ -204,7 +221,7 @@ const Board = ({ board, icons }) => {
       API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
       return newItems;
     });
-  } 
+  }
 
   const onEditBoard = async () => {
     try {
@@ -302,71 +319,55 @@ const Board = ({ board, icons }) => {
 
   return (
     <YStack flex={1}>
-      <XStack py={"$3"}>
-        <XStack f={1} alignItems='center' >
-          <Tinted>
-            <DataViewActionButton
-              icon={(props) => <ArrowLeft {...props} color="var(--color10)" />}
-              description="Back"
-              onPress={() => router.push("/boards")}
-              mr="$2"
-            />
-          </Tinted>
-          <Paragraph size="$5" fontWeight="400">{board.name}</Paragraph>
-        </XStack>
-        {/* <Tinted><Save color="var(--color8)" size={"$1"} strokeWidth={1.6}/></Tinted> */}
-        <XStack f={1} alignItems='center' justifyContent='flex-end'>
-          {
-            isJSONView
-              ? <Tinted>
-                <XStack userSelect="none" ai="center" jc="center" mr="$5" gap="$3">
-                  <Button
-                    icon={X}
-                    theme="red"
-                    scaleIcon={1.2}
-                    onPress={() => removeReplace('json')}
-                  />
-                  <Button
-                    icon={Save}
-                    scaleIcon={1.2}
-                    onPress={onEditBoard}
-                  />
-                </XStack>
-              </Tinted>
-              : <Tinted>
-                <XStack userSelect="none" ai="center" jc="center" mr="$5">
-                  <XStack mr="$3">
-                    <XStack opacity={rulesOpened ? 1.0 : 0.6} hoverStyle={{ opacity: 1 }} pressStyle={{ opacity: 0.8 }} cursor="pointer" onPress={() => {
-                      setRulesOpened(!rulesOpened)
-                    }}>
-                      <Sparkles size={25} color={autopilot ? "var(--color9)" : "var(--gray8)"} />
-                    </XStack>
+      <XStack p="$2" bc="red" als="center" pos="fixed" elevation={10} bw={1} boc="$gray6" animation="quick" bc="$bgPanel" zi={99999} b={rulesOpened ? -200 : 16} gap="$3" br="$5">
+        {
+          isJSONView
+            ? <Tinted>
+              <FloatingButton
+                Icon={X}
+                iconProps={{color: "$gray9"}}
+                onPress={() => removeReplace('json')}
+              />
+              <FloatingButton
+                Icon={Save}
+                onPress={onEditBoard}
+              />
+            </Tinted>
+            : <Tinted>
+              <FloatingButton
+                Icon={Plus}
+                onPress={async () => {
+                  setAddOpened(true)
+                }}
+              />
+              <FloatingButton
+                beating={autopilot}
+                fill={autopilot ? false : true}
+                Icon={autopilot ? Pause : Play}
+                iconProps={{ ml: autopilot ? 0 : 2 }}
+                onPress={async () => {
+                  let newValue = !autopilot
+                  setAutopilot(newValue)
+                  boardRef.current.autopilot = newValue
+                  await API.get(`/api/core/v1/boards/${board.name}/autopilot/${newValue ? 'on' : 'off'}`)
+                }}
+                hoverStyle={{ bg: '$color5' }}
+                bc={autopilot ? "$color7" : "transparent"}
+                br="$20"
+              />
+              <FloatingButton
+                Icon={ClipboardList}
+                onPress={async () => {
+                  setRulesOpened(!rulesOpened)
+                }}
+              />
+            </Tinted>
+        }
 
-                  </XStack>
-                  <Paragraph size="$3" fontWeight="400" mr="$4">Autopilot</Paragraph>
-                  <Switch size="$2" checked={autopilot} onCheckedChange={async (checked) => {
-                    setAutopilot(checked)
-                    boardRef.current.autopilot = checked
-                    await API.get(`/api/core/v1/boards/${board.name}/autopilot/${checked ? 'on' : 'off'}`)
-                  }}>
-                    <Switch.Thumb animation="bouncy" />
-                  </Switch>
-                </XStack>
-
-                <DataViewActionButton
-                  icon={(props) => <Plus {...props} color="var(--color10)" />}
-                  description="Add"
-                  onPress={async () => {
-                    setAddOpened(true)
-                  }}
-                />
-              </Tinted>
-          }
-        </XStack>
       </XStack>
 
       <CardSelector addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
-      
+
       <Theme reset>
         <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
           <Dialog.Portal zIndex={100000} overflow='hidden'>
@@ -472,11 +473,14 @@ const Board = ({ board, icons }) => {
               />
           }
         </YStack>
+        <div
+          onClick={() => setRulesOpened(false)}
+          style={{ width: "100vw", height: "120vh", position: "fixed", right: rulesOpened ? 0 : "-100vw" }}
+        ></div>
         {
-          <XStack position="fixed" animation="quick" right={rulesOpened ? 0 : -1000} top={130} width={810} height="80vh">
-            <XStack width="100%" br={9} height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? 'black' : 'white'} opacity={0.9}></XStack>
+          <XStack position="fixed" animation="quick" right={rulesOpened ? 20 : -1000} top={"70px"} width={810} height="calc(100vh - 100px)">
+            <XStack width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={0.9}></XStack>
             <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
-
           </XStack>
         }
       </XStack>
@@ -497,12 +501,12 @@ const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, 
 
   return (<AsyncView ready={boardData.status == 'loaded' && iconsData.status == 'loaded'}>
     <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
-          {boardData.status == 'error' && <ErrorMessage
-            msg="Error loading board"
-            details={board?.error?.result}
-          />}
-          {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
-        </AdminPage>
+      {boardData.status == 'error' && <ErrorMessage
+        msg="Error loading board"
+        details={board?.error?.result}
+      />}
+      {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
+    </AdminPage>
   </AsyncView>)
 }
 
