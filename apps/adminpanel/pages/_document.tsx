@@ -54,7 +54,7 @@ export default class Document extends NextDocument {
 
                     CanvasRenderingContext2D.prototype.drawImage = function (...args) {
                       try {
-                        console.log('🖼️ drawImage interceptado:', args);
+                        // console.log('🖼️ drawImage interceptado:', args);
                         // Si el primer argumento es una imagen/canvas/video
                         const img = args[0];
 
