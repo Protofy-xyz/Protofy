@@ -1,4 +1,4 @@
-import { YStack, Text, Button, Input, XStack } from '@my/ui';
+import { YStack, Text, Button, Input, XStack, useToastController } from '@my/ui';
 import { DashboardCard } from './DashboardCard';
 import { useEffect, useState } from 'react';
 import { getKey } from "@extensions/keys/coreContext";
@@ -22,6 +22,8 @@ export const KeySetter: React.FC<KeySetterProps> = ({
     const [value, setValue] = useState("");
     const [currKey, setCurrKey] = useState<any>("");
 
+    const toast = useToastController()
+
     const loadKey = async () => {
         const keyRes = await getKey({
             key: nameKey
@@ -35,10 +37,18 @@ export const KeySetter: React.FC<KeySetterProps> = ({
     }
 
     const onEditKey = async (keyVal) => {
-        const res = await API.post("/api/core/v1/keys/" + nameKey, { name: nameKey, value: keyVal });
+        const keyData = { name: nameKey, value: keyVal }
+
+        let res = await API.post("/api/core/v1/keys/" + nameKey, keyData);
+
+        if (res.isError && !res.data) { // If the key does not exist, create it
+            res = await API.post("/api/core/v1/keys", keyData);
+        }
+
         if (res?.data) {
-            console.log("DEV: Key saved: ", res.data);
             setCurrKey(res?.data.value);
+        } else if (res?.isError) {
+            toast.show("Error setting key", { duration: 2000, tint: "red" });
         }
     }
 
