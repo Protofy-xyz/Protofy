@@ -4,6 +4,7 @@ import { initParticlesAtom } from 'protolib/components/particles/ParticlesEngine
 import { ParticlesView } from 'protolib/components/particles/ParticlesView'
 import { Page } from 'protolib/components/Page'
 import { basicParticlesMask } from 'protolib/components/particles/particlesMasks/basicparticlesMask'
+import { Protofy } from "protobase";
 
 const Home = () => {
   const initParticles = useSetAtom(initParticlesAtom)
@@ -77,9 +78,6 @@ const Home = () => {
 }
 
 export default {
-  route: {
-    type: 'route',
-    path: '/',
-  },
-  component: Home,
-}
+  route: Protofy("route", "/"),
+  component: (props) => <Home {...props} />
+};
