@@ -29,7 +29,6 @@ import { TotalGroups, ListGroups } from '@extensions/groups/widgets'
 const enableArduinos = false
 
 export default ({ pages, boards, objects }) => {
-    const adminPages = pages.filter(p => p.pageType == 'admin' && !p.object)
     const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
 
     const integrations = [
@@ -57,14 +56,9 @@ export default ({ pages, boards, objects }) => {
         return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": ('/workspace/') + obj.features.adminPage }
     }) : [];
 
-    const adminMenu = adminPages.map((page) => {
-        return { "name": page.name.charAt(0).toUpperCase() + page.name.slice(1), "icon": Wrench, "href": page.route }
-    })
-
     const initialData = {
         Boards: [],
         ...(objectsMenu.length ? { Storage: objectsMenu } : {}),
-        ...(adminMenu.length ? { Admin: adminMenu } : {}),
         Integrations: integrations,
         Settings: systemMenu
     }

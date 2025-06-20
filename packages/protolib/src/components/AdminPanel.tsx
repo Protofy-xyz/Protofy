@@ -63,13 +63,6 @@ export const AdminPanel = ({ children }) => {
     }
   }
 
-  const getPages = async () => {
-    const pages = await API.get('/api/core/v1/pages')
-    if(pages.isLoaded) {
-      setPages(pages.data.items)
-    }
-  }
-
   const getBoards = async () => {
     const boards = await API.get('/api/core/v1/boards')
     if(boards.isLoaded) {
@@ -78,7 +71,6 @@ export const AdminPanel = ({ children }) => {
   }
 
   useEffect(() => {
-    getPages()
     getBoards()
     getObjects()
   }, [message])
@@ -95,7 +87,7 @@ export const AdminPanel = ({ children }) => {
     }
   }, [rightPanelSize])
 
-  const workspaceData = useWorkspace({pages: pages, boards: boards, objects: objects})
+  const workspaceData = useWorkspace({boards: boards, objects: objects})
   const settingsLogs = workspaceData?.logs
   const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
@@ -126,7 +118,7 @@ export const AdminPanel = ({ children }) => {
           </XStack>
         </>
       }
-      menuContent={pages ? <PanelMenu workspace={workspaceData} />:<></>}
+      menuContent={<PanelMenu workspace={workspaceData} />}
     >
       <XStack f={1} px={"$0"} flexWrap='wrap'>
         {children}
