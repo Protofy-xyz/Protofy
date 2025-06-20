@@ -437,7 +437,7 @@ const Board = ({ board, icons }) => {
               />
               : <DashboardGrid
                 items={cards}
-                layouts={layouts}
+                layouts={boardRef.current.layouts}
                 borderRadius={10}
                 padding={10}
                 backgroundColor="white"
@@ -450,11 +450,17 @@ const Board = ({ board, icons }) => {
                   console.log('programming layout change: ', breakpointRef.current)
                   clearInterval(dedupRef.current)
                   //small dedup to avoid multiple saves in a short time
+                  if(JSON.stringify(boardRef.current.layouts[breakpointRef.current]) == JSON.stringify(layout)) {
+                    console.log('Layout not changed, skipping save')
+                    return
+                  }
                   dedupRef.current = setTimeout(() => {
                     console.log('Layout changed: ', breakpointRef.current)
+                    console.log('Prev layout: ', boardRef.current.layouts[breakpointRef.current])
+                    console.log('New layout: ', layout)
                     boardRef.current.layouts[breakpointRef.current] = layout
                     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                  }, 1000)
+                  }, 100)
                 }}
                 onBreakpointChange={(bp) => {
                   clearInterval(dedupRef.current)

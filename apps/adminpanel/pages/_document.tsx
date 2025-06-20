@@ -51,28 +51,59 @@ export default class Document extends NextDocument {
                 if (typeof window !== 'undefined') {
                   (function shimDrawImage() {
                     const originalDrawImage = CanvasRenderingContext2D.prototype.drawImage;
+                    const drawQueues = new WeakMap(); // Mapea cada contexto a su cola de draws pendientes
+                    const drawInProgress = new WeakMap(); // Para evitar bucles infinitos al procesar la cola
 
                     CanvasRenderingContext2D.prototype.drawImage = function (...args) {
-                      try {
-                        // console.log('🖼️ drawImage interceptado:', args);
-                        // Si el primer argumento es una imagen/canvas/video
-                        const img = args[0];
+                        try {
+                          const img = args[0];
 
-                        if (!img) return;
+                          if (!img) return;
 
-                        const width = img.width || args[3];  // args[3] si se pasa: drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-                        const height = img.height || args[4];
+                          const width = img.width || args[3];
+                          const height = img.height || args[4];
 
-                        // Evitar drawImage si hay dimensiones nulas
-                        if (width === 0 || height === 0) return;
+                          // Si no tiene dimensiones, lo guardamos para intentar más tarde
+                          if (!width || !height) {
+                            if (!drawQueues.has(this)) drawQueues.set(this, []);
+                            drawQueues.get(this).push(args);
+                            return;
+                          }
 
-                        // Llamar a la función original
-                        return originalDrawImage.apply(this, args);
-                      } catch (err) {
-                        console.warn('🛑 drawImage falló silenciosamente:', err);
-                        return;
-                      }
-                    };
+                          // Evitar loops infinitos
+                          if (drawInProgress.get(this)) return;
+
+                          // Ejecutar los draws pendientes si hay
+                          const queue = drawQueues.get(this);
+                          if (queue && queue.length > 0) {
+                            drawInProgress.set(this, true);
+                            while (queue.length > 0) {
+                              const pendingArgs = queue.shift();
+                              try {
+                                const pendingImg = pendingArgs[0];
+                                const w = pendingImg?.width || pendingArgs[3];
+                                const h = pendingImg?.height || pendingArgs[4];
+                                if (w && h) {
+                                  originalDrawImage.apply(this, pendingArgs);
+                                } else {
+                                  // Si sigue sin estar lista, volver a poner al final
+                                  queue.push(pendingArgs);
+                                }
+                              } catch (e) {
+                                console.warn('🛑 Fallo al procesar draw pendiente:', e);
+                              }
+                            }
+                            drawInProgress.set(this, false);
+                          }
+
+                          // Dibujar la imagen actual
+                          return originalDrawImage.apply(this, args);
+
+                        } catch (err) {
+                          console.warn('🛑 drawImage falló silenciosamente:', err);
+                          return;
+                        }
+                      };
                   })();
                   var OriginalWebSocket = window.WebSocket;
 

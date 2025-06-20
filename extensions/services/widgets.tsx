@@ -103,10 +103,15 @@ const requestViewLib = (cb) => {
     });
 }
 
+const cardState = {}
 export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
     const [theme, setTheme] = useRootTheme()
+
+    if(cardState[uuid] === undefined) {
+        cardState[uuid] = {}
+    }
 
     //memorize the component to avoid rerendering on every update by
 
@@ -116,6 +121,11 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
         return getHTML(html, viewLib, {
             ...data, theme, domId: uuid, setCardData: (obj) => {
                 setData(obj)
+            }, cardState: cardState[uuid], setCardState: (state) => {
+                if(!cardState[uuid]) {
+                    return;
+                }
+                Object.assign(cardState[uuid], state);
             }
         })
     }, [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
@@ -131,6 +141,10 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
                 viewLib = lib;
                 setLoaded(true);
             })
+        }
+
+        return () => {
+            delete cardState[uuid]; // Clean up state when component unmounts
         }
     }, []);
 
