@@ -46,8 +46,34 @@ export default class Document extends NextDocument {
           <FontsLoader />
           <script dangerouslySetInnerHTML={{
             __html: `
+            
               (function() {
                 if (typeof window !== 'undefined') {
+                  (function shimDrawImage() {
+                    const originalDrawImage = CanvasRenderingContext2D.prototype.drawImage;
+
+                    CanvasRenderingContext2D.prototype.drawImage = function (...args) {
+                      try {
+                        console.log('🖼️ drawImage interceptado:', args);
+                        // Si el primer argumento es una imagen/canvas/video
+                        const img = args[0];
+
+                        if (!img) return;
+
+                        const width = img.width || args[3];  // args[3] si se pasa: drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+                        const height = img.height || args[4];
+
+                        // Evitar drawImage si hay dimensiones nulas
+                        if (width === 0 || height === 0) return;
+
+                        // Llamar a la función original
+                        return originalDrawImage.apply(this, args);
+                      } catch (err) {
+                        console.warn('🛑 drawImage falló silenciosamente:', err);
+                        return;
+                      }
+                    };
+                  })();
                   var OriginalWebSocket = window.WebSocket;
 
                   window.WebSocket = function(url, protocols) {

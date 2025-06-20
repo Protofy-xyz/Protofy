@@ -412,10 +412,31 @@ const reactCard = (jsx, root) => {
     });
 
     const jsxCode = `
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback ?? <div style={{ color: 'red' }}>Oops</div>;
+    }
+    return this.props.children;
+  }
+}
+
   function WidgetRoot({children}) {
     return (
       <Provider disableRootThemeClass>
+        <ErrorBoundary fallback={<div style={{ color: 'red' }}>Oops</div>}>
         {children}
+        </ErrorBoundary>
       </Provider>
     );
   }

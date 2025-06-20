@@ -55,13 +55,15 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, html, value, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+const ValueCard = ({ id, title, html, value, setData=(data, id) =>{}, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
   return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <CardValue
+      id={id}
       Icon={icon ?? 'tag'}
       value={value ?? 'N/A'}
       color={color}
       html={html}
+      setData={setData}
       {...data}
     />
   </CenterCard>
@@ -190,6 +192,20 @@ const Board = ({ board, icons }) => {
     });
   };
 
+  const setCardContent = (key, content) => {
+    setItems(prevItems => {
+      const newItems = prevItems.map(item => {
+        if (item.key === key) {
+          return { ...item, ...content };
+        }
+        return item;
+      });
+      boardRef.current.cards = newItems;
+      API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
+      return newItems;
+    });
+  } 
+
   const onEditBoard = async () => {
     try {
       const newBoard = JSON.parse(boardCode)
@@ -243,6 +259,11 @@ const Board = ({ board, icons }) => {
           setCurrentCard(item)
           setEditedCard(item)
         }}
+
+          setData={(data, id) => {
+            setCardContent(id, data)
+            console.log('setData called with:', data, id);
+          }}
           containerProps={item.containerProps}
         />
       }

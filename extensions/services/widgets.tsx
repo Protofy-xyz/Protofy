@@ -103,7 +103,7 @@ const requestViewLib = (cb) => {
     });
 }
 
-export const HTMLView = ({ html, data, ...props }) => {
+export const HTMLView = ({ html, data, setData=(data) => {}, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
     const [theme, setTheme] = useRootTheme()
@@ -122,15 +122,19 @@ export const HTMLView = ({ html, data, ...props }) => {
     }, []);
     if(!viewLib) return <></>
     return (
-        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? getHTML(html, viewLib, {...data, theme, domId: uuid}) : '' }} /> 
+        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? getHTML(html, viewLib, {...data, theme, domId: uuid, setCardData: (obj) => {
+            setData(obj)
+        }}) : '' }} /> 
     )
 }
 
-export const CardValue = ({ Icon, value, html, color = "var(--color7)", ...props }) => {
+export const CardValue = ({ Icon, id=null, value, setData=(data, id) => {}, html, color = "var(--color7)", ...props }) => {
 
     return (
         <YStack width="100%" height="100%" alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <HTMLView style={{width: "100%", height: '100%' }} html = {html} data={ {...props, icon: Icon, value: value, color: color }} />}
+            {html?.length > 0 && <HTMLView style={{width: "100%", height: '100%' }} html = {html} data={{...props, icon: Icon, value: value, color: color }} setData={(data) => {
+                setData(data, id)
+            }} />}
             {!html?.length && <>
                 {typeof Icon === 'string' ? <div style={{
                     width: "48px",
