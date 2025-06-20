@@ -93,7 +93,7 @@ export const DataTableList = ({
                 })
         )
     )
-    return <XStack pt="$1" flexWrap='wrap' f={1} bc="$bgPanel" br="$6" mt="$2" mb="$6">
+    return <XStack pt="$1" flexWrap='wrap' f={1} bc="$bgPanel" br="$6" mt="$2" mb="$6" overflow="scroll" overflowX="hidden">
         <Tinted>
             <DataTable2.component
                 disableItemSelection={disableItemSelection}
