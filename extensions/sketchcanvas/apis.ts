@@ -1,5 +1,6 @@
-export default (app, context) => {
+import {getServiceToken} from 'protonode'
 
+export default (app, context) => {
     context.cards.add({
         group: 'board',
         tag: "sketch",
@@ -7,15 +8,16 @@ export default (app, context) => {
         templateName: "Sketch canvas",
         name: "board_sketch",
         defaults: {
-            name: "",
+            name: "sketch",
+            freeze: true,
             icon: "pencil",
             description: "Draw something",
             type: 'value',
             html: "return sketch(data)"
         },
+        token: getServiceToken(),
         emitEvent: true
     });
-
 }
 
 

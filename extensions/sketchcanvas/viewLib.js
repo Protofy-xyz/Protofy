@@ -28,7 +28,7 @@ function Widget() {
                 return;
             }
             setTimeout(() => {
-                canvasRef.current.loadSaveData(data.drawing, true);
+                canvasRef.current.loadSaveData(data.drawing);
             }, 100)
         }
     }, [data.drawing]);

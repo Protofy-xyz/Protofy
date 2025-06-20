@@ -104,7 +104,7 @@ const requestViewLib = (cb) => {
 }
 
 const cardState = {}
-export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
+export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {    
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
     const [theme, setTheme] = useRootTheme()
@@ -114,8 +114,6 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
     }
 
     //memorize the component to avoid rerendering on every update by
-
-
     const totalHtml = useMemo(() => {
         if(!viewLib) return '';
         if(!document || !document.getElementById(uuid)) return '';
