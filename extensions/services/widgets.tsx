@@ -2,7 +2,7 @@ import { YStack, Text, XStack } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRemoteStateList } from 'protolib/lib/useRemoteState';
 import { ServiceModel } from './servicesSchemas';
 import AsyncView from 'protolib/components/AsyncView';
@@ -81,7 +81,7 @@ export const getHTML = (html, viewLib, data) => {
 let viewLib = null;
 let pendingViewLibRequest = null;
 const requestViewLib = (cb) => {
-    if(viewLib) {
+    if (viewLib) {
         cb(viewLib);
         return;
     }
@@ -103,15 +103,28 @@ const requestViewLib = (cb) => {
     });
 }
 
-export const HTMLView = ({ html, data, setData=(data) => {}, ...props }) => {
+export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
     const [theme, setTheme] = useRootTheme()
+
+    //memorize the component to avoid rerendering on every update by
+
+    const totalHtml = useMemo(() => {
+        if(!viewLib) return '';
+        if(!document || !document.getElementById(uuid)) return '';
+        return getHTML(html, viewLib, {
+            ...data, theme, domId: uuid, setCardData: (obj) => {
+                setData(obj)
+            }
+        })
+    }, [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
+
     //TODO: loading?
     useEffect(() => {
-        if(!loaded) {
+        if (!loaded) {
             requestViewLib((lib) => {
-                if(!lib) {
+                if (!lib) {
                     console.error('Failed to load view library');
                     return;
                 }
@@ -120,19 +133,17 @@ export const HTMLView = ({ html, data, setData=(data) => {}, ...props }) => {
             })
         }
     }, []);
-    if(!viewLib) return <></>
+
     return (
-        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? getHTML(html, viewLib, {...data, theme, domId: uuid, setCardData: (obj) => {
-            setData(obj)
-        }}) : '' }} /> 
+        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? totalHtml : '' }} />
     )
 }
 
-export const CardValue = ({ Icon, id=null, value, setData=(data, id) => {}, html, color = "var(--color7)", ...props }) => {
+export const CardValue = ({ Icon, id = null, value, setData = (data, id) => { }, html, color = "var(--color7)", ...props }) => {
 
     return (
         <YStack width="100%" height="100%" alignItems='center' justifyContent='center'>
-            {html?.length > 0 && <HTMLView style={{width: "100%", height: '100%' }} html = {html} data={{...props, icon: Icon, value: value, color: color }} setData={(data) => {
+            {html?.length > 0 && <HTMLView style={{ width: "100%", height: '100%' }} html={html} data={{ ...props, icon: Icon, value: value, color: color }} setData={(data) => {
                 setData(data, id)
             }} />}
             {!html?.length && <>
