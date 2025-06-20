@@ -7,7 +7,6 @@ function Widget() {
     const canvasRef = React.useRef(null);    
     const color = getComputedStyle(document.documentElement).getPropertyValue('--color9').trim();
     const firstLoadRef = React.useRef(true);
-    const oldDataRef = React.useRef(null);
 
     function undo() {
         if (canvasRef.current) {
@@ -23,27 +22,34 @@ function Widget() {
 
     React.useEffect(() => {
         if (canvasRef.current && data.drawing) {
-            oldDataRef.current = data.drawing;
-            //console.log('chaaaaaaaa loading data', data.drawing);
-            //canvasRef.current.loadSaveData(data.drawing, true);
+            data.setCardState({ oldData: data.drawing });
+            if(data?.cardState?.reDrawn) {
+                data.setCardState({ reDrawn: false });
+                return;
+            }
+            setTimeout(() => {
+                canvasRef.current.loadSaveData(data.drawing, true);
+            }, 100)
         }
     }, [data.drawing]);
 
-    return (
-        <div className="no-drag" {...cardEvents} style={{ height: "100%", padding: "3px" }}>
+    return React.useMemo( () => {
+        return <div className="no-drag" {...cardEvents} style={{ height: "100%", padding: "3px" }}>
             <Tinted>
                 <CanvasDraw onChange={() => {
                     const savedData = canvasRef.current.getSaveData();
+
                     if(firstLoadRef.current) {
                         firstLoadRef.current = false;
                         return;
                     }
-                    if(oldDataRef.current != canvasRef.current.getSaveData()) {
-                        //console.log('chaaaaaaaaaaaaaaaaaaaaaange', savedData);
-                        oldDataRef.current = savedData;
-                        //data.setCardData({drawing: canvasRef.current.getSaveData()});   
+
+                    if(JSON.stringify(JSON.parse(data?.cardState?.oldData ?? '{}')) != JSON.stringify(JSON.parse(canvasRef.current.getSaveData()))) {
+                        data.setCardState({ reDrawn: true });
+                        data.setCardState({ oldData: canvasRef.current.getSaveData() });
+                        data.setCardData({drawing: canvasRef.current.getSaveData()}, false);   
                     }
-                    
+
                 }} hideInterface={true} ref={canvasRef} hideGridY={true} hideGridX={true} backgroundColor='var(--bgPanel)' className="no-drag" style={{ width: "100%", height: "100%" }} brushRadius={2} lazyRadius={6} brushColor={color} />
                 <div style={{ position: "absolute", top: '10px', right: '10px', opacity: opacity, transition: 'opacity 0.3s ease-in-out' }}>
                     <InteractiveIcon onPress={undo} Icon="undo" IconColor='var(--color)' size={24} style={{  }} />
@@ -51,7 +57,7 @@ function Widget() {
                 </div>
             </Tinted>
         </div>
-    );
+    }, []);
 }
 
     `, card.domId)

@@ -115,6 +115,7 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
 
     //memorize the component to avoid rerendering on every update by
 
+
     const totalHtml = useMemo(() => {
         if(!viewLib) return '';
         if(!document || !document.getElementById(uuid)) return '';
@@ -128,7 +129,7 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
                 Object.assign(cardState[uuid], state);
             }
         })
-    }, [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
+    }, data.freeze? [viewLib] : [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
 
     //TODO: loading?
     useEffect(() => {
@@ -154,7 +155,7 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
 }
 
 export const CardValue = ({ Icon, id = null, value, setData = (data, id) => { }, html, color = "var(--color7)", ...props }) => {
-
+    
     return (
         <YStack width="100%" height="100%" alignItems='center' justifyContent='center'>
             {html?.length > 0 && <HTMLView style={{ width: "100%", height: '100%' }} html={html} data={{ ...props, icon: Icon, value: value, color: color }} setData={(data) => {
