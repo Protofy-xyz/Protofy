@@ -123,6 +123,11 @@ function createLogWindow() {
     fullscreen: fullscreen,
   });
 
+  logWindow.on('close', (event) => {
+    event.preventDefault();
+    logWindow.hide();
+  });
+
   logWindow.loadFile(path.join(__dirname, 'renderer.html'));
 }
 
