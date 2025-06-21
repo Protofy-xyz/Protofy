@@ -4,7 +4,6 @@ const http = require('http');
 const net = require('net');
 const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
-const { genToken } = require('protonode')
 const { spawn } = require('child_process');
 
 const minimist = require('minimist');
@@ -53,6 +52,7 @@ function logToRenderer(msg) {
 }
 
 const genNewSession = () => {
+  const { genToken } = require('protonode')
   const data = {
     id: 'admin@localhost',
     type: 'admin',
@@ -64,8 +64,6 @@ const genNewSession = () => {
     token: genToken(data)
   }
 }
-
-const userSession = genNewSession()
 
 async function runYarn() {
   return new Promise((resolve, reject) => {
@@ -154,6 +152,7 @@ function createLogWindow() {
 
 // Create main window (localhost:8000)
 function createMainWindow() {
+  const userSession = genNewSession()
   const sessionStr = JSON.stringify(userSession);
   const encoded = encodeURIComponent(sessionStr);
 
