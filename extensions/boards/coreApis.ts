@@ -759,6 +759,28 @@ return card({
         emitEvent: true
     });
 
+    addCard({
+        group: 'board',
+        tag: 'youtube',
+        id: 'youtube',
+        templateName: 'Display a YouTube video',
+        name: 'board_youtube',
+        defaults: {
+            name: 'YouTube Video',
+            icon: 'youtube',
+            description: 'Embed a YouTube video from a URL',
+            type: 'value',
+            html: `
+// data contains: data.value, data.icon and data.color
+return card({
+  content: youtubeEmbed({ url: \`\${data.value}\` }),
+  padding: '3px'
+});
+`,
+        },
+        emitEvent: true
+    });
+
 
     addCard({
         group: 'board',

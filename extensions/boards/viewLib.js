@@ -244,9 +244,29 @@ const iframe = ({ src }) => {
 }
 
 const boardImage = ({ src, alt = '' }) => {
-  return `<img src="${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: contain;" />`;
+    return `<img src="${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: contain;" />`;
 };
 
+const youtubeEmbed = ({ url }) => {
+    // Extrae el video ID desde una URL de YouTube completa
+    const match = url.match(
+        /(?:youtube\.com\/.*v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+    );
+
+    const videoId = match ? match[1] : url; // si ya es solo el ID
+
+    return `
+    <iframe
+      width="100%"
+      height="100%"
+      src="https://www.youtube.com/embed/${videoId}"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+      style="border: none;"
+    ></iframe>
+  `;
+};
 
 const cardAction = ({ data }) => {
     const margin = 10;
@@ -526,31 +546,31 @@ const getCardAspectRatio = (id) => {
 }
 
 function useCardAspectRatio(id) {
-  const [aspectRatio, setAspectRatio] = React.useState(1);
+    const [aspectRatio, setAspectRatio] = React.useState(1);
 
-  React.useEffect(() => {
-    const div = document.getElementById(id);
-    if (!div) return;
+    React.useEffect(() => {
+        const div = document.getElementById(id);
+        if (!div) return;
 
-    const heightError = 20; // margin top
-    const updateAspectRatio = () => {
-      const rect = div.getBoundingClientRect();
-      if (rect.height !== 0) {
-        setAspectRatio(rect.width / (rect.height-heightError));
-      }
-    };
+        const heightError = 20; // margin top
+        const updateAspectRatio = () => {
+            const rect = div.getBoundingClientRect();
+            if (rect.height !== 0) {
+                setAspectRatio(rect.width / (rect.height - heightError));
+            }
+        };
 
-    updateAspectRatio(); // calcular al montar
+        updateAspectRatio(); // calcular al montar
 
-    const resizeObserver = new ResizeObserver(updateAspectRatio);
-    resizeObserver.observe(div);
+        const resizeObserver = new ResizeObserver(updateAspectRatio);
+        resizeObserver.observe(div);
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [id]);
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [id]);
 
-  return aspectRatio;
+    return aspectRatio;
 }
 
 const useActiveCard = () => {
