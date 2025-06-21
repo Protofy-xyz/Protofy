@@ -8,9 +8,12 @@ import { forwardRef, useState, useContext, useEffect } from 'react';
 import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { BubbleChat } from './BubbleChat';
 import { useRouter } from 'next/router'
+import { useIsAdmin } from '../lib/useIsAdmin';
 
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)
+
+  useIsAdmin(() => '/auth/login?return='+document?.location?.pathname)
   const router = useRouter()
 
   const [ready, setReady] = useState(false);
