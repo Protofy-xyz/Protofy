@@ -108,13 +108,19 @@ export const AdminPanel = ({ children }) => {
               <InteractiveIcon
                   $xs={{ display: "none" }}
                   onPress={() => {
-                    window.electronAPI.openExternal("http://localhost:8000");
+                    window['electronAPI'].openExternal("http://localhost:8000");
                   }}
                   IconColor="var(--color)"
                   Icon={Globe}
                 />
             ) : null}
-            {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
+            {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => {
+              if(isElectron()) {
+                window['electronAPI'].toggleLogWindow()
+              } else {
+                setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })
+              }
+            }} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
           </XStack>
         </>
       }

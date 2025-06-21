@@ -124,9 +124,6 @@ function createLogWindow() {
   });
 
   logWindow.loadFile(path.join(__dirname, 'renderer.html'));
-  logWindow.on('closed', () => {
-    logWindow = null;
-  });
 }
 
 // Create main window (localhost:8000)
@@ -161,19 +158,23 @@ function createMainWindow() {
       });
 
       mainWindow.maximize();
+
+      mainWindow.on('close', async () => {
+        try {
+          console.log('🔚 Main window closed. Stopping PM2 and exiting...');
+          await stopPM2(logToRenderer);
+        } catch (err) {
+          console.error('❌ Error stopping PM2:', err);
+        } finally {
+          app.exit(0); // esto termina el proceso principal
+        }
+      });
       //close log window
       if (logWindow) {
-        logWindow.close();
+        logWindow.hide();
       }
 
       mainWindow.loadURL(initialUrl);
-
-      app.on('will-quit', async (event) => {
-        event.preventDefault(); // <- sigue siendo necesario
-        logToRenderer('🛑 will-quit: stopping PM2...');
-        await stopPM2(logToRenderer);
-        app.exit(); // <- app.quit() vuelve a emitir eventos; usa app.exit()
-      });
     })
     .catch(error => {
       console.error('❌ Failed to set session cookie:', error);
@@ -181,11 +182,11 @@ function createMainWindow() {
 }
 
 app.whenReady().then(async () => {
-  globalShortcut.register('CommandOrControl+R', () => {
-    if (mainWindow && !mainWindow.isDestroyed()) {
-      mainWindow.reload();
-    }
-  });
+  // globalShortcut.register('CommandOrControl+R', () => {
+  //   if (mainWindow && !mainWindow.isDestroyed()) {
+  //     mainWindow.reload();
+  //   }
+  // });
 
   try {
     const nodeBin = getNodeBinary(__dirname);
@@ -228,4 +229,15 @@ app.whenReady().then(async () => {
 
 ipcMain.on('open-external-url', (_event, url) => {
   shell.openExternal(url);
+});
+
+ipcMain.on('toggle-log-window', () => {
+  if (!logWindow) return;
+
+  if (logWindow.isVisible()) {
+    logWindow.hide();
+  } else {
+    logWindow.show();
+    logWindow.focus();
+  }
 });

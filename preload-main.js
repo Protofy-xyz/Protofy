@@ -18,7 +18,8 @@ const { contextBridge, ipcRenderer, shell } = require('electron');
 })();
 
 contextBridge.exposeInMainWorld('electronAPI', {
-  openExternal: (url) => ipcRenderer.send('open-external-url', url)
+  openExternal: (url) => ipcRenderer.send('open-external-url', url),
+  toggleLogWindow: () => ipcRenderer.send('toggle-log-window')
 });
 
 contextBridge.exposeInMainWorld('logAPI', {
