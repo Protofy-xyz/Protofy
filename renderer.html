@@ -10,7 +10,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-
+  <link rel="stylesheet" href="data/public/fonts/inter-400.css" />
   <!-- Styles -->
   <style>
     :root {
@@ -24,6 +24,8 @@
 
     * {
       box-sizing: border-box;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
     }
 
     html,
@@ -138,19 +140,20 @@
 
     /* Logs panel */
     #logs {
+      background: rgba(0, 0, 0, 0.8);
+      height: 100vh;
+      width: 100vw;
       display: none;
     }
 
-    textarea {
-      width: 100%;
-      height: 100%;
-      background: #000000cc;
-      color: #fff9d0;
+    #log {
+      white-space: pre-wrap;
+      color: #c7c2a2;
       border: none;
       resize: none;
-      padding: 18px;
+      padding: 10px;
       font-size: 15px;
-      font-family: 'Fira Code', monospace;
+      font-family: 'Inter', monospace;
       line-height: 1.4;
       backdrop-filter: blur(6px);
     }
@@ -170,13 +173,88 @@
   </div>
 
   <!-- Logs -->
-  <div id="logs">
-    <textarea id="log" readonly></textarea>
+  <div id="logs" style="overflow: auto;">
+    <pre id="log" readonly></pre>
   </div>
 
   <!-- tsParticles -->
   <script src="data/public/vendor/tsparticles.bundle.min.js"></script>
   <script>
+
+    function simpleAnsiToHtml(text) {
+      // Mapeo de códigos ANSI a estilos CSS
+      const codeStyles = {
+        // atributos
+        1: 'font-weight:bold',
+        4: 'text-decoration:underline',
+
+        // colores de texto (suaves y legibles)
+        30: 'color:#4B4B4B',        // suave gris oscuro
+        31: 'color:#D36A6A',        // rojo rosado
+        32: 'color:#6FB48C',        // verde salvia
+        33: 'color:#D7B46F',        // mostaza suave
+        34: 'color:#6A8ED3',        // azul lavanda
+        35: 'color:#B98ED3',        // violeta pastel
+        36: 'color:#6FD3C1',        // turquesa pastel
+        37: 'color:#EDEDED',        // gris claro casi blanco
+
+        // colores brillantes (versión pastel más clara)
+        90: 'color:#A0A0A0',        // gris suave
+        91: 'color:#E3A1A1',        // coral claro
+        92: 'color:#A8D8B9',        // verde menta
+        93: 'color:#F0E1A1',        // vainilla pastel
+        94: 'color:#A1B8E3',        // azul cielo suave
+        95: 'color:#D9B0E3',        // lila
+        96: 'color:#A1E3DD',        // cian suave
+        97: 'color:#FFFFFF',        // blanco puro
+
+        // fondo (a juego con los tonos de texto)
+        40: 'background-color:#2E2E2E',  // gris oscuro
+        41: 'background-color:#F4D6D6',  // fondo rosado
+        42: 'background-color:#D6F4E0',  // fondo verde muy claro
+        43: 'background-color:#F9F2D6',  // fondo amarillo suave
+        44: 'background-color:#D6E4F4',  // fondo azul suave
+        45: 'background-color:#F0D6F4',  // fondo magenta suave
+        46: 'background-color:#D6F4F2',  // fondo cian suave
+        47: 'background-color:#F7F7F7'   // gris claro casi blanco
+      };
+
+      // dividimos el texto en trozos, manteniendo los códigos ANSI
+      const parts = text.split(/(\x1b\[[0-9;]*m)/);
+      let openSpans = 0;
+      const html = parts.map(part => {
+        const m = part.match(/^\x1b\[([0-9;]*)m$/);
+        if (m) {
+          const codes = m[1].split(';').map(Number).filter(n => !isNaN(n));
+          // si está el código 0 => reset completo
+          if (codes.includes(0)) {
+            const closeTags = '</span>'.repeat(openSpans);
+            openSpans = 0;
+            return closeTags;
+          }
+          // construyo el estilo para este código
+          const styles = codes
+            .map(c => codeStyles[c])
+            .filter(Boolean);
+          if (styles.length) {
+            openSpans++;
+            return `<span style="${styles.join(';')}">`;
+          }
+          return '';
+        } else {
+          // texto normal: escapamos HTML
+          return part
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+        }
+      });
+
+      // cerramos cualquier span que quede abierto
+      if (openSpans) html.push('</span>'.repeat(openSpans));
+      return html.join('');
+    }
+
     /* Particles brand colors */
     tsParticles.load("particles", {
       fullScreen: { enable: false },
@@ -208,7 +286,7 @@
     const showLogs = () => {
       splash.style.display = 'none';
       logsPanel.style.display = 'block';
-      logBox.scrollTop = logBox.scrollHeight; // Scroll to bottom on second open
+      logsPanel.scrollTop = logsPanel.scrollHeight; // Scroll to bottom on second open
       document.title = 'Vento Logs';
     }
 
@@ -218,8 +296,8 @@
 
     /* Pipe logs coming from Electron preload */
     window.logAPI?.onLog(message => {
-      logBox.value += message + '\n';
-      logBox.scrollTop = logBox.scrollHeight;
+      logBox.innerHTML += simpleAnsiToHtml(message);
+      logsPanel.scrollTo(0, logsPanel.scrollHeight); // Auto-scroll to bottom
     });
   </script>
 </body>

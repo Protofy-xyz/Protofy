@@ -110,7 +110,7 @@ function waitForPortHttp(url, timeout = 30000, interval = 500) {
 // Create log window (renderer.html)
 function createLogWindow() {
   logWindow = new BrowserWindow({
-    width: 1000,
+    width: 1100,
     height: 800,
     title: 'Service Logs',
     autoHideMenuBar: true,
