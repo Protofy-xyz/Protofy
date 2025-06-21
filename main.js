@@ -154,7 +154,7 @@ function createMainWindow() {
         webPreferences: {
           preload: path.join(__dirname, 'preload-main.js'),
           additionalArguments: [`--session=${encoded}`],
-          contextIsolation: false,
+          contextIsolation: true,
           nodeIntegration: false,
         },
         fullscreen: fullscreen

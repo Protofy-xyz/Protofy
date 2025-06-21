@@ -1,3 +1,5 @@
+const { contextBridge, ipcRenderer, shell } = require('electron');
+
 (() => {
   const arg = process.argv.find(a => a.startsWith('--session='));
   if (!arg) return;
@@ -15,7 +17,14 @@
   });
 })();
 
-const { ipcRenderer } = require('electron');
-window.electronAPI = {
+contextBridge.exposeInMainWorld('electronAPI', {
   openExternal: (url) => ipcRenderer.send('open-external-url', url)
-};
+});
+
+contextBridge.exposeInMainWorld('logAPI', {
+  onLog: (callback) => {
+    ipcRenderer.on('log', (_event, message) => {
+      callback(message);
+    });
+  }
+});
