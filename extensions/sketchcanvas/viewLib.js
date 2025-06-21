@@ -33,7 +33,6 @@ function Widget() {
         }
     }, [data.drawing]);
 
-    return React.useMemo( () => {
         return <div className="no-drag" {...cardEvents} style={{ height: "100%", padding: "3px" }}>
             <Tinted>
                 <CanvasDraw onChange={() => {
@@ -57,7 +56,6 @@ function Widget() {
                 </div>
             </Tinted>
         </div>
-    }, []);
 }
 
     `, card.domId)
