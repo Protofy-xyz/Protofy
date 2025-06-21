@@ -13,7 +13,7 @@ import { useIsAdmin } from '../lib/useIsAdmin';
 export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
   useSession(pageSession)
 
-  useIsAdmin(() => '/auth/login?return='+document?.location?.pathname)
+  useIsAdmin(() => '/auth/login?return='+document?.location?.pathname+'?'+document?.location?.search)
   const router = useRouter()
 
   const [ready, setReady] = useState(false);

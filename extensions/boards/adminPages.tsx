@@ -6,6 +6,7 @@ import { DataView, DataViewActionButton } from "protolib/components/DataView"
 import { AdminPage } from "protolib/components/AdminPage"
 import { PaginatedData, SSR } from "protolib/lib/SSR"
 import { withSession } from "protolib/lib/Session"
+import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
@@ -103,6 +104,7 @@ const FloatingButton = ({ Icon, beating = false, ...props }) => {
 }
 
 const Board = ({ board, icons }) => {
+
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
@@ -497,13 +499,12 @@ const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, 
 
   const [iconsData, setIconsData] = useState(icons ?? getPendingResult('pending'))
   usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
-
-
-  return (<AsyncView ready={boardData.status == 'loaded' && iconsData.status == 'loaded'}>
+  useIsAdmin(() => '/auth/login?return=' + document?.location?.pathname + '?' + document?.location?.search)
+  return (<AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
     <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
       {boardData.status == 'error' && <ErrorMessage
         msg="Error loading board"
-        details={board?.error?.result}
+        details={boardData.error.error}
       />}
       {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
     </AdminPage>
