@@ -5,6 +5,7 @@ const net = require('net');
 const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const { genToken } = require('protonode')
+const { execSync } = require('child_process');
 
 const minimist = require('minimist');
 const args = minimist(process.argv.slice(1));
@@ -14,8 +15,8 @@ const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/boards';
 const fullscreen = args.fullscreen || false;
 const dev = args.dev || false;
 
-process.env.NODE_ENV='development';
-if(dev) {
+process.env.NODE_ENV = 'development';
+if (dev) {
   //set envar FULL_DEV=1
   process.env.FULL_DEV = '1';
 }
@@ -167,19 +168,11 @@ function createMainWindow() {
 
       mainWindow.loadURL(initialUrl);
 
-
-      let isQuitting = false;
-
-      app.on('before-quit', async (event) => {
-        if (!isQuitting) {
-          event.preventDefault();
-          isQuitting = true;
-      
-          logToRenderer('🛑 Cleaning up PM2...');
-          await stopPM2(logToRenderer);
-      
-          app.quit();
-        }
+      app.on('will-quit', async (event) => {
+        event.preventDefault(); // <- sigue siendo necesario
+        logToRenderer('🛑 will-quit: stopping PM2...');
+        await stopPM2(logToRenderer);
+        app.exit(); // <- app.quit() vuelve a emitir eventos; usa app.exit()
       });
     })
     .catch(error => {
@@ -201,6 +194,9 @@ app.whenReady().then(async () => {
     const coreStarted = new Promise(resolve => {
       resolveWhenCoreReady = resolve;
     });
+
+    //run yarn
+    // execSync(`node ./.yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
 
     await startPM2({
       ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),

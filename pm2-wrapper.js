@@ -94,28 +94,34 @@ function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = nu
 }
 
 function stopPM2(onLog = console.log) {
-    return new Promise(resolve => {
-      onLog('🛑 Cleaning up PM2...');
-      pm2.list((_, list) => {
-        const names = list.map(p => p.name);
-        if (names.length === 0) {
+  return new Promise(resolve => {
+    onLog('🛑 Cleaning up PM2...');
+    pm2.list((_, list) => {
+      const names = list.map(p => p.name);
+      const done = () => {
+        pm2.killDaemon(err => {
+          if (err) onLog(`⚠️ PM2 kill daemon error: ${err.message}`);
+          else onLog('💀 PM2 daemon killed');
           pm2.disconnect(() => resolve());
-          return;
-        }
-  
-        // Delete each process by name individually
-        let remaining = names.length;
-        names.forEach(name => {
-          pm2.delete(name, () => {
-            onLog(`🗑️ Killed service: ${name}`);
-            if (--remaining === 0) {
-              pm2.disconnect(() => resolve());
-            }
-          });
+        });
+      };
+
+      if (names.length === 0) {
+        return done();
+      }
+
+      let remaining = names.length;
+      names.forEach(name => {
+        pm2.delete(name, () => {
+          onLog(`🗑️ Killed service: ${name}`);
+          if (--remaining === 0) {
+            done();
+          }
         });
       });
     });
-  }
+  });
+}
 
 module.exports = {
   getNodeBinary,
