@@ -5,7 +5,7 @@ const net = require('net');
 const path = require('path');
 const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const { genToken } = require('protonode')
-const { execSync } = require('child_process');
+const { spawn } = require('child_process');
 
 const minimist = require('minimist');
 const args = minimist(process.argv.slice(1));
@@ -66,6 +66,27 @@ const genNewSession = () => {
 }
 
 const userSession = genNewSession()
+
+async function runYarn() {
+  return new Promise((resolve, reject) => {
+    const child = spawn('node', ['.yarn/releases/yarn-4.1.0.cjs'], {
+      windowsHide: true
+    });
+
+    child.stdout.setEncoding('utf-8');
+    child.stderr.setEncoding('utf-8');
+
+    child.stdout.on('data', data => logToRenderer(data));
+    child.stderr.on('data', data => logToRenderer(data));
+
+    child.on('error', err => reject(err));
+
+    child.on('close', code => {
+      logToRenderer(`\n[Proceso terminado con código ${code}]\n`);
+      resolve(code);
+    });
+  });
+}
 
 function waitForPortHttp(url, timeout = 30000, interval = 500) {
   //get port host and path from url
@@ -202,7 +223,8 @@ app.whenReady().then(async () => {
     });
 
     //run yarn
-    // execSync(`node ./.yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
+    await runYarn();
+    logToRenderer('✅ Yarn completed successfully.');
 
     await startPM2({
       ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),
