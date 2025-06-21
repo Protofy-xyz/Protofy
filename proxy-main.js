@@ -3,12 +3,16 @@ const path = require('path')
 const fs = require('fs')
 const Module = require('module')
 const MONOREPO_ROOT = path.resolve(__dirname, '../../project')
-const ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
-const NODE_MODULES_PATH = path.join(MONOREPO_ROOT, 'node_modules')
+let ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
+let NODE_MODULES_PATH = path.join(MONOREPO_ROOT, 'node_modules')
 
 if (!fs.existsSync(ENTRYPOINT)) {
-  console.error(`❌ Entrypoint not found on ${ENTRYPOINT}`)
-  process.exit(1)
+  ENTRYPOINT = path.resolve(__dirname, path.join('./', 'main.js'))
+  NODE_MODULES_PATH = path.resolve(__dirname, path.join('./', 'node_modules'))
+  if (!fs.existsSync(ENTRYPOINT)) {
+    console.error(`❌ Entrypoint not found on ${ENTRYPOINT}`)
+    process.exit(1)
+  }
 }
 
 if (!fs.existsSync(NODE_MODULES_PATH)) {
