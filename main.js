@@ -110,8 +110,8 @@ function waitForPortHttp(url, timeout = 30000, interval = 500) {
 // Create log window (renderer.html)
 function createLogWindow() {
   logWindow = new BrowserWindow({
-    width: 900,
-    height: 700,
+    width: 1000,
+    height: 800,
     title: 'Service Logs',
     autoHideMenuBar: true,
     // useContentSize: true,
@@ -242,6 +242,7 @@ ipcMain.on('toggle-log-window', () => {
   if (logWindow.isVisible()) {
     logWindow.hide();
   } else {
+    logWindow.webContents.send('log-window:show-logs');
     logWindow.show();
     logWindow.focus();
   }

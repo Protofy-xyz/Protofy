@@ -149,7 +149,7 @@
       border: none;
       resize: none;
       padding: 18px;
-      font-size: 0.85rem;
+      font-size: 15px;
       font-family: 'Fira Code', monospace;
       line-height: 1.4;
       backdrop-filter: blur(6px);
@@ -208,6 +208,12 @@
     viewLogs.addEventListener('click', () => {
       splash.style.display = 'none';
       logsPanel.style.display = 'block';
+    });
+
+    window.logAPI?.onShowLogs(() => {
+      splash.style.display = 'none';
+      logsPanel.style.display = 'block';
+      logBox.scrollTop = logBox.scrollHeight; // Scroll to bottom on second open
     });
 
     /* Pipe logs coming from Electron preload */
