@@ -4,8 +4,40 @@
     "layouts": {
         "lg": [
             {
+                "w": 4,
+                "h": 19,
+                "x": 0,
+                "y": 4,
+                "i": "action_1750256774576",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 4,
+                "h": 19,
+                "x": 4,
+                "y": 4,
+                "i": "value_1750256790295",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 8,
+                "h": 4,
+                "x": 0,
+                "y": 0,
+                "i": "value_1750261498829",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            }
+        ],
+        "md": [
+            {
                 "w": 3,
-                "h": 12,
+                "h": 16,
                 "x": 0,
                 "y": 4,
                 "i": "action_1750256774576",
@@ -15,7 +47,7 @@
             },
             {
                 "w": 3,
-                "h": 12,
+                "h": 16,
                 "x": 3,
                 "y": 4,
                 "i": "value_1750256790295",
@@ -34,33 +66,35 @@
                 "isResizable": true
             }
         ],
-        "md": [
+        "sm": [
             {
+                "w": 1,
+                "h": 11,
+                "x": 0,
+                "y": 4,
                 "i": "action_1750256774576",
-                "x": 0,
-                "y": 0,
-                "w": 2,
-                "h": 6,
-                "isResizable": true
+                "moved": false,
+                "static": false
             },
             {
+                "w": 1,
+                "h": 12,
+                "x": 0,
+                "y": 15,
                 "i": "value_1750256790295",
-                "x": 0,
-                "y": 0,
-                "w": 2,
-                "h": 6,
-                "isResizable": true
+                "moved": false,
+                "static": false
             },
             {
-                "i": "value_1750261498829",
+                "w": 1,
+                "h": 4,
                 "x": 0,
                 "y": 0,
-                "w": 4,
-                "h": 4,
-                "isResizable": true
+                "i": "value_1750261498829",
+                "moved": false,
+                "static": false
             }
-        ],
-        "sm": []
+        ]
     },
     "cards": [
         {
@@ -76,7 +110,8 @@
             "params": {
                 "message": "message"
             },
-            "type": "action"
+            "type": "action",
+            "displayResponse": false
         },
         {
             "key": "value_1750256790295",
@@ -88,14 +123,15 @@
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
             "rulesCode": "return states?.chatGPT?.conversation?.chatResponse",
-            "type": "value"
+            "type": "value",
+            "value": "401 Incorrect API key provided: put your*****here. You can find your API key at https://platform.openai.com/account/api-keys."
         },
         {
             "key": "value_1750261498829",
             "width": 4,
             "height": 4,
             "icon": "key",
-            "html": "\nreactCard(`\n  function Widget() {\n    const aspect = useCardAspectRatio('${data.domId}')\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
+            "html": "\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n\n              }}\n              onRemove={(key) => {\n\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
             "name": "Key Setter",
             "description": "Displays a key setter for a specific key or in case already set displays key is set",
             "type": "value",
