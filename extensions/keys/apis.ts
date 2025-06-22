@@ -30,7 +30,6 @@ const registerCards = (app, context) => {
             html: `
 reactCard(\`
   function Widget() {
-    const aspect = useCardAspectRatio('\${data.domId}')
     return (
           <View className="no-drag">
             <KeySetter
