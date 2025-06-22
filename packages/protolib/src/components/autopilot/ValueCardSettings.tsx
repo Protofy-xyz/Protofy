@@ -1,4 +1,4 @@
-import { Braces, Monitor, ClipboardList, Sliders } from '@tamagui/lucide-icons'
+import { Braces, Monitor, ClipboardList, Sliders, FileCode, CarFront } from '@tamagui/lucide-icons'
 import { YStack, XStack, ToggleGroup, ScrollView, Text } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
@@ -12,8 +12,16 @@ import { ParamsEditor } from './ParamsEditor'
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
     const [cardData, setCardData] = useState(card);
-    const [tab, setTab] = useState("rules");
+    const isSimpleReturnString = /^return\s*`[^`]*`\s*;?$/.test(cardData.rulesCode?.trim() || '');
+
+    const [tab, setTab] = useState(() => {
+        const defaultTab = card.editorOptions?.defaultTab || 'rules';
+        return defaultTab === 'value' && !isSimpleReturnString ? 'rules' : defaultTab;
+    });
+
     const { resolvedTheme } = useThemeSetting();
+
+
 
     useEffect(() => {
         onEdit(cardData);
@@ -34,10 +42,22 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                     <XStack m="$5" width={"100%"} pt="$0" pr="$1" mt={"$8"} jc="center">
                         {/* @ts-ignore */}
                         <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
+                            <ToggleGroup.Item
+                                value="value"
+                                disabled={!isSimpleReturnString}
+                                opacity={!isSimpleReturnString ? 0.4 : 1}
+                            >
+                                <XStack gap="$2" ai="center">
+                                    <ClipboardList size="$1" />
+                                    <Text color={!isSimpleReturnString ? '$color8' : '$color'}>
+                                        Value
+                                    </Text>
+                                </XStack>
+                            </ToggleGroup.Item>
                             <ToggleGroup.Item value="rules">
                                 <XStack gap={"$2"} ai={"center"}>
-                                    <ClipboardList size={"$1"} />
-                                    <Text>Value</Text>
+                                    <FileCode size={"$1"} />
+                                    <Text>Dynamic Value</Text>
                                 </XStack >
                             </ToggleGroup.Item>
                             <ToggleGroup.Item value="params">
@@ -61,6 +81,36 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
                         </ToggleGroup>
                     </XStack>
                     <Tinted>
+                        {tab == 'value' && <Monaco
+                            colors={{ 'editor.background': resolvedTheme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}
+                            path={"value-" + cardData.name + ".ts"}
+                            darkMode={resolvedTheme === 'dark'}
+                            sourceCode={
+                                (cardData.rulesCode?.trim().startsWith('return `') && cardData.rulesCode?.trim().endsWith('`'))
+                                    ? cardData.rulesCode.trim().slice(8, -1)
+                                    : cardData.rulesCode || ''
+                            }
+                            onChange={(newCode) => {
+                                setCardData({
+                                    ...cardData,
+                                    rulesCode: `return \`${newCode}\``
+                                })
+                            }}
+                            options={{
+                                scrollBeyondLastLine: false,
+                                scrollbar: {
+                                    vertical: 'auto',
+                                    horizontal: 'auto',
+                                },
+                                folding: false,
+                                lineDecorationsWidth: 0,
+                                lineNumbersMinChars: 0,
+                                lineNumbers: "off",
+                                minimap: { enabled: false },
+                                formatOnPaste: true,
+                                formatOnType: true,
+                            }}
+                        />}
                         {(tab == 'rules' || !tab) && <RuleEditor
                             displayInput={states}
                             onCodeChange={(cardData, states) => {
