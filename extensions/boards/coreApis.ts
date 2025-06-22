@@ -812,7 +812,7 @@ return card({
         name: 'board_markdown',
         defaults: {
             name: 'Markdown',
-            icon: 'markdown',
+            icon: 'file-text',
             description: 'Render formatted markdown using ReactMarkdown',
             type: 'value',
             html: "return markdown(data)"
