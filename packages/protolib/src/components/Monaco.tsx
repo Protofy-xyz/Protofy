@@ -19,7 +19,10 @@ type Props = {
     onChange?: any,
     onSave?: any,
     onEscape?: any,
-    path?: string
+    path?: string,
+    colors?: {
+        [key: string]: string;
+    }
 };
 
 function hslToRgb(h, s, l) {
@@ -65,6 +68,7 @@ export const Monaco = ({
     onChange = () => { },
     onSave = () => { },
     onEscape = () => { },
+    colors = {},
     ...props
 }: Props & EditorProps) => {
     const { resolvedTheme } = useThemeSetting();
@@ -93,6 +97,7 @@ export const Monaco = ({
             ],
             colors: {
                 'editor.background': resolvedTheme === 'dark' ? '#151515' : '#FFFFFF',
+                ...colors
             }
         });
 
