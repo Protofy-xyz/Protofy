@@ -525,11 +525,13 @@ export default {
           numColumnsForm={1}
           onAdd={(data) => { router.push(`/boards/view?board=${data.name}`); return data }}
           name="Board"
+          disableViews={['raw']}
           onEdit={data => { console.log("DATA (onEdit): ", data); return data }}
           onSelectItem={(item) => router.push(`/boards/view?board=${item.data.name}`)}
           columns={DataTable2.columns(
             DataTable2.column("name", row => row.name, "name")
           )}
+          
           model={BoardModel}
           pageState={pageState}
           dataTableGridProps={{

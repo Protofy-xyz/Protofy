@@ -35,7 +35,6 @@ export default ({ pages, boards, objects }) => {
         { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
         { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
         { "name": "Storage", "icon": Boxes, "href": "/workspace/objects" },
-        { "name": "Pages", "icon": "panels-top-left", "href": "/workspace/pages" },
         { "name": "Events", "icon": "activity", "href": "/workspace/events" },
     ]
     enableArduinos ? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }) : null
