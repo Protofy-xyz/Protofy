@@ -2,11 +2,15 @@
 const path = require('path')
 const fs = require('fs')
 const Module = require('module')
-const MONOREPO_ROOT = path.resolve(__dirname, '../../project')
+const minimist = require('minimist');
+const args = minimist(process.argv.slice(1));
+const projectDir = args.project || 'project';
+
+const MONOREPO_ROOT = path.resolve(__dirname, '../../'+projectDir)
 let ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
 let NODE_MODULES_PATH = path.join(MONOREPO_ROOT, 'node_modules')
 
-if (!fs.existsSync(ENTRYPOINT)) {
+if (!fs.existsSync(ENTRYPOINT)) { //if the entrypoint is not found in the project root, try to find it in the current directory
   ENTRYPOINT = path.resolve(__dirname, path.join('./', 'main.js'))
   NODE_MODULES_PATH = path.resolve(__dirname, path.join('./', 'node_modules'))
   if (!fs.existsSync(ENTRYPOINT)) {
