@@ -755,6 +755,9 @@ return card({
   padding: '3px'
 });
 `,
+            editorOptions: {
+                defaultTab: "value"
+            },
         },
         emitEvent: true
     });
@@ -777,6 +780,9 @@ return card({
   padding: '3px'
 });
 `,
+            editorOptions: {
+                defaultTab: "value"
+            },
         },
         emitEvent: true
     });
@@ -800,6 +806,9 @@ return card({
   padding: '3px'
 });
 `,
+            editorOptions: {
+                defaultTab: "value"
+            },
         },
         emitEvent: true
     });
@@ -815,7 +824,10 @@ return card({
             icon: 'file-text',
             description: 'Render formatted markdown using ReactMarkdown',
             type: 'value',
-            html: "return markdown(data)"
+            html: "return markdown(data)",
+            editorOptions: {
+                defaultTab: "value"
+            },
         },
         emitEvent: true
     });
