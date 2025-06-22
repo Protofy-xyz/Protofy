@@ -8,7 +8,7 @@ import { useState, useRef, useMemo } from 'react'
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
-
+import { useSettingValue } from "../../lib/useSetting";
 
 export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const { resolvedTheme } = useThemeSetting();
@@ -17,7 +17,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     const editedCode = useRef(board.rulesCode)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
-
+    const isAIEnabled = useSettingValue('ai.enabled', false);
 
     //useMemo to keep monaco editor from re-rendering
     const monacoEditor = useMemo(() => {
@@ -44,7 +44,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} p="$3" br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
         <Tinted>
             <PanelGroup direction="vertical">
-                <Panel defaultSize={75} minSize={20} maxSize={100}>
+                {isAIEnabled && <Panel defaultSize={75} minSize={0} maxSize={100}>
                     <YStack
                         flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         <Rules
@@ -66,16 +66,16 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
 
                         </YStack>
                     </YStack>
-                </Panel>
+                </Panel>}
                 <CustomPanelResizeHandle direction="horizontal" />
-                <Panel defaultSize={25} minSize={0} maxSize={80}>
+                <Panel defaultSize={isAIEnabled?25:100} minSize={0} maxSize={100}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         {monacoEditor}
                     </YStack>
                 </Panel>
             </PanelGroup>
             <XStack mt="auto" pt="$3" gap={30} jc='center' ai="center">
-                <Button onPress={async () => {
+                {isAIEnabled && <Button onPress={async () => {
                     setGeneratingBoardCode(true)
                     try {
                         boardRef.current.rules = savedRules
@@ -95,7 +95,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     }
                 }}>
                     {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
-                </Button>
+                </Button>}
                 <Button onPress={() => {
                     boardRef.current.rulesCode = editedCode.current
                     API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)

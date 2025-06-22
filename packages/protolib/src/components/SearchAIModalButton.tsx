@@ -5,9 +5,11 @@ import { Tinted } from "./Tinted"
 import { AlertDialog } from "./AlertDialog"
 import { usePageParams } from '../next/Params'
 import { SearchContext } from "../context/SearchContext"
+import { useSettingValue } from "../lib/useSetting";
 
 export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', ...props }: any, ref: any) => {
 
+    const isAIEnabled = useSettingValue('ai.enabled', false);
     const inputRef = useRef(null)
     const [open, setOpen] = useState(false)
     const [content, setContent] = useState(initialState)
@@ -85,7 +87,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                     fos={18}
                     size="$5"
                     width="100%"
-                    pl="85px"
+                    pl={isAIEnabled ? "85px": "50px"}
                     br="$6"
                     pt="10px"
                     height={isAiMode ? "200px" : "50px"}
@@ -135,7 +137,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                         >
                             {loading == "search" || searchStatus == "loading" ? <Spinner /> : <IconSearch color={!isAiMode ? "$color10" : "$gray8"} size={24} />}
                         </Button>
-                        <Button
+                        {isAIEnabled &&<Button
                             size="$3"
                             scaleIcon={2}
                             backgroundColor="transparent"
@@ -145,7 +147,7 @@ export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => 
                             pressStyle={{ backgroundColor: "transparent" }}
                         >
                             {loading == "ai" ? <Spinner /> : <Sparkles color={isAiMode ? "$color10" : "$gray8"} size={24} />}
-                        </Button>
+                        </Button>}
                     </XStack>
                 </Tinted>
             </YStack>

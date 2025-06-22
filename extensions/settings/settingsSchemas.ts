@@ -6,7 +6,7 @@ Protofy("features", {
 
 export const SettingSchema = Schema.object(Protofy("schema", {
 	name: z.string().id().search(),
-	value: z.string().display(['add', 'edit'])
+	value: z.any()
 }))
 
 Protofy("api", {

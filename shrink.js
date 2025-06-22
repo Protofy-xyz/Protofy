@@ -217,3 +217,18 @@ if (fs.existsSync(nextOutPath)) {
     rimraf.sync(nextOutPath);
     console.log('out directory in apps/next has been removed');
 }
+
+//remove settings
+const settingsPath = path.join(__dirname, 'data', 'settings');
+if (fs.existsSync(settingsPath)) {
+    fs.readdirSync(settingsPath).forEach(file => {
+        const filePath = path.join(settingsPath, file);
+        if (fs.lstatSync(filePath).isDirectory()) {
+            rimraf.sync(filePath);
+            console.log(`Removed directory: ${filePath}`);
+        } else {
+            fs.unlinkSync(filePath);
+            console.log(`Removed file: ${filePath}`);
+        }
+    });
+} 

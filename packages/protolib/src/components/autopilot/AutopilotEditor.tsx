@@ -8,6 +8,7 @@ import { Monaco } from "../Monaco";
 import { JSONView } from "../JSONView";
 import { useState } from "react";
 import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
+import { useSettingValue } from "protolib/lib/useSetting";
 
 function flattenObject(obj, prefix = "") {
     let result = [];
@@ -117,6 +118,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
     const [inputMode, setInputMode] = useState<"json" | "formatted">("json")
     const [search, setSearch] = useState('')
 
+    const isAIEnabled = useSettingValue('ai.enabled', false);
     const filteredData = filterObjectBySearch(data, search)
 
     return (
@@ -202,7 +204,7 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
             {/* Rigth panel */}
             <Panel defaultSize={70} minSize={50}>
                 <PanelGroup direction="vertical">
-                    <Panel defaultSize={66} minSize={20} maxSize={100}>
+                    {isAIEnabled && <Panel defaultSize={66} minSize={0} maxSize={100}>
                         <YStack
                             flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Rules
@@ -212,9 +214,9 @@ export const AutopilotEditor = ({ data, rules, rulesCode, setRulesCode, value, v
                                 loadingIndex={-1}
                             />
                         </YStack>
-                    </Panel>
+                    </Panel>}
                     <CustomPanelResizeHandle direction="horizontal" />
-                    <Panel defaultSize={34} minSize={0} maxSize={80}>
+                    <Panel defaultSize={isAIEnabled ? 34: 100} minSize={0} maxSize={100}>
                         <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Monaco
                                 path={'autopilot-rules.ts'}

@@ -123,15 +123,14 @@
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
             "rulesCode": "return states?.chatGPT?.conversation?.chatResponse",
-            "type": "value",
-            "value": "401 Incorrect API key provided: put your*****here. You can find your API key at https://platform.openai.com/account/api-keys."
+            "type": "value"
         },
         {
             "key": "value_1750261498829",
             "width": 4,
             "height": 4,
             "icon": "key",
-            "html": "\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n\n              }}\n              onRemove={(key) => {\n\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
+            "html": "\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n                settings.set('ai.provider', 'openai')\n                settings.set('ai.enabled', true)\n              }}\n              onRemove={(key) => {\n                settings.del('ai.provider')\n                settings.del('ai.enabled')\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
             "name": "Key Setter",
             "description": "Displays a key setter for a specific key or in case already set displays key is set",
             "type": "value",
@@ -143,6 +142,6 @@
     ],
     "autopilot": false,
     "rules": [
-        "crea una key con el campo name: patata y el de value: perro"
+        
     ]
 }
