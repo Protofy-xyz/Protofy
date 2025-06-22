@@ -804,7 +804,21 @@ return card({
         emitEvent: true
     });
 
-
+    addCard({
+        group: 'board',
+        tag: 'markdown',
+        id: 'markdown',
+        templateName: 'Display markdown text',
+        name: 'board_markdown',
+        defaults: {
+            name: 'Markdown',
+            icon: 'markdown',
+            description: 'Render formatted markdown using ReactMarkdown',
+            type: 'value',
+            html: "return markdown(data)"
+        },
+        emitEvent: true
+    });
 
     addCard({
         group: 'board',
