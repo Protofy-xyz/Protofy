@@ -67,7 +67,7 @@ const genNewSession = () => {
 
 async function runYarn() {
   return new Promise((resolve, reject) => {
-    const child = spawn('node', ['.yarn/releases/yarn-4.1.0.cjs'], {
+    const child = spawn('bin/node', ['.yarn/releases/yarn-4.1.0.cjs'], {
       windowsHide: true
     });
 
