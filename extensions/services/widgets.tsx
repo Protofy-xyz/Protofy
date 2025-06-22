@@ -127,7 +127,7 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
                 Object.assign(cardState[uuid], state);
             }
         })
-    }, data.freeze? [viewLib] : [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
+    }, data.freeze? [viewLib, uuid, loaded, !!document.getElementById(uuid)?.offsetWidth] : [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
 
     //TODO: loading?
     useEffect(() => {

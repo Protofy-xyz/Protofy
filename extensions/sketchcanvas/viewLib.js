@@ -7,6 +7,7 @@ function Widget() {
     const canvasRef = React.useRef(null);    
     const color = getComputedStyle(document.documentElement).getPropertyValue('--color9').trim();
     const firstLoadRef = React.useRef(0);
+    const timerRef = React.useRef(null);
 
     function undo() {
         if (canvasRef.current) {
@@ -46,11 +47,20 @@ function Widget() {
                         return;
                     }
 
+
+
                     const newData = JSON.parse(canvasRef.current.getSaveData());
+
                     if(JSON.stringify(JSON.parse(data?.cardState?.oldData ?? '{}')) !=  JSON.stringify(newData)) {
                         data.setCardState({ reDrawn: true });
                         data.setCardState({ oldData: canvasRef.current.getSaveData() });
-                        data.setCardData({drawing: canvasRef.current.getSaveData()}, false);   
+                        //throttle the save to every 500ms
+                        if(timerRef.current) {
+                            clearTimeout(timerRef.current);
+                        }
+                        timerRef.current = setTimeout(() => {
+                            data.setCardData({drawing: canvasRef.current.getSaveData()}, false);
+                        }, 500);
                     }
 
                 }} hideInterface={true} ref={canvasRef} hideGridY={true} hideGridX={true} backgroundColor='var(--bgPanel)' className="no-drag" style={{ width: "100%", height: "100%" }} brushRadius={2} lazyRadius={6} brushColor={color} />
