@@ -12,7 +12,9 @@ import { ParamsEditor } from './ParamsEditor'
 
 export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } }) => {
     const [cardData, setCardData] = useState(card);
-    const isSimpleReturnString = /^return\s*`[^`]*`\s*;?$/.test(cardData.rulesCode?.trim() || '');
+    const isSimpleReturnString =
+        !cardData.rulesCode ||
+        /^return\s*`[^`]*`\s*;?$/.test(cardData.rulesCode.trim());
 
     const [tab, setTab] = useState(() => {
         const defaultTab = card.editorOptions?.defaultTab || 'rules';
