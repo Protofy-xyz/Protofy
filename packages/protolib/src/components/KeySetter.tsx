@@ -13,10 +13,20 @@ import { Tinted } from './Tinted';
 
 interface KeySetterProps {
     nameKey: string;
+    validate?: (value: string) => Promise<string| true>;
+    placeholderValue?: string;
+    onAdd?: (value: string) => void;
+    onRemove?: (value: string) => void;
 }
 
 export const KeySetter: React.FC<KeySetterProps> = ({
     nameKey,
+    validate = async (value) => {
+        return true; // Default validation always passes
+    },
+    placeholderValue = "put your key here",
+    onAdd = (value) => { },
+    onRemove = (value) => { }
 }) => {
 
     const [value, setValue] = useState("");
@@ -37,6 +47,14 @@ export const KeySetter: React.FC<KeySetterProps> = ({
     }
 
     const onEditKey = async (keyVal) => {
+        if(keyVal !== placeholderValue)  {
+            const validationResult = await validate(keyVal);
+            if (validationResult !== true) {
+                toast.show(validationResult, { duration: 2000, tint: "red" });
+                return;
+            }  
+        } 
+
         const keyData = { name: nameKey, value: keyVal }
 
         let res = await API.post("/api/core/v1/keys/" + nameKey, keyData);
@@ -47,6 +65,11 @@ export const KeySetter: React.FC<KeySetterProps> = ({
 
         if (res?.data) {
             setCurrKey(res?.data.value);
+            if(keyVal !== placeholderValue) {
+                onAdd(keyVal)
+            } else {
+                onRemove(keyVal);
+            }
         } else if (res?.isError) {
             toast.show("Error setting key", { duration: 2000, tint: "red" });
         }
@@ -58,7 +81,7 @@ export const KeySetter: React.FC<KeySetterProps> = ({
 
     return <YStack p="$4">
         {
-            currKey && currKey !== "" && currKey != "put your key here"
+            currKey && currKey !== "" && currKey != placeholderValue
                 ? <XStack ai="center" jc="space-between" gap="$4" flexWrap='wrap'>
                     <XStack ai="center" gap="$2">
                         <Text>{nameKey}</Text>
@@ -66,7 +89,7 @@ export const KeySetter: React.FC<KeySetterProps> = ({
                     </XStack>
                     <XStack gap="$2" ai="center">
                         <Tinted tint="red">
-                            <Button circular icon={Trash2} onPress={() => onEditKey("put your key here")}></Button>
+                            <Button circular icon={Trash2} onPress={() => onEditKey(placeholderValue)}></Button>
                         </Tinted>
                         <Button bc="transparent" circular icon={RefreshCcw} onPress={loadKey}></Button>
                     </XStack>
@@ -80,7 +103,7 @@ export const KeySetter: React.FC<KeySetterProps> = ({
                         <XStack gap="$2" ai="center" flex={1}>
                             <Input
                                 f={1}
-                                placeholder='put your key here'
+                                placeholder={placeholderValue}
                                 value={value}
                                 bc="$bgContent"
                                 secureTextEntry={true}

@@ -29,18 +29,41 @@ const registerCards = (app, context) => {
             type: 'value',
             html: `
 reactCard(\`
+  async function validarOpenAIKey(apiKey) {
+    const res = await fetch('https://api.openai.com/v1/models', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Bearer '+apiKey,
+      }
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({}));
+      const message = error?.error?.message || 'HTTP '+res.status;
+      return message
+    }
+
+    return true;
+  }
+
   function Widget() {
     return (
           <View className="no-drag">
             <KeySetter
               nameKey={data.params.nameKey}
+              validate={validarOpenAIKey}
+              onAdd={(key) => {
+                // alert("add: "+key)
+              }}
+              onRemove={(key) => {
+                // alert("remove: "+key)
+              }}
             />
           </View>
     );
   }
 
 \`, data.domId)
-
 
             `,
             rulesCode: ``,
