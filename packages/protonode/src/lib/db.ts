@@ -1,4 +1,4 @@
-import { ProtoLevelDB } from './dbproviders/leveldb';
+import { ProtoSqliteDB }  from './dbproviders/sqlite';
 import { ProtoDB } from './protodb';
 
 const getDBPath = (dbPath) => {
@@ -7,18 +7,18 @@ const getDBPath = (dbPath) => {
 }
 
 export const connectDB = (dbPath: string, initialData?: Object, options?) => {
-    return ProtoLevelDB.initDB(getDBPath(dbPath), initialData, options)
+    return ProtoSqliteDB.initDB(getDBPath(dbPath), initialData, options)
 }
 
 export const getDB = (dbPath: string, req?, session?): ProtoDB => {
-    return ProtoLevelDB.connect(getDBPath(dbPath))
+    return ProtoSqliteDB.connect(getDBPath(dbPath))
 }
 
 export const closeDBS = async () => {
-    return await ProtoLevelDB.closeDBS()
+    return await ProtoSqliteDB.closeDBS()
 }
 
-export const leveldbProvider = {
+export const dbProvider = {
     connectDB,
     getDB,
     closeDBS

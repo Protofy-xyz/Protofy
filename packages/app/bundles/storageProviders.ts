@@ -1,6 +1,6 @@
-import { leveldbProvider } from 'protonode';
+import { dbProvider } from 'protonode';
 
-export { leveldbProvider } from 'protonode';
+export { dbProvider } from 'protonode';
 // DEFAULTS
-export const getDB = leveldbProvider.getDB;
-export const connectDB = leveldbProvider.connectDB;
+export const getDB = dbProvider.getDB;
+export const connectDB = dbProvider.connectDB;

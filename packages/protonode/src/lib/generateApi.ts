@@ -1,12 +1,12 @@
 import { getServiceToken } from './serviceToken'
 import { handler } from './handler'
 import { API, getEnv, getLogger, generateEvent } from 'protobase';
-import { leveldbProvider, getDBOptions } from './db';
+import { dbProvider, getDBOptions } from './db';
 import { ai } from './ai';
 
 const logger = getLogger()
-const _getDB = leveldbProvider.getDB;
-const _connectDB = leveldbProvider.connectDB;
+const _getDB = dbProvider.getDB;
+const _connectDB = dbProvider.connectDB;
 
 /*
     modelName: name of the model, used to generate api urls. for example, if model name is 'test' and prefix is '/api/v1/', then to read an item is: /api/v1/test
