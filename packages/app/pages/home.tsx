@@ -3,7 +3,7 @@ import { useSetAtom } from 'jotai'
 import { initParticlesAtom } from 'protolib/components/particles/ParticlesEngineAtom'
 import { ParticlesView } from 'protolib/components/particles/ParticlesView'
 import { Page } from 'protolib/components/Page'
-import { basicParticlesMask } from 'protolib/components/particles/particlesMasks/basicparticlesMask'
+import { basicParticlesMask } from 'protolib/components/particles/particlesMasks/basicParticlesMask'
 import { Protofy } from "protobase";
 
 const Home = () => {
@@ -27,7 +27,7 @@ const Home = () => {
         position: 'relative',
       }}
     >
-      <ParticlesView options={basicParticlesMask} />
+      <ParticlesView options={basicParticlesMask()} />
 
       <a
         href="/workspace"
