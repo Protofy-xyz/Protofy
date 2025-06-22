@@ -10,6 +10,7 @@ import { RadialBarChart } from 'protolib/components/RadialBartChart';
 import { KeySetter } from 'protolib/components/KeySetter';
 import { InteractiveIcon } from 'protolib/components/InteractiveIcon';
 import CanvasDraw from "react-canvas-draw"
+import ReactMarkdown from 'react-markdown';
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
@@ -23,6 +24,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(KeySetter, 'KeySetter');
     TransferComponent(InteractiveIcon, 'InteractiveIcon');
     TransferComponent(CanvasDraw, 'CanvasDraw');
+    TransferComponent(ReactMarkdown, 'ReactMarkdown');
 }
 
 

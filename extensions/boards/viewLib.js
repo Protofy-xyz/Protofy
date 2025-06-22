@@ -243,8 +243,31 @@ const iframe = ({ src }) => {
     return `<iframe style="width: 100%;height:100%;" src= "${src}" />`
 }
 
+
 const boardImage = ({ src, alt = '' }) => {
     return `<img src="${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: contain;" />`;
+};
+
+const markdown = (card) => {
+    return reactCard(`
+function Widget() {
+  const text = data?.value ?? '';
+  return (
+    <div className="no-drag" style={{
+      height: "100%",
+      padding: "1em",
+      overflow: "auto",
+      fontFamily: "sans-serif",
+      fontSize: "14px",
+      color: "var(--color)"
+    }}>
+      <Tinted>
+        <ReactMarkdown>{text}</ReactMarkdown>
+      </Tinted>
+    </div>
+  );
+}
+  `, card.domId);
 };
 
 const youtubeEmbed = ({ url }) => {
