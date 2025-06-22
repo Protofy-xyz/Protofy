@@ -604,3 +604,9 @@ const useActiveCard = () => {
         onMouseLeave: () => setActiveCard(false),
     }];
 }
+
+const getToken = () => {
+    //get token from localStorage, inside session, json decoded in key token
+    const session = JSON.parse(localStorage.getItem('session') || '{}');
+    return session.token || null;
+}
