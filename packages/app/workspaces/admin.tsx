@@ -46,6 +46,7 @@ export default ({ pages, boards, objects }) => {
         { "name": "Assets", "icon": Blocks, "href": "/workspace/assets?path=%2Fdata%2Fassets", "path": "" },
         { "name": "Users", "icon": "users", "href": "/workspace/users" },
         { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
+        // { "name": "Settings", "icon": Wrench, "href": "/workspace/settings" },
         { "name": "Services", "icon": Cog, "href": "/workspace/services" },
         { "name": "Databases", "icon": Database, href: "/workspace/databases" },
         { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
@@ -59,7 +60,7 @@ export default ({ pages, boards, objects }) => {
         Boards: [],
         ...(objectsMenu.length ? { Storage: objectsMenu } : {}),
         Integrations: integrations,
-        Settings: systemMenu
+        System: systemMenu
     }
 
     const boardsGroupByCategory = boards ? boards.reduce((acc, board) => {

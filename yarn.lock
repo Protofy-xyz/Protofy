@@ -3777,6 +3777,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/settings@workspace:extensions/settings":
+  version: 0.0.0-use.local
+  resolution: "@extensions/settings@workspace:extensions/settings"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/sketchcanvas@workspace:extensions/sketchcanvas":
   version: 0.0.0-use.local
   resolution: "@extensions/sketchcanvas@workspace:extensions/sketchcanvas"
