@@ -163,3 +163,37 @@ pathsToCheck.forEach(basePath => {
 //     fs.unlinkSync(envPath);
 //     console.log('.env file has been removed');
 // }
+
+//remove data/databases/* (and all its subdirectories and files)
+const dataPath = path.join(__dirname, 'data', 'databases');
+if (fs.existsSync(dataPath)) {
+    fs.readdirSync(dataPath).forEach(file => {
+        const filePath = path.join(dataPath, file);
+        if (fs.lstatSync(filePath).isDirectory()) {
+            rimraf.sync(filePath);
+            console.log(`Removed directory: ${filePath}`);
+        } else {
+            fs.unlinkSync(filePath);
+            console.log(`Removed file: ${filePath}`);
+        }
+    });
+} else {
+    console.log('data/databases directory does not exist');
+}
+
+//remove logs/* except for logs/.keep
+const logsPath = path.join(__dirname, 'logs');
+if (fs.existsSync(logsPath)) {
+    fs.readdirSync(logsPath).forEach(file => {
+        const filePath = path.join(logsPath, file);
+        if (file !== '.keep') { // Keep the .keep file
+            if (fs.lstatSync(filePath).isDirectory()) {
+                rimraf.sync(filePath);
+                console.log(`Removed directory: ${filePath}`);
+            } else {
+                fs.unlinkSync(filePath);
+                console.log(`Removed file: ${filePath}`);
+            }
+        }
+    });
+}
