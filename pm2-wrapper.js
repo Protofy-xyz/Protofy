@@ -27,7 +27,7 @@ function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = nu
   return new Promise((resolve, reject) => {
     process.env.PM2_NODE_PATH = nodeBin;
     process.env.IS_ECOSYSTEM_CHILD = '1';
-
+    process.execPath = nodeBin;
     pm2.connect(err => {
       if (err) {
         onLog(`❌ Error connecting to PM2: ${err.message}`);
