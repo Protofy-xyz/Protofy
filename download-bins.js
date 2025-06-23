@@ -94,8 +94,13 @@ async function setupPlatform(key, config) {
 
 async function main() {
   if (!existsSync('bin')) mkdirSync('bin');
-  for (const [key, config] of Object.entries(targets)) {
-    await setupPlatform(key, config);
+  //check if running on Windows
+  if (process.platform === 'win32') {
+    setupPlatform('win', targets.win);
+  } else if (process.platform === 'linux') {
+    setupPlatform('linux', targets.linux);
+  } else if (process.platform === 'darwin') {
+    setupPlatform('mac', targets.mac);
   }
 }
 
