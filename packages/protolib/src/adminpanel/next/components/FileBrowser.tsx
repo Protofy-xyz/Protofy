@@ -26,7 +26,7 @@ type RouteAdapter = {
 
 type FileBrowserProps = {
     router?: RouteAdapter        // <- opcional
-    initialPath?: string 
+    initialPath?: string
     initialFile?: string
     initialFilesState?: any
     onOpenFile?: Function
@@ -39,8 +39,12 @@ type FileBrowserProps = {
 export const FileBrowser = ({ router, initialPath = '/', initialFile = '', initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter, explorer }: FileBrowserProps) => {
     const externalPathname = router?.pathname ?? '/files';
     const solitoEnabled = !router;
-    const searchParams = solitoEnabled ? useSearchParams() : { entries: () => [] };
     const basePath = router ? externalPathname : 'files';
+    const rawSearch = solitoEnabled ? useSearchParams() : null;
+    const searchParams: Pick<URLSearchParams, 'entries'> =
+        rawSearch && typeof rawSearch.entries === 'function'
+            ? rawSearch
+            : { entries: () => [] as any };
     const baseQuery = router ? router.query : Object.fromEntries(searchParams.entries());
     const externalPath = baseQuery.path ?? initialPath;
     const externalFile = baseQuery.file ?? initialFile;
