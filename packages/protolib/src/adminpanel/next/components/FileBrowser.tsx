@@ -6,7 +6,7 @@ import { FileWidget } from '../../features/components/FilesWidget';
 import { IconContainer } from '../../../components/IconContainer';
 import { X } from '@tamagui/lucide-icons';
 import { useUpdateEffect } from 'usehooks-ts'
-import { useSearchParams, useRouter, usePathname } from 'solito/navigation';
+import { useSearchParams } from 'solito/navigation';
 import { useState } from 'react';
 import { Explorer } from './Explorer';
 import FileActions from '@extensions/files/fileActions';
@@ -17,7 +17,17 @@ import "next/dynamic"
 
 const logger = getLogger()
 
+type RouteAdapter = {
+    push: (url: string) => void
+    replace: (url: string) => void
+    pathname: string
+    query: Record<string, string>
+}
+
 type FileBrowserProps = {
+    router?: RouteAdapter        // <- opcional
+    initialPath?: string 
+    initialFile?: string
     initialFilesState?: any
     onOpenFile?: Function
     onChangeSelection?: Function
@@ -26,19 +36,19 @@ type FileBrowserProps = {
     explorer?: any
 }
 
-export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter, explorer }: FileBrowserProps) => {
-    const router = useRouter()
-    const searchParams = useSearchParams();
-    const query = Object.fromEntries(searchParams.entries());
-    const pathname = usePathname();
-
-    const routePath = query.path ?? '/';
-    const routeFile = query.file ?routePath + '/' + query.file.split('/')[0] : null
+export const FileBrowser = ({ router, initialPath = '/', initialFile = '', initialFilesState, onOpenFile, onChangeSelection, selection, fileFilter, explorer }: FileBrowserProps) => {
+    const externalPathname = router?.pathname ?? '/files';
+    const solitoEnabled = !router;
+    const searchParams = solitoEnabled ? useSearchParams() : { entries: () => [] };
+    const basePath = router ? externalPathname : 'files';
+    const baseQuery = router ? router.query : Object.fromEntries(searchParams.entries());
+    const externalPath = baseQuery.path ?? initialPath;
+    const externalFile = baseQuery.file ?? initialFile;
 
     const [filesState, setFilesState] = useState(initialFilesState ?? getPendingResult('pending'))
-    const [dialogOpen, setDialogOpen] = useState(routeFile ? true : false)
-    const [currentPath, setCurrentPath] = useState(routePath)
-    const [currentFile, setCurrentFile] = useState(routeFile ? routeFile : '')
+    const [dialogOpen, setDialogOpen] = useState(!!externalFile);
+    const [currentPath, setCurrentPath] = useState(externalPath);
+    const [currentFile, setCurrentFile] = useState(externalFile);
     const currentFileName = currentFile.split('/')[currentFile.split('/').length - 1]
     const [openAlert, setOpenAlert] = useState(false)
     const [isModified, setIsModified] = useState(false)
@@ -56,63 +66,60 @@ export const FileBrowser = ({ initialFilesState, onOpenFile, onChangeSelection, 
     ${currentFile ? 'The user is viewing the file' + currentFile : `The directory contents are: ${JSON.stringify(filesState)}`}
     `)
 
-    useUpdateEffect(() => { API.get({ url: '/api/core/v1/files/' + currentPath }, setFilesState) }, [currentPath])
-    usePendingEffect((s) => { API.get({ url: '/api/core/v1/files/' + currentPath }, s) }, setFilesState, initialFilesState)
+    const navigate = (url: string, replace = false) => {
+        if (router) {
+            replace ? router.replace(url) : router.push(url);
+        } else {
+            const qs = url.split('?')[1] ?? '';
+            const p = new URLSearchParams(qs);
+            setCurrentPath(p.get('path') ?? '/');
+            setCurrentFile(p.get('file') ?? '');
+        }
+    };
 
     useUpdateEffect(() => {
-        logger.debug({ query: routePath, newpath: currentPath }, `query: ${routePath} newpath: ${currentPath}`)
-        const path = (!currentPath.startsWith('/') ? '/' : '') + currentPath
+        API.get({ url: '/api/core/v1/files/' + currentPath }, setFilesState);
+    }, [currentPath]);
 
-        if (routePath !== currentPath) {
-            const newQuery = { ...query, path: path };
-            const newSearchParams = new URLSearchParams(newQuery).toString();
-            const newUrl = `${pathname}?${newSearchParams}`;
-            router.push(newUrl);
-          }
-    }, [currentPath])
+    usePendingEffect(
+        (s) => { API.get({ url: '/api/core/v1/files/' + currentPath }, s); },
+        setFilesState,
+        initialFilesState
+    );
+
+    useUpdateEffect(() => {
+        const q = new URLSearchParams({ path: currentPath });
+        if (currentFile) q.set('file', currentFile);
+        navigate(`${basePath}?${q.toString()}`, false);
+    }, [currentPath, currentFile]);
+
+    useUpdateEffect(() => {
+        if (externalPath !== currentPath) setCurrentPath(externalPath);
+        if (externalFile !== currentFile) setCurrentFile(externalFile);
+    }, [externalPath, externalFile]);
 
     useUpdateEffect(() => {
         if (currentFile) {
-            setDialogOpen(true)
+            setDialogOpen(true);
         } else {
-            const newQuery = { ...query };
-            delete newQuery.file;
-      
-            const newSearchParams = new URLSearchParams(newQuery).toString();
-            const newUrl = `${pathname}?${newSearchParams}`;
-            router.replace(newUrl);
-          }
-    }, [currentFile])
-
-
-    useUpdateEffect(() => {
-        const path = routePath && routePath['split'] ? routePath['split']('\\').join('/') : ''
-        logger.debug(`current path: ${path}`);
-        if (query.file) {
-            const file = (path + '/' + query.file).replace(/\/+/g, '/')
-            setCurrentFile(file)
-        } else {
-            setCurrentFile('')
-            setDialogOpen(false)
-            logger.debug(`useEffect fired! ${path}`);
-            setCurrentPath(path)
+            setDialogOpen(false);
+            navigate(`${basePath}?path=${currentPath}`, true);
         }
-
-    }, [routePath, query.file]);
+    }, [currentFile]);
 
     const onOpen = (file: any) => {
-        logger.debug({ file }, `on open client: ${JSON.stringify(file)}`)
-        if (file.isDir) return setCurrentPath(file.path ?? file.id)
-        if (onOpenFile) {
-            onOpenFile(file)
-            return
-        }
-        router.push('files?path=' + (!currentPath.startsWith('/') ? '/' : '') + currentPath + '&file=' + file.name)
-    }
+        if (file.isDir) return setCurrentPath(file.path ?? file.id);
+
+        if (onOpenFile) return onOpenFile(file);
+
+        navigate(
+            `${basePath}?path=${currentPath.startsWith('/') ? currentPath : '/' + currentPath}&file=${file.name}`
+        );
+    };
 
     const { resolvedTheme } = useThemeSetting()
 
-    const isFull = query?.file
+    const isFull = !!currentFile;
 
     const getWidget = () => <FileWidget
         hideCloseIcon={isFull ? true : false}

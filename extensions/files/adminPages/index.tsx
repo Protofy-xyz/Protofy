@@ -5,6 +5,7 @@ import { SSR } from 'protolib/lib/SSR';
 import { AdminPage } from 'protolib/components/AdminPage';
 import dynamic from 'next/dynamic'
 import { Spinner } from '@my/ui'
+import { useRouter } from 'next/router';
 
 const FileBrowser = dynamic<any>(() =>
     import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
@@ -12,9 +13,13 @@ const FileBrowser = dynamic<any>(() =>
 );
 
 function FilesPage({initialFilesState, pageSession}:any) {
+  const router = useRouter();
+  const { pathname, query, push, replace } = router;
+  const routeAdapter = { push, replace, pathname, query: query as Record<string, string> };
+
   return (
       <AdminPage pageSession={pageSession} title={"Files"} >
-        <FileBrowser initialFilesState={initialFilesState} />
+        <FileBrowser initialFilesState={initialFilesState} router={routeAdapter} />
       </AdminPage>
   )
 }
