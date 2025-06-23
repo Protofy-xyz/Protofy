@@ -2,7 +2,7 @@
   "name": "site",
   "main": "proxy-main.js",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.9",
   "workspaces": [
     "apps/api",
     "apps/core",
