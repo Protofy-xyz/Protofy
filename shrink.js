@@ -24,19 +24,6 @@ if (fs.existsSync(nodeModulesPath)) {
     console.log('node_modules directory has been removed');
 }
 
-//run yarn
-execSync('yarn', (error, stdout, stderr) => {
-    if (error) {
-        console.error(`Error executing yarn: ${error.message}`);
-        return;
-    }
-    if (stderr) {
-        console.error(`Yarn stderr: ${stderr}`);
-        return;
-    }
-    console.log(`Yarn stdout: ${stdout}`);
-});
-
 //remove apps/adminpanel/.next
 const nextPath = path.join(__dirname, 'apps', 'adminpanel', '.next');
 if (fs.existsSync(nextPath)) {
@@ -45,7 +32,6 @@ if (fs.existsSync(nextPath)) {
 }
 
 //remove apps/adminpanel/out
-
 const outPath = path.join(__dirname, 'apps', 'adminpanel', 'out');
 if (fs.existsSync(outPath)) {
     rimraf.sync(outPath);
@@ -73,89 +59,6 @@ if (process.platform === 'win32') {
         console.log('bin/node-macos has been removed');
     }
 }
-
-const disableGit = true
-if(!disableGit) {
-    //convert git to a shallow clone, remove .git/objects and .git/refs
-    const gitObjectsPath = path.join(__dirname, '.git', 'objects');
-    const gitRefsPath = path.join(__dirname, '.git', 'refs');
-    if (fs.existsSync(gitObjectsPath)) {
-        rimraf.sync(gitObjectsPath);
-        console.log('.git/objects has been removed');
-    }
-    if (fs.existsSync(gitRefsPath)) {
-        rimraf.sync(gitRefsPath);
-        console.log('.git/refs has been removed');
-    }
-
-    //run git init
-    const gitInitCommand = 'git init';
-    execSync(gitInitCommand, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing git init: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Git init stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Git init stdout: ${stdout}`);
-    });
-
-    //run git fetch --depth=1 origin main
-    const gitFetchCommand = 'git fetch --depth=1 origin main';
-    execSync(gitFetchCommand, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`Error executing git fetch: ${error.message}`);
-            return;
-        }
-        if (stderr) {
-            console.error(`Git fetch stderr: ${stderr}`);
-            return;
-        }
-        console.log(`Git fetch stdout: ${stdout}`);
-    });
-}
-
-
-//remove unnecesary dependencies from node_modules:
-const dependenciesToRemove = [
-    'electron',
-    'electron-builder',
-    'electron-publish',
-    'electron-to-chromium',
-    'app-builder-bin'
-];
-
-dependenciesToRemove.forEach(dep => {
-    const depPath = path.join(__dirname, 'node_modules', dep);
-    if (fs.existsSync(depPath)) {
-        rimraf.sync(depPath);
-        console.log(`Removed ${dep} from node_modules`);
-    } else {
-        console.log(`${dep} not found in node_modules`);
-    }
-});
-
-//remove symlink dependencies in node_modules, by iterating through node_modules and checking if the item is a symlink, if it is, remove it
-//also iterate node_modules/@extensions and node_modules/@my
-const pathsToCheck = [
-    path.join(__dirname, 'node_modules'),
-    path.join(__dirname, 'node_modules', '@extensions'),
-    path.join(__dirname, 'node_modules', '@my')
-];
-
-pathsToCheck.forEach(basePath => {
-    if (fs.existsSync(basePath)) {
-        fs.readdirSync(basePath).forEach(item => {
-            const itemPath = path.join(basePath, item);
-            if (fs.lstatSync(itemPath).isSymbolicLink()) {
-                rimraf.sync(itemPath);
-                console.log(`Removed symlink: ${itemPath}`);
-            }
-        });
-    }
-});
 
 //remove .env
 // const envPath = path.join(__dirname, '.env');
