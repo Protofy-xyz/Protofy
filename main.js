@@ -11,13 +11,7 @@ const { on } = require('events');
 const fs = require('fs');
 
 //get path to the local Node.js binary
-let nodePath = os.platform() === 'win32' ?
-  path.join(__dirname, 'bin/node.exe') :
-  os.platform() === 'darwin' ?
-    path.join(__dirname, 'bin/node-macosx') :
-    path.join(__dirname, 'bin/node-linux');  
-
-
+let nodePath = os.platform() === 'win32' ? path.join(__dirname, 'bin/node.exe') : path.join(__dirname, 'bin/node') 
 const hasLocalNode = fs.existsSync(nodePath);
 
 if (hasLocalNode) {
