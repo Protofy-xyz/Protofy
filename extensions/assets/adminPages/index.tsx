@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import { Button, Spinner, Stack, Text, useToastController, YStack } from '@my/ui'
 import { API } from 'protobase';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 
 const FileBrowser = dynamic<any>(() =>
   import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
@@ -16,6 +17,9 @@ const FileBrowser = dynamic<any>(() =>
 function FilesPage({ initialFilesState, pageSession }: any) {
   const [loading, setLoading] = useState(false);
   const toast = useToastController()
+  const router = useRouter();
+  const { pathname, query, push, replace } = router;
+  const routeAdapter = { push, replace, pathname, query: query as Record<string, string> };
 
   const onInstallAssets = async (selectedFiles: any, setCustomAction) => {
     setLoading(true);
@@ -28,6 +32,7 @@ function FilesPage({ initialFilesState, pageSession }: any) {
   return (
     <AdminPage pageSession={pageSession} title={"assets"} >
       <FileBrowser
+        router={routeAdapter}
         initialFilesState={initialFilesState}
         explorer={{
           disableNavBar: true,
