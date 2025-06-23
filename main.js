@@ -8,9 +8,26 @@ const { exec } = require('child_process');
 const os = require('os');
 const process = require('process');
 const { on } = require('events');
+const fs = require('fs');
 
-process.execPath = path.join(__dirname, 'bin/node'); // Set the Node.js binary path for child processes
-// 
+//get path to the local Node.js binary
+let nodePath = os.platform() === 'win32' ?
+  path.join(__dirname, 'bin/node.exe') :
+  os.platform() === 'darwin' ?
+    path.join(__dirname, 'bin/node-macosx') :
+    path.join(__dirname, 'bin/node-linux');  
+
+
+const hasLocalNode = fs.existsSync(nodePath);
+
+if (hasLocalNode) {
+  console.log('🟢 Local Node.js binary found. Using it for child processes: ', nodePath);
+  process.execPath = nodePath; // Set the Node.js binary path for child processes
+} else {
+  nodePath = 'node'
+  console.warn('🟡 No local Node.js binary found. Using system Node.js.');
+}
+
 process.chdir(__dirname);
 console.log('🟢 Starting app...');
 console.log('📁 Current directory:', __dirname);
@@ -81,7 +98,7 @@ async function runCommand(command, args = [], onData = (line) => {}) {
 }
 
 async function runYarn(command = '', onLog=(x) => {}) {
-  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', command], (line) => {
+  return runCommand(nodePath, ['.yarn/releases/yarn-4.1.0.cjs', command], (line) => {
     onLog(line);
   });
 }
