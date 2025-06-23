@@ -83,7 +83,6 @@ async function runCommand(command, args = [], onData = (line) => {}) {
 async function runYarn(command = '', onLog=(x) => {}) {
   return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', command], (line) => {
     onLog(line);
-    logToRenderer(line);
   });
 }
 
