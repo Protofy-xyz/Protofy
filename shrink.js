@@ -143,3 +143,20 @@ if (fs.existsSync(settingsPath)) {
         }
     });
 } 
+
+//delete preincluded assets
+const assetsPath = path.join(__dirname, 'data', 'assets');
+if (fs.existsSync(assetsPath)) {
+    fs.readdirSync(assetsPath).forEach(file => {
+        const filePath = path.join(assetsPath, file);
+        if (fs.lstatSync(filePath).isDirectory()) {
+            rimraf.sync(filePath);
+            console.log(`Removed directory: ${filePath}`);
+        } else {
+            fs.unlinkSync(filePath);
+            console.log(`Removed file: ${filePath}`);
+        }
+    });
+} else {
+    console.log('data/assets directory does not exist');
+}
