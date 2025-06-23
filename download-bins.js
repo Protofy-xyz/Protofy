@@ -23,7 +23,7 @@ const targets = {
   },
   linux: {
     url: `${baseUrl}/node-${version}-linux-x64.tar.gz`,
-    out: 'node-linux',
+    out: 'node',
     extract: async (archivePath, outputPath) => {
       await tar.x({
         file: archivePath,
@@ -38,7 +38,7 @@ const targets = {
   },
   mac: {
     url: `${baseUrl}/node-${version}-darwin-x64.tar.gz`,
-    out: 'node-macos',
+    out: 'node',
     extract: async (archivePath, outputPath) => {
       await tar.x({
         file: archivePath,
