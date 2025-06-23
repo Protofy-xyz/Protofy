@@ -21,8 +21,11 @@ let logWindow = null;
 let mainWindow = null;
 
 function logToRenderer(msg) {
-  if (logWindow) {
+  try {
+    // console.log(msg)
     logWindow.webContents.send('log', msg);
+  } catch(e) {
+    //console.error('❌ Error sending log to renderer:', e);
   }
 }
 
@@ -40,24 +43,45 @@ const genNewSession = () => {
   }
 }
 
-async function runYarn() {
+async function runCommand(command, args = [], onData = (line) => {}) {
+  console.log(`🔧 Running command: ${command} ${args.join(' ')}`);
   return new Promise((resolve, reject) => {
-    const child = spawn('bin/node', ['.yarn/releases/yarn-4.1.0.cjs'], {
+    const child = spawn(command, args, {
       windowsHide: true
     });
 
     child.stdout.setEncoding('utf-8');
     child.stderr.setEncoding('utf-8');
 
-    child.stdout.on('data', data => logToRenderer(data));
-    child.stderr.on('data', data => logToRenderer(data));
+    child.stdout.on('data', data => {
+      onData(data.toString());
+      logToRenderer(data);
+    });
 
-    child.on('error', err => reject(err));
+    child.stderr.on('data', data => {
+      onData(data.toString());
+      logToRenderer(data);
+    });
 
+    child.on('error', err => {
+      logToRenderer(`❌ Error: ${err.message}`);
+      reject(err);
+    });
     child.on('close', code => {
-      logToRenderer(`\n[Proceso terminado con código ${code}]\n`);
       resolve(code);
     });
+  });
+}
+
+async function runYarn() {
+  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs'], (line) => {
+    logToRenderer(line);
+  });
+}
+
+async function runYarnKill() {
+  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', 'kill'], (line) => {
+    logToRenderer(line);
   });
 }
 
@@ -126,6 +150,7 @@ function createLogWindow() {
 
 // Create main window (localhost:8000)
 function createMainWindow(fullscreen, initialUrl) {
+  require('dotenv').config({ path: path.join(__dirname, '.env') });
   const userSession = genNewSession()
   const sessionStr = JSON.stringify(userSession);
   const encoded = encodeURIComponent(sessionStr);
@@ -181,86 +206,29 @@ function createMainWindow(fullscreen, initialUrl) {
     });
 }
 
-function startPM2({ waitForLog }) {
-  return new Promise((resolve, reject) => {
-    const child = spawn('bin/node', ['pm2-wrapper.js'], {
-      windowsHide: true
-    });
-
-    child.stdout.setEncoding('utf-8');
-    child.stderr.setEncoding('utf-8');
-
-    child.stdout.on('data', data => {
-      waitForLog && waitForLog(data.toString());
-      logToRenderer(data)
-    });
-    child.stderr.on('data', data => {
-      waitForLog && waitForLog(data.toString());
-      logToRenderer(data)
-    });
-
-    child.on('error', err => reject(err));
-
-    child.on('close', code => {
-      logToRenderer(`\n[Proceso terminado con código ${code}]\n`);
-      resolve(code);
-    });
+function startPM2({ mode, waitForLog }) {
+  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', mode], (line) => {
+    if (waitForLog) {
+      waitForLog(line);
+    }
+    logToRenderer(line);
   });
 }
 
 function stopPM2() {
-  return new Promise((resolve, reject) => {
-    const child = spawn('bin/node', ['pm2-wrapper.js', '--stop'], {
-      windowsHide: true
-    });
-
-    child.stdout.setEncoding('utf-8');
-    child.stderr.setEncoding('utf-8');
-
-    child.stdout.on('data', data => logToRenderer(data));
-    child.stderr.on('data', data => logToRenderer(data));
-
-    child.on('error', err => reject(err));
-
-    child.on('close', code => {
-      resolve(code);
-    });
+  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', 'kill'], (line) => {
+    logToRenderer(line);
   });
 }
 
-function boot(waitForLog) {
-  const minimist = require('minimist');
-  //load envars from .env file
-  require('dotenv').config({ path: path.join(__dirname, '.env') });
-  const args = minimist(process.argv.slice(1));
-  const isDev = args.dev || false;
-  const dev = args.dev || false;
-
-  process.env.NODE_ENV = 'development';
-  if (dev) {
-    //set envar FULL_DEV=1
-    process.env.FULL_DEV = '1';
-  }
-
-  // 🔧 Setear NODE_ENV solo si no estaba seteado ya
-  if (!process.env.NODE_ENV) {
-    process.env.NODE_ENV = isDev ? 'development' : 'production'
-  }
-
+function boot(mode, waitForLog) {
   startPM2({
+    mode,
     waitForLog
   });
-
-  return args
 }
 
 app.whenReady().then(async () => {
-  // globalShortcut.register('CommandOrControl+R', () => {
-  //   if (mainWindow && !mainWindow.isDestroyed()) {
-  //     mainWindow.reload();
-  //   }
-  // });
-
   try {
     let resolveWhenCoreReady;
     const coreStarted = new Promise(resolve => {
@@ -271,26 +239,31 @@ app.whenReady().then(async () => {
     
     //run yarn
     await runYarn();
-    logToRenderer('✅ Yarn completed successfully.');
-    const args = boot(line => {
+    console.log('✅ Yarn completed successfully.');
+
+    await runYarnKill(); // Ensure any previous PM2 processes are killed
+    console.log('✅ Previous PM2 processes killed.');
+
+    const args = require('minimist')(process.argv.slice(2));
+    boot(args.dev ? 'dev-fast' : 'start-fast' ,line => {
       if (line.includes('Service Started: core')) {
         resolveWhenCoreReady(); // ✅
       }
     })
-
-    let initialUrl = args.initialUrl ?? 'http://localhost:8000/workspace/boards';
-
-    logToRenderer('⏳ Waiting for core service to start...');
+    console.log('🟢 Booting with mode:', args.dev ? 'dev-fast' : 'start-fast');
+    console.log('⏳ Waiting for core service to start...');
     await coreStarted;
+    console.log('✅ Core service started.');
 
-    logToRenderer('⏳ Waiting for port 8000...');
+    const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/boards';
+    console.log('⏳ Waiting for port 8000...');
     await waitForPortHttp(initialUrl);
 
     await new Promise(resolve => setTimeout(resolve, 1000));
-    logToRenderer('✅ Port 8000 ready. Opening main window...');
+    console.log('✅ Port 8000 ready. Opening main window...');
     createMainWindow(args.fullscreen, initialUrl);
   } catch (err) {
-    logToRenderer(`❌ Startup failed: ${err.message}`);
+    console.log(`❌ Startup failed: ${err.message}`);
     process.exit(1);
   }
 });
