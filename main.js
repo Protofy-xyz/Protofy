@@ -4,6 +4,10 @@ const http = require('http');
 const net = require('net');
 const path = require('path');
 const { spawn } = require('child_process');
+const { exec } = require('child_process');
+const os = require('os');
+const process = require('process');
+const { on } = require('events');
 
 process.execPath = path.join(__dirname, 'bin/node'); // Set the Node.js binary path for child processes
 // 
@@ -22,7 +26,10 @@ let mainWindow = null;
 
 function logToRenderer(msg) {
   try {
-    // console.log(msg)
+    //if inside process.argv there is a -v argument, then log to console
+    if (process.argv.includes('-v') || process.argv.includes('--verbose')) {
+      console.log(msg);
+    }
     logWindow.webContents.send('log', msg);
   } catch(e) {
     //console.error('❌ Error sending log to renderer:', e);
@@ -73,14 +80,9 @@ async function runCommand(command, args = [], onData = (line) => {}) {
   });
 }
 
-async function runYarn() {
-  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs'], (line) => {
-    logToRenderer(line);
-  });
-}
-
-async function runYarnKill() {
-  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', 'kill'], (line) => {
+async function runYarn(command = '', onLog=(x) => {}) {
+  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', command], (line) => {
+    onLog(line);
     logToRenderer(line);
   });
 }
@@ -186,7 +188,7 @@ function createMainWindow(fullscreen, initialUrl) {
       mainWindow.on('close', async () => {
         try {
           console.log('🔚 Main window closed. Stopping PM2 and exiting...');
-          await stopPM2();
+          await runYarn('kill');
         } catch (err) {
           console.error('❌ Error stopping PM2:', err);
         } finally {
@@ -206,28 +208,6 @@ function createMainWindow(fullscreen, initialUrl) {
     });
 }
 
-function startPM2({ mode, waitForLog }) {
-  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', mode], (line) => {
-    if (waitForLog) {
-      waitForLog(line);
-    }
-    logToRenderer(line);
-  });
-}
-
-function stopPM2() {
-  return runCommand('bin/node', ['.yarn/releases/yarn-4.1.0.cjs', 'kill'], (line) => {
-    logToRenderer(line);
-  });
-}
-
-function boot(mode, waitForLog) {
-  startPM2({
-    mode,
-    waitForLog
-  });
-}
-
 app.whenReady().then(async () => {
   try {
     let resolveWhenCoreReady;
@@ -238,19 +218,19 @@ app.whenReady().then(async () => {
     createLogWindow(); // Show logs immediately
     
     //run yarn
-    await runYarn();
+    await runYarn('install');
     console.log('✅ Yarn completed successfully.');
 
-    await runYarnKill(); // Ensure any previous PM2 processes are killed
-    console.log('✅ Previous PM2 processes killed.');
+    await runYarn('kill'); // Ensure any previous PM2 processes are killed
+    console.log('💣 Previous PM2 processes killed.');
 
     const args = require('minimist')(process.argv.slice(2));
-    boot(args.dev ? 'dev-fast' : 'start-fast' ,line => {
+    runYarn(args.dev ? 'dev-fast' : 'start-fast' ,line => {
       if (line.includes('Service Started: core')) {
         resolveWhenCoreReady(); // ✅
       }
     })
-    console.log('🟢 Booting with mode:', args.dev ? 'dev-fast' : 'start-fast');
+    console.log('☕ Booting with mode:', args.dev ? 'dev-fast' : 'start-fast');
     console.log('⏳ Waiting for core service to start...');
     await coreStarted;
     console.log('✅ Core service started.');
