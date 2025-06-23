@@ -4,7 +4,7 @@ import { useWorkspaces, useUserSettings } from '../lib/useSession';
 import { PanelMenu } from './PanelMenu';
 import { MainPanel } from './MainPanel';
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity, Globe } from '@tamagui/lucide-icons'
+import { Activity, Globe, Store} from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai';
 import { useContext, useEffect, useState } from 'react'
 import { atomWithStorage } from 'jotai/utils'
@@ -114,6 +114,19 @@ export const AdminPanel = ({ children }) => {
                   Icon={Globe}
                 />
             ) : null}
+            
+            <InteractiveIcon
+                $xs={{ display: "none" }}
+                onPress={() => {
+                  if(isElectron()) {
+                    window['electronAPI'].openExternal("https://store.protofy.xyz");
+                  }else{
+                    window.open("https://store.protofy.xyz", "_blank");
+                  }
+                }}
+                IconColor="var(--color)"
+                Icon={Store}
+              />
             {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => {
               if(isElectron()) {
                 window['electronAPI'].toggleLogWindow()
