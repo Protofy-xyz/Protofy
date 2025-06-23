@@ -3,34 +3,11 @@ const { app, BrowserWindow, session, ipcMain, globalShortcut, shell } = require(
 const http = require('http');
 const net = require('net');
 const path = require('path');
-const { getNodeBinary, startPM2, stopPM2 } = require('./pm2-wrapper');
 const { spawn } = require('child_process');
 
-const minimist = require('minimist');
-const args = minimist(process.argv.slice(1));
-const isDev = args.dev || false;
-const isFullDev = args.coredev || false;
-const initialUrl = args.initialUrl || 'http://localhost:8000/workspace/boards';
-const fullscreen = args.fullscreen || false;
-const dev = args.dev || false;
-
-process.env.NODE_ENV = 'development';
-if (dev) {
-  //set envar FULL_DEV=1
-  process.env.FULL_DEV = '1';
-}
-
-// 🔧 Setear NODE_ENV solo si no estaba seteado ya
-if (!process.env.NODE_ENV) {
-  process.env.NODE_ENV = isDev ? 'development' : 'production'
-}
-
-
+process.execPath = path.join(__dirname, 'bin/node'); // Set the Node.js binary path for child processes
 // 
 process.chdir(__dirname);
-//load envars from .env file
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
 console.log('🟢 Starting app...');
 console.log('📁 Current directory:', __dirname);
 
@@ -40,12 +17,10 @@ if (process.env.IS_ECOSYSTEM_CHILD === '1') {
   process.exit(0);
 }
 
-const PORT = 8000;
 let logWindow = null;
 let mainWindow = null;
 
 function logToRenderer(msg) {
-  console.log(msg);
   if (logWindow) {
     logWindow.webContents.send('log', msg);
   }
@@ -138,8 +113,7 @@ function createLogWindow() {
     scrollBounce: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-    },
-    fullscreen: fullscreen,
+    }
   });
 
   logWindow.on('close', (event) => {
@@ -151,7 +125,7 @@ function createLogWindow() {
 }
 
 // Create main window (localhost:8000)
-function createMainWindow() {
+function createMainWindow(fullscreen, initialUrl) {
   const userSession = genNewSession()
   const sessionStr = JSON.stringify(userSession);
   const encoded = encodeURIComponent(sessionStr);
@@ -187,14 +161,15 @@ function createMainWindow() {
       mainWindow.on('close', async () => {
         try {
           console.log('🔚 Main window closed. Stopping PM2 and exiting...');
-          await stopPM2(logToRenderer);
+          await stopPM2();
         } catch (err) {
           console.error('❌ Error stopping PM2:', err);
         } finally {
+          console.log('👋 Exiting app...');
           app.exit(0); // esto termina el proceso principal
         }
       });
-      //close log window
+      //hide log window
       if (logWindow) {
         logWindow.hide();
       }
@@ -206,6 +181,79 @@ function createMainWindow() {
     });
 }
 
+function startPM2({ waitForLog }) {
+  return new Promise((resolve, reject) => {
+    const child = spawn('bin/node', ['pm2-wrapper.js'], {
+      windowsHide: true
+    });
+
+    child.stdout.setEncoding('utf-8');
+    child.stderr.setEncoding('utf-8');
+
+    child.stdout.on('data', data => {
+      waitForLog && waitForLog(data.toString());
+      logToRenderer(data)
+    });
+    child.stderr.on('data', data => {
+      waitForLog && waitForLog(data.toString());
+      logToRenderer(data)
+    });
+
+    child.on('error', err => reject(err));
+
+    child.on('close', code => {
+      logToRenderer(`\n[Proceso terminado con código ${code}]\n`);
+      resolve(code);
+    });
+  });
+}
+
+function stopPM2() {
+  return new Promise((resolve, reject) => {
+    const child = spawn('bin/node', ['pm2-wrapper.js', '--stop'], {
+      windowsHide: true
+    });
+
+    child.stdout.setEncoding('utf-8');
+    child.stderr.setEncoding('utf-8');
+
+    child.stdout.on('data', data => logToRenderer(data));
+    child.stderr.on('data', data => logToRenderer(data));
+
+    child.on('error', err => reject(err));
+
+    child.on('close', code => {
+      resolve(code);
+    });
+  });
+}
+
+function boot(waitForLog) {
+  const minimist = require('minimist');
+  //load envars from .env file
+  require('dotenv').config({ path: path.join(__dirname, '.env') });
+  const args = minimist(process.argv.slice(1));
+  const isDev = args.dev || false;
+  const dev = args.dev || false;
+
+  process.env.NODE_ENV = 'development';
+  if (dev) {
+    //set envar FULL_DEV=1
+    process.env.FULL_DEV = '1';
+  }
+
+  // 🔧 Setear NODE_ENV solo si no estaba seteado ya
+  if (!process.env.NODE_ENV) {
+    process.env.NODE_ENV = isDev ? 'development' : 'production'
+  }
+
+  startPM2({
+    waitForLog
+  });
+
+  return args
+}
+
 app.whenReady().then(async () => {
   // globalShortcut.register('CommandOrControl+R', () => {
   //   if (mainWindow && !mainWindow.isDestroyed()) {
@@ -214,29 +262,23 @@ app.whenReady().then(async () => {
   // });
 
   try {
-    const nodeBin = getNodeBinary(__dirname);
-
     let resolveWhenCoreReady;
     const coreStarted = new Promise(resolve => {
       resolveWhenCoreReady = resolve;
     });
 
+    createLogWindow(); // Show logs immediately
+    
     //run yarn
     await runYarn();
     logToRenderer('✅ Yarn completed successfully.');
-
-    await startPM2({
-      ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),
-      nodeBin,
-      onLog: logToRenderer,
-      waitForLog: line => {
-        if (line.includes('Service Started: core')) {
-          resolveWhenCoreReady(); // ✅
-        }
+    const args = boot(line => {
+      if (line.includes('Service Started: core')) {
+        resolveWhenCoreReady(); // ✅
       }
-    });
+    })
 
-    createLogWindow(); // Show logs immediately
+    let initialUrl = args.initialUrl ?? 'http://localhost:8000/workspace/boards';
 
     logToRenderer('⏳ Waiting for core service to start...');
     await coreStarted;
@@ -246,7 +288,7 @@ app.whenReady().then(async () => {
 
     await new Promise(resolve => setTimeout(resolve, 1000));
     logToRenderer('✅ Port 8000 ready. Opening main window...');
-    createMainWindow();
+    createMainWindow(args.fullscreen, initialUrl);
   } catch (err) {
     logToRenderer(`❌ Startup failed: ${err.message}`);
     process.exit(1);

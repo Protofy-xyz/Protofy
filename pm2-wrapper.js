@@ -15,6 +15,8 @@ function getNodeBinary(baseDir) {
   return path.join(baseDir, 'bin', binName);
 }
 
+process.execPath = getNodeBinary(__dirname);
+
 // 🎨 Terminal log colors
 const colors = ['\x1b[36m', '\x1b[33m', '\x1b[35m', '\x1b[32m', '\x1b[34m', '\x1b[31m', '\x1b[90m'];
 const resetColor = '\x1b[0m';
@@ -23,9 +25,10 @@ function colorize(label, colorIndex, line) {
   return `${color}[${label}]${resetColor} ${line}`;
 }
 
-function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = null }) {
+async function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = null }) {
   return new Promise((resolve, reject) => {
     process.env.PM2_NODE_PATH = nodeBin;
+    process.env.NODE = nodeBin;
     process.env.IS_ECOSYSTEM_CHILD = '1';
     process.execPath = nodeBin;
     pm2.connect(err => {
@@ -93,7 +96,7 @@ function startPM2({ ecosystemFile, nodeBin, onLog = console.log, waitForLog = nu
   });
 }
 
-function stopPM2(onLog = console.log) {
+async function stopPM2(onLog = console.log) {
   return new Promise(resolve => {
     onLog('🛑 Cleaning up PM2...');
     pm2.list((_, list) => {
@@ -123,12 +126,6 @@ function stopPM2(onLog = console.log) {
   });
 }
 
-module.exports = {
-  getNodeBinary,
-  startPM2,
-  stopPM2,
-};
-
 // CLI usage
 if (require.main === module) {
   const nodeBin = getNodeBinary(__dirname);
@@ -141,12 +138,24 @@ if (require.main === module) {
     process.exit(0);
   };
 
+    // check if its start or stop
+  if (process.argv.includes('--stop')) {
+    cleanup().then(() => {
+      console.log('✅ PM2 stopped successfully.');
+      process.exit(0);
+    }).catch(err => {
+      console.error(`❌ Failed to stop PM2: ${err.message}`);
+      process.exit(1);
+    });
+    return;
+  }
+
   process.on('SIGINT', cleanup);
   process.on('SIGTERM', cleanup);
   process.on('exit', cleanup);
 
   startPM2({
-    ecosystemFile: 'ecosystem.config.js',
+    ecosystemFile: path.join(__dirname, 'ecosystem.config.js'),
     nodeBin,
     onLog: msg => console.log(msg),
   })

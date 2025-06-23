@@ -3,10 +3,20 @@ const isProduction = process.env.NODE_ENV === 'production';
 const path = require('path');
 const currentDir = path.dirname(__filename);
 
+let node = 'node'
+if (process.platform === 'win32') {
+    const nodeBin = path.resolve(path.join(currentDir, '../../bin/node.exe'));
+    if (require('fs').existsSync(nodeBin)) {
+        node = nodeBin;
+    } else {
+        console.warn(`Node binary not found at ${nodeBin}. Using default node.`);
+    }
+}
+
 const api = {
     name: 'api',
     script: 'src/index.ts',
-    interpreter: 'node',
+    interpreter: node,
     interpreter_args: '--import tsx',
     watch: false,
     autorestart: true,
@@ -24,7 +34,7 @@ const api = {
 const apiDev = {
     name: 'api-dev',
     script: 'src/index.ts',
-    interpreter: 'node',
+    interpreter: node,
     interpreter_args: '--import tsx',
     watch: false,
     autorestart: true,

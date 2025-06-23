@@ -4,15 +4,25 @@ const path = require('path');
 const currentDir = path.dirname(__filename);
 
 const commonEnv = {
-  PATH: `${path.resolve(currentDir, '../../bin')}${path.delimiter}${process.env.PATH}`
+    PATH: `${path.resolve(currentDir, '../../bin')}${path.delimiter}${process.env.PATH}`
 };
+
+let node = 'node'
+if (process.platform === 'win32') {
+    const nodeBin = path.resolve(path.join(currentDir, '../../bin/node.exe'));
+    if (require('fs').existsSync(nodeBin)) {
+        node = nodeBin;
+    } else {
+        console.warn(`Node binary not found at ${nodeBin}. Using default node.`);
+    }
+}
 
 module.exports = {
     apps: [
         isFullDev ? {
             name: 'core-dev',
             script: 'src/index.ts',
-            interpreter: 'node',
+            interpreter: node,
             interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
@@ -29,7 +39,7 @@ module.exports = {
         } : {
             name: 'core',
             script: 'src/index.ts',
-            interpreter: 'node',
+            interpreter: node,
             interpreter_args: '--import tsx',
             watch: false,
             autorestart: true,
