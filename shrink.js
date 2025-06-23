@@ -24,6 +24,14 @@ if (fs.existsSync(nodeModulesPath)) {
     console.log('node_modules directory has been removed');
 }
 
+//run yarn install to install dependencies again
+try {
+    execSync('yarn install', { stdio: 'inherit' });
+    console.log('Dependencies have been reinstalled');
+} catch (error) {
+    console.error('Error reinstalling dependencies:', error.message);
+}
+
 //remove apps/adminpanel/.next
 const nextPath = path.join(__dirname, 'apps', 'adminpanel', '.next');
 if (fs.existsSync(nextPath)) {
