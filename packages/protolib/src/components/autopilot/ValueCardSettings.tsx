@@ -14,7 +14,7 @@ export const ValueCardSettings = ({ states, card, icons, onEdit = (data) => { } 
     const [cardData, setCardData] = useState(card);
     const isSimpleReturnString =
         !cardData.rulesCode ||
-        /^return\s*`[^`]*`\s*;?$/.test(cardData.rulesCode.trim());
+        /^return\s*`[\s\S]*`$/.test(cardData.rulesCode.trim());
 
     const [tab, setTab] = useState(() => {
         const defaultTab = card.editorOptions?.defaultTab || 'rules';
