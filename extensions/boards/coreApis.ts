@@ -509,6 +509,13 @@ export default async (app, context) => {
             `);
 
             const response = await wrapper(states, req.query, token, API);
+            //get previous value from state
+            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
+            if( response !== prevValue) {
+                //set the new value in the state
+                await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
+            }
+            
             res.json(response);
         } catch (error) {
             logger.error({ error }, "Error executing action");
