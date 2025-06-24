@@ -70,7 +70,7 @@ const ValueCard = ({ id, title, html, value, setData=(data, id) =>{}, icon = und
   </CenterCard>
 }
 
-const ActionCard = ({ id, displayResponse, html, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+const ActionCard = ({ id, displayResponse, html, value=undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
   return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
       data={data}
@@ -82,6 +82,7 @@ const ActionCard = ({ id, displayResponse, html, name, title, params, icon = und
       icon={icon}
       color={color}
       html={html}
+      value={value}
     />
   </CenterCard>
 }
@@ -287,6 +288,7 @@ const Board = ({ board, icons }) => {
         />
       }
     } else if (item.type == 'action') {
+      console.log('stateeeeeeeeeeeeeeeeees: ', states)
       return {
         ...item,
         content: <ActionCard
@@ -309,6 +311,7 @@ const Board = ({ board, icons }) => {
             setCurrentCard(item);
             setEditedCard(item);
           }}
+          value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
             const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
             return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;

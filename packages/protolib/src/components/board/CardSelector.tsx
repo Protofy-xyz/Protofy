@@ -132,14 +132,17 @@ return card({
 
 const extraCards = [{
   defaults: {
-    type: 'value'
+    type: 'value',
+    name: 'value'
   },
   name: 'Display value',
   id: 'value'
 },
 {
   defaults: {
-    type: 'action'
+    type: 'action',
+    name: 'action',
+    displayResponse: true
   },
   name: 'Invoques an action',
   id: 'action'

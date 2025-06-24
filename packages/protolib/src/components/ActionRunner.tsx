@@ -1,10 +1,10 @@
-import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, TextArea } from '@my/ui';
+import { Button, Input, Paragraph, XStack, YStack, Tooltip, Spinner, Text } from '@my/ui';
 import React, { useEffect, useMemo, useState } from 'react';
 import { HTMLView } from "@extensions/services/widgets";
 
 const enableHTML = true
 
-export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)', ...props }) => {
+export const ActionRunner = ({ name, data, displayResponse, value = undefined, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)', ...props }) => {
     useEffect(() => {
         if (!window['onRunListeners']) window['onRunListeners'] = {}
         window['onRunListeners'][name] = onRun
@@ -26,7 +26,7 @@ export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run
             {/* Si hay HTML, renderizarlo */}
             {html?.length > 0 && enableHTML && (
                 <HTMLView style={{ width: "100%", height: "100%" }}
-                    html={html} data={{ ...props, ...data, icon, name, params: actionParams, color, displayResponse }} />
+                    html={html} data={{ ...props, ...data, icon, name, params: actionParams, color, displayResponse, value }} />
             )}
 
             {/* Si NO hay HTML, usar el diseño clásico */}
@@ -76,7 +76,9 @@ export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run
                     ))}
 
                     {displayResponse && (
-                        <TextArea editable={false} f={1} placeholder="Action responses will appear here..." width="100%" value={response} />
+                        <Text className="no-drag" userSelect="none" mt={10} fontSize={30} fontWeight="bold" color="$primary">
+                            {React.isValidElement(value) || typeof value === 'string' || typeof value == 'number' ? value : 'N/A'}
+                        </Text>
                     )}
 
                     <Tooltip>
@@ -88,6 +90,7 @@ export const ActionRunner = ({ name, data, displayResponse, html, caption = "Run
                                     hoverStyle={{ backgroundColor: color, filter: "brightness(1.1)" }}
                                     backgroundColor={color}
                                     mt="$3"
+                                    marginHorizontal="$2"
                                     width="100%"
                                     className="no-drag"
                                     onPress={async () => {

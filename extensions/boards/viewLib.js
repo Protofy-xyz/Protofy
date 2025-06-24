@@ -311,7 +311,7 @@ const youtubeEmbed = ({ url }) => {
   `;
 };
 
-const cardAction = ({ data }) => {
+const cardAction = ({ data, cardIcon }) => {
     const margin = 10;
     const allKeys = Object.keys(data.params || {});
     const longestKey = allKeys.reduce((acc, cur) => (
@@ -320,14 +320,15 @@ const cardAction = ({ data }) => {
     const baseLabelWidth = longestKey.length * 8 + margin;
     return `
      <div style="
-        height: 100%;
-        width: 100%;
         display: flex;
+        width: 99%;
+        height: ${data.displayResponse ? "100%": "auto"};
         flex-direction: column;
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
     ">
+        ${cardIcon ? icon({ name: cardIcon.name, size: cardIcon.size, color: cardIcon.color }) : ''}
         <form
             style="width: 100%; margin-top: 15px;"
             onsubmit='window.executeAction(event, "${data.name}")'
@@ -428,7 +429,7 @@ const cardAction = ({ data }) => {
                 flex: 1;
                 height: '100%';
                 width: 100%;
-                display: flex;
+                display: ${data.displayResponse ? 'flex' : 'none'};
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
@@ -436,7 +437,7 @@ const cardAction = ({ data }) => {
                 font-weight: bold;
                 margin-top: 20px;
                 white-space: pre-wrap:
-            ">${jsonToDiv('', 0, 2)}</div>
+            ">${jsonToDiv(data.value ?? '', 0, 2)}</div>
         </div>
 
     </div>
