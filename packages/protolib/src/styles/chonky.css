@@ -8,7 +8,7 @@
     margin-top: 40px !important;
 }
 
-.chonky-activeButton .chonky-text  {
+.chonky-activeButton .chonky-text {
     color: var(--color6) !important;
 }
 
@@ -70,7 +70,7 @@
 }
 
 .chonky-fileEntryClickableWrapper {
-    cursor:pointer
+    cursor: pointer
 }
 
 .MuiPopover-paper {
@@ -80,4 +80,54 @@
 .MuiMenuItem-root {
     margin-top: 10px !important;
     margin-bottom: 10px !important;
+}
+
+.MuiInputBase-root {
+    border-radius: 12px !important;
+}
+
+.chonky-toolbarRight {
+    display: flex;
+    gap: 12px;
+}
+
+.MuiButton-label {
+    font-family: Inter !important;
+    font-weight: 400 !important;
+    font-size: 15px;
+    gap: 12px;
+}
+
+.MuiButtonBase-root {
+    border-radius: 20px !important;
+    padding: 20px !important;
+}
+
+.MuiPaper-root {
+    border-radius: 10px !important;
+}
+
+.MuiPaper-root .MuiButtonBase-root {
+    border-radius: 0px !important;
+    padding: 20px !important;
+}
+
+[class^="listFileEntry-"] {
+  box-shadow: none !important;
+  border-bottom: 1px solid var(--gray7) !important;
+}
+
+.MuiPaper-elevation2 {
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.07) !important;
+}
+
+.MuiTypography-body1 {
+    font-family: Inter !important;
+    font-weight: 500 !important;
+    font-size: 15px;
+    color: var(--color7);
+}
+
+.MuiFormControl-root {
+    width: 300px !important;
 }
