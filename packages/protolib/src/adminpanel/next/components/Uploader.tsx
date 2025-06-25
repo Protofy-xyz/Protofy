@@ -7,7 +7,7 @@ const Input = ({ accept, onFiles, files, getFilesFromEvent }) => {
   const anyFileSelected = files.length <= 0
 
   return <YStack borderRadius="$4" ai="center" jc="center" w="100%" h={"100%"}>
-    <FileUp color="$color5" size={60} mb="$4" />
+    <FileUp color="$color8" size={60} mb="$4" />
     <Text >Drop your files here or</Text>
     <Text
       color="$blue8"
@@ -48,7 +48,7 @@ const Controls = ({ files, onSubmit }) => {
           Cancel
         </Button>
       </Tinted>
-      <Button px="$6" disabled={!files.length} onPress={onUpload}>
+      <Button bc="$color7" px="$6" disabled={!files.length} onPress={onUpload}>
         Upload
       </Button>
     </XStack>
@@ -96,7 +96,7 @@ const FilePreview = ({ meta, fileWithMeta }: any) => {
           >
             {meta.name}
           </Text>
-          <Progress bw={0} w="100%" value={percent} bc="$color5">
+          <Progress bw={0} w="100%" value={percent} bc="$gray6">
             <Progress.Indicator bc="$color8" />
           </Progress>
         </YStack>
@@ -111,14 +111,14 @@ const FilePreview = ({ meta, fileWithMeta }: any) => {
 const Layout = ({ input, previews, submitButton, dropzoneProps, files }) => {
   const { style, className, ...handlers } = dropzoneProps
 
-  return <YStack f={1} p="$5" gap="$2" w="100%">
+  return <YStack f={1} p="$5" gap="$4" w="100%" bc="$bgPanel">
     <YStack
       {...handlers}
       borderStyle="dashed"
       bw={2}
       p="$4"
       height={files.length > 0 ? 180 : "100%"}
-      borderColor="$color5" br="$6" ai="center" gap="$2"
+      borderColor="$color8" br="$6" ai="center" gap="$2"
     >
       {input}
     </YStack>
