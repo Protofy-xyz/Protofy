@@ -251,7 +251,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         <Dialog open={showUploadDialog} onOpenChange={setShowUploadDialog}>
                             <Dialog.Portal>
                                 <Dialog.Overlay />
-                                <Dialog.Content p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
+                                <Dialog.Content overflow="hidden" p={0} backgroundColor={resolvedTheme == 'dark' ? "#1e1e1e" : 'white'} height={'600px'} width={"600px"} >
                                     <Uploader path={currentPath} onUpload={onUploadFiles} setShowUploadDialog={setShowUploadDialog} />
                                     <Dialog.Close />
                                 </Dialog.Content>
