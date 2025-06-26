@@ -261,7 +261,7 @@ function Widget() {
       backgroundColor: "var(--bg-color)"
     }}>
       <Tinted>
-        <ReactMarkdown>{text}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
       </Tinted>
     </div>
   );
