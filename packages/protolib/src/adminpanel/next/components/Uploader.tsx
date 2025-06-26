@@ -118,7 +118,7 @@ const Layout = ({ input, previews, submitButton, dropzoneProps, files }) => {
       bw={2}
       p="$4"
       height={files.length > 0 ? 180 : "100%"}
-      borderColor="$color8" br="$6" ai="center" gap="$2"
+      borderColor="$color8" br="$4" ai="center" gap="$2"
     >
       {input}
     </YStack>
