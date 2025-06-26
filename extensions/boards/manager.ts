@@ -7,7 +7,7 @@ import { watch } from 'chokidar';
 const processes = new Map();
 
 export const Manager = {
-    start: async (file, boardId, getStates, getActions) => {
+    start: async (file, boardId, getStates, getActions, skipWatch?) => {
         const states = await getStates();
         const actions = await getActions();
         if (processes.has(file)) {
@@ -41,6 +41,9 @@ export const Manager = {
             processes.delete(file);
         });
 
+        if(skipWatch) {
+            return true;
+        }
         //set watcher for file changes
         let timer = null;
         watch(file, { persistent: true, ignoreInitial: true })
@@ -55,9 +58,9 @@ export const Manager = {
                     setTimeout(() => {
                         console.log(`[Manager] Restarting board file ${file}`);
                         // Restart the process
-                        Manager.start(file, boardId, getStates, getActions);
+                        Manager.start(file, boardId, getStates, getActions, true);
                     }, 500);
-                }, 500);
+                }, 1000);
 
             })
             .on('error', (error) => {

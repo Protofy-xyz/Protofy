@@ -251,6 +251,15 @@ const getDB = (path, req, session) => {
             } catch (error) {
                 console.log("Error deleting file: " + filePath)
             }
+
+            const tsPath = BoardsDir(getRoot(req)) + key + ".js"
+            try {
+                if( fsSync.existsSync(tsPath)) {
+                    await fs.unlink(tsPath)
+                }
+            } catch (error) {
+                console.log("Error deleting boards automations file: " + tsPath)
+            }
         },
 
         async put(key, value) {
@@ -258,6 +267,29 @@ const getDB = (path, req, session) => {
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
+
+            //check if the board automation file exists, if not, create it
+            if (!fsSync.existsSync(BoardsDir(getRoot(req)) + key + '.js')) {
+                const boardFileContent = `const { boardConnect } = require('protonode')
+const { Protofy } = require('protobase')
+
+const run = Protofy("code",
+    async ({ states, board }) => {
+        // board.onChange({
+        //     key: 'surname',
+        //     changed: (value) => {
+        //         board.log('Surname changed to:', value);
+        //         board.execute_action({
+        //             name: 'set_age'
+        //         })
+        //     }
+        // })
+    }
+)
+
+boardConnect(run)`
+                fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
+            }
 
             await acquireLock(filePath);
             removeActions({ group: 'boards', tag: key })
