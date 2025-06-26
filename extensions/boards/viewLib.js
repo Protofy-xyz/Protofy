@@ -251,13 +251,14 @@ const markdown = (card) => {
 function Widget() {
   const text = data?.value ?? '';
   return (
-    <div className="no-drag" style={{
+    <div className="no-drag markdown-body" style={{
       height: "100%",
       padding: "1em",
       overflow: "auto",
       fontFamily: "sans-serif",
       fontSize: "14px",
-      color: "var(--color)"
+      color: "var(--color)",
+      backgroundColor: "var(--bg-color)"
     }}>
       <Tinted>
         <ReactMarkdown>{text}</ReactMarkdown>

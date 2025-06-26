@@ -17791,6 +17791,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"github-markdown-css@npm:5.8.1":
+  version: 5.8.1
+  resolution: "github-markdown-css@npm:5.8.1"
+  checksum: 10/6adbab7a918662c5178ec3e6e390a54824e4ad6b964261579800c49da0b7a3d4afe3efb834a7f177f9552b8f6d64b07fdf044ae6fdd2e1e0cca66f814df13b94
+  languageName: node
+  linkType: hard
+
 "gl-matrix@npm:^3.4.3":
   version: 3.4.3
   resolution: "gl-matrix@npm:3.4.3"
@@ -25097,6 +25104,7 @@ __metadata:
     classnames: "npm:2.3.2"
     cookie: "npm:^0.6.0"
     framer-motion: "npm:6.5.1"
+    github-markdown-css: "npm:5.8.1"
     highlight.js: "npm:^11.9.0"
     jest: "npm:~29.7.0"
     jotai: "npm:^2.4.2"

@@ -21,6 +21,7 @@ import "@blueprintjs/table/lib/css/table.css";
 import 'react-dropzone-uploader/dist/styles.css'
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import 'github-markdown-css/github-markdown-light.css';
 
 import { NextThemeProvider, useRootTheme } from '@tamagui/next-theme'
 import { Provider } from 'app/provider'
