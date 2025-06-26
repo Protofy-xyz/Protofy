@@ -496,7 +496,7 @@ export default async (app, context) => {
             const states = await context.state.getStateTree();
             return states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
         }, async () => {
-            await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
+            return await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
         })
         if(started) {
             res.send({ result: 'stopped', message: "Board started", board: req.params.boardId });

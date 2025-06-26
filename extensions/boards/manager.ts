@@ -50,9 +50,14 @@ export const Manager = {
                     clearTimeout(timer);
                 }
                 timer = setTimeout(() => {
+                    console.log(`[Manager] Stopping board file ${file} due to change`);
                     Manager.stop(file);
-                    Manager.start(file, boardId, getStates, getActions);
-                }, 1000);
+                    setTimeout(() => {
+                        console.log(`[Manager] Restarting board file ${file}`);
+                        // Restart the process
+                        Manager.start(file, boardId, getStates, getActions);
+                    }, 500);
+                }, 500);
 
             })
             .on('error', (error) => {
