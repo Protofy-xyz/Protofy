@@ -247,7 +247,7 @@ const boardImage = ({ src, alt = '' }) => {
 };
 
 const markdown = (card) => {
-    return reactCard(`
+  return reactCard(`
 function Widget() {
   const text = data?.value ?? '';
   return (
@@ -260,6 +260,14 @@ function Widget() {
       color: "var(--color)",
       backgroundColor: "var(--bg-color)"
     }}>
+      <style>{\`
+        .markdown-body th{
+          background-color: var(--color3) !important;
+        }
+        .markdown-body td {
+          background-color: var(--color1) !important;
+        }
+      \`}</style>
       <Tinted>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
       </Tinted>
