@@ -7,7 +7,7 @@ import { watch } from 'chokidar';
 const processes = new Map();
 
 export const Manager = {
-    start: async (file, getStates, getActions) => {
+    start: async (file, boardId, getStates, getActions) => {
         const states = await getStates();
         const actions = await getActions();
         if (processes.has(file)) {
@@ -28,7 +28,7 @@ export const Manager = {
         processes.set(file, child);
 
         // Enviar estado inicial
-        child.send({ type: 'init', states, actions });
+        child.send({ type: 'init', states, actions, boardId});
 
         // Escuchar mensajes del hijo (opcional)
         child.on('message', (msg) => {
@@ -51,7 +51,7 @@ export const Manager = {
                 }
                 timer = setTimeout(() => {
                     Manager.stop(file);
-                    Manager.start(file, getStates, getActions);
+                    Manager.start(file, boardId, getStates, getActions);
                 }, 1000);
 
             })
