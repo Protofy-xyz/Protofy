@@ -1,13 +1,17 @@
 
 import { fork } from 'child_process';
 import * as path from 'path';
+import { watch } from 'chokidar';
+
 
 const processes = new Map();
 
 export const Manager = {
-    start: (file, state, actions) => {
+    start: async (file, getStates, getActions) => {
+        const states = await getStates();
+        const actions = await getActions();
         if (processes.has(file)) {
-            if(processes.get(file).killed) {
+            if (processes.get(file).killed) {
                 processes.delete(file);
             } else {
                 console.warn(`Manager: Process for "${file}" already running.`);
@@ -24,7 +28,7 @@ export const Manager = {
         processes.set(file, child);
 
         // Enviar estado inicial
-        child.send({ type: 'init', state, actions });
+        child.send({ type: 'init', states, actions });
 
         // Escuchar mensajes del hijo (opcional)
         child.on('message', (msg) => {
@@ -37,6 +41,17 @@ export const Manager = {
             processes.delete(file);
         });
 
+        //set watcher for file changes
+        watch(file, { persistent: true, ignoreInitial: true })
+            .on('change', (changedFile) => {
+                console.log(`[Manager] File changed: ${changedFile}`);
+                Manager.stop(file);
+                Manager.start(file, getStates, getActions);
+            })
+            .on('error', (error) => {
+                console.error(`[Manager] Error watching file ${file}:`, error);
+            });
+
         return true
     },
 
@@ -45,17 +60,18 @@ export const Manager = {
         if (child) {
             processes.delete(file);
             child.kill();
+            //remove watcher
+            watch(file).close();
             return true
         } else {
             return false
-            console.warn(`Manager: No process running for "${file}"`);
         }
     },
 
-    update: (file, state, key) => {
+    update: (file, states, key) => {
         const child = processes.get(file);
         if (child) {
-            child.send({ type: 'update', state, key });
+            child.send({ type: 'update', states, key });
         }
     },
 
