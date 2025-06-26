@@ -8,7 +8,7 @@ const onChangeMask: MaskDefinition = {
   category: 'Board',
   keywords: ['board', 'onChange', 'change'],
   context: 'board.onChange',
-  icon: 'globe',
+  icon: 'cable',
   params: {
     key: {
       type: 'input',

@@ -8,7 +8,7 @@ const executeActionMask: MaskDefinition = {
   category: 'Board',
   keywords: ['board', 'execute', 'action', 'execute_action'],
   context: 'board.execute_action',
-  icon: 'globe',
+  icon: 'zap',
   params: {
     name: {
       type: 'input',
