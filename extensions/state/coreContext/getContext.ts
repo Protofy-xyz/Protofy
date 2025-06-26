@@ -19,11 +19,7 @@ export const getContext = async (options: {
         logger.error({}, "State group is required");
         return
     }
-    
-    if(!name) {
-        logger.error({}, "State name is required");
-        return
-    }
+
 
     if(!tag) {
         logger.error({}, "State tag is required");
@@ -34,6 +30,8 @@ export const getContext = async (options: {
         logger.error({}, "State defaultValue is required");
         return
     }
-
+    if(name === undefined) {
+        return ProtoMemDB(chunk).getByTag(group, tag) ?? defaultValue
+    }
     return ProtoMemDB(chunk).get(group, tag, name) ?? defaultValue
 }

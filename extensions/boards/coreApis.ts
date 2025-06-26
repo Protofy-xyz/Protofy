@@ -9,6 +9,7 @@ import { addAction } from '@extensions/actions/coreContext/addAction';
 import { removeActions } from "@extensions/actions/coreContext/removeActions";
 import fileActions from "@extensions/files/fileActions";
 import { addCard } from "@extensions/cards/coreContext/addCard";
+import { Manager } from "./manager";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
@@ -309,15 +310,7 @@ const getDB = (path, req, session) => {
     return db;
 }
 
-const BoardsAutoAPI = AutoAPI({
-    modelName: 'boards',
-    modelType: BoardModel,
-    initialData: {},
-    skipDatabaseIndexes: true,
-    getDB: getDB,
-    prefix: '/api/core/v1/',
-    requiresAdmin: ['*']
-})
+
 
 class HttpError extends Error {
     constructor(public status: number, message: string) {
@@ -327,6 +320,19 @@ class HttpError extends Error {
 }
 
 export default async (app, context) => {
+    const BoardsAutoAPI = AutoAPI({
+        modelName: 'boards',
+        modelType: BoardModel,
+        initialData: {},
+        skipDatabaseIndexes: true,
+        getDB: getDB,
+        prefix: '/api/core/v1/',
+        requiresAdmin: ['*'],
+        onAfterUpdate: async (board) => {
+            const actions = await context.state.get({ group: 'boards', tag: board.name, chunk: 'actions', defaultValue: {} });
+            Manager.updateActions('../../data/boards/' + board.name + '.js', actions)
+        }
+    })
     class HttpError extends Error {
         constructor(public status: number, message: string) {
             super(message);
@@ -391,6 +397,7 @@ export default async (app, context) => {
                         // logger.info({ newValue: value, oldValue: states['boards'][boardId] }, "Setting value for card " + card.key);
                         card.value = value;
                         context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
+                        Manager.update('../../data/boards/' + boardId + '.js', states.boards[boardId] ?? {}, card.name);
                     }
                     // }
                 }
@@ -482,16 +489,31 @@ export default async (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
+    const instances = {}
+
+    app.get('/api/core/v1/boards/:boardId/play', requireAdmin(), async (req, res) => {
+        const states = await context.state.getStateTree();
+        const boardStates = states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
+        const boardActions = await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
+        Manager.start('../../data/boards/' + req.params.boardId + '.js', boardStates, boardActions)
+    });
+
+    app.get('/api/core/v1/boards/:boardId/stop', requireAdmin(), async (req, res) => {
+        Manager.stop('../../data/boards/' + req.params.boardId + '.js');
+    });
+
+    const getBoardActions = async (boardId) => {
+        const board = await getBoard(boardId);
+        if (!board.cards || !Array.isArray(board.cards)) {
+            return [];
+        }
+        return board.cards.filter(c => c.type === 'action').map(c => c.name);
+    }
 
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
         try {
-            const board = await getBoard(req.params.boardId);
-            if (!board.cards || !Array.isArray(board.cards)) {
-                res.send({ error: "No actions found" });
-                return;
-            }
-
-            const action = board.cards.find(a => a.name === req.params.action && a.type === 'action');
+            const actions = await getBoardActions(req.params.boardId);
+            const action = actions.find(a => a === req.params.action);
             if (!action) {
                 res.send({ error: "Action not found" });
                 return;
@@ -511,11 +533,11 @@ export default async (app, context) => {
             const response = await wrapper(states, req.query, token, API);
             //get previous value from state
             const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
-            if( response !== prevValue) {
+            if (response !== prevValue) {
                 //set the new value in the state
                 await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
             }
-            
+
             res.json(response);
         } catch (error) {
             logger.error({ error }, "Error executing action");
