@@ -67,7 +67,11 @@ export function boardConnect(run) {
             boardId = msg.boardId;
             log = console.log.bind(console, 'Board log [' + boardId + ']: ');
             if (msg.type === 'init') {
-                run({ states, actions, board: { onChange, execute_action, log, id: boardId } });
+                try {
+                    run({ states, actions, board: { onChange, execute_action, log, id: boardId } });
+                } catch (error) {
+                    console.error('Error running board ['+boardId+']:', error);
+                }
             }
         } else if (msg.type === 'update') {
             //msg.key is the key to update, msg.value is the new value

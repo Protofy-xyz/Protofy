@@ -4,32 +4,92 @@ import { YStack, XStack, Button, Spinner, useToastController } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { Rules } from '../../components/autopilot/Rules'
 import { Monaco } from '../../components/Monaco'
-import { useState, useRef, useMemo } from 'react'
-import { useThemeSetting } from '@tamagui/next-theme'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
 import { useSettingValue } from "../../lib/useSetting";
+import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
+import { ArrowFunction } from 'ts-morph';
 
-export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
-    const { resolvedTheme } = useThemeSetting();
+
+function generateStateDeclarations(obj) {
+    const recurse = (o) => {
+        return (
+            '{\n' +
+            Object.entries(o)
+                .map(([key, val]) => {
+                    if (typeof val === 'object' && val !== null) {
+                        return `  ${key}: ${recurse(val)};`;
+                    } else {
+                        return `  ${key}: any;`;
+                    }
+                })
+                .join('\n') +
+            '\n}'
+        );
+    };
+
+    return `declare const states: ${recurse(obj)};`;
+}
+
+
+export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states, resolvedTheme }) => {
     const [savedRules, setSavedRules] = useState(board.rules)
-    const savedCode = useRef(board.rulesCode)
-    const editedCode = useRef(board.rulesCode)
+    const boardStates = states.boards ? states.boards[board.name] : {}
+    const boardActions = actions.boards ? actions.boards[board.name] : {}
+
+    const boardStatesDeclarations = useMemo(() => {
+        return generateStateDeclarations(boardStates)
+    }, [boardStates]);
+
+    const boardDeclaration = useMemo(() => {
+        const possibleNames = Object.keys(boardActions ?? {}).map(name => `"${name}"`).join(' | ')
+        return `declare const board: {\n` +
+            `  onChange: (params: { key: string, changed: (value: any) => void }) => void;\n` +
+            `  execute_action: (params: { name: ${possibleNames}, params?: Record<string, any> }) => Promise<any>;\n` +
+            `  id: string;\n` +
+            `  log: (...args: any[]) => void;\n` +
+            `};` +
+            '\n};';
+    }, [board.name]);
+
+    const code = useMemo(() => {
+        const sourceFile = toSourceFile(automationInfo.code)
+        const definition = getDefinition(sourceFile, '"code"')
+        if (definition && ArrowFunction.isArrowFunction(definition)) {
+            return definition.getBodyText()
+        }
+        return ''
+    }, [automationInfo.code]);
+
+
+    const savedCode = useRef(code)
+    const editedCode = useRef(code)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
     const isAIEnabled = useSettingValue('ai.enabled', false);
+    const [reloadMonaco, setReloadMonaco] = useState(0);
 
+    console.log('states: ', boardStates)
     //useMemo to keep monaco editor from re-rendering
     const monacoEditor = useMemo(() => {
         return <Monaco
+            key={Math.random().toString(36).substring(2, 15)}
             path={'sidemenu-rules.ts'}
             darkMode={resolvedTheme === 'dark'}
             sourceCode={savedCode.current}
             onChange={(text) => {
                 editedCode.current = text
             }}
-            onMount={(editor) => {
+            onMount={(editor, monaco) => {
                 editedCode.current = savedCode.current
+                if (!reloadMonaco) setTimeout(() => setReloadMonaco(1));
+                console.log('Monaco editor mounted', boardStatesDeclarations);
+                monaco.languages.typescript.typescriptDefaults.addExtraLib(
+                    boardDeclaration + "\n" +
+                    boardStatesDeclarations,
+                    'ts:filename/customTypes.d.ts'
+                );
             }}
             options={{
                 folding: false,
@@ -39,7 +99,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                 minimap: { enabled: false }
             }}
         />
-    }, [resolvedTheme, savedCode.current])
+    }, [resolvedTheme, savedCode.current, reloadMonaco, boardStatesDeclarations]);
 
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} p="$3" br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
         <Tinted>
@@ -68,7 +128,7 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     </YStack>
                 </Panel>}
                 <CustomPanelResizeHandle direction="horizontal" />
-                <Panel defaultSize={isAIEnabled?25:100} minSize={0} maxSize={100}>
+                <Panel defaultSize={isAIEnabled ? 25 : 100} minSize={0} maxSize={100}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         {monacoEditor}
                     </YStack>
@@ -79,11 +139,21 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     setGeneratingBoardCode(true)
                     try {
                         boardRef.current.rules = savedRules
-                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: states.boards ? states.boards[board.name] : {}, actions: actions.boards ? actions.boards[board.name] : {} })
-                        boardRef.current.rulesCode = rulesCode.data.jsCode
+                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: boardStates, actions: actions.boards ? actions.boards[board.name] : {} })
+                        if (rulesCode.error || !rulesCode.data?.jsCode) {
+                            toast.show(`Error generating board code: ${rulesCode.error}`)
+                            return
+                        }
+
                         savedCode.current = rulesCode.data.jsCode
+                        editedCode.current = rulesCode.data.jsCode
                         await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
 
+                        const sourceFile = toSourceFile(automationInfo.code)
+                        const definition = getDefinition(sourceFile, '"code"').getBody()
+                        definition.replaceWithText("{\n" + editedCode.current + "\n}");
+                        
+                        API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
                         // boardRef.current.rules = []
                         // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                         toast.show(`Rules applied successfully!`)
@@ -97,8 +167,10 @@ export const RulesSideMenu = ({ boardRef, board, actions, states }) => {
                     {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
                 </Button>}
                 <Button onPress={() => {
-                    boardRef.current.rulesCode = editedCode.current
-                    API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                    const sourceFile = toSourceFile(automationInfo.code)
+                    const definition = getDefinition(sourceFile, '"code"').getBody()
+                    definition.replaceWithText("{\n" + editedCode.current + "\n}");
+                    API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
                 }}>
                     Save
                 </Button>

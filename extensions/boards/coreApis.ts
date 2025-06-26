@@ -440,22 +440,6 @@ export default async (app, context) => {
             }
         }
 
-        if (autopilotState[boardId] && fileContent.rulesCode) {
-            //evalute board autopilot rules
-            const wrapper = new AsyncFunction('states', 'token', 'API', 'prevStates', `
-                ${getExecuteAction(await getActions(), boardId)}
-                ${hasStateValue()}
-                ${hasStateValueChanged()}
-                ${getStateValue()}
-                ${fileContent.rulesCode}
-            `);
-
-            await wrapper(states?.boards && states?.boards[boardId] ? states.boards[boardId] : {}, token, API, prevStates[boardId] ?? {});
-            // console.log(prevStates)
-            prevStates[boardId] = JSON.parse(JSON.stringify(states.boards[boardId] ?? {}))
-
-        }
-
         return fileContent;
     };
 
@@ -521,33 +505,6 @@ export default async (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
-    const instances = {}
-
-    app.get('/api/core/v1/boards/:boardId/play', requireAdmin(), async (req, res) => {
-        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', req.params.boardId, async () => {
-            const states = await context.state.getStateTree();
-            return states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
-        }, async () => {
-            return await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
-        })
-        if(started) {
-            res.send({ result: 'stopped', message: "Board started", board: req.params.boardId });
-        } else {
-            res.send({ result: 'already_running', message: "Board already running", board: req.params.boardId });
-        }
-        
-    });
-
-    app.get('/api/core/v1/boards/:boardId/stop', requireAdmin(), async (req, res) => {
-        const stopped = Manager.stop('../../data/boards/' + req.params.boardId + '.js');
-        if(stopped) {
-            res.send({ result: 'sopped', message: "Board stopped", board: req.params.boardId });
-        } else {
-            res.send({ result: 'already_stopped', message: "Board already stopped or not running", board: req.params.boardId });
-        }
-
-    });
-
     const getBoardActions = async (boardId) => {
         const board = await getBoard(boardId);
         if (!board.cards || !Array.isArray(board.cards)) {
@@ -555,6 +512,41 @@ export default async (app, context) => {
         }
         return board.cards.filter(c => c.type === 'action');
     }
+
+    app.get('/api/core/v1/boards/:boardId/automation', requireAdmin(), async (req, res) => {
+        try {
+            const boardId = req.params.boardId;
+            const filePath = BoardsDir(getRoot()) + boardId + '.js';
+            if (!fsSync.existsSync(filePath)) {
+                res.status(404).send({ error: "Board automation file not found" });
+                return;
+            }
+            const fileContent = await fs.readFile(filePath, 'utf8');
+            res.send({ code: fileContent });
+        } catch (error) {
+            logger.error({ error }, "Error getting board automation");
+            res.status(500).send({ error: "Internal Server Error" });
+        }
+    })
+
+    app.post('/api/core/v1/boards/:boardId/automation', requireAdmin(), async (req, res) => {
+        try {
+            const boardId = req.params.boardId;
+            const filePath = BoardsDir(getRoot()) + boardId + '.js';
+            try {
+                await fs.writeFile(filePath, req.body.code);
+                res.send({ message: "Board automation updated successfully" });
+            } catch (error) {
+                logger.error({ error }, "Error writing board automation file");
+                res.status(500).send({ error: "Internal Server Error" });
+            } finally {
+                releaseLock(filePath);
+            }
+        } catch (error) {
+            logger.error({ error }, "Error updating board automation");
+            res.status(500).send({ error: "Internal Server Error" });
+        }
+    })
 
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
         try {
@@ -626,8 +618,22 @@ export default async (app, context) => {
 
     app.get('/api/core/v1/boards/:boardId/autopilot/on', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
-        autopilotState[boardId] = true;
-        res.send({ message: "Autopilot enabled for board: " + boardId });
+
+        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', req.params.boardId, async () => {
+            const states = await context.state.getStateTree();
+            return states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
+        }, async () => {
+            return await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
+        }, () => {
+            autopilotState[boardId] = false;
+        })
+
+        if(started) {
+            res.send({ result: 'started', message: "Board started", board: req.params.boardId });
+            autopilotState[boardId] = true;
+        } else {
+            res.send({ result: 'already_running', message: "Board already running", board: req.params.boardId });
+        }
     })
 
     app.get('/api/core/v1/viewLib', requireAdmin(), async (req, res) => {
@@ -658,8 +664,13 @@ export default async (app, context) => {
 
     app.get('/api/core/v1/boards/:boardId/autopilot/off', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
-        autopilotState[boardId] = false;
-        res.send({ message: "Autopilot disabled for board: " + boardId });
+        const stopped = Manager.stop('../../data/boards/' + req.params.boardId + '.js');
+        if(stopped) {
+            res.send({ result: 'sopped', message: "Board stopped", board: req.params.boardId });
+        } else {
+            res.send({ result: 'already_stopped', message: "Board already stopped or not running", board: req.params.boardId });
+        }
+
     })
 
     app.get('/api/core/v1/autopilot/llm', requireAdmin(), async (req, res) => {

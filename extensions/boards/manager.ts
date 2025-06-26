@@ -2,12 +2,13 @@
 import { fork } from 'child_process';
 import * as path from 'path';
 import { watch } from 'chokidar';
+import { on } from 'events';
 
 
 const processes = new Map();
 
 export const Manager = {
-    start: async (file, boardId, getStates, getActions, skipWatch?) => {
+    start: async (file, boardId, getStates, getActions, onExit, skipWatch?) => {
         const states = await getStates();
         const actions = await getActions();
         if (processes.has(file)) {
@@ -39,6 +40,7 @@ export const Manager = {
         child.on('exit', (code) => {
             console.log(`[Manager] board file ${file} exited with code ${code}`);
             processes.delete(file);
+            onExit && onExit(file, code);
         });
 
         if(skipWatch) {
@@ -58,7 +60,7 @@ export const Manager = {
                     setTimeout(() => {
                         console.log(`[Manager] Restarting board file ${file}`);
                         // Restart the process
-                        Manager.start(file, boardId, getStates, getActions, true);
+                        Manager.start(file, boardId, getStates, getActions, onExit, true);
                     }, 500);
                 }, 1000);
 

@@ -1,6 +1,6 @@
 import { ClipboardList, Pause, Play, Plus, Save, Settings, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
-import { API, getPendingResult } from 'protobase'
+import { API, getPendingResult, set } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
 import { DataView, DataViewActionButton } from "protolib/components/DataView"
 import { AdminPage } from "protolib/components/AdminPage"
@@ -22,7 +22,6 @@ import { CardSelector } from 'protolib/components/board/CardSelector'
 
 import { ValueCardSettings } from 'protolib/components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from 'protolib/components/autopilot/ActionCardSettings'
-import { RulesSideMenu } from 'protolib/components/autopilot/RulesSideMenu'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from 'protolib/components/board/BoardPreview'
@@ -37,6 +36,7 @@ import dynamic from 'next/dynamic'
 const { useParam, useParams } = createParam()
 
 const ActionRunner = dynamic(() => import('protolib/components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
+const RulesSideMenu = dynamic(() => import('protolib/components/autopilot/RulesSideMenu').then(mod => mod.RulesSideMenu), { ssr: false })
 
 const sourceUrl = '/api/core/v1/boards'
 const CardIcon = ({ Icon, onPress, ...props }) => {
@@ -119,6 +119,7 @@ const Board = ({ board, icons }) => {
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
+  const [automationInfo, setAutomationInfo] = useState();
   const breakpointRef = useRef('lg')
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
@@ -137,6 +138,8 @@ const Board = ({ board, icons }) => {
 
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/core/v1/boards/${board.name}`)
+    const automationInfo = await API.get(`/api/core/v1/boards/${board.name}/automation`)
+    setAutomationInfo(automationInfo.data)
     if (dataData.status == 'loaded') {
       let newItems = dataData.data?.cards
       if (!newItems || newItems.length == 0) newItems = [addCard]
@@ -485,7 +488,7 @@ const Board = ({ board, icons }) => {
         {
           <XStack position="fixed" animation="quick" right={rulesOpened ? 20 : -1000} top={"70px"} width={810} height="calc(100vh - 100px)">
             <XStack width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={0.9}></XStack>
-            <RulesSideMenu boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>
+            {automationInfo &&<RulesSideMenu automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
           </XStack>
         }
       </XStack>
