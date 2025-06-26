@@ -9,30 +9,28 @@ const dataDir = (root) => fspath.join(root, "/data/settings/")
 
 
 const getDB = (path, req, session) => {
+    const dirPath = dataDir(getRoot(req));
+    fs.mkdir(dirPath, { recursive: true }).catch((err) => {
+        console.error("Error ensuring settings folder exists", err);
+    });
+    
     const db = {
         async *iterator() {
-            // console.log("Iterator")
-            try {
-                await fs.access(dataDir(getRoot(req)), fs.constants.F_OK)
-            } catch (error) {
-                console.log("Creating settings folder")
-                await fs.mkdir(dataDir(getRoot(req)))
-            }
-            const files = (await fs.readdir(dataDir(getRoot(req)))).filter(f => {
+            const files = (await fs.readdir(dirPath)).filter(f => {
                 const filenameSegments = f.split('.')
-                return !fsSync.lstatSync(fspath.join(dataDir(getRoot(req)), f)).isDirectory() && (filenameSegments[filenameSegments.length - 1] === "json")
+                return !fsSync.lstatSync(fspath.join(dirPath, f)).isDirectory() && (filenameSegments[filenameSegments.length - 1] === "json")
             })
             // console.log("Files: ", files)
             for (const file of files) {
                 //read file content
-                const fileContent = await fs.readFile(dataDir(getRoot(req)) + file, 'utf8')
-                yield [file.name, fileContent];
+                const fileContent = await fs.readFile(dirPath + file, 'utf8')
+                yield [file.replace(/\.json$/, ""), fileContent]
             }
         },
 
         async del(key, value) {
-            console.log("Deleting key: ", JSON.stringify({key,value}))
-            const filePath = dataDir(getRoot(req)) + key + ".json"
+            console.log("Deleting key: ", JSON.stringify({ key, value }))
+            const filePath = fspath.join(dirPath, key + ".json");
             try {
                 await fs.unlink(filePath)
             } catch (error) {
@@ -41,22 +39,22 @@ const getDB = (path, req, session) => {
         },
 
         async put(key, value) {
-            const filePath = dataDir(getRoot(req)) + key + ".json"
-            try{
+            const filePath = fspath.join(dirPath, key + ".json");
+            try {
                 await fs.writeFile(filePath, value)
-            }catch(error){
+            } catch (error) {
                 console.error("Error creating file: " + filePath, error)
             }
         },
 
         async get(key) {
-            const filePath = dataDir(getRoot(req)) + key + ".json"
-            try{
+            const filePath = fspath.join(dirPath, key + ".json");
+            try {
                 const fileContent = await fs.readFile(filePath, 'utf8')
                 return fileContent
-            }catch(error){
+            } catch (error) {
                 throw new Error("File not found")
-            }                   
+            }
         }
     };
 
@@ -65,7 +63,7 @@ const getDB = (path, req, session) => {
 
 const SettingsAutoAPI = AutoAPI({
     modelName: 'settings',
-    modelType: SettingModel, 
+    modelType: SettingModel,
     prefix: '/api/core/v1/',
     dbName: 'settings',
     getDB: getDB,
