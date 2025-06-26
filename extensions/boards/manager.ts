@@ -7,8 +7,12 @@ const processes = new Map();
 export const Manager = {
     start: (file, state, actions) => {
         if (processes.has(file)) {
-            console.warn(`Manager: Process for "${file}" already running.`);
-            return;
+            if(processes.get(file).killed) {
+                processes.delete(file);
+            } else {
+                console.warn(`Manager: Process for "${file}" already running.`);
+                return false;
+            }
         }
 
         const absPath = path.resolve(file);
@@ -32,14 +36,18 @@ export const Manager = {
             console.log(`[Manager] board file ${file} exited with code ${code}`);
             processes.delete(file);
         });
+
+        return true
     },
 
     stop: (file) => {
         const child = processes.get(file);
         if (child) {
-            child.kill();
             processes.delete(file);
+            child.kill();
+            return true
         } else {
+            return false
             console.warn(`Manager: No process running for "${file}"`);
         }
     },

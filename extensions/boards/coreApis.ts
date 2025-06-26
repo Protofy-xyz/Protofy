@@ -495,11 +495,23 @@ export default async (app, context) => {
         const states = await context.state.getStateTree();
         const boardStates = states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
         const boardActions = await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
-        Manager.start('../../data/boards/' + req.params.boardId + '.js', boardStates, boardActions)
+        const started = Manager.start('../../data/boards/' + req.params.boardId + '.js', boardStates, boardActions)
+        if(started) {
+            res.send({ result: 'stopped', message: "Board started", board: req.params.boardId, states: boardStates, actions: boardActions });
+        } else {
+            res.send({ result: 'already_running', message: "Board already running", board: req.params.boardId });
+        }
+        
     });
 
     app.get('/api/core/v1/boards/:boardId/stop', requireAdmin(), async (req, res) => {
-        Manager.stop('../../data/boards/' + req.params.boardId + '.js');
+        const stopped = Manager.stop('../../data/boards/' + req.params.boardId + '.js');
+        if(stopped) {
+            res.send({ result: 'sopped', message: "Board stopped", board: req.params.boardId });
+        } else {
+            res.send({ result: 'already_stopped', message: "Board already stopped or not running", board: req.params.boardId });
+        }
+
     });
 
     const getBoardActions = async (boardId) => {
