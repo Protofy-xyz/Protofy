@@ -4,7 +4,7 @@ import { useWorkspaces, useUserSettings } from '../lib/useSession';
 import { PanelMenu } from './PanelMenu';
 import { MainPanel } from './MainPanel';
 import { InteractiveIcon } from './InteractiveIcon'
-import { Activity, Globe, Store} from '@tamagui/lucide-icons'
+import { Activity, Cog, Globe, Store } from '@tamagui/lucide-icons'
 import { atom, useAtom } from 'jotai';
 import { useContext, useEffect, useState } from 'react'
 import { atomWithStorage } from 'jotai/utils'
@@ -46,11 +46,11 @@ export const AdminPanel = ({ children }) => {
   const userSpaces = useWorkspaces()
   const [appState, setAppState] = useAtom(AppState)
   const SiteConfig = useContext<SiteConfigType>(AppConfContext);
-  const { PanelLayout} = SiteConfig.layout
+  const { PanelLayout } = SiteConfig.layout
 
   const [rightPanelSize, setRightPanelSize] = useAtom(RightPanelAtom)
 
-  const {message} = useSubscription('notifications/object/#')
+  const { message } = useSubscription('notifications/object/#')
 
   const [pages, setPages] = useState()
   const [boards, setBoards] = useState()
@@ -58,14 +58,14 @@ export const AdminPanel = ({ children }) => {
 
   const getObjects = async () => {
     const objects = await API.get('/api/core/v1/objects')
-    if(objects.isLoaded) {
+    if (objects.isLoaded) {
       setObjects(objects.data.items)
     }
   }
 
   const getBoards = async () => {
     const boards = await API.get('/api/core/v1/boards')
-    if(boards.isLoaded) {
+    if (boards.isLoaded) {
       setBoards(boards.data.items)
     }
   }
@@ -87,48 +87,61 @@ export const AdminPanel = ({ children }) => {
     }
   }, [rightPanelSize])
 
-  const workspaceData = useWorkspace({boards: boards, objects: objects})
+  const workspaceData = useWorkspace({ boards: boards, objects: objects })
   const settingsLogs = workspaceData?.logs
   const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
 
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
-  return rightPanelSize && <MainPanel 
-  borderLess={true} 
-  rightPanelSize={rightPanelSize} 
-  setRightPanelSize={setRightPanelSize} 
-  rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }} 
-  rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened} 
-  rightPanelResizable={true} 
-  centerPanelContent={workspaceData && <PanelLayout
+  return rightPanelSize && <MainPanel
+    borderLess={true}
+    rightPanelSize={rightPanelSize}
+    setRightPanelSize={setRightPanelSize}
+    rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }}
+    rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened}
+    rightPanelResizable={true}
+    centerPanelContent={workspaceData && <PanelLayout
       topBar={
         <>
           <XStack ai="center">
             <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
+            <InteractiveIcon
+              $xs={{ display: "none" }}
+              onPress={() => {
+                if (isElectron()) {
+                  window['electronAPI'].openWindow("store");
+                } else {
+                  window.open("https://store.protofy.xyz", "_blank");
+                }
+              }}
+              IconColor="var(--color)"
+              Icon={Store}
+            />
             {isElectron() ? (
               <InteractiveIcon
-                  $xs={{ display: "none" }}
-                  onPress={() => {
-                    window['electronAPI'].openExternal("http://localhost:8000");
-                  }}
-                  IconColor="var(--color)"
-                  Icon={Globe}
-                />
-            ) : null}
-            
-            <InteractiveIcon
                 $xs={{ display: "none" }}
                 onPress={() => {
-                  if(isElectron()) {
-                    window['electronAPI'].openWindow("store");
-                  }else{
-                    window.open("https://store.protofy.xyz", "_blank");
-                  }
+                  window['electronAPI'].openExternal("http://localhost:8000");
                 }}
                 IconColor="var(--color)"
-                Icon={Store}
+                Icon={Globe}
               />
+            ) : null}
+
+            <InteractiveIcon
+              onPress={() => {
+                if (isElectron()) {
+                  window.open("http://localhost:8000/workspace/settings", "_blank");
+                } else {
+                  window.location.href = "/workspace/settings";
+                }
+                
+              }}
+              IconColor="var(--color)"
+              Icon={Cog}
+            />
+
             {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => {
-              if(isElectron()) {
+              if (isElectron()) {
                 window['electronAPI'].toggleLogWindow()
               } else {
                 setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })
@@ -143,5 +156,5 @@ export const AdminPanel = ({ children }) => {
         {children}
       </XStack>
     </PanelLayout>
-  } rightPanelContent={settingsLogsEnabled ? <LogPanel AppState={AppState} /> : null} />
+    } rightPanelContent={settingsLogsEnabled ? <LogPanel AppState={AppState} /> : null} />
 }
