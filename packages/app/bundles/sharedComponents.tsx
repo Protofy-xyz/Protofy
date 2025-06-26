@@ -11,6 +11,7 @@ import { KeySetter } from 'protolib/components/KeySetter';
 import { InteractiveIcon } from 'protolib/components/InteractiveIcon';
 import CanvasDraw from "react-canvas-draw"
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm'
 import { API } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
 
@@ -27,6 +28,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(InteractiveIcon, 'InteractiveIcon');
     TransferComponent(CanvasDraw, 'CanvasDraw');
     TransferComponent(Markdown, 'ReactMarkdown');
+    TransferComponent(remarkGfm, 'remarkGfm')
     TransferComponent(API, 'API');
     TransferComponent(FileBrowser, 'FileBrowser');
 }
