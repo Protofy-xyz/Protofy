@@ -25,7 +25,7 @@ const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
 const memory = {}
 
-const getExecuteAction = (actions, board = '') => `
+export const getExecuteAction = (actions, board = '') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url, params={}) {
     console.log('Executing action: ', url, params);
@@ -492,7 +492,7 @@ export default async (app, context) => {
     const instances = {}
 
     app.get('/api/core/v1/boards/:boardId/play', requireAdmin(), async (req, res) => {
-        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', async () => {
+        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', req.params.boardId, async () => {
             const states = await context.state.getStateTree();
             return states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
         }, async () => {
@@ -521,13 +521,14 @@ export default async (app, context) => {
         if (!board.cards || !Array.isArray(board.cards)) {
             return [];
         }
-        return board.cards.filter(c => c.type === 'action').map(c => c.name);
+        return board.cards.filter(c => c.type === 'action');
     }
 
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
         try {
             const actions = await getBoardActions(req.params.boardId);
-            const action = actions.find(a => a === req.params.action);
+            const action = actions.find(a => a.name === req.params.action);
+
             if (!action) {
                 res.send({ error: "Action not found" });
                 return;
