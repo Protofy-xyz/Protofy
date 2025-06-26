@@ -74,6 +74,7 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
 
     const flows = useMemo(() => {
         return <CodeView
+            viewPort={{ x: 20, y: window.innerHeight / 8, zoom: 0.8 }}
             onFlowChange={(code) => {
                 editedCode.current = code
             }}

@@ -167,7 +167,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   </CodeView>
 }
 
-export const CodeView = ({ monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></> }) => {
+export const CodeView = ({ monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort=undefined}) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
@@ -205,7 +205,7 @@ export const CodeView = ({ monacoOnMount = (editor, monaco) => { }, monacoInstan
     </XStack>
     {mode == 'code' ? monaco
     : <Flows
-      autoFitView={true}
+
       nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
         const [snippetName, setSnippetName] = useState();
         const [fragmentText, setFragmentText] = useState(dumpFragment());
@@ -295,6 +295,7 @@ export const CodeView = ({ monacoOnMount = (editor, monaco) => { }, monacoInstan
       customSnippets={getFlowsCustomSnippets(pathname, query)}
       onEdit={(code) => { onFlowChange(code); sourceCode.current = code }}
       setIsModified={setIsModified}
+      defaultViewPort={viewPort}
       setSourceCode={(sourceCode) => {
         sourceCode.current = sourceCode
       }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
