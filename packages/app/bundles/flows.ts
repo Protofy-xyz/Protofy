@@ -11,6 +11,9 @@ export const paths = {
     ],
     apis:[
         'apis'
+    ],
+    boards: [
+        'view'
     ]
 }
 

@@ -1,6 +1,6 @@
 
 import { API } from 'protobase'
-import { YStack, XStack, Button, Spinner, useToastController } from '@my/ui'
+import { YStack, XStack, Button, Spinner, useToastController, useTheme } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
 import { Rules } from '../../components/autopilot/Rules'
 import { Monaco } from '../../components/Monaco'
@@ -10,7 +10,7 @@ import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
 import { useSettingValue } from "../../lib/useSetting";
 import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
-
+import { CodeView } from '@extensions/files/intents';
 
 function generateStateDeclarations(obj) {
     const recurse = (o) => {
@@ -68,43 +68,40 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
     const isAIEnabled = useSettingValue('ai.enabled', false);
-    const [reloadMonaco, setReloadMonaco] = useState(0);
 
-    console.log('states: ', boardStates)
-    //useMemo to keep monaco editor from re-rendering
-    const monacoEditor = useMemo(() => {
-        return <Monaco
-            key={Math.random().toString(36).substring(2, 15)}
-            path={'sidemenu-rules.ts'}
-            darkMode={resolvedTheme === 'dark'}
-            sourceCode={savedCode.current}
-            onChange={(text) => {
-                editedCode.current = text
+    const theme = useTheme()
+
+
+    const flows = useMemo(() => {
+        return <CodeView
+            onFlowChange={(code) => {
+                editedCode.current = code
             }}
-            onMount={(editor, monaco) => {
-                editedCode.current = savedCode.current
-                if (!reloadMonaco) setTimeout(() => setReloadMonaco(1));
-                console.log('Monaco editor mounted', boardStatesDeclarations);
+            onCodeChange={(code) => {
+                editedCode.current = code
+            }}
+            path={'/data/boards/' + board.name + '.ts'}
+            sourceCode={editedCode}
+            monacoOnMount={(editor, monaco) => {
                 monaco.languages.typescript.typescriptDefaults.addExtraLib(
                     boardDeclaration + "\n" +
                     boardStatesDeclarations,
                     'ts:filename/customTypes.d.ts'
                 );
             }}
-            options={{
-                folding: false,
+            monacoOptions={{
+                folding: true,
                 lineDecorationsWidth: 0,
                 lineNumbersMinChars: 0,
-                lineNumbers: false,
+                lineNumbers: true,
                 minimap: { enabled: false }
             }}
         />
-    }, [resolvedTheme, savedCode.current, reloadMonaco, boardStatesDeclarations]);
-
+    }, [resolvedTheme, board.name, theme, editedCode.current]);
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} p="$3" br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
         <Tinted>
             <PanelGroup direction="vertical">
-                {isAIEnabled && <Panel defaultSize={75} minSize={0} maxSize={100}>
+                {isAIEnabled && <Panel defaultSize={50} minSize={0} maxSize={100}>
                     <YStack
                         flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
                         <Rules
@@ -128,9 +125,9 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
                     </YStack>
                 </Panel>}
                 <CustomPanelResizeHandle direction="horizontal" />
-                <Panel defaultSize={isAIEnabled ? 25 : 100} minSize={0} maxSize={100}>
+                <Panel defaultSize={isAIEnabled ? 50 : 100} minSize={0} maxSize={100}>
                     <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
-                        {monacoEditor}
+                        {flows}
                     </YStack>
                 </Panel>
             </PanelGroup>
@@ -152,7 +149,7 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
                         const sourceFile = toSourceFile(automationInfo.code)
                         const definition = getDefinition(sourceFile, '"code"').getBody()
                         definition.replaceWithText("{\n" + editedCode.current + "\n}");
-                        
+
                         API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
                         // boardRef.current.rules = []
                         // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)

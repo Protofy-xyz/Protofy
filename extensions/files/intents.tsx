@@ -1,5 +1,5 @@
 import { Spinner, XStack, YStack, useTheme, Button, Text, Input, TextArea } from '@my/ui'
-import React, { useEffect, useRef, useCallback, useState, useContext } from 'react';
+import React, { useEffect, useRef, useCallback, useState, useContext, useMemo } from 'react';
 import { useSearchParams, usePathname } from 'solito/navigation';
 import { DataCard } from 'protolib/components/DataCard'
 import AsyncView from 'protolib/components/AsyncView'
@@ -167,13 +167,28 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   </CodeView>
 }
 
-export const CodeView = ({ monacoOptions={}, onCodeChange=(code) => {}, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children=<></> }) => {
+export const CodeView = ({ monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></> }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
   const toast = useToastController();
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState('flow')
+  const [reloadMonaco, setReloadMonaco] = useState(0);
+  const monaco = useMemo(() => {
+    return monacoInstance ?? <Monaco
+      key={Math.random()}
+      path={path}
+      onMount={(editor, monaco) => {
+        if(!reloadMonaco) setReloadMonaco(1)
+        monacoOnMount(editor, monaco)
+      }}
+      options={monacoOptions}
+      darkMode={resolvedTheme == 'dark'}
+      sourceCode={sourceCode.current}
+      onChange={(code) => { onCodeChange(code); sourceCode.current = code }}
+    />
+  }, [sourceCode.current, path, reloadMonaco, resolvedTheme])
 
   const content = <XStack mt={30} f={1} width={"100%"}>
     {/* <Theme name={tint as any}> */}
@@ -188,101 +203,101 @@ export const CodeView = ({ monacoOptions={}, onCodeChange=(code) => {}, fileCont
         </IconContainer>}
       {children}
     </XStack>
-    {mode == 'code' ? <Monaco path={path} options={monacoOptions} darkMode={resolvedTheme == 'dark'} sourceCode={sourceCode.current} onChange={(code) => { onCodeChange(code); sourceCode.current = code }} />
-      : <Flows
-
-        nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
-          const [snippetName, setSnippetName] = useState();
-          const [fragmentText, setFragmentText] = useState(dumpFragment());
-          return (
-            <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
-              <XStack f={1} jc="space-between" ai="center">
-                <Tinted>
-                  <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>
-                </Tinted>
-                <XStack gap="$2">
-                  <Button
-                    backgroundColor={"transparent"}
-                    hoverStyle={{
-                      backgroundColor: "$color2",
-                      borderColor: "$color8"
-                    }}
-                    color="$color8"
-                    borderColor="$color8"
-                    size="$3"
-                    onPress={() => closeMenu()}
-                  >
-                    <X size={16} />
-                  </Button>
-                  <Tinted>
-                    <Button disabled={!fragmentText} size="$3" onPress={() => { updateFragment(fragmentText); closeMenu() }}>
-                      <Check size={16} fillOpacity={0} />
-                    </Button>
-                  </Tinted>
-                </XStack>
-              </XStack>
-              <YStack height={300}>
-                <Monaco
-                  path={path}
-                  darkMode={resolvedTheme == 'dark'}
-                  sourceCode={fragmentText}
-                  options={{
-                    folding: false,
-                    lineDecorationsWidth: 0,
-                    lineNumbersMinChars: 0,
-                    lineNumbers: false,
-                    minimap: { enabled: false }
-                  }}
-                  onChange={(code) => { setFragmentText(code); }}
-                />
-              </YStack>
+    {mode == 'code' ? monaco
+    : <Flows
+      autoFitView={true}
+      nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
+        const [snippetName, setSnippetName] = useState();
+        const [fragmentText, setFragmentText] = useState(dumpFragment());
+        return (
+          <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
+            <XStack f={1} jc="space-between" ai="center">
+              <Tinted>
+                <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>
+              </Tinted>
               <XStack gap="$2">
-                <Input f={1} value={snippetName} size="$3" placeholder='Snippet name required to export...' onChange={(e) => {
-                  // Only accepts alphabetical characters
-                  const regex = /^[a-zA-Z]+$/;
-                  // @ts-ignore 
-                  const value = e.target?.value
-                  if (regex.test(value) || value == '') {
-                    setSnippetName(value);
-                  }
-                }} />
+                <Button
+                  backgroundColor={"transparent"}
+                  hoverStyle={{
+                    backgroundColor: "$color2",
+                    borderColor: "$color8"
+                  }}
+                  color="$color8"
+                  borderColor="$color8"
+                  size="$3"
+                  onPress={() => closeMenu()}
+                >
+                  <X size={16} />
+                </Button>
                 <Tinted>
-                  <Button
-                    disabled={!snippetName}
-                    size="$3"
-                    color={!snippetName ? "$gray8" : "$color7"}
-                    backgroundColor={"transparent"}
-                    disabledStyle={{
-                      borderColor: "$gray8",
-                    }}
-                    hoverStyle={{
-                      backgroundColor: "$color2",
-                      borderColor: "$color7"
-                    }}
-                    borderColor="$color7"
-                    onPress={() => {
-                      onGenerateSnippset(snippetName, fragmentText, closeMenu, (err = "") => {
-                        toast.show("Error generating snippet", { message: err, duration: 3000 })
-                      });
-                    }}
-                  >
-                    Export
+                  <Button disabled={!fragmentText} size="$3" onPress={() => { updateFragment(fragmentText); closeMenu() }}>
+                    <Check size={16} fillOpacity={0} />
                   </Button>
                 </Tinted>
               </XStack>
+            </XStack>
+            <YStack height={300}>
+              <Monaco
+                path={path}
+                darkMode={resolvedTheme == 'dark'}
+                sourceCode={fragmentText}
+                options={{
+                  folding: false,
+                  lineDecorationsWidth: 0,
+                  lineNumbersMinChars: 0,
+                  lineNumbers: false,
+                  minimap: { enabled: false }
+                }}
+                onChange={(code) => { setFragmentText(code); }}
+              />
             </YStack>
-          )
-        }}
-        config={{ menu: getFlowsMenuConfig(pathname, query) }}
-        isModified={isModified}
-        rawCodeFromMenu={true}
-        customComponents={getFlowsCustomComponents(pathname, query)}
-        customSnippets={getFlowsCustomSnippets(pathname, query)}
-        onEdit={(code) => { sourceCode.current = code }}
-        setIsModified={setIsModified}
-        setSourceCode={(sourceCode) => {
-          sourceCode.current = sourceCode
-        }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
+            <XStack gap="$2">
+              <Input f={1} value={snippetName} size="$3" placeholder='Snippet name required to export...' onChange={(e) => {
+                // Only accepts alphabetical characters
+                const regex = /^[a-zA-Z]+$/;
+                // @ts-ignore 
+                const value = e.target?.value
+                if (regex.test(value) || value == '') {
+                  setSnippetName(value);
+                }
+              }} />
+              <Tinted>
+                <Button
+                  disabled={!snippetName}
+                  size="$3"
+                  color={!snippetName ? "$gray8" : "$color7"}
+                  backgroundColor={"transparent"}
+                  disabledStyle={{
+                    borderColor: "$gray8",
+                  }}
+                  hoverStyle={{
+                    backgroundColor: "$color2",
+                    borderColor: "$color7"
+                  }}
+                  borderColor="$color7"
+                  onPress={() => {
+                    onGenerateSnippset(snippetName, fragmentText, closeMenu, (err = "") => {
+                      toast.show("Error generating snippet", { message: err, duration: 3000 })
+                    });
+                  }}
+                >
+                  Export
+                </Button>
+              </Tinted>
+            </XStack>
+          </YStack>
+        )
+      }}
+      config={{ menu: getFlowsMenuConfig(pathname, query) }}
+      isModified={isModified}
+      rawCodeFromMenu={true}
+      customComponents={getFlowsCustomComponents(pathname, query)}
+      customSnippets={getFlowsCustomSnippets(pathname, query)}
+      onEdit={(code) => { onFlowChange(code); sourceCode.current = code }}
+      setIsModified={setIsModified}
+      setSourceCode={(sourceCode) => {
+        sourceCode.current = sourceCode
+      }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
     <XStack opacity={0} top={-200000} position={"absolute"}>
       <Flows preload={true} primary={"#f00"} />
     </XStack>

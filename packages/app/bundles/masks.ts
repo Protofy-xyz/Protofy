@@ -26,6 +26,8 @@ import stateMachineMasks from '@extensions/statemachines/masks'
 import stateMasks from '@extensions/state/masks'
 import { paths } from './flows';
 
+import boardMasks from '@extensions/boards/boardMasks'
+
 export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     const pathParts = path.split('/')
     const segment = pathParts[pathParts.length - 1]
@@ -64,6 +66,10 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
         ...networkMasks,
         ...stateMachineMasks,
         ...stateMasks
+    ]
+
+    if( paths.boards.includes(segment) ) return [
+        ...boardMasks
     ]
     return []
 }

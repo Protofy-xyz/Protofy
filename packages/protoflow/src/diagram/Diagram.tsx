@@ -330,7 +330,7 @@ const Diagram = React.forwardRef(({
                 edges={edges}
                 fitView={autoFitView}
                 fitViewOptions={{
-                    maxZoom: 0.5
+                    maxZoom: 0.6
                 }}
                 zoomOnDoubleClick={zoomOnDoubleClick}
                 onNodesChange={onNodesChange}
