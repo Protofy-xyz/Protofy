@@ -267,6 +267,22 @@ function Widget() {
         .markdown-body td {
           background-color: var(--color1) !important;
         }
+        .markdown-body ul {
+            display: block;
+            list-style-type: disc !important;
+            margin-block-start: 1em;
+            margin-block-end: 1em;
+            padding-left: 1.5em !important;
+        }
+
+        .markdown-body ul ul {
+            list-style-type: circle !important;
+        }
+
+        .markdown-body li {
+            display: list-item;
+            margin-bottom: 0.25em;
+        }
       \`}</style>
       <Tinted>
         <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
