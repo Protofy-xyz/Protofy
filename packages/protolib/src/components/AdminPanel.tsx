@@ -119,7 +119,7 @@ export const AdminPanel = ({ children }) => {
                 $xs={{ display: "none" }}
                 onPress={() => {
                   if(isElectron()) {
-                    window['electronAPI'].openExternal("https://store.protofy.xyz");
+                    window['electronAPI'].openWindow("store");
                   }else{
                     window.open("https://store.protofy.xyz", "_blank");
                   }

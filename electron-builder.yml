@@ -23,6 +23,7 @@ linux:
 asar: false
 files:
   - proxy-main.js
+  - windows
   - "!**/node_modules"
   - "!**/node_modules/**"
   - "!node_modules"

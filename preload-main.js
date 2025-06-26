@@ -19,7 +19,11 @@ const { contextBridge, ipcRenderer, shell } = require('electron');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   openExternal: (url) => ipcRenderer.send('open-external-url', url),
-  toggleLogWindow: () => ipcRenderer.send('toggle-log-window')
+  openWindow: (window) => ipcRenderer.send('open-window', { window }),
+  toggleLogWindow: () => ipcRenderer.send('toggle-log-window'),
+  downloadAsset: (url, assetName) => {
+    ipcRenderer.send('download-asset', { url, assetName })
+  }
 });
 
 contextBridge.exposeInMainWorld('logAPI', {

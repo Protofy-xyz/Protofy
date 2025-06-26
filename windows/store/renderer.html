@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>protofy-store</title>
+  <style>
+    * {
+      margin: 0px;
+      padding: 0px;
+      border: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background-color: #0a0a0a;
+    }
+
+    ::-webkit-scrollbar {
+      height: 14px;
+      width: 14px;
+    }
+
+    ::-webkit-scrollbar-button {
+      height: 0;
+      width: 0;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border: 5.5px solid rgba(0, 0, 0, 0);
+      background-clip: padding-box;
+      border-radius: 1px;
+      background-color: rgba(150, 150, 150, 0.15);
+      display: none;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      display: flex;
+    }
+  </style>
+  <script>
+    window.addEventListener('message', (event) => {
+      if (event.data?.type === 'rpc') {
+        const { method } = event.data;
+        if (method === 'download-asset') {
+          if (!event.data.asset.url || !event.data.asset.name) {
+            console.log("bad asset download request from iframe")
+            return
+          }
+          const url = event.data.asset.url
+          const name = event.data.asset.name
+          console.log(name + "received: " + url)
+          window.api.downloadAsset(url, name);
+        }
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <iframe src="https://store.protofy.xyz" style="height: 100vh; width: 100vw;"></iframe>
+</body>
+
+</html>

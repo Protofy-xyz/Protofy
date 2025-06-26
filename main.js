@@ -1,6 +1,7 @@
 // 📦 main.js
 const { app, BrowserWindow, session, ipcMain, globalShortcut, shell } = require('electron');
 const http = require('http');
+const https = require('https');
 const net = require('net');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -272,4 +273,38 @@ ipcMain.on('toggle-log-window', () => {
     logWindow.show();
     logWindow.focus();
   }
+});
+
+ipcMain.on('open-window', (event, { window }) => {
+  const browserWindow = new BrowserWindow({
+    width: 1100,
+    height: 800,
+    title: window,
+    autoHideMenuBar: true,
+    resizable: true,
+    scrollBounce: false,
+    webPreferences: {
+      preload: path.join(__dirname, "windows", window, 'preload.js'),
+    }
+  });
+
+  browserWindow.loadFile(path.join(__dirname, "windows", window, 'renderer.html'));
+})
+
+ipcMain.on('download-asset', (event, { url, assetName }) => {
+  // save to downloads: app.getPath('downloads')
+  console.log("downloading asset:", assetName)
+  const filePath = path.join(__dirname, "data", "assets", assetName + '.zip');
+  const file = fs.createWriteStream(filePath);
+
+  https.get(url, (response) => {
+    response.pipe(file);
+    file.on('finish', () => {
+      file.close();
+      console.log('asset download complete:', filePath);
+    });
+  }).on('error', (err) => {
+    fs.unlink(filePath, () => { });
+    console.error('error downloading asset:', err.message);
+  });
 });
