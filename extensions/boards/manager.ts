@@ -42,11 +42,18 @@ export const Manager = {
         });
 
         //set watcher for file changes
+        let timer = null;
         watch(file, { persistent: true, ignoreInitial: true })
             .on('change', (changedFile) => {
                 console.log(`[Manager] File changed: ${changedFile}`);
-                Manager.stop(file);
-                Manager.start(file, getStates, getActions);
+                if (timer) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(() => {
+                    Manager.stop(file);
+                    Manager.start(file, getStates, getActions);
+                }, 1000);
+
             })
             .on('error', (error) => {
                 console.error(`[Manager] Error watching file ${file}:`, error);
