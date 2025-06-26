@@ -16,7 +16,7 @@ function generateStateDeclarations(obj) {
     const recurse = (o) => {
         return (
             '{\n' +
-            Object.entries(o)
+            Object.entries(o??{})
                 .map(([key, val]) => {
                     if (typeof val === 'object' && val !== null) {
                         return `  ${key}: ${recurse(val)};`;
