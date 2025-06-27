@@ -142,7 +142,7 @@ const objectsSourceUrl = '/api/core/v1/objects?all=1'
 export default {
     'apis': {
         component: ({ pageState, initialItems, pageSession, extraData }: any) => {
-            const { replace } = usePageParams(pageState ?? {})
+            const { replace, push } = usePageParams(pageState ?? {})
             usePrompt(() => `At this moment the user is browsing the Rest API management page. The Rest API management page allows to list, create, read, update and delete API definitions. API definitions are typescript files using express.
             The system allows to create APIs either from an empty template, or from an AutoCRUD template. The automatic crud template creates an automatic CRUD API for a given object. 
             To Automatic CRUD API generates the following endpoints: get /api/v1/:objectName (list), post /api/v1/:objectName (create), post /api/v1/:objectName/:objectId (update), get /api/v1/:objectName/:objectId/delete (delete) and get /api/v1/:objectName/:objectId (read)
@@ -175,7 +175,7 @@ export default {
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
 
 
-            return (<AdminPage title="Automations" pageSession={pageSession}>
+            return (<AdminPage title="Actions" pageSession={pageSession}>
                 <AlertDialog
                     p={"$2"}
                     pt="$5"
@@ -216,13 +216,13 @@ export default {
                                 }}
                                 slides={[
                                     {
-                                        name: "Create new Automation",
+                                        name: "Create new Action",
                                         title: "Select your Template",
                                         component: <FirstSlide selected={data?.data['template']} setSelected={(tpl) => setData({ ...data, data: { ...data['data'], template: tpl } })} />
                                     },
                                     {
                                         name: apiTemplates[data?.data['template']]['name'],
-                                        title: "Configure your Automation",
+                                        title: "Configure your action",
                                         component: <SecondSlide error={error} objects={objects} setError={setError} data={data} setData={setData} />
                                     }
                                 ]
@@ -305,12 +305,13 @@ export default {
                 <DataView
                     onDataAvailable={(total) => setTotal(total)}
                     onSelectItem={(item) => {
-                        replace('editFile', item.data.filePath);
+                        push('editFile', item.data.filePath);
                     }}
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    name="Automation"
+                    name="Action"
+                    entityName='Actions'
                     columns={DataTable2.columns(
                         DataTable2.column("name", row => row.name, 'name', row => <XStack id={"apis-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("type", row => row.type, 'type', row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),

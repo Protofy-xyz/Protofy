@@ -1,4 +1,3 @@
-//@flows
 /*
 
 app is an express object, you can use app.get/app.post to create new endpoints

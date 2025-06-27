@@ -55,7 +55,7 @@ export const DeleteButton = ({ id, left = false, field, onDelete, size = 20, col
 }
 
 
-export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false, options = [] }: any) => {
+export const NodeInput = ({ placeholder="default", id, disabled, post = (t) => t, pre = (t) => t, onBlur, field, children, style = {}, editing = false, options = [] }: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const { setNodes } = useProtoflow()
@@ -121,7 +121,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
                     ...style
                 }}
                 value={tmpInputValue}
-                placeholder="default"
+                placeholder={placeholder}
                 onChange={t => setTmpInputValue(t.target.value)}
                 options={options}
             />
@@ -130,7 +130,7 @@ export const NodeInput = ({ id, disabled, post = (t) => t, pre = (t) => t, onBlu
     </div>)
 }
 
-const HandleField = ({ id, param, index = 0, portId = null, editing = false, onRequestEdit = (param) => { }, onCancelEdit = () => { } }) => {
+const HandleField = ({ id, param, index = 0, portId = null, editing = false, onRequestEdit = (param) => { }, onCancelEdit = () => { }, placeholder=undefined }) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const notify = useFlowsStore(state => state.dataNotify)
@@ -333,7 +333,9 @@ const HandleField = ({ id, param, index = 0, portId = null, editing = false, onR
                         id={id}
                         post={(v) => getDataFromField(post(v), param.field, nodeData)}
                         pre={(v) => pre(v?.value ?? v ?? '')}
+                        placeHolder={placeholder}
                         options={param.data?.options}
+                        placeholder={param.placeholder ?? ''}
                         field={param.field}
                         onBlur={param.onBlur}
                         disabled={disabled || param.isDisabled}
@@ -500,7 +502,7 @@ export const HandleOutput = ({ id, param, position = null, style = {}, isConnect
     )
 }
 
-export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, children = null, portId = null }) => {
+export const NodeParams = ({ placeholder=undefined, mode = 'column', id, params, boxStyle = {}, children = null, portId = null }) => {
     const [editing, setEditing] = React.useState('')
     const [currentParams, setCurrentParams] = React.useState(null)
     useEffect(() => {
@@ -516,7 +518,7 @@ export const NodeParams = ({ mode = 'column', id, params, boxStyle = {}, childre
     //@ts-ignore
     return <div style={{ flex: 1, display: 'flex', flexDirection: mode, ...boxStyle }}>
         {params.map((param: Field, i) => {
-            return <HandleField onCancelEdit={() => setEditing('')} editing={param.field == editing} onRequestEdit={(param) => !editing ? setEditing(param.field) : null} key={i} id={id} param={param} index={i} portId={portId} />
+            return <HandleField placeholder={placeholder} onCancelEdit={() => setEditing('')} editing={param.field == editing} onRequestEdit={(param) => !editing ? setEditing(param.field) : null} key={i} id={id} param={param} index={i} portId={portId} />
         })}
         {children}
     </div>

@@ -160,3 +160,21 @@ if (fs.existsSync(assetsPath)) {
 } else {
     console.log('data/assets directory does not exist');
 }
+
+//delete the contents of data/keys
+const keysPath = path.join(__dirname, 'data', 'keys');
+if (fs.existsSync(keysPath)) {
+    fs.readdirSync(keysPath).forEach(file => {
+        const filePath = path.join(keysPath, file);
+        if (fs.lstatSync(filePath).isDirectory()) {
+            rimraf.sync(filePath);
+            console.log(`Removed directory: ${filePath}`);
+        } else {
+            fs.unlinkSync(filePath);
+            console.log(`Removed file: ${filePath}`);
+        }
+    });
+} else {
+    console.log('data/keys directory does not exist');
+}
+

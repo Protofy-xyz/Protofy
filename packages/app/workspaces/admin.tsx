@@ -32,9 +32,8 @@ export default ({ pages, boards, objects }) => {
     const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
 
     const integrations = [
-        { "name": "Automations", "icon": Zap, "href": "/workspace/apis" },
+        { "name": "Actions", "icon": Zap, "href": "/workspace/actions" },
         { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
-        { "name": "Storage", "icon": Boxes, "href": "/workspace/objects" },
         { "name": "Events", "icon": "activity", "href": "/workspace/events" },
     ]
     enableArduinos ? integrations.push({ "name": "Arduinos", "icon": Router, "href": "/workspace/arduinos" }) : null
@@ -56,10 +55,11 @@ export default ({ pages, boards, objects }) => {
         return { "name": obj.name.charAt(0).toUpperCase() + obj.name.slice(1), "icon": Box, "href": ('/workspace/') + obj.features.adminPage }
     }) : [];
 
+    objectsMenu.push({ "name": "Manage Storage", "icon": Boxes, "href": "/workspace/objects" })
     const initialData = {
         Boards: [],
-        ...(objectsMenu.length ? { Storage: objectsMenu } : {}),
-        Integrations: integrations,
+        Storage: objectsMenu,
+        Platform: integrations,
         System: systemMenu
     }
 
