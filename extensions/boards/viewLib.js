@@ -263,9 +263,11 @@ function Widget() {
       <style>{\`
         .markdown-body th{
           background-color: var(--color3) !important;
+           padding: 0.5em;
         }
         .markdown-body td {
           background-color: var(--color1) !important;
+           padding: 0.5em;
         }
         .markdown-body ul {
             display: block;
@@ -274,11 +276,13 @@ function Widget() {
             margin-block-end: 1em;
             padding-left: 1.5em !important;
         }
-
         .markdown-body ul ul {
             list-style-type: circle !important;
         }
-
+        .markdown-body p {
+            margin-bottom: 1em;
+            line-height: 1.6;
+        }
         .markdown-body li {
             display: list-item;
             margin-bottom: 0.25em;
