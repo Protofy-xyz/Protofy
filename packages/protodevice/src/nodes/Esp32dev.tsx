@@ -10,7 +10,7 @@ const Esp32dev = ({ node = {}, nodeData = {}, topics = {}, color }: any) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const metadata = useFlowsStore(state => state.metadata)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const offsetY = 145.8 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 129 //This value is for setting the initial point where the available pins start to draw
     const spacing = 27.8
     const edges = useEdges();
     const ports = metadata.board.ports

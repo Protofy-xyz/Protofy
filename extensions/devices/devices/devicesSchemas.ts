@@ -193,7 +193,11 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
         deviceObj.setCredentials(deviceObject.data.credentials)
       }
       const componentsTree = deviceObj.getComponentsTree(this.data.name, deviceDefinition)
-      yaml = deviceObj.dump("yaml").replace(/'@/g,"").replace(/@'/g,"")
+      yaml = deviceObj.dump("yaml")
+      
+      yaml = yaml.replace(/'@!lambda ''(.*?)''@'/g, "!lambda '$1'");
+      yaml = yaml.replace(/'@/g,"").replace(/@'/g,"")
+
 
       const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
 

@@ -6,6 +6,7 @@ import { getColor } from ".";
 const MKSServo42 = ({ node = {}, nodeData = {}, children, color }: any) => {
     const [name, setName] = React.useState(nodeData['param-1'])
     const nameErrorMsg = 'Reserved name'
+    const intervalErrorMsg = 'Add units h/m/s/ms'
     const nodeParams: Field[] = [
         {
             label: 'Name', static: true, field: 'param-1', type: 'input', onBlur: () => { setName(nodeData['param-1']) },
@@ -18,7 +19,10 @@ const MKSServo42 = ({ node = {}, nodeData = {}, children, color }: any) => {
         {
             label: 'Motor CAN id', static: true, field: 'param-3', type: 'input', onBlur: () => { setName(nodeData['param-3']) },
         },
-
+        {
+            label: 'Update Interval', static: true, field: 'param-4', type: 'input',
+            error: !['h', 'm', 's', 'ms'].includes(nodeData['param-4']?.value?.replace(/['"0-9]+/g, '')) ? intervalErrorMsg : null
+        }
 
     ] as Field[]
     return (
@@ -38,6 +42,7 @@ export default {
     getInitialData: () => { return { to: 'mksServo42', 
         "param-1": { value: "", kind: "StringLiteral" }, 
         "param-2": { value: "", kind: "StringLiteral" }, 
-        "param-3": { value: "", kind: "StringLiteral"}
+        "param-3": { value: "", kind: "StringLiteral"},
+        "param-4": { value: "30s", kind: "StringLiteral" }
     } }
 }
