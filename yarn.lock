@@ -3611,6 +3611,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/esphome@workspace:extensions/esphome":
+  version: 0.0.0-use.local
+  resolution: "@extensions/esphome@workspace:extensions/esphome"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/events@workspace:extensions/events":
   version: 0.0.0-use.local
   resolution: "@extensions/events@workspace:extensions/events"

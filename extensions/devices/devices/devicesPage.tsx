@@ -334,7 +334,7 @@ export default {
         icon: UploadCloud,
         action: async (element) => {
           try {
-            var result = await API.get("/api/core/v1/devices/" + element.data.name + "/yaml")
+            var result = await API.get("/api/v1/esphome/" + element.data.name + "/yaml")
             flashDevice(element, result.data.yaml)
           } catch (err) {
             console.error(err)
@@ -353,6 +353,10 @@ export default {
 
 
           const { port, error } = await connectSerialPort()
+          console.log("Port: ", port, " Error: ", error)
+          if(error === "Any port selected") {
+            return
+          }
           if (!port || error) {
             setModalFeedback({ message: error || 'No port detected.', details: { error: true } })
             setShowModal(true)
