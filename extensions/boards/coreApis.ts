@@ -629,9 +629,11 @@ export default async (app, context) => {
         })
 
         if(started) {
+            logger.info(`Autopilot started for board: ${boardId}`);
             res.send({ result: 'started', message: "Board started", board: req.params.boardId });
             autopilotState[boardId] = true;
         } else {
+            logger.info(`Autopilot already running for board: ${boardId}`);
             res.send({ result: 'already_running', message: "Board already running", board: req.params.boardId });
         }
     })
