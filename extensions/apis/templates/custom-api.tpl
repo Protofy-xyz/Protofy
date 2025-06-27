@@ -42,7 +42,7 @@ export default Protofy("code", async (app: Application, context) => {
     // use query parameters in the url to pass parameters to the automation
     context.automations.automation({
         name: '{{codeNameLowerCase}}',
-        responseMode: 'wait',
+        responseMode: 'manual',
         app: app,
         onRun: async (params, res, name) => {
             context.apis.automationResponse(res, "ok");
