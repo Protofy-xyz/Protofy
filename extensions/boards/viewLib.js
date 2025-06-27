@@ -276,10 +276,15 @@ function Widget() {
             margin-block-end: 1em;
             padding-left: 1.5em !important;
         }
+        .markdown-body table {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
         .markdown-body ul ul {
             list-style-type: circle !important;
         }
         .markdown-body p {
+            margin-top: 1em;
             margin-bottom: 1em;
             line-height: 1.6;
         }

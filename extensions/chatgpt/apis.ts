@@ -35,15 +35,7 @@ export default (app, context) => {
                 description: "chatGPT last chat response",
                 rulesCode: `return states?.chatGPT?.conversation?.chatResponse`,
                 type: 'value',
-                html: `
-                //data contains: data.value, data.icon and data.color
-                return card({
-                    content: \`
-                        \${icon({ name: data.icon, color: data.color, size: '48' })}    
-                        \${cardValue({ value: data.value, style: "font-size: 20px; font-weight: 400; margin-top: 10px" })}
-                    \`
-                });
-                `
+                html: "return markdown(data)",
             },
             emitEvent: true,
             token: await getServiceToken()
