@@ -201,7 +201,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
 
       const subsystems = deviceObj.getSubsystemsTree(this.data.name, deviceDefinition)
 
-      await API.post("/api/core/v1/devices/" + this.data.name + "/yamls", { yaml })
+      await API.post("/api/v1/esphome/" + this.data.name + "/yamls", { yaml })
       if (deviceObject.isError) {
         console.error(deviceObject.error)
         return;
@@ -237,7 +237,7 @@ export class DevicesModel extends ProtoModel<DevicesModel> {
   }
   
   async getManifestUrl(compileSessionId){
-    return "http://localhost:8000/api/core/v1/devices/" + this.data.name + "/" + compileSessionId + "/manifest"
+    return "http://localhost:8000/api/v1/esphome/" + this.data.name + "/" + compileSessionId + "/manifest"
   }
   async getCore(){
     const response = await API.get('/api/core/v1/deviceDefinitions/' + this.data.deviceDefinition);
