@@ -35,9 +35,9 @@ const Fetch = (node: any = {}, nodeData = {}) => {
             <NodeParams id={node.id} params={[{ label: 'Use service token', field: 'param-6', type: 'boolean' }]} />
             <NodeParams id={node.id} params={[{ label: 'Await', field: 'await', type: 'boolean', static: true }]} />
             <div style={{ marginTop: "120px" }}>
-                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '400px' }} handleId={'then'} />
+                <FlowPort id={node.id} type='output' label='On Response (data)' style={{ top: '220px' }} handleId={'then'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-4'} type={"target"} fallbackPort={'then'} portType={"_"} preText="async (data) => " postText="" />
-                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '450px' }} handleId={'error'} />
+                <FlowPort id={node.id} type='output' label='On Error (error)' style={{ top: '260px' }} handleId={'error'} />
                 <FallbackPort fallbackText="null" node={node} port={'param-5'} type={"target"} fallbackPort={'error'} portType={"_"} preText="async (error) => " postText="" />
             </div>
 
