@@ -86,9 +86,9 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
     const setNodeData = useFlowsStore(state => state.setNodeData);
 
     // Adjusted offsets for top, middle, and bottom groups
-    const offsetYTop = 210.5; // Initial Y offset for the top group
-    const offsetYMiddle = 258; // Y offset for the middle group
-    const offsetYBottom = 552; // Y offset for the bottom group
+    const offsetYTop = 195; // Initial Y offset for the top group
+    const offsetYMiddle = 243; // Y offset for the middle group
+    const offsetYBottom = 537; // Y offset for the bottom group
 
     // Spacing for each group
     const spacingTop = 49; // Spacing for the top group of ports

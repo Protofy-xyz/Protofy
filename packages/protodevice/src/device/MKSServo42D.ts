@@ -2,12 +2,14 @@ class MKSServo42 {
     type;
     name;
     canBusId;
-    motorId
-    constructor(name, canBusId, motorId) {
-        this.type = 'canbus'
+    motorId;
+    updateInterval;
+    constructor(name, canBusId, motorId, updateInterval) {
+        this.type = 'motor'
         this.name = name
         this.canBusId = canBusId
         this.motorId = motorId
+        this.updateInterval = updateInterval
     }
     extractNestedComponents(element, deviceComponents) {
       const keysToExtract = [
@@ -50,202 +52,221 @@ class MKSServo42 {
     attach(pin, deviceComponents) {
         const componentObjects = [
           {
-            name: 'script',
-            config: [
-              {
-                id: `${this.name}_send_set_target`,
-                parameters: {
-                  speed: 'int',
-                  acc: 'int',
-                  pulse: 'int',
-                },
-                then: {
-                  lambda: 
-`if (pulse > 8388607) pulse = 8388607;
-if (pulse < -8388607) pulse = -8388607;
-
-uint8_t pulse_high = (uint8_t)((pulse & 0x00FF0000) >> 16);
-uint8_t pulse_mid = (uint8_t)((pulse & 0x0000FF00) >> 8);
-uint8_t pulse_low = (uint8_t)(pulse & 0x000000FF);
-
-std::vector<uint8_t> data = {
-  0xFE,
-  (uint8_t)((speed & 0xFF00) >> 8),
-  (uint8_t)(speed & 0x00FF),
-  acc,
-  pulse_high,
-  pulse_mid,
-  pulse_low
-};
-
-uint8_t crc = 1;
-for (int i = 0; i < data.size(); i++) {
-  crc += data[i];
-}
-crc &= 0xFF;
-data.push_back(crc);
-
-id(${this.canBusId}).send_data(${this.motorId}, false, data);
-`
-                }
-              },
-              {
-                id: `${this.name}_send_home`,
-                then: {
-                  "canbus.send": {
-                    can_id: this.motorId,
-                    data: '@[0x91, 0x92]@',
-                  }
-                }
-              },
-              {
-                id: `${this.name}_send_enable_rotation`,
-                parameters: {
-                  state: 'string',
-                },
-                then: {
-                  lambda:
-`std::vector<uint8_t> data = {0xF3, 0x00};
-if (state == "ON") {
-  data[1] += 1;
-}
-
-uint8_t crc = 1;
-for (int i = 0; i < data.size(); i++) {
-  crc += data[i];
-}
-crc &= 0xFF;
-data.push_back(crc);
-
-id(${this.canBusId}).send_data(${this.motorId}, false, data);
-`
-                }
-              },
-              {
-                id: `${this.name}_send_limit_remap`,
-                parameters: {
-                  state: 'string',
-                },
-                then: {
-                  lambda: 
-`std::vector<uint8_t> data = {0x9E, 0x00};
-if (state == "ON") {
-  data[1] = 0x01;
-} else if (state == "OFF") {
-  data[1] = 0x00;
-} else {
-  ESP_LOGW("MKS SERVO42D", "Invalid payload for set_limit_remap: %s", state.c_str());
-  return;
-}
-
-uint8_t crc = 1;
-for (int i = 0; i < data.size(); i++) {
-  crc += data[i];
-}
-crc &= 0xFF;
-data.push_back(crc);
-
-id(${this.canBusId}).send_data(${this.motorId}, false, data);
-`
-                }
-              }
-            ]
+            name: "external_components",
+            config: {
+                //@ts-ignore
+                source: "github://Protofy-xyz/esphome-components",
+                refresh: "0s",
+                components: ["mks42d"]
+            }
           },
           {
-            name: this.type,
+            name: 'mks42d',
+            config: {
+              id: this.name,
+              can_bus_id: this.canBusId,
+              can_id: this.motorId,
+              throttle: this.updateInterval
+            },
+            subsystem: this.getSubsystem(),
+          },
+          {
+            name: 'canbus',
             config: {
               on_frame: [
                 {
                   can_id: this.motorId,
                   then: {
                     lambda:
-`if (x.size() == 0) return;
-
-ESP_LOGD("can id ${this.motorId}", "Received data:");
-for (size_t i = 0; i < x.size(); i++) {
-  ESP_LOGD("can id 1", "[%d] = 0x%02X", i, x[i]);
-}
-
-if (x[0] == 0xFE) {
-  char motor_states[4][30] = {"run fail", "run starting", "run complete", "end limit stopped"};
-  ESP_LOGD("MKS SERVO42D", "Step control response = 0x%02X", x[1]);
-  switch (x[1]) {
-    case 0x00: id(${this.name}_step_state).publish_state(motor_states[0]); break;
-    case 0x01: id(${this.name}_step_state).publish_state(motor_states[1]); break;
-    case 0x02: id(${this.name}_step_state).publish_state(motor_states[2]); break;
-    case 0x03: id(${this.name}_step_state).publish_state(motor_states[3]); break;
-  }
-}
-
-if (x[0] == 0x91) {
-  char homing_states[3][30] = {"go home fail", "go home start", "go home success"};
-  ESP_LOGD("MKS SERVO42D", "Homing response = 0x%02X", x[1]);
-  switch (x[1]) {
-    case 0x00: id(${this.name}_home_state).publish_state(homing_states[0]); break;
-    case 0x01: id(${this.name}_home_state).publish_state(homing_states[1]); break;
-    case 0x02: id(${this.name}_home_state).publish_state(homing_states[2]); break;
-  }
-}
-  `
+`id(${this.name}).process_frame(x);`
                   }
                 }
               ]
-            },
-            subsystem: this.getSubsystem()
+            }
           },
           {
             name: 'mqtt',
             config: {
               on_json_message: [
                 {
-                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_target`,
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_target_position`,
                   then: {
-                    lambda: 
-`id(${this.name}_send_set_target)->execute((int)x["speed"], (int)x["acc"], (int)x["pulses"]);
-`
+                    "mks42d.set_target_position": {
+                      id: `${this.name}`,
+                      target_position: `@!lambda 'return x["target_position"].as<int>();'@`,
+                      speed: `@!lambda 'return x["speed"].as<int>();'@`,
+                      acceleration: `@!lambda 'return x["acceleration"].as<int>();'@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_speed`,
+                  then: {
+                    "mks42d.set_speed": {
+                      id: `${this.name}`,
+                      speed: `@!lambda 'return x["speed"].as<int>();'@`,
+                      acceleration: `@!lambda 'return x["acceleration"].as<int>();'@`,
+                      direction: `@!lambda 'return x["direction"].as<std::string>();'@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_no_limit_reverse`,
+                  then: {
+                    "mks42d.set_no_limit_reverse": {
+                      id: `${this.name}`,
+                      degrees: `@!lambda 'return x["degrees"].as<int>();'@`,
+                      current_ma: `@!lambda 'return x["current_ma"].as<int>();'@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_home_params`,
+                  then: {
+                    "mks42d.set_home_params": {
+                      id: `${this.name}`,
+                      hm_trig_level: `@!lambda 'return x["hm_trig_level"].as<bool>();'@`,
+                      hm_dir: `@!lambda 'return x["hm_dir"].as<std::string>();'@`,
+                      hm_speed: `@!lambda 'return x["hm_speed"].as<int>();'@`,
+                      end_limit: `@!lambda 'return x["end_limit"].as<bool>();'@`,
+                      sensorless_homing: `@!lambda 'return x["sensorless_homing"].as<bool>();'@`
+                    }
                   }
                 }
               ],
               on_message: [
                 {
-                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/home`,
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/send_home`,
                   then: {
-                    "script.execute": `${this.name}_send_home`
+                    "mks42d.send_home": {
+                      id: `${this.name}`,
+                    }
                   }
                 },
                 {
                   topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/enable_rotation`,
                   then: {
-                    lambda: 
-`id(${this.name}_send_enable_rotation)->execute(x);
-`
+                    "mks42d.enable_rotation": {
+                      id: `${this.name}`,
+                      state: `@!lambda "return std::string(x);"@`
+                    }
                   }
                 },
                 {
-                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_limit_remap`,
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/send_limit_remap`,
                   then: {
-                    lambda: 
-`id(${this.name}_send_limit_remap)->execute(x);
-`
+                    "mks42d.send_limit_remap": {
+                      id: `${this.name}`,
+                      state: `@!lambda "return std::string(x);"@`
+                    }
                   }
-                }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/unstall`,
+                  then: {
+                    "mks42d.unstall_command": {
+                      id: `${this.name}`,
+                    }
+                  }
+                },
+
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_direction`,
+                  then: {
+                    "mks42d.set_direction": {
+                      id: `${this.name}`,
+                      dir: `@!lambda "return std::string(x);"@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_microstep`,
+                  then: {
+                    "mks42d.set_microstep": {
+                      id: `${this.name}`,
+                      microstep: `@!lambda "return atoi(x.c_str());"@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_hold_current`,
+                  then: {
+                    "mks42d.set_hold_current": {
+                      id: `${this.name}`,
+                      percent: `@!lambda "return atoi(x.c_str());"@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_working_current`,
+                  then: {
+                    "mks42d.set_working_current": {
+                      id: `${this.name}`,
+                      ma: `@!lambda "return atoi(x.c_str());"@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_mode`,
+                  then: {
+                    "mks42d.set_mode": {
+                      id: `${this.name}`,
+                      mode: `@!lambda "return atoi(x.c_str());"@`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_0`,
+                  then: {
+                    "mks42d.set_0": {
+                      id: `${this.name}`
+                    }
+                  }
+                },
+                {
+                  topic: `devices/${deviceComponents.esphome.name}/${this.type}/${this.name}/set_protection`,
+                  then: {
+                    "mks42d.set_protection": {
+                      id: `${this.name}`,
+                      state: `@!lambda "return std::string(x);"@`
+                    }
+                  }
+                },
               ]
             }
           },
           {
             name: 'text_sensor',
             config: { 
-              platform: "template",
-              name: `${this.name}_step_state`,
-              id: `${this.name}_step_state`,
-            }
-          },
-          {
-            name: 'text_sensor',
-            config: { 
-              platform: "template",
-              name: `${this.name}_home_state`,
-              id: `${this.name}_home_state`,
+              platform: "mks42d",
+              step_state: {
+                id: `${this.name}_step_state`,
+                name: `${this.name} step state`,
+              },
+              home_state: {
+                id: `${this.name}_home_state`,
+                name: `${this.name} home state`,
+              },
+              in1_state: {
+                id: `${this.name}_in1_state`,
+                name: `${this.name} in1 state`,
+              },
+              in2_state: {
+                id: `${this.name}_in2_state`,
+                name: `${this.name} in2 state`,
+              },
+              out1_state: {
+                id: `${this.name}_out1_state`,
+                name: `${this.name} out1 state`,
+              },
+              out2_state: {
+                id: `${this.name}_out2_state`,
+                name: `${this.name} out2 state`,
+              },
+              stall_state: {
+                id: `${this.name}_stall_state`,
+                name: `${this.name} stall state`,
+              },
             }
           },
         ]
@@ -264,14 +285,29 @@ if (x[0] == 0x91) {
               name: 'set_target',
               label: 'Target',
               description: 'Sets target of the stepper',
-              endpoint: "/"+this.type+"/"+this.name+"/set_target",
+              endpoint: `/${this.type}/${this.name}/set_target_position`,
               connectionType: 'mqtt',
               payload: {
                 type: 'json-schema',
                 schema: {
-                  "pulses": { "type": "int"},
-                  "acceleration": { "type": "int"},
-                  "speed": { "type": "int"}
+                  target_position: { type: 'int' },
+                  speed: { type: 'int' },
+                  acceleration: { type: 'int' }
+                }
+              },
+            },
+            {
+              name: 'set_speed',
+              label: 'Speed',
+              description: 'Set speed and acceleration directly',
+              endpoint: `/${this.type}/${this.name}/set_speed`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'json-schema',
+                schema: {
+                  speed: { type: 'int' },
+                  acceleration: { type: 'int' },
+                  direction: { type: 'string' }
                 }
               },
             },
@@ -279,7 +315,7 @@ if (x[0] == 0x91) {
               name: 'home',
               label: 'Home',
               description: 'Homes the stepper',
-              endpoint: "/"+this.type+"/"+this.name+"/home",
+              endpoint: `/${this.type}/${this.name}/send_home`,
               connectionType: 'mqtt',
               payload: {
                 type: 'str',
@@ -312,7 +348,7 @@ if (x[0] == 0x91) {
               name: 'enable_limit_remap',
               label: 'Enable limit remap',
               description: 'Enables limit remap',
-              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              endpoint: `/${this.type}/${this.name}/send_limit_remap`,
               connectionType: 'mqtt',
               payload: {
                 type: 'str',
@@ -323,7 +359,119 @@ if (x[0] == 0x91) {
               name: 'disable_limit_remap',
               label: 'Disable limit remap',
               description: 'Disables limit remap',
-              endpoint: `/${this.type}/${this.name}/set_limit_remap`,
+              endpoint: `/${this.type}/${this.name}/send_limit_remap`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'OFF',
+              },
+            },
+            {
+              name: 'unstall',
+              label: 'Unstall motor',
+              description: 'Clears a stall condition',
+              endpoint: `/${this.type}/${this.name}/unstall`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'ON',
+              },
+            },
+            {
+              name: 'set_direction',
+              label: 'Set direction',
+              description: 'Sets the motor direction',
+              endpoint: `/${this.type}/${this.name}/set_direction`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+              },
+            },
+            {
+              name: 'set_microstep',
+              label: 'Set microstep',
+              description: 'Sets microstepping value',
+              endpoint: `/${this.type}/${this.name}/set_microstep`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'int',
+              },
+            },
+            {
+              name: 'set_hold_current',
+              label: 'Set hold current',
+              description: 'Current (%) to hold the motor when idle',
+              endpoint: `/${this.type}/${this.name}/set_hold_current`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'int',
+              },
+            },
+            {
+              name: 'set_working_current',
+              label: 'Set working current',
+              description: 'Current (mA) to use when moving',
+              endpoint: `/${this.type}/${this.name}/set_working_current`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'int',
+              },
+            },
+            {
+              name: 'set_mode',
+              label: 'Set mode',
+              description: 'Sets the control mode',
+              endpoint: `/${this.type}/${this.name}/set_mode`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'int',
+                description: "0: CR_OPEN, 1: CR_CLOSE, 2: CR_vFOC, 3: SR_OPEN, 4: SR_CLOSE, 5: SR_vFOC"
+              },
+            },
+            {
+              name: 'set_home_params',
+              label: 'Set homing parameters',
+              description: 'Sets motor homing behavior',
+              endpoint: `/${this.type}/${this.name}/set_home_params`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'json-schema',
+                schema: {
+                  hm_trig_level: { type: 'bool' },
+                  hm_dir: { type: 'string' },
+                  hm_speed: { type: 'int' },
+                  end_limit: { type: 'bool' },
+                  sensorless_homing: { type: 'bool' },
+                }
+              }
+            },
+            {
+              name: 'set_0',
+              label: 'Set 0 position',
+              description: 'Sets the current position as 0',
+              endpoint: `/${this.type}/${this.name}/set_0`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'ON',
+              },
+            },
+            {
+              name: 'enable_protection',
+              label: 'Enable protection mode',
+              description: 'Enables the motor protection mode',
+              endpoint: `/${this.type}/${this.name}/set_protection`,
+              connectionType: 'mqtt',
+              payload: {
+                type: 'str',
+                value: 'ON',
+              },
+            },
+            {
+              name: 'disable_protection',
+              label: 'Disable protection mode',
+              description: 'Disables the motor protection mode',
+              endpoint: `/${this.type}/${this.name}/set_protection`,
               connectionType: 'mqtt',
               payload: {
                 type: 'str',
@@ -331,26 +479,62 @@ if (x[0] == 0x91) {
               },
             }
           ],
-          monitors:[
+          monitors: [
             {
-                name: "step_state",
-                label: "Step state",
-                description: "state of the motor after receiving a command of movement by steps",
-                endpoint: "/sensor/"+`${this.name}_step_state`+"/state",
-                connectionType: "mqtt",
+              name: "step_state",
+              label: "Step state",
+              description: "State after a step command",
+              endpoint: `/sensor/${this.name}_step_state/state`,
+              connectionType: "mqtt",
             },
             {
-                name: "homing_state",
-                label: "Homing state",
-                description: "state of the motor after receiving a command of homing",
-                endpoint: "/sensor/"+`${this.name}_home_state`+"/state",
-                connectionType: "mqtt",
+              name: "home_state",
+              label: "Homing state",
+              description: "State after homing",
+              endpoint: `/sensor/${this.name}_home_state/state`,
+              connectionType: "mqtt",
             },
-        ]
+            {
+              name: "stall_state",
+              label: "Stall state",
+              description: "Reports whether the motor is stalled",
+              endpoint: `/sensor/${this.name}_stall_state/state`,
+              connectionType: "mqtt",
+            },
+            {
+              name: "in1_state",
+              label: "IN1 state",
+              description: "State of IN1 input",
+              endpoint: `/sensor/${this.name}_in1_state/state`,
+              connectionType: "mqtt",
+            },
+            {
+              name: "in2_state",
+              label: "IN2 state",
+              description: "State of IN2 input",
+              endpoint: `/sensor/${this.name}_in2_state/state`,
+              connectionType: "mqtt",
+            },
+            {
+              name: "out1_state",
+              label: "OUT1 state",
+              description: "State of OUT1 output",
+              endpoint: `/sensor/${this.name}_out1_state/state`,
+              connectionType: "mqtt",
+            },
+            {
+              name: "out2_state",
+              label: "OUT2 state",
+              description: "State of OUT2 output",
+              endpoint: `/sensor/${this.name}_out2_state/state`,
+              connectionType: "mqtt",
+            }
+          ]
         }
       }
+
 }
 
-export function mksServo42(name, canBusId, motorId) { 
-    return new MKSServo42(name, canBusId, motorId);
+export function mksServo42(name, canBusId, motorId, updateInterval) { 
+    return new MKSServo42(name, canBusId, motorId, updateInterval);
 }

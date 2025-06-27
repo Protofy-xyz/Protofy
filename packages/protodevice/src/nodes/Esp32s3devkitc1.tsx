@@ -9,7 +9,7 @@ const Esp32s3devkitc1 = ({ node = {}, nodeData = {}, topics = {}, color }: any) 
     const { id } = node
     const useFlowsStore = useContext(FlowStoreContext)
     const setNodeData = useFlowsStore(state => state.setNodeData)
-    const offsetY = 150.3 //This value is for setting the initial point where the available pins start to draw
+    const offsetY = 157.7 //This value is for setting the initial point where the available pins start to draw
     const spacing = 26.6
     const edges = useEdges();
     const metadata = useFlowsStore(state => state.metadata)

@@ -219,21 +219,20 @@ export const flash = async (cb: (data: any) => void, deviceName: string, compile
 
 
 const onlineCompiler = "compile.protofy.xyz";
-const secured = true;
 export const downloadDeviceFirmwareEndpoint = (targetDevice, compileSessionId) => {
-    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/download/${targetDevice}?compileSessionId=${compileSessionId}`)
+    return (`https://${onlineCompiler}/api/v1/device/download/${targetDevice}?compileSessionId=${compileSessionId}`)
 };
 
 export const onlineCompilerSecureWebSocketUrl = () => {
-    return (`ws${secured ? "s" : ""}://${onlineCompiler}/websocket`)
+    return (`wss://${onlineCompiler}/websocket`)
 };
 
 export const postYamlApiEndpoint = (targetDevice) => {
-    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/edit/${targetDevice}`);
+    return (`https://${onlineCompiler}/api/v1/device/edit/${targetDevice}`);
 };
 
 export const compileActionUrl = (targetDevice, compileSessionId) => {
-    return (`http${secured ? "s" : ""}://${onlineCompiler}/api/v1/device/compile/${targetDevice}?compileSessionId=${compileSessionId}`)
+    return (`https://${onlineCompiler}/api/v1/device/compile/${targetDevice}?compileSessionId=${compileSessionId}`)
 };
 
 export const compileMessagesTopic = (targetDevice) => {
