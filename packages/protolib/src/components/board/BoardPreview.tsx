@@ -43,7 +43,7 @@ export default ({ element, width, onDelete, ...props }: any) => {
                 {
                     board?.get("cards")?.length
                         ? <XStack gap="$2" f={1} mah={"$9"} flexWrap="wrap" overflow="scroll">
-                            {board.get("cards")?.map((card: any, index: number) => (
+                            {board.get("cards")?.filter(i=>i).map((card: any, index: number) => (
                                 <Tinted key={card.name}>
                                     <Tooltip>
                                         <Tooltip.Trigger>

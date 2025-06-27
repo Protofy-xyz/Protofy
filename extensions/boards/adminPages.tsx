@@ -110,7 +110,7 @@ const Board = ({ board, icons }) => {
   const dedupRef = useRef() as any
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
   const router = useRouter()
-  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(key => key != 'addwidget')] : [addCard]))
+  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i=>i).filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -141,7 +141,7 @@ const Board = ({ board, icons }) => {
     const automationInfo = await API.get(`/api/core/v1/boards/${board.name}/automation`)
     setAutomationInfo(automationInfo.data)
     if (dataData.status == 'loaded') {
-      let newItems = dataData.data?.cards
+      let newItems = (dataData.data?.cards || []).filter(card => card)
       if (!newItems || newItems.length == 0) newItems = [addCard]
       setItems(newItems)
     }

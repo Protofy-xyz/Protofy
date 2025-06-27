@@ -96,7 +96,6 @@
             },
             "rulesCode": "return states.objects.players.lastEntries"
         },
-        null,
         {
             "key": "value_1750210052045",
             "width": 2,

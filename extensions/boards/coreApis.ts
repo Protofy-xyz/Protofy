@@ -273,7 +273,7 @@ const getDB = (path, req, session) => {
                     return rest;
                 }
             })
-            
+
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
 
             //check if the board automation file exists, if not, create it
@@ -408,6 +408,9 @@ export default async (app, context) => {
         // Iterate over cards to get the card content
         for (let i = 0; i < fileContent.cards.length; i++) {
             const card = fileContent.cards[i];
+            if(!card) {
+                continue;
+            }
             try {
                 if (card.type === 'value') {
                     if (!card.rulesCode) {
