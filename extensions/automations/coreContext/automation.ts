@@ -68,6 +68,7 @@ export const automation = async (options: {
                 description: options.description ?? "",
                 rulesCode: `return execute_action("/api/v1/automations/${name}", userParams)`,
                 params: options.automationParams ?? {},
+                displayResponse: true,
                 type: 'action'
             },
             emitEvent: true,
