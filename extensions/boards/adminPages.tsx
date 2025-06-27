@@ -291,7 +291,6 @@ const Board = ({ board, icons }) => {
         />
       }
     } else if (item.type == 'action') {
-      console.log('stateeeeeeeeeeeeeeeeees: ', states)
       return {
         ...item,
         content: <ActionCard
