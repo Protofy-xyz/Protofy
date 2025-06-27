@@ -111,10 +111,7 @@
                 "message": "message"
             },
             "type": "action",
-            "displayResponse": false,
-            "value": {
-                "message": "Prompt sent to ChatGPT"
-            }
+            "displayResponse": false
         },
         {
             "key": "value_1750256790295",
