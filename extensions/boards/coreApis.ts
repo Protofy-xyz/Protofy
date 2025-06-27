@@ -266,6 +266,14 @@ const getDB = (path, req, session) => {
             // try to create the board file in the boards folder
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
+            value.cards = (value.cards || []).map(card => {
+                if(card.type === 'value') {
+                    //remove value from the card
+                    const { value, ...rest } = card;
+                    return rest;
+                }
+            })
+            
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
 
             //check if the board automation file exists, if not, create it
