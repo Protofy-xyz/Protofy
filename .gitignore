@@ -6,6 +6,7 @@ logs/*
 !data/assets
 data/assets/*.zip
 .yarn/install-state.gz
+.yarn/cache
 !data/automations
 !data/templates
 !data/devices
