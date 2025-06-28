@@ -6,8 +6,12 @@ directories:
 mac:
   target:
     - target: dir
-      arch: x64
-  icon: "apps/adminpanel/public/favicon.ico"
+      arch:
+        - x64
+        - arm64
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  icon: apps/adminpanel/public/icon.icns
 win:
   target:
     - target: dir

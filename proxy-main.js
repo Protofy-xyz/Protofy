@@ -4,7 +4,8 @@ const fs = require('fs')
 const projectDir = 'project';
 const Module = require('module');
 
-const MONOREPO_ROOT = path.resolve(__dirname, '../../'+projectDir)
+//check if osx
+const MONOREPO_ROOT = path.resolve(__dirname, (process.platform === 'darwin' ? '../../../../' : '../../')+projectDir)
 let ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
 
 if (!fs.existsSync(ENTRYPOINT)) { //if the entrypoint is not found in the project root, try to find it in the current directory
