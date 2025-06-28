@@ -1,15 +1,27 @@
-//this is a proxy to call the real main.js
 const path = require('path')
 const fs = require('fs')
-const projectDir = 'project';
-const Module = require('module');
+const Module = require('module')
+const { app } = require('electron') 
 
-//check if osx
-const MONOREPO_ROOT = path.resolve(process.platform === 'darwin' ? process.execPath + '../../../../' : __dirname+ '../../'+projectDir)
+const projectDir = 'project'
+
+let MONOREPO_ROOT
+if(process.platform === 'darwin') {
+
+  const dest = path.join(app.getPath('userData'), 'app-runtime-0.0.11')
+  MONOREPO_ROOT = dest
+  if(!fs.existsSync(dest)) {
+    fs.cpSync(__dirname, dest, {recursive: true})
+  }
+} else {
+  MONOREPO_ROOT = path.resolve(__dirname, '../../', projectDir)
+}
+
+
 let ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
 
-if (!fs.existsSync(ENTRYPOINT)) { //if the entrypoint is not found in the project root, try to find it in the current directory
-  ENTRYPOINT = path.resolve(__dirname, path.join('./', 'main.js'))
+if (!fs.existsSync(ENTRYPOINT)) {
+  ENTRYPOINT = path.resolve(__dirname, 'main.js')
   if (!fs.existsSync(ENTRYPOINT)) {
     console.error(`❌ Entrypoint not found on ${ENTRYPOINT}`)
     process.exit(1)
@@ -18,6 +30,5 @@ if (!fs.existsSync(ENTRYPOINT)) { //if the entrypoint is not found in the projec
 
 const customRequire = Module.createRequire(ENTRYPOINT)
 
-// Arrancamos la app real
 console.log(`🚀 Running ${ENTRYPOINT}`)
 customRequire(ENTRYPOINT)
