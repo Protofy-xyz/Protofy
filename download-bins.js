@@ -37,7 +37,7 @@ const targets = {
     }
   },
   mac: {
-    url: `${baseUrl}/node-${version}-darwin-x64.tar.gz`,
+    url: `${baseUrl}/node-${version}-darwin-arm64.tar.gz`,
     out: 'node',
     extract: async (archivePath, outputPath) => {
       await tar.x({
