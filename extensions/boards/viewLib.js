@@ -247,7 +247,7 @@ const boardImage = ({ src, alt = '' }) => {
 };
 
 const markdown = (card) => {
-  return reactCard(`
+    return reactCard(`
 function Widget() {
   const text = data?.value ?? '';
   return (
@@ -345,25 +345,9 @@ const youtubeEmbed = ({ url }) => {
   `;
 };
 
-const cardAction = ({ data, cardIcon }) => {
-    const margin = 10;
+const paramsForm = ({ data }) => {
     const allKeys = Object.keys(data.params || {});
-    const longestKey = allKeys.reduce((acc, cur) => (
-        cur.length > acc.length ? cur : acc
-    ), '');
-    const baseLabelWidth = longestKey.length * 8 + margin;
-    return `
-     <div style="
-        display: flex;
-        width: 99%;
-        height: ${data.displayResponse ? "100%": "auto"};
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-    ">
-        ${cardIcon ? icon({ name: cardIcon.name, size: cardIcon.size, color: cardIcon.color }) : ''}
-        <form
+    return `<form
             style="width: 100%; margin-top: 15px;"
             onsubmit='window.executeAction(event, "${data.name}")'
         >
@@ -427,7 +411,7 @@ const cardAction = ({ data, cardIcon }) => {
     }).join('')
         }
 
-            <button
+            ${data.triggers?.manual ||data.type == 'action' ? `<button
                 class="no-drag"
                 type="submit"
                 style="
@@ -451,34 +435,40 @@ const cardAction = ({ data, cardIcon }) => {
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
                 <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
-                    ${data.layout?.buttonLabel ? data.layout.buttonLabel : "Run"}
+                    ${data.layout?.buttonLabel ? data.layout.buttonLabel : (data.triggers?.manual ?? "Run")}
                 </a>
-            </button>
-        </form>
+            </button>`: ``}
+        </form>`
+}
 
-        <div 
-            id="${data.name + '_response'}"
-            style="
-                overflow: auto;
-                flex: 1;
-                height: '100%';
-                width: 100%;
-                display: ${data.displayResponse ? 'flex' : 'none'};
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                font-size: 30px;
-                font-weight: bold;
-                margin-top: 20px;
-                white-space: pre-wrap:
-            ">${jsonToDiv(data.value ?? '', 0, 2)}</div>
-        </div>
+const cardAction = ({ data }) => {
+    const value = data.value
+    let fullHeight = false;
+    console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
+        fullHeight = true;
+    }
+    return `
+     <div style="
+        display: flex;
+        width: 99%;
+        height: ${fullHeight ? '100%' : 'auto'};
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    ">
 
+        ${data.displayResponse ? cardValue({
+            value: data.value ?? 'N/A'
+        }):''}
+
+        ${data.params && Object.keys(data.params).length > 0 ? paramsForm({data}): ''}
     </div>
     `;
 };
 
-const cardValue = ({ value, style = '' }) => {
+const cardValue = ({ value, style = '', id=null }) => {
     let fullHeight = false;
     //check if value is string, number or boolean
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
@@ -486,7 +476,7 @@ const cardValue = ({ value, style = '' }) => {
         fullHeight = true;
     }
     return `
-        <div style="
+        <div ${id?'id="'+id+'"':''} style="
             height: ${fullHeight ? '100%' : 'auto'};
             width: 100%;
             display: flex;

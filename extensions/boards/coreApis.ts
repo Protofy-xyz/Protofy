@@ -403,7 +403,7 @@ export default async (app, context) => {
 
     const reloadBoard = async (boardId) => {
         // console.log('**************Reloading board: ', boardId)
-        const states = await context.state.getStateTree();
+        const states = (await context.state.getStateTree()) || {};
         const fileContent = await getBoard(boardId);
 
         if (!fileContent.cards || !Array.isArray(fileContent.cards)) {
@@ -417,15 +417,12 @@ export default async (app, context) => {
                 continue;
             }
             try {
-                if (card.type === 'value') {
+                if (card.type == 'value' || card.triggers && card.triggers.interval && card.triggers.interval == 'auto') {
                     if (!card.rulesCode) {
                         // logger.info({ card }, "No rulesCode for value card: " + card.key);
                         continue;
                     }
-                    if (!states) {
-                        // logger.info({ card }, "No states, omitting value for card " + card.key);
-                        continue;
-                    }
+
                     // logger.info({ card }, "Evaluating rulesCode for card: " + card.key);
                     if (!memory[card.key]) {
                         memory[card.key] = {}
@@ -585,7 +582,13 @@ export default async (app, context) => {
                 ${action.rulesCode}
             `);
 
-            const response = await wrapper(states, req.query, token, API);
+            let response = await wrapper(states, req.query, token, API);
+
+            //the real value could by in responseKey
+            if(action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
+                response = response[action.responseKey];
+            }
+
             //get previous value from state
             const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
             if (response !== prevValue) {

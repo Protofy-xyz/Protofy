@@ -52,6 +52,7 @@ export const automation = async (options: {
             tag: options.tags && options.tags.length > 0 ? options.tags[0] : 'system',
             description: options.description ?? "",
             params: options.automationParams ?? {},
+            responseKey: 'result',
             emitEvent: true,
             token: token
         })

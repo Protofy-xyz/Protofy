@@ -31,7 +31,6 @@ export const DashboardCard = ({ children, id, title, cardActions = <></>, titleP
                     w="100%"
                     btrr={9}
                     btlr={9}
-                    ml={15}
                     mt={10}
                     h={20}
                     ai="center"
@@ -40,7 +39,7 @@ export const DashboardCard = ({ children, id, title, cardActions = <></>, titleP
                 {title ? (
                     <Paragraph flex={1} fow="500" textOverflow={"ellipsis"} textAlign="center" overflow="hidden" whiteSpace={"nowrap"}fos={"$4"}>{title}</Paragraph>
                 ) : null}
-                    <XStack position="absolute" right={0} className="no-drag" mr="$6" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
+                    <XStack position="absolute" right={0} className="no-drag" mr="$3.5" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
                         {cardActions}
                     </XStack>
                 </XStack>}

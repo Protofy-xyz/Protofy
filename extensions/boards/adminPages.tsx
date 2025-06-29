@@ -169,11 +169,7 @@ const Board = ({ board, icons }) => {
           cleanedParams[key] = params[key];
         }
       }
-      const response = await window['onRunListeners'][card](card, cleanedParams);
-      const responseElement = document.getElementById(card + '_response');
-      if (responseElement) {
-        responseElement.innerHTML = jsonToDiv(response, 0, 2);
-      }
+      await window['onRunListeners'][card](card, cleanedParams);
     };
   }, [])
 

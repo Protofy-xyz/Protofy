@@ -14,7 +14,8 @@ export const addAction = async (options: {
     url: string,
     emitEvent?: boolean,
     receiveBoard?: boolean,
-    token?: string
+    token?: string,
+    responseKey?: string,
 }) => {
     const group = options.group || 'system'
     const name = options.name
@@ -25,6 +26,7 @@ export const addAction = async (options: {
     const chunk = options.chunk || 'actions'
     const method = options.method || 'get'
     const receiveBoard = options.receiveBoard || false
+    const responseKey = options.responseKey
 
     if(!name) {
         logger.error({}, "Action name is required");
@@ -50,6 +52,7 @@ export const addAction = async (options: {
         method: method,
         ...(receiveBoard && {receiveBoard: receiveBoard}),
         token: options.token || null,
+        ...((responseKey !== undefined) && {responseKey: responseKey}),
     }
     
     if(options.token) {
