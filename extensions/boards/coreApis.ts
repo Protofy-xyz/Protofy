@@ -263,6 +263,7 @@ const getDB = (path, req, session) => {
         },
 
         async put(key, value) {
+
             // try to create the board file in the boards folder
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
@@ -272,7 +273,10 @@ const getDB = (path, req, session) => {
                     const { value, ...rest } = card;
                     return rest;
                 }
+                return card
             })
+
+
 
             const filePath = BoardsDir(getRoot(req)) + key + ".json"
 
@@ -304,8 +308,9 @@ boardConnect(run)`
             try {
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
                 //register actions for each card
+                console.log('cards: ', value.cards)
                 if (value.cards && Array.isArray(value.cards)) {
-                    const actionsCards = value.cards.filter(c => c.type === 'action')
+                    const actionsCards = value.cards.filter(c => c && c.type === 'action')
                     for (let i = 0; i < actionsCards.length; i++) {
                         const card = actionsCards[i];
                         console.log("Adding action: ", JSON.stringify(card, null, 4))
@@ -370,7 +375,7 @@ export default async (app, context) => {
         requiresAdmin: ['*'],
         onAfterUpdate: async (board) => {
             const actions = await context.state.get({ group: 'boards', tag: board.name, chunk: 'actions', defaultValue: {} });
-            Manager.updateActions('../../data/boards/' + board.name + '.js', actions)
+            Manager.update('../../data/boards/' + board.name + '.js', 'actions', null, actions)
         }
     })
     class HttpError extends Error {
@@ -440,7 +445,7 @@ export default async (app, context) => {
                         // logger.info({ newValue: value, oldValue: states['boards'][boardId] }, "Setting value for card " + card.key);
                         card.value = value;
                         context.state.set({ group: 'boards', tag: boardId, name: card.name, value: value, emitEvent: true });
-                        Manager.update('../../data/boards/' + boardId + '.js', states.boards[boardId] ?? {}, card.name);
+                        Manager.update('../../data/boards/' + boardId + '.js', 'states', card.name, value);
                     }
                     // }
                 }
@@ -630,11 +635,13 @@ export default async (app, context) => {
     app.get('/api/core/v1/boards/:boardId/autopilot/on', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
 
-        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', req.params.boardId, async () => {
+        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', async () => {
             const states = await context.state.getStateTree();
-            return states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {};
-        }, async () => {
-            return await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} });
+            return {
+                boardId: req.params.boardId,
+                states: states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {},
+                actions: await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} })
+            }
         }, () => {
             autopilotState[boardId] = false;
         })

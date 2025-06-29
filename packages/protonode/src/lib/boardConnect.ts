@@ -3,9 +3,11 @@ const protonode = require('protonode')
 const API = protobase.API
 
 export function boardConnect(run) {
-    let states = {}
-    let actions = []
-    let boardId = null
+    let context = {} as {
+        actions: any;
+        states: any;
+        boardId: string;
+    }
     let log = null
 
     const token = protonode.getServiceToken()
@@ -20,7 +22,7 @@ export function boardConnect(run) {
 
     async function execute_action({ name, params = {} }) {
         console.log('Executing action: ', name, params);
-        const action = actions[name]
+        const action = context.actions[name]
         if (!action) {
             console.error('Action not found: ', name);
             return;
@@ -31,7 +33,7 @@ export function boardConnect(run) {
         console.log('Action: ', action)
 
         if (action.receiveBoard) {
-            params['board'] = boardId;
+            params['board'] = context.boardId;
         }
         //check if the action has configParams and if it does, check if the param is visible
         //if the param is not visible, hardcode the param value to the value in the configParams defaultValue
@@ -59,31 +61,33 @@ export function boardConnect(run) {
         }
     }
 
-    process.on('message', (msg:any) => {
+    process.on('message', (msg: any) => {
         if (msg.type === 'init') {
+            context = msg.context;
             // console.log('[WORKER] Set state:', msg.states, 'and actions:', msg.actions, 'for board:', msg.boardId);
-            states = msg.states;
-            actions = msg.actions;
-            boardId = msg.boardId;
-            log = console.log.bind(console, 'Board log [' + boardId + ']: ');
+            log = console.log.bind(console, 'Board log [' + context.boardId + ']: ');
             if (msg.type === 'init') {
                 try {
-                    run({ states, actions, board: { onChange, execute_action, log, id: boardId } });
+                    run({ ...context, board: { onChange, execute_action, log, id: context.boardId } });
                 } catch (error) {
-                    console.error('Error running board ['+boardId+']:', error);
+                    console.error('Error running board [' + context.boardId + ']:', error);
                 }
             }
         } else if (msg.type === 'update') {
+            console.log(`[WORKER] Update received for chunk: ${msg.chunk}, key: ${msg.key}, value: ${msg.value}`);
+            console.log()
             //msg.key is the key to update, msg.value is the new value
-            states = msg.states
-            if (listeners[msg.key]) {
-                listeners[msg.key].forEach(callback => callback(states[msg.key]));
+            const chunk = msg.chunk
+            const key = msg.key
+            const value = msg.value
+            if (key) {
+                context[chunk][key] = value;
+                if (chunk == 'states' && listeners[key]) {
+                    listeners[key].forEach(callback => callback(context.states[key]));
+                }
+            } else {
+                context[chunk] = value;
             }
-        } else if (msg.type === 'updateActions') {
-            // console.log('[WORKER] Updating actions:', msg.actions);
-            //msg.actions is the new actions array
-            actions = msg.actions;
-            // console.log('[WORKER] Actions updated:', actions);
         }
     });
 }

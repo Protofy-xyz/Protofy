@@ -8,9 +8,8 @@ import { on } from 'events';
 const processes = new Map();
 
 export const Manager = {
-    start: async (file, boardId, getStates, getActions, onExit, skipWatch?) => {
-        const states = await getStates();
-        const actions = await getActions();
+    start: async (file, getContext, onExit, skipWatch?) => {
+        const context = getContext ? await getContext() : {};
         if (processes.has(file)) {
             if (processes.get(file).killed) {
                 processes.delete(file);
@@ -29,7 +28,7 @@ export const Manager = {
         processes.set(file, child);
 
         // Enviar estado inicial
-        child.send({ type: 'init', states, actions, boardId});
+        child.send({ type: 'init', context});
 
         // Escuchar mensajes del hijo (opcional)
         child.on('message', (msg) => {
@@ -60,7 +59,7 @@ export const Manager = {
                     setTimeout(() => {
                         console.log(`[Manager] Restarting board file ${file}`);
                         // Restart the process
-                        Manager.start(file, boardId, getStates, getActions, onExit, true);
+                        Manager.start(file, getContext, onExit, true);
                     }, 500);
                 }, 1000);
 
@@ -85,17 +84,10 @@ export const Manager = {
         }
     },
 
-    update: (file, states, key) => {
+    update: (file, chunk, key?, value?) => {
         const child = processes.get(file);
         if (child) {
-            child.send({ type: 'update', states, key });
-        }
-    },
-
-    updateActions: (file, actions) => {
-        const child = processes.get(file);
-        if (child) {
-            child.send({ type: 'updateActions', actions });
+            child.send({ type: 'update', chunk, key, value });
         }
     }
 };
