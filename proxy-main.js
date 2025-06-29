@@ -8,7 +8,7 @@ const projectDir = 'project'
 let MONOREPO_ROOT
 if(process.platform === 'darwin') {
 
-  const dest = path.join(app.getPath('userData'), 'app-runtime-0.0.11')
+  const dest = path.join(app.getPath('userData'), 'app-runtime-0.0.12')
   MONOREPO_ROOT = dest
   if(!fs.existsSync(dest)) {
     fs.cpSync(__dirname, dest, {recursive: true})
