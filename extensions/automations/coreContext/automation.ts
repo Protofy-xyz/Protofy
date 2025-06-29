@@ -62,7 +62,7 @@ export const automation = async (options: {
             group: 'automations',
             tag: 'actions',
             id: name.split('/').join('_'),
-            templateName: 'Run '+name.split('/').join('_')+' automation',
+            templateName: 'Run '+name.split('/').join('_')+' action',
             name: 'automations_'+name.split('/').join('_'),
             defaults: {
                 name: name.split('/').join('_'),
@@ -70,6 +70,7 @@ export const automation = async (options: {
                 rulesCode: `return execute_action("/api/v1/automations/${name}", userParams)`,
                 params: options.automationParams ?? {},
                 displayResponse: true,
+                responseKey: 'result',
                 type: 'action'
             },
             emitEvent: true,

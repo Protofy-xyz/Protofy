@@ -411,7 +411,7 @@ const paramsForm = ({ data }) => {
     }).join('')
         }
 
-            ${data.triggers?.manual ||data.type == 'action' ? `<button
+            ${data.triggers?.manual || data.type == 'action' ? `<button
                 class="no-drag"
                 type="submit"
                 style="
@@ -463,7 +463,7 @@ const cardAction = ({ data }) => {
             value: data.value ?? 'N/A'
         }):''}
 
-        ${data.params && Object.keys(data.params).length > 0 ? paramsForm({data}): ''}
+        ${paramsForm({data})}
     </div>
     `;
 };
