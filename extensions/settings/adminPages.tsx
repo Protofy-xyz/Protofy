@@ -5,8 +5,17 @@ import { Key } from '@tamagui/lucide-icons';
 import { usePrompt } from 'protolib/context/PromptAtom'
 import { PaginatedData } from 'protolib/lib/SSR';
 import { DataTable2 } from 'protolib/components/DataTable2'
+import { SiteConfig } from '@my/config/dist/AppConfig'
+import {
+  TooltipGroup,
+  XGroup,
+  XStack,
+} from '@my/ui'
+import { ThemeToggle } from 'protolib/components/ThemeToggle'
+import { ColorToggleButton } from 'protolib/components/ColorToggleButton'
 
 const sourceUrl = '/api/core/v1/settings'
+const tooltipDelay = { open: 500, close: 150 }
 
 export default {
   'settings': {
@@ -15,6 +24,11 @@ export default {
         initialItems?.isLoaded ? 'Currently the system returned the following information: ' + JSON.stringify(initialItems.data) : ''
       ))
 
+      const settingsTintSwitcher = SiteConfig.ui?.tintSwitcher
+      const settingsThemeSwitcher = SiteConfig.ui?.themeSwitcher
+      const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
+      const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
+  
       return (<AdminPage title="Keys" pageSession={pageSession}>
         <DataView
           enableAddToInitialData
@@ -23,6 +37,18 @@ export default {
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}
+          toolBarContent={
+            <TooltipGroup delay={tooltipDelay}>
+              <XGroup ml="$2" boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+              {settingsThemeSwitcherEnabled && <XGroup.Item>
+                <ThemeToggle borderWidth={0} chromeless />
+              </XGroup.Item>}
+              {settingsTintSwitcherEnabled && <XGroup.Item>
+                <ColorToggleButton borderWidth={0} chromeless />
+              </XGroup.Item>}
+              </XGroup>
+            </TooltipGroup>
+          }
           name="settings"
           model={SettingModel}
           columns={DataTable2.columns(
