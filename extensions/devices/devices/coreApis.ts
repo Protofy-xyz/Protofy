@@ -8,7 +8,6 @@ import fs from 'fs';
 import path from 'path';
 import { addAction } from "@extensions/actions/coreContext/addAction";
 import { addCard } from "@extensions/cards/coreContext/addCard";
-import { downloadDeviceFirmwareEndpoint } from "../devicesUtils";
 
 export const DevicesAutoAPI = AutoAPI({
     modelName: 'devices',
@@ -272,64 +271,6 @@ export default (app, context) => {
         }
         res.send({value})
     }))
-
-    // app.get('/api/core/v1/devices/:device/yaml', handler(async (req, res, session) => {
-    //     if(!session || !session.user.admin) {
-    //         res.status(401).send({error: "Unauthorized"})
-    //         return
-    //     }
-    //     const devicePath = path.join(devicesPath, req.params.device)
-    //     if(!fs.existsSync(devicePath)){
-    //         res.status(404).send({error: "Not Found"})
-    //         return
-    //     }
-    //     const yaml = fs.readFileSync(path.join(devicePath,"config.yaml"),'utf8')
-    //     res.send({yaml})
-    // }))
-
-    // app.get('/api/core/v1/devices/:device/:compileSessionId/manifest', handler(async (req, res, session) => {
-    //     const db = getDB('devices')
-    //     const deviceInfo = DevicesModel.load(JSON.parse(await db.get(req.params.device)), session)
-    //     const core = await deviceInfo.getCore()
-    //     const mapCore = {
-    //         "esp32": "ESP32",
-    //         "esp8266": "ESP8266",
-    //         "esp32s3": "ESP32-S3",
-    //         "esp32c3": "ESP32-C3",
-    //         "esp32s2": "ESP32-S2" 
-    //     }
-    //     const manifest = {
-    //         "name": `${req.params.device} firmware`,
-    //         "new_install_prompt_erase": true,
-    //         "improv": true,
-    //         "builds": [{
-    //             "chipFamily": mapCore[core],
-    //             "parts": [
-    //                 {"path": downloadDeviceFirmwareEndpoint(req.params.device, req.params.compileSessionId), "offset": "0"},
-    //             ]
-    //         }]
-    //         }
-    //     res.send(JSON.stringify(manifest))
-    // }))
-
-    // app.post('/api/core/v1/devices/:device/yamls', handler(async (req, res, session) => {
-    //     if(!session || !session.user.admin) {
-    //         res.status(401).send({error: "Unauthorized"})
-    //         return
-    //     }
-
-    //     const {yaml} = req.body
-
-    //     registerActions()
-
-    //     if(!fs.existsSync(devicesPath)) fs.mkdirSync(devicesPath)
-    //     const devicePath = path.join(devicesPath, req.params.device)
-    //     if(!fs.existsSync(devicePath)) fs.mkdirSync(devicePath)
-    //     fs.writeFileSync(path.join(devicePath,"config.yaml"),yaml)
-    //     //fs.writeFileSync(path.join(devicePath,"config_"+ moment().format("DD_MM_YYYY_HH_mm_ss")+".yaml"),yaml)
-
-    //     res.send({value: yaml})
-    // }))
 
     const processMessage = async (message: string, topic: string) => {
         const splitted = topic.split("/");
