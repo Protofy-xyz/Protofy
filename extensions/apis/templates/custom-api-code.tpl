@@ -43,6 +43,7 @@ export default Protofy("code", async (app: Application, context) => {
         name: '{{codeNameLowerCase}}',
         responseMode: 'manual',
         app: app,
+        sourceFile: '/data/automations/{{codeNameLowerCase}}.ts',
         onRun: async (params, res, name) => {
             context.apis.automationResponse(res, "ok");
         },

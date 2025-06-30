@@ -8,7 +8,7 @@ const AutomationResponse = ({ node = {}, nodeData = {}, children }: any) => {
     ] as Field[]
 
     return (
-        <Node icon={Reply} node={node} isPreview={!node.id} title='Automation Response' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Reply} node={node} isPreview={!node.id} title='Action Response' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

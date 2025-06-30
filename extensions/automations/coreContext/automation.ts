@@ -10,6 +10,7 @@ export const automation = async (options: {
     responseMode?: 'instant' | 'wait' | 'manual',
     automationParams?: any,
     tags?: string[],
+    sourceFile?: string,
     displayName?: string,
     description?: string,
     app: any,
@@ -71,6 +72,7 @@ export const automation = async (options: {
                 params: options.automationParams ?? {},
                 displayResponse: true,
                 responseKey: 'result',
+                ...(options.sourceFile?{sourceFile: options.sourceFile}:{}),
                 type: 'action'
             },
             emitEvent: true,

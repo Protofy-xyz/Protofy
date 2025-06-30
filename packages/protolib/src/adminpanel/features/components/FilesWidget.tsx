@@ -13,7 +13,8 @@ type FilesWidget = {
     extraIcons?: React.ReactElement[],
     title?: string,
     currentFile: string,
-    currentFileName: string
+    currentFileName: string,
+    masksPath?: string
 }
 
 export const FileWidget = ({
@@ -23,11 +24,12 @@ export const FileWidget = ({
     icons = [],
     currentFile,
     currentFileName,
+    masksPath = '',
     ...props
 }: FilesWidget & YStackProps) => {
     const mime = lookup(currentFile)
     if(currentFile === '') return <></>
-    const resolved = useIntent(getIntent('open', 'files', { isModified, extraIcons: icons, name: currentFileName, path: currentFile, mime }))
+    const resolved = useIntent(getIntent('open', 'files', { isModified, extraIcons: icons, name: currentFileName, path: currentFile, mime, masksPath }))
 
     return <>
         <XStack height={20} />

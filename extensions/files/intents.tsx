@@ -115,7 +115,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
   );
 };
 
-const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
+const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath=undefined }) => {
   const [fileContent, setFileContent] = useFileFromAPI(path)
   const searchParams = useSearchParams();
   const query = Object.fromEntries(searchParams.entries());
@@ -144,7 +144,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   }, [fileContent]);
 
   return <AsyncView ready={loaded}>
-    <CodeView defaultMode={defaultMode.current} path={path} extraIcons={extraIcons} sourceCode={sourceCode} fileContent={fileContent} isModified={isModified} setIsModified={setIsModified}>
+    <CodeView masksPath={masksPath} defaultMode={defaultMode.current} path={path} extraIcons={extraIcons} sourceCode={sourceCode} fileContent={fileContent} isModified={isModified} setIsModified={setIsModified}>
       <SaveButton
         onSave={() => originalSourceCode.current = sourceCode.current}
         checkStatus={() => sourceCode.current != originalSourceCode.current}
@@ -173,7 +173,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified }) => {
   </AsyncView>
 }
 
-export const CodeView = ({ defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
+export const CodeView = ({ masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
@@ -298,7 +298,7 @@ export const CodeView = ({ defaultMode = 'flow', monacoOnMount = (editor, monaco
         config={{ menu: getFlowsMenuConfig(pathname, query) }}
         isModified={isModified}
         rawCodeFromMenu={true}
-        customComponents={getFlowsCustomComponents(pathname, query)}
+        customComponents={getFlowsCustomComponents(masksPath ?? pathname, query)}
         customSnippets={getFlowsCustomSnippets(pathname, query)}
         onEdit={(code) => { onFlowChange(code); sourceCode.current = code }}
         setIsModified={setIsModified}

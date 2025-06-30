@@ -1,4 +1,4 @@
-import { ClipboardList, Pause, Play, Plus, Save, Settings, Trash2, X } from '@tamagui/lucide-icons'
+import { Cable, ClipboardList, Pause, Play, Plus, Save, Settings, Trash2, X} from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult, set } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
@@ -8,7 +8,7 @@ import { PaginatedData, SSR } from "protolib/lib/SSR"
 import { withSession } from "protolib/lib/Session"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme, Spinner } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -25,11 +25,13 @@ import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
 import BoardPreview from 'protolib/components/board/BoardPreview'
 import { Monaco } from 'protolib/components/Monaco'
+import { IconContainer } from 'protolib/components/IconContainer'
 import { usePageParams } from 'protolib/next'
 import { jsonToDiv } from 'protolib/lib/jsonToDiv'
 import { usePendingEffect } from 'protolib/lib/usePendingEffect'
 import { createParam } from 'solito'
 import { AsyncView } from 'protolib/components/AsyncView'
+import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 
 const { useParam, useParams } = createParam()
@@ -46,17 +48,24 @@ const CardIcon = ({ Icon, onPress, ...props }) => {
   </Tinted>
 }
 
-const CardActions = ({ id, onEdit, onDelete }) => {
+const FileWidget = dynamic<any>(() =>
+    import('protolib/adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
+    {loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+);
+
+const CardActions = ({ id, data, onEdit, onDelete, onEditCode }) => {
+
   return <Tinted>
     <XStack pt={"$2"}>
+      {data?.sourceFile && <CardIcon Icon={Cable} onPress={onEditCode} />}
       <CardIcon Icon={Settings} onPress={onEdit} />
       <CardIcon Icon={Trash2} onPress={onDelete} />
     </XStack>
   </Tinted>
 }
 
-const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
-  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
+const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} />} >
     <ActionRunner
       data={data}
       displayResponse={displayResponse}
@@ -102,6 +111,7 @@ const Board = ({ board, icons }) => {
   const [editedCard, setEditedCard] = useState(null)
   const [autopilot, setAutopilot] = useState(board.autopilot)
   const [rulesOpened, setRulesOpened] = useState(false)
+  const [editCode, setEditCode] = useState('')
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
   const breakpointRef = useRef('lg')
@@ -260,6 +270,9 @@ const Board = ({ board, icons }) => {
             setCurrentCard(item);
             setEditedCard(item);
           }}
+          onEditCode={() => {
+            setEditCode(item.sourceFile)
+          }}
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
             const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
@@ -272,6 +285,8 @@ const Board = ({ board, icons }) => {
 
   return (
     <YStack flex={1}>
+
+
       <XStack p="$2" bc="red" als="center" pos="fixed" elevation={10} bw={1} boc="$gray6" animation="quick" bc="$bgPanel" zi={99999} b={rulesOpened ? -200 : 16} gap="$3" br="$5">
         {
           isJSONView
@@ -356,20 +371,49 @@ const Board = ({ board, icons }) => {
           </Dialog.Portal>
         </Dialog>
       </Theme>
-      <AlertDialog
-        acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
-        p="$5"
-        acceptCaption="Delete"
-        setOpen={setIsDeleting}
-        open={isDeleting}
-        onAccept={async (seter) => {
-          await deleteCard(currentCard)
-        }}
-        acceptTint="red"
-        title={`Delete "${currentCard?.name}"`}
-        description={"Are you sure you want to delete this card?"}
-      >
-      </AlertDialog>
+
+
+
+      <Theme reset>
+        <Dialog modal open={editCode} onOpenChange={setEditCode}>
+          <Dialog.Portal zIndex={100000} overflow='hidden'>
+            <Dialog.Overlay />
+            <Dialog.Content
+              bordered
+              elevate
+              animateOnly={['transform', 'opacity']}
+              enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
+              exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
+              gap="$4"
+              w={"90vw"}
+              h={"95vh"}
+              maw={1600}
+            >
+              <FileWidget
+                masksPath={'/workspace/actions'}
+                id={"file-widget-" + editCode}
+                hideCloseIcon={false}
+                isModified={true}
+                setIsModified={() => { }}
+                icons={[
+                  <IconContainer onPress={() => {
+                    setEditCode('')
+                  }}>
+                    <X color="var(--color)" size={"$1"} />
+                  </IconContainer>
+                ]}
+                currentFileName={editCode.split && editCode.split('/').pop()}
+                currentFile={editCode}
+              />
+            </Dialog.Content>
+          </Dialog.Portal>
+        </Dialog>
+      </Theme>
+
+
+
+
+
       <XStack f={1}>
         <YStack f={1}>
           {
