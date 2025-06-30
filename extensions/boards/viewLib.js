@@ -427,7 +427,7 @@ const cardAction = ({ data }) => {
         box-sizing: border-box;
     ">
 
-        ${data.displayResponse ? cardValue({
+        ${data.displayResponse !== false ? cardValue({
             value: data.value ?? 'N/A'
         }):''}
 

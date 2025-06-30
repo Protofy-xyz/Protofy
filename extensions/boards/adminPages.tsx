@@ -20,7 +20,6 @@ import React from 'react'
 import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { CardSelector } from 'protolib/components/board/CardSelector'
 
-import { ValueCardSettings } from 'protolib/components/autopilot/ValueCardSettings'
 import { ActionCardSettings } from 'protolib/components/autopilot/ActionCardSettings'
 import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
@@ -56,21 +55,7 @@ const CardActions = ({ id, onEdit, onDelete }) => {
   </Tinted>
 }
 
-const ValueCard = ({ id, title, html, value, setData=(data, id) =>{}, icon = undefined, color, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
-  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
-    <CardValue
-      id={id}
-      Icon={icon ?? 'tag'}
-      value={value ?? 'N/A'}
-      color={color}
-      html={html}
-      setData={setData}
-      {...data}
-    />
-  </CenterCard>
-}
-
-const ActionCard = ({ id, displayResponse, html, value=undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
+const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
   return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} onDelete={onDelete} onEdit={onEdit} />} >
     <ActionRunner
       data={data}
@@ -105,12 +90,11 @@ const FloatingButton = ({ Icon, beating = false, ...props }) => {
 }
 
 const Board = ({ board, icons }) => {
-
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
   const router = useRouter()
-  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i=>i).filter(key => key != 'addwidget')] : [addCard]))
+  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -211,20 +195,6 @@ const Board = ({ board, icons }) => {
     });
   };
 
-  const setCardContent = (key, content) => {
-    setItems(prevItems => {
-      const newItems = prevItems.map(item => {
-        if (item.key === key) {
-          return { ...item, ...content };
-        }
-        return item;
-      });
-      boardRef.current.cards = newItems;
-      API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
-      return newItems;
-    });
-  }
-
   const onEditBoard = async () => {
     try {
       const newBoard = JSON.parse(boardCode)
@@ -267,26 +237,7 @@ const Board = ({ board, icons }) => {
           </YStack>
         </CenterCard>
       }
-    } else if (item.type == 'value') {
-      return {
-        ...item,
-        content: <ValueCard data={item} html={item.html} color={item.color} icon={item.icon} id={item.key} title={item.name} value={item.value ?? 'N/A'} onDelete={() => {
-          setIsDeleting(true)
-          setCurrentCard(item)
-        }} onEdit={() => {
-          setIsEditing(true)
-          setCurrentCard(item)
-          setEditedCard(item)
-        }}
-
-          setData={(data, id) => {
-            setCardContent(id, data)
-            console.log('setData called with:', data, id);
-          }}
-          containerProps={item.containerProps}
-        />
-      }
-    } else if (item.type == 'action') {
+    } else {
       return {
         ...item,
         content: <ActionCard
@@ -317,7 +268,6 @@ const Board = ({ board, icons }) => {
         />
       };
     }
-    return item
   })
 
   return (
@@ -328,7 +278,7 @@ const Board = ({ board, icons }) => {
             ? <Tinted>
               <FloatingButton
                 Icon={X}
-                iconProps={{color: "$gray9"}}
+                iconProps={{ color: "$gray9" }}
                 onPress={() => removeReplace('json')}
               />
               <FloatingButton
@@ -383,17 +333,12 @@ const Board = ({ board, icons }) => {
               exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
               gap="$4"
               w={"90vw"}
-              h={"90vh"}
-              mah={1200}
-              maw={1400}
+              h={"95vh"}
+              maw={1600}
             >
-              <Dialog.Title>Edit</Dialog.Title>
-              {currentCard && currentCard.type == 'value' && <ValueCardSettings states={states} icons={icons} card={currentCard} onEdit={(data) => {
+              <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
-              }} />}
-              {currentCard && currentCard.type == 'action' && <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
-                setEditedCard(data)
-              }} />}
+              }} />
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
@@ -446,7 +391,7 @@ const Board = ({ board, icons }) => {
                 padding={10}
                 backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
-                  if(breakpointCancelRef.current == breakpointRef.current) {
+                  if (breakpointCancelRef.current == breakpointRef.current) {
                     console.log('Layout change cancelled for breakpoint: ', breakpointRef.current)
                     breakpointCancelRef.current = null
                     return
@@ -454,7 +399,7 @@ const Board = ({ board, icons }) => {
                   console.log('programming layout change: ', breakpointRef.current)
                   clearInterval(dedupRef.current)
                   //small dedup to avoid multiple saves in a short time
-                  if(JSON.stringify(boardRef.current.layouts[breakpointRef.current]) == JSON.stringify(layout)) {
+                  if (JSON.stringify(boardRef.current.layouts[breakpointRef.current]) == JSON.stringify(layout)) {
                     console.log('Layout not changed, skipping save')
                     return
                   }
@@ -483,7 +428,7 @@ const Board = ({ board, icons }) => {
         {
           <XStack position="fixed" animation="quick" right={rulesOpened ? 20 : -1000} top={"70px"} width={810} height="calc(100vh - 100px)">
             <XStack width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={0.9}></XStack>
-            {automationInfo &&<RulesSideMenu automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+            {automationInfo && <RulesSideMenu automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
           </XStack>
         }
       </XStack>
@@ -532,7 +477,7 @@ export default {
           columns={DataTable2.columns(
             DataTable2.column("name", row => row.name, "name")
           )}
-          
+
           model={BoardModel}
           pageState={pageState}
           dataTableGridProps={{

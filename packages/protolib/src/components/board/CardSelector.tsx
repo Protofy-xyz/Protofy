@@ -2,7 +2,6 @@ import { YStack, XStack, Spacer, ScrollView, useThemeName, Input, Text } from '@
 import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
 import { useEffect, useMemo, useState } from 'react';
-import { ValueCardSettings } from '../autopilot/ValueCardSettings';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { AlignLeft, Braces, Copy, Search, ArrowBigDownDash, Activity } from "@tamagui/lucide-icons";
@@ -99,13 +98,10 @@ const iconTable = {
 
 const SecondSlide = ({ card, selected, states, icons, actions, setCard }) => {
   return <YStack mb={"$4"} f={1} mah="1200px" h="64vh">
-    {card?.type == "value" ?
-      <ValueCardSettings states={states} icons={icons} card={card} onEdit={(data) => {
-        setCard(data)
-      }} /> :
-      <ActionCardSettings states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
-        setCard(data)
-      }} />}
+
+    <ActionCardSettings states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
+      setCard(data)
+    }} />
   </YStack>
 }
 

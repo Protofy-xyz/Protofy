@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { AutopilotEditor } from './AutopilotEditor'
 
-export const RuleEditor = ({ displayInput, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData={} }) => {
+export const RuleEditor = ({ actions, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData={} }) => {
     const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
     const [value, setValue] = useState()
   
@@ -40,12 +40,14 @@ export const RuleEditor = ({ displayInput, states, cardData, setCardData, compil
       getRulesCode(true)
     }, [cardData.rules])
   
-    return <AutopilotEditor setRulesCode={(rulesCode) => {
+    return <AutopilotEditor 
+    panels={cardData.type == 'value' ? ['states'] : ['actions', 'states']}
+    setRulesCode={(rulesCode) => {
       setCardData({
         ...cardData,
         rulesCode
       })
-    }} rulesCode={cardData.rulesCode} data={displayInput} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
+    }} rulesCode={cardData.rulesCode} actions={actions} states={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
       setCardData({
         ...cardData,
         rules: cardData.rules?.filter((_, i) => i !== index)
