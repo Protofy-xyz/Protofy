@@ -7,7 +7,7 @@ import {
     Box,
     LayoutDashboard,
     Zap,
-    Wrench,
+    HelpingHand,
     Blocks
 } from '@tamagui/lucide-icons'
 import { MonitorCog as RawMonitorCog } from 'lucide-react'
@@ -46,9 +46,10 @@ export default ({ pages, boards, objects }) => {
         { "name": "Users", "icon": "users", "href": "/workspace/users" },
         { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
         // { "name": "Settings", "icon": Wrench, "href": "/workspace/settings" },
-        { "name": "Services", "icon": Cog, "href": "/workspace/services" },
+        { "name": "Services", "icon": HelpingHand, "href": "/workspace/services" },
         { "name": "Databases", "icon": Database, href: "/workspace/databases" },
-        { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" }
+        { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" },
+        { "name": "Settings", "icon": Cog, "href": "/workspace/settings" }
     ]
 
     const objectsMenu = objectsWithPage.length ? objectsWithPage.map((obj) => {

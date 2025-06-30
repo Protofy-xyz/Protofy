@@ -127,19 +127,6 @@ export const AdminPanel = ({ children }) => {
               />
             ) : null}
 
-            <InteractiveIcon
-              onPress={() => {
-                if (isElectron()) {
-                  window.open("http://localhost:8000/workspace/settings", "_blank");
-                } else {
-                  window.location.href = "/workspace/settings";
-                }
-                
-              }}
-              IconColor="var(--color)"
-              Icon={Cog}
-            />
-
             {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => {
               if (isElectron()) {
                 window['electronAPI'].toggleLogWindow()
