@@ -336,6 +336,21 @@ const Board = ({ board, icons }) => {
 
       <CardSelector addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
+     <AlertDialog
+        acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
+        p="$5"
+        acceptCaption="Delete"
+        setOpen={setIsDeleting}Add commentMore actions
+        open={isDeleting}
+        onAccept={async (seter) => {
+          await deleteCard(currentCard)
+        }}
+        acceptTint="red"
+        title={`Delete "${currentCard?.name}"`}
+        description={"Are you sure you want to delete this card?"}
+      >
+      </AlertDialog>
+      
       <Theme reset>
         <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
           <Dialog.Portal zIndex={100000} overflow='hidden'>
