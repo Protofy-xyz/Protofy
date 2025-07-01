@@ -416,8 +416,10 @@ export default async (app, context) => {
             if(!card) {
                 continue;
             }
+
+            const hasIntervalTrigger = card.triggers && Array.isArray(card.triggers) && card.triggers.some(t => t.type === 'interval' && t.interval === 'auto');
             try {
-                if (card.type == 'value' || card.triggers && card.triggers.interval && card.triggers.interval == 'auto') {
+                if (card.type == 'value' || hasIntervalTrigger) {
                     if (!card.rulesCode) {
                         // logger.info({ card }, "No rulesCode for value card: " + card.key);
                         continue;

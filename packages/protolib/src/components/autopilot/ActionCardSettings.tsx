@@ -12,6 +12,7 @@ import { Markdown } from '../Markdown'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { useUpdateEffect } from 'usehooks-ts'
+import { TriggersEditor } from './TriggersEditor';
 
 export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
@@ -64,6 +65,12 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                   <XStack gap={"$2"} ai={"center"}>
                     <FileCode size={"$1"} />
                     <Text>Rules</Text>
+                  </XStack >
+                </ToggleGroup.Item>
+                <ToggleGroup.Item value="triggers">
+                  <XStack gap={"$2"} ai={"center"}>
+                    <FileCode size={"$1"} />
+                    <Text>Triggers</Text>
                   </XStack >
                 </ToggleGroup.Item>
                 <ToggleGroup.Item value="params">
@@ -164,6 +171,15 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               states={states}
               cardData={cardData}
               setCardData={setCardData}
+            />}
+            {(tab == 'triggers' || !tab) && <TriggersEditor 
+              triggers={cardData.triggers || []}
+              setTriggers={(newTriggers) => {
+                setCardData((prev) => ({
+                  ...prev,
+                  triggers: newTriggers,
+                }))
+              }}
             />}
             {tab == 'params' && <ParamsEditor
               params={cardData.params || {}}
