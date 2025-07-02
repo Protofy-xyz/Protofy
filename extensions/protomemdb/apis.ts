@@ -107,7 +107,7 @@ export default (app, context, inCore?) => {
                     name: "name of the variable to set",
                     value: "value to set"
                 },
-                rulesCode: `return await execute_action("${'/api'+part+'/v1/actions/protomemdb/write'}", userParams)`
+                rulesCode: `await execute_action("${'/api'+part+'/v1/actions/protomemdb/write'}", userParams); return userParams.value;`
             },
             emitEvent: true,
         })
