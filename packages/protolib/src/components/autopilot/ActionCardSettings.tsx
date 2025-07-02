@@ -93,6 +93,20 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                 </ToggleGroup.Item>
               </ToggleGroup>
             </XStack>
+            <XStack pos={"absolute"}   right={30} ai={"center"}>
+              <Label htmlFor="autopilot-switch" mr={"$3"}  >Display response</Label>
+              <Switch
+                id="autopilot-switch"
+                size="$4"
+                checked={cardData.displayResponse}
+                onCheckedChange={(value) => {
+                  setCardData({ ...cardData, displayResponse: value })
+                }}
+                className="no-drag"
+              >
+                <Switch.Thumb className="no-drag" animation="quick" />
+              </Switch>
+            </XStack>
           </XStack>
           <Tinted>
             {tab == 'info' &&
