@@ -4,7 +4,7 @@ const _protocol = typeof window !== 'undefined' ? window.location.protocol : ''
 const SiteConfig = {
     trackingID: 'G-XXXXXXXXXXXX',
     SSR: true, //Server-side rendering
-    documentationVisible: true,
+    documentationVisible: false,
     useLocalDocumentation: false,
     signupEnabled: false,
     defaultWorkspacePage: 'dashboard',
