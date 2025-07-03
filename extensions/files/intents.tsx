@@ -299,7 +299,7 @@ export const CodeView = ({ disableFlowMode=false, masksPath = undefined, default
         config={{ menu: getFlowsMenuConfig(pathname, query) }}
         isModified={isModified}
         rawCodeFromMenu={true}
-        customComponents={getFlowsCustomComponents(masksPath ?? pathname, query)}
+        customComponents={getFlowsCustomComponents(masksPath ? masksPath : pathname, query)}
         customSnippets={getFlowsCustomSnippets(pathname, query)}
         onEdit={(code) => { onFlowChange(code); sourceCode.current = code }}
         setIsModified={setIsModified}
