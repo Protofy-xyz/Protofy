@@ -1,5 +1,5 @@
 // proxy.js
-const system = require('../../system.js')
+const routes = require('../../routes.js')
 const httpProxy = require('http-proxy')
 const protobose = require('protobase')
 const getLogger = protobose.getLogger
@@ -33,7 +33,7 @@ function createProxyServer(name) {
 }
 
 function findResolver(name, req) {
-  return system.services
+  return routes.routers
     .filter(s => !s.disabled)
     .find(r => r.route(req))
 }
