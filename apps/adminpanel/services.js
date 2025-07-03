@@ -13,7 +13,7 @@ const services = [
         disabledRoute: (req) => {
           if (req.url.startsWith('/workspace/') || req.url == '/workspace') {
             let r = req.url.split('?')[0]
-            const file = path.join("/data/pages/", path.resolve(r))
+            const file = path.join("/data/pages/", r)
             return "file://" + file
           }
         }
