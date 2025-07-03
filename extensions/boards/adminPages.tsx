@@ -109,7 +109,7 @@ const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
   const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
-  const [addOpened, setAddOpened] = useState(false)
+  const [addOpened, _setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
@@ -122,6 +122,13 @@ const Board = ({ board, icons }) => {
   const breakpointRef = useRef('lg')
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
+
+  const [addKey, setAddKey] = useState(0)
+
+  const setAddOpened = (value) => {
+    _setAddOpened(value)
+    if(value) setAddKey(prev => prev + 1)
+  }
 
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
@@ -353,7 +360,7 @@ const Board = ({ board, icons }) => {
 
       </XStack>
 
-      <CardSelector board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
      <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
