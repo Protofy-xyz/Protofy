@@ -9,6 +9,7 @@ import { JSONView } from "../JSONView";
 import { useCallback, useMemo, useState } from "react";
 import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
 import { useSettingValue } from "protolib/lib/useSetting";
+import { CodeView } from '@extensions/files/intents';
 
 function flattenObject(obj, prefix = "") {
     let result = [];
@@ -61,6 +62,42 @@ function filterObjectBySearch(data, search) {
     }
 
     return Object.keys(result).length > 0 ? result : undefined;
+}
+
+/**
+ * A partir de un objeto JS, genera una declaración TS
+ * con todas las propiedades opcionales y arrays tipados.
+ */
+function generateStatesDeclaration(statesObj: any): string {
+    function inferType(value: any): string {
+        if (value === null || value === undefined) {
+            return 'any';
+        }
+        switch (typeof value) {
+            case 'string': return 'string';
+            case 'number': return 'number';
+            case 'boolean': return 'boolean';
+            case 'function': return '(...args: any[]) => any';
+        }
+        if (Array.isArray(value)) {
+            // Inferir tipo de elementos y unificarlos si hay varios
+            const types = Array.from(new Set(value.map(inferType)));
+            const itemType = types.length > 0
+                ? types.join(' | ')
+                : 'any';
+            return `Array<${itemType}>`;
+        }
+        // Objeto: todas las claves opcionales
+        const props = Object.entries(value).map(([key, val]) => {
+            const t = inferType(val);
+            // notación "key"?: type
+            return `"${key}"?: ${t}`;
+        });
+        return `{ ${props.join('; ')} }`;
+    }
+
+    const tsType = inferType(statesObj);
+    return `declare const states: ${tsType};`;
 }
 
 const FormattedView = ({ level1Priority = '', level2Priority = '', copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
@@ -177,7 +214,7 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
     const [stateInputMode, setStateInputMode] = useState<"json" | "formatted">("formatted")
     const [stateSearch, setStateSearch] = useState('')
 
-
+    const [reloadMonaco, setReloadMonaco] = useState(0);
 
     const cleanedActions = useMemo(() => {
         const cleaned = {};
@@ -263,7 +300,14 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
         return <YStack gap="$2" ai="flex-start">
             {stateInputMode === "formatted" && <FormattedView level1Priority='boards' level2Priority={board.name} copyIndex={0} onCopy={text => {
                 const parts = text[0].split('->').map(p => p.trim());
-                return 'states' + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
+                let inBoard = false;
+                if(text[0].startsWith('boards -> '+board.name + ' -> ')) {
+                    //skip boards -> boardName ->
+                    parts.splice(0, 2);
+                    inBoard = true;
+                }
+
+                return (!inBoard?'states':'board') + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
             }} data={filteredStateData} />}
             {stateInputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} />}
         </YStack>
@@ -279,18 +323,44 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
                 if (targetBoard && targetBoard === board?.name) {
                     copyVal = val.name
                 }
-                console.log('vaaaaal', val)
+
                 return `execute_action("${copyVal}", {
 ${Object.entries(val.params || {}).map(([key, value]) => {
-return `\t${key}: '' // ${value}`;
-                    }).join(',\n')}
+                    return `\t${key}: '', // ${value}`;
+                }).join('\n')}
 })`
             }} data={actionData} />}
             {inputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredData} />}
         </YStack>
     }, [filteredData, actionData, inputMode, board?.name]);
 
+    const monacoEditor = useMemo(() => {
+        return <Monaco
+            path={'autopilot-rules.js'}
+            darkMode={resolvedTheme === 'dark'}
+            sourceCode={rulesCode}
+            onChange={setRulesCode}
+            onMount={(editor, monaco) => {
+                const decl = generateStatesDeclaration(states);
 
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(`
+${decl}
+declare function execute_action(name_or_url: string, params?: Record<string, any>): void;
+declare const params: Record<string, any>;
+        `);
+
+                if (!reloadMonaco) setReloadMonaco(1);
+            }}
+            options={{
+                folding: false,
+                lineDecorationsWidth: 0,
+                lineNumbersMinChars: 0,
+                lineNumbers: false,
+                minimap: { enabled: false }
+            }}
+        />
+
+    }, [rulesCode, resolvedTheme, reloadMonaco, setRulesCode]);
 
     return (
         <PanelGroup direction="horizontal">
@@ -413,19 +483,7 @@ return `\t${key}: '' // ${value}`;
                     <CustomPanelResizeHandle direction="horizontal" />
                     <Panel defaultSize={isAIEnabled ? 34 : 100} minSize={0} maxSize={100}>
                         <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
-                            <Monaco
-                                path={'autopilot-rules.ts'}
-                                darkMode={resolvedTheme === 'dark'}
-                                sourceCode={rulesCode}
-                                onChange={setRulesCode}
-                                options={{
-                                    folding: false,
-                                    lineDecorationsWidth: 0,
-                                    lineNumbersMinChars: 0,
-                                    lineNumbers: false,
-                                    minimap: { enabled: false }
-                                }}
-                            />
+                            {monacoEditor}
                         </YStack>
                     </Panel>
                 </PanelGroup>

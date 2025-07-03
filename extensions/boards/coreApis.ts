@@ -430,11 +430,16 @@ export default async (app, context) => {
                     if (!memory[card.key]) {
                         memory[card.key] = {}
                     }
-                    const wrapper = new AsyncFunction('states', 'data', 'memory', `
-                        ${card.rulesCode}
+
+                    let rulesCode = card.rulesCode.trim();
+                    if (!rulesCode.startsWith('return ')) {
+                        rulesCode = 'return ' + rulesCode;
+                    }
+                    const wrapper = new AsyncFunction('states', 'board', 'data', 'memory', `
+                        ${rulesCode}
                     `);
 
-                    let value = await wrapper(states, card, memory[card.key]);
+                    let value = await wrapper(states, states?.boards?.[boardId] ?? {}, card, memory[card.key]);
                     // logger.info({ value }, "Value for card " + card.key);
                     // if (value !== states && value != states['boards'][boardId][card.name]) {
                     const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: card.name, defaultValue: null });
@@ -580,12 +585,17 @@ export default async (app, context) => {
             }
 
             const states = await context.state.getStateTree();
-            const wrapper = new AsyncFunction('states', 'userParams', 'token', 'API', `
+            //after trimming empty lines from the beginning or empty spaces, check if the line start with 'return ', if not, add 'return ' at the beginning
+            let rulesCode = action.rulesCode.trim();
+            if (!rulesCode.startsWith('return ')) {
+                rulesCode = 'return ' + rulesCode;
+            }
+            const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
                 ${getExecuteAction(await getActions(), req.params.boardId)}
-                ${action.rulesCode}
+                ${rulesCode}
             `);
 
-            let response = await wrapper(states, req.query, token, API);
+            let response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
 
             //the real value could by in responseKey
             if(action.responseKey && response && typeof response === 'object' && action.responseKey in response) {

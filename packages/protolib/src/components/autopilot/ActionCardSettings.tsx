@@ -170,7 +170,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                 return "rules processed"
               }}
               actions={actions}
-              compiler='getActionCode'
+              compiler={cardData.type == 'value' ? 'getValueCode':'getActionCode'}
               states={states}
               cardData={cardData}
               setCardData={setCardData}

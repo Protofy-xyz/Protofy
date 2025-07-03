@@ -173,15 +173,16 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath=un
   </AsyncView>
 }
 
-export const CodeView = ({ masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
+export const CodeView = ({ disableFlowMode=false, masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
   const toast = useToastController();
   const { resolvedTheme } = useThemeSetting()
-  const [mode, setMode] = useState(defaultMode)
+  const [mode, setMode] = useState(disableFlowMode ? 'code' : defaultMode)
   console.log('sourceCode: ', sourceCode)
   const [reloadMonaco, setReloadMonaco] = useState(0);
+
   const monaco = useMemo(() => {
     return monacoInstance ?? <Monaco
       key={Math.random()}
@@ -199,7 +200,7 @@ export const CodeView = ({ masksPath = undefined, defaultMode = 'flow', monacoOn
 
   const content = <XStack mt={30} f={1} width={"100%"}>
     {/* <Theme name={tint as any}> */}
-    <XStack position="absolute" right={20} top={-32}>
+    {!disableFlowMode && <XStack position="absolute" right={20} top={-32}>
       {mode == 'code' ? <IconContainer onPress={() => setMode('flow')}>
         {/* <SizableText mr={"$2"}>Save</SizableText> */}
         <Workflow color="var(--color)" size={"$1"} />
@@ -209,8 +210,8 @@ export const CodeView = ({ masksPath = undefined, defaultMode = 'flow', monacoOn
           <Code color="var(--color)" size={"$1"} />
         </IconContainer>}
       {children}
-    </XStack>
-    {mode == 'code' ? monaco
+    </XStack>}
+    {mode == 'code' || disableFlowMode ? monaco
       : <Flows
 
         nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {

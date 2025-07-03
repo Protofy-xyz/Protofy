@@ -19,7 +19,7 @@
                 "endAngle": "-270",
                 "aspect": "1.7"
             },
-            "rulesCode": "return states.objects.players.lastEntries"
+            "rulesCode": "states.objects.players.lastEntries"
         },
         {
             "key": "value_1750205567388",
@@ -30,7 +30,7 @@
             "name": "Pie Chart",
             "description": "Displays a pie chart using Recharts",
             "type": "value",
-            "rulesCode": "return states.objects.players.lastEntries",
+            "rulesCode": "states.objects.players.lastEntries",
             "params": {
                 "nameKey": "name",
                 "dataKey": "score"
@@ -49,7 +49,7 @@
                 "nameKey": "name",
                 "dataKey": "score"
             },
-            "rulesCode": "return states.objects.players.lastEntries"
+            "rulesCode": "states.objects.players.lastEntries"
         },
         {
             "key": "value_1750208012341",
@@ -64,7 +64,7 @@
                 "nameKey": "name",
                 "dataKey": "score"
             },
-            "rulesCode": "return states.objects.players.lastEntries"
+            "rulesCode": "states.objects.players.lastEntries"
         },
         {
             "key": "value_1750208806989",
@@ -79,7 +79,7 @@
                 "nameKey": "name",
                 "dataKey": "score"
             },
-            "rulesCode": "return states.objects.players.lastEntries"
+            "rulesCode": "states.objects.players.lastEntries"
         },
         {
             "key": "value_1750209418277",
@@ -94,7 +94,7 @@
                 "nameKey": "name",
                 "dataKey": "score"
             },
-            "rulesCode": "return states.objects.players.lastEntries"
+            "rulesCode": "states.objects.players.lastEntries"
         },
         {
             "key": "value_1750210052045",
@@ -175,16 +175,6 @@
                 "x": 9,
                 "y": 0,
                 "i": "value_1750209418277",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 5,
-                "h": 11,
-                "x": 7,
-                "y": 14,
-                "i": "action_1750209841887",
                 "moved": false,
                 "static": false,
                 "isResizable": true
@@ -272,16 +262,6 @@
                 "isResizable": true
             },
             {
-                "w": 6,
-                "h": 11,
-                "x": 0,
-                "y": 36,
-                "i": "action_1750209841887",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
                 "w": 2,
                 "h": 6,
                 "x": 0,
@@ -354,15 +334,6 @@
                 "x": 0,
                 "y": 89,
                 "i": "value_1750209418277",
-                "moved": false,
-                "static": false
-            },
-            {
-                "w": 1,
-                "h": 16,
-                "x": 0,
-                "y": 15,
-                "i": "action_1750209841887",
                 "moved": false,
                 "static": false
             },

@@ -106,12 +106,15 @@
             "name": "Send message",
             "color": "#74AA9C",
             "description": "send a message to chatGPT",
-            "rulesCode": "return execute_action(\"/api/v1/chatgpt/send/prompt\", { message: userParams.message});",
+            "rulesCode": "execute_action(\"/api/v1/chatgpt/send/prompt\", { message: params.message});",
             "params": {
                 "message": "message"
             },
             "type": "action",
-            "displayResponse": false
+            "displayResponse": false,
+            "value": {
+                "message": "Prompt sent to ChatGPT"
+            }
         },
         {
             "key": "value_1750256790295",
@@ -122,7 +125,7 @@
             "name": "Message response",
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
-            "rulesCode": "return states?.chatGPT?.conversation?.chatResponse",
+            "rulesCode": "states?.chatGPT?.conversation?.chatResponse",
             "type": "value"
         },
         {
