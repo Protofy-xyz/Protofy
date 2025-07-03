@@ -32,10 +32,15 @@ function createProxyServer(name) {
   return { proxy, logger }
 }
 
+function getRoute(resolver, req) {
+  if (resolver.disabled && resolver.disabledRoute) {
+    return resolver.disabledRoute?.(req)
+  }
+  return resolver.route(req)
+}
+
 function findResolver(name, req) {
-  return routes.routers
-    .filter(s => !s.disabled)
-    .find(r => r.route(req))
+  return routes.routers.find(r => getRoute(r, req))
 }
 
 function serveStream(filePath, res) {
@@ -69,7 +74,8 @@ function handleHttp(name, req, res, fallback, proxy, logger) {
   const resolver = findResolver(name, req)
   if (resolver) {
     if (resolver.name !== name) {
-      logger.trace({ url: req.url, target: resolver.route(req) }, 'Proxying request')
+      let target = getRoute(resolver, req)
+      logger.trace({ url: req.url, target: target }, 'Proxying request')
       proxy.web(req, res, { target: resolver.route(req) })
       return true
     }
