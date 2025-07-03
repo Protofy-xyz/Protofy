@@ -4,7 +4,7 @@ import { HTMLView } from "@extensions/services/widgets";
 
 const enableHTML = true
 
-export const ActionRunner = ({ name, data, displayResponse, value = undefined, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)', ...props }) => {
+export const ActionRunner = ({ id = null, setData = (data, id) => { }, name, data, displayResponse, value = undefined, html, caption = "Run", description = "", actionParams = {}, onRun, icon, color = 'var(--color7)', ...props }) => {
     useEffect(() => {
         if (!window['onRunListeners']) window['onRunListeners'] = {}
         window['onRunListeners'][name] = onRun
@@ -26,7 +26,9 @@ export const ActionRunner = ({ name, data, displayResponse, value = undefined, h
             {/* Si hay HTML, renderizarlo */}
             {html?.length > 0 && enableHTML && (
                 <HTMLView style={{ width: "100%", height: "100%" }}
-                    html={html} data={{ ...props, ...data, icon, name, params: actionParams, color, displayResponse, value }} />
+                    html={html} data={{ ...props, ...data, icon, name, params: actionParams, color, displayResponse, value }} setData={(data) => {
+                        setData(data, id)
+                    }} />
             )}
 
             {/* Si NO hay HTML, usar el diseño clásico */}

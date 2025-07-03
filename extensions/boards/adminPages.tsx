@@ -69,9 +69,11 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
   </Tinted>
 }
 
-const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy=() => {}, data = {}, containerProps = {} }) => {
+const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy=() => {}, data = {}, containerProps = {}, setData=(data, id) =>{} }) => {
   return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
+      setData={setData}
+      id={id}
       data={data}
       displayResponse={displayResponse}
       name={name}
@@ -217,6 +219,20 @@ const Board = ({ board, icons }) => {
     });
   };
 
+  const setCardContent = (key, content) => {
+    setItems(prevItems => {
+      const newItems = prevItems.map(item => {
+        if (item.key === key) {
+          return { ...item, ...content };
+        }
+        return item;
+      });
+      boardRef.current.cards = newItems;
+      API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
+      return newItems;
+    });
+  }
+
   const onEditBoard = async () => {
     try {
       const newBoard = JSON.parse(boardCode)
@@ -299,6 +315,12 @@ const Board = ({ board, icons }) => {
           onEditCode={() => {
             setEditCode(item.sourceFile)
           }}
+
+          setData={(data, id) => {
+            setCardContent(id, data)
+            console.log('setData called with:', data, id);
+          }}
+
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
             const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
