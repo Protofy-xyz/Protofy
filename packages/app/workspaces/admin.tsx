@@ -69,7 +69,7 @@ export default ({ pages, boards, objects }) => {
         if (!acc[category]) {
             acc[category] = [];
         }
-        acc[category].push({ "name": board.name.charAt(0).toUpperCase() + board.name.slice(1), "icon": board.icon ?? LayoutDashboard, "href": '/workspace/boards/view?board=' + board.name });
+        acc[category].push({ "name": (board.displayName ?? board.name).charAt(0).toUpperCase() + (board.displayName ?? board.name).slice(1), "icon": board.icon ?? LayoutDashboard, "href": '/workspace/boards/view?board=' + (board.name) });
         return acc;
     }, initialData) : initialData;
 
