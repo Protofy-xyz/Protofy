@@ -1,4 +1,4 @@
-import { Cable, ClipboardList, Pause, Play, Plus, Save, Settings, Trash2, X} from '@tamagui/lucide-icons'
+import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X} from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult, set } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
@@ -34,6 +34,10 @@ import { AsyncView } from 'protolib/components/AsyncView'
 import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 
+const generate_random_id = () => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+}
+
 const { useParam, useParams } = createParam()
 
 const ActionRunner = dynamic(() => import('protolib/components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
@@ -53,19 +57,20 @@ const FileWidget = dynamic<any>(() =>
     {loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
 );
 
-const CardActions = ({ id, data, onEdit, onDelete, onEditCode }) => {
+const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
 
   return <Tinted>
     <XStack pt={"$2"}>
       {data?.sourceFile && <CardIcon Icon={Cable} onPress={onEditCode} />}
+      <CardIcon Icon={Copy} onPress={onCopy} />
       <CardIcon Icon={Settings} onPress={onEdit} />
       <CardIcon Icon={Trash2} onPress={onDelete} />
     </XStack>
   </Tinted>
 }
 
-const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, data = {}, containerProps = {} }) => {
-  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} />} >
+const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy=() => {}, data = {}, containerProps = {} }) => {
+  return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       data={data}
       displayResponse={displayResponse}
@@ -261,6 +266,20 @@ const Board = ({ board, icons }) => {
           title={item.name}
           params={item.params}
           containerProps={item.containerProps}
+          onCopy={() => {
+            //duplicate the card, adding a _x to the name
+            const newCard = {
+              ...item,
+              key: item.key.replace(/_vento_copy_.+$/, '') + '_vento_copy_' + generate_random_id(),
+              name: item.name.replace(/ _\d+$/, '') + ' _' + (parseInt(item.name.match(/_(\d+)$/)?.[1] || '1') + 1)
+            };
+            setItems(prevItems => {
+              const newItems = [...prevItems, newCard].filter(i => i.key !== 'addwidget');
+              boardRef.current.cards = newItems;
+              API.post(`/api/core/v1/boards/${board.name}`, boardRef.current);
+              return newItems;
+            });
+          }}
           onDelete={() => {
             setIsDeleting(true);
             setCurrentCard(item);

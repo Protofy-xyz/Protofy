@@ -88,24 +88,10 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
                 <ToggleGroup.Item value="raw">
                   <XStack gap={"$2"} ai={"center"}>
                     <Braces size={"$1"} />
-                    <Text>Raw</Text>
+                    <Text>Settings</Text>
                   </XStack >
                 </ToggleGroup.Item>
               </ToggleGroup>
-            </XStack>
-            <XStack pos={"absolute"}   right={30} ai={"center"}>
-              <Label htmlFor="autopilot-switch" mr={"$3"}  >Display response</Label>
-              <Switch
-                id="autopilot-switch"
-                size="$4"
-                checked={cardData.displayResponse}
-                onCheckedChange={(value) => {
-                  setCardData({ ...cardData, displayResponse: value })
-                }}
-                className="no-drag"
-              >
-                <Switch.Thumb className="no-drag" animation="quick" />
-              </Switch>
             </XStack>
           </XStack>
           <Tinted>
@@ -186,7 +172,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               cardData={cardData}
               setCardData={setCardData}
             />}
-            {(tab == 'triggers' || !tab) && <TriggersEditor 
+            {(tab == 'triggers' || !tab) && <TriggersEditor
               triggers={cardData.triggers || []}
               setTriggers={(newTriggers) => {
                 setCardData((prev) => ({
@@ -214,32 +200,64 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               }}
             />}
             {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
-            {tab == 'raw' && <Monaco
-              path={"card-" + cardData.name + ".ts"}
-              darkMode={resolvedTheme === 'dark'}
-              sourceCode={JSON.stringify(cardData, null, 2)}
-              onChange={(newCode) => {
-                try {
-                  setCardData(JSON.parse(newCode))
-                } catch (err) {
-                  console.error("Invalid JSON", err)
-                }
-              }}
-              options={{
-                scrollBeyondLastLine: false,
-                scrollbar: {
-                  vertical: 'auto',
-                  horizontal: 'auto',
-                },
-                folding: false,
-                lineDecorationsWidth: 0,
-                lineNumbersMinChars: 0,
-                minimap: { enabled: false },
-                formatOnPaste: true,
-                formatOnType: true,
-              }}
-            />}
+            {tab == 'raw' && <YStack f={1}>
+              {card.type == 'action' && <XStack>
+                <XStack ai="center">
+                  <Label htmlFor="display-value-switch" mr={"$3"}  >Display value</Label>
+                  <Switch
+                    id="display-value-switch"
+                    size="$4"
+                    checked={cardData.displayResponse}
+                    onCheckedChange={(value) => {
+                      setCardData({ ...cardData, displayResponse: value })
+                    }}
+                    className="no-drag"
+                  >
+                    <Switch.Thumb className="no-drag" animation="quick" />
+                  </Switch>
+                </XStack>
+                <XStack ai="center" ml={"$4"}>
+                  <Label htmlFor="display-button-switch" mr={"$3"}>Display button</Label>
+                  <Switch
+                    id="display-button-switch"
+                    size="$4"
+                    checked={cardData.displayButton === undefined ? true : cardData.displayButton}
+                    onCheckedChange={(value) => {
+                      setCardData({ ...cardData, displayButton: value })
+                    }}
+                    className="no-drag"
+                  >
+                    <Switch.Thumb className="no-drag" animation="quick" />
+                  </Switch>
+                </XStack>
+              </XStack>}
 
+              <Monaco
+                path={"card-" + cardData.name + ".ts"}
+                darkMode={resolvedTheme === 'dark'}
+                sourceCode={JSON.stringify(cardData, null, 2)}
+                onChange={(newCode) => {
+                  try {
+                    setCardData(JSON.parse(newCode))
+                  } catch (err) {
+                    console.error("Invalid JSON", err)
+                  }
+                }}
+                options={{
+                  scrollBeyondLastLine: false,
+                  scrollbar: {
+                    vertical: 'auto',
+                    horizontal: 'auto',
+                  },
+                  folding: false,
+                  lineDecorationsWidth: 0,
+                  lineNumbersMinChars: 0,
+                  minimap: { enabled: false },
+                  formatOnPaste: true,
+                  formatOnType: true,
+                }}
+              />
+            </YStack>}
           </Tinted>
 
         </YStack>

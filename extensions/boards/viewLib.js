@@ -413,7 +413,7 @@ const cardAction = ({ data }) => {
     const value = data.value
     let fullHeight = false;
     console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
-    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
+    if (value !== undefined && typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
         fullHeight = true;
     }
     return `
@@ -431,7 +431,7 @@ const cardAction = ({ data }) => {
             value: data.value ?? 'N/A'
         }):''}
 
-        ${paramsForm({data})}
+        ${data.displayButton !== false ? paramsForm({data}): ''}
     </div>
     `;
 };

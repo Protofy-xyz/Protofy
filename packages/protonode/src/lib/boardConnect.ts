@@ -39,7 +39,7 @@ export function boardConnect(run) {
         //if the param is not visible, hardcode the param value to the value in the configParams defaultValue
         if (action.configParams) {
             for (const param in action.configParams) {
-                if (action.configParams[param].visible === false) {
+                if(action.configParams[param].visible === false && action.configParams[param].defaultValue !== '') {
                     params[param] = action.configParams[param].defaultValue
                 }
             }

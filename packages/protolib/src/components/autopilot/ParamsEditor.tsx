@@ -81,8 +81,7 @@ export const ParamsEditor = ({
     setRows((prev) =>
       prev.map((row) => {
         if (row.rowId !== rowId) return row
-        const nextVisible = newValue ? row.visible : true
-        return { ...row, defaultValue: newValue, visible: nextVisible }
+        return { ...row, defaultValue: newValue }
       })
     )
   }, [])
@@ -91,9 +90,6 @@ export const ParamsEditor = ({
     setRows((prev) =>
       prev.map((row) => {
         if (row.rowId !== rowId) return row
-        if (!row.defaultValue && row.visible) {
-          return row
-        }
         return { ...row, visible: !row.visible }
       })
     )
