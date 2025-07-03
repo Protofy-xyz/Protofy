@@ -607,6 +607,8 @@ export default async (app, context) => {
             if (response !== prevValue) {
                 //set the new value in the state
                 await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
+
+                Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
             }
 
             res.json(response);

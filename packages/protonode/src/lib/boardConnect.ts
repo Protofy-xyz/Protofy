@@ -75,7 +75,6 @@ export function boardConnect(run) {
             }
         } else if (msg.type === 'update') {
             console.log(`[WORKER] Update received for chunk: ${msg.chunk}, key: ${msg.key}, value: ${msg.value}`);
-            console.log()
             //msg.key is the key to update, msg.value is the new value
             const chunk = msg.chunk
             const key = msg.key

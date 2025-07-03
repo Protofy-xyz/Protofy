@@ -3,15 +3,33 @@ const { Protofy } = require('protobase')
 
 const run = Protofy("code",
     async ({ states, board }) => {
-        // board.onChange({
-        //     key: 'surname',
-        //     changed: (value) => {
-        //         board.log('Surname changed to:', value);
-        //         board.execute_action({
-        //             name: 'set_age'
-        //         })
-        //     }
-        // })
+            board.execute_action({
+                name: 'time',
+                params: {
+                    time: 1
+                }
+            })
+
+            board.execute_action({
+                name: 'system_state',
+                params: {
+                    name: 'stop'
+                }
+            })
+
+            setInterval(() => {
+                console.log('staaaaate: ', states)
+                if(states.system_state == 'play') {
+                    let time = parseInt(states.time, 10)
+                    time = time + 1
+                    board.execute_action({
+                        name: 'time',
+                        params: {
+                            time: time
+                        }
+                    })
+                }
+            }, 1000)
     }
 )
 

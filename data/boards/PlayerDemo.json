@@ -33,8 +33,8 @@
             "type": "action",
             "name": "stop",
             "displayResponse": false,
-            "rulesCode": "execute_action(\"system_state\", {name: \"stop\"})",
-            "value": "stop"
+            "rulesCode": "execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
+            "value": "1"
         },
         {
             "key": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
@@ -59,6 +59,27 @@
             "displayResponse": false,
             "rulesCode": "execute_action(\"system_state\", {name: \"pause\"})",
             "value": "pause"
+        },
+        {
+            "key": "action_1751541935642",
+            "width": 2,
+            "height": 6,
+            "icon": "clock-1",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "type": "action",
+            "name": "time",
+            "displayResponse": true,
+            "rulesCode": "return params.time",
+            "params": {
+                "time": ""
+            },
+            "configParams": {
+                "time": {
+                    "visible": false,
+                    "defaultValue": ""
+                }
+            },
+            "value": "1"
         }
     ],
     "autopilot": false,
@@ -88,7 +109,7 @@
                 "w": 2,
                 "h": 6,
                 "x": 0,
-                "y": 12,
+                "y": 6,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false,
@@ -98,8 +119,18 @@
                 "w": 2,
                 "h": 6,
                 "x": 0,
-                "y": 18,
+                "y": 12,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 4,
+                "y": 0,
+                "i": "action_1751541935642",
                 "moved": false,
                 "static": false,
                 "isResizable": true
@@ -144,6 +175,14 @@
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751541935642",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
                 "isResizable": true
             }
         ],
