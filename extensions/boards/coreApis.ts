@@ -27,11 +27,11 @@ const memory = {}
 
 export const getExecuteAction = (actions, board = '') => `
 const actions = ${JSON.stringify(actions)}
-async function execute_action(url, params={}) {
-    console.log('Executing action: ', url, params);
-    const action = actions.find(a => a.url === url);
+async function execute_action(url_or_name, params={}) {
+    console.log('Executing action: ', url_or_name, params);
+    const action = actions.find(a => a.url === url_or_name || a.name === url_or_name);
     if (!action) {
-        console.error('Action not found: ', url);
+        console.error('Action not found: ', action.url);
         return;
     }
 
@@ -55,13 +55,13 @@ async function execute_action(url, params={}) {
         if(action.token) {
             token = action.token
         }
-        //console.log('url: ', url+'?token='+token)
-        const response = await API.post(url+'?token='+token, data);
+        //console.log('url: ', action.url+'?token='+token)
+        const response = await API.post(action.url+'?token='+token, data);
         return response.data
     } else {
         const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
-        //console.log('url: ', url+'?token='+token+'&'+paramsStr)
-        const response = await API.get(url+'?token='+token+'&'+paramsStr);
+        //console.log('url: ', action.url+'?token='+token+'&'+paramsStr)
+        const response = await API.get(action.url+'?token='+token+'&'+paramsStr);
         return response.data
     }
 }
@@ -565,7 +565,7 @@ export default async (app, context) => {
     })
 
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
-        try {
+
             const actions = await getBoardActions(req.params.boardId);
             const action = actions.find(a => a.name === req.params.action);
 
@@ -600,14 +600,7 @@ export default async (app, context) => {
             }
 
             res.json(response);
-        } catch (error) {
-            logger.error({ error }, "Error executing action");
-            if (error instanceof HttpError) {
-                res.status(error.status).send({ error: error.message });
-            } else {
-                res.status(500).send({ error: error.message });
-            }
-        }
+
     })
 
     app.get('/api/core/v1/boards/:boardId', requireAdmin(), async (req, res) => {

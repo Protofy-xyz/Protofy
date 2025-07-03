@@ -353,7 +353,7 @@ const Board = ({ board, icons }) => {
 
       </XStack>
 
-      <CardSelector addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
      <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
@@ -385,7 +385,7 @@ const Board = ({ board, icons }) => {
               h={"95vh"}
               maw={1600}
             >
-              <ActionCardSettings actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
+              <ActionCardSettings board={board} actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
               }} />
               <Dialog.Close displayWhenAdapted asChild>

@@ -14,7 +14,7 @@ import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { useUpdateEffect } from 'usehooks-ts'
 import { TriggersEditor } from './TriggersEditor';
 
-export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (data) => { } }) => {
+export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { } }) => {
   const [cardData, setCardData] = useState(card);
   const isSimpleReturnString =
     !cardData.rulesCode ||
@@ -32,6 +32,8 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
       html: code,
     })
   }
+
+  console.log("ActionCardSettings board: ", board)
 
   return (
     <YStack f={1}>
@@ -162,6 +164,7 @@ export const ActionCardSettings = ({ actions, states, card, icons, onEdit = (dat
               }}
             />}
             {(tab == 'rules' || !tab) && <RuleEditor
+              board={board}
               extraCompilerData={{ userParams: cardData.params, actions: actions }}
               onCodeChange={(cardData, states) => {
                 return "rules processed"

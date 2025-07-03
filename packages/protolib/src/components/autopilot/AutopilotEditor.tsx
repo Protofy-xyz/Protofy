@@ -63,84 +63,121 @@ function filterObjectBySearch(data, search) {
     return Object.keys(result).length > 0 ? result : undefined;
 }
 
-const FormattedView = ({ copyIndex = 1, data, hideValue, onCopy = (text) => text }) => {
-  const [showCopied, setShowCopied] = useState<number | null>(null)
+const FormattedView = ({ level1Priority = '', level2Priority = '', copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
+    const [showCopied, setShowCopied] = useState<number | null>(null)
 
-  // Evita recalcular si `data` no cambia
-  const list = useMemo(() => flattenObject(data), [data])
+    // Evita recalcular si `data` no cambia
+    const list = useMemo(() => {
+        if (!data || typeof data !== 'object') return [];
 
-  const handleCopy = useCallback((text: string, index: number) => {
-    const copiedText = onCopy(text)
-    navigator.clipboard.writeText(copiedText)
-    setShowCopied(index)
-    setTimeout(() => setShowCopied(null), 700)
-  }, [onCopy])
+        const orderedData: Record<string, any> = {};
+        const level1Keys = Object.keys(data);
 
-  return (
-    <>
-      {list.map((line, index) => {
-        const isCopied = showCopied === index
-        const keyLabel = line[0]
-        const value = line[copyIndex]
+        const sortedLevel1Keys = [
+            ...(level1Priority && level1Keys.includes(level1Priority) ? [level1Priority] : []),
+            ...level1Keys.filter(k => k !== level1Priority),
+        ];
 
-        return (
-          <XStack
-            key={keyLabel + index}
-            cursor="pointer"
-            p="$2"
-            px="$4"
-            bg="$gray2"
-            gap="$2"
-            br="$4"
-            hoverStyle={{ backgroundColor: "$color5" }}
-            onPress={() => handleCopy(value, index)}
-          >
-            {isCopied && (
-              <Text
-                fos="$4"
-                color="$color7"
-                pos="absolute"
-                left="$4"
-              >
-                copied to clipboard!
-              </Text>
-            )}
+        for (const level1Key of sortedLevel1Keys) {
+            const level1Val = data[level1Key];
+            if (typeof level1Val !== 'object') continue;
 
-            <XStack opacity={isCopied ? 0 : 1} mr="$5">
-              <Text fos="$4">
-                {keyLabel + (hideValue ? '' : ' : ')}
-              </Text>
-              {!hideValue && (
-                <Text fos="$4" color="$color7">
-                  {value}
-                </Text>
-              )}
-            </XStack>
+            orderedData[level1Key] = {};
 
-            <YStack flex={1} hoverStyle={{ opacity: 1 }} opacity={0}>
-              <Copy
-                display="flex"
-                color="$blue8"
-                pos="absolute"
-                r="$1"
-                top={2}
-                size={14}
-              />
-            </YStack>
-          </XStack>
-        )
-      })}
-    </>
-  )
+            const level2Keys = Object.keys(level1Val);
+            const sortedLevel2Keys = [
+                ...(level2Priority && level2Keys.includes(level2Priority) ? [level2Priority] : []),
+                ...level2Keys.filter(k => k !== level2Priority),
+            ];
+
+            for (const level2Key of sortedLevel2Keys) {
+                orderedData[level1Key][level2Key] = level1Val[level2Key];
+            }
+        }
+
+        return flattenObject(orderedData);
+    }, [data, level1Priority, level2Priority]);
+
+    const handleCopy = useCallback((text: string, index: number) => {
+        const copiedText = onCopy(text)
+        navigator.clipboard.writeText(copiedText)
+        setShowCopied(index)
+        setTimeout(() => setShowCopied(null), 700)
+    }, [onCopy])
+
+
+    return (
+        <>
+            {list.map((line, index) => {
+                const isCopied = showCopied === index
+                const keyLabel = line[0]
+                const value = line[copyIndex]
+
+                return (
+                    <XStack
+                        key={keyLabel + index}
+                        cursor="pointer"
+                        p="$2"
+                        px="$4"
+                        bg="$gray2"
+                        gap="$2"
+                        br="$4"
+                        hoverStyle={{ backgroundColor: "$color5" }}
+                        onPress={() => handleCopy(value, index)}
+                    >
+                        {isCopied && (
+                            <Text
+                                fos="$4"
+                                color="$color7"
+                                pos="absolute"
+                                left="$4"
+                            >
+                                copied to clipboard!
+                            </Text>
+                        )}
+
+                        <XStack opacity={isCopied ? 0 : 1} mr="$5">
+                            <Text fos="$4">
+                                {keyLabel + (hideValue ? '' : ' : ')}
+                            </Text>
+                            {!hideValue && (
+                                <Text fos="$4" color="$color7">
+                                    {line[displayIndex] || value}
+                                </Text>
+                            )}
+                        </XStack>
+
+                        <YStack flex={1} hoverStyle={{ opacity: 1 }} opacity={0}>
+                            <Copy
+                                display="flex"
+                                color="$blue8"
+                                pos="absolute"
+                                r="$1"
+                                top={2}
+                                size={14}
+                            />
+                        </YStack>
+                    </XStack>
+                )
+            })}
+        </>
+    )
 }
 
-export const AutopilotEditor = ({ panels=['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
+function getBoardIdFromActionUrl(path: string): string | null {
+    const match = path.match(/^\/api\/core\/v1\/boards\/([^\/]+)\/actions\/.+$/);
+    return match ? match[1] : null;
+}
+
+export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
 
     const [stateInputMode, setStateInputMode] = useState<"json" | "formatted">("formatted")
     const [stateSearch, setStateSearch] = useState('')
+
+
 
     const cleanedActions = useMemo(() => {
         const cleaned = {};
@@ -173,49 +210,85 @@ export const AutopilotEditor = ({ panels=['actions', 'staes'], actions, states, 
 
     const isAIEnabled = useSettingValue('ai.enabled', false);
     const filteredData = useMemo(() => {
-        return filterObjectBySearch(cleanedActions, search)
+        const filtered = filterObjectBySearch(cleanedActions, search)
+        return filtered
     }, [cleanedActions, search]);
     const filteredStateData = useMemo(() => {
-        return filterObjectBySearch(states, stateSearch)
+        const filtered = filterObjectBySearch(states, stateSearch)
+        return filtered
     }, [states, stateSearch]);
 
     const actionData = useMemo(() => {
-        //keep only the first 3 levels of the object, and the last level, set the value to the url of the action
-        const result = {};
-        for (const [level1Key, level1Value] of Object.entries(filteredData || {})) {
+        const result: Record<string, any> = {};
+
+        const level1Priority = ['boards'];
+        const level2Priority = [board.name];
+
+        const level1Keys = Object.keys(filteredData || {});
+        const sortedLevel1Keys = [
+            ...level1Priority.filter(k => level1Keys.includes(k)),
+            ...level1Keys.filter(k => !level1Priority.includes(k))
+        ];
+
+        for (const level1Key of sortedLevel1Keys) {
+            const level1Value = filteredData?.[level1Key];
             if (typeof level1Value === 'object') {
                 result[level1Key] = {};
-                for (const [level2Key, level2Value] of Object.entries(level1Value || {})) {
+
+                const level2Keys = Object.keys(level1Value || {});
+                const sortedLevel2Keys = [
+                    ...level2Priority.filter(k => level2Keys.includes(k)),
+                    ...level2Keys.filter(k => !level2Priority.includes(k))
+                ];
+
+                for (const level2Key of sortedLevel2Keys) {
+                    const level2Value = level1Value?.[level2Key];
                     if (typeof level2Value === 'object') {
                         result[level1Key][level2Key] = {};
+
                         for (const [level3Key, level3Value] of Object.entries(level2Value || {})) {
                             if (typeof level3Value === 'object' && level3Value['url']) {
-                                result[level1Key][level2Key][level3Key] = level3Value['url'];
+                                result[level1Key][level2Key][level3Key] = JSON.stringify(level3Value);
                             }
                         }
                     }
                 }
             }
         }
+
         return result;
-    }, [filteredData]);
+    }, [filteredData, board.name]);
 
     const statesPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
-            {stateInputMode === "formatted" && <FormattedView copyIndex={0} onCopy={text => {
-                const parts = text[0].split('->').map(p => p.trim())
-                return 'states' + parts.map(p => `?.${p}`).join('');
+            {stateInputMode === "formatted" && <FormattedView level1Priority='boards' level2Priority={board.name} copyIndex={0} onCopy={text => {
+                const parts = text[0].split('->').map(p => p.trim());
+                return 'states' + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
             }} data={filteredStateData} />}
             {stateInputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} />}
         </YStack>
-    }, [filteredStateData, stateInputMode]);
+    }, [filteredStateData, stateInputMode, board?.name]);
 
     const actionsPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
-            {inputMode === "formatted" && <FormattedView onCopy={text => 'execute_action("' + text + '", {})'} data={actionData} hideValue={true} />}
+            {inputMode === "formatted" && <FormattedView hideValue={true} onCopy={text => {
+                const val = JSON.parse(text);
+                if (!val || !val.url) return '';
+                const targetBoard = getBoardIdFromActionUrl(val.url);
+                let copyVal = val.url;
+                if (targetBoard && targetBoard === board?.name) {
+                    copyVal = val.name
+                }
+                console.log('vaaaaal', val)
+                return `execute_action("${copyVal}", {
+${Object.entries(val.params || {}).map(([key, value]) => {
+return `\t${key}: '' // ${value}`;
+                    }).join(',\n')}
+})`
+            }} data={actionData} />}
             {inputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredData} />}
         </YStack>
-    }, [filteredData, actionData, inputMode]);
+    }, [filteredData, actionData, inputMode, board?.name]);
 
 
 
