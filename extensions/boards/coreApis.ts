@@ -29,7 +29,7 @@ export const getExecuteAction = (actions, board = '') => `
 const actions = ${JSON.stringify(actions)}
 async function execute_action(url_or_name, params={}) {
     console.log('Executing action: ', url_or_name, params);
-    const action = actions.find(a => a.url === url_or_name || a.name === url_or_name);
+    const action = actions.find(a => a.url === url_or_name || (a.name === url_or_name && a.path == '/boards/${board}/' + a.name));
     if (!action) {
         console.error('Action not found: ', action.url);
         return;
@@ -255,7 +255,7 @@ const getDB = (path, req, session) => {
 
             const tsPath = BoardsDir(getRoot(req)) + key + ".js"
             try {
-                if( fsSync.existsSync(tsPath)) {
+                if (fsSync.existsSync(tsPath)) {
                     await fs.unlink(tsPath)
                 }
             } catch (error) {
@@ -269,7 +269,7 @@ const getDB = (path, req, session) => {
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
             value.cards = (value.cards || []).map(card => {
-                if(card.type === 'value') {
+                if (card.type === 'value') {
                     //remove value from the card
                     const { value, ...rest } = card;
                     return rest;
@@ -404,7 +404,7 @@ export default async (app, context) => {
         // Iterate over cards to get the card content
         for (let i = 0; i < fileContent.cards.length; i++) {
             const card = fileContent.cards[i];
-            if(!card) {
+            if (!card) {
                 continue;
             }
 
@@ -560,48 +560,50 @@ export default async (app, context) => {
     })
 
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
+        const actions = await getBoardActions(req.params.boardId);
+        const action = actions.find(a => a.name === req.params.action);
 
-            const actions = await getBoardActions(req.params.boardId);
-            const action = actions.find(a => a.name === req.params.action);
+        if (!action) {
+            res.send({ error: "Action not found" });
+            return;
+        }
 
-            if (!action) {
-                res.send({ error: "Action not found" });
-                return;
-            }
+        if (!action.rulesCode) {
+            res.send({ error: "No code found for action" });
+            return;
+        }
 
-            if (!action.rulesCode) {
-                res.send({ error: "No code found for action" });
-                return;
-            }
-
-            const states = await context.state.getStateTree();
-            //after trimming empty lines from the beginning or empty spaces, check if the line start with 'return ', if not, add 'return ' at the beginning
-            let rulesCode = action.rulesCode.trim();
-            if (!rulesCode.startsWith('return ')) {
-                rulesCode = 'return ' + rulesCode;
-            }
-            const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
+        const states = await context.state.getStateTree();
+        //after trimming empty lines from the beginning or empty spaces, check if the line start with 'return ', if not, add 'return ' at the beginning
+        let rulesCode = action.rulesCode.trim();
+        if (!rulesCode.startsWith('return ')) {
+            rulesCode = 'return ' + rulesCode;
+        }
+        const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
                 ${getExecuteAction(await getActions(), req.params.boardId)}
                 ${rulesCode}
             `);
 
-            let response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
+        let response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
 
-            //the real value could by in responseKey
-            if(action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
-                response = response[action.responseKey];
-            }
+        //the real value could by in responseKey
+        if (action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
+            response = response[action.responseKey];
+        }
 
-            //get previous value from state
-            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
-            if (response !== prevValue) {
-                //set the new value in the state
-                await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
+        // console.log('Action response: ', response);
+        //get previous value from state
+        const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
+        // console.log('Action Previous value: ', prevValue);
+        if (response !== prevValue) {
+            //set the new value in the state
+            // console.log('Setting new value for action: ', action.name, ' in board: ', req.params.boardId, ' with value: ', response);
+            await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
 
-                Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
-            }
+            Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
+        }
 
-            res.json(response);
+        res.json(response);
 
     })
 
@@ -647,7 +649,7 @@ export default async (app, context) => {
             autopilotState[boardId] = false;
         })
 
-        if(started) {
+        if (started) {
             logger.info(`Autopilot started for board: ${boardId}`);
             res.send({ result: 'started', message: "Board started", board: req.params.boardId });
             autopilotState[boardId] = true;
@@ -686,7 +688,7 @@ export default async (app, context) => {
     app.get('/api/core/v1/boards/:boardId/autopilot/off', requireAdmin(), async (req, res) => {
         const boardId = req.params.boardId;
         const stopped = Manager.stop('../../data/boards/' + req.params.boardId + '.js');
-        if(stopped) {
+        if (stopped) {
             res.send({ result: 'sopped', message: "Board stopped", board: req.params.boardId });
         } else {
             res.send({ result: 'already_stopped', message: "Board already stopped or not running", board: req.params.boardId });
