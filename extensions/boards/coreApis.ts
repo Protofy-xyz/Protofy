@@ -286,19 +286,9 @@ const getDB = (path, req, session) => {
                 const boardFileContent = `const { boardConnect } = require('protonode')
 const { Protofy } = require('protobase')
 
-const run = Protofy("code",
-    async ({ states, board }) => {
-        // board.onChange({
-        //     key: 'surname',
-        //     changed: (value) => {
-        //         board.log('Surname changed to:', value);
-        //         board.execute_action({
-        //             name: 'set_age'
-        //         })
-        //     }
-        // })
-    }
-)
+const run = Protofy("code", async ({ states, board }) => {
+
+})
 
 boardConnect(run)`
                 fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
