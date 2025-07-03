@@ -10,6 +10,10 @@ const path = require('path')
 const mrmime = require('mrmime')
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
+function getRoot() {
+  return path.join(__dirname, "..", "..")
+}
+
 function makeLogger(name) {
   return getLogger(
     name,
@@ -33,8 +37,8 @@ function createProxyServer(name) {
 }
 
 function getRoute(resolver, req) {
-  if (resolver.disabled && resolver.disabledRoute) {
-    return resolver.disabledRoute?.(req)
+  if (resolver.disabled) {
+    return resolver?.disabledRoute?.(req)
   }
   return resolver.route(req)
 }
@@ -75,9 +79,39 @@ function handleHttp(name, req, res, fallback, proxy, logger) {
   if (resolver) {
     if (resolver.name !== name) {
       let target = getRoute(resolver, req)
-      logger.trace({ url: req.url, target: target }, 'Proxying request')
-      proxy.web(req, res, { target: resolver.route(req) })
-      return true
+      if (!target.startsWith("file://")) {
+        logger.trace({ url: req.url, target: target }, 'Proxying request')
+        proxy.web(req, res, { target: resolver.route(req) })
+        return true
+      } else {
+        const filepath = target.slice(7)
+        //static pages fallback
+        let htmlFile = path.join(getRoot(), filepath)
+        console.log("htmlfile", htmlFile)
+        //check if the path is a directory
+        if (fs.existsSync(htmlFile) && fs.statSync(htmlFile).isDirectory()) {
+          //check if there is a file named htmlFile plus html
+          if (!fs.existsSync(htmlFile + '.html') && fs.existsSync(path.join(htmlFile, 'index.html'))) {
+            htmlFile = path.join(htmlFile, 'index.html')
+          }
+        }
+
+        //if the path is a file, check if it has an extension
+        if (!path.extname(htmlFile)) {
+          //if not, assume it's an HTML file
+          htmlFile += '.html'
+        }
+
+        if (fs.existsSync(htmlFile) && fs.statSync(htmlFile).isFile()) {
+          serveStream(htmlFile, res)
+          return true
+        } else {
+          logger.warn({ url: req.url, file: htmlFile }, 'File not found, serving 404')
+          serve404(res)
+          return true
+        }
+
+      }
     }
   } else {
     //static pages fallback
