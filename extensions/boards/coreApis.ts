@@ -576,9 +576,7 @@ export default async (app, context) => {
         const states = await context.state.getStateTree();
         //after trimming empty lines from the beginning or empty spaces, check if the line start with 'return ', if not, add 'return ' at the beginning
         let rulesCode = action.rulesCode.trim();
-        if (!rulesCode.startsWith('return ')) {
-            rulesCode = 'return ' + rulesCode;
-        }
+
         const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
                 ${getExecuteAction(await getActions(), req.params.boardId)}
                 ${rulesCode}

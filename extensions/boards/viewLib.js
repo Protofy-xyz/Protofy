@@ -284,7 +284,7 @@ function Widget() {
       color: "var(--color)"
     }}>
       <Tinted>
-        <FileBrowser />
+        <FileBrowser initialPath={"${card.value}"} />
       </Tinted>
     </div>
   );

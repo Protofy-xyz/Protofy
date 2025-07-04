@@ -14,6 +14,7 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 import { API } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
+import { Spinner } from '@my/ui' 
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
@@ -31,6 +32,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(remarkGfm, 'remarkGfm')
     TransferComponent(API, 'API');
     TransferComponent(FileBrowser, 'FileBrowser');
+    TransferComponent(Spinner, 'Spinner');
 }
 
 

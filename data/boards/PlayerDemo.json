@@ -11,7 +11,7 @@
             "type": "action",
             "name": "system_state",
             "displayResponse": true,
-            "rulesCode": "params.name",
+            "rulesCode": "return params.name",
             "params": {
                 "name": ""
             },
@@ -21,7 +21,7 @@
                     "defaultValue": ""
                 }
             },
-            "value": "stop",
+            "value": "play",
             "displayButton": false
         },
         {
@@ -33,7 +33,7 @@
             "type": "action",
             "name": "stop",
             "displayResponse": false,
-            "rulesCode": "execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
+            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
             "value": "1"
         },
         {
@@ -45,7 +45,7 @@
             "type": "action",
             "name": "play",
             "displayResponse": false,
-            "rulesCode": "execute_action(\"system_state\", {name: \"play\"})",
+            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
             "value": "play"
         },
         {
@@ -57,7 +57,7 @@
             "type": "action",
             "name": "pause",
             "displayResponse": false,
-            "rulesCode": "execute_action(\"system_state\", {name: \"pause\"})",
+            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
             "value": "pause"
         },
         {
@@ -79,7 +79,8 @@
                     "defaultValue": ""
                 }
             },
-            "value": "1"
+            "value": "1",
+            "displayButton": false
         }
     ],
     "autopilot": false,
@@ -109,7 +110,7 @@
                 "w": 2,
                 "h": 6,
                 "x": 0,
-                "y": 6,
+                "y": 12,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false,
@@ -119,7 +120,7 @@
                 "w": 2,
                 "h": 6,
                 "x": 0,
-                "y": 12,
+                "y": 18,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false,
@@ -128,8 +129,8 @@
             {
                 "w": 2,
                 "h": 6,
-                "x": 4,
-                "y": 0,
+                "x": 0,
+                "y": 6,
                 "i": "action_1751541935642",
                 "moved": false,
                 "static": false,
@@ -178,11 +179,13 @@
                 "isResizable": true
             },
             {
-                "i": "action_1751541935642",
-                "x": 0,
-                "y": 0,
                 "w": 2,
                 "h": 6,
+                "x": 0,
+                "y": 18,
+                "i": "action_1751541935642",
+                "moved": false,
+                "static": false,
                 "isResizable": true
             }
         ],
@@ -220,6 +223,15 @@
                 "x": 0,
                 "y": 15,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 1,
+                "x": 0,
+                "y": 20,
+                "i": "action_1751541935642",
                 "moved": false,
                 "static": false
             }
