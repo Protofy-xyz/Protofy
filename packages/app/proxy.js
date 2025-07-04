@@ -87,7 +87,6 @@ function handleHttp(name, req, res, fallback, proxy, logger) {
         const filepath = target.slice(7)
         //static pages fallback
         let htmlFile = path.join(getRoot(), filepath)
-        console.log("htmlfile", htmlFile)
         //check if the path is a directory
         if (fs.existsSync(htmlFile) && fs.statSync(htmlFile).isDirectory()) {
           //check if there is a file named htmlFile plus html
