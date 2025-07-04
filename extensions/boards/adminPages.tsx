@@ -106,6 +106,59 @@ const FloatingButton = ({ Icon, beating = false, ...props }) => {
   </YStack>
 }
 
+const getExecuteAction = (board, rawActions) => {
+  const actions = []
+  const flatten = (obj, path) => {
+    if (obj.url) {
+      actions.push({ ...obj, path: path })
+    } else {
+      for (const key in obj) {
+        flatten(obj[key], path + '/' + key)
+      }
+    }
+  }
+  flatten(rawActions, '')
+  
+  return async (url_or_name, params = {}) => {
+    console.log('Executing action: ', url_or_name, params);
+    const action = actions.find(a => a.url === url_or_name || (a.name === url_or_name && a.path == '/boards/'+board+'/' + a.name));
+    if (!action) {
+      console.error('Action not found: ', url_or_name);
+      return;
+    }
+
+    console.log('Action: ', action)
+
+    if (action.receiveBoard) {
+      params.board = board.name
+    }
+    //check if the action has configParams and if it does, check if the param is visible
+    //if the param is not visible, hardcode the param value to the value in the configParams defaultValue
+    if (action.configParams) {
+      for (const param in action.configParams) {
+        if (action.configParams[param].visible === false && action.configParams[param].defaultValue != '') {
+          params[param] = action.configParams[param].defaultValue
+        }
+      }
+    }
+
+    if (action.method === 'post') {
+      let { token, ...data } = params;
+      if (action.token) {
+        token = action.token
+      }
+      //console.log('url: ', action.url+'?token='+token)
+      const response = await API.post(action.url, data);
+      return response.data
+    } else {
+      const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+      //console.log('url: ', action.url+'?token='+token+'&'+paramsStr)
+      const response = await API.get(action.url + '?' + paramsStr);
+      return response.data
+    }
+  }
+}
+
 const Board = ({ board, icons }) => {
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
@@ -169,6 +222,7 @@ const Board = ({ board, icons }) => {
 
   useEffect(() => {
     window['executeAction'] = async (event, card) => {
+      //This allows to call the action from <ActtionRunner />
       event.preventDefault();
       const formData = new FormData(event.target);
       const params = Object.fromEntries(formData['entries']());
@@ -183,6 +237,9 @@ const Board = ({ board, icons }) => {
     };
   }, [])
 
+  useEffect(() => {
+    window['execute_action'] = getExecuteAction(board.name, actions)
+  }, [actions])
   useUpdateEffect(() => {
     // console.log('///////////////////////////////////////////////////////')
     // console.log('Board states: ', states)
@@ -210,7 +267,7 @@ const Board = ({ board, icons }) => {
     }
   }, [items, board?.layouts])
 
-  boardRef.current.layouts = layouts  
+  boardRef.current.layouts = layouts
 
   const addWidget = async (card) => {
     setItems(prevItems => {

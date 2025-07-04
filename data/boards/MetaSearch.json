@@ -9,12 +9,18 @@
             "width": 2,
             "height": 6,
             "icon": "file-stack",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onDeleteItem={(item, index) => alert(item)} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
             "type": "action",
             "name": "queue",
             "displayResponse": true,
-            "rulesCode": "if(params.action == 'reset') {\r\n    return []\r\n} else if(params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1)\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item])\r\n}",
-            "value": [],
+            "rulesCode": "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = params.index;\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
+            "value": [
+                "furgo.jpg",
+                "protofy.jpg",
+                "factura.jpg",
+                "furgo.jpg",
+                "protofy.jpg"
+            ],
             "params": {
                 "item": "",
                 "action": "action to perform in the queue: push, pop, clear"
@@ -82,12 +88,12 @@
             "width": 2,
             "height": 6,
             "icon": "zap",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value != 'empty' ? boardImage({ src: `${'/public/store/'+data.value}` }):''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value != 'empty' ? boardImage({ src: `${'/public/store/'+data.value}`, style:\"height: 75%\" }):''}\n        ${data.value == 'empty' ? cardValue({value: 'empty'}): ''}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "current_item",
-            "displayResponse": true,
+            "displayResponse": false,
             "rulesCode": "const item = board?.['queue']?.[0] ?? 'empty'\r\nawait execute_action(\"queue\", {\r\n\titem: '', // \r\n\taction: 'pop', // action to perform in the queue: push, pop, clear\r\n})\r\nreturn item",
-            "value": "protofy.jpg",
+            "value": "factura.jpg",
             "displayButton": true,
             "triggers": [
                 {
@@ -212,7 +218,7 @@
             "name": "process",
             "displayResponse": false,
             "rulesCode": "await execute_action(\"thinking\")\r\nconst item = 'http://localhost:8000/public/store/'+board?.['current_item']\r\nlet result = await execute_action(\"/api/core/v1/vision/describe\", {\r\n    url: item,\r\n    prompt: board?.['prompt']\r\n})\r\nconst content = result.replace(/^```json\\s*([\\s\\S]*?)\\s*```$/m, '$1')\r\nawait execute_action(\"/api/v1/actions/metasearch/create\", {\r\n    ...(JSON.parse(content)),\r\n    path: '/data/public/store/'+board?.['current_item']\r\n})\r\nawait execute_action(\"idle\")\r\nreturn content",
-            "value": "{\n    \"one_sentence_description\": \"A woman wearing safety glasses and a mask is using an angle grinder in a workshop.\",\n    \"main_colors\": \"gray, white, black\",\n    \"visible_elements\": [\"woman\", \"angle grinder\", \"workshop\", \"workbench\", \"tools\", \"shelves\", \"safety glasses\", \"mask\", \"laptop\", \"metal parts\", \"grinding wheel\", \"power tools\"],\n    \"addresses\": [],\n    \"people_names\": [],\n    \"type\": \"picture\"\n}"
+            "value": "{\n    \"one_sentence_description\": \"A woman wearing safety glasses and a mask is using a grinder on a metal object in a workshop.\",\n    \"main_colors\": \"gray, white, black\",\n    \"visible_elements\": [\"grinder\", \"workbench\", \"tools\", \"shelves\", \"safety glasses\", \"mask\", \"metal object\", \"laptop\", \"power supply\", \"drill press\", \"lathe\"],\n    \"addresses\": [],\n    \"people_names\": [],\n    \"type\": \"picture\"\n}"
         },
         {
             "key": "action_1751642306167",
@@ -242,7 +248,7 @@
         "lg": [
             {
                 "w": 2,
-                "h": 19,
+                "h": 18,
                 "x": 2,
                 "y": 0,
                 "i": "action_1751638749452",
@@ -254,7 +260,7 @@
                 "w": 2,
                 "h": 5,
                 "x": 0,
-                "y": 19,
+                "y": 24,
                 "i": "action_1751639120194",
                 "moved": false,
                 "static": false,
@@ -264,7 +270,7 @@
                 "w": 2,
                 "h": 7,
                 "x": 0,
-                "y": 12,
+                "y": 0,
                 "i": "action_1751639237192",
                 "moved": false,
                 "static": false,
@@ -272,9 +278,9 @@
             },
             {
                 "w": 2,
-                "h": 8,
+                "h": 13,
                 "x": 0,
-                "y": 0,
+                "y": 7,
                 "i": "action_1751639992343",
                 "moved": false,
                 "static": false,
@@ -334,7 +340,7 @@
                 "w": 2,
                 "h": 4,
                 "x": 0,
-                "y": 8,
+                "y": 20,
                 "i": "action_1751641244774",
                 "moved": false,
                 "static": false,
@@ -364,7 +370,7 @@
                 "w": 2,
                 "h": 5,
                 "x": 2,
-                "y": 19,
+                "y": 18,
                 "i": "value_1751644640071",
                 "moved": false,
                 "static": false,
@@ -477,6 +483,138 @@
                 "isResizable": true
             }
         ],
-        "sm": []
+        "sm": [],
+        "": [
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 0,
+                "i": "action_1751638749452",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 6,
+                "i": "action_1751639120194",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 12,
+                "i": "action_1751639237192",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 18,
+                "i": "action_1751639992343",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 24,
+                "i": "action_1751640229148",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 30,
+                "i": "action_1751640277348",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 36,
+                "i": "action_1751640277348_vento_copy_da6q2neatwgsv0mi6xxb7f",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 42,
+                "i": "action_1751640277348_vento_copy_3vychcftr59a612rdh2ujt",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 48,
+                "i": "value_1751640795802",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 54,
+                "i": "action_1751641244774",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 60,
+                "i": "action_1751641826768",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 66,
+                "i": "action_1751642306167",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 72,
+                "i": "value_1751644640071",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            }
+        ]
     }
 }

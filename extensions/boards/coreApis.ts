@@ -31,7 +31,7 @@ async function execute_action(url_or_name, params={}) {
     console.log('Executing action: ', url_or_name, params);
     const action = actions.find(a => a.url === url_or_name || (a.name === url_or_name && a.path == '/boards/${board}/' + a.name));
     if (!action) {
-        console.error('Action not found: ', action.url);
+        console.error('Action not found: ', url_or_name);
         return;
     }
 
