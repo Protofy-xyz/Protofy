@@ -1,4 +1,4 @@
-import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X} from '@tamagui/lucide-icons'
+import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult, set } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
@@ -10,10 +10,10 @@ import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme, Spinner } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
-import { DashboardGrid } from 'protolib/components/DashboardGrid';
+import { DashboardGrid, useInitialBreakpoint } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
 import { CardValue, CenterCard } from '@extensions/services/widgets'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from 'protolib/components/Tinted'
 import React from 'react'
@@ -34,6 +34,7 @@ import { AsyncView } from 'protolib/components/AsyncView'
 import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 
+
 const generate_random_id = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
@@ -53,8 +54,8 @@ const CardIcon = ({ Icon, onPress, ...props }) => {
 }
 
 const FileWidget = dynamic<any>(() =>
-    import('protolib/adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
-    {loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+  import('protolib/adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
+  { loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
@@ -69,7 +70,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
   </Tinted>
 }
 
-const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy=() => {}, data = {}, containerProps = {}, setData=(data, id) =>{} }) => {
+const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {}, containerProps = {}, setData = (data, id) => { } }) => {
   return <CenterCard title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       setData={setData}
@@ -121,7 +122,8 @@ const Board = ({ board, icons }) => {
   const [editCode, setEditCode] = useState('')
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
-  const breakpointRef = useRef('lg')
+  // const initialBreakPoint = useInitialBreakpoint()
+  const breakpointRef = useRef('') as any
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
 
@@ -129,7 +131,7 @@ const Board = ({ board, icons }) => {
 
   const setAddOpened = (value) => {
     _setAddOpened(value)
-    if(value) setAddKey(prev => prev + 1)
+    if (value) setAddKey(prev => prev + 1)
   }
 
   const { resolvedTheme } = useThemeSetting()
@@ -200,13 +202,15 @@ const Board = ({ board, icons }) => {
     setCurrentCard(null)
   }
 
-  const layouts = {
-    lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 4, doubleH: 12 }, { layout: board?.layouts?.lg }),
-    md: computeLayout(items, { totalCols: 6, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.md }),
-    sm: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 12, doubleW: 1, doubleH: 12 }, { layout: board?.layouts?.sm }),
-  }
+  const layouts = useMemo(() => {
+    return {
+      lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 4, doubleH: 12 }, { layout: board?.layouts?.lg }),
+      md: computeLayout(items, { totalCols: 6, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.md }),
+      sm: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 12, doubleW: 1, doubleH: 12 }, { layout: board?.layouts?.sm }),
+    }
+  }, [items, board?.layouts])
 
-  boardRef.current.layouts = layouts
+  boardRef.current.layouts = layouts  
 
   const addWidget = async (card) => {
     setItems(prevItems => {
@@ -384,11 +388,11 @@ const Board = ({ board, icons }) => {
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
-     <AlertDialog
+      <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
         p="$5"
         acceptCaption="Delete"
-        setOpen={setIsDeleting}Add commentMore actions
+        setOpen={setIsDeleting} Add commentMore actions
         open={isDeleting}
         onAccept={async (seter) => {
           await deleteCard(currentCard)
@@ -398,7 +402,7 @@ const Board = ({ board, icons }) => {
         description={"Are you sure you want to delete this card?"}
       >
       </AlertDialog>
-      
+
       <Theme reset>
         <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
           <Dialog.Portal zIndex={100000} overflow='hidden'>
@@ -499,17 +503,19 @@ const Board = ({ board, icons }) => {
                 backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
                   if (breakpointCancelRef.current == breakpointRef.current) {
-                    console.log('Layout change cancelled for breakpoint: ', breakpointRef.current)
+                    console.log('Layout change cancelled for breakpoint: ', breakpointRef.current, breakpointCancelRef.current)
                     breakpointCancelRef.current = null
                     return
                   }
-                  console.log('programming layout change: ', breakpointRef.current)
-                  clearInterval(dedupRef.current)
+
                   //small dedup to avoid multiple saves in a short time
                   if (JSON.stringify(boardRef.current.layouts[breakpointRef.current]) == JSON.stringify(layout)) {
                     console.log('Layout not changed, skipping save')
                     return
                   }
+
+                  console.log('programming layout change: ', breakpointRef.current)
+                  clearInterval(dedupRef.current)
                   dedupRef.current = setTimeout(() => {
                     console.log('Layout changed: ', breakpointRef.current)
                     console.log('Prev layout: ', boardRef.current.layouts[breakpointRef.current])
@@ -524,6 +530,9 @@ const Board = ({ board, icons }) => {
                   breakpointRef.current = bp
                   //after changing breakpoint a onLaoutChange is triggered but its not necessary to save the layout
                   breakpointCancelRef.current = bp
+                  setTimeout(() => {
+                    breakpointCancelRef.current = null //reset the cancel flag after 1 second
+                  }, 1000)
                 }}
               />
           }
