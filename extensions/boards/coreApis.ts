@@ -396,7 +396,7 @@ export default async (app, context) => {
         // console.log('**************Reloading board: ', boardId)
         const states = (await context.state.getStateTree()) || {};
         const fileContent = await getBoard(boardId);
-
+        
         if (!fileContent.cards || !Array.isArray(fileContent.cards)) {
             return fileContent;
         }
@@ -935,6 +935,25 @@ return card({
             description: 'Render formatted markdown using ReactMarkdown',
             type: 'value',
             html: "return markdown(data)",
+            editorOptions: {
+                defaultTab: "value"
+            },
+        },
+        emitEvent: true
+    });
+
+        addCard({
+        group: 'board',
+        tag: 'filebrowser',
+        id: 'filebrowser',
+        templateName: 'Display a file browser',
+        name: 'board_filebrowser',
+        defaults: {
+            name: 'File Browser',
+            icon: 'folder-search',
+            description: 'Render a file browser',
+            type: 'value',
+            html: "return fileBrowser(data)",
             editorOptions: {
                 defaultTab: "value"
             },
