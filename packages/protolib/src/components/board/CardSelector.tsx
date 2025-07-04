@@ -126,23 +126,24 @@ return card({
 `
 }
 
-const extraCards = [{
-  defaults: {
-    type: 'value',
-    name: 'value'
-  },
-  name: 'Display value',
-  id: 'value'
-},
-{
-  defaults: {
-    type: 'action',
-    name: 'action',
-    displayResponse: true
-  },
-  name: 'Invoques an action',
-  id: 'action'
-}]
+const extraCards = [
+  {
+    defaults: {
+      type: 'action',
+      name: 'card',
+      displayResponse: true
+    },
+    name: 'Empty card',
+    id: 'action'
+  }
+  , {
+    defaults: {
+      type: 'value',
+      name: 'value'
+    },
+    name: 'Display a value',
+    id: 'value'
+  }]
 
 function flattenTree(obj) {
   let leaves = [];
