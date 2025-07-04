@@ -9,15 +9,15 @@
             "width": 2,
             "height": 6,
             "icon": "file-stack",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onDeleteItem={(item, index) => alert(item)} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onClear={(items) => execute_action('queue', {action: 'clear'})} onDeleteItem={(item, index) => execute_action('queue', {action: 'remove', index})} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
             "type": "action",
             "name": "queue",
             "displayResponse": true,
-            "rulesCode": "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = params.index;\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
+            "rulesCode": "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
             "value": [
+                "factura.jpg",
                 "furgo.jpg",
                 "protofy.jpg",
-                "factura.jpg",
                 "furgo.jpg",
                 "protofy.jpg"
             ],
@@ -483,138 +483,6 @@
                 "isResizable": true
             }
         ],
-        "sm": [],
-        "": [
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 0,
-                "i": "action_1751638749452",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 6,
-                "i": "action_1751639120194",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 12,
-                "i": "action_1751639237192",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 18,
-                "i": "action_1751639992343",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 24,
-                "i": "action_1751640229148",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 30,
-                "i": "action_1751640277348",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 36,
-                "i": "action_1751640277348_vento_copy_da6q2neatwgsv0mi6xxb7f",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 42,
-                "i": "action_1751640277348_vento_copy_3vychcftr59a612rdh2ujt",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 48,
-                "i": "value_1751640795802",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 54,
-                "i": "action_1751641244774",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 60,
-                "i": "action_1751641826768",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 66,
-                "i": "action_1751642306167",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            },
-            {
-                "w": 2,
-                "h": 6,
-                "x": 0,
-                "y": 72,
-                "i": "value_1751644640071",
-                "moved": false,
-                "static": false,
-                "isResizable": true
-            }
-        ]
+        "sm": []
     }
 }

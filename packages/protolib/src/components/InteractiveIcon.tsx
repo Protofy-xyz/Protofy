@@ -9,13 +9,16 @@ export const InteractiveIcon = ({ Icon, IconColor = 'var(--color8)', DisabledIco
 
   return (
     <XStack cursor={disabled ? "dafault" : "pointer"} {...props}>
-      <Stack
+
+      <XStack
+        ai='center' jc='center'
         o={0.8}
         br={"$5"} p={"$2"}
         als="flex-start" cursor={disabled ? "dafault" : "pointer"}
         pressStyle={!disabled ? { o: 0.7 } : {}}
         hoverStyle={!disabled ? { o: 1, bc: "$color5" } : {}
         }>
+                {props.children}
         {mode == "react" && <Icon size={size} color={disabled ? DisabledIconColor : IconColor} strokeWidth={2} />}
         {mode == "string" && <div style={{
                     width: size+"px",
@@ -30,7 +33,7 @@ export const InteractiveIcon = ({ Icon, IconColor = 'var(--color8)', DisabledIco
                     maskPosition: "center",
                     WebkitMaskPosition: "center"
                 }} />}
-      </Stack>
+      </XStack>
     </XStack>
   );
 };

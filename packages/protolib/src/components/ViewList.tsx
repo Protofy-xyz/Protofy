@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react'
 import type { ColorTokens } from 'tamagui'
 import { Avatar, Button, Circle, H1, H5, Paragraph, ScrollView, Separator, SizableText, Text, View, XStack, YGroup, YStack } from 'tamagui'
 import { FlatList } from 'react-native'
+import { InteractiveIcon } from './InteractiveIcon'
 
 
-export function ViewList({ items, onDeleteItem=(item, index) => {} }) {
+export function ViewList({ items, onDeleteItem = (item, index) => { }, onClear = (items) => { } }) {
   const [itemsList, setItemsList] = useState(items)
 
   const renderItem = ({ item, index }) => (
@@ -14,11 +15,17 @@ export function ViewList({ items, onDeleteItem=(item, index) => {} }) {
 
   return (
     <YStack className='no-drag' height="100%" f={1}>
-      <XStack jc="flex-end" mr={"$4"} ai="center" gap={"$2"} mb={"$2"}>
-        {itemsList.length ? <SizableText fontWeight={"600"} o={0.85} color="$color11">Total: {itemsList.length}</SizableText>: <></>}
-      </XStack>
-      <ScrollView height="100%" width="100%" flex={1} mt={"$2"} mb={"$4"}>
-        {itemsList.length ? <FlatList
+      {itemsList.length ? <XStack>
+        <XStack f={1} ml={"$3"}>
+          <InteractiveIcon onPress={() => onClear(items)} Icon="trash"><SizableText mr="$2">Clear all</SizableText></InteractiveIcon>
+        </XStack>
+        <XStack mr={"$4"} ai="center" gap={"$2"}>
+          <SizableText fontWeight={"500"} o={0.8}>Total: {itemsList.length}</SizableText>
+        </XStack>
+      </XStack> : <></>}
+
+      {itemsList.length ? <ScrollView height="100%" width="100%" flex={1} mt={"$2"} mb={"$4"}>
+        <FlatList
           data={itemsList}
           renderItem={renderItem}
           ItemSeparatorComponent={() => <></>}
@@ -26,11 +33,11 @@ export function ViewList({ items, onDeleteItem=(item, index) => {} }) {
           style={{ flex: 1 }}
           contentContainerStyle={{}}
           showsVerticalScrollIndicator={false}
-        /> : <YStack jc="center" ai="center" height="100%" f={1}  o={1}>
-            <Info color="$color7" size={50} />
-            <Paragraph mt={"$4"} fontSize={"$8"} fontWeight="600" color="$color">Empty queue</Paragraph>
-          </YStack>}
-      </ScrollView>
+        /></ScrollView> : <YStack jc="center" ai="center" height="100%" f={1} o={1}>
+        <Info color="$color7" size={50} />
+        <Paragraph mt={"$4"} fontSize={"$8"} fontWeight="600" color="$color">Empty queue</Paragraph>
+      </YStack>}
+
     </YStack>
 
   )
