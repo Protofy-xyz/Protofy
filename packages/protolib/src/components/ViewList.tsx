@@ -4,10 +4,11 @@ import type { ColorTokens } from 'tamagui'
 import { Avatar, Button, Circle, H1, H5, Paragraph, ScrollView, Separator, SizableText, Text, View, XStack, YGroup, YStack } from 'tamagui'
 import { FlatList } from 'react-native'
 import { InteractiveIcon } from './InteractiveIcon'
+import { useUpdateEffect } from 'usehooks-ts'
 
 
 export function ViewList({ items, onDeleteItem = (item, index) => { }, onClear = (items) => { } }) {
-  const [itemsList, setItemsList] = useState(items)
+  const [itemsList, setItemsList] = useState(items ?? [])
 
   const renderItem = ({ item, index }) => (
     <ViewListItem item={item} index={index} onDeleteItem={onDeleteItem} />
