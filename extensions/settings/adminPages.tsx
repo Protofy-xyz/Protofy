@@ -37,18 +37,6 @@ export default {
           sourceUrl={sourceUrl}
           initialItems={initialItems}
           numColumnsForm={1}
-          toolBarContent={
-            <TooltipGroup delay={tooltipDelay}>
-              <XGroup ml="$2" boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
-              {settingsThemeSwitcherEnabled && <XGroup.Item>
-                <ThemeToggle borderWidth={0} chromeless />
-              </XGroup.Item>}
-              {settingsTintSwitcherEnabled && <XGroup.Item>
-                <ColorToggleButton borderWidth={0} chromeless />
-              </XGroup.Item>}
-              </XGroup>
-            </TooltipGroup>
-          }
           name="settings"
           model={SettingModel}
           columns={DataTable2.columns(

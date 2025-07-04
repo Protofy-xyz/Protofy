@@ -1,10 +1,14 @@
 import { NextLink } from '../NextLink'
 import * as React from 'react'
 import {
+  TooltipGroup,
+  XGroup,
   XStack,
 } from '@my/ui'
 import { SiteConfig } from '@my/config/dist/AppConfig'
 import { isElectron } from '../../lib/isElectron'
+import { ThemeToggle } from '../ThemeToggle'
+import { ColorToggleButton } from '../ColorToggleButton'
 
 export type HeaderContentsProps = {
   logoSize?: number,
@@ -75,6 +79,17 @@ export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, log
       >
         <XStack ai="center" space="$3">
           {rightArea}
+          {(themeSwitcher || tintSwitcher) &&
+            <TooltipGroup delay={tooltipDelay}>
+              <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
+                {themeSwitcher && settingsThemeSwitcherEnabled && <XGroup.Item>
+                  <ThemeToggle borderWidth={0} chromeless />
+                </XGroup.Item>}
+                {tintSwitcher && settingsTintSwitcherEnabled && <XGroup.Item>
+                  <ColorToggleButton borderWidth={0} chromeless />
+                </XGroup.Item>}
+              </XGroup>
+            </TooltipGroup>}
           {showMenu && menu}
         </XStack>
       </XStack>
