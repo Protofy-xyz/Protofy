@@ -1,6 +1,7 @@
 {
     "name": "MetaSearch",
     "displayName": "Meta Search",
+    "icon": "folder-search",
     "hidden": true,
     "cards": [
         {

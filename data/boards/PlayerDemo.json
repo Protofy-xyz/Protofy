@@ -1,6 +1,7 @@
 {
     "name": "PlayerDemo",
     "displayName": "Player Demo",
+    "icon": "gamepad-2",
     "cards": [
         {
             "key": "action_1751494497585",
