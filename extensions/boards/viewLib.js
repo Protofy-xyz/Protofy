@@ -409,7 +409,7 @@ const paramsForm = ({ data }) => {
         </form>`
 }
 
-const cardAction = ({ data }) => {
+const cardAction = ({ data, content }) => {
     const value = data.value
     let fullHeight = false;
     console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
@@ -428,7 +428,7 @@ const cardAction = ({ data }) => {
     ">
 
         ${data.displayResponse !== false ? cardValue({
-            value: data.value ?? 'N/A'
+            value: content ?? data.value ?? 'N/A'
         }):''}
 
         ${data.displayButton !== false ? paramsForm({data}): ''}
