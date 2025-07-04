@@ -16,6 +16,7 @@ import { API } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
 import { Spinner } from '@my/ui' 
 import { ViewList } from 'protolib/components/ViewList';
+import { JSONView } from 'protolib/components/JSONView';
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
@@ -35,6 +36,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(FileBrowser, 'FileBrowser');
     TransferComponent(Spinner, 'Spinner');
     TransferComponent(ViewList, 'ViewList');
+    TransferComponent(JSONView, 'JSONView');
 }
 
 
