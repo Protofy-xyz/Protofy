@@ -214,8 +214,6 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
     const [stateInputMode, setStateInputMode] = useState<"json" | "formatted">("formatted")
     const [stateSearch, setStateSearch] = useState('')
 
-    const [reloadMonaco, setReloadMonaco] = useState(0);
-
     const cleanedActions = useMemo(() => {
         const cleaned = {};
 
@@ -348,8 +346,6 @@ ${decl}
 declare function execute_action(name_or_url: string, params?: Record<string, any>): void;
 declare const params: Record<string, any>;
         `);
-
-                if (!reloadMonaco) setReloadMonaco(1);
             }}
             options={{
                 folding: false,
@@ -360,7 +356,7 @@ declare const params: Record<string, any>;
             }}
         />
 
-    }, [rulesCode, resolvedTheme, reloadMonaco, setRulesCode]);
+    }, [rulesCode, resolvedTheme, setRulesCode]);
 
     return (
         <PanelGroup direction="horizontal">

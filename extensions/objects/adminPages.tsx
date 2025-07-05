@@ -36,11 +36,18 @@ const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession,
         apiUrl = prefix + name
     }
 
+    const fields = objModel?.getObjectFields()
+    let reducedView = false
+    if(!fields || fields.length === 0 || (fields.length === 1 && fields[0] == "id")) {
+        reducedView = true
+    }
     // const {name, prefix} = Objects.inventory.getApiOptions()
     // const apiUrl = prefix + name
     return (<AdminPage title={"Object " + object?.name} workspace={workspace} pageSession={pageSession}>
         {!objExists ? <ErrorMessage msg="Object not found" /> : null}
         {objExists ? <DataView
+            addMode={reducedView? 'raw':'form'}
+            disableViews={reducedView ? ["grid", "list"]:[]}
             sourceUrl={apiUrl}
             initialItems={initialItems}
             numColumnsForm={1}

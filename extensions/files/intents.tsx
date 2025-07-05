@@ -181,14 +181,11 @@ export const CodeView = ({ disableFlowMode=false, masksPath = undefined, default
   const { resolvedTheme } = useThemeSetting()
   const [mode, setMode] = useState(disableFlowMode ? 'code' : defaultMode)
   console.log('sourceCode: ', sourceCode)
-  const [reloadMonaco, setReloadMonaco] = useState(0);
-
   const monaco = useMemo(() => {
     return monacoInstance ?? <Monaco
       key={Math.random()}
       path={path}
       onMount={(editor, monaco) => {
-        if (!reloadMonaco) setReloadMonaco(1)
         monacoOnMount(editor, monaco)
       }}
       options={monacoOptions}
@@ -196,7 +193,7 @@ export const CodeView = ({ disableFlowMode=false, masksPath = undefined, default
       sourceCode={sourceCode.current}
       onChange={(code) => { onCodeChange(code); sourceCode.current = code }}
     />
-  }, [sourceCode.current, path, reloadMonaco, resolvedTheme])
+  }, [sourceCode.current, path, resolvedTheme])
 
   const content = <XStack mt={30} f={1} width={"100%"}>
     {/* <Theme name={tint as any}> */}

@@ -7,6 +7,7 @@ import JSONViewer from './jsonui/JSONViewer'
 import { getPendingResult } from 'protobase'
 import React from 'react'
 import { IconContainer } from './IconContainer'
+import { JSONView } from './JSONView'
 
 export const DataCard = React.forwardRef(({ compact=false, innerContainerProps = {}, extraIcons = [], iconProps = {}, itemCardProps = {}, minimal, json, name, onSave = (content) => { }, onDelete = () => { }, hideDeleteIcon, isTemplate = false, ...props }: any, ref: any) => {
     const { tint } = useTint()
@@ -35,14 +36,14 @@ export const DataCard = React.forwardRef(({ compact=false, innerContainerProps =
 
     const memoizedJSONViewer = useMemo(() => {
         return (
-            <JSONViewer
+            editable ? <JSONViewer
                 compact={compact}
                 key={childKey}
                 onChange={onJsonUpdate}
                 editable={editable}
                 data={content}
                 collapsible
-            />
+            /> : <JSONView src={content} key={childKey} />
         );
     }, [compact, childKey, onJsonUpdate, editable, content]);
 

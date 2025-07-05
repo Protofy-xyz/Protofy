@@ -1,4 +1,4 @@
-import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useMedia } from '@my/ui'
+import { YStack, XStack, Paragraph, Text, Button, Stack, ScrollView, Spacer, ButtonProps, Tooltip, Spinner, useMedia, H3, TextArea } from '@my/ui'
 import { Center } from './Center';
 import { useRemoteStateList } from '../lib/useRemoteState';
 import { AlertDialog } from './AlertDialog';
@@ -10,10 +10,10 @@ import { Notice } from './Notice';
 import { ActiveGroup } from './ActiveGroup';
 import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
-import { forwardRef, useContext, useEffect, useState } from 'react'
+import { forwardRef, useContext, useEffect, useMemo, useState } from 'react'
 import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search } from '@tamagui/lucide-icons'
 import { getErrorMessage, useToastController } from '@my/ui'
-import { useUpdateEffect } from 'usehooks-ts';
+import { useTimeout, useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
 import React from 'react';
 import ActiveRender from "./ActiveRender"
@@ -25,10 +25,12 @@ import ErrorMessage from './ErrorMessage';
 import { Filters, QueryFilters } from './Filters';
 import dynamic from 'next/dynamic'
 import { SearchAIModalButton } from './SearchAIModalButton';
+import { useThemeSetting } from '@tamagui/next-theme'
+import { Monaco } from './Monaco';
 
 const FileWidget = dynamic<any>(() =>
     import('../adminpanel/features/components/FilesWidget').then(module => module.FileWidget),
-    {loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 //uncomment to enable datasheet view (excel like)
@@ -39,22 +41,22 @@ const FileWidget = dynamic<any>(() =>
 
 const DataTableList = dynamic<any>(() =>
     import('./DataTableList').then(module => module.DataTableList),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 const ObjectGrid = dynamic<any>(() =>
     import('./ObjectGrid').then(module => module.ObjectGrid),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 const DataTableCard = dynamic<any>(() =>
     import('./DataTableCard').then(module => module.DataTableCard),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 const EditableObject = dynamic<any>(() =>
     import('./EditableObject').then(module => module.EditableObject),
-    { ssr: false, loading:() => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted>}
+    { ssr: false, loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
 const MapView = dynamic<any>(() =>
@@ -120,6 +122,7 @@ interface DataViewProps {
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
     URLTransform?: (url: string) => string;
+    addMode?: 'form' | 'raw'
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -133,6 +136,30 @@ type DataViewActionButtonProps = {
     icon: any
     description?: string
     id?: string
+}
+
+const RawAddPanel = ({ displayName, onAdd }) => {
+    const { resolvedTheme } = useThemeSetting()
+    const [sourceCode, setSourceCode] = useState('');
+
+    const monacoEditor = useMemo(() => {
+        return <Monaco
+            path={'add.json'}
+            darkMode={resolvedTheme === 'dark'}
+            sourceCode={sourceCode}
+            onChange={setSourceCode}
+            options={{
+                lineDecorationsWidth: 5,
+                lineNumbersMinChars: 0,
+                minimap: { enabled: false }
+            }}
+        />
+
+    }, [resolvedTheme]);
+    return <YStack width="700px" height="60vh">
+        <XStack id="eo-dlg-title">{<H3><Tinted><H3 color="$color9">Add</H3></Tinted>{` ${displayName}`}</H3>}</XStack>
+        { monacoEditor }
+    </YStack>
 }
 
 export const DataViewActionButton = ({ icon, description, id, ...props }: DataViewActionButtonProps & ButtonProps) => {
@@ -192,7 +219,7 @@ const DataViewInternal = forwardRef(({
     onEdit = (data) => data,
     onDelete = (data) => data,
     onAdd = (data) => data,
-    onDataAvailable = (total, currentItems) => {},
+    onDataAvailable = (total, currentItems) => { },
     views = undefined,
     extraViews = [],
     openMode = 'edit',
@@ -220,7 +247,8 @@ const DataViewInternal = forwardRef(({
     objectProps = {},
     refreshOnHotReload = false,
     quickRefresh = false,
-    URLTransform = (url) => url
+    URLTransform = (url) => url,
+    addMode = 'form'
 }: DataViewProps, ref: any) => {
     const displayName = (entityName ?? pluralName) ?? name
     const [state, setState] = useState(pageState ?? {})
@@ -391,7 +419,7 @@ const DataViewInternal = forwardRef(({
                     await API.get(`${sourceUrl}/${key}/delete`);
                     onDelete({ sourceUrl, selected, key })
                 },
-                onSave: async (value,element) => {
+                onSave: async (value, element) => {
                     // console.log("Saving: ", {value,element, sourceUrl})
                     const id = element.getId()
                     const result = await API.post(sourceUrl + '/' + id, value)
@@ -518,7 +546,7 @@ const DataViewInternal = forwardRef(({
                         <ScrollView maxHeight={"90vh"}>
                             <XStack mr="$4">
                                 {/* @ts-ignore */}
-                                <EditableObject
+                                {addMode == 'form' ? <EditableObject
                                     URLTransform={URLTransform}
                                     id={"admin-eo"}
                                     name={name}
@@ -546,7 +574,7 @@ const DataViewInternal = forwardRef(({
                                     icons={icons}
                                     customFields={{ ...customFields, ...customFieldsForms }}
                                     {...objectProps}
-                                />
+                                /> : <RawAddPanel displayName={displayName} />}
                             </XStack>
                         </ScrollView>
                     </YStack>
@@ -663,18 +691,18 @@ const DataViewInternal = forwardRef(({
                                     </XStack>
                                 </XStack>}
                             </XStack>
-                            <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{display: 'none'}}>
-                                <SearchAIModalButton 
-                                    placeholder={"Search in " + name} 
-                                    initialState={search} 
-                                    defaultOpened={true} 
+                            <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{ display: 'none' }}>
+                                <SearchAIModalButton
+                                    placeholder={"Search in " + name}
+                                    initialState={search}
+                                    defaultOpened={true}
                                     onSearch={setSearch}
                                     trigger={
                                         <DataViewActionButton
-                                        id="admin-dataview-add-btn"
-                                        icon={Search}
-                                        description={`Search in ${name}`}
-                                    />
+                                            id="admin-dataview-add-btn"
+                                            icon={Search}
+                                            description={`Search in ${name}`}
+                                        />
                                     }
                                 />
                                 {!hideFilters && <Filters

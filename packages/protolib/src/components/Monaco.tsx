@@ -101,6 +101,8 @@ export const Monaco = ({
             }
         });
 
+        monaco.editor.setTheme(customThemeName); 
+
         // Solo registrar si no se ha hecho ya
         if (!monaco.languages.getLanguages().some(lang => lang.id === 'gherkin')) {
             monaco.languages.register({ id: 'gherkin' });

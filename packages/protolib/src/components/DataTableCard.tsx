@@ -11,6 +11,7 @@ const GridElementCard = ({ index, data, width }) => {
 
     return <Stack key={element.key} width={width}>
         <DataCard
+            backgroundColor={"$bgPanel"}
             compact={true}
             innerContainerProps={{
                 mb: "$3",
