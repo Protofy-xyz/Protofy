@@ -122,7 +122,6 @@ interface DataViewProps {
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
     URLTransform?: (url: string) => string;
-    addMode?: 'form' | 'raw'
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -264,7 +263,6 @@ const DataViewInternal = forwardRef(({
     refreshOnHotReload = false,
     quickRefresh = false,
     URLTransform = (url) => url,
-    addMode = 'form'
 }: DataViewProps, ref: any) => {
     const displayName = (entityName ?? pluralName) ?? name
     const [state, setState] = useState(pageState ?? {})
@@ -562,7 +560,7 @@ const DataViewInternal = forwardRef(({
                         <ScrollView maxHeight={"90vh"}>
                             <XStack mr="$4">
                                 {/* @ts-ignore */}
-                                {addMode == 'form' ? <EditableObject
+                                {state?.view != 'raw' ? <EditableObject
                                     URLTransform={URLTransform}
                                     id={"admin-eo"}
                                     name={name}

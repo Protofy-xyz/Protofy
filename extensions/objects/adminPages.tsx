@@ -46,7 +46,6 @@ const ObjectView = ({ workspace, pageState, initialItems, itemData, pageSession,
     return (<AdminPage title={"Object " + object?.name} workspace={workspace} pageSession={pageSession}>
         {!objExists ? <ErrorMessage msg="Object not found" /> : null}
         {objExists ? <DataView
-            addMode={reducedView? 'raw':'form'}
             disableViews={reducedView ? ["grid", "list"]:[]}
             sourceUrl={apiUrl}
             initialItems={initialItems}
