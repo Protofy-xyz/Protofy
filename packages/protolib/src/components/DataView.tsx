@@ -526,9 +526,11 @@ const DataViewInternal = forwardRef(({
     }
 
 
+    const realActiveView = activeViewIndex == -1 ? 0 : activeViewIndex
+    
     return (<AsyncView atom={currentItems}>
         <YStack ref={ref} height="100%" f={1}>
-            <ActiveGroup initialState={activeViewIndex == -1 ? 0 : activeViewIndex}>
+            <ActiveGroup initialState={realActiveView}>
                 {
                     state.editFile && <FileWidget
                         id={"file-widget-" + getFilenameFromPath(state.editFile ?? '').split('.')[0]}
@@ -560,7 +562,7 @@ const DataViewInternal = forwardRef(({
                         <ScrollView maxHeight={"90vh"}>
                             <XStack mr="$4">
                                 {/* @ts-ignore */}
-                                {state?.view != 'raw' ? <EditableObject
+                                {tableViews[realActiveView]?.name != 'raw' ? <EditableObject
                                     URLTransform={URLTransform}
                                     id={"admin-eo"}
                                     name={name}
