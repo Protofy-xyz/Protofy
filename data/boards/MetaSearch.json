@@ -413,6 +413,106 @@
                 "isResizable": true
             }
         ],
-        "sm": []
+        "sm": [
+            {
+                "w": 1,
+                "h": 11,
+                "x": 0,
+                "y": 4,
+                "i": "action_1751638749452",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 4,
+                "x": 0,
+                "y": 0,
+                "i": "action_1751639120194",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 9,
+                "x": 0,
+                "y": 15,
+                "i": "action_1751639992343",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 3,
+                "x": 0,
+                "y": 24,
+                "i": "action_1751640229148",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 5,
+                "x": 0,
+                "y": 27,
+                "i": "action_1751640277348",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 5,
+                "x": 0,
+                "y": 32,
+                "i": "action_1751640277348_vento_copy_da6q2neatwgsv0mi6xxb7f",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 5,
+                "x": 0,
+                "y": 37,
+                "i": "action_1751640277348_vento_copy_3vychcftr59a612rdh2ujt",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 17,
+                "x": 0,
+                "y": 58,
+                "i": "value_1751640795802",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 16,
+                "x": 0,
+                "y": 42,
+                "i": "action_1751641826768",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 5,
+                "x": 0,
+                "y": 75,
+                "i": "action_1751642306167",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 1,
+                "h": 3,
+                "x": 0,
+                "y": 80,
+                "i": "value_1751644640071",
+                "moved": false,
+                "static": false
+            }
+        ]
     }
 }
