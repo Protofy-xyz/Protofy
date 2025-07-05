@@ -94,19 +94,20 @@ const getDB = (path, req, session) => {
       const validExtensions = ["ts", "py", "php"]
       const root = getRoot(req);
 
-      
       const files = (await fs.readdir(APIDir(root))).filter(f => {
         const fullPath = fspath.join(APIDir(root), f);
         const ext = f.split('.').pop();
         return !fsSync.lstatSync(fullPath).isDirectory() && validExtensions.includes(ext!);
       });
       
-      const apis = await Promise.all(files.map(async f => {
+      let apis = await Promise.all(files.map(async f => {
         const name = f.replace(/\.[^/.]+$/, "")
         const segments = f.split('.')
         const extension = '.' + segments[segments.length - 1]
         return getAPI(name, req, extension)
       }));
+
+      apis = apis.filter(api => api.type == 'CustomAPI')
 
       for (const api of apis) {
         if (api) yield [api.name, JSON.stringify(api)];
