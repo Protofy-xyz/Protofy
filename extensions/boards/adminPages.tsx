@@ -233,7 +233,7 @@ const Board = ({ board, icons }) => {
           cleanedParams[key] = params[key];
         }
       }
-      await window['onRunListeners'][card](card, cleanedParams);
+      return await window['onRunListeners'][card](card, cleanedParams);
     };
   }, [])
 
