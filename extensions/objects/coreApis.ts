@@ -144,6 +144,10 @@ const getDB = (path, req, session) => {
       if (syncFs.existsSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))) {
         syncFs.unlinkSync(fspath.join(getRoot(req), 'data/objects', value.name + '.ts'))
       } 
+
+      if (syncFs.existsSync(fspath.join(getRoot(req), 'data/automations', value.name + '.ts'))) {
+        syncFs.unlinkSync(fspath.join(getRoot(req), 'data/automations', value.name + '.ts'))
+      } 
     },
 
     async put(key, value) {
@@ -203,7 +207,7 @@ const getDB = (path, req, session) => {
       
  
       //if api is selected, create an autoapi for the object
-      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "LevelDB") ? "automatic-crud" : "automatic-crud-storage"
+      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "SQLite") ? "automatic-crud" : "automatic-crud-storage"
       if (session) {
         const objectApi = APIModel.load({
           name: value.name,

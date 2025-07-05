@@ -61,7 +61,7 @@ export default {
                 }
             }
 
-            usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on leveldb, and stored under /data/databases.
+            usePrompt(() => `At this moment the user is browsing the databases list page. The databases list page allows to list the system databases. Databases are based on sqlite files, and stored under /data/databases.
             The user can use the database management page to view system databases, or can select a specific database from the list, and view the entries for the selected database.
             The system databases store the information in key->value system, storing JSONs as the value. 
             The databases are used to store users, groups, and as a storage for any CRUD API created for a object.

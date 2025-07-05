@@ -61,7 +61,7 @@ export const FileBrowser = ({ router, initialPath = '/', initialFile = '', initi
     The web file managers allow to create, view and edit files, has an integrated source code editor, an integrated visual programming editor and allows to upload and download files from the system.
     Using the file manager you have full control of the system because you can directly edit any system file. Be careful when editing sensible files, like source code or system directories, you may break the system.
     There are interesting directories:
-    - /data/databases contain the databases (leveldb files)
+    - /data/databases contain the databases (sqlite files)
     - /apps contain the system applications (next, expo, proxy and express apis)
     - /apps/next/public publicly accesible directory. The files you upload here can be accessed from the public system url (its the public directory of the next app)
     - /packages/app the custom bundle. The system encourages extension through bundles, and the custom bundle is the bundle for your specific system. You can extend the system from this bundle, or create other bundles. bundles can add apis, pages, tasks, objects and more things 

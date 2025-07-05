@@ -41,7 +41,7 @@ export const PromptAtom = atom<PromptContext[]>([{
         
         The UI is based on Tamagui, there is a big set of premade components and utils under packages/protolib. The system uses the concept of 'objects'. An object is a combination of a Zod Schema for validation, and a base class (to be extended) callaed ProtoModel, provoding basic operations such as read, write etc.
         
-        There is an automatic api system to create list, create, read, update, delete Rest apis wrapping an 'object'. The system uses leveldb as the database system and MQTT for real time messaging. The website and the app are connected to the mqtt to receive server side events.
+        There is an automatic api system to create list, create, read, update, delete Rest apis wrapping an 'object'. The system uses sqlite as the database system and MQTT for real time messaging. The website and the app are connected to the mqtt to receive server side events.
         
         The mqtt server is based on aedes and running in apps/core, providing a mqtt server for the stack.
         

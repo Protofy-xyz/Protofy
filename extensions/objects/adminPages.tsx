@@ -74,10 +74,10 @@ export default {
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
-                        databaseType: z.union([z.literal("LevelDB"), z.literal("Google Sheets"), z.literal("JSON File")])
+                        databaseType: z.union([z.literal("SQLite"), z.literal("Google Sheets"), z.literal("JSON File")])
                             .after("keys")
                             .label("database type")
-                            .defaultValue("LevelDB"),
+                            .defaultValue("SQLite"),
                         param: z.string()
                             .after("keys")
                             .label("Google Sheet Link")
@@ -93,19 +93,6 @@ export default {
                     model={ObjectModel}
                     pageState={pageState}
                     icons={ObjectIcons}
-                    deleteable={(element) => {
-                        if (Array.isArray(element)) {
-                            for (const ele of element) {
-                                if (Object.keys(ele.features).length !== 0) {
-                                    return false;
-                                }
-                            }
-                            return true;
-                        } else {
-                            return Object.keys(element.data.features).length === 0
-                        }
-                    }
-                    }
 
                     extraMenuActions={[
                         {

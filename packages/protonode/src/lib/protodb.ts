@@ -10,7 +10,7 @@ export type ProtoDBConfig = {
 export abstract class ProtoDB {
     capabilities: string[]
     location: string
-    options: any //database-level options. If the connector is for leveldb, those are leveldb options
+    options: any //database-level options. If the connector is for sqlite, those are sqlite options
     config: ProtoDBConfig //configuration of the behaviour of the OOP class (disable cache, context and names...)
     constructor(location, options?, config?) {
         this.location = location
