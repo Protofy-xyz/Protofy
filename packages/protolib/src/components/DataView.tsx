@@ -138,9 +138,11 @@ type DataViewActionButtonProps = {
     id?: string
 }
 
-const RawAddPanel = ({ displayName, onAdd }) => {
+const RawAddPanel = ({ displayName, onSave }) => {
     const { resolvedTheme } = useThemeSetting()
     const [sourceCode, setSourceCode] = useState('');
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<PendingResult | undefined>(undefined)
 
     const monacoEditor = useMemo(() => {
         return <Monaco
@@ -158,7 +160,21 @@ const RawAddPanel = ({ displayName, onAdd }) => {
     }, [resolvedTheme]);
     return <YStack width="700px" height="60vh">
         <XStack id="eo-dlg-title">{<H3><Tinted><H3 color="$color9">Add</H3></Tinted>{` ${displayName}`}</H3>}</XStack>
-        { monacoEditor }
+        {monacoEditor}
+        <Button f={1} onPress={async () => {
+            try {
+                let data = JSON.parse(sourceCode)
+                setLoading(true)
+                await onSave(data)
+                setLoading(false)
+            } catch (e) {
+                setError(e)
+                console.log('e: ', e)
+            }
+
+        }}>
+            {loading ? <Spinner /> : 'Save'}
+        </Button>
     </YStack>
 }
 
@@ -574,7 +590,23 @@ const DataViewInternal = forwardRef(({
                                     icons={icons}
                                     customFields={{ ...customFields, ...customFieldsForms }}
                                     {...objectProps}
-                                /> : <RawAddPanel displayName={displayName} />}
+                                /> : <RawAddPanel displayName={displayName} onSave={async (data) => {
+                                    console.log('Saving from editable object: ', data)
+                                    try {
+                                        const obj = model.load(data)
+                                        const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                        if (result.isError) {
+                                            throw result.error
+                                        }
+                                        //fetch(setItems)
+                                        setCreateOpen(false);
+                                        toast.show(name + ' created', {
+                                            message: obj.getId()
+                                        })
+                                    } catch (e) {
+                                        throw getPendingResult('error', null, e instanceof z.ZodError ? e.flatten() : e)
+                                    }
+                                }} />}
                             </XStack>
                         </ScrollView>
                     </YStack>
