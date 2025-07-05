@@ -157,7 +157,7 @@ function jsonToDiv(json, indent, expandedDepth) {
         parsed = json;
     }
 
-    return '<div class="no-drag" style="border: 1px solid var(--gray7);border-radius: 10px;padding-top: 20px;flex:1;text-align:left; height:100%; background-color: var(--gray1);width: 100%; display:inline-block; white-space:pre-wrap;">' +
+    return '<div class="no-drag" style="padding-top: 0px;border-radius: 10px;flex:1;text-align:left; height:100%; background-color: var(--gray1);width: 100%; display:inline-block; white-space:pre-wrap;">' +
         render(parsed, indent) +
         "</div>";
 }
