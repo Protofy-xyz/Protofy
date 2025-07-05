@@ -162,7 +162,7 @@
             "type": "action",
             "name": "process",
             "displayResponse": true,
-            "rulesCode": "await execute_action(\"thinking\")\r\nconst item = 'http://localhost:8000/public/store/'+board?.['current_item']\r\nlet result = await execute_action(\"/api/core/v1/vision/describe\", {\r\n    url: item,\r\n    prompt: board?.['prompt']\r\n})\r\nconst content = result.replace(/^```json\\s*([\\s\\S]*?)\\s*```$/m, '$1')\r\nawait execute_action(\"/api/v1/actions/metasearch/create\", {\r\n    ...(JSON.parse(content)),\r\n    path: '/data/public/store/'+board?.['current_item']\r\n})\r\nawait execute_action(\"idle\")\r\nreturn JSON.parse(content)"
+            "rulesCode": "await execute_action(\"thinking\")\r\nconst item = 'http://localhost:8000/public/store/'+board?.['current_item']\r\nlet result = await execute_action(\"/api/core/v1/vision/describe\", {\r\n    url: item,\r\n    prompt: board?.['prompt']\r\n})\r\n\r\nif(!result || !result.replace) {\r\n    execute_action('error')\r\n    return 'error'\r\n} else{\r\n    const content = result.replace(/^```json\\s*([\\s\\S]*?)\\s*```$/m, '$1')\r\n    await execute_action(\"/api/v1/actions/metasearch/create\", {\r\n        ...(JSON.parse(content)),\r\n        path: '/data/public/store/'+board?.['current_item']\r\n    })\r\n    await execute_action(\"idle\")\r\n    return JSON.parse(content)\r\n}\r\n"
         },
         {
             "key": "action_1751642306167",
