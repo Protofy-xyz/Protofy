@@ -26,6 +26,9 @@
 </aditional_decriptions>
 <element_parameter_fields>
 {{{modelDefinition}}}
+
+Sample of some elements in the database, so you can understand better the fields to retrieve:
+{{{sampleElements}}}
 </element_parameter_fields>
 <{{{modelName}}}_class>
 {{{modelType}}}

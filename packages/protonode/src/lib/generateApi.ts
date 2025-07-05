@@ -237,7 +237,13 @@ export const AutoAPI = ({
         const mode = req.query.mode;
         let prompt, jsCode
         if (search && mode == "ai") {
-            prompt = await context.autopilot.getPromptFromTemplate({ 
+            //get a sample of model elements to use as context for the AI
+            let sampleElements = await API.get(prefix + modelName + '?token='+getServiceToken()) as any
+            sampleElements = sampleElements?.data?.items || []
+            sampleElements = JSON.stringify(sampleElements) //take only the first 10 elements
+            // console.log('sampleElements: ', sampleElements)
+            prompt = await context.autopilot.getPromptFromTemplate({
+                sampleElements,
                 templateName: "aiSearch", 
                 search,
                 modelName,
@@ -245,8 +251,13 @@ export const AutoAPI = ({
                 modelDefinition: JSON.stringify(modelType.getObjectFieldsDefinition()),
                 aditionalDecriptions: modelType.getAdditionalDescriptions(),
             });
+            // console.log('-------------------------------------------------------------------------')
+            // console.log("******** AI prompt: ", prompt)
             const reply = await ai.callModel(prompt, context, { useChatGPT: true });
             jsCode = ai.cleanCode(reply.choices[0].message.content)
+            // console.log('-------------------------------------------------------------------------')
+            // console.log("******** AI code: ", jsCode)
+            // console.log('-------------------------------------------------------------------------')
         } 
         
         const parseResult = async (value, skipFilters?) => {
