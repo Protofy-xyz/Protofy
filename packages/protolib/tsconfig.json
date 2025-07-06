@@ -10,7 +10,6 @@
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx",
-    "jest/jest-globals.d.ts"
+    "**/*.tsx"
   ]
 }

@@ -40,7 +40,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "jest/jest-globals.d.ts",
     "../../packages/protolib/**/*.ts",
     "../../packages/protolib/**/*.tsx"
   ],

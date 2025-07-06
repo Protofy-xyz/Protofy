@@ -21,7 +21,6 @@ dist
 tsconfig.tsbuildinfo
 node_modules
 **/_
-**/tests/spec/out
 .DS_Store
 
 .next

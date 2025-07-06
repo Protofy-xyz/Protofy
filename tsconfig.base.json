@@ -39,8 +39,5 @@
   ],
   "typeAcquisition": {
     "enable": true
-  },
-  "include": [
-    "./jest-globals.d.ts"
-  ]
+  }
 }
