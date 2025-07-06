@@ -284,11 +284,11 @@ ipcMain.on('open-window', (event, { window }) => {
     resizable: true,
     scrollBounce: false,
     webPreferences: {
-      preload: path.join(__dirname, "windows", window, 'preload.js'),
+      preload: path.join(__dirname, "electron", "windows", window, 'preload.js'),
     }
   });
 
-  browserWindow.loadFile(path.join(__dirname, "windows", window, 'renderer.html'));
+  browserWindow.loadFile(path.join(__dirname, "electron", "windows", window, 'renderer.html'));
 })
 
 ipcMain.on('download-asset', (event, { url, assetName }) => {
