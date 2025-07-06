@@ -77,7 +77,7 @@ const getDB = (path, req, session) => {
                     name: machineName + ".ts",
                     data: {
                         options: {
-                            template: `/packages/protolib/src/bundles/stateMachines/templates/${template}.tpl`,
+                            template: `/extensions/stateMachines/templates/${template}.tpl`,
                             variables: {
                                 ...value,
                                 ...machineData

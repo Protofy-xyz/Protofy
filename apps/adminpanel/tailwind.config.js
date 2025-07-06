@@ -4,7 +4,7 @@ const twConfig = {
   content: [
     "./pages/**/*.{html,jsx,tsx}",
     "./index.html",
-    "../../packages/protolib/src/**/*.{html,tsx,jsx}",
+    "../../packages/protolib/**/*.{html,tsx,jsx}",
   ],
   theme: {
     extend: {

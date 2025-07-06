@@ -20,15 +20,12 @@
       "es6",
       "dom",
       "esnext.asynciterable"
-    ],
-    "paths": {
-      "protolib/*": ["../protolib/src/*"]
-    }
+    ]
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "../protolib/src/**/*.ts",
+    "../protolib/**/*.ts",
   ],
   "exclude": [
     "node_modules"

@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { SiteConfig } from 'app/conf';
-import { AdminPage } from 'protolib/index';
 
 export default function Page(props: any) {
   const projectName = SiteConfig.projectName;

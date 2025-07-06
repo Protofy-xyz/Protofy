@@ -74,7 +74,6 @@ module.exports = function () {
           /can't resolve 'perf_hooks'/i
         ];
       }
-      config.resolve.alias['protolib'] = resolve(__dirname, '../../packages/protolib/dist');
       config.externals = config.externals || []
       return config;
     }

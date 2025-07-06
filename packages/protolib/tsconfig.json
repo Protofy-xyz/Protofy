@@ -5,8 +5,6 @@
     "composite": true,
     "strict": false,
     "paths": {
-      "protolib/*": ["./*"],
-      "@components/*": ["./components/*"],
       "react-native": ["react-native-web"]
     }
   },

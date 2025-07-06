@@ -92,7 +92,7 @@ export const startCore = (ready?) => {
       'src/**',
       '../../extensions/**',
       '../../packages/app/conf.ts',
-      '../../packages/protolib/dist/**',
+      '../../packages/protolib/**',
       '../../packages/app/bundles/coreApis.ts',
       '../../packages/app/bundles/coreContext.ts',
       '../../packages/protonode/dist/**',

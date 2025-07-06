@@ -2,10 +2,5 @@
     "compilerOptions": {
         "esModuleInterop": true,
         "baseUrl": "../../packages",
-        "paths": {
-            "protolib/*": [
-                "protolib/src/*"
-            ]
-        }
     }
 }

@@ -21,13 +21,10 @@
         "dom",
         "esnext.asynciterable"
       ],
-      "paths": {
-        "protolib/*": ["../protolib/src/**/*.ts", "../protolib/src/**/*.tsx"]
-      }
     },
     "include": [
-      "../protolib/src/**/*.tsx",
-      "../protolib/src/**/*.ts",
+      "../protolib/**/*.tsx",
+      "../protolib/**/*.ts",
       "src/**/*.ts",
       "src/**/*.tsx",
       "jest/jest-globals.d.ts"
