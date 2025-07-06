@@ -27,7 +27,7 @@ example of board.execute_action({
     //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
 </code_structure>
 
-The state object has the following shape:
+The "board" state object has the following shape:
 <states_object>
 {{{states}}}
 </states_object>
