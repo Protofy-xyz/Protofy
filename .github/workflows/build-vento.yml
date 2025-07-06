@@ -45,22 +45,20 @@ jobs:
         run: yarn install --immutable
 
       - name: Build macOS App
-        run: |
-          yarn app-package
-          ls ../dist/mac-arm64/Vento.app/Contents/MacOS
+        run: yarn app-package
 
       - name: Find APP file and move to upload directory
         run: |
           # Create upload-artifact and zip the win-unpacked folder
           mkdir -p upload-artifact
-          APP_PATH=../dist/mac-arm64/Vento.app/Contents/MacOS/Vento
-          cp "$APP_PATH" upload-artifact/Vento-mac
+          APP_PATH=../dist/mac-arm64
+          zip -r upload-artifact/Vento_macOS.zip $APP_PATH/*
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Vento_MacOS
-          path: upload-artifact/Vento-mac
+          path: upload-artifact/Vento_macOS.zip 
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -69,7 +67,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento-mac
+          files: upload-artifact/Vento_macOS.zip 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -114,13 +112,13 @@ jobs:
           Copy-Item -Path * -Destination '..\dist\win-unpacked\project' -Recurse -Force
           # Create upload-artifact and zip the win-unpacked folder
           New-Item -ItemType Directory -Force -Path upload-artifact
-          Compress-Archive -Path '..\dist\win-unpacked\*' -DestinationPath 'upload-artifact/Vento.zip'
+          Compress-Archive -Path '..\dist\win-unpacked\*' -DestinationPath 'upload-artifact/Vento_Windows.zip'
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Vento_Windows
-          path: upload-artifact/Vento.zip
+          path: upload-artifact/Vento_Windows.zip
       
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -129,6 +127,6 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento.zip
+          files: upload-artifact/Vento_Windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
