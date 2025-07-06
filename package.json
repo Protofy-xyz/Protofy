@@ -44,7 +44,6 @@
     "kill": "pm2 kill",
     "stop": "pm2 stop all",
     "logs": "pm2 logs",
-    "create-environment": "node copy.js",
     "sync-setup": "git remote add upstream git@github.com:Protofy-xyz/Protofy.git",
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
