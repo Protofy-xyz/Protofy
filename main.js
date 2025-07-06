@@ -158,7 +158,7 @@ function createLogWindow() {
     logWindow.hide();
   });
 
-  logWindow.loadFile(path.join(__dirname, 'renderer.html'));
+  logWindow.loadFile(path.join(__dirname, 'electron', 'splash', 'renderer.html'));
 }
 
 // Create main window (localhost:8000)
