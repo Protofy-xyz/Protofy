@@ -47,10 +47,15 @@ jobs:
       - name: Build macOS App (.dmg)
         run: |
           yarn app-package
+          echo "_____../dist_____"
           ls ../dist
+          echo "____../dist/mac-arm64______"
           ls ../dist/mac-arm64
+          echo "_____ ../dist/mac-arm64/Vento.app_____"
           ls ../dist/mac-arm64/Vento.app
+          echo "_____../dist/mac-arm64/Vento.app/Contents_____"
           ls ../dist/mac-arm64/Vento.app/Contents
+          echo "_____../dist/mac-arm64/Vento.app/Contents/MacOS_____"
           ls ../dist/mac-arm64/Vento.app/Contents/MacOS
 
       - name: Find DMG file and move to upload directory
