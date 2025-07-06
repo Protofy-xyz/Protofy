@@ -10,9 +10,9 @@ const onChangeMask: MaskDefinition = {
   context: 'board.onChange',
   icon: 'cable',
   params: {
-    key: {
+    name: {
       type: 'input',
-      label: 'state key',
+      label: 'state name',
       initialValue: { value: '', kind: 'StringLiteral' },
     },
     changed: {
