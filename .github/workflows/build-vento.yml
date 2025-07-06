@@ -59,7 +59,7 @@ jobs:
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Vento
+          name: Vento_MacOS
           path: upload-artifact/Vento-mac
 
       - name: Upload to GitHub Release
