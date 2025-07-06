@@ -69,7 +69,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento
+          files: upload-artifact/Vento-mac
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
