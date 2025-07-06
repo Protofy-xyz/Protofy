@@ -1,6 +1,6 @@
 {
   "name": "site",
-  "main": "proxy-main.js",
+  "main": "electron/proxy-main.js",
   "private": true,
   "version": "0.0.12",
   "workspaces": [

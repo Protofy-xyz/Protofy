@@ -1,18 +1,17 @@
 // 📦 main.js
-const { app, BrowserWindow, session, ipcMain, globalShortcut, shell } = require('electron');
+const { app, BrowserWindow, session, ipcMain, shell } = require('electron');
 const http = require('http');
 const https = require('https');
-const net = require('net');
 const path = require('path');
 const { spawn } = require('child_process');
-const { exec } = require('child_process');
 const os = require('os');
 const process = require('process');
-const { on } = require('events');
 const fs = require('fs');
 
+const rootPath = path.join(__dirname, '..')
+
 //get path to the local Node.js binary
-let nodePath = os.platform() === 'win32' ? path.join(__dirname, 'bin/node.exe') : path.join(__dirname, 'bin/node') 
+let nodePath = os.platform() === 'win32' ? path.join(rootPath, 'bin/node.exe') : path.join(rootPath, 'bin/node') 
 const hasLocalNode = fs.existsSync(nodePath);
 
 if (hasLocalNode) {
@@ -23,9 +22,9 @@ if (hasLocalNode) {
   console.warn('🟡 No local Node.js binary found. Using system Node.js.');
 }
 
-process.chdir(__dirname);
+process.chdir(rootPath);
 console.log('🟢 Starting app...');
-console.log('📁 Current directory:', __dirname);
+console.log('📁 Current directory:', rootPath);
 
 // Avoid recursion
 if (process.env.IS_ECOSYSTEM_CHILD === '1') {
@@ -158,12 +157,17 @@ function createLogWindow() {
     logWindow.hide();
   });
 
-  logWindow.loadFile(path.join(__dirname, 'electron', 'splash', 'renderer.html'));
+  logWindow.loadFile(path.join(__dirname, 'splash', 'renderer.html'));
 }
 
 // Create main window (localhost:8000)
 function createMainWindow(fullscreen, initialUrl) {
-  require('dotenv').config({ path: path.join(__dirname, '.env') });
+  require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+  console.log('ENVIRONMENT VARIABLES:');
+  for (const [key, value] of Object.entries(process.env)) {
+    console.log(`${key}=${value}`);
+  }
+  console.log('📦 Creating main window...');
   const userSession = genNewSession()
   const sessionStr = JSON.stringify(userSession);
   const encoded = encodeURIComponent(sessionStr);
@@ -284,11 +288,11 @@ ipcMain.on('open-window', (event, { window }) => {
     resizable: true,
     scrollBounce: false,
     webPreferences: {
-      preload: path.join(__dirname, "electron", "windows", window, 'preload.js'),
+      preload: path.join(__dirname, "windows", window, 'preload.js'),
     }
   });
 
-  browserWindow.loadFile(path.join(__dirname, "electron", "windows", window, 'renderer.html'));
+  browserWindow.loadFile(path.join(__dirname, "windows", window, 'renderer.html'));
 })
 
 ipcMain.on('download-asset', (event, { url, assetName }) => {

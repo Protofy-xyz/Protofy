@@ -11,10 +11,10 @@ if(process.platform === 'darwin') {
   const dest = path.join(app.getPath('userData'), 'app-runtime-0.0.12')
   MONOREPO_ROOT = dest
   if(!fs.existsSync(dest)) {
-    fs.cpSync(__dirname, dest, {recursive: true})
+    fs.cpSync(path.join(__dirname, '..'), dest, {recursive: true})
   }
 } else {
-  MONOREPO_ROOT = path.resolve(__dirname, '../../', projectDir)
+  MONOREPO_ROOT = path.resolve(__dirname, '../../../', projectDir)
 }
 
 
