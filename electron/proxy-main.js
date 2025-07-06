@@ -26,6 +26,7 @@ if (!fs.existsSync(ENTRYPOINT)) {
     console.error(`❌ Entrypoint not found on ${ENTRYPOINT}`)
     process.exit(1)
   }
+  global.skipInstall = true // Skip install step in the main process
 }
 
 const customRequire = Module.createRequire(ENTRYPOINT)

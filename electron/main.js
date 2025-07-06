@@ -92,7 +92,7 @@ async function runCommand(command, args = [], onData = (line) => {}) {
 }
 
 async function runYarn(command = '', onLog=(x) => {}) {
-  return runCommand(nodePath, ['.yarn/releases/yarn-4.1.0.cjs', command], (line) => {
+  return runCommand(nodePath, ['.yarn/releases/yarn-4.1.0.cjs', ...command.split(' ')], (line) => {
     onLog(line);
   });
 }
@@ -232,9 +232,11 @@ app.whenReady().then(async () => {
 
     createLogWindow(); // Show logs immediately
     
-    //run yarn
-    await runYarn('install');
-    console.log('✅ Yarn completed successfully.');
+    //if run from app-dev, skip install since this will delete devdependencies, including electron itself
+    if(!global.skipInstall) {
+      await runYarn('workspaces focus --all --production');
+      console.log('✅ Yarn completed successfully.');
+    }
 
     await runYarn('kill'); // Ensure any previous PM2 processes are killed
     console.log('💣 Previous PM2 processes killed.');
