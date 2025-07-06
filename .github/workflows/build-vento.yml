@@ -44,33 +44,23 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build macOS App (.dmg)
+      - name: Build macOS App
         run: |
           yarn app-package
-          echo "_____../dist_____"
-          ls ../dist
-          echo "____../dist/mac-arm64______"
-          ls ../dist/mac-arm64
-          echo "_____ ../dist/mac-arm64/Vento.app_____"
-          ls ../dist/mac-arm64/Vento.app
-          echo "_____../dist/mac-arm64/Vento.app/Contents_____"
-          ls ../dist/mac-arm64/Vento.app/Contents
-          echo "_____../dist/mac-arm64/Vento.app/Contents/MacOS_____"
           ls ../dist/mac-arm64/Vento.app/Contents/MacOS
 
-      - name: Find DMG file and move to upload directory
+      - name: Find APP file and move to upload directory
         run: |
           # Create upload-artifact and zip the win-unpacked folder
           mkdir -p upload-artifact
-          DMG_PATH=$(find ../dist -name "*.dmg" | head -n 1)
-          echo "Found DMG: $DMG_PATH"
-          cp "$DMG_PATH" upload-artifact/Vento-mac.dmg
+          APP_PATH=../dist/mac-arm64/Vento.app/Contents/MacOS
+          cp "$APP_PATH" upload-artifact/Vento-mac
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Vento
-          path: upload-artifact/Vento-mac.dmg
+          path: upload-artifact/Vento-mac
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -79,7 +69,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento.dmg
+          files: upload-artifact/Vento
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
