@@ -53,7 +53,7 @@ jobs:
         run: |
           # Create upload-artifact and zip the win-unpacked folder
           mkdir -p upload-artifact
-          APP_PATH=../dist/mac-arm64/Vento.app/Contents/MacOS
+          APP_PATH=../dist/mac-arm64/Vento.app/Contents/MacOS/Vento
           cp "$APP_PATH" upload-artifact/Vento-mac
 
       - name: Upload Vento as artifact
