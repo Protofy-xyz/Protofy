@@ -14,6 +14,10 @@ const logger = getLogger();
 const assetsDir = "/data/assets"
 const assetsRoot = path.join(root, assetsDir);
 
+if(fs.existsSync(assetsRoot) === false) {
+    fs.mkdirSync(assetsRoot, { recursive: true });
+}
+
 const decompressZip = async (options) => {
     const zipPath = options.zipPath;
     const outputPath = options.outputPath;
