@@ -45,7 +45,7 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
     const boardDeclaration = useMemo(() => {
         const possibleNames = Object.keys(boardActions ?? {}).map(name => `"${name}"`).join(' | ')
         return `declare const board: {\n` +
-            `  onChange: (params: { key: string, changed: (value: any) => void }) => void;\n` +
+            `  onChange: (params: { name: string, changed: (value: any) => void }) => void;\n` +
             `  execute_action: (params: { name: ${possibleNames}, params?: Record<string, any> }) => Promise<any>;\n` +
             `  id: string;\n` +
             `  log: (...args: any[]) => void;\n` +
