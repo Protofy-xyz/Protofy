@@ -6,40 +6,55 @@ const path = require('path');
 const rimraf = require('rimraf');
 const { execSync } = require('child_process');
 
-const packageVentoPath = path.join(__dirname, 'package-vento.json');
-const packagePath = path.join(__dirname, 'package.json');
-// Check if package-vento.json exists
-if (fs.existsSync(packageVentoPath)) {
-    // Read the contents of package-vento.json
-    const packageVentoContent = fs.readFileSync(packageVentoPath, 'utf8');
-    // Write the contents to package.json
-    fs.writeFileSync(packagePath, packageVentoContent, 'utf8');
-    console.log('package-vento.json has been moved to package.json');
+const dirname = path.join(__dirname, '..')
+
+
+const packagePath = path.join(dirname, 'package.json');
+const workspaces = [
+    "apps/api",
+    "apps/core",
+    "packages/app",
+    "packages/config",
+    "packages/protobase",
+    "packages/protodevice",
+    "packages/protonode",
+    "extensions/*",
+    "scripts"
+]
+// load package.json and replace workspaces with the ones we want to keep
+if (fs.existsSync(packagePath)) {
+    const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
+    packageJson.workspaces = workspaces;
+    fs.writeFileSync(packagePath, JSON.stringify(packageJson, null, 2), 'utf8');
+    console.log('package.json workspaces have been updated');
+} else {
+    console.error('package.json not found');
+    process.exit(1);
 }
 
 // Remove node_modules directory
-const nodeModulesPath = path.join(__dirname, 'node_modules');
+const nodeModulesPath = path.join(dirname, 'node_modules');
 if (fs.existsSync(nodeModulesPath)) {
     rimraf.sync(nodeModulesPath);
     console.log('node_modules directory has been removed');
 }
 
 //remove apps/adminpanel/.next
-const nextPath = path.join(__dirname, 'apps', 'adminpanel', '.next');
+const nextPath = path.join(dirname, 'apps', 'adminpanel', '.next');
 if (fs.existsSync(nextPath)) {
     rimraf.sync(nextPath);
     console.log('.next directory in apps/adminpanel has been removed');
 }
 
 //remove apps/adminpanel/out
-const outPath = path.join(__dirname, 'apps', 'adminpanel', 'out');
+const outPath = path.join(dirname, 'apps', 'adminpanel', 'out');
 if (fs.existsSync(outPath)) {
     rimraf.sync(outPath);
     console.log('out directory in apps/adminpanel has been removed');
 }
 
 //remove .yarn/cache
-const yarnCachePath = path.join(__dirname, '.yarn', 'cache');
+const yarnCachePath = path.join(dirname, '.yarn', 'cache');
 if (fs.existsSync(yarnCachePath)) {
     rimraf.sync(yarnCachePath);
     console.log('.yarn/cache directory has been removed');
@@ -47,8 +62,8 @@ if (fs.existsSync(yarnCachePath)) {
 
 
 //check if its running on windows and remove bin/node-linux and bin/node-macos
-const binPathLinux = path.join(__dirname, 'bin', 'node-linux');
-const binPathMacos = path.join(__dirname, 'bin', 'node-macos');
+const binPathLinux = path.join(dirname, 'bin', 'node-linux');
+const binPathMacos = path.join(dirname, 'bin', 'node-macos');
 if (process.platform === 'win32') {
     if (fs.existsSync(binPathLinux)) {
         rimraf.sync(binPathLinux);
@@ -61,14 +76,14 @@ if (process.platform === 'win32') {
 }
 
 //remove .env
-// const envPath = path.join(__dirname, '.env');
+// const envPath = path.join(dirname, '.env');
 // if (fs.existsSync(envPath)) {
 //     fs.unlinkSync(envPath);
 //     console.log('.env file has been removed');
 // }
 
 //remove data/databases/* (and all its subdirectories and files)
-const dataPath = path.join(__dirname, 'data', 'databases');
+const dataPath = path.join(dirname, 'data', 'databases');
 if (fs.existsSync(dataPath)) {
     fs.readdirSync(dataPath).forEach(file => {
         const filePath = path.join(dataPath, file);
@@ -85,7 +100,7 @@ if (fs.existsSync(dataPath)) {
 }
 
 //remove logs/* except for logs/.keep
-const logsPath = path.join(__dirname, 'logs');
+const logsPath = path.join(dirname, 'logs');
 if (fs.existsSync(logsPath)) {
     fs.readdirSync(logsPath).forEach(file => {
         const filePath = path.join(logsPath, file);
@@ -102,14 +117,14 @@ if (fs.existsSync(logsPath)) {
 }
 
 //remove apps/adminpanel/.tamagui
-const tamaguiPath = path.join(__dirname, 'apps', 'adminpanel', '.tamagui');
+const tamaguiPath = path.join(dirname, 'apps', 'adminpanel', '.tamagui');
 if (fs.existsSync(tamaguiPath)) {
     rimraf.sync(tamaguiPath);
     console.log('.tamagui directory in apps/adminpanel has been removed');
 }
 
 //remove settings
-const settingsPath = path.join(__dirname, 'data', 'settings');
+const settingsPath = path.join(dirname, 'data', 'settings');
 if (fs.existsSync(settingsPath)) {
     fs.readdirSync(settingsPath).forEach(file => {
         const filePath = path.join(settingsPath, file);
@@ -121,10 +136,10 @@ if (fs.existsSync(settingsPath)) {
             console.log(`Removed file: ${filePath}`);
         }
     });
-} 
+}
 
 //delete preincluded assets
-const assetsPath = path.join(__dirname, 'data', 'assets');
+const assetsPath = path.join(dirname, 'data', 'assets');
 if (fs.existsSync(assetsPath)) {
     fs.readdirSync(assetsPath).forEach(file => {
         const filePath = path.join(assetsPath, file);
@@ -141,7 +156,7 @@ if (fs.existsSync(assetsPath)) {
 }
 
 //delete the contents of data/keys
-const keysPath = path.join(__dirname, 'data', 'keys');
+const keysPath = path.join(dirname, 'data', 'keys');
 if (fs.existsSync(keysPath)) {
     fs.readdirSync(keysPath).forEach(file => {
         const filePath = path.join(keysPath, file);

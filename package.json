@@ -49,6 +49,7 @@
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
+    "shrink": "node scripts/shrink.js",
     "clean": "yarn workspaces foreach --all run clean",
     "protofy-update-setup": "git remote add protofy git@github.com:Protofy-xyz/Protofy.git",
     "protofy-update": "git fetch protofy && git rebase protofy/main && yarn clean",
