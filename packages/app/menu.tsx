@@ -13,6 +13,6 @@ export default [
         },
         id: 'pop-over-workspace-link'
     },
-    { label: "Login", path: "/auth/login", visibility: session => !session.loggedIn },
+    { label: "Login", path: "/workspace/auth/login", visibility: session => !session.loggedIn },
     { label: "Logout", path: "/", visibility: session => session.loggedIn, onClick: logout },
 ]

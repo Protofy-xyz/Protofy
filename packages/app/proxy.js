@@ -54,7 +54,7 @@ function serveStream(filePath, res) {
 }
 
 function serve404(res) {
-  const fn = path.join(__dirname, '../../data/pages/404.html')
+  const fn = path.join(__dirname, '../../data/pages/workspace/404.html')
   res.writeHead(404, { 'Content-Type': 'text/html' })
   fs.createReadStream(fn).pipe(res)
 }
@@ -135,6 +135,14 @@ function handleHttp(name, req, res, fallback, proxy, logger) {
       return true
     } else {
       logger.warn({ url: req.url, file: htmlFile }, 'File not found, serving 404')
+      if(p == '/') {
+        //if the request is for the root, serve the index.html file
+        htmlFile = path.join(__dirname, '../../data/pages/workspace/index.html')
+        if (fs.existsSync(htmlFile) && fs.statSync(htmlFile).isFile()) {
+          serveStream(htmlFile, res)
+          return true
+        }
+      }
       serve404(res)
       return true
     }

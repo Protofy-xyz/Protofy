@@ -52,7 +52,6 @@ export const AdminPanel = ({ children }) => {
 
   const { message } = useSubscription('notifications/object/#')
 
-  const [pages, setPages] = useState()
   const [boards, setBoards] = useState()
   const [objects, setObjects] = useState()
 

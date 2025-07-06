@@ -5,7 +5,6 @@
   "version": "0.0.12",
   "workspaces": [
     "apps/adminpanel",
-    "apps/next",
     "apps/api",
     "apps/core",
     "packages/app",

@@ -1,16 +1,7 @@
-import DashboardPage from '@extensions/boards/adminPages'
-import Head from 'next/head'
-import { SiteConfig } from 'app/conf'
+import Feature from 'app/pages/home'
+import { useSession } from 'protolib/lib/useSession'
 
-export default function Page(props:any) {
-  const projectName = SiteConfig.projectName
-
-  return (
-    <>
-      <Head>
-        <title>{projectName + " - Dashboard"}</title>
-      </Head>
-      <DashboardPage.boards.component {...props} />
-    </>
-  )
+export default function IndexPage(props:any) {
+  useSession(props.pageSession)
+  return <Feature.component {...props} />
 }

@@ -108,19 +108,6 @@ if (fs.existsSync(tamaguiPath)) {
     console.log('.tamagui directory in apps/adminpanel has been removed');
 }
 
-//remove apps/next/.next and apps/next/out
-const nextAppPath = path.join(__dirname, 'apps', 'next');
-const nextNextPath = path.join(nextAppPath, '.next');
-const nextOutPath = path.join(nextAppPath, 'out');
-if (fs.existsSync(nextNextPath)) {
-    rimraf.sync(nextNextPath);
-    console.log('.next directory in apps/next has been removed');
-}
-if (fs.existsSync(nextOutPath)) {
-    rimraf.sync(nextOutPath);
-    console.log('out directory in apps/next has been removed');
-}
-
 //remove settings
 const settingsPath = path.join(__dirname, 'data', 'settings');
 if (fs.existsSync(settingsPath)) {

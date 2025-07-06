@@ -2,7 +2,7 @@ import { Router, Inbox, Library, Key, Cog, Database, DatabaseBackup, Bot, Helpin
 
 export default (pages) => {
     return {
-        "default": "/workspace/pages",
+        "default": "/workspace/boards",
         "label": "Workspace",
         "assistant": true,
         "logs": false,
@@ -19,7 +19,7 @@ export default (pages) => {
             "Content": [
                 { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/" },
                 { "name": "Resources", "icon": Library, "href": "/workspace/resources" },
-                { "name": "Public", "icon": "door-open", "type": "/workspace/files?path=/apps/next/public"},
+                { "name": "Public", "icon": "door-open", "type": "/workspace/files?path=/data/public"},
                 { "name": "Databases", "icon": DatabaseBackup, "href": "/workspace/databases" },
             ],
             "Devices": [

@@ -30,7 +30,7 @@ const Home = () => {
       <ParticlesView options={basicParticlesMask()} />
 
       <a
-        href="/workspace"
+        href="/workspace/boards"
         style={{
           textDecoration: 'none',
           color: 'inherit',

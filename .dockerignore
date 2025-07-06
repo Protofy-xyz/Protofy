@@ -5,5 +5,3 @@ data
 **/node_modules
 .yarn/cache
 .yarn/install-state.gz
-apps/site/.next
-apps/site/.tamagui

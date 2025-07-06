@@ -63,7 +63,7 @@ export const FileBrowser = ({ router, initialPath = '/', initialFile = '', initi
     There are interesting directories:
     - /data/databases contain the databases (sqlite files)
     - /apps contain the system applications (next, expo, proxy and express apis)
-    - /apps/next/public publicly accesible directory. The files you upload here can be accessed from the public system url (its the public directory of the next app)
+    - /data/public publicly accesible directory. The files you upload here can be accessed from the public system url (its the public directory of the next app), in /public
     - /packages/app the custom bundle. The system encourages extension through bundles, and the custom bundle is the bundle for your specific system. You can extend the system from this bundle, or create other bundles. bundles can add apis, pages, tasks, objects and more things 
     
     Currently the user is in the directory: ${currentPath}. 

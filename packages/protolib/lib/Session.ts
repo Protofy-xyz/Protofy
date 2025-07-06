@@ -49,7 +49,7 @@ const fail = (returnUrl?) => {
     return {
         redirect: {
             permanent: false,
-            destination: "/auth/login" + (returnUrl ? "?return=" + encodedReturn : "")
+            destination: "/workspace/auth/login" + (returnUrl ? "?return=" + encodedReturn : "")
         }
     }
 }

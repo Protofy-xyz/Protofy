@@ -32,7 +32,7 @@ const fileActions = [
         title: "Public link",
         // description: "This is a public link to access this file, anyone with de link can access the contect of the file",
         filter: (path, selected) => {
-            return path.startsWith("/apps/next/public") && selected.length == 1 && !selected[0].isDir
+            return path.startsWith("/data/public") && selected.length == 1 && !selected[0].isDir
         },
         size: {
             width: 500,

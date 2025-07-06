@@ -19,16 +19,10 @@ const MonitorCog = styled(RawMonitorCog, {
     color: 'currentColor',
 })
 
-import { ServiceMemoryUsageChart, TotalMemoryUsage, TotalCPUUsage } from '@extensions/services/widgets'
-import { TotalUsers, ListLatestUsers } from '@extensions/users/widgets'
-import { LastEvents, TotalEvents } from '@extensions/events/widgets'
-import { ListPages } from '@extensions/pages/widgets'
-import { TotalObjects } from '@extensions/objects/widgets'
-import { TotalGroups, ListGroups } from '@extensions/groups/widgets'
 
 const enableArduinos = false
 
-export default ({ pages, boards, objects }) => {
+export default ({ boards, objects }) => {
     const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
 
     const integrations = [

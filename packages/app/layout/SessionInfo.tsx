@@ -6,7 +6,7 @@ export default function SessionInfo() {
     return (
       <>
         {
-          session.loggedIn ? <></>: <HeaderLink href="/auth/login" id="header-login-link" suppressHydrationWarning={true}>Login</HeaderLink>
+          session.loggedIn ? <></>: <HeaderLink href="/workspace/auth/login" id="header-login-link" suppressHydrationWarning={true}>Login</HeaderLink>
         }
       </>
     )

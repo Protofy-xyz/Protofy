@@ -477,7 +477,7 @@ export const UIMasks = [
                 "data": {
                     "label": "url",
                     "field": "prop-url",
-                    "apiUrl": "adminapi/v1/files//apps/next/public",
+                    "apiUrl": "adminapi/v1/files//data/public",
                     "list": "return res.isDir ? undefined : res.name"
                 }
             },

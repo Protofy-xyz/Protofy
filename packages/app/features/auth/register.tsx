@@ -166,7 +166,7 @@ function SignUp() {
           <Paragraph theme="alt2" ta="center" size="$2">
             Already registered?
             {` `}
-            <Link id="sign-in-link" href="/auth/login" style={{ fontWeight: '800' }}>
+            <Link id="sign-in-link" href="/workspace/auth/login" style={{ fontWeight: '800' }}>
               Sign in.
             </Link>
           </Paragraph>

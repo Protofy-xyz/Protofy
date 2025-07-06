@@ -25,7 +25,6 @@
     ".yarn",
     "dist",
     "types",
-    "apps/next/out",
     ".next",
     ".tamagui",
     ".venv"

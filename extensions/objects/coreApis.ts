@@ -7,7 +7,6 @@ import { ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { getServiceToken } from 'protonode'
 import { API } from 'protobase'
 import { APIModel } from '@extensions/apis/apisSchemas'
-import { PageModel } from '@extensions/pages/pagesSchemas'
 
 
 const indexFile = "/packages/app/objects/index.ts"
@@ -217,20 +216,6 @@ const getDB = (path, req, session) => {
           modelName: value.id
         })
         await API.post("/api/core/v1/apis?token=" + session.token, objectApi.create().getData())
-
-        if (value.adminPage) {
-          const objectApi = PageModel.load({
-            name: value.name,
-            route: value.name,
-            permissions: ["admin"],
-            web: true,
-            electron: false,
-            protected: true,
-            object: value.name,
-            template: "admin"
-          })
-          await API.post("/api/core/v1/pages?token=" + session.token, objectApi.create().getData())
-        }
       }
 
     },
