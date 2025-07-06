@@ -47,7 +47,6 @@ jobs:
       - name: Build macOS App (.dmg)
         run: |
           yarn app-package
-          cd ..\dist\mac-arm64
 
       - name: Find DMG file and move to upload directory
         run: |
