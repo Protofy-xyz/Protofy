@@ -225,18 +225,11 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
             for (const [level2Key, level2Value] of Object.entries(level1Value)) {
                 if (!level2Value || typeof level2Value !== 'object') continue;
 
-                for (const [level3Key, level3Value] of Object.entries(level2Value)) {
-                    if (!level3Value || typeof level3Value !== 'object') continue;
+                const { name, description, params, url } = level2Value;
 
-                    // Extraer solo las claves deseadas
-                    const { name, description, params, url } = level3Value;
+                if (!cleaned[level1Key]) cleaned[level1Key] = {};
 
-                    // Asegurar la estructura en cleaned
-                    if (!cleaned[level1Key]) cleaned[level1Key] = {};
-                    if (!cleaned[level1Key][level2Key]) cleaned[level1Key][level2Key] = {};
-
-                    cleaned[level1Key][level2Key][level3Key] = { name, description, params, url };
-                }
+                cleaned[level1Key][level2Key] = { name, description, params, url };
             }
         }
 
@@ -256,8 +249,7 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
     const actionData = useMemo(() => {
         const result: Record<string, any> = {};
 
-        const level1Priority = ['boards'];
-        const level2Priority = [board.name];
+        const level1Priority = [board.name];
 
         const level1Keys = Object.keys(filteredData || {});
         const sortedLevel1Keys = [
@@ -271,21 +263,12 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
                 result[level1Key] = {};
 
                 const level2Keys = Object.keys(level1Value || {});
-                const sortedLevel2Keys = [
-                    ...level2Priority.filter(k => level2Keys.includes(k)),
-                    ...level2Keys.filter(k => !level2Priority.includes(k))
-                ];
 
-                for (const level2Key of sortedLevel2Keys) {
+
+                for (const level2Key of level2Keys) {
                     const level2Value = level1Value?.[level2Key];
-                    if (typeof level2Value === 'object') {
-                        result[level1Key][level2Key] = {};
-
-                        for (const [level3Key, level3Value] of Object.entries(level2Value || {})) {
-                            if (typeof level3Value === 'object' && level3Value['url']) {
-                                result[level1Key][level2Key][level3Key] = JSON.stringify(level3Value);
-                            }
-                        }
+                    if (typeof level2Value === 'object' && level2Value['url']) {
+                        result[level1Key][level2Key] = JSON.stringify(level2Value);
                     }
                 }
             }
@@ -299,13 +282,13 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
             {stateInputMode === "formatted" && <FormattedView level1Priority='boards' level2Priority={board.name} copyIndex={0} onCopy={text => {
                 const parts = text[0].split('->').map(p => p.trim());
                 let inBoard = false;
-                if(text[0].startsWith('boards -> '+board.name + ' -> ')) {
+                if (text[0].startsWith(board.name + ' -> ')) {
                     //skip boards -> boardName ->
-                    parts.splice(0, 2);
+                    parts.splice(0, 1);
                     inBoard = true;
                 }
 
-                return (!inBoard?'states':'board') + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
+                return (!inBoard ? 'states' : 'board') + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
             }} data={filteredStateData} />}
             {stateInputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} />}
         </YStack>
