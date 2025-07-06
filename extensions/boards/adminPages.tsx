@@ -618,7 +618,7 @@ const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, 
 
   const [iconsData, setIconsData] = useState(icons ?? getPendingResult('pending'))
   usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
-  useIsAdmin(() => '/auth/login?return=' + document?.location?.pathname + '?' + document?.location?.search)
+  useIsAdmin(() => '/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
   return (<AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
     <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
       {boardData.status == 'error' && <ErrorMessage
