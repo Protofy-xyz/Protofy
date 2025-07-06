@@ -379,7 +379,7 @@ const paramsForm = ({ data }) => {
     }).join('')
         }
 
-            ${(data.triggers || []).some(t => t.type == 'manual') || data.type == 'action' ? `<button
+            ${data.type == 'action' ? `<button
                 id="${data.name}-run-button"
                 class="no-drag"
                 type="submit"
@@ -404,7 +404,7 @@ const paramsForm = ({ data }) => {
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
                 <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
-                    ${data.layout?.buttonLabel ? data.layout.buttonLabel : ((data.triggers || []).find(t => t.type == 'manual')?.caption ? (data.triggers || []).find(t => t.type == 'manual')?.caption :  "Run")}
+                    ${data.buttonLabel ? data.buttonLabel :"Run"}
                 </a>
             </button>`: ``}
         </form>`

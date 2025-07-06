@@ -402,9 +402,9 @@ export default async (app, context) => {
                 continue;
             }
 
-            const hasIntervalTrigger = card.triggers && Array.isArray(card.triggers) && card.triggers.some(t => t.type === 'interval' && t.interval === 'auto');
+            
             try {
-                if (card.type == 'value' || hasIntervalTrigger) {
+                if (card.type == 'value') {
                     if (!card.rulesCode) {
                         // logger.info({ card }, "No rulesCode for value card: " + card.key);
                         continue;

@@ -40,12 +40,7 @@
             "name": "reindex",
             "displayResponse": false,
             "rulesCode": "const items = await execute_action(\"/api/core/v1/files\", {path: '/data/public/store'})\r\nconsole.log('iteeeeeeeems: ', items)\r\nfor(var i = 0;i<items.length;i++) {\r\n    await execute_action(\"queue\", {\r\n\t\titem: items[i], // \r\n\t\taction: 'push', // action to perform in the queue: push, pop, clear\r\n\t})\r\n}\r\n",
-            "triggers": [
-                {
-                    "type": "manual",
-                    "caption": "reindex"
-                }
-            ]
+            "buttonLabel": "reindex"
         },
         {
             "key": "action_1751639992343",
@@ -58,12 +53,7 @@
             "displayResponse": false,
             "rulesCode": "const item = board?.['queue']?.[0] ?? 'empty'\r\nawait execute_action(\"queue\", {\r\n\titem: '', // \r\n\taction: 'pop', // action to perform in the queue: push, pop, clear\r\n})\r\nreturn item",
             "displayButton": true,
-            "triggers": [
-                {
-                    "type": "manual",
-                    "caption": "pop"
-                }
-            ]
+            "buttonLabel": "pop"
         },
         {
             "key": "action_1751640229148",
@@ -96,12 +86,7 @@
             "name": "idle",
             "displayResponse": false,
             "rulesCode": "execute_action(\"system_state\", {\r\n\tstate: 'idle', // \r\n})",
-            "triggers": [
-                {
-                    "type": "manual",
-                    "caption": "Idle"
-                }
-            ]
+            "buttonLabel": "Idle"
         },
         {
             "key": "action_1751640277348_vento_copy_da6q2neatwgsv0mi6xxb7f",
@@ -113,12 +98,7 @@
             "name": "error",
             "displayResponse": false,
             "rulesCode": "execute_action(\"system_state\", {\r\n\tstate: 'error', // \r\n})",
-            "triggers": [
-                {
-                    "type": "manual",
-                    "caption": "Idle"
-                }
-            ],
+            "buttonLabel": "Error",
             "color": "#d43737"
         },
         {
@@ -131,12 +111,7 @@
             "name": "thinking",
             "displayResponse": false,
             "rulesCode": "execute_action(\"system_state\", {\r\n\tstate: 'thinking', // \r\n})",
-            "triggers": [
-                {
-                    "type": "manual",
-                    "caption": "Thinking"
-                }
-            ],
+            "buttonLabel": "Thinking",
             "color": "#407ece"
         },
         {
