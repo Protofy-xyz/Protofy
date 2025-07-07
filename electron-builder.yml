@@ -5,7 +5,7 @@ directories:
   output: ../dist
 mac:
   target:
-    - target: dir
+    - target: dmg
       arch:
         - arm64
   hardenedRuntime: true

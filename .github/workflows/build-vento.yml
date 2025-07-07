@@ -54,20 +54,12 @@ jobs:
           APP_PATH=../dist/mac-arm64
           cd "$APP_PATH"
           zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
-          cd "$GITHUB_WORKSPACE"
-          cp ../dist/mac-arm64/Vento.app/Contents/MacOS/Vento "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS_1"
-
+    
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Vento_MacOS
           path: upload-artifact/Vento_macOS.zip 
-
-      - name: Upload Vento as artifact (1)   
-        uses: actions/upload-artifact@v4
-        with:
-          name: Vento_MacOS(1)
-          path: upload-artifact/Vento_macOS_1
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
