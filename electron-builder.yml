@@ -5,7 +5,7 @@ directories:
   output: ../dist
 mac:
   target:
-    - target: dir
+    - target: dmg
       arch:
         - arm64
   hardenedRuntime: true
@@ -37,3 +37,4 @@ files:
 buildDependenciesFromSource: false
 npmRebuild: false
 afterPack: ./scripts/afterPack.js
+publish: null
