@@ -45,24 +45,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build macOS App
-        run: |
-          yarn app-package
-          echo "________"
-          ls -la ../dist/mac-arm64
-
-      - name: Find APP file and move to upload directory
-        run: |
-          # Create upload-artifact and zip the win-unpacked folder
-          mkdir -p upload-artifact
-          APP_PATH=../dist/mac-arm64
-          cd "$APP_PATH"
-          zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
-    
-      - name: Upload Vento as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Vento_MacOS
-          path: upload-artifact/Vento_macOS.zip 
+        run: yarn app-package
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -71,7 +54,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento_macOS.zip 
+          files: ../dist/Vento-*-arm64.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -118,12 +101,6 @@ jobs:
           New-Item -ItemType Directory -Force -Path upload-artifact
           Compress-Archive -Path '..\dist\win-unpacked\*' -DestinationPath 'upload-artifact/Vento_Windows.zip'
 
-      - name: Upload Vento as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Vento_Windows
-          path: upload-artifact/Vento_Windows.zip
-      
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
         uses: softprops/action-gh-release@v2
