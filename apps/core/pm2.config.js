@@ -15,6 +15,20 @@ if (process.platform === 'win32') {
     } else {
         console.warn(`Node binary not found at ${nodeBin}. Using default node.`);
     }
+} else if (process.platform === 'darwin') {
+    const nodeBin = path.resolve(path.join(currentDir, '../../bin/node'));
+    if (require('fs').existsSync(nodeBin)) {
+        node = nodeBin;
+    } else {
+        console.warn(`Node binary not found at ${nodeBin}. Using default node.`);
+    }
+} else if (process.platform === 'linux') {
+    const nodeBin = path.resolve(path.join(currentDir, '../../bin/node'));
+    if (require('fs').existsSync(nodeBin)) {
+        node = nodeBin;
+    } else {
+        console.warn(`Node binary not found at ${nodeBin}. Using default node.`);
+    }
 }
 
 module.exports = {
