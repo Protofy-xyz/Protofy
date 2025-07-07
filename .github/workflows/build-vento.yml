@@ -52,7 +52,8 @@ jobs:
           # Create upload-artifact and zip the win-unpacked folder
           mkdir -p upload-artifact
           APP_PATH=../dist/mac-arm64
-          zip -r upload-artifact/Vento_macOS.zip $APP_PATH/*
+          cd APP_PATH
+          zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
