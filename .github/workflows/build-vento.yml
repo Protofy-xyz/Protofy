@@ -54,16 +54,8 @@ jobs:
           APP_PATH=../dist/mac-arm64
           cd "$APP_PATH"
           zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
-          echo ":::::::"
-          ls $APP_PATH
-          echo ":::::::"
-          ls $APP_PATH/Vento.app
-          echo ":::::::"
-          ls $APP_PATH/Vento.app/Contents
-          echo ":::::::"
-          ls $APP_PATH/Vento.app/Contents/MacOS
-          echo ":::::::"
-          cp "$APP_PATH/Vento.app/Contents/MacOS/Vento" "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS(single)"
+          cd "$GITHUB_WORKSPACE"
+          cp ../dist/mac-arm64/Vento.app/Contents/MacOS/Vento" "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS(single)"
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
