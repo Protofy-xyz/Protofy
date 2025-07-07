@@ -33,10 +33,15 @@ if (fs.existsSync(packagePath)) {
 }
 
 // Remove node_modules directory
-const nodeModulesPath = path.join(dirname, 'node_modules');
-if (fs.existsSync(nodeModulesPath)) {
-    rimraf.sync(nodeModulesPath);
-    console.log('node_modules directory has been removed');
+//only if not osx
+if (process.platform === 'darwin') {
+    console.log('Skipping node_modules removal on macOS');
+} else {
+    const nodeModulesPath = path.join(dirname, 'node_modules');
+    if (fs.existsSync(nodeModulesPath)) {
+        rimraf.sync(nodeModulesPath);
+        console.log('node_modules directory has been removed');
+    }
 }
 
 //remove apps/adminpanel/.next
