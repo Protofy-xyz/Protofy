@@ -55,7 +55,7 @@ jobs:
           cd "$APP_PATH"
           zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
           cd "$GITHUB_WORKSPACE"
-          cp ../dist/mac-arm64/Vento.app/Contents/MacOS/Vento "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS(single)"
+          cp ../dist/mac-arm64/Vento.app/Contents/MacOS/Vento "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS_1"
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
@@ -67,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Vento_MacOS(1)
-          path: upload-artifact/Vento_macOS(single)
+          path: upload-artifact/Vento_macOS_1
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -87,7 +87,7 @@ jobs:
           tag_name: ${{ github.event.inputs.tag_name }}
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
-          files: upload-artifact/Vento_macOS(single)
+          files: upload-artifact/Vento_macOS_1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
