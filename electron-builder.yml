@@ -37,4 +37,4 @@ files:
 buildDependenciesFromSource: false
 npmRebuild: false
 afterPack: ./scripts/afterPack.js
-publish: never
+publish: null
