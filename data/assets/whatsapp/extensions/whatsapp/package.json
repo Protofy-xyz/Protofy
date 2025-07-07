@@ -1,7 +1,0 @@
-{
-  "name": "@extensions/whatsapp",
-  "version": "1.0.0",
-  "dependencies": {
-    "qrcode": "1.4.4"
-  }
-}

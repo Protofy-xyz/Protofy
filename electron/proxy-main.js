@@ -8,17 +8,20 @@ const projectDir = 'project'
 let MONOREPO_ROOT
 if(process.platform === 'darwin') {
 
-  const dest = path.join(app.getPath('userData'), 'app-runtime-0.0.12')
-  MONOREPO_ROOT = dest
+  const dest = path.join(app.getPath('userData'), 'app-runtime-0.1.0')
+  MONOREPO_ROOT = path.join(dest, 'electron')
   if(!fs.existsSync(dest)) {
     fs.cpSync(path.join(__dirname, '..'), dest, {recursive: true})
   }
 } else {
-  MONOREPO_ROOT = path.resolve(__dirname, '../../../', projectDir)
+  MONOREPO_ROOT = path.resolve(__dirname, '../../../', projectDir, 'electron')
 }
 
+console.log(`📂 Monorepo root: ${MONOREPO_ROOT}`)
 
 let ENTRYPOINT = path.join(MONOREPO_ROOT, 'main.js')
+
+console.log('🔍 Looking for entrypoint in: ', ENTRYPOINT)
 
 if (!fs.existsSync(ENTRYPOINT)) {
   ENTRYPOINT = path.resolve(__dirname, 'main.js')

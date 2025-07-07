@@ -7,7 +7,6 @@ mac:
   target:
     - target: dir
       arch:
-        - x64
         - arm64
   hardenedRuntime: true
   gatekeeperAssess: false
@@ -37,3 +36,4 @@ files:
   - "!.gitignore"
 buildDependenciesFromSource: false
 npmRebuild: false
+afterPack: ./scripts/afterPack.js
