@@ -45,7 +45,10 @@ jobs:
         run: yarn install --immutable
 
       - name: Build macOS App
-        run: yarn app-package
+        run: |
+          yarn app-package
+          echo "________"
+          ls -la ../dist/mac-arm64
 
       - name: Find APP file and move to upload directory
         run: |
