@@ -54,12 +54,19 @@ jobs:
           APP_PATH=../dist/mac-arm64
           cd "$APP_PATH"
           zip -r $GITHUB_WORKSPACE/upload-artifact/Vento_macOS.zip ./*
+          cp "$APP_PATH/Vento.app/Contents/MacOS/Vento" "$GITHUB_WORKSPACE/upload-artifact/Vento_macOS(single)"
 
       - name: Upload Vento as artifact
         uses: actions/upload-artifact@v4
         with:
           name: Vento_MacOS
           path: upload-artifact/Vento_macOS.zip 
+
+      - name: Upload Vento as artifact (1)   
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vento_MacOS(1)
+          path: upload-artifact/Vento_macOS(single)
 
       - name: Upload to GitHub Release
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -69,6 +76,17 @@ jobs:
           name: ${{ github.event.inputs.release_name }}
           prerelease: ${{ github.event.inputs.prerelease }}
           files: upload-artifact/Vento_macOS.zip 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to GitHub Release (1)
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag_name }}
+          name: ${{ github.event.inputs.release_name }}
+          prerelease: ${{ github.event.inputs.prerelease }}
+          files: upload-artifact/Vento_macOS(single)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
