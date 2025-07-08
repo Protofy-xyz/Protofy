@@ -110,7 +110,7 @@ const typeCodes = {
 //data contains: data.value, data.icon and data.color
 return card({
     content: \`
-        \${icon({ name: data.icon, color: data.color, size: '48' })}    
+        \${cardIcon({ data, size: '48' })}    
         \${cardValue({ value: data.value })}
     \`
 });
@@ -119,7 +119,7 @@ return card({
 // data contains: data.icon, data.color, data.name, data.params
 return card({
     content: \`
-        \${icon({ name: data.icon, color: data.color, size: '48' })}
+        \${cardIcon({ data, size: '48' })}
         \${cardAction({ data })}
     \`
 });

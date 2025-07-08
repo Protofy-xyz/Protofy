@@ -17,6 +17,18 @@ const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     `;
 };
 
+const cardIcon = ({data, size, style = ''}) => {
+    if(data.displayIcon === false) {
+        return '';
+    }
+    return icon({
+        name: data.icon || 'default',
+        size: size || '48',
+        color: data.color,
+        style: style || ''
+    });
+}
+
 function jsonToDiv(json, indent, expandedDepth) {
     indent = indent || 0;
     expandedDepth = (expandedDepth === undefined) ? 2 : expandedDepth;

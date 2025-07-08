@@ -8,7 +8,7 @@
             "width": 2,
             "height": 6,
             "icon": "activity",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "system_state",
             "displayResponse": true,
@@ -22,51 +22,48 @@
                     "defaultValue": ""
                 }
             },
-            "value": "play",
-            "displayButton": false
+            "displayButton": false,
+            "displayIcon": true
         },
         {
             "key": "action_1751496924165",
             "width": 2,
             "height": 6,
             "icon": "circle-stop",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "stop",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
-            "value": "1"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})"
         },
         {
             "key": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
             "width": 2,
             "height": 6,
             "icon": "play",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "play",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
-            "value": "play"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})"
         },
         {
             "key": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
             "width": 2,
             "height": 6,
             "icon": "circle-pause",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "pause",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
-            "value": "pause"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})"
         },
         {
             "key": "action_1751541935642",
             "width": 2,
             "height": 6,
             "icon": "clock-1",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "time",
             "displayResponse": true,
@@ -80,7 +77,6 @@
                     "defaultValue": ""
                 }
             },
-            "value": "1",
             "displayButton": false
         }
     ],
