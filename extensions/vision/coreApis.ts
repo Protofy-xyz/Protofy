@@ -4,6 +4,7 @@ import { Application } from "express";
 import axios from "axios";
 import { addAction } from "@extensions/actions/coreContext/addAction";
 import { addCard } from "@extensions/cards/coreContext/addCard";
+import { getChatGPTApiKey} from '@extensions/chatgpt/coreContext';
 
 async function getImageBase64(url) {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -11,6 +12,43 @@ async function getImageBase64(url) {
 }
 
 async function sendPromptWithImage(prompt, imageUrl) {
+    const token = await getChatGPTApiKey();
+    if (!token) throw new Error("OpenAI API key not found");
+    const imageBase64 = await getImageBase64(imageUrl);
+
+    const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+            temperature: 1,
+            model: 'gpt-4o', // o 'gpt-4-vision-preview'
+            messages: [
+                {
+                    role: "user",
+                    content: [
+                        {
+                            type: "image_url",
+                            image_url: {
+                                url: `data:image/jpeg;base64,${imageBase64}`,
+                            },
+                        },
+                        { type: "text", text: prompt }
+                    ],
+                },
+            ],
+            max_tokens: 1024,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+
+    return response.data.choices[0].message.content;
+}
+
+async function sendPromptWithImageLmStudio(prompt, imageUrl) {
     const imageBase64 = await getImageBase64(imageUrl);
 
     // Enviar el prompt y la imagen en base64 a LM Studio
