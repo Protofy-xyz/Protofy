@@ -1,0 +1,731 @@
+{
+    "name": "camera",
+    "cards": [
+        {
+            "key": "action_1751928129349",
+            "width": 2,
+            "height": 6,
+            "icon": "file-stack",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onClear={(items) => execute_action('queue', {action: 'clear'})} onDeleteItem={(item, index) => execute_action('queue', {action: 'remove', index})} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            "type": "action",
+            "name": "queue",
+            "displayResponse": true,
+            "rulesCode": "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
+            "params": {
+                "item": "",
+                "action": "action to perform in the queue: push, pop, clear"
+            },
+            "configParams": {
+                "item": {
+                    "visible": true,
+                    "defaultValue": ""
+                },
+                "action": {
+                    "visible": true,
+                    "defaultValue": ""
+                }
+            },
+            "displayButton": false
+        },
+        {
+            "key": "value_1751928213399",
+            "width": 2,
+            "height": 6,
+            "icon": "folder-search",
+            "html": "return fileBrowser(data)",
+            "name": "File Browser",
+            "description": "Render a file browser",
+            "type": "value",
+            "editorOptions": {
+                "defaultTab": "value"
+            },
+            "rulesCode": "return '/data/public/photos'"
+        },
+        {
+            "key": "action_1751928305579",
+            "width": 2,
+            "height": 6,
+            "icon": "x",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data })}\n    `\n});\n",
+            "type": "action",
+            "name": "reindex",
+            "displayResponse": false,
+            "rulesCode": "const items = await execute_action(\"/api/core/v1/files\", {path: '/data/public/photos'})\r\nconsole.log('iteeeeeeeems: ', items)\r\nfor(var i = 0;i<items.length;i++) {\r\n    await execute_action(\"queue\", {\r\n\t\titem: items[i], // \r\n\t\taction: 'push', // action to perform in the queue: push, pop, clear\r\n\t})\r\n}\r\n",
+            "buttonLabel": "reindex"
+        },
+        {
+            "key": "action_1751928368242",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value && data.value != 'empty' ? boardImage({ src: `${'/public/photos/'+data.value}`, style:\"height: 75%\" }):''}\n        ${data.value == 'empty' ? cardValue({value: 'empty'}): ''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "type": "action",
+            "name": "current_photo",
+            "displayResponse": false,
+            "rulesCode": "const item = board?.['queue']?.[0] ?? 'empty'\r\nawait execute_action(\"queue\", {\r\n\titem: '', // \r\n\taction: 'pop', // action to perform in the queue: push, pop, clear\r\n})\r\nreturn item",
+            "displayButton": true,
+            "buttonLabel": "pop"
+        },
+        {
+            "key": "action_1751930235436",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_1",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0.2"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "1"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_7jfgv8t8nkif6hcokuswsq",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_2",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0.5"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "2"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_ejem0dutyzrh2h10ehtyz9",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_3",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.2"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "3"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_3pli13ttygeptkgtbkstu",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_4",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0.73"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "4"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_6vyatb0ecyx3cr6akg8e69",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_5",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.45"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.2"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "5"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_x2l74efz74u2xmrfgrbr",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_6",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0.70"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.54"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.2"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "6"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "action_1751930235436_vento_copy_t2gmcgenykuaqqncdd4yl",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_7",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.65"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "7"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "value_1751932940477",
+            "width": 2,
+            "height": 6,
+            "icon": "tag",
+            "html": "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value })}\n    `\n});\n",
+            "type": "value",
+            "name": ""
+        },
+        {
+            "key": "action_1751930235436_vento_copy_6spmzm2lgpc8vtolygqfaa",
+            "width": 2,
+            "height": 6,
+            "icon": "crop",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${data.value?`<img src=\"${data.value?.replace(/^\\/data/, '')}\" />`:''}\n        ${cardAction({ data })}\n    `\n});\n",
+            "name": "crop_8",
+            "color": "#FFC300",
+            "description": "crop an image",
+            "rulesCode": "return (await execute_action(\"/api/v1/imageops/crop\", {\r\n    ...params,\r\n    image: '/data/public/photos/'+board.current_photo,\r\n    saveTo: '/data/public/photos_crop/'+board.current_photo+'_'+params.saveTo+'.jpg'\r\n}))+'?x='+Math.random();",
+            "params": {
+                "x": "",
+                "y": "",
+                "width": "",
+                "height": "",
+                "saveTo": "path to save the cropped image"
+            },
+            "type": "action",
+            "configParams": {
+                "x": {
+                    "visible": false,
+                    "defaultValue": "0.35"
+                },
+                "y": {
+                    "visible": false,
+                    "defaultValue": "0.75"
+                },
+                "width": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "height": {
+                    "visible": false,
+                    "defaultValue": "0.25"
+                },
+                "saveTo": {
+                    "visible": false,
+                    "defaultValue": "8"
+                }
+            },
+            "displayResponse": false,
+            "displayButton": false
+        },
+        {
+            "key": "value_1751932940477_vento_copy_jdd0m07yrpmnmryzlii1c",
+            "width": 2,
+            "height": 6,
+            "icon": "tag",
+            "html": "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}    \n        ${cardValue({ value: data.value })}\n    `\n});\n",
+            "type": "value",
+            "name": ""
+        },
+        {
+            "key": "action_1751933312995",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${icon({ name: data.icon, color: data.color, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "type": "action",
+            "name": "crop",
+            "displayResponse": true,
+            "rulesCode": "execute_action(\"crop_1\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_2\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_3\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_4\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_5\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_6\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_7\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})\r\n\r\nexecute_action(\"crop_8\", {\r\n\tx: '', // \r\n\ty: '', // \r\n\twidth: '', // \r\n\theight: '', // \r\n\tsaveTo: '', // path to save the cropped image\r\n})"
+        }
+    ],
+    "autopilot": false,
+    "layouts": {
+        "lg": [
+            {
+                "w": 2,
+                "h": 8,
+                "x": 0,
+                "y": 16,
+                "i": "action_1751928129349",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 4,
+                "h": 10,
+                "x": 0,
+                "y": 0,
+                "i": "value_1751928213399",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 8,
+                "x": 2,
+                "y": 10,
+                "i": "action_1751928305579",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 12,
+                "x": 5,
+                "y": 8,
+                "i": "action_1751928368242",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 8,
+                "x": 5,
+                "y": 0,
+                "i": "action_1751930235436",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 8,
+                "x": 6,
+                "y": 0,
+                "i": "action_1751930235436_vento_copy_7jfgv8t8nkif6hcokuswsq",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 8,
+                "x": 4,
+                "y": 6,
+                "i": "action_1751930235436_vento_copy_ejem0dutyzrh2h10ehtyz9",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 7,
+                "x": 7,
+                "y": 6,
+                "i": "action_1751930235436_vento_copy_3pli13ttygeptkgtbkstu",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 6,
+                "x": 4,
+                "y": 14,
+                "i": "action_1751930235436_vento_copy_6vyatb0ecyx3cr6akg8e69",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 7,
+                "x": 7,
+                "y": 13,
+                "i": "action_1751930235436_vento_copy_x2l74efz74u2xmrfgrbr",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 7,
+                "x": 4,
+                "y": 20,
+                "i": "action_1751930235436_vento_copy_t2gmcgenykuaqqncdd4yl",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 6,
+                "x": 7,
+                "y": 0,
+                "i": "value_1751932940477",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 7,
+                "x": 5,
+                "y": 20,
+                "i": "action_1751930235436_vento_copy_6spmzm2lgpc8vtolygqfaa",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 1,
+                "h": 6,
+                "x": 4,
+                "y": 0,
+                "i": "value_1751932940477_vento_copy_jdd0m07yrpmnmryzlii1c",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 10,
+                "i": "action_1751933312995",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            }
+        ],
+        "md": [
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 0,
+                "i": "action_1751928129349",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 6,
+                "i": "value_1751928213399",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 12,
+                "i": "action_1751928305579",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 6,
+                "x": 0,
+                "y": 18,
+                "i": "action_1751928368242",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 2,
+                "h": 8,
+                "x": 0,
+                "y": 24,
+                "i": "action_1751930235436",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_7jfgv8t8nkif6hcokuswsq",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_ejem0dutyzrh2h10ehtyz9",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_3pli13ttygeptkgtbkstu",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_6vyatb0ecyx3cr6akg8e69",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_x2l74efz74u2xmrfgrbr",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_t2gmcgenykuaqqncdd4yl",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "value_1751932940477",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751930235436_vento_copy_6spmzm2lgpc8vtolygqfaa",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "value_1751932940477_vento_copy_jdd0m07yrpmnmryzlii1c",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            },
+            {
+                "i": "action_1751933312995",
+                "x": 0,
+                "y": 0,
+                "w": 2,
+                "h": 6,
+                "isResizable": true
+            }
+        ],
+        "sm": []
+    }
+}
