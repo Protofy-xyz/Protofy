@@ -63,7 +63,7 @@ function serve404(res) {
 function handleHttp(name, req, res, fallback, proxy, logger) {
   // 1) public files
   if (req.url.startsWith('/public/')) {
-    const rel = decodeURIComponent(req.url.replace(/\.\.\//g, ''))
+    let rel = decodeURIComponent(req.path.replace(/\.\.\//g, ''))
     const root = '../../data'
     const fp = path.join(root, rel)
     if (!fs.existsSync(fp)) {
