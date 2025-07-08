@@ -36,7 +36,7 @@
     "prepare": "node prepare.js && yarn workspaces foreach --all run prepare-dev",
     "add-user": "yarn workspace core add-user",
     "build": "yarn workspaces foreach -t --all run build",
-    "package": "yarn workspaces foreach --all run package",
+    "package": "yarn prepare-dev && yarn workspaces foreach --all run package",
     "status": "pm2 status",
     "monit": "pm2 monit",
     "dashboard": "pm2 plus",
