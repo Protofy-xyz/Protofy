@@ -18,7 +18,9 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   const isSimpleReturnString =
     !cardData.rulesCode ||
     /^return\s*`[\s\S]*`$/.test(cardData.rulesCode.trim());
-  const [tab, setTab] = useState("rules");
+  const hasEmptyRulesCode = !cardData.rulesCode 
+  //if there is rules code and it is a simple return string, we show the value tab by default, otherwise we show the rules tab
+  const [tab, setTab] = useState(!hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules"); 
 
   const { resolvedTheme } = useThemeSetting();
   useEffect(() => {

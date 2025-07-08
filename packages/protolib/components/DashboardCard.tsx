@@ -34,6 +34,7 @@ export const DashboardCard = ({ children, hideTitle, id, title, cardActions = <>
                     mt={hideTitle ? 0 : 10}
                     h={20}
                     ai="center"
+                    zIndex={3333}
                     {...titleProps}
                 >
                 {title && !hideTitle ? (
