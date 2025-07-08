@@ -71,7 +71,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
 }
 
 const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
-  return <CenterCard titleMode={data.titleMode} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
+  return <CenterCard hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       setData={setData}
       id={id}

@@ -11,7 +11,7 @@ interface DashboardCardProps {
     cardActions?: ReactNode;
 }
 
-export const DashboardCard = ({ children, id, title, cardActions = <></>, titleProps = {}, containerProps = {} }: DashboardCardProps) => {
+export const DashboardCard = ({ children, hideTitle, id, title, cardActions = <></>, titleProps = {}, containerProps = {} }: DashboardCardProps) => {
     const [hovered, setHovered] = useState(false);
     return (
         <Tinted>
@@ -26,20 +26,20 @@ export const DashboardCard = ({ children, id, title, cardActions = <></>, titleP
                 {...containerProps}
                 style={{ height: '100%', overflow: 'hidden', ...containerProps.style }}
             >
-
+            
                 {(title || cardActions) && <XStack
                     w="100%"
                     btrr={9}
                     btlr={9}
-                    mt={10}
+                    mt={hideTitle ? 0 : 10}
                     h={20}
                     ai="center"
                     {...titleProps}
                 >
-                {title ? (
+                {title && !hideTitle ? (
                     <Paragraph flex={1} fow="500" textOverflow={"ellipsis"} textAlign="center" overflow="hidden" whiteSpace={"nowrap"}fos={"$4"}>{title}</Paragraph>
                 ) : null}
-                    <XStack position="absolute" right={0} className="no-drag" mr="$3.5" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
+                    <XStack position="absolute" mt={hideTitle?15:0} right={0} className="no-drag" mr="$3.5" opacity={hovered? 0.75 : 0} pressStyle={{ opacity: 0.9 }}>
                         {cardActions}
                     </XStack>
                 </XStack>}

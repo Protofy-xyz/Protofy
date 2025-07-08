@@ -190,6 +190,20 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
             {tab == 'raw' && <YStack f={1}>
               {card.type == 'action' && <XStack>
                 <XStack ai="center">
+                  <Label htmlFor="display-title-switch" mr={"$3"}  >Display title</Label>
+                  <Switch
+                    id="display-title-switch"
+                    size="$4"
+                    checked={cardData.displayTitle === undefined ? true : cardData.displayTitle}
+                    onCheckedChange={(value) => {
+                      setCardData({ ...cardData, displayTitle: value })
+                    }}
+                    className="no-drag"
+                  >
+                    <Switch.Thumb className="no-drag" animation="quick" />
+                  </Switch>
+                </XStack>
+                <XStack ai="center">
                   <Label htmlFor="display-value-switch" mr={"$3"}  >Display value</Label>
                   <Switch
                     id="display-value-switch"
