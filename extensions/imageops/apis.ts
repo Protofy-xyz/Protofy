@@ -51,11 +51,12 @@ export default (app, context) => {
                 rulesCode: `return execute_action("/api/v1/imageops/crop", userParams);`,
                 params: {
                     image: "path to the image",
-                    x: "x coordinate",
-                    y: "y coordinate",
-                    width: "width",
-                    height: "height",
-                    saveTo: "path to save the cropped image"
+                    x: "x coordinate (0-1)",
+                    y: "y coordinate (0-1)",
+                    width: "width (0-1)",
+                    height: "height (0-1)",
+                    saveTo: "path to save the cropped image",
+                    rotation: "rotation in degrees (0-360, default 0)"
                 },
                 type: 'action'
             },
@@ -70,11 +71,16 @@ export default (app, context) => {
             return;
         }
 
-        let { image, x, y, width, height, saveTo } = req.query as any;
+        let { image, x, y, width, height, saveTo, rotation } = req.query as any;
         x = parseFloat(x); y = parseFloat(y);
         width = parseFloat(width); height = parseFloat(height);
+        rotation = parseInt(rotation ?? '0', 10); // default to 0
 
-        if (!image || !saveTo || [x, y, width, height].some(v => isNaN(v) || v < 0 || v > 1)) {
+        if (
+            !image || !saveTo ||
+            [x, y, width, height].some(v => isNaN(v) || v < 0 || v > 1) ||
+            isNaN(rotation) || rotation < -360 || rotation > 360
+        ) {
             res.status(400).send({ error: "Missing or invalid parameters" });
             return;
         }
@@ -94,9 +100,14 @@ export default (app, context) => {
             const cropH = Math.round(height * (metadata.height || 1));
 
             await fs.mkdir(path.dirname(outputPath), { recursive: true });
-            await sharp(inputPath)
-                .extract({ left: cropX, top: cropY, width: cropW, height: cropH })
-                .toFile(outputPath);
+
+            let image = sharp(inputPath).extract({ left: cropX, top: cropY, width: cropW, height: cropH });
+
+            if (rotation % 360 !== 0) {
+                image = image.rotate(rotation); // clockwise or counterclockwise
+            }
+
+            await image.toFile(outputPath);
 
             res.send(saveTo);
         } catch (err) {
