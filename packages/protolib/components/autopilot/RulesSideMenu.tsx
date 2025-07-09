@@ -11,12 +11,13 @@ import { useSettingValue } from "../../lib/useSetting";
 import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import { CodeView } from '@extensions/files/intents';
+import { ClipboardList, Save, Sparkles } from '@tamagui/lucide-icons'
 
 function generateStateDeclarations(obj) {
     const recurse = (o) => {
         return (
             '{\n' +
-            Object.entries(o??{})
+            Object.entries(o ?? {})
                 .map(([key, val]) => {
                     if (typeof val === 'object' && val !== null) {
                         return `  ${key}: ${recurse(val)};`;
@@ -33,8 +34,7 @@ function generateStateDeclarations(obj) {
 }
 
 
-export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states, resolvedTheme }) => {
-    const [savedRules, setSavedRules] = useState(board.rules)
+export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo, boardRef, board, actions, states, resolvedTheme }) => {
     const boardStates = states.boards ? states.boards[board.name] : {}
     const boardActions = actions.boards ? actions.boards[board.name] : {}
 
@@ -70,10 +70,49 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
     const isAIEnabled = useSettingValue('ai.enabled', false);
 
     const theme = useTheme()
-
-
     const flows = useMemo(() => {
         return <CodeView
+            onApplyRules={async (rules) => {
+                try {
+                    boardRef.current.rules = rules
+                    const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: rules, states: boardStates, actions: actions.boards ? actions.boards[board.name] : {} })
+                    if (rulesCode.error || !rulesCode.data?.jsCode) {
+                        toast.show(`Error generating board code: ${rulesCode.error}`)
+                        return
+                    }
+
+                    savedCode.current = rulesCode.data.jsCode
+                    editedCode.current = rulesCode.data.jsCode
+                    await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
+                } catch (e) {
+                    toast.show(`Error generating board code: ${e.message}`)
+                    console.error(e)
+                }
+            }}
+            disableAIPanels={!isAIEnabled}
+            defaultMode={isAIEnabled ? 'rules' : 'flow'}
+            rules={board.rules}
+            leftIcons={
+                <XStack zIndex={9999} gap="$3" ml="$2">
+                    {leftIcons}
+                </XStack>
+            }
+            icons={<XStack zIndex={9999} gap="$3" mr="$2">
+                {/* <XStack cursor='pointer' onPress={async () => {
+                   
+                }} o={0.7} pressStyle={{ opacity: 0.7 }} hoverStyle={{ opacity: 1 }}>
+                    <Sparkles size="$1" color="var(--color)" />
+                </XStack> */}
+                {icons}
+                <XStack cursor='pointer' onPress={() => {
+                    const sourceFile = toSourceFile(automationInfo.code)
+                    const definition = getDefinition(sourceFile, '"code"').getBody()
+                    definition.replaceWithText("{\n" + editedCode.current + "\n}");
+                    API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
+                }} o={0.8} pressStyle={{ opacity: 0.8 }} ml="$5" hoverStyle={{ opacity: 1 }}>
+                    <Save size="$1" color="var(--color)" />
+                </XStack>
+            </XStack>}
             viewPort={{ x: 20, y: window.innerHeight / 8, zoom: 0.8 }}
             onFlowChange={(code) => {
                 editedCode.current = code
@@ -81,7 +120,7 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
             onCodeChange={(code) => {
                 editedCode.current = code
             }}
-            path={board.name}
+            path={board.name + '.ts'}
             sourceCode={editedCode}
             monacoOnMount={(editor, monaco) => {
                 monaco.languages.typescript.typescriptDefaults.addExtraLib(
@@ -99,80 +138,15 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
             }}
         />
     }, [resolvedTheme, board.name, theme, editedCode.current]);
-    return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} p="$3" br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
+    return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
         <Tinted>
             <PanelGroup direction="vertical">
-                {isAIEnabled && <Panel defaultSize={50} minSize={0} maxSize={100}>
-                    <YStack
-                        flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
-                        <Rules
-                            rules={savedRules ?? []}
-                            onAddRule={(e, rule) => {
-                                setSavedRules([...(savedRules ?? []), rule])
-                            }}
-                            onDeleteRule={(index) => {
-                                setSavedRules(savedRules.filter((_, i) => i != index))
-                            }}
-                            onEditRule={(index, rule) => {
-                                const newRules = [...savedRules]
-                                newRules[index] = rule
-                                setSavedRules(newRules)
-                            }}
-                            loadingIndex={-1}
-                        />
-                        <YStack mt="auto" pt="$3">
-
-                        </YStack>
-                    </YStack>
-                </Panel>}
-                <CustomPanelResizeHandle direction="horizontal" />
                 <Panel defaultSize={isAIEnabled ? 50 : 100} minSize={0} maxSize={100}>
-                    <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
+                    <YStack flex={1} mt="$5" height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" >
                         {flows}
                     </YStack>
                 </Panel>
             </PanelGroup>
-            <XStack mt="auto" pt="$3" gap={30} jc='center' ai="center">
-                {isAIEnabled && <Button onPress={async () => {
-                    setGeneratingBoardCode(true)
-                    try {
-                        boardRef.current.rules = savedRules
-                        const rulesCode = await API.post(`/api/core/v1/autopilot/getBoardCode`, { rules: savedRules, states: boardStates, actions: actions.boards ? actions.boards[board.name] : {} })
-                        if (rulesCode.error || !rulesCode.data?.jsCode) {
-                            toast.show(`Error generating board code: ${rulesCode.error}`)
-                            return
-                        }
-
-                        savedCode.current = rulesCode.data.jsCode
-                        editedCode.current = rulesCode.data.jsCode
-                        await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-
-                        const sourceFile = toSourceFile(automationInfo.code)
-                        const definition = getDefinition(sourceFile, '"code"').getBody()
-                        definition.replaceWithText("{\n" + editedCode.current + "\n}");
-
-                        API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
-                        // boardRef.current.rules = []
-                        // await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
-                        toast.show(`Rules applied successfully!`)
-                    } catch (e) {
-                        toast.show(`Error generating board code: ${e.message}`)
-                        console.error(e)
-                    } finally {
-                        setGeneratingBoardCode(false)
-                    }
-                }}>
-                    {generatingBoardCode ? <Spinner /> : 'Apply Rules'}
-                </Button>}
-                <Button onPress={() => {
-                    const sourceFile = toSourceFile(automationInfo.code)
-                    const definition = getDefinition(sourceFile, '"code"').getBody()
-                    definition.replaceWithText("{\n" + editedCode.current + "\n}");
-                    API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
-                }}>
-                    Save
-                </Button>
-            </XStack>
         </Tinted>
     </YStack>
 }

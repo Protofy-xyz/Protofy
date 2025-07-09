@@ -10,7 +10,7 @@ import { BubbleChat } from './BubbleChat';
 import { useRouter } from 'next/router'
 import { useIsAdmin } from '../lib/useIsAdmin';
 
-export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = true }: any, ref) => {
+export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = false }: any, ref) => {
   useSession(pageSession)
 
   useIsAdmin(() => '/workspace/auth/login?return='+document?.location?.pathname+(document?.location?.search ? '?'+document?.location?.search: ''))
