@@ -279,7 +279,7 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
 
     const statesPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
-            {stateInputMode === "formatted" && <FormattedView level1Priority='boards' level2Priority={board.name} copyIndex={0} onCopy={text => {
+            {stateInputMode === "formatted" && <FormattedView level1Priority={board.name} copyIndex={0} onCopy={text => {
                 const parts = text[0].split('->').map(p => p.trim());
                 let inBoard = false;
                 if (text[0].startsWith(board.name + ' -> ')) {
