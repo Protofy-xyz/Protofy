@@ -11,7 +11,7 @@ import { ActiveGroup } from './ActiveGroup';
 import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useMemo, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search, Trash } from '@tamagui/lucide-icons'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useTimeout, useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
@@ -279,6 +279,7 @@ const DataViewInternal = forwardRef(({
     const items: any = _items
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
+    const [deleteOpen, setDeleteOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
     const [currentItemData, setCurrentItemData] = useState(itemData)
@@ -527,7 +528,7 @@ const DataViewInternal = forwardRef(({
 
 
     const realActiveView = activeViewIndex == -1 ? 0 : activeViewIndex
-    
+
     return (<AsyncView atom={currentItems}>
         <YStack ref={ref} height="100%" f={1}>
             <ActiveGroup initialState={realActiveView}>
@@ -680,6 +681,22 @@ const DataViewInternal = forwardRef(({
                         </ScrollView>
                     </YStack>
                 </AlertDialog>
+                <AlertDialog
+                    acceptCaption="Delete all"
+                    setOpen={setDeleteOpen}
+                    open={deleteOpen}
+                    onAccept={async (setOpen) => {
+                        await API.get('/api/core/v1/databases/'+ name + '/delete')
+                        document.location.reload()
+                    }}
+                    title={'Delete'}
+                    description={"This action will delete all data from your database. Are you sure you want to continue?"}
+                    w={400}
+                >
+                    <YStack f={1} jc="center" ai="center">
+
+                    </YStack>
+                </AlertDialog>
                 {!state.editFile && <>
                     <XStack pt="$3" px="$3" mb="$1">
                         <XStack ml="$2" f={1} ai="center" gap="$2">
@@ -754,6 +771,16 @@ const DataViewInternal = forwardRef(({
                                         }}
                                     />
                                 </Tinted>}
+                                <Tinted>
+                                    <DataViewActionButton
+                                        id="admin-dataview-add-btn"
+                                        icon={Trash}
+                                        description={`Delete all items from ${name}`}
+                                        onPress={() => {
+                                            setDeleteOpen(true)
+                                        }}
+                                    />
+                                </Tinted>
                                 {!disableViewSelector && <ButtonGroup marginLeft="$3" boc="$gray5">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>

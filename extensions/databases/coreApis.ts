@@ -1,4 +1,4 @@
-import { handler, AutoAPI, getRoot, closeDBS} from 'protonode'
+import { handler, AutoAPI, getRoot, closeDBS } from 'protonode'
 import { connectDB, getDB } from '@my/config/dist/storageProviders';
 import * as fs from 'fs'
 import * as path from 'path'
@@ -30,6 +30,7 @@ async function moveFolder(src, dest) {
     await fs.promises.rename(src, destTime)
   } catch (error) {
     console.error('Error moving folder:', error)
+    throw new Error(`Failed to move folder from ${src} to ${dest}: ${error.message}`)
   }
 }
 
@@ -52,10 +53,24 @@ const customGetDB = (path, req, session) => {
       }
     },
 
-    async del (key, value) {
+    async del(key, value) {
       const origin = fspath.join(dbDir(req), key)
       const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
-      moveFolder(origin, dest)
+      const deleteDatabase = async (retries=0) =>{
+        try {
+          await moveFolder(origin, dest)
+        } catch (e) {
+          if (retries < 3) {
+            console.warn(`Failed to delete database ${key}, retrying... (${retries + 1})`)
+            await new Promise(resolve => setTimeout(resolve, 1000)) // wait 1 second before retrying
+            return deleteDatabase(retries + 1)
+          } else {
+            console.error(`Failed to delete database ${key} after multiple attempts:`, e)
+            throw e
+          }
+        }
+      }
+      await deleteDatabase()
     },
 
     async put(key, value) {
@@ -115,7 +130,7 @@ export default (app, context) => {
 
     //global case
     if (ids.length === 1 && ids[0] === "*") {
-      const allDbs =  await getDatabases()
+      const allDbs = await getDatabases()
       const transformedArray = allDbs.map(element => element.name)
       ids = transformedArray
     }
@@ -123,7 +138,7 @@ export default (app, context) => {
     for (const id of ids) {
       try {
         const originalPath = path.join(dbDir(req), id)
-        const backupPath = path.join(getRoot(req), "data","backups", id + "_" + getTimestamp())
+        const backupPath = path.join(getRoot(req), "data", "backups", id + "_" + getTimestamp())
 
         if (!await createBackupFolderIfNeeded(backupPath)) {
           throw new Error("Failed to create backup folder")

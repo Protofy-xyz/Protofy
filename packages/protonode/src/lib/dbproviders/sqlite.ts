@@ -13,18 +13,21 @@ export interface SQLiteOptions {
 }
 
 export class ProtoSqliteDB extends ProtoDB {
-  private db: Database.Database
   public capabilities: string[] = ['pagination', 'groupBySingle', 'groupByOptions']
-
+  private path: string
+  private options: any
   constructor(dbPath: string, options?: any, config?: ProtoDBConfig) {
     super(dbPath, options, config)
-    this.db = new Database(dbPath, { fileMustExist: false, ...options })
-    this.prepareSchema()
+    this.path = dbPath
+    this.options = options
+    const db = new Database(dbPath, { fileMustExist: false, ...options })
+    this.prepareSchema(db)
+    db.close()
   }
 
   /** Crea las tablas si no existen */
-  private prepareSchema() {
-    this.db.exec(`
+  private prepareSchema(db: Database.Database) {
+    db.exec(`
       CREATE TABLE IF NOT EXISTS entries (
         id          TEXT PRIMARY KEY,
         data        TEXT NOT NULL,
@@ -35,6 +38,15 @@ export class ProtoSqliteDB extends ProtoDB {
         value TEXT NOT NULL
       );
     `)
+  }
+
+  private withDB<T>(fn: (db: Database.Database) => T): T {
+    const db = new Database(this.path, { fileMustExist: false, ...this.options })
+    try {
+      return fn(db)
+    } finally {
+      db.close()
+    }
   }
 
   static connect(dbPath: string, options?: any, config?: ProtoDBConfig) {
@@ -88,79 +100,78 @@ export class ProtoSqliteDB extends ProtoDB {
   // — CRUD básico —
 
   get(key: string) {
-    const row = this.db
-      .prepare(`SELECT data FROM entries WHERE id = ?`)
-      .get(key)
-    if (!row) throw new Error('NotFound')
-    return row.data
+    return this.withDB(db => {
+      const row = db.prepare(`SELECT data FROM entries WHERE id = ?`).get(key)
+      if (!row) throw new Error('NotFound')
+      return row.data
+    })
   }
 
   async exists(key: string) {
-    const row = this.db
-      .prepare(`SELECT 1 FROM entries WHERE id = ?`)
-      .get(key)
-    return !!row
+    return this.withDB(db => {
+      const row = db.prepare(`SELECT 1 FROM entries WHERE id = ?`).get(key)
+      return !!row
+    })
   }
 
   async put(key: string, value: string, options?: any) {
-    const now = Date.now()
-    const existing = this.db
-      .prepare(`SELECT created_at FROM entries WHERE id = ?`)
-      .get(key)
-    const created_at = existing ? existing.created_at : now
+    return this.withDB(db => {
+      const now = Date.now()
+      const existing = db.prepare(`SELECT created_at FROM entries WHERE id = ?`).get(key)
+      const created_at = existing ? existing.created_at : now
 
-    this.db
-      .prepare(
-        `INSERT INTO entries(id,data,created_at)
-         VALUES(@id,@data,@created_at)
-         ON CONFLICT(id) DO UPDATE SET data=@data`
-      )
-      .run({ id: key, data: value, created_at })
+      db.prepare(`
+        INSERT INTO entries(id,data,created_at)
+        VALUES(@id,@data,@created_at)
+        ON CONFLICT(id) DO UPDATE SET data=@data
+      `).run({ id: key, data: value, created_at })
 
-    return true
+      return true
+    })
   }
 
   async del(key: string) {
-    this.db.prepare(`DELETE FROM entries WHERE id = ?`).run(key)
-    return true
+    return this.withDB(db => {
+      db.prepare(`DELETE FROM entries WHERE id = ?`).run(key)
+      return true
+    })
   }
 
   // — Conteos e índices —
 
   async count(filter?: { key: string; value: any }) {
-    if (filter) {
-      const sql = `
-        SELECT COUNT(*) AS c FROM entries
-        WHERE json_extract(data, ?) = ?
-      `
-      // utilizamos placeholder para la ruta JSON
-      return this.db
-        .prepare(sql)
-        .get(`$.${filter.key}`, filter.value).c
-    }
-    return this.db.prepare(`SELECT COUNT(*) AS c FROM entries`).get().c
+    return this.withDB(db => {
+      if (filter) {
+        const sql = `
+          SELECT COUNT(*) AS c FROM entries
+          WHERE json_extract(data, ?) = ?
+        `
+        return db.prepare(sql).get(`$.${filter.key}`, filter.value).c
+      }
+      return db.prepare(`SELECT COUNT(*) AS c FROM entries`).get().c
+    })
   }
 
   async getIndexedKeys() {
-    try {
-      const row = this.db
-        .prepare(`SELECT value FROM indexTable WHERE name='indexes'`)
-        .get()
-      return JSON.parse(row.value).keys
-    } catch {
-      return []
-    }
+    return this.withDB(db => {
+      try {
+        const row = db.prepare(`SELECT value FROM indexTable WHERE name='indexes'`).get()
+        return JSON.parse(row.value).keys
+      } catch {
+        return []
+      }
+    })
   }
 
   async getGroupIndexes() {
-    try {
-      const row = this.db
-        .prepare(`SELECT value FROM indexTable WHERE name='groupIndexes'`)
-        .get()
-      return JSON.parse(row.value)
-    } catch {
-      return []
-    }
+    return this.withDB(db => {
+      try {
+        const row = db.prepare(`SELECT value FROM indexTable WHERE name='groupIndexes'`).get()
+        return JSON.parse(row.value)
+      } catch {
+        return []
+      }
+    })
   }
 
   async hasGroupIndexes(keys: string[]) {
@@ -169,17 +180,15 @@ export class ProtoSqliteDB extends ProtoDB {
   }
 
   async getGroupIndexOptions(groupKey: string, limit = 100) {
-    const sql = `
-      SELECT DISTINCT json_extract(data, ?) AS v
-      FROM entries
-      WHERE v IS NOT NULL
-      LIMIT ?
-    `
-    // la ruta JSON va como parámetro
-    return this.db
-      .prepare(sql)
-      .all(`$.${groupKey}`, limit)
-      .map((r: any) => r.v)
+    return this.withDB(db => {
+      const sql = `
+        SELECT DISTINCT json_extract(data, ?) AS v
+        FROM entries
+        WHERE v IS NOT NULL
+        LIMIT ?
+      `
+      return db.prepare(sql).all(`$.${groupKey}`, limit).map((r: any) => r.v)
+    })
   }
 
   // — Paginación ordenada —
@@ -192,39 +201,42 @@ export class ProtoSqliteDB extends ProtoDB {
     direction: 'asc' | 'desc',
     filter?: { key: string; value: any }
   ) {
-    // validamos la dirección
-    const dir = direction.toLowerCase() === 'desc' ? 'DESC' : 'ASC'
+    return this.withDB(db => {
+      const dir = direction.toLowerCase() === 'desc' ? 'DESC' : 'ASC'
 
-    let sql = `SELECT data FROM entries`
-    const params: any[] = []
+      let sql = `SELECT data FROM entries`
+      const params: any[] = []
 
-    if (filter) {
-      sql += ` WHERE json_extract(data, ?) = ?`
-      params.push(`$.${filter.key}`, filter.value)
-    }
+      if (filter) {
+        sql += ` WHERE json_extract(data, ?) = ?`
+        params.push(`$.${filter.key}`, filter.value)
+      }
 
-    sql += `
-      ORDER BY json_extract(data, ?) ${dir}
-      LIMIT ? OFFSET ?
-    `
-    params.push(`$.${key}`, itemsPerPage, pageNumber * itemsPerPage)
+      sql += `
+        ORDER BY json_extract(data, ?) ${dir}
+        LIMIT ? OFFSET ?
+      `
+      params.push(`$.${key}`, itemsPerPage, pageNumber * itemsPerPage)
 
-    return this.db
-      .prepare(sql)
-      .all(...params)
-      .map((r: any) => r.data)
+      return db.prepare(sql).all(...params).map((r: any) => r.data)
+    })
   }
 
   // — Iterador para list() —
 
   *iterator() {
-    const stmt = this.db.prepare(`SELECT id, data FROM entries`)
-    for (const row of stmt.iterate()) {
-      yield [row.id, row.data]
+    const db = new Database(this.path, { fileMustExist: false, ...this.options })
+    try {
+      const stmt = db.prepare(`SELECT id, data FROM entries`)
+      for (const row of stmt.iterate()) {
+        yield [row.id, row.data]
+      }
+    } finally {
+      db.close()
     }
   }
 
   async close() {
-    this.db.close()
+    // ya no hace falta cerrar nada, pero se mantiene para compatibilidad
   }
 }
