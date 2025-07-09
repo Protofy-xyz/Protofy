@@ -848,7 +848,7 @@ const FlowsBase = ({
     }, [_customComponents.length])
 
     useEffect(() => {
-        if (sourceCode) {
+        if (sourceCode !== undefined && sourceCode !== null) {
             reload()
         }
     }, [sourceCode])

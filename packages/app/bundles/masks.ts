@@ -69,7 +69,8 @@ export const getFlowsCustomComponents = (path: string, queryParams: {}) => {
     ]
 
     if( paths.boards.includes(segment) ) return [
-        ...boardMasks
+        ...boardMasks,
+        ...baseMasks.api
     ]
     return []
 }
