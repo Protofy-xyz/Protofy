@@ -81,7 +81,7 @@ export const RulesSideMenu = ({ automationInfo, boardRef, board, actions, states
             onCodeChange={(code) => {
                 editedCode.current = code
             }}
-            path={'/data/boards/' + board.name + '.ts'}
+            path={board.name}
             sourceCode={editedCode}
             monacoOnMount={(editor, monaco) => {
                 monaco.languages.typescript.typescriptDefaults.addExtraLib(
