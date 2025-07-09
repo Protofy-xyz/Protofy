@@ -220,6 +220,20 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                   </Switch>
                 </XStack>
                 <XStack ai="center" ml={"$4"}>
+                  <Label htmlFor="display-icon-switch" mr={"$3"}>Display icon</Label>
+                  <Switch
+                    id="display-icon-switch"
+                    size="$4"
+                    checked={cardData.displayIcon === undefined ? true : cardData.displayIcon}
+                    onCheckedChange={(value) => {
+                      setCardData({ ...cardData, displayIcon: value })
+                    }}
+                    className="no-drag"
+                  >
+                    <Switch.Thumb className="no-drag" animation="quick" />
+                  </Switch>
+                </XStack>
+                <XStack ai="center" ml={"$4"}>
                   <Label htmlFor="display-button-switch" mr={"$3"}>Display button</Label>
                   <Switch
                     id="display-button-switch"
@@ -234,7 +248,10 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                   </Switch>
                 </XStack>
                 {(cardData.displayButton === undefined ? true : cardData.displayButton)?<XStack ai="center" ml={"$4"}>
+                  Button text
+                  <Label htmlFor="button-text-input" ml={"$2"} />
                   <Input
+                    outlineColor={'$colorTransparent'}
                     id="button-text-input"
                     size="$4"
                     placeholder="Button text"
@@ -244,20 +261,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                     }}
                     className="no-drag"/>
                 </XStack>:<></>}
-                <XStack ai="center" ml={"$4"}>
-                  <Label htmlFor="display-icon-switch" mr={"$3"}>Display icon</Label>
-                  <Switch
-                    id="display-icon-switch"
-                    size="$4"
-                    checked={cardData.displayIcon === undefined ? true : cardData.displayIcon}
-                    onCheckedChange={(value) => {
-                      setCardData({ ...cardData, displayIcon: value })
-                    }}
-                    className="no-drag"
-                  >
-                    <Switch.Thumb className="no-drag" animation="quick" />
-                  </Switch>
-                </XStack>
+
               </XStack>}
 
               <Monaco
