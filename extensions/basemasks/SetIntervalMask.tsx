@@ -9,7 +9,7 @@ const SetIntervalMask = ({ node = {}, nodeData = {}, children }: any) => {
         <Node icon={Timer} node={node} isPreview={!node.id} title='Interval timer' color={color} id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={[{ label: 'Interval time (ms)', field: 'param-2', type: 'input' }]} />
             <div style={{ paddingBottom: "80px" }}>
-                <FlowPort id={node.id} type='input' label='On Timer' style={{ top: '140px' }} handleId={'request'} />
+                <FlowPort id={node.id} type='input' label='On Timer' style={{ top: '110px' }} handleId={'request'} />
                 <FallbackPort node={node} port={'param-1'} type={"target"} fallbackPort={'request'} portType={"_"} preText={"async () => "} postText="" />
             </div>
         </Node>
