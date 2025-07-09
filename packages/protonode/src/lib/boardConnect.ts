@@ -24,10 +24,11 @@ export function boardConnect(run) {
         listeners[name].push(changed);
     }
 
-    async function execute_action({ name, params = {} }) {
+    async function execute_action({ name, params = {}, done = (result) => {}, error = (err) =>{} }) {
         console.log('Executing action: ', name, params);
         const action = context.actions[name]
         if (!action) {
+            error('Action not found: ' + name);
             console.error('Action not found: ', name);
             return;
         }
@@ -56,11 +57,23 @@ export function boardConnect(run) {
             }
             //console.log('url: ', url+'?token='+token)
             const response = await API.post(url + '?token=' + token, data);
+            if(response.isError) {
+                console.error('Error executing action: ', response.error);
+                error(response.error);
+                return;
+            }
+            done(response.data);
             return response.data
         } else {
             const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
             //console.log('url: ', url+'?token='+token+'&'+paramsStr)
             const response = await API.get(url + '?token=' + token + '&' + paramsStr);
+            if(response.isError) {
+                console.error('Error executing action: ', response.error);
+                error(response.error);
+                return;
+            }
+            done(response.data);
             return response.data
         }
     }

@@ -19,6 +19,16 @@ const executeActionMask: MaskDefinition = {
       type: 'input',
       label: 'params',
       initialValue: { value: '{}', kind: 'Identifier' },
+    },
+    done: {
+      type: 'output',
+      label: 'done',
+      vars: ['value'],
+    },
+    error: {
+      type: 'output',
+      label: 'error',
+      vars: ['value'],
     }
   },
 };
