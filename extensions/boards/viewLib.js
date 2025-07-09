@@ -264,7 +264,9 @@ const markdown = (card) => {
     const text = data?.value ?? '';
     return (
         <View className="no-drag" height="100%">
-            <Markdown data={text} setData={(newtext) => setCardData('${card.key}', 'rulesCode', 'return \`'+newtext+'\`')} />
+            <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
+                <Markdown data={text} setData={(newtext) => setCardData('${card.key}', 'rulesCode', 'return \`'+newtext+'\`')} />
+            </ProtoThemeProvider>
         </View>
     );
   }
@@ -286,7 +288,9 @@ function Widget() {
       color: "var(--color)"
     }}>
       <Tinted>
-        <FileBrowser initialPath={"${card.value}"} />
+        <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
+            <FileBrowser initialPath={"${card.value}"} />
+        </ProtoThemeProvider>
       </Tinted>
     </div>
   );
