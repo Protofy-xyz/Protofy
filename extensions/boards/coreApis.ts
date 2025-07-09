@@ -466,7 +466,7 @@ export default async (app, context) => {
     });
 
     app.post('/api/core/v1/autopilot/getValueCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "valueRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "valueRules", states: JSON.stringify({boards: req.body.states}, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
@@ -477,7 +477,7 @@ export default async (app, context) => {
     })
 
     app.post('/api/core/v1/autopilot/getActionCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "actionRules", states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "actionRules", states: JSON.stringify({boards: req.body.states}, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }

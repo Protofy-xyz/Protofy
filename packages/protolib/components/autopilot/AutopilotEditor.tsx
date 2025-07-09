@@ -68,7 +68,7 @@ function filterObjectBySearch(data, search) {
  * A partir de un objeto JS, genera una declaración TS
  * con todas las propiedades opcionales y arrays tipados.
  */
-function generateStatesDeclaration(statesObj: any): string {
+function generateStatesDeclaration(name, statesObj: any): string {
     function inferType(value: any): string {
         if (value === null || value === undefined) {
             return 'any';
@@ -97,7 +97,7 @@ function generateStatesDeclaration(statesObj: any): string {
     }
 
     const tsType = inferType(statesObj);
-    return `declare const states: ${tsType};`;
+    return `declare const ${name}: ${tsType};`;
 }
 
 const FormattedView = ({ level1Priority = '', level2Priority = '', copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
@@ -206,7 +206,17 @@ function getBoardIdFromActionUrl(path: string): string | null {
     return match ? match[1] : null;
 }
 
-export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
+const generateParamsDeclaration = (cardData) => {
+    if (!cardData.params || Object.keys(cardData.params).length === 0) return '';
+
+    const params = Object.entries(cardData.params).map(([key, value]) => {
+        return `\t"${key}": ${typeof value === 'string' ? `'${value}'` : value}, // ${value}`;
+    }).join('\n');
+
+    return `declare const params: {\n${params}\n};`;
+}
+
+export const AutopilotEditor = ({ cardData, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
@@ -315,6 +325,15 @@ ${Object.entries(val.params || {}).map(([key, value]) => {
         </YStack>
     }, [filteredData, actionData, inputMode, board?.name]);
 
+
+    const declarations = useMemo(() => {
+        const decl = generateStatesDeclaration('states', { board: states });
+        return `
+${decl}
+${cardData.type == 'action' ? `declare function execute_action(name_or_url: string, params?: Record<string, any>): void;`: ''}
+${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
+    }, [states, cardData]);
+
     const monacoEditor = useMemo(() => {
         return <Monaco
             path={'autopilot-rules.js'}
@@ -322,13 +341,8 @@ ${Object.entries(val.params || {}).map(([key, value]) => {
             sourceCode={rulesCode}
             onChange={setRulesCode}
             onMount={(editor, monaco) => {
-                const decl = generateStatesDeclaration(states);
 
-                monaco.languages.typescript.javascriptDefaults.addExtraLib(`
-${decl}
-declare function execute_action(name_or_url: string, params?: Record<string, any>): void;
-declare const params: Record<string, any>;
-        `);
+                monaco.languages.typescript.javascriptDefaults.addExtraLib(declarations);
             }}
             options={{
                 folding: false,
@@ -339,7 +353,7 @@ declare const params: Record<string, any>;
             }}
         />
 
-    }, [rulesCode, resolvedTheme, setRulesCode]);
+    }, [rulesCode, resolvedTheme, setRulesCode, cardData.type, cardData.params, states]);
 
     return (
         <PanelGroup direction="horizontal">

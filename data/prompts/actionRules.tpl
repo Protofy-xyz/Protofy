@@ -41,6 +41,9 @@ The available action list to execute is:
 {{{actions}}}
 </actions>
 
+If there are multiple options in the states or actions, like various keys at different boards that match the rule description, then priorize the use of the
+states related to the board {{{board}}}
+
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.
 IMPORTANT: anser only with javascript and nothing else.
 Try to keep it simple, write simple code as described by the rules. Most rules will just require simple calls to execute_action.
