@@ -6,7 +6,7 @@ import { PanelLeftOpen, PanelLeftClose, ArrowLeftToLine } from '@tamagui/lucide-
 export const SideMenu = ({ sideBarColor = '$background', children, ...props }: any) => {
     const isXs = useMedia().xs
     const [open, setOpen] = useState(false)
-    const [collapsed, setCollapsed] = useState(true)
+    const [collapsed, setCollapsed] = useState(false)
     const width = collapsed ? 80 : 260
 
     return <YStack bw={0} bc={sideBarColor} {...props} onDoubleClick={e => { setCollapsed(!collapsed); e.stopPropagation() }}>
