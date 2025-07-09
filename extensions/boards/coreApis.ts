@@ -391,7 +391,7 @@ export default async (app, context) => {
         // console.log('**************Reloading board: ', boardId)
         const states = (await context.state.getStateTree()) || {};
         const fileContent = await getBoard(boardId);
-        
+
         if (!fileContent.cards || !Array.isArray(fileContent.cards)) {
             return fileContent;
         }
@@ -403,7 +403,7 @@ export default async (app, context) => {
                 continue;
             }
 
-            
+
             try {
                 if (card.type == 'value') {
                     if (!card.rulesCode) {
@@ -936,7 +936,7 @@ return card({
         emitEvent: true
     });
 
-        addCard({
+    addCard({
         group: 'board',
         tag: 'filebrowser',
         id: 'filebrowser',
@@ -951,6 +951,44 @@ return card({
             editorOptions: {
                 defaultTab: "value"
             },
+        },
+        emitEvent: true
+    });
+
+    addCard({
+        group: 'board',
+        tag: 'queue',
+        id: 'queue',
+        templateName: 'Queue of items',
+        name: 'board_queue',
+        defaults: {
+            name: 'queue',
+            icon: 'file-stack',
+            width: 2,
+            height: 6,
+            description: 'Display a queue of items',
+            type: 'action',
+            editorOptions: {
+                defaultTab: "value"
+            },
+            html: "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onClear={(items) => execute_action('queue', {action: 'clear'})} onDeleteItem={(item, index) => execute_action('queue', {action: 'remove', index})} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            displayResponse: true,
+            rulesCode: "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
+            params: {
+                item: "",
+                action: "action to perform in the queue: push, pop, clear"
+            },
+            configParams: {
+                item: {
+                    visible: true,
+                    defaultValue: ""
+                },
+                action: {
+                    "visible": true,
+                    "defaultValue": ""
+                }
+            },
+            displayButton: false
         },
         emitEvent: true
     });
