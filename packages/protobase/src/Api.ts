@@ -46,7 +46,7 @@ const _fetch = async (urlOrData, data?, update?, plain?, retryNum=10):Promise<Pe
                 resData = await res.text()
                 if(!plain) resData = JSON.parse(resData)
             } catch(e) {
-                console.error("Error decoding JSON response from API: ", realUrl, e)
+                //console.error("Error decoding JSON response from API: ", realUrl, e)
             }
 
             if (!res.ok) {
