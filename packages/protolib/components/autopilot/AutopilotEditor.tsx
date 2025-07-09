@@ -305,7 +305,7 @@ export const AutopilotEditor = ({ board, panels = ['actions', 'staes'], actions,
                     copyVal = val.name
                 }
 
-                return `execute_action("${copyVal}", {
+                return `await execute_action("${copyVal}", {
 ${Object.entries(val.params || {}).map(([key, value]) => {
                     return `\t${key}: '', // ${value}`;
                 }).join('\n')}
