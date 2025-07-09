@@ -239,6 +239,22 @@ const Board = ({ board, icons }) => {
 
   useEffect(() => {
     window['execute_action'] = getExecuteAction(board.name, actions)
+    window['setCardData'] = (cardId, key, value) => {
+      const card = items.find(item => item.key === cardId);
+      if (card) {
+        const newItems = items.map(item => {
+          if (item.key === cardId) {
+            return { ...item, [key]: value };
+          }
+          return item;
+        });
+        setItems(newItems);
+        board.cards = newItems;
+        API.post(`/api/core/v1/boards/${board.name}`, board);
+      } else {
+        console.error('Card not found:', cardId);
+      }
+    }
   }, [actions])
   useUpdateEffect(() => {
     // console.log('///////////////////////////////////////////////////////')

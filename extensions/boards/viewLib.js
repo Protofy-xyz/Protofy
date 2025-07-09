@@ -259,27 +259,17 @@ const boardImage = ({ src, alt = '', style = '' }) => {
 };
 
 const markdown = (card) => {
-    return reactCard(`
-function Widget() {
-  const text = data?.value ?? '';
-  return (
-    <div className="no-drag markdown-body" style={{
-      height: "100%",
-      padding: "1em",
-      overflow: "auto",
-      fontFamily: "sans-serif",
-      fontSize: "14px",
-      color: "var(--color)",
-      backgroundColor: "var(--bg-color)"
-    }}>
+    reactCard(`
+  function Widget() {
+    const text = data?.value ?? '';
+    return (
+        <View className="no-drag" height="100%">
+            <Markdown data={text} setData={(newtext) => setCardData('${card.key}', 'rulesCode', 'return \`'+newtext+'\`')} />
+        </View>
+    );
+  }
 
-      <Tinted>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-      </Tinted>
-    </div>
-  );
-}
-  `, card.domId);
+`, data.domId)
 };
 
 const fileBrowser = (card) => {
@@ -551,10 +541,10 @@ const dataView = (object, root) => {
     return (
         <MqttWrapper>
             <Tinted>
-            <View className="no-drag">
-                {/* you can use data.value here to access the value */}
-                <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
-            </View>
+                <View className="no-drag">
+                    {/* you can use data.value here to access the value */}
+                    <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
+                </View>
             </Tinted>
         </MqttWrapper>
     );
