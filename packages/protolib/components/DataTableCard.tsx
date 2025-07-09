@@ -2,6 +2,8 @@ import { Stack, StackProps } from "@my/ui"
 import { DataCard } from "./DataCard"
 import { useRef } from "react";
 import { Grid } from './Grid';
+import { Button } from "protoflow";
+import { InteractiveIcon } from "./InteractiveIcon";
 
 const GridElementCard = ({ index, data, width }) => {
     const element = data.element
@@ -21,7 +23,7 @@ const GridElementCard = ({ index, data, width }) => {
             onDelete={onDelete}
             onSave={(content) => {
                 //console.log("OnSave: ", {content,data});
-                onSave? onSave(content, modelItem):null
+                onSave ? onSave(content, modelItem) : null
             }}
             json={element}
             name={modelItem.getId()}
@@ -35,7 +37,7 @@ export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin
 
     const data = items?.data?.items?.map((element, i) => {
         return {
-            id: 'item_'+i,
+            id: 'item_' + i,
             element,
             model,
             onDelete: props.onDelete,
@@ -44,6 +46,8 @@ export const DataTableCard = ({ itemMinWidth = 400, rightGap = 30, contentMargin
     })
 
     return <Stack ml={"$5"} ref={containerRef} f={1}{...props}>
-        <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth}/>
+        <Stack mt={"$-7"} >
+            <Grid key={data.length} rightGap={rightGap} containerRef={containerRef} spacing={spacing} data={data} card={GridElementCard} itemMinWidth={itemMinWidth} />
+        </Stack>
     </Stack>
 }
