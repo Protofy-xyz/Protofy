@@ -233,6 +233,17 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                     <Switch.Thumb className="no-drag" animation="quick" />
                   </Switch>
                 </XStack>
+                {(cardData.displayButton === undefined ? true : cardData.displayButton)?<XStack ai="center" ml={"$4"}>
+                  <Input
+                    id="button-text-input"
+                    size="$4"
+                    placeholder="Button text"
+                    value={cardData.buttonLabel=== undefined ? 'Run' : cardData.buttonLabel}
+                    onChangeText={(value) => {
+                      setCardData({ ...cardData, buttonLabel: value })
+                    }}
+                    className="no-drag"/>
+                </XStack>:<></>}
                 <XStack ai="center" ml={"$4"}>
                   <Label htmlFor="display-icon-switch" mr={"$3"}>Display icon</Label>
                   <Switch
