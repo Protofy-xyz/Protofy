@@ -128,6 +128,7 @@ export const ObjectGrid = ({
     }, [])
 
     return <Stack f={1} o={ready?1:0} ref={containerRef} {...props}>
+        <Stack mt={"$-7"} >
         {data && data.length > 0 ? <Grid
             overScanBy={overScanBy} 
             key={data.length + ready} 
@@ -138,5 +139,6 @@ export const ObjectGrid = ({
             card={gridElementCard??GridElementCard} itemMinWidth={itemMinWidth}
         /> : emptyMessage}
         {children}
+        </Stack>
     </Stack>
 }
