@@ -30,6 +30,7 @@ async function moveFolder(src, dest) {
     await fs.promises.rename(src, destTime)
   } catch (error) {
     console.error('Error moving folder:', error)
+    throw new Error(`Failed to move folder from ${src} to ${dest}: ${error.message}`)
   }
 }
 
@@ -55,7 +56,21 @@ const customGetDB = (path, req, session) => {
     async del(key, value) {
       const origin = fspath.join(dbDir(req), key)
       const dest = fspath.join(getRoot(req), 'data', 'deleted_databases', key)
-      await moveFolder(origin, dest)
+      const deleteDatabase = async (retries=0) =>{
+        try {
+          await moveFolder(origin, dest)
+        } catch (e) {
+          if (retries < 3) {
+            console.warn(`Failed to delete database ${key}, retrying... (${retries + 1})`)
+            await new Promise(resolve => setTimeout(resolve, 1000)) // wait 1 second before retrying
+            return deleteDatabase(retries + 1)
+          } else {
+            console.error(`Failed to delete database ${key} after multiple attempts:`, e)
+            throw e
+          }
+        }
+      }
+      await deleteDatabase()
     },
 
     async put(key, value) {
