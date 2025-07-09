@@ -115,7 +115,7 @@ const SaveButton = ({ checkStatus = () => true, defaultState = 'available', path
   );
 };
 
-const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath=undefined }) => {
+const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath = undefined }) => {
   const [fileContent, setFileContent] = useFileFromAPI(path)
   const searchParams = useSearchParams();
   const query = Object.fromEntries(searchParams.entries());
@@ -126,7 +126,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath=un
   const defaultMode = useRef('code')
   useEffect(() => {
     if (fileContent.isLoaded) {
-      if(fileContent.data.startsWith('//@flows')) {
+      if (fileContent.data.startsWith('//@flows')) {
         defaultMode.current = 'flow'
       }
       const sourceFile = toSourceFile(fileContent.data)
@@ -173,7 +173,7 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath=un
   </AsyncView>
 }
 
-export const CodeView = ({ disableFlowMode=false, masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
+export const CodeView = ({ disableFlowMode = false, masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
   const pathname = usePathname();
   const theme = useTheme()
   const tint = useTint().tint
@@ -303,7 +303,11 @@ export const CodeView = ({ disableFlowMode=false, masksPath = undefined, default
         defaultViewPort={viewPort}
         setSourceCode={(sourceCode) => {
           sourceCode.current = sourceCode
-        }} sourceCode={sourceCode.current} path={path} themeMode={resolvedTheme} primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
+        }}
+        sourceCode={sourceCode.current}
+        path={path}
+        themeMode={resolvedTheme}
+        primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />}
     <XStack opacity={0} top={-200000} position={"absolute"}>
       <Flows preload={true} primary={"#f00"} />
     </XStack>
