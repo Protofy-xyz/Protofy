@@ -775,7 +775,9 @@ export default async (app, context) => {
                 name: "Name of the card to reset"
             },
             rulesCode: `return await execute_action("/api/core/v1/board/cardreset", userParams)`,
-            displayResponse: true
+            displayResponse: true,
+            buttonLabel: "Reset card",
+            displayIcon: false
         },
         emitEvent: true,
         token: await getServiceToken()
