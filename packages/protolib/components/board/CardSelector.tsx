@@ -175,7 +175,7 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
 
   useEffect(() => {
     if (selectedCard) {
-      setCard({ key: "key", width: 2, height: 6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type], ...selectedCard.defaults })
+      setCard({ key: "key", width: selectedCard.defaults.type === 'value'?1:2, height: selectedCard.defaults.type === 'value'? 4:6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type], ...selectedCard.defaults })
     } else {
       setCard(undefined)
     }

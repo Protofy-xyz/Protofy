@@ -324,6 +324,8 @@ export default (app, context) => {
         templateName: "Interactive devices table",
         name: "devices_table",
         defaults: {
+            width: 5, 
+            height: 12,
             name: "Devices Table",
             icon: "router",
             description: "Interactive devices table",

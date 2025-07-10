@@ -4,7 +4,7 @@
     "layouts": {
         "lg": [
             {
-                "w": 4,
+                "w": 6,
                 "h": 6,
                 "x": 0,
                 "y": 0,
@@ -14,7 +14,7 @@
                 "isResizable": true
             },
             {
-                "w": 8,
+                "w": 10,
                 "h": 19,
                 "x": 0,
                 "y": 6,
@@ -26,7 +26,7 @@
             {
                 "w": 4,
                 "h": 6,
-                "x": 4,
+                "x": 6,
                 "y": 0,
                 "i": "value_1750261498829",
                 "moved": false,
@@ -36,8 +36,8 @@
         ],
         "md": [
             {
-                "w": 3,
-                "h": 5,
+                "w": 9,
+                "h": 6,
                 "x": 0,
                 "y": 0,
                 "i": "action_1750256774576",
@@ -46,19 +46,19 @@
                 "isResizable": true
             },
             {
-                "w": 5,
-                "h": 19,
+                "w": 24,
+                "h": 21,
                 "x": 0,
-                "y": 5,
+                "y": 6,
                 "i": "value_1750256790295",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 2,
-                "h": 5,
-                "x": 3,
+                "w": 15,
+                "h": 6,
+                "x": 9,
                 "y": 0,
                 "i": "value_1750261498829",
                 "moved": false,
@@ -68,10 +68,39 @@
         ],
         "sm": [
             {
-                "w": 1,
+                "w": 2,
                 "h": 5,
                 "x": 0,
-                "y": 4,
+                "y": 5,
+                "i": "action_1750256774576",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 2,
+                "h": 17,
+                "x": 0,
+                "y": 10,
+                "i": "value_1750256790295",
+                "moved": false,
+                "static": false
+            },
+            {
+                "w": 2,
+                "h": 5,
+                "x": 0,
+                "y": 0,
+                "i": "value_1750261498829",
+                "moved": false,
+                "static": false
+            }
+        ],
+        "xs": [
+            {
+                "w": 2,
+                "h": 5,
+                "x": 0,
+                "y": 5,
                 "i": "action_1750256774576",
                 "moved": false,
                 "static": false
@@ -80,14 +109,14 @@
                 "w": 1,
                 "h": 12,
                 "x": 0,
-                "y": 9,
+                "y": 10,
                 "i": "value_1750256790295",
                 "moved": false,
                 "static": false
             },
             {
-                "w": 1,
-                "h": 4,
+                "w": 2,
+                "h": 5,
                 "x": 0,
                 "y": 0,
                 "i": "value_1750261498829",
@@ -111,10 +140,7 @@
                 "message": "message"
             },
             "type": "action",
-            "displayResponse": false,
-            "value": {
-                "message": "Prompt sent to ChatGPT"
-            }
+            "displayResponse": false
         },
         {
             "key": "value_1750256790295",

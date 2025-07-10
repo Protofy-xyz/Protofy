@@ -77,39 +77,5 @@ export default (app, context, inCore?) => {
             }, getServiceToken())
             res.status(200).json({ changed: true })
         }))
-    
-        addAction({
-            group: 'memory',
-            name: 'write',
-            url: '/api'+part+'/v1/actions/protomemdb/write',
-            tag: 'actions',
-            description: "set state variable",
-            params: {
-                name: "name of the variable to set",
-                value: "value to set"
-            },
-            receiveBoard: true,
-            emitEvent: true
-        })
-    
-        addCard({
-            group: 'states',
-            tag: 'actions',
-            id: 'set',
-            templateName: 'set states variable',
-            name: 'set_states',
-            defaults: {
-                type: "action",
-                icon: 'route',
-                name: 'set variable',
-                description: 'Set state variable',
-                params: {
-                    name: "name of the variable to set",
-                    value: "value to set"
-                },
-                rulesCode: `await execute_action("${'/api'+part+'/v1/actions/protomemdb/write'}", userParams); return userParams.value;`
-            },
-            emitEvent: true,
-        })
     }
 }

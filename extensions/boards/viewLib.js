@@ -323,7 +323,7 @@ const paramsForm = ({ data }) => {
     const allKeys = Object.keys(data.params || {});
     return `<form
             style="width: 100%; margin-top: 15px;"
-            onsubmit='const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeAction(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
+            onsubmit='event.preventDefault();const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeAction(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
         >
             ${allKeys.map(key => {
         const cfg = data.configParams?.[key] || {};

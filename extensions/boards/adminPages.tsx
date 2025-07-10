@@ -162,7 +162,7 @@ const getExecuteAction = (board, rawActions) => {
 const Board = ({ board, icons }) => {
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
-  const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 6 }
+  const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 1 }
   const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, _setAddOpened] = useState(false)
@@ -228,13 +228,14 @@ const Board = ({ board, icons }) => {
       event.preventDefault();
       const formData = new FormData(event.target);
       const params = Object.fromEntries(formData['entries']());
-      console.log('Running action with params:', params, 'in card: ', card);
+
       const cleanedParams = {};
       for (const key in params) {
         if (params[key] || params[key] === "0") {
           cleanedParams[key] = params[key];
         }
       }
+
       return await window['onRunListeners'][card](card, cleanedParams);
     };
   }, [])
@@ -279,9 +280,10 @@ const Board = ({ board, icons }) => {
 
   const layouts = useMemo(() => {
     return {
-      lg: computeLayout(items, { totalCols: 12, normalW: 2, normalH: 6, doubleW: 4, doubleH: 12 }, { layout: board?.layouts?.lg }),
-      md: computeLayout(items, { totalCols: 6, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.md }),
-      sm: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 12, doubleW: 1, doubleH: 12 }, { layout: board?.layouts?.sm }),
+      lg: computeLayout(items, { totalCols: 24, normalW: 8, normalH: 6, doubleW: 8, doubleH: 6 }, { layout: board?.layouts?.lg }),
+      md: computeLayout(items, { totalCols: 24, normalW: 10, normalH: 6, doubleW: 10, doubleH: 6 }, { layout: board?.layouts?.md }),
+      sm: computeLayout(items, { totalCols: 2, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.sm }),
+      xs: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 6, doubleW: 1, doubleH: 6 }, { layout: board?.layouts?.sm }),
     }
   }, [items, board?.layouts])
 

@@ -829,10 +829,12 @@ export default async (app, context) => {
     addCard({
         group: 'autopilot',
         tag: 'message',
-        id: 'send',
+        id: 'autopilot_send_message',
         templateName: 'Send a message to the autopilot system',
-        name: 'autopilot_send',
+        name: 'send',
         defaults: {
+            width: 2,
+            height: 8,
             type: "action",
             icon: 'message-square-text',
             name: 'autopilot_send',
@@ -889,10 +891,12 @@ export default async (app, context) => {
     addCard({
         group: 'board',
         tag: 'question',
-        id: 'send',
+        id: 'board_question_send',
         templateName: 'Send a question to the board',
         name: 'board_question',
         defaults: {
+            width: 2, 
+            height: 8,
             type: "action",
             icon: 'message-square-text',
             name: 'board question',
@@ -909,10 +913,12 @@ export default async (app, context) => {
     addCard({
         group: 'board',
         tag: "iframe",
-        id: 'show',
+        id: 'board_iframe_show',
         templateName: "Display a link in an iframe",
-        name: "board_iframe",
+        name: "show",
         defaults: {
+            width: 4, 
+            height: 12,
             name: "Frame",
             icon: "monitor-stop",
             description: "Display a link in an iframe",
@@ -938,6 +944,8 @@ return card({
         templateName: 'Display a YouTube video',
         name: 'board_youtube',
         defaults: {
+            width: 3, 
+            height: 8,
             name: 'YouTube Video',
             icon: 'youtube',
             description: 'Embed a YouTube video from a URL',
@@ -964,10 +972,13 @@ return card({
         templateName: "Display an image",
         name: "board_image",
         defaults: {
+            width: 1, 
+            height: 4,
             name: "Image",
             icon: "image",
             description: "Display an image that scales without distortion",
             type: 'value',
+            rulesCode: 'return `/public/vento-square.png`',
             html: `
 // data contains: data.value, data.icon and data.color
 return card({
@@ -985,15 +996,18 @@ return card({
     addCard({
         group: 'board',
         tag: 'markdown',
-        id: 'markdown',
+        id: 'board_markdown',
         templateName: 'Display markdown text',
         name: 'board_markdown',
         defaults: {
+            width: 3,
+            height: 12,
             name: 'Markdown',
             icon: 'file-text',
             description: 'Render formatted markdown using ReactMarkdown',
             type: 'value',
             html: "return markdown(data)",
+            rulesCode: "return `# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n## Tables\n\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\nRight aligned columns\n\n| Option | Description |\n| ------:| -----------:|\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |`",
             editorOptions: {
                 defaultTab: "value"
             },
@@ -1004,15 +1018,18 @@ return card({
     addCard({
         group: 'board',
         tag: 'filebrowser',
-        id: 'filebrowser',
+        id: 'board_filebrowser',
         templateName: 'Display a file browser',
-        name: 'board_filebrowser',
+        name: 'view',
         defaults: {
+            width: 5.5,
+            height: 12,
             name: 'File Browser',
             icon: 'folder-search',
             description: 'Render a file browser',
             type: 'value',
             html: "return fileBrowser(data)",
+            rulesCode: "return `/data/public`",
             editorOptions: {
                 defaultTab: "value"
             },
@@ -1023,14 +1040,14 @@ return card({
     addCard({
         group: 'board',
         tag: 'queue',
-        id: 'queue',
+        id: 'board_interactive_queue',
         templateName: 'Queue of items',
-        name: 'board_queue',
+        name: 'interactive',
         defaults: {
             name: 'queue',
             icon: 'file-stack',
             width: 2,
-            height: 6,
+            height: 12,
             description: 'Display a queue of items',
             type: 'action',
             editorOptions: {
@@ -1061,10 +1078,12 @@ return card({
     addCard({
         group: 'board',
         tag: "react",
-        id: 'show',
+        id: 'board_react',
         templateName: "Display a React component",
-        name: "board_react",
+        name: "show",
         defaults: {
+            width: 2,
+            height: 8,
             name: "React",
             icon: "table-properties",
             description: "Display a React component",
@@ -1077,15 +1096,18 @@ return card({
     addCard({
         group: 'board',
         tag: "table",
-        id: 'show',
+        id: 'board_table_show',
         templateName: "Display an array of objects in a table",
-        name: "board_table",
+        name: "show",
         defaults: {
+            width: 3,
+            height: 10,
             name: "Table",
             icon: "table-properties",
             description: "Display an array of objects in a table",
             type: 'value',
             html: "\n//data contains: data.value, data.icon and data.color\nreturn card({\n    content: cardTable(data.value), padding: '3px'\n});\n",
+            rulesCode: "return [{name: \"protofito\", age: 20}, {name: \"protofita\", age: 19}, {name: \"bad protofito\", age: 10}]",
         },
         emitEvent: true
     })

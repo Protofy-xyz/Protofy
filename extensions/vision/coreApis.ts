@@ -88,6 +88,8 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'IP Camera',
         name: 'vision_camera',
         defaults: {
+            width: 3,
+            height: 10,
             type: "value",
             icon: 'camera',
             name: 'camera',
@@ -146,6 +148,8 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'Detect objects using AI',
         name: 'vision_detect',
         defaults: {
+            width: 2, 
+            height: 10,
             type: "action",
             icon: 'camera',
             name: 'detect',
@@ -199,6 +203,8 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'describe image using AI',
         name: 'vision_describe',
         defaults: {
+            width: 2, 
+            height: 10,
             type: "action",
             icon: 'camera',
             name: 'describe',

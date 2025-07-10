@@ -94,9 +94,9 @@ export function computeLayout(items, config, options:any={}) {
             continue;
         }
         let w, h;
-        if(widget.width && widget.height){
-            w = widget.width;
-            h = widget.height;
+        if(widget.width && widget.height && !prevLayout){
+            w = Math.ceil(widget.width * (normalW/4));
+            h = Math.ceil(widget.height * (normalH/5.5));
         } else if (doubleWidgets.includes(widget.key)) {
             // Widget "doble"
             w = doubleW;

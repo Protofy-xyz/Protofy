@@ -24,29 +24,16 @@ export default (app, context) => {
         group: 'objects',
         tag: 'services',
         name: 'list',
-        id: 'services_view',
-        templateName: 'Services View',
+        id: 'services_list',
+        templateName: 'List Internal Services',
         defaults: {
+            width: 2,
+            height: 14,
             icon: 'cog',
             displayResponse: true,
             name: `list services`,
-            html: `
-reactCard(\`
-  function Widget() {
-    return (
-      <View className="no-drag">
-        <MqttWrapper>
-          <ServicesView />
-        </MqttWrapper>
-      </View>
-    );
-  }
-
-\`, data.domId)
-
-            `,
             type: 'action',
-            description: `Returns a list of services objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
+            description: `Returns a list of system services objects. You can filter the results by passing itemsPerPage, page, search, orderBy and orderDirection parameters.`,
             params: {
                 itemsPerPage: 'number of items per page (optional)',
                 page: 'page number to retrieve (optional)',

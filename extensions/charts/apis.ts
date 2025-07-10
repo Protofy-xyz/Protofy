@@ -8,13 +8,13 @@ export default (app, context) => {
         name: 'pie',
         id: 'charts_recharts_pie',
         templateName: "Pie Chart",
-
         defaults: {
-            width: 4,
-            height: 8,
+            width: 2.5,
+            height: 10,
             name: "Pie Chart",
             icon: "chart-pie",
             description: "Displays a pie chart using Recharts",
+            rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]",
             type: 'value',
             html: `
 reactCard(\`
@@ -27,8 +27,8 @@ reactCard(\`
               title={"players score"}
               id={"piechart"}
               data={data.value}
-              dataKey={data.params.dataKey}
-              nameKey={data.params.nameKey}
+              dataKey={data.params.dataKey ?? 'value'}
+              nameKey={data.params.nameKey ?? 'name'}
               isAnimationActive={false}
               aspect={aspect}
             />
@@ -40,7 +40,6 @@ reactCard(\`
 
 
             `,
-            rulesCode: ``,
             params: {
                 nameKey: 'name',
                 dataKey: 'value'
@@ -58,7 +57,7 @@ reactCard(\`
             templateName: "Bar Chart",
 
             defaults: {
-                width: 4,
+                width: 2,
                 height: 8,
                 name: "Bar Chart",
                 icon: "chart-column",
@@ -67,6 +66,7 @@ reactCard(\`
                 html: `
 reactCard(\`
   function Widget() {
+    const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
         <BarChart
@@ -77,6 +77,7 @@ reactCard(\`
           dataKey={data.params.dataKey}
           nameKey={data.params.nameKey}
           isAnimationActive={false}
+          aspect={aspect}
         />
       </View>
     );
@@ -87,7 +88,7 @@ reactCard(\`
                     nameKey: 'name',
                     dataKey: 'value'
                 },
-                rulesCode: ``
+                rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]"
             },
             emitEvent: true,
             token: getServiceToken()
@@ -100,8 +101,8 @@ reactCard(\`
             templateName: "Area Chart",
 
             defaults: {
-                width: 4,
-                height: 8,
+                width: 3,
+                height: 4,
                 name: "Area Chart",
                 icon: "chart-area",
                 type: 'value',
@@ -131,7 +132,7 @@ reactCard(\`
                     nameKey: 'name',
                     dataKey: 'value'
                 },
-                rulesCode: ``
+                rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]"
             },
             emitEvent: true,
             token: getServiceToken()
@@ -144,8 +145,8 @@ reactCard(\`
         templateName: "Radar Chart",
 
         defaults: {
-            width: 4,
-            height: 8,
+            width: 3,
+            height: 10,
             name: "Radar Chart",
             icon: "chart-network",
             description: "Displays a radar chart using Recharts",
@@ -160,8 +161,8 @@ reactCard(\`
           colors={["#8884d8", "#82ca9d"]}
           id={"radarchart"}
           data={data.value}
-          dataKey={data.params.dataKey}
-          nameKey={data.params.nameKey}
+          dataKey={data.params.dataKey?? 'value'}
+          nameKey={data.params.nameKey ?? 'name'}
           isAnimationActive={false}
           aspect={aspect}
           colors={chartColors}
@@ -175,7 +176,7 @@ reactCard(\`
                 nameKey: 'stat',
                 dataKey: 'value'
             },
-            rulesCode: ``
+            rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]"
         },
         emitEvent: true,
         token: getServiceToken()
@@ -189,8 +190,8 @@ reactCard(\`
         templateName: "Radial Bar Chart",
 
         defaults: {
-            width: 4,
-            height: 8,
+            width: 3,
+            height: 10,
             name: "Radial Bar Chart",
             icon: "radar", // o "gauge", "compass" o algo visual tipo métrica
             description: "Displays a radial bar chart using Recharts",
@@ -232,7 +233,7 @@ reactCard(\`
                 innerRadius: '50%',
                 outerRadius: '100%'
             },
-            rulesCode: ``
+            rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]"
         },
         emitEvent: true,
         token: getServiceToken()
@@ -247,8 +248,8 @@ reactCard(\`
         templateName: "Line Chart",
 
         defaults: {
-            width: 4,
-            height: 8,
+            width: 3,
+            height: 6,
             name: "Line Chart",
             icon: "chart-line",
             description: "Displays a line chart using Recharts",
@@ -278,7 +279,7 @@ reactCard(\`
                 nameKey: 'name',
                 dataKey: 'value'
             },
-            rulesCode: ``
+            rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]"
         },
         emitEvent: true,
         token: getServiceToken()

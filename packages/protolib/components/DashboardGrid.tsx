@@ -14,8 +14,8 @@ export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, pad
                 {...props}
                 className="layout"
                 layouts={layouts}
-                breakpoints={{ lg: 1500, md: 900, sm: 0 }}
-                cols={{ lg: 12, md: 6, sm: 1 }}
+                breakpoints={{ lg: 1500, md: 800, sm: 400, xs: 0 }}
+                cols={{ lg: 24, md: 24, sm: 2, xs: 1 }}
                 rowHeight={30}
                 draggableCancel=".no-drag"
                 style={{height: '100%', overflow: 'auto'}}

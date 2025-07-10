@@ -29,6 +29,8 @@ export default (app, context) => {
             templateName: "chatGPT last chat response",
             name: "response",
             defaults: {
+                width: 2,
+                height: 8,
                 name: "chatGPT_last_chat_response",
                 icon: "openai",
                 color: "#74AA9C",
@@ -48,6 +50,8 @@ export default (app, context) => {
         templateName: "chatGPT send message",
         name: "send_message",
         defaults: {
+            width: 2,
+            height: 8,
             name: "chatGPT_message_send",
             icon: "openai",
             color: "#74AA9C",

@@ -24,6 +24,8 @@ export default async (app, context) => {
         templateName: 'Read File or Directory',
         name: 'files_read',
         defaults: {
+            width: 2,
+            height: 8,
             type: "action",
             icon: 'file',
             name: 'files_read',
@@ -59,6 +61,8 @@ export default async (app, context) => {
         templateName: 'Download File from URL',
         name: 'files_download',
         defaults: {
+            width: 2,
+            height: 9,
             type: "action",
             icon: 'download',
             name: 'files_download',

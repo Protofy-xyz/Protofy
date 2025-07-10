@@ -44,6 +44,8 @@ export default (app, context) => {
             templateName: "crop image",
             name: "crop",
             defaults: {
+                width: 2,
+                height: 17,
                 name: "crop_image",
                 icon: "crop",
                 color: "#FFC300",

@@ -85,7 +85,7 @@ export const AutoActions = ({
         templateName: 'Check if a ' + modelName + ' exists in the storage',
         defaults: {
             html: getHTML('exists'),
-            width: 4,
+            width: 2,
             height: 8,
             icon: 'file-check',
             displayResponse: true,
@@ -109,7 +109,7 @@ export const AutoActions = ({
         templateName: "Last " + modelName + " table",
 
         defaults: {
-            width: 4,
+            width: 3,
             height: 8,
             name: "Table",
             icon: "table-properties",
@@ -160,7 +160,7 @@ export const AutoActions = ({
         templateName: 'Read ' + modelName + ' from the storage',
         defaults: {
             html: getHTML('read'),
-            width: 4,
+            width: 2,
             height: 8,
             icon: 'file-search',
             displayResponse: true,
@@ -235,8 +235,8 @@ export const AutoActions = ({
         templateName: 'Create ' + modelName + ' in the storage',
         defaults: {
             html: getHTML('create'),
-            width: 4,
-            height: 8,
+            width: 2,
+            height: 14,
             icon: 'file-plus',
             displayResponse: true,
             name: `create ${modelName}`,
@@ -293,6 +293,8 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_delete',
         templateName: 'Delete ' + modelName + ' from the storage',
         defaults: {
+            width: 2,
+            height: 8,
             icon: 'trash',
             displayResponse: true,
             name: `delete ${modelName}`,
@@ -356,8 +358,8 @@ export const AutoActions = ({
         templateName: 'Updates ' + modelName + ' in the storage',
         defaults: {
             html: getHTML('update'),
-            width: 4,
-            height: 8,
+            width: 2,
+            height: 12,
             icon: 'file-pen-line',
             displayResponse: true,
             name: `update ${modelName}`,
@@ -494,6 +496,8 @@ export const AutoActions = ({
         id: 'object_' + modelName + '_list',
         templateName: modelName + ' storage',
         defaults: {
+            width: 4,
+            height: 10,
             icon: 'search',
             displayResponse: true,
             name: `list ${modelName}`,
