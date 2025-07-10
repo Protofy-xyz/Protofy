@@ -10,7 +10,7 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
     const getRulesCode = async (force?) => {
       if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
         setHasCode(false)
-        const code = await API.post('/api/core/v1/autopilot/'+compiler, { states, rules: cardData.rules, ...extraCompilerData })
+        const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states, rules: cardData.rules, ...extraCompilerData })
         if (!code?.data?.jsCode) return
         setCardData({
           ...cardData,
@@ -41,6 +41,7 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
     }, [cardData.rules])
   
     return <AutopilotEditor
+    cardData={cardData}
     board={board}
     panels={cardData.type == 'value' ? ['states'] : ['actions', 'states']}
     setRulesCode={(rulesCode) => {

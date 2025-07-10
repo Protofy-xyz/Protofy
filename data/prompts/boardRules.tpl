@@ -10,7 +10,7 @@ example usage of board.onChange({
         ...
     }
 })
-The code has a functionc alled "board.execute_action" used to execute an action. execute_action receives a single argument, an object with name and params.
+The code has an async function called "board.execute_action" used to execute an action. execute_action receives a single argument, an object with name and params.
 example of board.execute_action({
     name: 'actionname',
     params: {

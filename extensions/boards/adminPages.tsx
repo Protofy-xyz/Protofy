@@ -1,4 +1,4 @@
-import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X } from '@tamagui/lucide-icons'
+import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X, ArrowLeft } from '@tamagui/lucide-icons'
 import { BoardModel } from './boardsSchemas'
 import { API, getPendingResult, set } from 'protobase'
 import { DataTable2 } from "protolib/components/DataTable2"
@@ -175,10 +175,12 @@ const Board = ({ board, icons }) => {
   const [editCode, setEditCode] = useState('')
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
+  const [rulesSize, setRulesSize] = useState(1010)
   // const initialBreakPoint = useInitialBreakpoint()
   const breakpointRef = useRef('') as any
   const { query, removeReplace, push } = usePageParams()
   const isJSONView = query.json == 'true'
+  const iconRotate = useRef(null) as any
 
   const [addKey, setAddKey] = useState(0)
 
@@ -568,7 +570,7 @@ const Board = ({ board, icons }) => {
                   formatOnType: true
                 }}
               />
-              : <DashboardGrid
+              : <YStack left={-10} f={1}><DashboardGrid
                 items={cards}
                 layouts={boardRef.current.layouts}
                 borderRadius={10}
@@ -607,7 +609,7 @@ const Board = ({ board, icons }) => {
                     breakpointCancelRef.current = null //reset the cancel flag after 1 second
                   }, 1000)
                 }}
-              />
+              /></YStack>
           }
         </YStack>
         <div
@@ -615,9 +617,25 @@ const Board = ({ board, icons }) => {
           style={{ width: "100vw", height: "120vh", position: "fixed", right: rulesOpened ? 0 : "-100vw" }}
         ></div>
         {
-          <XStack position="fixed" animation="quick" right={rulesOpened ? 20 : -1000} top={"70px"} width={810} height="calc(100vh - 100px)">
-            <XStack width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={0.9}></XStack>
-            {automationInfo && <RulesSideMenu automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+          <XStack position="fixed" animation="quick" right={rulesOpened ? 40 : -rulesSize} top={"70px"} width={rulesSize} height="calc(100vh - 100px)">
+
+            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
+
+            {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
+              <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                setRulesSize(prev => {
+                  if (prev === 1010) {
+                    iconRotate.current.style.rotate = '180deg'
+                  } else {
+                    iconRotate.current.style.rotate = '0deg'
+                  }
+                  return prev === 1010 ? window.innerWidth - 330 : 1010
+                })
+              }} o={0.8} pressStyle={{opacity: 0.8}} hoverStyle={{opacity: 1}}>
+                <ArrowLeft size="$1" color="var(--color)" />
+              </XStack>
+            </XStack>} 
+            automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
           </XStack>
         }
       </XStack>

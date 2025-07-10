@@ -20,6 +20,13 @@ The rules array is:
     if no other rule apply or dont know what to do, just return states as a whole
 </rules>
 
+If there are multiple options in the states, like various keys at different boards that match the rule description, then priorize the use of the
+states related to the board {{{board}}}
+
+If you choose to use a value from states.boards['{{{board}}}'] you should use 'board' instead.
+'board' is an already declared variable pointing to states.boards['{{board}}']
+so if you use board.xxx you are accesing states.boards['{{board}}'] directly, and its shorter. 
+
 Remember: your objective is just to generate the code to return a value from states.
 the rules describe what to return from the states object.
 The rules are not intended to be used inside the code you generate, are instructions for You
