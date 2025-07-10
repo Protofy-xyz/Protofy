@@ -9,8 +9,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { getRoot, handler, requireAdmin } from 'protonode';
 import { getLogger, API } from 'protobase';
 import archiver from 'archiver';
-import { addAction } from '@extensions/actions/coreContext/addAction';
-import { addCard } from '@extensions/cards/coreContext/addCard';
 const { createExpressProxy } = require('app/proxy.js')
 
 const logger = getLogger()
@@ -147,6 +145,32 @@ const handleFilesWriteRequest = async (req, res, session) => {
     res.status(200).send({result: "uploaded"});
 };
 
+const handleFilesDownloadRequest = async (req, res) => {
+
+    const querypath = req.query.path || '';  // Use query parameter for path
+    const filepath = path.join(getRoot(req), querypath);
+    console.log("Download file to path: ", filepath)
+    const url = req.query.url || ''; // Use query parameter for URL
+    //download file from url
+    if (url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const buffer = Buffer.from(await response.arrayBuffer());
+            await fs.writeFile(filepath, buffer);
+            res.status(200).send({ result: "File downloaded successfully" });
+        } catch (error) {
+            logger.error({ error }, "Error downloading file from URL");
+            res.status(500).send({ error: "Error downloading file from URL" });
+        }
+        return;
+    } else {
+        res.status(400).send({ error: "No URL provided for download" });
+    }
+}
+
 const handleDirectoryCreateRequest = async (req, res, session) => {
     const name = req.params.path || '';
 
@@ -234,44 +258,13 @@ app.post('/api/core/v1/deleteItems/:path(*)', requireAdmin(), handler(handleDele
 app.post('/api/core/v1/files', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
 // Route to write files or create directories in /api/core/v1/files/*
 app.post('/api/core/v1/files/:path(*)', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
+// Route to download files in /api/core/v1/download/*
+app.get('/api/core/v1/download', requireAdmin(), handler(handleFilesDownloadRequest));
 // Route to create directories in /api/core/v1/directories/*
 app.post('/api/core/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 
 app.get('/api/core/v1/files/:path(*)?', requireAdmin(), handler(handleFilesRequest));
 
 app.post('/api/core/v1/renameItem', requireAdmin(), handler(handleRenameRequest));
-
-
-addAction({
-    group: 'files',
-    name: 'read',
-    url: "/api/core/v1/files",
-    tag: 'actions',
-    description: "Read a file or directory",
-    params: {
-        path: "Path to the file or directory to read",
-    },
-    emitEvent: true
-})
-
-addCard({
-    group: 'files',
-    tag: 'actions',
-    id: 'send',
-    templateName: 'Read File or Directory',
-    name: 'files_read',
-    defaults: {
-        type: "action",
-        icon: 'file',
-        name: 'files_read',
-        description: 'Read a file or directory',
-        params: {
-            path: "Path to the file or directory to read",
-        },
-        rulesCode: `return await execute_action("/api/core/v1/files", userParams)`,
-        displayResponse: true
-    },
-    emitEvent: true,
-})
 
 export default 'files'
