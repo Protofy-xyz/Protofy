@@ -10,7 +10,6 @@ import { removeActions } from "@extensions/actions/coreContext/removeActions";
 import fileActions from "@extensions/files/fileActions";
 import { addCard } from "@extensions/cards/coreContext/addCard";
 import { Manager } from "./manager";
-import boardContext from 'app/bundles/boardContext'
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
@@ -281,7 +280,7 @@ const getDB = (path, req, session) => {
                 const boardFileContent = `const { boardConnect } = require('protonode')
 const { Protofy } = require('protobase')
 
-const run = Protofy("code", async ({ states, board }) => {
+const run = Protofy("code", async ({ context, states, board }) => {
 
 })
 
@@ -636,8 +635,7 @@ export default async (app, context) => {
             return {
                 boardId: req.params.boardId,
                 states: states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {},
-                actions: await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} }),
-                context: boardContext
+                actions: await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} })
             }
         }, () => {
             autopilotState[boardId] = false;

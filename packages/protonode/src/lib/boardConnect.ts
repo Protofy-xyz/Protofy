@@ -1,3 +1,5 @@
+
+import boardContext from 'app/bundles/boardContext'
 const protobase = require('protobase')
 const protonode = require('protonode')
 const API = protobase.API
@@ -85,7 +87,7 @@ export function boardConnect(run) {
             log = console.log.bind(console, 'Board log [' + context.boardId + ']: ');
             if (msg.type === 'init') {
                 try {
-                    run({ ...context, board: { onChange, execute_action, log, id: context.boardId } });
+                    run({ context: boardContext, ...context, board: { onChange, execute_action, log, id: context.boardId } });
                 } catch (error) {
                     console.error('Error running board [' + context.boardId + ']:', error);
                 }

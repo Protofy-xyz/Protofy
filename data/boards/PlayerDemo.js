@@ -1,7 +1,7 @@
 const { boardConnect } = require('protonode')
 const { Protofy } = require('protobase')
 
-const run = Protofy("code", async ({ states, board }) => {
+const run = Protofy("code", async ({ context, states, board }) => {
 board.execute_action({
   name: "time",
   params: {
