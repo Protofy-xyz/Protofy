@@ -162,7 +162,7 @@ const getExecuteAction = (board, rawActions) => {
 const Board = ({ board, icons }) => {
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
-  const addCard = { key: 'addwidget', type: 'addWidget', width: 1, height: 1 }
+  const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 4 }
   const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
   const [addOpened, _setAddOpened] = useState(false)
