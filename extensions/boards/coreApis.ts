@@ -745,10 +745,75 @@ export default async (app, context) => {
         }
     })
 
+
+    addAction({
+        group: 'board',
+        name: 'reset',
+        url: "/api/core/v1/autopilot/llm",
+        tag: 'card',
+        description: "Resets the value of a card in the board",
+        params: {
+            name: "the name of the card to reset"
+        },
+        emitEvent: true,
+        receiveBoard: true,
+        token: await getServiceToken()
+    })
+
+    addCard({
+        group: 'board',
+        tag: 'card',
+        id: 'board_reset',
+        templateName: 'Reset card value',
+        name: 'board_reset',
+        defaults: {
+            type: "action",
+            icon: 'message-square-text',
+            name: 'card reset',
+            description: 'Reset the value of a card in the board',
+            params: {
+                name: "Name of the card to reset"
+            },
+            rulesCode: `return await execute_action("/api/core/v1/board/cardreset", userParams)`,
+            displayResponse: true
+        },
+        emitEvent: true,
+        token: await getServiceToken()
+    })
+
+    app.get('/api/core/v1/board/cardreset', requireAdmin(), async (req, res) => {
+        if (!req.query.name) {
+            res.status(400).send('Missing name parameter')
+            return
+        }
+
+        if (!req.query.board) {
+            res.status(400).send('Missing board parameter')
+            return
+        }
+
+        const board = await getBoard(req.query.board);
+        if (!board.cards || !Array.isArray(board.cards)) {
+            res.send({ error: "No cards found" });
+            return;
+        }
+
+        const card = board.cards.find(c => c.name === req.query.name);
+        if (!card) {
+            res.send({ error: "Card not found" });
+            return;
+        }
+
+        await context.state.set({ group: 'boards', tag: req.query.board, name: card.name, value: card.initialValue ?? undefined, emitEvent: true });
+
+        Manager.update('../../data/boards/' + req.query.board + '.js', 'states', card.name, null);
+        res.json(card.name);
+    })
+
     addAction({
         group: 'autopilot',
         name: 'send',
-        url: "/api/core/v1/autopilot/llm",
+        url: "/api/core/v1/board/cardreset",
         tag: 'message',
         description: "Send a direct instruction to the autopilot system, in natural language. Returns the result of executing the instruction.",
         params: {
