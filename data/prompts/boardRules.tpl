@@ -6,7 +6,7 @@ The code has an object called "board", representhing the board state, with a key
 The code has a function called "board.onChange" in the scope that allows you to configure a callback to be executed when a state variable changes.
 example usage of board.onChange({
     name: 'nameofthekeyinthestatesobject',
-    changed: (newvalue) => {
+    changed: (value) => {
         ...
     }
 })
@@ -90,5 +90,11 @@ IMPORTANT: DO NOT USE IF, USE context.flow2.switch instead. Omit the use of {} i
 IMPORTANT: DO NOT USE IF, USE context.flow2.switch instead. Omit the use of {} in the function body if possible, when functions contain only one statement.
 IMPORTANT: DO NOT USE IF, USE context.flow2.switch instead. Omit the use of {} in the function body if possible, when functions contain only one statement.
 </helpers>
+
+<onChange>
+When using onChange, alwais use parentehesis for the parameters and 'value' as the name of the parameter:
+
+board.onChange((value) => {...}) is the only right way to do it. 
+</onChange>
 
 Please, generate the code.

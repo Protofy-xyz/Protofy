@@ -1,5 +1,5 @@
 
-import boardContext from 'app/bundles/boardContext'
+//import boardContext from 'app/bundles/boardContext'
 const protobase = require('protobase')
 const protonode = require('protonode')
 const API = protobase.API
@@ -82,6 +82,8 @@ export function boardConnect(run) {
 
     process.on('message', (msg: any) => {
         if (msg.type === 'init') {
+            //import boardContext from 'app/bundles/boardContext'
+            const boardContext = require('app/bundles/boardContext').default;
             context = msg.context;
             // console.log('[WORKER] Set state:', msg.states, 'and actions:', msg.actions, 'for board:', msg.boardId);
             log = console.log.bind(console, 'Board log [' + context.boardId + ']: ');
