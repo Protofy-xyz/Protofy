@@ -15,7 +15,7 @@ export interface SQLiteOptions {
 export class ProtoSqliteDB extends ProtoDB {
   public capabilities: string[] = ['pagination', 'groupBySingle', 'groupByOptions']
   private path: string
-  private options: any
+  options: any
   constructor(dbPath: string, options?: any, config?: ProtoDBConfig) {
     super(dbPath, options, config)
     this.path = dbPath

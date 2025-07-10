@@ -10,7 +10,7 @@ export const connectDB = (dbPath: string, initialData?: Object, options?) => {
     return ProtoSqliteDB.initDB(getDBPath(dbPath), initialData, options)
 }
 
-export const getDB = (dbPath: string, req?, session?): ProtoDB => {
+export const getDB = (dbPath: string, req?, session?) => {
     return ProtoSqliteDB.connect(getDBPath(dbPath))
 }
 
