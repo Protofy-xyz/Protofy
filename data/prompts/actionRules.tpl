@@ -9,7 +9,7 @@ The user has described what the code should do, in natural language, and you nee
 //available variables are: userPrams and states
 //states: state object with the current system state. userParams: user provided params
 
-//TODO: call actions with: execute_action(action_url, actionParams)
+//TODO: call actions with: execute_action(action_url, actionParams) or return values from states
 //actionParams is a key->value object, where the key is the name of the parameter and the value is the value for the parameter
 //example of valid code that just executes an action forwarding an element from the user params to the action params:
 //return execute_action(action_url, {name: userParams.name})
@@ -46,16 +46,18 @@ states related to the board {{{board}}}
 
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.
 IMPORTANT: anser only with javascript and nothing else.
-Try to keep it simple, write simple code as described by the rules. Most rules will just require simple calls to execute_action.
-Always use literal actions urls to execute the actions with execute_action.
+Try to keep it simple, write simple code as described by the rules. Most rules will just require simple calls to execute_action or directly returning
+values from states.
+If you need to use execute_action, always use literal actions urls to execute the actions with execute_action.
 execute_action is an async function and some actions return values. If you are interested in the return value of an action, just await for it.
-if you simply execute an action, remember to return the result of the call to execute_action.
+if you simply execute an action, remember to return the result of the call to await execute_action.
 
 <expected_output>
 answer only with the javascript implementation of the code. Do not explain anything and anser just with javascript.
 </expected_output>
 
 <very_important>
+IF THE USER REQUEST A VALUE THAT CAN BE OBTAINED EITHER BY CALLING AN ACTION OR READING FROM STATES, ITS BETTER TO CALL THE ACTION.
 NEVER CHECK FOR STATES LIKE THE STATE OF A BUTTON OR A LOCK IF THE RULES DON'T ASK FOR IT EXPLICITLY.
-MOST RULES ARE RESOLVED TO ONE LINERS EXECUTING execute_action. DOING MORE THAN THAT SHOULD BE REQUESTED IN THE RULES.
+MOST RULES ARE RESOLVED TO ONE LINERS EXECUTING execute_action or returning a value from states. DOING MORE THAN THAT SHOULD BE REQUESTED IN THE RULES.
 </very_important>
