@@ -12,7 +12,7 @@ export const LogoIcon = React.forwardRef(({ children, ...props }: StackProps, re
       marginVertical={-10}
       pressStyle={{
         opacity: 1,
-        scaleY: -1,
+        scale: 0.95,
       }}
 
       hoverStyle={{

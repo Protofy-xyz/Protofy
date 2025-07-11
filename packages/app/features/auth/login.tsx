@@ -120,8 +120,8 @@ function SignIn({ darkMode, isClient }: { darkMode: boolean, isClient: boolean }
     filter: !isClient
       ? 'none'
       : darkMode
-        ? 'drop-shadow(0 0 10px #000000) invert(1)' // solo en dark mode
-        : 'none', // en modo claro no aplicamos filtros
+        ? 'drop-shadow(0 0 10px #000000) invert(1)'
+        : 'drop-shadow(0 0 10px var(--color5)) invert(0)',
     animation: 'float 6s ease-in-out infinite',
     marginBottom: '2.5rem',
   }
@@ -131,13 +131,7 @@ function SignIn({ darkMode, isClient }: { darkMode: boolean, isClient: boolean }
       <YStack miw={300} maw={320} jc="space-between" p="$2" gap="$4">
         <YStack mb="$4">
           <LogoIcon o={0.9}>
-            {darkMode ?
-              <img src="/public/vento-logo.png" alt="Vento logo" style={logoStyle} /> :
-              <ProtofyLogoSVG
-                className="tamagui-icon"
-                width={600 / 5}
-                height={652 / 5}
-              />}
+            <img src="/public/vento-logo.png" alt="Vento logo" style={logoStyle} />
           </LogoIcon>
         </YStack>
 
