@@ -11,7 +11,7 @@ export const CardSettings = ({ cardData, setCardData, icons }) => {
     return <XStack alignItems="center" space="$6" width="100%" >
         <YStack flex={1} w={400} >
             <XStack ai={"center"}>
-                <Label ml={"$2"} h={"$3.5"} size={"$5"}> <Type color={"$color8"} mr="$2" />Title</Label>
+                <Label ml={"$2"} h={"$3.5"} size={"$5"}> <Type color={"$color8"} mr="$2" />Name</Label>
                 {error?<Text color={"$red9"} fontSize={"$1"} ml={"$3"}>{error}</Text>:<></>}
             </XStack>
             <Input
