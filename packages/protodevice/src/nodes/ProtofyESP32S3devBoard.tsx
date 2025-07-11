@@ -116,7 +116,7 @@ const ProtofyESP32S3devBoard = ({ node = {}, nodeData = {}, topics = {}, color }
     return (
         <Node output={false} skipCustom={true} node={node} color={color} isPreview={!id} title="Protofy ESP32S3 devBoard" id={id} margin="200px">
             <div style={{ marginTop: '20px', marginBottom: '20px' }}>
-                <img src={'/images/device/ProtofyESP32S3devBoard.png'} style={{ width: "100%" }} />
+                <img src={'/public/images/device/ProtofyESP32S3devBoard.png'} style={{ width: "100%" }} />
             </div>
 
             {/* Render handles directly from the new portsWithPositions array */}
