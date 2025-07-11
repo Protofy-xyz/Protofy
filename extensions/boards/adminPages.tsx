@@ -35,6 +35,16 @@ import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 
 
+const checkCard = async (items,editedCard) => {
+  console.log("items: ", items)
+  console.log("editedCard: ", editedCard)
+  const existingCard = items.find(item => item.name === editedCard.name && item.key !== editedCard.key);
+  if (existingCard) {
+    console.error('A card with the same name already exists')
+    throw new Error('A card with the same name already exists')
+  }
+ }
+
 const generate_random_id = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 }
@@ -290,6 +300,12 @@ const Board = ({ board, icons }) => {
   boardRef.current.layouts = layouts
 
   const addWidget = async (card) => {
+    try{
+      await checkCard(items, card)
+    }catch(e){
+      throw new Error(e)
+    }
+    
     setItems(prevItems => {
       const uniqueKey = card.type + '_' + Date.now();
       const newCard = { ...card, key: uniqueKey }
@@ -503,10 +519,10 @@ const Board = ({ board, icons }) => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
                   setItems(newItems)
                   boardRef.current.cards = newItems
+                  await checkCard(newItems,editedCard)
                   await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                   setCurrentCard(null)
                   setIsEditing(false)
-                  setEditedCard(null)
                 }}>
                   Save
                 </TamaButton></Tinted>

@@ -197,8 +197,12 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
           styles={{ w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
           lastButtonCaption="Create"
           onFinish={async () => {
-            await onFinish(card)
-            setAddOpened(false)
+            try{
+              await onFinish(card)
+              setAddOpened(false)
+            }catch(e){
+              console.error("Error creating card: ", e)
+            }
           }}
           slides={[
             {
