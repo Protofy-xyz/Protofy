@@ -465,7 +465,7 @@ export default async (app, context) => {
     });
 
     app.post('/api/core/v1/autopilot/getValueCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "valueRules", states: JSON.stringify({boards: req.body.states}, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "valueRules", states: JSON.stringify({ boards: req.body.states }, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
@@ -476,7 +476,7 @@ export default async (app, context) => {
     })
 
     app.post('/api/core/v1/autopilot/getActionCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "actionRules", states: JSON.stringify({boards: req.body.states}, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "actionRules", states: JSON.stringify({ boards: req.body.states }, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
@@ -576,27 +576,39 @@ export default async (app, context) => {
                 ${rulesCode}
             `);
 
-        let response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
 
-        //the real value could by in responseKey
-        if (action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
-            response = response[action.responseKey];
+        try {
+            let response = null;
+            try {
+                response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
+            } catch(err) {
+                console.error("Error executing action code: ", err);
+                res.status(500).send({ _err: "e_code", error: "Error executing action code", message: err.message, stack: err.stack, name: err.name, code: err.code });
+                return;
+            }
+
+
+            //the real value could by in responseKey
+            if (action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
+                response = response[action.responseKey];
+            }
+
+            // console.log('Action response: ', response);
+            //get previous value from state
+            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
+            // console.log('Action Previous value: ', prevValue);
+            if (response !== prevValue) {
+                //set the new value in the state
+                // console.log('Setting new value for action: ', action.name, ' in board: ', req.params.boardId, ' with value: ', response);
+                await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
+
+                Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
+            }
+            res.json(response);
+        } catch(err) {
+            console.error("Error executing action: ", err);
+            res.status(500).send({ _err: "e_general", error: "Error executing action", message: err.message, stack: err.stack, name: err.name, code: err.code });
         }
-
-        // console.log('Action response: ', response);
-        //get previous value from state
-        const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
-        // console.log('Action Previous value: ', prevValue);
-        if (response !== prevValue) {
-            //set the new value in the state
-            // console.log('Setting new value for action: ', action.name, ' in board: ', req.params.boardId, ' with value: ', response);
-            await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
-
-            Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
-        }
-
-        res.json(response);
-
     })
 
     app.get('/api/core/v1/boards/:boardId', requireAdmin(), async (req, res) => {
@@ -895,7 +907,7 @@ export default async (app, context) => {
         templateName: 'Send a question to the board',
         name: 'board_question',
         defaults: {
-            width: 2, 
+            width: 2,
             height: 8,
             type: "action",
             icon: 'message-square-text',
@@ -917,7 +929,7 @@ export default async (app, context) => {
         templateName: "Display a link in an iframe",
         name: "show",
         defaults: {
-            width: 4, 
+            width: 4,
             height: 12,
             name: "Frame",
             icon: "monitor-stop",
@@ -944,7 +956,7 @@ return card({
         templateName: 'Display a YouTube video',
         name: 'board_youtube',
         defaults: {
-            width: 3, 
+            width: 3,
             height: 8,
             name: 'YouTube Video',
             icon: 'youtube',
@@ -972,7 +984,7 @@ return card({
         templateName: "Display an image",
         name: "board_image",
         defaults: {
-            width: 1, 
+            width: 1,
             height: 4,
             name: "Image",
             icon: "image",
