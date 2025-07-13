@@ -33,6 +33,7 @@ import { createParam } from 'solito'
 import { AsyncView } from 'protolib/components/AsyncView'
 import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
+import { useEventEffect } from '@extensions/events/hooks'
 
 
 const checkCard = async (items,editedCard) => {
@@ -80,7 +81,17 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
   </Tinted>
 }
 
-const ActionCard = ({ id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
+const ActionCard = ({ board, id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
+  const [state, setState] = useState('idle')
+    useEventEffect((payload, msg) => {
+    try {
+      const parsedMessage = JSON.parse(msg.message);
+      const payload = parsedMessage.payload
+      console.log('Received event payload: ', payload)
+    } catch(e) {
+      console.error(e);
+    }
+  }, {path: "actions/boards/"+board.name+"/"+name+"/#"});
   return <CenterCard hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       setData={setData}
@@ -376,6 +387,7 @@ const Board = ({ board, icons }) => {
       return {
         ...item,
         content: <ActionCard
+          board={board}
           data={item}
           html={item.html}
           displayResponse={item.displayResponse}
