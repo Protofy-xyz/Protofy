@@ -1,42 +1,41 @@
-import { useEffect } from "react"
-import { useEvent } from "./useEvent"
-import { API } from "protobase";
-import { useSession } from "protolib/lib/useSession";
+import { useEffect } from 'react'
+import { useEvent } from './useEvent'
+import { API } from 'protobase'
+import { useSession } from 'protolib/lib/useSession'
 
-export const useFullEventEffect = (onEvent, eventFilter?: { path?: string, from?: string,user?:string }, initialEvent?: boolean) => {
-    const event = useEvent(eventFilter)
-    const [session] = useSession()
+export const useFullEventEffect = (
+  onEvent: (event: any) => void,
+  eventFilter?: { path?: string; from?: string; user?: string },
+  initialEvent?: boolean
+) => {
+  const [session] = useSession()
 
-    const readEvent = async()=>{
-        const userUrl = eventFilter.user? `&filter[user]=${eventFilter.user}`:""
-        const pathUrl = eventFilter.path? `&filter[path]=${eventFilter.path}`: ""
-        const from = eventFilter.from? `&filter[from]=${eventFilter.from}`: ""
-        //x=1 is a dummy param to allow the use of the & operator in the url
-        const urlLastEvent = `/api/core/v1/events?x=1${from}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
+  // ✅ Escucha en tiempo real sin perder mensajes
+  useEvent(eventFilter, onEvent)
 
-        let result = await API.get(urlLastEvent)
-        if (result.isError) {
-            console.error(result.error)
-            return
-        }
-        const event = result.data?.items[0]
+  // ✅ Recupera último evento histórico si se solicita
+  useEffect(() => {
+    if (!initialEvent) return
 
-        if (!event) return
+    const readEvent = async () => {
+      const userUrl = eventFilter?.user ? `&filter[user]=${eventFilter.user}` : ''
+      const pathUrl = eventFilter?.path ? `&filter[path]=${eventFilter.path}` : ''
+      const fromUrl = eventFilter?.from ? `&filter[from]=${eventFilter.from}` : ''
+      const url = `/api/core/v1/events?x=1${fromUrl}${userUrl}${pathUrl}&itemsPerPage=1&token=${session.token}&orderBy=created&orderDirection=desc`
 
-        event['message'] = JSON.stringify({ payload: result.data?.items[0]?.payload })
-        onEvent(event)
+      const result = await API.get(url)
+      if (result.isError) {
+        console.error(result.error)
+        return
+      }
+
+      const event = result.data?.items?.[0]
+      if (!event) return
+
+      event.message = JSON.stringify({ payload: event.payload })
+      onEvent(event)
     }
 
-    useEffect(() => {
-        if (event) {
-            onEvent(event)
-        }
-    }, [event])
-
-    useEffect(()=>{
-        if(initialEvent){
-            readEvent();
-        }
-    }, [eventFilter.path])
-
+    readEvent()
+  }, [initialEvent, eventFilter?.path, eventFilter?.from, eventFilter?.user, session.token])
 }

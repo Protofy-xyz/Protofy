@@ -96,22 +96,23 @@ const ActionCard = ({ board, id, displayResponse, html, value = undefined, name,
     try {
       const parsedMessage = JSON.parse(msg.message);
       const payload = parsedMessage.payload
-      console.log('Status: ', parsedMessage.status)
+      console.log('Message: ', payload)
       switch (payload.status) {
         case 'running':
+          console.log('Running action: ', name)
           setStatus('running')
           break;
         case 'done':
+          console.log('Done action: ', name)
           setStatus('idle')
-          // if (displayResponse) {
-          //   setData(payload, id)
-          // }
           break;
         case 'error':
+          console.log('Error action: ', name)
           setStatus('error')
           console.error('Error executing action: ', payload.error)
           break;
         case 'code_error':
+          console.log('Code error action: ', name)
           setStatus('error')
           console.error('Error in action code: ', payload.error)
           break;
