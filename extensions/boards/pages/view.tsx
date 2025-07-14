@@ -1,10 +1,10 @@
 import React from 'react'
-import { Cable, ClipboardList, Copy, Pause, Play, Plus, Save, Settings, Trash2, X, ArrowLeft } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -15,7 +15,6 @@ import { Tinted } from 'protolib/components/Tinted'
 import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { CardSelector } from 'protolib/components/board/CardSelector'
 import { ActionCardSettings } from 'protolib/components/autopilot/ActionCardSettings'
-import { useRouter } from 'solito/navigation';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Monaco } from 'protolib/components/Monaco'
 import { IconContainer } from 'protolib/components/IconContainer'
@@ -79,13 +78,39 @@ const FileWidget = dynamic<any>(() =>
 );
 
 const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
-
+  const [menuOpened, setMenuOpened] = useState(false)
+  const MenuButton = ({ text, Icon, onPress }: { text: string, Icon: any, onPress: any }) => {
+    return (
+      <XStack id={id} ml="$1" o={1} br="$5" p="$3" als="flex-start" cursor="pointer" pressStyle={{ opacity: 0.7 }} hoverStyle={{ backgroundColor: "$color5" }}
+        onPress={(e) => {
+          onPress(e)
+          setMenuOpened(false)
+        }}
+      >
+        <Icon size="$1" color="var(--color9)" strokeWidth={2} />
+        <Text ml="$3">{text}</Text>
+      </XStack>
+    )
+  }
   return <Tinted>
     <XStack pt={"$2"}>
       {data?.sourceFile && <CardIcon Icon={Cable} onPress={onEditCode} />}
-      <CardIcon Icon={Copy} onPress={onCopy} />
       <CardIcon Icon={Settings} onPress={onEdit} />
-      <CardIcon Icon={Trash2} onPress={onDelete} />
+      <Popover onOpenChange={setMenuOpened} open={menuOpened} allowFlip>
+        <Popover.Trigger>
+          <CardIcon Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} />
+        </Popover.Trigger>
+        <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
+          <Tinted>
+            <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
+              <YStack>
+                <MenuButton text="Duplicate" Icon={Copy} onPress={() => onCopy()} />
+                <MenuButton text="Delete" Icon={Trash2} onPress={() => onDelete()} />
+              </YStack>
+            </YStack>
+          </Tinted>
+        </Popover.Content>
+      </Popover>
     </XStack>
   </Tinted>
 }
