@@ -44,7 +44,7 @@ export const SideMenu = ({ sideBarColor = '$background', children, themeSwitcher
             </YStack>}
             {React.cloneElement(children, { ...children.props, collapsed })}
         </YStack>
-        <XStack jc='space-between' m="$4" ai="center">
+        <XStack jc={collapsed ? "center" : "space-between"} m="$4" ai="center">
             {(tintSwitcher || themeSwitcher) &&
                 <XStack display={collapsed ? "none" : "flex"}>
                     {themeSwitcher && settingsThemeSwitcherEnabled && <ThemeToggle borderWidth={0} chromeless />}
