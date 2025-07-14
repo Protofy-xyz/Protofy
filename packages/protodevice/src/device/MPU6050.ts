@@ -28,6 +28,7 @@ class MPU6050 {
           gyro_x: {name: `${this.name}-gyro-x`},
           gyro_y: {name: `${this.name}-gyro-y`},
           gyro_z: {name: `${this.name}-gyro-z`},
+          temperature: {name: `${this.name}-temperature`},
         },
         subsystem: this.getSubsystem()
       },
@@ -97,6 +98,14 @@ class MPU6050 {
           description: 'Get gyroscope Z axis status',
           units: '°/s',
           endpoint: "/sensor/"+this.name+"-gyro-z/state",
+          connectionType: 'mqtt',
+        },
+        {
+          name: 'temperature',
+          label: 'Temperature',
+          description: 'Get temperature status',
+          units: '°C',
+          endpoint: "/sensor/"+this.name+"-temperature/state",
           connectionType: 'mqtt',
         },
       ]
