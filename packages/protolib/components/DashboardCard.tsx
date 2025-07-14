@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, useRef } from "react";
 import { Tinted } from './Tinted';
 import { StackProps, XStack, YStack, Paragraph } from '@my/ui';
 
@@ -25,27 +25,36 @@ export const DashboardCard = ({
 }: DashboardCardProps) => {
     const [hovered, setHovered] = useState(false);
     const [showRunning, setShowRunning] = useState(false);
+    const visualRunningUntil = useRef<number>(0);
 
     useEffect(() => {
         if (status === 'running') {
+            const now = Date.now();
+            visualRunningUntil.current = now + 1000; // mantener visible al menos 1 segundo
             setShowRunning(true);
-        } else if (showRunning) {
-            // Si ya estaba en running, esperamos 2s antes de ocultarlo
-            const timeout = setTimeout(() => {
+        } else if (status !== 'running') {
+            const now = Date.now();
+            const delay = visualRunningUntil.current - now;
+
+            if (delay <= 0) {
                 setShowRunning(false);
-            }, 1000);
-            return () => clearTimeout(timeout);
+            } else {
+                const timeout = setTimeout(() => {
+                    setShowRunning(false);
+                }, delay);
+                return () => clearTimeout(timeout);
+            }
         }
     }, [status]);
 
     return (
         <>
             <style>{`
-                @keyframes dashOffset {
-                    0% { stroke-dashoffset: 100; }
-                    100% { stroke-dashoffset: 0; }
-                }
-            `}</style>
+        @keyframes dashOffset {
+          0% { stroke-dashoffset: 100; }
+          100% { stroke-dashoffset: 0; }
+        }
+      `}</style>
 
             <Tinted>
                 <YStack
