@@ -103,9 +103,9 @@ const ActionCard = ({ board, id, displayResponse, html, value = undefined, name,
           break;
         case 'done':
           setStatus('idle')
-          if (displayResponse) {
-            setData(payload, id)
-          }
+          // if (displayResponse) {
+          //   setData(payload, id)
+          // }
           break;
         case 'error':
           setStatus('error')
