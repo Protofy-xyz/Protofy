@@ -26,6 +26,7 @@ import { AsyncView } from 'protolib/components/AsyncView'
 import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { useEventEffect } from '@extensions/events/hooks'
+import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext'
 
 class ValidationError extends Error {
   errors: string[];
@@ -37,23 +38,23 @@ class ValidationError extends Error {
   }
 }
 
-const checkCard = async (cards,newCard) => {
+const checkCard = async (cards, newCard) => {
   const errors = []
   console.log("cards: ", cards)
   console.log("newCard: ", newCard)
   const existingCard = cards.find(item => item.name === newCard.name && item.key !== newCard.key);
   if (existingCard) {
     console.error('A card with the same name already exists')
-    errors.push('A card with the same name already exists')  
+    errors.push('A card with the same name already exists')
   }
-  if( newCard.name === '') {
+  if (newCard.name === '') {
     console.error('Card name cannot be empty')
     errors.push('Card name cannot be empty')
   }
-  if(errors.length > 0) {
+  if (errors.length > 0) {
     throw new ValidationError(errors);
   }
- }
+}
 
 const generate_random_id = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -91,12 +92,12 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
 
 const ActionCard = ({ board, id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
   const [status, setStatus] = useState('idle')
-    useEventEffect((payload, msg) => {
+  useEventEffect((payload, msg) => {
     try {
       const parsedMessage = JSON.parse(msg.message);
       const payload = parsedMessage.payload
-              console.log('Status: ', parsedMessage.status)
-      switch(payload.status) {
+      console.log('Status: ', parsedMessage.status)
+      switch (payload.status) {
         case 'running':
           setStatus('running')
           break;
@@ -115,10 +116,10 @@ const ActionCard = ({ board, id, displayResponse, html, value = undefined, name,
           console.error('Error in action code: ', payload.error)
           break;
       }
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
-  }, {path: "actions/boards/"+board.name+"/"+name+"/#"});
+  }, { path: "actions/boards/" + board.name + "/" + name + "/#" });
   return <CenterCard status={status} hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       setData={setData}
@@ -166,10 +167,10 @@ const getExecuteAction = (board, rawActions) => {
     }
   }
   flatten(rawActions, '')
-  
+
   return async (url_or_name, params = {}) => {
     console.log('Executing action: ', url_or_name, params);
-    const action = actions.find(a => a.url === url_or_name || (a.name === url_or_name && a.path == '/boards/'+board+'/' + a.name));
+    const action = actions.find(a => a.url === url_or_name || (a.name === url_or_name && a.path == '/boards/' + board + '/' + a.name));
     if (!action) {
       console.error('Action not found: ', url_or_name);
       return;
@@ -208,18 +209,21 @@ const getExecuteAction = (board, rawActions) => {
 }
 
 const Board = ({ board, icons }) => {
+  const {
+    addOpened,
+    rulesOpened,
+    setAddOpened,
+    setRulesOpened,
+  } = useBoardControls();
+
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 4 }
-  const router = useRouter()
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
-  const [addOpened, _setAddOpened] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
-  const [autopilot, setAutopilot] = useState(board.autopilot)
-  const [rulesOpened, setRulesOpened] = useState(false)
   const [editCode, setEditCode] = useState('')
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
@@ -232,11 +236,6 @@ const Board = ({ board, icons }) => {
   const iconRotate = useRef(null) as any
 
   const [addKey, setAddKey] = useState(0)
-
-  const setAddOpened = (value) => {
-    _setAddOpened(value)
-    if (value) setAddKey(prev => prev + 1)
-  }
 
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme == 'dark'
@@ -339,12 +338,12 @@ const Board = ({ board, icons }) => {
   boardRef.current.layouts = layouts
 
   const addWidget = async (card) => {
-    try{
+    try {
       await checkCard(items, card)
-    }catch(e){
+    } catch (e) {
       throw new Error(e)
     }
-    
+
     setItems(prevItems => {
       const uniqueKey = card.type + '_' + Date.now();
       const newCard = { ...card, key: uniqueKey }
@@ -471,54 +470,6 @@ const Board = ({ board, icons }) => {
   return (
     <YStack flex={1}>
 
-
-      <XStack p="$2" bc="red" als="center" pos="fixed" elevation={10} bw={1} boc="$gray6" animation="quick" bc="$bgPanel" zi={99999} b={rulesOpened ? -200 : 16} gap="$3" br="$5">
-        {
-          isJSONView
-            ? <Tinted>
-              <FloatingButton
-                Icon={X}
-                iconProps={{ color: "$gray9" }}
-                onPress={() => removeReplace('json')}
-              />
-              <FloatingButton
-                Icon={Save}
-                onPress={onEditBoard}
-              />
-            </Tinted>
-            : <Tinted>
-              <FloatingButton
-                Icon={Plus}
-                onPress={async () => {
-                  setAddOpened(true)
-                }}
-              />
-              <FloatingButton
-                beating={autopilot}
-                fill={autopilot ? false : true}
-                Icon={autopilot ? Pause : Play}
-                iconProps={{ ml: autopilot ? 0 : 2 }}
-                onPress={async () => {
-                  let newValue = !autopilot
-                  setAutopilot(newValue)
-                  boardRef.current.autopilot = newValue
-                  await API.get(`/api/core/v1/boards/${board.name}/autopilot/${newValue ? 'on' : 'off'}`)
-                }}
-                hoverStyle={{ bg: '$color5' }}
-                bc={autopilot ? "$color7" : "transparent"}
-                br="$20"
-              />
-              <FloatingButton
-                Icon={ClipboardList}
-                onPress={async () => {
-                  setRulesOpened(!rulesOpened)
-                }}
-              />
-            </Tinted>
-        }
-
-      </XStack>
-
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
 
       <AlertDialog
@@ -556,24 +507,24 @@ const Board = ({ board, icons }) => {
               }} />
               {errors.length > 0 ?
                 <YStack>
-                    {errors.map((error, index) => (
-                      <Paragraph key={"err"+index} color="$red9" fontSize="$4">{error}</Paragraph>
-                    ))}
+                  {errors.map((error, index) => (
+                    <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
+                  ))}
                 </YStack>
-                :<></>
-              } 
+                : <></>
+              }
 
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
                   setItems(newItems)
                   boardRef.current.cards = newItems
-                  try{
-                    await checkCard(newItems,editedCard)
-                  }catch(e){
+                  try {
+                    await checkCard(newItems, editedCard)
+                  } catch (e) {
                     if (e instanceof ValidationError) {
                       setErrors(e.errors);
-                    }else{
+                    } else {
                       console.error('Error checking card:', e);
                       setErrors(['An unexpected error occurred while checking the card.']);
                     }
@@ -708,11 +659,11 @@ const Board = ({ board, icons }) => {
                   }
                   return prev === 1010 ? window.innerWidth - 330 : 1010
                 })
-              }} o={0.8} pressStyle={{opacity: 0.8}} hoverStyle={{opacity: 1}}>
+              }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
                 <ArrowLeft size="$1" color="var(--color)" />
               </XStack>
-            </XStack>} 
-            automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+            </XStack>}
+              automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
           </XStack>
         }
       </XStack>
@@ -720,22 +671,67 @@ const Board = ({ board, icons }) => {
   )
 }
 
-export const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
-  const { params } = useParams()
+const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession }) => {
+  const {
+    rulesOpened,
+    setRulesOpened,
+    toggleJson,
+    saveJson,
+    toggleAutopilot,
+    openAdd
+  } = useBoardControls();
 
-  const [boardData, setBoardData] = useState(board ?? getPendingResult('pending'))
-  usePendingEffect((s) => { API.get({ url: `/api/core/v1/boards/${params.board}/` }, s) }, setBoardData, board)
+  const onFloatingBarEvent = (event) => {
+    if (event.type === 'toggle-rules') {
+      setRulesOpened(!rulesOpened);
+    }
+    if (event.type === 'toggle-json') {
+      toggleJson();
+    }
+    if (event.type === 'save-json') {
+      saveJson();
+    }
+    if (event.type === 'toggle-autopilot') {
+      toggleAutopilot();
+    }
+    if (event.type === 'open-add') {
+      openAdd();
+    }
+  }
 
-  const [iconsData, setIconsData] = useState(icons ?? getPendingResult('pending'))
-  usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
-  useIsAdmin(() => '/workspace/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
-  return (<AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
-    <AdminPage title={params.board + " board"} workspace={workspace} pageSession={pageSession}>
+  return <AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
+    <AdminPage
+      title={params.board + " board"}
+      workspace={workspace}
+      pageSession={pageSession}
+      onActionBarEvent={onFloatingBarEvent}
+    >
       {boardData.status == 'error' && <ErrorMessage
         msg="Error loading board"
         details={boardData.error.error}
       />}
       {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
     </AdminPage>
-  </AsyncView>)
+  </AsyncView>
+}
+
+export const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
+  const { params } = useParams()
+  const [boardData, setBoardData] = useState(board ?? getPendingResult('pending'))
+  usePendingEffect((s) => { API.get({ url: `/api/core/v1/boards/${params.board}/` }, s) }, setBoardData, board)
+
+  const [iconsData, setIconsData] = useState(icons ?? getPendingResult('pending'))
+  usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
+  useIsAdmin(() => '/workspace/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
+
+  return (<BoardControlsProvider boardName={params.board}>
+    <BoardViewLoader
+      workspace={workspace}
+      boardData={boardData}
+      iconsData={iconsData}
+      params={params}
+      pageSession={pageSession}
+    />
+  </BoardControlsProvider>
+  )
 }

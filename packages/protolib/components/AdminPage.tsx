@@ -9,11 +9,12 @@ import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { BubbleChat } from './BubbleChat';
 import { useRouter } from 'next/router'
 import { useIsAdmin } from '../lib/useIsAdmin';
+import { useActionBar } from './ActionBarWidget';
 
-export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = false }: any, ref) => {
+export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = false, actionBar = null, onActionBarEvent = (e) => {} }: any, ref) => {
   useSession(pageSession)
 
-  useIsAdmin(() => '/workspace/auth/login?return='+document?.location?.pathname+(document?.location?.search ? '?'+document?.location?.search: ''))
+  useIsAdmin(() => '/workspace/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
   const router = useRouter()
 
   const [ready, setReady] = useState(false);
@@ -40,24 +41,27 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
 
   usePrompt(() => `The user is browsing an admin page in the admin panel. The title of the admin page is: "${title}"`)
 
-  if(!ready) {
-    return <></>
-  } 
+  const ActionBar = useActionBar(actionBar, onActionBarEvent)
 
-  if(router.query.mode === 'embed') {
+  if (!ready) {
+    return <></>
+  }
+
+  if (router.query.mode === 'embed') {
     return children
   }
 
   return (
     <Tinted>
-      <Page ref={ref} title={title + " - " +projectName} backgroundColor={'$bgContent'}>
+      <Page ref={ref} title={title + " - " + projectName} backgroundColor={'$bgContent'}>
         <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName, searchStatus, setSearchStatus }}>
           <AdminPanel>
             {children}
           </AdminPanel>
         </SearchContext.Provider>
         <Tinted>
-          {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/board"/>}
+          {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/board" />}
+          {ActionBar}
         </Tinted>
       </Page>
     </Tinted>
