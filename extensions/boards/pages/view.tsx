@@ -535,7 +535,7 @@ const Board = ({ board, icons }) => {
 
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
-            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
+            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
             return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
           }}
         />
