@@ -1,5 +1,4 @@
 import { X, Save, Plus, Pause, Play, ClipboardList } from 'lucide-react';
-import { YStack } from '@my/ui';
 import { Tinted } from 'protolib/components/Tinted';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
@@ -10,7 +9,7 @@ const getActionBar = (generateEvent) => {
   return isJSONView
     ? [
       <Tinted>
-        <ActionBarButton Icon={X} iconProps={{ color: '$gray9' }} onPress={() => generateEvent({ type: "toggle-json" })} />
+        <ActionBarButton Icon={X} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "toggle-json" })} />
       </Tinted>,
       <Tinted>
         <ActionBarButton Icon={Save} onPress={() => generateEvent({ type: "save-json" })} />
@@ -27,8 +26,8 @@ const getActionBar = (generateEvent) => {
           Icon={autopilot ? Pause : Play}
           iconProps={{ ml: autopilot ? 0 : 2 }}
           onPress={() => generateEvent({ type: "toggle-autopilot" })}
-          hoverStyle={{ bg: '$color5' }}
-          bc={autopilot ? '$color7' : 'transparent'}
+          hoverStyle={{ bg: 'var(--color5)' }}
+          bc={autopilot ? 'var(--color7)' : 'transparent'}
           br="$20"
         />
       </Tinted>,
