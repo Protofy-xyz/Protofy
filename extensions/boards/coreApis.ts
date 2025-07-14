@@ -573,6 +573,7 @@ export default async (app, context) => {
             user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
             ephemeral: true, // this event is ephemeral, it will not be stored in the database
             payload: {
+                status: 'running',
                 action: req.params.action,
                 boardId: req.params.boardId,
                 params: req.query
@@ -595,11 +596,13 @@ export default async (app, context) => {
                 response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
             } catch (err) {
                 await generateEvent({
+
                     path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/code/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                     from: 'system', // system entity where the event was generated (next, api, cmd...)
                     user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                     ephemeral: true, // this event is ephemeral, it will not be stored in the database
                     payload: {
+                        status: 'code_error',
                         action: req.params.action,
                         boardId: req.params.boardId,
                         params: req.query,
@@ -634,11 +637,13 @@ export default async (app, context) => {
             }
             res.json(response);
             await generateEvent({
+
                 path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/done', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'system', // system entity where the event was generated (next, api, cmd...)
                 user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                 ephemeral: true, // this event is ephemeral, it will not be stored in the database
                 payload: {
+                    status: 'done',
                     action: req.params.action,
                     boardId: req.params.boardId,
                     params: req.query,
@@ -647,11 +652,13 @@ export default async (app, context) => {
             }, getServiceToken())
         } catch (err) {
             await generateEvent({
+
                 path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
                 from: 'system', // system entity where the event was generated (next, api, cmd...)
                 user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
                 ephemeral: true, // this event is ephemeral, it will not be stored in the database
                 payload: {
+                    status: 'error',
                     action: req.params.action,
                     boardId: req.params.boardId,
                     params: req.query,

@@ -82,17 +82,36 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
 }
 
 const ActionCard = ({ board, id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
-  const [state, setState] = useState('idle')
+  const [status, setStatus] = useState('idle')
     useEventEffect((payload, msg) => {
     try {
       const parsedMessage = JSON.parse(msg.message);
       const payload = parsedMessage.payload
-      console.log('Received event payload: ', payload)
+              console.log('Status: ', parsedMessage.status)
+      switch(payload.status) {
+        case 'running':
+          setStatus('running')
+          break;
+        case 'done':
+          setStatus('idle')
+          if (displayResponse) {
+            setData(payload, id)
+          }
+          break;
+        case 'error':
+          setStatus('error')
+          console.error('Error executing action: ', payload.error)
+          break;
+        case 'code_error':
+          setStatus('error')
+          console.error('Error in action code: ', payload.error)
+          break;
+      }
     } catch(e) {
       console.error(e);
     }
   }, {path: "actions/boards/"+board.name+"/"+name+"/#"});
-  return <CenterCard hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
+  return <CenterCard status={status} hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
     <ActionRunner
       setData={setData}
       id={id}
