@@ -90,53 +90,102 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
   </Tinted>
 }
 
-const ActionCard = ({ board, id, displayResponse, html, value = undefined, name, title, params, icon = undefined, color, onRun = (name, params) => { }, onEditCode = () => { }, onDelete = () => { }, onEdit = () => { }, onCopy = () => { }, data = {} as any, containerProps = {}, setData = (data, id) => { } }) => {
-  const [status, setStatus] = useState('idle')
+const ActionCard = ({
+  board,
+  id,
+  displayResponse,
+  html,
+  value = undefined,
+  name,
+  title,
+  params,
+  icon = undefined,
+  color,
+  onRun = (name, params) => { },
+  onEditCode = () => { },
+  onDelete = () => { },
+  onEdit = () => { },
+  onCopy = () => { },
+  data = {} as any,
+  containerProps = {},
+  setData = (data, id) => { }
+}) => {
+  const [status, setStatus] = useState<'idle' | 'running' | 'error'>('idle')
+  const lockRef = useRef(false)
+
   useEventEffect((payload, msg) => {
     try {
-      const parsedMessage = JSON.parse(msg.message);
+      const parsedMessage = JSON.parse(msg.message)
       const payload = parsedMessage.payload
       console.log('Message: ', payload)
-      switch (payload.status) {
-        case 'running':
-          console.log('Running action: ', name)
-          setStatus('running')
-          break;
-        case 'done':
-          console.log('Done action: ', name)
-          setStatus('idle')
-          break;
-        case 'error':
-          console.log('Error action: ', name)
-          setStatus('error')
-          console.error('Error executing action: ', payload.error)
-          break;
-        case 'code_error':
-          console.log('Code error action: ', name)
-          setStatus('error')
-          console.error('Error in action code: ', payload.error)
-          break;
+
+      const next = payload.status
+      if (next === 'running') {
+        console.log('Running action: ', name)
+        lockRef.current = true
+        setStatus('running')
+        requestAnimationFrame(() => {
+          lockRef.current = false
+        })
+      } else {
+        const apply = () => {
+          if (next === 'done') {
+            console.log('Done action: ', name)
+            setStatus('idle')
+          } else if (next === 'error' || next === 'code_error') {
+            console.log('Error action: ', name)
+            setStatus('error')
+            console.error('Error: ', payload.error)
+          }
+        }
+
+        if (lockRef.current) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(apply)
+          })
+        } else {
+          apply()
+        }
       }
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
-  }, { path: "actions/boards/" + board.name + "/" + name + "/#" });
-  return <CenterCard status={status} hideTitle={data.displayTitle === false} title={title} id={id} containerProps={containerProps} cardActions={<CardActions id={id} data={data} onDelete={onDelete} onEdit={onEdit} onEditCode={onEditCode} onCopy={onCopy} />} >
-    <ActionRunner
-      setData={setData}
+  }, { path: "actions/boards/" + board.name + "/" + name + "/#" })
+
+  return (
+    <CenterCard
+      status={status}
+      hideTitle={data.displayTitle === false}
+      title={title}
       id={id}
-      data={data}
-      displayResponse={displayResponse}
-      name={name}
-      description={"Run action"}
-      actionParams={params}
-      onRun={onRun}
-      icon={icon}
-      color={color}
-      html={html}
-      value={value}
-    />
-  </CenterCard>
+      containerProps={containerProps}
+      cardActions={
+        <CardActions
+          id={id}
+          data={data}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onEditCode={onEditCode}
+          onCopy={onCopy}
+        />
+      }
+    >
+      <ActionRunner
+        setData={setData}
+        id={id}
+        data={data}
+        displayResponse={displayResponse}
+        name={name}
+        description="Run action"
+        actionParams={params}
+        onRun={onRun}
+        icon={icon}
+        color={color}
+        html={html}
+        value={value}
+      />
+    </CenterCard>
+  )
 }
 
 const FloatingButton = ({ Icon, beating = false, ...props }) => {
