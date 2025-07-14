@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, YStack, Paragraph } from '@my/ui';
 import { Camera } from '@tamagui/lucide-icons';
 
-export const CameraCard = ({ onPicture }) => {
+export const CameraCard = ({ params, onPicture }) => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [error, setError] = useState<string | null>(null);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const startCamera = async () => {
         try {
@@ -51,25 +52,48 @@ export const CameraCard = ({ onPicture }) => {
         };
     }, []);
 
-    return (
-        <YStack space="$4">
+    const fps = params?.fps?.defaultValue || 1;
+
+    useEffect(() => {
+        if(params?.mode?.defaultValue != 'auto') {
+            console.log("Camera mode is not set to auto, skipping interval setup.");
+            return;
+        }
+        console.log("Setting up interval for capturing images at", fps, "fps");
+        clearInterval(intervalRef.current as NodeJS.Timeout);
+        intervalRef.current = setInterval(() => {
+            captureImage();
+        }, 1000 / fps);
+
+        return () => clearInterval(intervalRef.current as NodeJS.Timeout);
+    }, [fps]);
+
+    return useMemo(() => (
+        <YStack ai="center" space="$4">
+
             <video
                 ref={videoRef}
                 autoPlay
                 playsInline
                 muted
-                style={{ width: "100%", borderRadius: 12 }}
+                style={{ width: "99%" }}
             />
+
+            {/* {params?.mode?.defaultValue == 'auto' && (
+                <Paragraph position="relative" top={-15} fontSize="$1" width="100%" mr="$4" textAlign="right">
+                    Capturing at {fps} fps
+                </Paragraph>
+            )} */}
             <canvas ref={canvasRef} style={{ display: "none" }} />
 
-            <Button
+            {params?.mode?.defaultValue == 'manual' && <Button
                 icon={Camera}
                 onPress={captureImage}
                 theme="active"
                 size="$4"
             >
                 Take picture
-            </Button>
+            </Button>}
 
             {error && (
                 <Paragraph color="red" fontWeight="600">
@@ -77,5 +101,5 @@ export const CameraCard = ({ onPicture }) => {
                 </Paragraph>
             )}
         </YStack>
-    );
+    ) , [params?.mode?.defaultValue, fps, error]);
 };

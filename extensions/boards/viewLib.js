@@ -468,23 +468,24 @@ const cardValue = ({ value, style = '', id = null }) => {
 }
 
 const SafeProvider = window.Provider || (({ children }) => children);
-
+window.WidgetWrapper = window.WidgetWrapper || (({ children }) =>
+  React.createElement(
+    SafeProvider,
+    { disableRootThemeClass: true },
+    React.createElement(ErrorBoundary, {
+      fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops')
+    }, children)
+  )
+);
 
 window.updateReactCardProps = (uuid, newProps) => {
     const root = window._reactWidgets?.[uuid];
     const Component = window._reactWidgetComponents?.[uuid];
     if (!root || !Component) return;
 
-    const Wrapper = ({ children }) =>
-        React.createElement(
-            SafeProvider,
-            { disableRootThemeClass: true },
-            React.createElement(ErrorBoundary, {
-                fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops')
-            }, children)
-        );
-
-    const element = React.createElement(Wrapper, null,
+    const element = React.createElement(
+        window.WidgetWrapper,
+        null,
         React.createElement(Component, newProps)
     );
 
@@ -508,26 +509,17 @@ class ErrorBoundary extends React.Component {
 }
 
 const reactCard = (jsx, rootId, initialProps = {}) => {
-    // Exponer componentes globales
     Object.keys(window.ProtoComponents || {}).forEach(key => {
         window[key] = window.ProtoComponents[key];
     });
 
     if (window._reactWidgets?.[rootId]) {
-        // Ya está montado, solo actualiza props
         window.updateReactCardProps(rootId, initialProps);
         return;
     }
-    const jsxCode = `
-        function WidgetRoot({ children }) {
-          return React.createElement(
-            SafeProvider,
-            { disableRootThemeClass: true },
-            React.createElement(ErrorBoundary, { fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops') }, children)
-          );
-        }
 
-        ${jsx}
+    const jsxCode = `
+        ${jsx}  // define Widget(props)
 
         const container = document.getElementById("${rootId}");
         const root = ReactDOM.createRoot(container);
@@ -538,8 +530,10 @@ const reactCard = (jsx, rootId, initialProps = {}) => {
         window._reactWidgetComponents = window._reactWidgetComponents || {};
         window._reactWidgetComponents["${rootId}"] = Widget;
 
-        const element = React.createElement(WidgetRoot, null,
-            React.createElement(Widget, ${JSON.stringify(initialProps)})
+        const element = React.createElement(
+          window.WidgetWrapper,
+          null,
+          React.createElement(Widget, ${JSON.stringify(initialProps)})
         );
 
         root.render(element);
