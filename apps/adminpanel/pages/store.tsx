@@ -34,7 +34,7 @@ export default function Page(props: any) {
         <title>{projectName + ' - Store'}</title>
       </Head>
       <iframe
-        src="https://store.protofy.xyz"
+        src="https://protofy.xyz/store"
         style={{ height: '100vh', width: '100vw', border: 'none' }}
       />
     </>

@@ -109,7 +109,7 @@ export const AdminPanel = ({ children }) => {
                 if (isElectron()) {
                   window['electronAPI'].openWindow("store");
                 } else {
-                  window.open("https://store.protofy.xyz", "_blank");
+                  window.open("https://protofy.xyz/store", "_blank");
                 }
               }}
               IconColor="var(--color)"
