@@ -1,14 +1,9 @@
 import { NextLink } from '../NextLink'
 import * as React from 'react'
 import {
-  TooltipGroup,
-  XGroup,
   XStack,
 } from '@my/ui'
-import { SiteConfig } from '@my/config/dist/AppConfig'
 import { isElectron } from '../../lib/isElectron'
-import { ThemeToggle } from '../ThemeToggle'
-import { ColorToggleButton } from '../ColorToggleButton'
 
 export type HeaderContentsProps = {
   logoSize?: number,
@@ -16,20 +11,12 @@ export type HeaderContentsProps = {
   centerArea?: string,
   logo?: any
   logoHref?: string,
-  themeSwitcher?: boolean,
-  tintSwitcher?: boolean,
   leftArea?: any,
   rightArea?: any,
   topBar?: any
 }
-const tooltipDelay = { open: 500, close: 150 }
 
-export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, logo, logoHref = "/", themeSwitcher = true, tintSwitcher = true, logoSize = 30, menu }: HeaderContentsProps) => {
-  const settingsTintSwitcher = SiteConfig.ui?.tintSwitcher
-  const settingsThemeSwitcher = SiteConfig.ui?.themeSwitcher
-
-  const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
-  const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
+export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, logo, logoHref = "/", logoSize = 30, menu }: HeaderContentsProps) => {
 
   const [showMenu, setShowMenu] = React.useState(false)
   React.useEffect(() => {
@@ -40,7 +27,7 @@ export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, log
   return (
     <XStack f={1} pt="$3" >
       <XStack ai="center" space="$4">
-        {(logo || themeSwitcher || tintSwitcher) &&
+        {logo &&
           <XStack f={1} minWidth={210} $xs={{ paddingLeft: "$4" }}>
             {logo && <NextLink href={logoHref}>
               <XStack py={logoSize / 4} ai="center" px="$3" cur="pointer" my={-20}>
@@ -50,7 +37,6 @@ export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, log
           </XStack>}
         {leftArea}
       </XStack>
-
 
       {centerArea && <XStack
         position="absolute"
@@ -79,17 +65,6 @@ export const HeaderContents = React.memo(({ leftArea, centerArea, rightArea, log
       >
         <XStack ai="center" space="$3">
           {rightArea}
-          {(themeSwitcher || tintSwitcher) &&
-            <TooltipGroup delay={tooltipDelay}>
-              <XGroup boc="$color2" bw={1} mah={32} bc="transparent" ai="center" size="$3">
-                {themeSwitcher && settingsThemeSwitcherEnabled && <XGroup.Item>
-                  <ThemeToggle borderWidth={0} chromeless />
-                </XGroup.Item>}
-                {tintSwitcher && settingsTintSwitcherEnabled && <XGroup.Item>
-                  <ColorToggleButton borderWidth={0} chromeless />
-                </XGroup.Item>}
-              </XGroup>
-            </TooltipGroup>}
           {showMenu && menu}
         </XStack>
       </XStack>

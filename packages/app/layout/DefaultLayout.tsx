@@ -28,7 +28,7 @@ export const DefaultLayout = React.forwardRef((props: {
     sideMenu={null}
     footer={<Footer />}
     header={<AppBar>
-      <HeaderContents tintSwitcher={props.tintSwitcher} themeSwitcher={props.themeSwitcher} headerTitle={props.headerTitle} menu={<HeaderMenu menuPlacement={'bottom'}>
+      <HeaderContents headerTitle={props.headerTitle} menu={<HeaderMenu menuPlacement={'bottom'}>
         <HeaderMenuContent />
       </HeaderMenu>}
         logo={<Image

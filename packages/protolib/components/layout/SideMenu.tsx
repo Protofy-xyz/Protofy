@@ -1,15 +1,24 @@
 import React from 'react'
-import { YStack, useMedia, Button, Square } from '@my/ui'
+import { YStack, useMedia, Button, Square, TooltipGroup, XGroup, XStack } from '@my/ui'
 import { useState } from 'react'
 import { PanelLeftOpen, PanelLeftClose, ArrowLeftToLine } from '@tamagui/lucide-icons'
+import { SiteConfig } from '@my/config/dist/AppConfig'
+import { ThemeToggle } from '../../components/ThemeToggle'
+import { ColorToggleButton } from '../../components/ColorToggleButton'
 
-export const SideMenu = ({ sideBarColor = '$background', children, ...props }: any) => {
+export const SideMenu = ({ sideBarColor = '$background', children, themeSwitcher = true, tintSwitcher = true, ...props }: any) => {
     const isXs = useMedia().xs
     const [open, setOpen] = useState(false)
     const [collapsed, setCollapsed] = useState(false)
     const width = collapsed ? 80 : 260
 
-    return <YStack bw={0} bc={sideBarColor} userSelect='none' style={{"MozUserSelect": "none", "WebkitUserSelect": "none", "msUserSelect": "none"}} {...props} onDoubleClick={e => { setCollapsed(!collapsed); e.stopPropagation(); e.preventDefault() }}>
+    const settingsTintSwitcher = SiteConfig.ui?.tintSwitcher
+    const settingsThemeSwitcher = SiteConfig.ui?.themeSwitcher
+
+    const settingsTintSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsTintSwitcher
+    const settingsThemeSwitcherEnabled = settingsTintSwitcher === undefined ? true : settingsThemeSwitcher
+
+    return <YStack bw={0} bc={sideBarColor} {...props} onDoubleClick={e => { setCollapsed(!collapsed); e.stopPropagation() }}>
         <YStack
             animateOnly={["width"]}
             // @ts-ignore
@@ -35,20 +44,27 @@ export const SideMenu = ({ sideBarColor = '$background', children, ...props }: a
             </YStack>}
             {React.cloneElement(children, { ...children.props, collapsed })}
         </YStack>
-        <YStack
-            m="$4"
-            onPress={() => setCollapsed(!collapsed)}
-            p="$2"
-            als={collapsed ? "center" : "flex-end"}
-            cursor='pointer'
-            hoverStyle={{ backgroundColor: '$gray4' }}
-            br="$4"
-        >
-            {/* @ts-ignore */}
-            <Square animation="quick" rotate={collapsed ? '180deg' : '0deg'}>
-                <ArrowLeftToLine size={20} color="$gray9" />
-            </Square>
-        </YStack>
+        <XStack jc='space-between' m="$4" ai="center">
+            {(tintSwitcher || themeSwitcher) &&
+                <XStack display={collapsed ? "none" : "flex"}>
+                    {themeSwitcher && settingsThemeSwitcherEnabled && <ThemeToggle borderWidth={0} chromeless />}
+                    {tintSwitcher && settingsTintSwitcherEnabled && <ColorToggleButton borderWidth={0} chromeless />}
+                </XStack>
+            }
+            <YStack
+                onPress={() => setCollapsed(!collapsed)}
+                p="$2"
+                als={collapsed ? "center" : "flex-end"}
+                cursor='pointer'
+                hoverStyle={{ backgroundColor: '$gray4' }}
+                br="$4"
+            >
+                {/* @ts-ignore */}
+                <Square animation="quick" rotate={collapsed ? '180deg' : '0deg'}>
+                    <ArrowLeftToLine size={20} color="$gray9" />
+                </Square>
+            </YStack>
+        </XStack>
         {isXs && <>
             <YStack
                 backgroundColor="$background"
