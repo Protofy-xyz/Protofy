@@ -1,19 +1,20 @@
-import getFloatingBar from '@extensions/boards/ActionBar';
+import getActionBar from '@extensions/boards/ActionBar';
 
-export const processFloatingBar = (nextRouter, defaults = {}, generateEvent = (e) => { }) => {
+export const processActionBar = (nextRouter, defaults = {}, generateEvent = (e) => {}) => {
     const contents = {
-        "boards": [...getFloatingBar(generateEvent)]
-    }
+        "boards": () => getActionBar(generateEvent)
+    };
 
-    const router = {
+    const routes = {
         "/boards/*": contents.boards,
     };
 
     const matchRoute = (path) => {
-        for (const pattern in router) {
+        for (const pattern in routes) {
             const regex = new RegExp("^" + pattern.replace(/[-\/\\^$+?.()|[\]{}]/g, '\\$&').replace(/\*/g, ".*") + "$");
             if (regex.test(path)) {
-                return router[pattern];
+                const actionBarFn = routes[pattern];
+                return actionBarFn ? actionBarFn() : [];
             }
         }
         return [];
