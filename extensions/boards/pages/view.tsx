@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Text } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
@@ -88,7 +88,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
         }}
       >
         <Icon size="$1" color="var(--color9)" strokeWidth={2} />
-        <Text ml="$3">{text}</Text>
+        <Paragraph ml="$3">{text}</Paragraph>
       </XStack>
     )
   }
