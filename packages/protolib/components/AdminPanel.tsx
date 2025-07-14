@@ -95,7 +95,7 @@ export const AdminPanel = ({ children }) => {
     borderLess={true}
     rightPanelSize={rightPanelSize}
     setRightPanelSize={setRightPanelSize}
-    rightPanelStyle={{ marginRight: '20px', height: 'calc(100vh - 85px)', marginTop: '68px', backgroundColor: 'transparent' }}
+    rightPanelStyle={{ marginRight: '20px', height: '100vh', padding: '20px', backgroundColor: 'var(--bgPanel)' }}
     rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened}
     rightPanelResizable={true}
     centerPanelContent={workspaceData && <PanelLayout

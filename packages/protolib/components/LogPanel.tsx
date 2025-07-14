@@ -146,7 +146,7 @@ export const LogPanel = ({AppState}) => {
             </Popover>
         </XStack>
 
-        <ScrollView bc="transparent" f={1} height={"calc( 100vh - 130px )"}>
+        <ScrollView bc="transparent" f={1} height={"calc( 100vh - 90px )"}>
             {filteredMessages.map((m, i) => {
                 return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
                     <Tinted>
