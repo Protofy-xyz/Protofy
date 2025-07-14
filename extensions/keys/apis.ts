@@ -28,6 +28,7 @@ const registerCards = (app, context) => {
             description: "Displays a key setter for a specific key or in case already set displays key is set",
             type: 'value',
             html: `
+//@react
 reactCard(\`
   async function validarOpenAIKey(apiKey) {
     const res = await fetch('https://api.openai.com/v1/models', {

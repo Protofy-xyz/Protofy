@@ -2,7 +2,7 @@ import { YStack, Text, XStack } from '@my/ui';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import { API } from 'protobase'
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { useRemoteStateList } from 'protolib/lib/useRemoteState';
 import { ServiceModel } from './servicesSchemas';
 import AsyncView from 'protolib/components/AsyncView';
@@ -104,32 +104,54 @@ const requestViewLib = (cb) => {
 }
 
 const cardState = {}
-export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {    
+export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
-    const [theme, setTheme] = useRootTheme()
+    const [theme, setTheme] = useRootTheme();
 
-    if(cardState[uuid] === undefined) {
-        cardState[uuid] = {}
+    if (cardState[uuid] === undefined) {
+        cardState[uuid] = {};
     }
 
-    //memorize the component to avoid rerendering on every update by
-    const totalHtml = useMemo(() => {
-        if(!viewLib) return '';
-        if(!document || !document.getElementById(uuid)) return '';
-        return getHTML(html, viewLib, {
-            ...data, theme, domId: uuid, setCardData: (obj) => {
-                setData(obj)
-            }, cardState: cardState[uuid], setCardState: (state) => {
-                if(!cardState[uuid]) {
-                    return;
-                }
-                Object.assign(cardState[uuid], state);
-            }
-        })
-    }, data.freeze? [viewLib, uuid, loaded, !!document.getElementById(uuid)?.offsetWidth] : [html, JSON.stringify(data), viewLib, !document.getElementById(uuid)]);
+    const isReactWidget = (html) => html.includes('reactCard') || html.includes('//@react');
 
-    //TODO: loading?
+    const dataForCard = {
+        ...data,
+        theme,
+        domId: uuid,
+        setCardData: (obj) => setData(obj),
+        cardState: cardState[uuid],
+        setCardState: (state) => {
+            if (cardState[uuid]) Object.assign(cardState[uuid], state);
+        }
+    };
+
+    const htmlContainerRef = useRef(null);
+
+    // Este useEffect es clave para ReactCards ya montadas
+    useEffect(() => {
+        if (!loaded || !viewLib) return;
+
+        if (isReactWidget(html)) {
+            // Ya montado antes
+            if (window._reactWidgets?.[uuid]) {
+                window.updateReactCardProps?.(uuid, dataForCard);
+            } else {
+                const innerHtml = getHTML(html, viewLib, dataForCard);
+                if (htmlContainerRef.current) {
+                    htmlContainerRef.current.innerHTML = innerHtml;
+                }
+            }
+        } else {
+            // HTML normal, siempre regenerar
+            const innerHtml = getHTML(html, viewLib, dataForCard);
+            if (htmlContainerRef.current) {
+                htmlContainerRef.current.innerHTML = innerHtml;
+            }
+        }
+    }, [html, JSON.stringify(data), loaded]);
+
+    // Cargar viewLib
     useEffect(() => {
         if (!loaded) {
             requestViewLib((lib) => {
@@ -139,21 +161,19 @@ export const HTMLView = ({ html, data, setData = (data) => { }, ...props }) => {
                 }
                 viewLib = lib;
                 setLoaded(true);
-            })
+            });
         }
 
         return () => {
-            delete cardState[uuid]; // Clean up state when component unmounts
-        }
+            delete cardState[uuid]; // Clean up
+        };
     }, []);
 
-    return (
-        <div id={uuid} {...props} dangerouslySetInnerHTML={{ __html: loaded ? totalHtml : '' }} />
-    )
-}
+    return <div id={uuid} ref={htmlContainerRef} {...props} />;
+};
 
 export const CardValue = ({ Icon, id = null, value, setData = (data, id) => { }, html, color = "var(--color7)", ...props }) => {
-    
+
     return (
         <YStack width="100%" height="100%" alignItems='center' justifyContent='center'>
             {html?.length > 0 && <HTMLView style={{ width: "100%", height: '100%' }} html={html} data={{ ...props, icon: Icon, value: value, color: color }} setData={(data) => {

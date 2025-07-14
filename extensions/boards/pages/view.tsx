@@ -361,6 +361,7 @@ const Board = ({ board, icons }) => {
 
       return await window['onRunListeners'][card](card, cleanedParams);
     };
+    
   }, [])
 
   useEffect(() => {

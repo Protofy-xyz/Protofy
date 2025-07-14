@@ -13,6 +13,7 @@ export default AutoActions({
     notificationsName: 'accounts',
     html: {
         "list": `
+//@react
 const groups = getStorage('group', 'lastEntries', [])
 
 reactCard(\`

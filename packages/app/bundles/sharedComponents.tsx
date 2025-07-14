@@ -19,6 +19,8 @@ import { Spinner } from '@my/ui'
 import { ViewList } from 'protolib/components/ViewList';
 import { JSONView } from 'protolib/components/JSONView';
 import { ProtoThemeProvider } from 'protolib/components/ProtoThemeProvider';
+import { CameraPreview } from 'protolib/components/vision/CameraPreview';
+import { CameraCard } from 'protolib/components/vision/CameraCard';
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
@@ -41,6 +43,8 @@ export const transferExtensionComponents = () => {
     TransferComponent(ViewList, 'ViewList');
     TransferComponent(JSONView, 'JSONView');
     TransferComponent(ProtoThemeProvider, 'ProtoThemeProvider');
+    TransferComponent(CameraPreview, 'CameraPreview');
+    TransferComponent(CameraCard, 'CameraCard');
 }
 
 

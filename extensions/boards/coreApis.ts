@@ -300,6 +300,7 @@ boardConnect(run)`
                         const card = actionsCards[i];
                         console.log("Adding action: ", JSON.stringify(card, null, 4))
                         addAction({
+                            method: card.method || 'get',
                             group: 'boards',
                             name: card.name,
                             url: "/api/core/v1/boards/" + key + "/actions/" + card.name,
@@ -553,7 +554,7 @@ export default async (app, context) => {
         }
     })
 
-    app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), async (req, res) => {
+    const handleBoardAction = async (req, res, params) => {
         const actions = await getBoardActions(req.params.boardId);
         const action = actions.find(a => a.name === req.params.action);
 
@@ -568,109 +569,109 @@ export default async (app, context) => {
         }
 
         await generateEvent({
-            path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/run', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-            from: 'system', // system entity where the event was generated (next, api, cmd...)
-            user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-            ephemeral: true, // this event is ephemeral, it will not be stored in the database
+            path: `actions/boards/${req.params.boardId}/${req.params.action}/run`,
+            from: 'system',
+            user: 'system',
+            ephemeral: true,
             payload: {
                 status: 'running',
                 action: req.params.action,
                 boardId: req.params.boardId,
-                params: req.query
-            }, // event payload, event-specific data
-        }, getServiceToken())
+                params
+            },
+        }, getServiceToken());
 
         const states = await context.state.getStateTree();
-        //after trimming empty lines from the beginning or empty spaces, check if the line start with 'return ', if not, add 'return ' at the beginning
         let rulesCode = action.rulesCode.trim();
 
         const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
-                ${getExecuteAction(await getActions(), req.params.boardId)}
-                ${rulesCode}
-            `);
-
+        ${getExecuteAction(await getActions(), req.params.boardId)}
+        ${rulesCode}
+    `);
 
         try {
             let response = null;
             try {
-                response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, req.query, req.query, token, API);
+                response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, params, params, token, API);
             } catch (err) {
                 await generateEvent({
-
-                    path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/code/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                    from: 'system', // system entity where the event was generated (next, api, cmd...)
-                    user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-                    ephemeral: true, // this event is ephemeral, it will not be stored in the database
+                    path: `actions/boards/${req.params.boardId}/${req.params.action}/code/error`,
+                    from: 'system',
+                    user: 'system',
+                    ephemeral: true,
                     payload: {
                         status: 'code_error',
                         action: req.params.action,
                         boardId: req.params.boardId,
-                        params: req.query,
+                        params,
                         stack: err.stack,
                         message: err.message,
                         name: err.name,
                         code: err.code
-                    }, // event payload, event-specific data
-                }, getServiceToken())
+                    },
+                }, getServiceToken());
 
                 console.error("Error executing action code: ", err);
                 res.status(500).send({ _err: "e_code", error: "Error executing action code", message: err.message, stack: err.stack, name: err.name, code: err.code });
                 return;
             }
 
-
-            //the real value could by in responseKey
             if (action.responseKey && response && typeof response === 'object' && action.responseKey in response) {
                 response = response[action.responseKey];
             }
 
-            // console.log('Action response: ', response);
-            //get previous value from state
-            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name, defaultValue: undefined });
-            // console.log('Action Previous value: ', prevValue);
+            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name });
             if (response !== prevValue) {
-                //set the new value in the state
-                // console.log('Setting new value for action: ', action.name, ' in board: ', req.params.boardId, ' with value: ', response);
                 await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
-
-                Manager.update('../../data/boards/' + req.params.boardId + '.js', 'states', action.name, response);
+                Manager.update(`../../data/boards/${req.params.boardId}.js`, 'states', action.name, response);
             }
-            res.json(response);
-            await generateEvent({
 
-                path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/done', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'system', // system entity where the event was generated (next, api, cmd...)
-                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-                ephemeral: true, // this event is ephemeral, it will not be stored in the database
+            res.json(response);
+
+            await generateEvent({
+                path: `actions/boards/${req.params.boardId}/${req.params.action}/done`,
+                from: 'system',
+                user: 'system',
+                ephemeral: true,
                 payload: {
                     status: 'done',
                     action: req.params.action,
                     boardId: req.params.boardId,
-                    params: req.query,
-                    response: response
-                }, // event payload, event-specific data
-            }, getServiceToken())
+                    params,
+                    response
+                },
+            }, getServiceToken());
+
         } catch (err) {
             await generateEvent({
-
-                path: 'actions/boards/' + req.params.boardId + '/' + req.params.action + '/error', //event type: / separated event category: files/create/file, files/create/dir, devices/device/online
-                from: 'system', // system entity where the event was generated (next, api, cmd...)
-                user: 'system', // the original user that generates the action, 'system' if the event originated in the system itself
-                ephemeral: true, // this event is ephemeral, it will not be stored in the database
+                path: `actions/boards/${req.params.boardId}/${req.params.action}/error`,
+                from: 'system',
+                user: 'system',
+                ephemeral: true,
                 payload: {
                     status: 'error',
                     action: req.params.action,
                     boardId: req.params.boardId,
-                    params: req.query,
+                    params,
                     stack: err.stack,
                     message: err.message,
                     name: err.name,
                     code: err.code
-                }, // event payload, event-specific data
-            }, getServiceToken())
+                },
+            }, getServiceToken());
             console.error("Error executing action: ", err);
             res.status(500).send({ _err: "e_general", error: "Error executing action", message: err.message, stack: err.stack, name: err.name, code: err.code });
         }
+    };
+
+    // Aceptar GET
+    app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), (req, res) => {
+        handleBoardAction(req, res, req.query)
+    })
+
+    // Aceptar POST
+    app.post('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), (req, res) => {
+        handleBoardAction(req, res, req.body)
     })
 
     app.get('/api/core/v1/boards/:boardId', requireAdmin(), async (req, res) => {
@@ -1080,7 +1081,7 @@ return card({
             icon: 'file-text',
             description: 'Render formatted markdown using ReactMarkdown',
             type: 'value',
-            html: "return markdown(data)",
+            html: "//@react\nreturn markdown(data)",
             rulesCode: "return `# h1 Heading 8-)\n## h2 Heading\n### h3 Heading\n#### h4 Heading\n##### h5 Heading\n###### h6 Heading\n\n## Tables\n\n| Option | Description |\n| ------ | ----------- |\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |\n\nRight aligned columns\n\n| Option | Description |\n| ------:| -----------:|\n| data   | path to data files to supply the data that will be passed into templates. |\n| engine | engine to be used for processing templates. Handlebars is the default. |\n| ext    | extension to be used for dest files. |`",
             editorOptions: {
                 defaultTab: "value"

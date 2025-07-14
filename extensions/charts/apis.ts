@@ -17,8 +17,9 @@ export default (app, context) => {
             rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]",
             type: 'value',
             html: `
+
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
           <View className="no-drag">
@@ -26,9 +27,9 @@ reactCard(\`
               colors={chartColors}
               title={"players score"}
               id={"piechart"}
-              data={data.value}
-              dataKey={data.params.dataKey ?? 'value'}
-              nameKey={data.params.nameKey ?? 'name'}
+              data={props.value}
+              dataKey={props.params.dataKey}
+              nameKey={props.params.nameKey}
               isAnimationActive={false}
               aspect={aspect}
             />
@@ -36,7 +37,8 @@ reactCard(\`
     );
   }
 
-\`, data.domId)
+\`, data.domId, data)
+
 
 
             `,
@@ -64,8 +66,9 @@ reactCard(\`
                 description: "Displays a bar chart using Recharts",
                 type: 'value',
                 html: `
+
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
@@ -73,16 +76,17 @@ reactCard(\`
           colors={chartColors}
           title={"players score"}
           id={"barchart"}
-          data={data.value}
-          dataKey={data.params.dataKey}
-          nameKey={data.params.nameKey}
+          data={props.value}
+          dataKey={props.params.dataKey}
+          nameKey={props.params.nameKey}
           isAnimationActive={false}
           aspect={aspect}
         />
       </View>
     );
   }
-\`, data.domId)
+\`, data.domId, data)
+        
         `,
                 params: {
                     nameKey: 'name',
@@ -107,8 +111,9 @@ reactCard(\`
                 icon: "chart-area",
                 type: 'value',
                 html: `
+
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
@@ -117,16 +122,16 @@ reactCard(\`
           color={chartColors[0]}
           title={"players score"}
           id={"areachart"}
-          data={data.value}
-          dataKey={data.params.dataKey}
-          nameKey={data.params.nameKey}
+          data={props.value}
+          dataKey={props.params.dataKey}
+          nameKey={props.params.nameKey}
           isAnimationActive={false}
           aspect={aspect}
         />
       </View>
     );
   }
-\`, data.domId)
+\`, data.domId, data)
     `,
                 params: {
                     nameKey: 'name',
@@ -152,25 +157,27 @@ reactCard(\`
             description: "Displays a radar chart using Recharts",
             type: 'value',
             html: `
+
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
         <RadarChart
           colors={["#8884d8", "#82ca9d"]}
           id={"radarchart"}
-          data={data.value}
-          dataKey={data.params.dataKey?? 'value'}
-          nameKey={data.params.nameKey ?? 'name'}
+          data={props.value}
+          dataKey={props.params.dataKey}
+          nameKey={props.params.nameKey}
           isAnimationActive={false}
           aspect={aspect}
           colors={chartColors}
+          color={chartColors[1]}
         />
       </View>
     );
   }
-\`, data.domId)
+\`, data.domId, data)
     `,
             params: {
                 nameKey: 'stat',
@@ -198,8 +205,9 @@ reactCard(\`
             type: 'value',
             html: `
 
+
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
@@ -207,19 +215,20 @@ reactCard(\`
           colors={chartColors}
           title={"Progress per category"}
           id={"radialbarchart"}
-          data={data.value}
-          dataKey={data.params.dataKey}
-          nameKey={data.params.nameKey}
+          data={props.value}
+          dataKey={props.params.dataKey}
+          nameKey={props.params.nameKey}
           isAnimationActive={false}
-          startAngle={data.params.startAngle}
-          endAngle={data.params.endAngle}
-          displayLegend={data.params.displayLegend}
+          startAngle={props.params.startAngle}
+          endAngle={props.params.endAngle}
+          displayLegend={props.params.displayLegend}
           aspect={aspect}
         />
       </View>
     );
   }
-\`, data.domId)
+\`, data.domId, data)
+    
     
     `,
             params: {
@@ -256,24 +265,26 @@ reactCard(\`
             type: 'value',
             html: `
 reactCard(\`
-  function Widget() {
+  function Widget(props) {
     const aspect = useCardAspectRatio('\${data.domId}')
     return (
       <View className="no-drag">
         <LineChart
           colors={chartColors}
+          color={chartColors[2]}
           title={"players score"}
           id={"linechart"}
-          data={data.value}
-          dataKey={data.params.dataKey}
-          nameKey={data.params.nameKey}
+          data={props.value}
+          dataKey={props.params.dataKey}
+          nameKey={props.params.nameKey}
           isAnimationActive={false}
           aspect={aspect}
         />
       </View>
     );
   }
-\`, data.domId)
+\`, data.domId, data)
+        
         `,
             params: {
                 nameKey: 'name',

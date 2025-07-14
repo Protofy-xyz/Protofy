@@ -184,7 +184,7 @@
             "width": 2,
             "height": 6,
             "icon": "openai",
-            "html": "return markdown(data)",
+            "html": "//@react\r\nreturn markdown(data)",
             "name": "Message response",
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
@@ -196,7 +196,7 @@
             "width": 4,
             "height": 4,
             "icon": "key",
-            "html": "\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n                settings.set('ai.provider', 'openai')\n                settings.set('ai.enabled', true)\n              }}\n              onRemove={(key) => {\n                settings.del('ai.provider')\n                settings.del('ai.enabled')\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
+            "html": "//@react\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n                settings.set('ai.provider', 'openai')\n                settings.set('ai.enabled', true)\n              }}\n              onRemove={(key) => {\n                settings.del('ai.provider')\n                settings.del('ai.enabled')\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
             "name": "Key Setter",
             "description": "Displays a key setter for a specific key or in case already set displays key is set",
             "type": "value",
@@ -210,11 +210,11 @@
             "width": 3,
             "height": 12,
             "icon": "file-text",
-            "html": "return markdown(data)",
+            "html": "//@react\r\nreturn markdown(data)",
             "name": "Read Me",
             "description": "Render formatted markdown using ReactMarkdown",
             "type": "value",
-            "rulesCode": "return `# 🧠 ChatGPT Interaction Board\n\nThis board lets you chat with ChatGPT using the OpenAI API. Follow these simple steps to get started:\n\n## 🔑 Step 1: Get Your API Key\n\n1. Go to [OpenAI's API Keys page](https://platform.openai.com/account/api-keys).\n2. Log in and click **\"Create new secret key\"**.\n3. Copy and save your key securely — it won't be shown again.\n\n> ⚠️ **Keep it secret!** Your API key is private and usage-based.\n\n## 🔑 Step 2: Set Your API Key\n\n1. Add your key on Key Setter card and click \"+\" to add. \n\n## 💬 Step 3: Chat with ChatGPT\n\n- Enter your message in the **input box**.\n- Click the **\"Send\"** button to interact.\n- You’ll receive a response from ChatGPT below.\n\nStart chatting now and build your own AI assistant! 🚀\n`",
+            "rulesCode": "return `# 🧠 ChatGPT Interaction Board\r\n\r\nThis board lets you chat with ChatGPT using the OpenAI API.Follow these simple steps to get started:\r\n\r\n## 🔑 Step 1: Get Your API Key\r\n\r\n1. Go to[OpenAI's API Keys page](https://platform.openai.com/account/api-keys).\r\n2. Log in and click ** \"Create new secret key\" **.\r\n3. Copy and save your key securely — it won't be shown again.\r\n\r\n    > ⚠️ ** Keep it secret! ** Your API key is private and usage - based.\r\n\r\n## 🔑 Step 2: Set Your API Key\r\n\r\n1. Add your key on Key Setter card and click \"+\" to add. \r\n\r\n## 💬 Step 3: Chat with ChatGPT\r\n\r\n- Enter your message in the ** input box **.\r\n- Click the ** \"Send\" ** button to interact.\r\n- You’ll receive a response from ChatGPT below.\r\n\r\nStart chatting now and build your own AI assistant! 🚀\r\n`",
             "editorOptions": {
                 "defaultTab": "value"
             }
