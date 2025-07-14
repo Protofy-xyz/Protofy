@@ -8,7 +8,7 @@ import { PaginatedData, SSR } from "protolib/lib/SSR"
 import { withSession } from "protolib/lib/Session"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme, Spinner } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Stack, Switch, Button, Theme, Spinner, Text } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid, useInitialBreakpoint } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -36,13 +36,31 @@ import dynamic from 'next/dynamic'
 import { useEventEffect } from '@extensions/events/hooks'
 
 
-const checkCard = async (items,editedCard) => {
-  console.log("items: ", items)
-  console.log("editedCard: ", editedCard)
-  const existingCard = items.find(item => item.name === editedCard.name && item.key !== editedCard.key);
+class ValidationError extends Error {
+  errors: string[];
+
+  constructor(errors: string[]) {
+    super(errors.join('\n'));
+    this.name = 'ValidationError';
+    this.errors = errors;
+  }
+}
+
+const checkCard = async (cards,newCard) => {
+  const errors = []
+  console.log("cards: ", cards)
+  console.log("newCard: ", newCard)
+  const existingCard = cards.find(item => item.name === newCard.name && item.key !== newCard.key);
   if (existingCard) {
     console.error('A card with the same name already exists')
-    throw new Error('A card with the same name already exists')
+    errors.push('A card with the same name already exists')  
+  }
+  if( newCard.name === '') {
+    console.error('Card name cannot be empty')
+    errors.push('Card name cannot be empty')
+  }
+  if(errors.length > 0) {
+    throw new ValidationError(errors);
   }
  }
 
@@ -216,6 +234,7 @@ const Board = ({ board, icons }) => {
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
   const [rulesSize, setRulesSize] = useState(1010)
+  const [errors, setErrors] = useState<string[]>([])
   // const initialBreakPoint = useInitialBreakpoint()
   const breakpointRef = useRef('') as any
   const { query, removeReplace, push } = usePageParams()
@@ -545,12 +564,31 @@ const Board = ({ board, icons }) => {
               <ActionCardSettings board={board} actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
               }} />
+              {errors.length > 0 ?
+                <YStack>
+                    {errors.map((error, index) => (
+                      <Paragraph key={"err"+index} color="$red9" fontSize="$4">{error}</Paragraph>
+                    ))}
+                </YStack>
+                :<></>
+              } 
+
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
                   setItems(newItems)
                   boardRef.current.cards = newItems
-                  await checkCard(newItems,editedCard)
+                  try{
+                    await checkCard(newItems,editedCard)
+                  }catch(e){
+                    if (e instanceof ValidationError) {
+                      setErrors(e.errors);
+                    }else{
+                      console.error('Error checking card:', e);
+                      setErrors(['An unexpected error occurred while checking the card.']);
+                    }
+                    return
+                  }
                   await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                   setCurrentCard(null)
                   setIsEditing(false)
@@ -688,7 +726,6 @@ const Board = ({ board, icons }) => {
           </XStack>
         }
       </XStack>
-
     </YStack>
   )
 }
