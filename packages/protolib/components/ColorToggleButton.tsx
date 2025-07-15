@@ -11,7 +11,7 @@ export const ColorToggleButton = React.forwardRef((props: ButtonProps, ref: any)
           <Circle
             //@ts-ignore
             bw={1} boc="var(--color9)" m={2}
-            size={12}
+            size={13}
             backgroundColor={tint as any}
           />
         </Button>

@@ -32,7 +32,7 @@ export const ThemeToggle = React.forwardRef((props: ButtonProps, ref: any) => {
           {...props}
           aria-label="Toggle light/dark color scheme"
           icon={Icon}
-          scaleIcon={1.2}
+          scaleIcon={1.3}
           color="$gray9"
         >
           {/* {theme === 'light' ? <Moon size={12} /> : <SunIcon />} */}
