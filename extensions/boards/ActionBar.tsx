@@ -1,7 +1,8 @@
-import { X, Save, Plus, Pause, Play, ClipboardList } from 'lucide-react';
+import { X, Save, Plus, Pause, Play, ClipboardList, Activity } from 'lucide-react';
 import { Tinted } from 'protolib/components/Tinted';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
+import { Separator } from '@my/ui';
 
 const getActionBar = (generateEvent) => {
   const { isJSONView, autopilot } = useBoardControls();
@@ -33,7 +34,11 @@ const getActionBar = (generateEvent) => {
       </Tinted>,
       <Tinted>
         <ActionBarButton Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
-      </Tinted>
+      </Tinted>,
+      <Tinted>
+        <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
+        <ActionBarButton Icon={Activity} onPress={() => generateEvent({ type: "toggle-logs" })} />
+      </Tinted>,
     ]
 };
 

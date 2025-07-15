@@ -26,6 +26,9 @@ import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { useEventEffect } from '@extensions/events/hooks'
 import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext'
+import { isElectron } from 'protolib/lib/isElectron'
+import { useAtom } from 'jotai'
+import { AppState } from 'protolib/components/AdminPanel'
 
 class ValidationError extends Error {
   errors: string[];
@@ -361,7 +364,7 @@ const Board = ({ board, icons }) => {
 
       return await window['onRunListeners'][card](card, cleanedParams);
     };
-    
+
   }, [])
 
   useEffect(() => {
@@ -674,12 +677,9 @@ const Board = ({ board, icons }) => {
                   formatOnType: true
                 }}
               />
-              : <YStack left={-10} f={1}><DashboardGrid
+              : <YStack f={1}><DashboardGrid
                 items={cards}
                 layouts={boardRef.current.layouts}
-                borderRadius={10}
-                padding={10}
-                backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
                   if (breakpointCancelRef.current == breakpointRef.current) {
                     console.log('Layout change cancelled for breakpoint: ', breakpointRef.current, breakpointCancelRef.current)
@@ -756,6 +756,7 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     toggleAutopilot,
     openAdd
   } = useBoardControls();
+  const [appState, setAppState] = useAtom(AppState)
 
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {
@@ -769,6 +770,13 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     }
     if (event.type === 'toggle-autopilot') {
       toggleAutopilot();
+    }
+    if (event.type === 'toggle-logs') {
+      if (isElectron()) {
+        window['electronAPI'].toggleLogWindow()
+      } else {
+        setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })
+      }
     }
     if (event.type === 'open-add') {
       openAdd();

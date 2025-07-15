@@ -27,9 +27,7 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
 
   return (
     <Layout
-      header={
-          <XStack borderBottomWidth={0.2} boc="$gray6" justifyContent="space-between" f={1} pb="$2">{headerContents}</XStack>
-      }
+      header={<></>}
       sideMenu={<SideMenu mt={appBarHeight} sideBarColor={_panelBgColor} style={{borderRadius: "0px 14px 14px 0px"}}>{menuContent}</SideMenu>}
       footer={
         null
