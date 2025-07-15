@@ -1,12 +1,15 @@
-import getActionBar from '@extensions/boards/ActionBar';
+import getBoardsBar from '@extensions/boards/ActionBar';
+import getAssetsBar from '@extensions/assets/ActionBar';
 
 export const processActionBar = (nextRouter, defaults = {}, generateEvent = (e) => {}) => {
     const contents = {
-        "boards": () => getActionBar(generateEvent)
+        "boards": () => getBoardsBar(generateEvent),
+        "assets": () => getAssetsBar(generateEvent),
     };
 
     const routes = {
         "/boards/*": contents.boards,
+        "/assets": contents.assets,
     };
 
     const matchRoute = (path) => {

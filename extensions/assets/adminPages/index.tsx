@@ -8,6 +8,7 @@ import { Button, Spinner, Stack, Text, useToastController, YStack } from '@my/ui
 import { API } from 'protobase';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { isElectron } from 'protolib/lib/isElectron';
 
 const FileBrowser = dynamic<any>(() =>
   import('protolib/adminpanel/next/components/FileBrowser').then(module => module.FileBrowser),
@@ -29,8 +30,22 @@ function FilesPage({ initialFilesState, pageSession }: any) {
     toast.show("Assets installed successfully. Please refresh the page to see the changes.")
   }
 
+  const onActionBarEvent = (event: any) => {
+    if (event.type === "open-store") {
+      if (isElectron()) {
+        window['electronAPI'].openWindow("store");
+      } else {
+        window.open("https://protofy.xyz/store", "_blank");
+      }
+    }
+  }
+
   return (
-    <AdminPage pageSession={pageSession} title={"assets"} >
+    <AdminPage
+      pageSession={pageSession}
+      title={"assets"}
+      onActionBarEvent={onActionBarEvent}
+    >
       <FileBrowser
         router={routeAdapter}
         initialFilesState={initialFilesState}
