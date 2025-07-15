@@ -4,8 +4,6 @@ import { DefaultLayout as ProtoDefaultLayout } from 'protolib/components/layout/
 import { AppBar } from 'protolib/components/AppBar'
 import React from 'react'
 import { StackProps, Image, useThemeName } from '@my/ui'
-import { HeaderMenu } from './HeaderMenu'
-import { HeaderMenuContent } from './HeaderMenuContent'
 
 export const DefaultLayout = React.forwardRef((props: {
   sideMenu?: React.ReactNode | null;
@@ -28,17 +26,16 @@ export const DefaultLayout = React.forwardRef((props: {
     sideMenu={null}
     footer={<Footer />}
     header={<AppBar>
-      <HeaderContents headerTitle={props.headerTitle} menu={<HeaderMenu menuPlacement={'bottom'}>
-        <HeaderMenuContent />
-      </HeaderMenu>}
+      <HeaderContents
+        headerTitle={props.headerTitle}
         logo={<Image
-            key={themeName}
-            style={{ filter: themeName?.startsWith("dark") ? "invert(70%) brightness(10)" : "invert(5%)" }}
-            src={"/public/vento-logo.png"}
-            alt="Logo"
-            width={180}
-            height={30}
-            resizeMode='contain'
+          key={themeName}
+          style={{ filter: themeName?.startsWith("dark") ? "invert(70%) brightness(10)" : "invert(5%)" }}
+          src={"/public/vento-logo.png"}
+          alt="Logo"
+          width={180}
+          height={30}
+          resizeMode='contain'
         />}
       />
     </AppBar>}
