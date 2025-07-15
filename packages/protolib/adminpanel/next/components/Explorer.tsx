@@ -142,9 +142,9 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         title={<Tinted><Text color="$color7">Download</Text></Tinted>}
                         description="Use those links to download:"
                     >
-                        <YStack 
-                            f={1} 
-                            overflow={'scroll'} 
+                        <YStack
+                            f={1}
+                            overflow={'scroll'}
                             //@ts-ignore
                             overflowX={'hidden'}
                         >
@@ -239,6 +239,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                 files={parsedFiles}
                                 folderChain={folderChain}
                                 fileActions={myFileActions}
+                                {...props}
                             >
                                 {!props.disableNavBar && <FileNavbar />}
                                 {!props.disableFileToolbar && <FileToolbar />}

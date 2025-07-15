@@ -50,6 +50,12 @@ function FilesPage({ initialFilesState, pageSession }: any) {
         router={routeAdapter}
         initialFilesState={initialFilesState}
         explorer={{
+          i18n: {
+            locale: 'en',                     // idioma activo
+            messages: {
+              'chonky.fileList.nothingToShow': `You don't have any assets installed. Find new assets by clicking on “Go to the Store”.`,
+            },
+          },
           disableNavBar: true,
           getExtendedFileProps: f => ({
             isDir: false,
