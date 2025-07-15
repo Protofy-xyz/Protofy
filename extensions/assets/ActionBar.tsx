@@ -7,10 +7,10 @@ const getActionBar = (generateEvent) => {
   return [
     <YStack f={1} jc="center" pl="$1.5" mr="$1">
       <Text fos="$3">
-        Find or explore new assets for your project?
+        Find new assets for your project
       </Text>
       <Text fos="$3" color="$gray9">
-        Download assets for free.
+        Free to download
       </Text>
     </YStack>,
     <Tinted>
