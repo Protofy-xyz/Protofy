@@ -771,13 +771,6 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     if (event.type === 'toggle-autopilot') {
       toggleAutopilot();
     }
-    if (event.type === 'toggle-logs') {
-      if (isElectron()) {
-        window['electronAPI'].toggleLogWindow()
-      } else {
-        setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })
-      }
-    }
     if (event.type === 'open-add') {
       openAdd();
     }

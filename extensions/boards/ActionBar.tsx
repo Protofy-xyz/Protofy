@@ -3,6 +3,7 @@ import { Tinted } from 'protolib/components/Tinted';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
 import { Separator } from '@my/ui';
+import { ActionLogsButton } from 'protolib/components/ActionLogsButton';
 
 const getActionBar = (generateEvent) => {
   const { isJSONView, autopilot } = useBoardControls();
@@ -35,10 +36,10 @@ const getActionBar = (generateEvent) => {
       <Tinted>
         <ActionBarButton Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
       </Tinted>,
-      <Tinted>
+      <>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-        <ActionBarButton Icon={Activity} onPress={() => generateEvent({ type: "toggle-logs" })} />
-      </Tinted>,
+        <ActionLogsButton/>
+      </>,
     ]
 };
 
