@@ -17,6 +17,6 @@ export const ActionLogsButton = () => {
   }
   
   return <Tinted>
-    <ActionBarButton Icon={Activity} onPress={onToggleLogs} />
+    <ActionBarButton selected={appState.logsPanelOpened} Icon={Activity} onPress={onToggleLogs} />
   </Tinted>
 }

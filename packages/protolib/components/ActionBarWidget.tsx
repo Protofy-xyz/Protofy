@@ -2,7 +2,7 @@ import { XStack, YStack } from "@my/ui"
 import { processActionBar } from "app/bundles/actionBar"
 import { useRouter } from 'next/router'
 
-export const ActionBarButton = ({ Icon, beating = false, ...props }) => {
+export const ActionBarButton = ({ Icon, selected = false, ...props }) => {
   const size = 34
   return <YStack
     jc="center"
@@ -15,7 +15,7 @@ export const ActionBarButton = ({ Icon, beating = false, ...props }) => {
     hoverStyle={{ bg: '$gray2' }}
     {...props}
   >
-    <Icon size={20} fill={props.fill ? "var(--color)" : "transparent"} {...props.iconProps} />
+    <Icon size={20} color={selected ? "var(--color8)" : "var(--color)"} fill={props.fill ? "var(--color)" : "transparent"} {...props.iconProps} />
   </YStack>
 }
 
