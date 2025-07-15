@@ -601,8 +601,7 @@ const Board = ({ board, icons }) => {
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
-                  setItems(newItems)
-                  boardRef.current.cards = newItems
+                 
                   try {
                     await checkCard(newItems, editedCard)
                     setErrors([]); // Clear errors if validation passes
@@ -615,6 +614,8 @@ const Board = ({ board, icons }) => {
                     }
                     return
                   }
+                  setItems(newItems)
+                  boardRef.current.cards = newItems
                   await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                   setCurrentCard(null)
                   setIsEditing(false)
