@@ -325,6 +325,18 @@ const Board = ({ board, icons }) => {
 
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
 
+  useUpdateEffect(() => {
+    if (addOpened) {
+      setErrors([]);
+    }
+  }, [addOpened]);
+
+  useUpdateEffect(() => {
+    if (isEditing) {
+      setErrors([]);
+    }
+  }, [isEditing]);
+
   //@ts-ignore store the states in the window object to be used in the cards htmls
   window['protoStates'] = states
 
