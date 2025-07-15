@@ -22,13 +22,13 @@ class MPU6050 {
           id: this.name,
           address: this.address,
           update_interval: this.updateInterval,
-          accel_x: {name: `${this.name}-accel-x`},
-          accel_y: {name: `${this.name}-accel-y`},
-          accel_z: {name: `${this.name}-accel-z`},
-          gyro_x: {name: `${this.name}-gyro-x`},
-          gyro_y: {name: `${this.name}-gyro-y`},
-          gyro_z: {name: `${this.name}-gyro-z`},
-          temperature: {name: `${this.name}-temperature`},
+          accel_x: {name: `${this.name}_accel_x`},
+          accel_y: {name: `${this.name}_accel_y`},
+          accel_z: {name: `${this.name}_accel_z`},
+          gyro_x: {name: `${this.name}_gyro_x`},
+          gyro_y: {name: `${this.name}_gyro_y`},
+          gyro_z: {name: `${this.name}_gyro_z`},
+          temperature: {name: `${this.name}_temperature`},
         },
         subsystem: this.getSubsystem()
       },
@@ -57,7 +57,7 @@ class MPU6050 {
           label: 'Accelerometer X',
           description: 'Get accelerometer X axis status',
           units: 'm/s²',
-          endpoint: "/sensor/"+this.name+"-accel-x/state",
+          endpoint: "/sensor/"+this.name+"_accel_x/state",
           connectionType: 'mqtt',
         },
         {
@@ -65,7 +65,7 @@ class MPU6050 {
           label: 'Accelerometer Y',
           description: 'Get accelerometer Y axis status',
           units: 'm/s²',
-          endpoint: "/sensor/"+this.name+"-accel-y/state",
+          endpoint: "/sensor/"+this.name+"_accel_y/state",
           connectionType: 'mqtt',
         },
         {
@@ -73,7 +73,7 @@ class MPU6050 {
           label: 'Accelerometer Z',
           description: 'Get accelerometer Z axis status',
           units: 'm/s²',
-          endpoint: "/sensor/"+this.name+"-accel-z/state",
+          endpoint: "/sensor/"+this.name+"_accel_z/state",
           connectionType: 'mqtt',
         },
         {
@@ -81,7 +81,7 @@ class MPU6050 {
           label: 'Gyroscope X',
           description: 'Get gyroscope X axis status',
           units: '°/s',
-          endpoint: "/sensor/"+this.name+"-gyro-x/state",
+          endpoint: "/sensor/"+this.name+"_gyro_x/state",
           connectionType: 'mqtt',
         },
         {
@@ -89,7 +89,7 @@ class MPU6050 {
           label: 'Gyroscope Y',
           description: 'Get gyroscope Y axis status',
           units: '°/s',
-          endpoint: "/sensor/"+this.name+"-gyro-y/state",
+          endpoint: "/sensor/"+this.name+"_gyro_y/state",
           connectionType: 'mqtt',
         },
         {
@@ -97,7 +97,7 @@ class MPU6050 {
           label: 'Gyroscope Z',
           description: 'Get gyroscope Z axis status',
           units: '°/s',
-          endpoint: "/sensor/"+this.name+"-gyro-z/state",
+          endpoint: "/sensor/"+this.name+"_gyro_z/state",
           connectionType: 'mqtt',
         },
         {
@@ -105,7 +105,7 @@ class MPU6050 {
           label: 'Temperature',
           description: 'Get temperature status',
           units: '°C',
-          endpoint: "/sensor/"+this.name+"-temperature/state",
+          endpoint: "/sensor/"+this.name+"_temperature/state",
           connectionType: 'mqtt',
         },
       ]
