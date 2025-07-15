@@ -96,12 +96,12 @@ const iconTable = {
   'action': 'zap'
 }
 
-const SecondSlide = ({ card, board, selected, states, icons, actions, setCard }) => {
+const SecondSlide = ({ card, board, selected, states, icons, actions, setCard,errors }) => {
   return <YStack mb={"$4"} f={1} mah="1200px" h="64vh">
 
     <ActionCardSettings board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
       setCard(data)
-    }} />
+    }} errors={errors} />
   </YStack>
 }
 
@@ -168,7 +168,7 @@ const useCards = (extraCards = []) => {
   return [...extraCards, ...flattenTree(availableCards)]
 }
 
-export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, onFinish, states, icons, actions }) => {
+export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, onFinish, states, icons, actions, errors}) => {
   const cards = useCards(extraCards)
   const [selectedCard, setSelectedCard] = useState(cards[0])
   const [card, setCard] = useState()
@@ -213,7 +213,7 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
             {
               name: "Configure your widget",
               title: "Configure your widget",
-              component: <SecondSlide board={board} states={states} icons={icons} actions={actions} card={card} setCard={setCard} />
+              component: <SecondSlide board={board} states={states} icons={icons} actions={actions} card={card} setCard={setCard} errors={errors} />
             }
           ]
           }></Slides>

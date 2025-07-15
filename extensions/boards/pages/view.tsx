@@ -53,6 +53,11 @@ const checkCard = async (cards, newCard) => {
     console.error('Card name cannot be empty')
     errors.push('Card name cannot be empty')
   }
+  const regex = /^[a-zA-Z0-9-_ ]*$/;
+  if (!regex.test(newCard.name)) {
+    console.error("Invalid name, only letters, numbers, spaces, - and _ are allowed.")
+    errors.push("Invalid name, only letters, numbers, spaces, - and _ are allowed.")
+  }
   if (errors.length > 0) {
     throw new ValidationError(errors);
   }
@@ -419,7 +424,14 @@ const Board = ({ board, icons }) => {
   const addWidget = async (card) => {
     try {
       await checkCard(items, card)
+      setErrors([]); // Clear errors if validation passes
     } catch (e) {
+      if (e instanceof ValidationError) {
+        setErrors(e.errors);
+      } else {
+        console.error('Error checking card:', e);
+        setErrors(['An unexpected error occurred while checking the card.']);
+      }
       throw new Error(e)
     }
 
@@ -549,7 +561,7 @@ const Board = ({ board, icons }) => {
   return (
     <YStack flex={1}>
 
-      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors}/>
 
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
@@ -583,15 +595,8 @@ const Board = ({ board, icons }) => {
             >
               <ActionCardSettings board={board} actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
-              }} />
-              {errors.length > 0 ?
-                <YStack>
-                  {errors.map((error, index) => (
-                    <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
-                  ))}
-                </YStack>
-                : <></>
-              }
+              }} errors={errors}/>
+              
 
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
@@ -600,6 +605,7 @@ const Board = ({ board, icons }) => {
                   boardRef.current.cards = newItems
                   try {
                     await checkCard(newItems, editedCard)
+                    setErrors([]); // Clear errors if validation passes
                   } catch (e) {
                     if (e instanceof ValidationError) {
                       setErrors(e.errors);
