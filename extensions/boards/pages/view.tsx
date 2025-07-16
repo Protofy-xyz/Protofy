@@ -4,7 +4,7 @@ import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -88,7 +88,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
         }}
       >
         <Icon size="$1" color="var(--color9)" strokeWidth={2} />
-        <Paragraph ml="$3">{text}</Paragraph>
+        <Text ml="$3">{text}</Text>
       </XStack>
     )
   }
