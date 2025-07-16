@@ -196,13 +196,19 @@
             "width": 4,
             "height": 4,
             "icon": "key",
-            "html": "//@react\nreactCard(`\n  async function validarOpenAIKey(apiKey) {\n    const res = await fetch('https://api.openai.com/v1/models', {\n      method: 'GET',\n      headers: {\n        'Authorization': 'Bearer '+apiKey,\n      }\n    });\n\n    if (!res.ok) {\n      const error = await res.json().catch(() => ({}));\n      const message = error?.error?.message || 'HTTP '+res.status;\n      return message\n    }\n\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data.params.nameKey}\n              validate={validarOpenAIKey}\n              onAdd={(key) => {\n                settings.set('ai.provider', 'openai')\n                settings.set('ai.enabled', true)\n              }}\n              onRemove={(key) => {\n                settings.del('ai.provider')\n                settings.del('ai.enabled')\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n\n            ",
+            "html": "\n//@react\nreactCard(`\n  async function validateKey(apiKey) {\n   // return true or false if the key is valid or not\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data?.configParams?.nameKey?.defaultValue}\n              validate={validateKey}\n              onAdd={(key) => {\n                // alert(\"add: \"+key)\n              }}\n              onRemove={(key) => {\n                // alert(\"remove: \"+key)\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n            ",
             "name": "Key Setter",
             "description": "Displays a key setter for a specific key or in case already set displays key is set",
             "type": "value",
             "rulesCode": "",
             "params": {
-                "nameKey": "OPENAI_API_KEY"
+                "nameKey": "The key name to set"
+            },
+            "configParams": {
+                "nameKey": {
+                    "visible": true,
+                    "defaultValue": "OPENAI_API_KEY"
+                }
             }
         },
         {

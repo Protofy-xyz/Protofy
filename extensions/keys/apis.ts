@@ -31,19 +31,7 @@ const registerCards = (app, context) => {
 //@react
 reactCard(\`
   async function validarOpenAIKey(apiKey) {
-    const res = await fetch('https://api.openai.com/v1/models', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Bearer '+apiKey,
-      }
-    });
-
-    if (!res.ok) {
-      const error = await res.json().catch(() => ({}));
-      const message = error?.error?.message || 'HTTP '+res.status;
-      return message
-    }
-
+   // return true or false if the key is valid or not
     return true;
   }
 
@@ -51,7 +39,7 @@ reactCard(\`
     return (
           <View className="no-drag">
             <KeySetter
-              nameKey={data.params.nameKey}
+              nameKey={data?.configParams?.nameKey?.defaultValue}
               validate={validarOpenAIKey}
               onAdd={(key) => {
                 // alert("add: "+key)
@@ -69,8 +57,14 @@ reactCard(\`
             `,
             rulesCode: ``,
             params: {
-                nameKey: 'name'
+              nameKey: 'The key name to set'
             },
+            configParams:{
+              nameKey: {
+                "visible": true,
+                "defaultValue": ""
+              }
+            }
         },
 
         emitEvent: true,
