@@ -90,12 +90,24 @@ const Action = ({ deviceName, action }) => {
     const { client } = useMqttState();
 
     const buttonAction = (action, value?) => {
-        const sendValue = value != undefined ? value : action.payload.value
-        if (action.connectionType == "mqtt") {
-            console.log("MQTT Dev: ", action.payload)
-            client.publish(getPeripheralTopic(deviceName, action.endpoint), (action.payload.type == "json" || action.payload.type == "json-schema" || Array.isArray(action?.payload)) ? JSON.stringify(sendValue) : sendValue.toString())
+        const sendValue = value !== undefined ? value : action.payload.value;
+
+        let payloadToSend;
+
+        if (typeof sendValue === "object" && sendValue !== null) {
+            payloadToSend = JSON.stringify(sendValue);
+        } else if (typeof sendValue === "string") {
+            payloadToSend = sendValue;
+        } else {
+            payloadToSend = String(sendValue);
         }
-    }
+
+        if (action.connectionType === "mqtt") {
+            console.log("MQTT Dev:", action.payload);
+            client.publish(getPeripheralTopic(deviceName, action.endpoint), payloadToSend);
+        }
+    };
+
 
     const [value, setValue] = useState(
         action?.payload?.type == "json-schema" ?
@@ -116,6 +128,7 @@ const Action = ({ deviceName, action }) => {
     } else if (action?.payload?.type != "json-schema") {
         type = "input"
     }
+    console.log("🤖 ~ Action ~ type:", type)
 
     switch (type) {
         case "button":
@@ -151,6 +164,7 @@ const Action = ({ deviceName, action }) => {
         case "select":
             const [selectedOption, setSelectedOption] = useState(action.payload[0].value);
             const payloadOptions = Array.isArray(action.payload.value) ? action.payload.value : [];
+            console.log("🤖 ~ Action ~ payloadOptions:", payloadOptions)
 
             console.log("🤖 ~ Action ~ selectedOption:", selectedOption)
             
