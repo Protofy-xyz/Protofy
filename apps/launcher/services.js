@@ -9,13 +9,6 @@ const services = [
           if (req.url.startsWith('/launcher/') || req.url == '/launcher') {
             return process.env.ADMIN_PANEL_URL ?? 'http://localhost:3008'
           }
-        },
-        disabledRoute: (req) => {
-          if (req.url.startsWith('/launcher/') || req.url == '/launcher') {
-            let r = req.url.split('?')[0]
-            const file = path.join("/electron/launcher", r)
-            return "file://" + file
-          }
         }
     }
 ]
