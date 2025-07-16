@@ -27,18 +27,7 @@ export default function Home() {
       }}
     >
       <ParticlesView options={basicParticlesMask()} />
-
-      <style>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-        }
-
-        @keyframes progress {
-          0% { transform: translateX(-100%); }
-          100% { transform: translateX(300%); }
-        }
-      `}</style>
+      
     </Page>
   )
 }

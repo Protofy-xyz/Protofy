@@ -25,7 +25,6 @@ linux:
   icon: "apps/adminpanel/public/favicon.ico"
 asar: false
 files:
-  - proxy-main.js
   - electron/**
   - "!**/node_modules"
   - "!**/node_modules/**"
