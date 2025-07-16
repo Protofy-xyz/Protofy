@@ -8,6 +8,7 @@ interface DashboardCardProps {
     title?: string;
     status?: "running" | "error" | "idle" | "success";
     hideTitle?: boolean;
+    hideFrame?: boolean;
     titleProps?: StackProps;
     containerProps?: StackProps;
     cardActions?: ReactNode;
@@ -17,6 +18,7 @@ export const DashboardCard = ({
     children,
     status,
     hideTitle,
+    hideFrame,
     id,
     title,
     cardActions = <></>,
@@ -64,7 +66,7 @@ export const DashboardCard = ({
                     onHoverOut={() => setHovered(false)}
                     key={id}
                     borderRadius={10}
-                    backgroundColor="$bgPanel"
+                    backgroundColor={hideFrame?"transparent":"$bgPanel"}
                     flex={1}
                     position="relative"
                     {...containerProps}

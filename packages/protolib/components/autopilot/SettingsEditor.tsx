@@ -45,6 +45,7 @@ export const SettingsEditor = ({
                         {renderCheckbox('Display title', 'displayTitle')}
                         {renderCheckbox('Display value', 'displayResponse')}
                         {renderCheckbox('Display icon', 'displayIcon')}
+                        {renderCheckbox('Display frame', 'displayFrame')}
                         {renderCheckbox('Display button', 'displayButton')}
 
                         {getChecked('displayButton') && (
