@@ -292,7 +292,7 @@ const subsystem = ({ subsystem, deviceName }) => {
 
 export const Subsystems = ({ subsystems, deviceName }) => <YStack maxHeight={750} overflow="scroll" padding="$2" paddingTop="20px">
     <>
-        <YStack gap="$3" width={"800px"}>
+        <YStack gap="$3" width="100%" maxWidth={800}>
             {
                 subsystems
                     .sort((a, b) => {
