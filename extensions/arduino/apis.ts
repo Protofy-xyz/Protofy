@@ -46,7 +46,7 @@ export default (app, context) => {
     // const transport = new ProtofySerial({ port: 'COM16', baudRate: 115200 })
     const serialManager = new SerialManager()
     serialManager.startPortScan(2000)
-    serialManager.addDevice({ id: 'arduino1', port: 'COM3', baudRate: 115200, autoReconnect: true,})
+    //serialManager.addDevice({ id: 'arduino1', port: 'COM3', baudRate: 115200, autoReconnect: true,})
     serialManager.on('deviceConnected', async (id) => {
         console.log(`Dispositivo ${id} conectado`) 
         generateEvent(
