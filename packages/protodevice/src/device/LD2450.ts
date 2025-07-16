@@ -550,6 +550,8 @@ class LD2450 {
         const coords = ['x1', 'y1', 'x2', 'y2'];
         for (let zone = 1; zone <= 3; zone++) {
             coords.forEach(coord => {
+                const min_value = coord.startsWith('y') ? 0 : -4860;
+                const max_value = coord.startsWith('y') ? 7560 : 4860;
                 coordinateActions.push({
                     name: `set_zone_${zone}_${coord}`,
                     label: `Zone ${zone} ${coord.toUpperCase()}`,
@@ -558,8 +560,8 @@ class LD2450 {
                     connectionType: 'mqtt',
                     payload: {
                         type: 'slider',
-                        min_value: -4860,
-                        max_value: 4860,
+                        min_value,
+                        max_value,
                         step: 10,
                         initial_value: 0
                     },
