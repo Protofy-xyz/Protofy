@@ -40,12 +40,13 @@ export const SettingsEditor = ({
     return (
         <XStack f={1} gap="$4">
             <YStack gap="$1" w={300}>
+
+                {renderCheckbox('Display title', 'displayTitle')}
+                {renderCheckbox('Display icon', 'displayIcon')}
+                {renderCheckbox('Display frame', 'displayFrame')}
                 {card.type === 'action' && (
                     <>
-                        {renderCheckbox('Display title', 'displayTitle')}
                         {renderCheckbox('Display value', 'displayResponse')}
-                        {renderCheckbox('Display icon', 'displayIcon')}
-                        {renderCheckbox('Display frame', 'displayFrame')}
                         {renderCheckbox('Display button', 'displayButton')}
 
                         {getChecked('displayButton') && (
