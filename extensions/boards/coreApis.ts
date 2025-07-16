@@ -59,7 +59,7 @@ async function execute_action(url_or_name, params={}) {
         const response = await API.post(action.url+'?token='+token, data);
         return response.data
     } else {
-        const paramsStr = Object.keys(params).map(k => k + '=' + params[k]).join('&');
+        const paramsStr = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
         //console.log('url: ', action.url+'?token='+token+'&'+paramsStr)
         const response = await API.get(action.url+'?token='+token+'&'+paramsStr);
         return response.data
