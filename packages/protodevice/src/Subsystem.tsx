@@ -292,7 +292,7 @@ const Action = ({ deviceName, action }) => {
                         value={isNaN(sliderValue) ? "" : sliderValue.toString()}
                         onChange={handleInputChange}
                         onBlur={handleInputBlur}
-                        width="$6"
+                        width="$8"
                         textAlign="center"
                         inputMode="numeric"
                     />
