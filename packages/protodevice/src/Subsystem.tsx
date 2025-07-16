@@ -125,6 +125,8 @@ const Action = ({ deviceName, action }) => {
         type = "button"
     } else if (Array.isArray(action?.payload)) {
         type = "select"
+    } else if (action?.payload?.type === "slider") {
+        type = "slider"
     } else if (action?.payload?.type != "json-schema") {
         type = "input"
     }
@@ -201,6 +203,110 @@ const Action = ({ deviceName, action }) => {
                 Send
             </Button>
         </XStack>
+        case "slider": {
+            const {
+                min_value = 0,
+                max_value = 100,
+                step = 1,
+                initial_value = 0,
+                unit = ""
+            } = action.payload;
+
+            const [sliderValue, setSliderValue] = useState(initial_value);
+            const trackRef = React.useRef<HTMLInputElement>(null);
+
+            const clamp = (val: number) => {
+                return Math.min(Math.max(val, min_value), max_value);
+            };
+
+            const roundToStep = (val: number) => {
+                const rounded = Math.round((val - min_value) / step) * step + min_value;
+                return clamp(rounded);
+            };
+
+            const handleSliderChange = (val: number) => {
+                setSliderValue(roundToStep(val));
+            };
+
+            const handleInputChange = (e) => {
+                const raw = e.target.value;
+                // Allow empty input for editing
+                if (raw === "") {
+                    setSliderValue(NaN);
+                    return;
+                }
+
+                // Prevent non-numeric characters
+                const num = Number(raw);
+                if (!isNaN(num)) {
+                    setSliderValue(clamp(num));
+                }
+            };
+
+            const handleInputBlur = () => {
+                if (isNaN(sliderValue)) {
+                    setSliderValue(clamp(initial_value));
+                } else {
+                    setSliderValue(roundToStep(sliderValue));
+                }
+            };
+
+            return (
+                <XStack gap="$3" alignItems="center" width="100%">
+                    <Text
+                        whiteSpace="nowrap"
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                        maxWidth="150px"
+                        minWidth="120px"
+                    >
+                        {action.label ?? action.name}
+                    </Text>
+
+                    <Text size="$2">{min_value}{unit}</Text>
+
+                    <YStack flex={1} minWidth={200}>
+                        <input
+                            ref={trackRef}
+                            type="range"
+                            min={min_value}
+                            max={max_value}
+                            step={step}
+                            value={isNaN(sliderValue) ? initial_value : sliderValue}
+                            onChange={(e) => handleSliderChange(Number(e.target.value))}
+                            style={{
+                                width: '100%',
+                                height: '4px',
+                                borderRadius: '4px',
+                                background: 'var(--color4)',
+                                accentColor: 'var(--color10)',
+                                appearance: 'none',
+                                cursor: 'pointer'
+                            }}
+                        />
+                    </YStack>
+
+                    <Text size="$2">{max_value}{unit}</Text>
+
+                    <Input
+                        value={isNaN(sliderValue) ? "" : sliderValue.toString()}
+                        onChange={handleInputChange}
+                        onBlur={handleInputBlur}
+                        width="$6"
+                        textAlign="center"
+                        inputMode="numeric"
+                    />
+                    <Button
+                        key={action.name} // Make sure to provide a unique key for each Button
+                        onPress={() => { buttonAction(action, sliderValue) }}
+                        color="$color10"
+                        title={"Description: " + action.description}
+                    >
+                        Send
+                    </Button>
+                </XStack>
+            );
+        }
         default:
             const schema = action?.payload?.schema;
             return <XStack gap="$3" alignSelf='flex-start' alignItems="center" mt="10px" mb="10px" width="100%">
