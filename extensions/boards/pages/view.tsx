@@ -189,6 +189,7 @@ const ActionCard = ({
     <CenterCard
       status={status}
       hideTitle={data.displayTitle === false}
+      hideFrame={data.displayFrame === false}
       title={title}
       id={id}
       containerProps={containerProps}

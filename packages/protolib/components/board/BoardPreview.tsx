@@ -25,22 +25,24 @@ export default ({ element, width, onDelete, ...props }: any) => {
             gap="$4"
             {...props}
         >
-            <XStack jc={"space-between"} ai={"center"} >
-                <XStack gap="$2" ai={"center"} >
+            <XStack jc={"space-between"} ai={"start"} >
+                <XStack gap="$2" ai={"start"} >
                     <YStack>
                         <Text fos="$8" fow="600" >{board?.get("displayName")?? board?.get("name")}</Text>
                         <Text fos="$2" fow="600" >{board?.get("name")}</Text>
                     </YStack>
-                    <Tinted> <Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
                 </XStack>
-                <ItemMenu
-                    type={"bulk"}
-                    mt={"1px"}
-                    ml={"-5px"}
-                    element={board}
-                    deleteable={() => true}
-                    onDelete={onDelete}
-                />
+                <XStack ai={"center"} >
+                    <Tinted> <Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
+                    <ItemMenu
+                        type={"bulk"}
+                        mt={"1px"}
+                        ml={"-5px"}
+                        element={board}
+                        deleteable={() => true}
+                        onDelete={onDelete}
+                    />
+                </XStack>
             </XStack>
             <YStack gap="$2">
                 <Text fow="600">Values</Text>
