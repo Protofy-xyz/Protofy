@@ -52,6 +52,7 @@ import CANBusUART from './CANBusUART';
 import I2c_MCP23008 from './I2c_MCP23008';
 import SEN0377 from './SEN0377';
 import AHT10 from './AHT10';
+import LD2450 from './LD2450';
 
 const deviceMasks = [
   Wifi,
@@ -105,7 +106,8 @@ const deviceMasks = [
   CANBusUART,
   I2c_MCP23008,
   SEN0377,
-  AHT10
+  AHT10,
+  LD2450
 ]
 
 const masksLength = deviceMasks.length
