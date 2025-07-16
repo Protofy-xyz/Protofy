@@ -5,26 +5,29 @@ import Head from 'next/head'
 import { useSession, useSessionContext, getSessionContext } from "../lib/useSession";
 import { getLogger } from "protobase";
 
-export const Page = React.forwardRef(({mqttConfig, title, ...props}: {mqttConfig?: any, title?: string} & StackProps, ref: any) => {
+export const Page = React.forwardRef(({mqttConfig, title, skipSessionManagement, ...props}: {mqttConfig?: any, title?: string, skipSessionManagement?: boolean} & StackProps, ref: any) => {
     const theme = useTheme()
     const isEditing = useIsEditing()
-    const [session] = useSession()
+
     const [ctx, setCtx] = useSessionContext()
 
-    const loadContext = async() => {
-        try {
-            const currentContext = await getSessionContext(session.user.type)
-            setCtx(currentContext)
-        } catch(e) {
-            getLogger().error({error: e}, "Error loading context")
+    if(!skipSessionManagement) {
+        const [session] = useSession()
+        const loadContext = async() => {
+            try {
+                const currentContext = await getSessionContext(session.user.type)
+                setCtx(currentContext)
+            } catch(e) {
+                getLogger().error({error: e}, "Error loading context")
+            }
         }
+        
+        useEffect(() => {
+            if(session.token && (!ctx || ctx.state == 'pending')) {
+                loadContext()
+            }
+        }, [session, ctx])
     }
-    
-    useEffect(() => {
-        if(session.token && (!ctx || ctx.state == 'pending')) {
-            loadContext()
-        }
-    }, [session, ctx])
 
     return (
         <>

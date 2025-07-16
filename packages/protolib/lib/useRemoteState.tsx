@@ -3,11 +3,15 @@ import { usePendingEffect } from './usePendingEffect';
 import useSubscription from './mqtt/useSubscription'; 
 import { PendingResult } from 'protobase';
 
-export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=false) => { // Quick refresh skips fetch when a change is detected
+export const useRemoteStateList = (items, fetch, topic, model, quickRefresh=false, disableNotifications?) => { // Quick refresh skips fetch when a change is detected
     const [dataState, setDataState] = useState<PendingResult | undefined>(items);
     const lastId = useRef(0)
     usePendingEffect((s) => fetch(s), setDataState, dataState)
 
+    if(disableNotifications) {
+        return [dataState, setDataState];
+    }
+    
     const { messages } = useSubscription(topic);
     // console.log('subscribed to topic for changes: ', topic)
     useEffect(() => {

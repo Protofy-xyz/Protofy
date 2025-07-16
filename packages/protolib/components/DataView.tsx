@@ -122,6 +122,11 @@ interface DataViewProps {
     refreshOnHotReload?: boolean;
     quickRefresh?: boolean;
     URLTransform?: (url: string) => string;
+    disableNotifications?: boolean;
+    hideSearch?: boolean;
+    hideDeleteAll?: boolean;
+    hidePagination?: boolean;
+    title?: React.ReactNode | undefined
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -263,7 +268,13 @@ const DataViewInternal = forwardRef(({
     refreshOnHotReload = false,
     quickRefresh = false,
     URLTransform = (url) => url,
+    disableNotifications = false,
+    hideSearch = false,
+    hideDeleteAll = false,
+    hidePagination = false,
+    title = undefined
 }: DataViewProps, ref: any) => {
+
     const displayName = (entityName ?? pluralName) ?? name
     const [state, setState] = useState(pageState ?? {})
     sourceUrl = URLTransform(sourceUrl)
@@ -275,7 +286,7 @@ const DataViewInternal = forwardRef(({
         setSearchStatus(undefined)
     }
 
-    const [_items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh)
+    const [_items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh, disableNotifications);
     const items: any = _items
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
     const [createOpen, setCreateOpen] = useState(false)
@@ -526,7 +537,6 @@ const DataViewInternal = forwardRef(({
         </Center>
     }
 
-
     const realActiveView = activeViewIndex == -1 ? 0 : activeViewIndex
 
     return (<AsyncView atom={currentItems}>
@@ -701,7 +711,7 @@ const DataViewInternal = forwardRef(({
                     <XStack pt="$3" px="$3" mb="$1">
                         <XStack ml="$2" f={1} ai="center" gap="$2">
                             <Paragraph>
-                                <Text fontSize="$9" fontWeight="600" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>
+                                {title ?? <Text fontSize="$9" fontWeight="600" color="$color11">{displayName.charAt(0).toUpperCase() + displayName.slice(1)}</Text>}
                             </Paragraph>
                             {rowIcon && <Stack mr="$3"><Tinted><RowIcon color='var(--color7)' size={26} /></Tinted></Stack>}
                             {hasGlobalMenu ? <Tinted><ItemMenu type={"global"} sourceUrl='' hideDeleteButton={true} element="" extraMenuActions={extraMenuActions}></ItemMenu></Tinted> : <></>}
@@ -709,7 +719,7 @@ const DataViewInternal = forwardRef(({
                         </XStack>
 
                         <XStack ai="center" ml="$2">
-                            <XStack ai="center">
+                            {!hidePagination && <XStack ai="center">
                                 {currentItems.isLoaded && <XStack>
                                     <XStack ai="center">
                                         <XStack ai="center">
@@ -739,9 +749,9 @@ const DataViewInternal = forwardRef(({
                                         </Tinted>
                                     </XStack>
                                 </XStack>}
-                            </XStack>
+                            </XStack>}
                             <XStack ai="center" marginLeft="$3" mb={"$1"} $xs={{ display: 'none' }}>
-                                <SearchAIModalButton
+                                {!hideSearch && <SearchAIModalButton
                                     placeholder={"Search in " + name}
                                     initialState={search}
                                     defaultOpened={true}
@@ -753,7 +763,7 @@ const DataViewInternal = forwardRef(({
                                             description={`Search in ${name}`}
                                         />
                                     }
-                                />
+                                />}
                                 {!hideFilters && <Filters
                                     customFilters={customFilters}
                                     model={model}
@@ -771,7 +781,7 @@ const DataViewInternal = forwardRef(({
                                         }}
                                     />
                                 </Tinted>}
-                                <Tinted>
+                                {!hideDeleteAll && <Tinted>
                                     <DataViewActionButton
                                         id="admin-dataview-add-btn"
                                         icon={Trash}
@@ -780,7 +790,7 @@ const DataViewInternal = forwardRef(({
                                             setDeleteOpen(true)
                                         }}
                                     />
-                                </Tinted>
+                                </Tinted>}
                                 {!disableViewSelector && <ButtonGroup marginLeft="$3" boc="$gray5">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
