@@ -23,7 +23,7 @@ export const CardSettings = ({ cardData, setCardData, icons }) => {
                     if (regex.test(e.target.value)) {
                         setError(null);
                     }else{
-                        setError("Invalid input, only letters, numbers, spaces, - and _ are allowed.");
+                        //setError("Invalid input, only letters, numbers, spaces, - and _ are allowed.");
                     }
                     setCardData({
                             ...cardData,

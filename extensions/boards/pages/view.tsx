@@ -26,6 +26,9 @@ import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { useEventEffect } from '@extensions/events/hooks'
 import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext'
+import { isElectron } from 'protolib/lib/isElectron'
+import { useAtom } from 'jotai'
+import { AppState } from 'protolib/components/AdminPanel'
 
 class ValidationError extends Error {
   errors: string[];
@@ -49,6 +52,11 @@ const checkCard = async (cards, newCard) => {
   if (newCard.name === '') {
     console.error('Card name cannot be empty')
     errors.push('Card name cannot be empty')
+  }
+  const regex = /^[a-zA-Z0-9-_ ]*$/;
+  if (!regex.test(newCard.name)) {
+    console.error("Invalid name, only letters, numbers, spaces, - and _ are allowed.")
+    errors.push("Invalid name, only letters, numbers, spaces, - and _ are allowed.")
   }
   if (errors.length > 0) {
     throw new ValidationError(errors);
@@ -317,6 +325,18 @@ const Board = ({ board, icons }) => {
 
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
 
+  useUpdateEffect(() => {
+    if (addOpened) {
+      setErrors([]);
+    }
+  }, [addOpened]);
+
+  useUpdateEffect(() => {
+    if (isEditing) {
+      setErrors([]);
+    }
+  }, [isEditing]);
+
   //@ts-ignore store the states in the window object to be used in the cards htmls
   window['protoStates'] = states
 
@@ -361,6 +381,7 @@ const Board = ({ board, icons }) => {
 
       return await window['onRunListeners'][card](card, cleanedParams);
     };
+
   }, [])
 
   useEffect(() => {
@@ -415,7 +436,14 @@ const Board = ({ board, icons }) => {
   const addWidget = async (card) => {
     try {
       await checkCard(items, card)
+      setErrors([]); // Clear errors if validation passes
     } catch (e) {
+      if (e instanceof ValidationError) {
+        setErrors(e.errors);
+      } else {
+        console.error('Error checking card:', e);
+        setErrors(['An unexpected error occurred while checking the card.']);
+      }
       throw new Error(e)
     }
 
@@ -534,7 +562,7 @@ const Board = ({ board, icons }) => {
 
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
-            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + params[key]).join('&');
+            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
             return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
           }}
         />
@@ -545,7 +573,7 @@ const Board = ({ board, icons }) => {
   return (
     <YStack flex={1}>
 
-      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} />
+      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors}/>
 
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
@@ -579,23 +607,16 @@ const Board = ({ board, icons }) => {
             >
               <ActionCardSettings board={board} actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
-              }} />
-              {errors.length > 0 ?
-                <YStack>
-                  {errors.map((error, index) => (
-                    <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
-                  ))}
-                </YStack>
-                : <></>
-              }
+              }} errors={errors}/>
+              
 
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
-                  setItems(newItems)
-                  boardRef.current.cards = newItems
+                 
                   try {
                     await checkCard(newItems, editedCard)
+                    setErrors([]); // Clear errors if validation passes
                   } catch (e) {
                     if (e instanceof ValidationError) {
                       setErrors(e.errors);
@@ -605,6 +626,8 @@ const Board = ({ board, icons }) => {
                     }
                     return
                   }
+                  setItems(newItems)
+                  boardRef.current.cards = newItems
                   await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
                   setCurrentCard(null)
                   setIsEditing(false)
@@ -673,12 +696,9 @@ const Board = ({ board, icons }) => {
                   formatOnType: true
                 }}
               />
-              : <YStack left={-10} f={1}><DashboardGrid
+              : <YStack f={1}><DashboardGrid
                 items={cards}
                 layouts={boardRef.current.layouts}
-                borderRadius={10}
-                padding={10}
-                backgroundColor="white"
                 onLayoutChange={(layout, layouts) => {
                   if (breakpointCancelRef.current == breakpointRef.current) {
                     console.log('Layout change cancelled for breakpoint: ', breakpointRef.current, breakpointCancelRef.current)
@@ -755,6 +775,7 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     toggleAutopilot,
     openAdd
   } = useBoardControls();
+  const [appState, setAppState] = useAtom(AppState)
 
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {

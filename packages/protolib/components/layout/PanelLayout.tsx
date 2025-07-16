@@ -8,28 +8,17 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
   const _panelBgColor = '$bgPanel'
   const panel = <Panel>
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, height: '100%', overflow: 'auto' }}>
-      <XStack elevation={3} br={"$6"} mt={appBarHeight} f={1} paddingBottom={panelBottom ? '20px' : '0px'} style={{ flex: 1 }}>
-        {/* <ScrollView f={1} $sm={{ br: "$0" }} style={{
-        flexGrow: 1,
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-        contentContainerStyle={{ flexGrow: 1 }}
-      > */}
+      <XStack mt={appBarHeight} f={1} paddingBottom={panelBottom ? '20px' : '0px'} style={{ flex: 1 }}>
         <YStack f={1} style={{ flex: 1, overflowY: 'auto' }}>
           {children}
         </YStack>
-        {/* </ScrollView> */}
       </XStack>
     </div>
   </Panel>
 
   return (
     <Layout
-      header={
-          <XStack borderBottomWidth={0.2} boc="$gray6" justifyContent="space-between" f={1} pb="$2">{headerContents}</XStack>
-      }
+      header={<></>}
       sideMenu={<SideMenu mt={appBarHeight} sideBarColor={_panelBgColor} style={{borderRadius: "0px 14px 14px 0px"}}>{menuContent}</SideMenu>}
       footer={
         null

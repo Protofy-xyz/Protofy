@@ -17,8 +17,8 @@ const icon = ({ name, size, color = 'var(--color7)', style = '' }) => {
     `;
 };
 
-const cardIcon = ({data, size, style = ''}) => {
-    if(data.displayIcon === false) {
+const cardIcon = ({ data, size, style = '' }) => {
+    if (data.displayIcon === false) {
         return '';
     }
     return icon({
@@ -260,8 +260,8 @@ const boardImage = ({ src, alt = '', style = '' }) => {
 
 const markdown = (card) => {
     reactCard(`
-  function Widget() {
-    const text = data?.value ?? '';
+  function Widget(props) {
+    const text = props?.value ?? '';
     return (
         <View className="no-drag" height="100%">
             <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
@@ -271,7 +271,7 @@ const markdown = (card) => {
     );
   }
 
-`, data.domId)
+`, data.domId, data)
 };
 
 const fileBrowser = (card) => {
@@ -410,7 +410,7 @@ const paramsForm = ({ data }) => {
                 onmouseup="this.style.filter='brightness(1.05)'"
             >
                 <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
-                    ${data.buttonLabel ? data.buttonLabel :"Run"}
+                    ${data.buttonLabel ? data.buttonLabel : "Run"}
                 </a>
             </button>`: ``}
         </form>`
@@ -435,15 +435,15 @@ const cardAction = ({ data, content }) => {
     ">
 
         ${data.displayResponse !== false ? cardValue({
-            value: content ?? data.value ?? 'N/A'
-        }):''}
+        value: content ?? data.value ?? 'N/A'
+    }) : ''}
 
-        ${data.displayButton !== false ? paramsForm({data}): ''}
+        ${data.displayButton !== false ? paramsForm({ data }) : ''}
     </div>
     `;
 };
 
-const cardValue = ({ value, style = '', id=null }) => {
+const cardValue = ({ value, style = '', id = null }) => {
     let fullHeight = false;
     //check if value is string, number or boolean
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
@@ -451,7 +451,7 @@ const cardValue = ({ value, style = '', id=null }) => {
         fullHeight = true;
     }
     return `
-        <div ${id?'id="'+id+'"':''} style="
+        <div ${id ? 'id="' + id + '"' : ''} style="
             height: ${fullHeight ? '100%' : 'auto'};
             width: 100%;
             display: flex;
@@ -467,55 +467,84 @@ const cardValue = ({ value, style = '', id=null }) => {
     `;
 }
 
-const reactCard = (jsx, root) => {
-    // This is a hack to make react available in the boards html
-    //iterate each key of window.ProtoComponents and add it to the global window object
+const SafeProvider = window.Provider || (({ children }) => children);
+window.WidgetWrapper = window.WidgetWrapper || (({ children }) =>
+  React.createElement(
+    SafeProvider,
+    { disableRootThemeClass: true },
+    React.createElement(ErrorBoundary, {
+      fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops')
+    }, children)
+  )
+);
+
+window.updateReactCardProps = (uuid, newProps) => {
+    const root = window._reactWidgets?.[uuid];
+    const Component = window._reactWidgetComponents?.[uuid];
+    if (!root || !Component) return;
+
+    const element = React.createElement(
+        window.WidgetWrapper,
+        null,
+        React.createElement(Component, newProps)
+    );
+
+    root.render(element);
+};
+
+class ErrorBoundary extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { hasError: false };
+    }
+    static getDerivedStateFromError() {
+        return { hasError: true };
+    }
+    render() {
+        if (this.state.hasError) {
+            return this.props.fallback ?? React.createElement('div', { style: { color: 'red' } }, 'Oops');
+        }
+        return this.props.children;
+    }
+}
+
+const reactCard = (jsx, rootId, initialProps = {}) => {
     Object.keys(window.ProtoComponents || {}).forEach(key => {
         window[key] = window.ProtoComponents[key];
     });
 
-    const jsxCode = `
-
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return this.props.fallback ?? <div style={{ color: 'red' }}>Oops</div>;
+    if (window._reactWidgets?.[rootId]) {
+        window.updateReactCardProps(rootId, initialProps);
+        return;
     }
-    return this.props.children;
-  }
-}
 
-  function WidgetRoot({children}) {
-    return (
-      <Provider disableRootThemeClass>
-        <ErrorBoundary fallback={<div style={{ color: 'red' }}>Oops</div>}>
-        {children}
-        </ErrorBoundary>
-      </Provider>
-    );
-  }
+    const jsxCode = `
+        ${jsx}  // define Widget(props)
 
-  ${jsx}
+        const container = document.getElementById("${rootId}");
+        const root = ReactDOM.createRoot(container);
 
-  const root = ReactDOM.createRoot(document.getElementById("${root}"));
-  root.render(<WidgetRoot><Widget /></WidgetRoot>);
-`;
+        window._reactWidgets = window._reactWidgets || {};
+        window._reactWidgets["${rootId}"] = root;
+
+        window._reactWidgetComponents = window._reactWidgetComponents || {};
+        window._reactWidgetComponents["${rootId}"] = Widget;
+
+        const element = React.createElement(
+          window.WidgetWrapper,
+          null,
+          React.createElement(Widget, ${JSON.stringify(initialProps)})
+        );
+
+        root.render(element);
+    `;
 
     const compiled = Babel.transform(jsxCode, {
         presets: ['react'],
     }).code;
 
     eval(compiled);
-}
+};
 
 const dataView = (object, root) => {
     return reactCard(`

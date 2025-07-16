@@ -1,5 +1,5 @@
 import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info } from '@tamagui/lucide-icons'
-import { Text, YStack, XStack, ToggleGroup } from '@my/ui'
+import { Text, YStack, XStack, ToggleGroup, Paragraph } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -13,7 +13,7 @@ import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { SettingsEditor } from './SettingsEditor'
 
-export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { } }) => {
+export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors }) => {
   const [cardData, setCardData] = useState(card);
   const isSimpleReturnString =
     !cardData.rulesCode ||
@@ -194,6 +194,14 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
 
         </YStack>
       </Tinted >
+      {errors?.length > 0 ?
+                <YStack>
+                  {errors.map((error, index) => (
+                    <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
+                  ))}
+                </YStack>
+                : <></>
+              }
     </YStack >
   );
 };

@@ -17,7 +17,6 @@ export default function useSubscription(
   const [messages, setMessages] = useState<IMessage[]>([])
 
   const lastId = useRef(1)
-  const queueRef = useRef<IMessage[]>([])  // ✅ Cola real
   const listenersRef = useRef<((msg: IMessage) => void)[]>([]) // ✅ Callbacks suscritos
 
   const { maxLog, ...options } = subscriptionOptions
@@ -38,7 +37,6 @@ export default function useSubscription(
           message: msg,
         }
 
-        queueRef.current.push(fullMsg) // 🧠 Mete a cola inmediatamente
         setMessages(prev => [fullMsg, ...prev.slice(0, maxLog)])
         setMessage(fullMsg)
 

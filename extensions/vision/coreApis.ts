@@ -4,7 +4,7 @@ import { Application } from "express";
 import axios from "axios";
 import { addAction } from "@extensions/actions/coreContext/addAction";
 import { addCard } from "@extensions/cards/coreContext/addCard";
-import { getChatGPTApiKey} from '@extensions/chatgpt/coreContext';
+import { getChatGPTApiKey } from '@extensions/chatgpt/coreContext';
 
 async function getImageBase64(url) {
     const response = await axios.get(url, { responseType: 'arraybuffer' });
@@ -148,7 +148,7 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'Detect objects using AI',
         name: 'vision_detect',
         defaults: {
-            width: 2, 
+            width: 2,
             height: 10,
             type: "action",
             icon: 'camera',
@@ -203,7 +203,7 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'describe image using AI',
         name: 'vision_describe',
         defaults: {
-            width: 2, 
+            width: 2,
             height: 10,
             type: "action",
             icon: 'camera',
@@ -215,6 +215,41 @@ export default async (app: Application, context: typeof APIContext) => {
             },
             rulesCode: `return await execute_action("/api/core/v1/vision/describe", userParams)`,
             displayResponse: true
+        },
+        emitEvent: true,
+    })
+
+    addCard({
+        group: 'vision',
+        tag: 'inputs',
+        id: 'vision_web_camera',
+        templateName: 'Board Camera',
+        name: 'web_camera',
+        defaults: {
+            "width": 2,
+            "height": 8,
+            "icon": "table-properties",
+            "html": "//@react\nreactCard(`\n  function Widget(props) {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            <CameraCard params={props.configParams} onPicture={(picture64) => {\n              execute_action(props.name, {picture: picture64})\n            }}/>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId, data)\n",
+            "name": "camera",
+            "description": "Display a React component",
+            "type": "action",
+            "method": "post",
+            "displayButton": true,
+            "rulesCode": "return params.picture",
+            "params": {
+                "mode": "manual or auto (auto is experimental)",
+                "fps": "fps to capture"
+            },
+            "configParams": {
+                "mode": {
+                    "visible": false,
+                    "defaultValue": "manual"
+                },
+                "fps": {
+                    "visible": false,
+                    "defaultValue": "1"
+                }
+            },
         },
         emitEvent: true,
     })

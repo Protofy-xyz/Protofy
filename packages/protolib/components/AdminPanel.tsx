@@ -99,43 +99,6 @@ export const AdminPanel = ({ children }) => {
     rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened}
     rightPanelResizable={true}
     centerPanelContent={workspaceData && <PanelLayout
-      topBar={
-        <>
-          <XStack ai="center">
-            <XStack>{userSpaces.length > 1 && <WorkspaceSelector />}</XStack>
-            <InteractiveIcon
-              $xs={{ display: "none" }}
-              onPress={() => {
-                if (isElectron()) {
-                  window['electronAPI'].openWindow("store");
-                } else {
-                  window.open("https://protofy.xyz/store", "_blank");
-                }
-              }}
-              IconColor="var(--color)"
-              Icon={Store}
-            />
-            {isElectron() ? (
-              <InteractiveIcon
-                $xs={{ display: "none" }}
-                onPress={() => {
-                  window['electronAPI'].openExternal("http://localhost:8000");
-                }}
-                IconColor="var(--color)"
-                Icon={Globe}
-              />
-            ) : null}
-
-            {settingsLogsEnabled ? <InteractiveIcon $xs={{ display: "none" }} onPress={() => {
-              if (isElectron()) {
-                window['electronAPI'].toggleLogWindow()
-              } else {
-                setAppState({ ...appState, logsPanelOpened: !appState.logsPanelOpened })
-              }
-            }} IconColor="var(--color)" Icon={Activity}></InteractiveIcon> : null}
-          </XStack>
-        </>
-      }
       menuContent={<PanelMenu workspace={workspaceData} />}
     >
       <XStack f={1} px={"$0"} flexWrap='wrap'>

@@ -9,6 +9,7 @@ import { ItemMenu } from '../ItemMenu';
 export default ({ element, width, onDelete, ...props }: any) => {
     const board = new BoardModel(element);
     const router = useRouter();
+    console.log("Board", board);
 
     return (
         <YStack
@@ -26,7 +27,10 @@ export default ({ element, width, onDelete, ...props }: any) => {
         >
             <XStack jc={"space-between"} ai={"center"} >
                 <XStack gap="$2" ai={"center"} >
-                    <Text fos="$8" fow="600" >{board?.get("name")}</Text>
+                    <YStack>
+                        <Text fos="$8" fow="600" >{board?.get("displayName")?? board?.get("name")}</Text>
+                        <Text fos="$2" fow="600" >{board?.get("name")}</Text>
+                    </YStack>
                     <Tinted> <Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
                 </XStack>
                 <ItemMenu
