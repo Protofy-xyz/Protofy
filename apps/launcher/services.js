@@ -7,7 +7,7 @@ const services = [
         "description": "Launcher UI to manage and interact with projects",
         "route": (req) => {
           if (req.url.startsWith('/launcher/') || req.url == '/workspace') {
-            return process.env.ADMIN_PANEL_URL ?? 'http://localhost:3002'
+            return process.env.ADMIN_PANEL_URL ?? 'http://localhost:3008'
           }
         },
         disabledRoute: (req) => {

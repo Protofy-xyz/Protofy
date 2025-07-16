@@ -56,7 +56,7 @@ app.prepare().then(() => {
     }
   }, server)
 
-  const PORT = 3002
+  const PORT = 3008
   server.listen(PORT, (err) => {
     if (err) throw err
     console.log(`> Ready on http://localhost:${PORT}`)
