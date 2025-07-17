@@ -3656,6 +3656,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@extensions/themes@workspace:extensions/themes":
+  version: 0.0.0-use.local
+  resolution: "@extensions/themes@workspace:extensions/themes"
+  languageName: unknown
+  linkType: soft
+
 "@extensions/tokens@workspace:extensions/tokens":
   version: 0.0.0-use.local
   resolution: "@extensions/tokens@workspace:extensions/tokens"

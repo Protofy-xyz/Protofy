@@ -22,7 +22,7 @@ const plugins = [
     config: './tamagui.config.ts',
     components: ['tamagui', '@my/ui'],
     importsWhitelist: ['constants.js', 'colors.js'],
-    outputCSS: process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
+    outputCSS: process.env.NODE_ENV === 'production' ? '../../data/public/themes/adminpanel.css' : null,
     logTimings: true,
     disableExtraction,
     // experiment - reduced bundle size react-native-web

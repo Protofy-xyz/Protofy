@@ -11,9 +11,7 @@ import { createGenericFont } from './createGenericFont'
 import { animations } from './animations'
 import { themes } from './themes'
 import { tokens } from './tokens'
-import uiConfig from './uiConfig'
 import { createAnimations } from '@tamagui/animations-css'
-
 
 export const cherryBombFont = createCherryBombFont()
 export const munroFont = createMunroFont()
@@ -231,13 +229,25 @@ function spreadRecursive(config, extraConfig) {
 
 export const createConfig = (aditionalConfig: any = {}) => {
   var newConfig = defaultDataConfig
-  if (Object.keys.length > 0) {
+  if (Object.keys(aditionalConfig).length > 0) {
     newConfig = spreadRecursive(defaultDataConfig, aditionalConfig)
   }
   return createTamagui(newConfig)
 }
 
-export const config = createConfig(uiConfig)
+
+let customConfig = {};
+
+if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+  try {
+    const { getConfigFromDisk } = require('./tamagui-config-loader');
+    customConfig = getConfigFromDisk();
+  } catch (e) {
+    console.error('Error loading config from disk:', e);
+  }
+}
+
+export const config = createConfig(customConfig)
 
 export const staticConfig = () => createTamagui({
   ...defaultDataConfig,

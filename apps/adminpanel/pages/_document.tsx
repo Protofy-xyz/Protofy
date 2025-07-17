@@ -1,6 +1,6 @@
 import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
 import { StyleSheet } from 'react-native'
-import Tamagui from '../tamagui.config'
+import { makeTamaguiConfigFromDB } from '../tamagui.config'
 import { FontsLoader } from 'app/components/FontsLoader'
 
 export default class Document extends NextDocument {
@@ -9,6 +9,7 @@ export default class Document extends NextDocument {
 
     // @ts-ignore RN doesn't have this type
     const rnwStyle = StyleSheet.getSheet()
+    const { tamagui } = await makeTamaguiConfigFromDB()
 
     return {
       ...page,
@@ -18,9 +19,14 @@ export default class Document extends NextDocument {
             id={rnwStyle.id}
             dangerouslySetInnerHTML={{ __html: rnwStyle.textContent }}
           />
+          <link
+            id="tamagui-css"
+            rel="stylesheet"
+            href="/public/themes/adminpanel.css"
+          />
           <style
             dangerouslySetInnerHTML={{
-              __html: Tamagui.getCSS({
+              __html: tamagui.getCSS({
                 // if you are using "outputCSS" option, you should use this "exclude"
                 // if not, then you can leave the option out
                 exclude: process.env.NODE_ENV === 'production' ? 'design-system' : null,
