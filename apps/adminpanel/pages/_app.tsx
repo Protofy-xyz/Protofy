@@ -8,7 +8,7 @@ import { transferExtensionComponents } from 'app/bundles/sharedComponents';
 initSchemaSystem()
 
 if (process.env.NODE_ENV === 'production') {
-  require('../public/tamagui.css')
+  require('../../../data/public/themes/adminpanel.css')
 }
 
 // This is a hack to make react available in the boards html
