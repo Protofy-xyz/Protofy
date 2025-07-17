@@ -45,7 +45,7 @@ export default {
                 await API.get(`${sourceUrl}/${element.name}/delete`);
               }}
               onPress={(e) => {
-                const dialogContent = e.target.closest('.is_DialogContent')
+                const dialogContent = e.target.className.includes('DialogEditDisplayName')
                 if (dialogContent) return
                 router.push(`/boards/view?board=${element.name}`)
               }}

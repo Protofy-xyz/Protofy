@@ -1,13 +1,16 @@
-import { YStack, Text, XStack, Tooltip, Paragraph } from '@my/ui';
+import { YStack, Text, XStack, Tooltip, Paragraph, Dialog } from '@my/ui';
 import { Tinted } from '../Tinted';
-import { Sparkles } from "@tamagui/lucide-icons";
+import { Sparkles, Pencil } from "@tamagui/lucide-icons";
 import { BoardModel } from '@extensions/boards/boardsSchemas';
 import { useRouter } from 'solito/navigation';
 import { getIconUrl } from '../IconSelect';
 import { ItemMenu } from '../ItemMenu';
+import { useState } from 'react';
 
 export default ({ element, width, onDelete, ...props }: any) => {
     const board = new BoardModel(element);
+    const [editSettingsDialog, seteditSettingsDialog] = useState(false);
+    const [selectedBoard, setSelectedBoard] = useState(null);
     const router = useRouter();
     console.log("Board", board);
 
@@ -25,6 +28,7 @@ export default ({ element, width, onDelete, ...props }: any) => {
             gap="$4"
             {...props}
         >
+           
             <XStack jc={"space-between"} ai={"start"} >
                 <XStack gap="$2" ai={"start"} >
                     <YStack>
@@ -35,12 +39,20 @@ export default ({ element, width, onDelete, ...props }: any) => {
                 <XStack ai={"center"} >
                     <Tinted> <Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
                     <ItemMenu
-                        type={"bulk"}
+                        type={"item"}
                         mt={"1px"}
                         ml={"-5px"}
                         element={board}
                         deleteable={() => true}
                         onDelete={onDelete}
+                        // extraMenuActions={[
+                        //     {
+                        //         text: "Change display name",
+                        //         icon: Pencil,
+                        //         action: (element) => { console.log("pressed: ",element); seteditSettingsDialog(true); setSelectedBoard(element)},
+                        //         isVisible: (element) => true
+                        //     }
+                        // ]}
                     />
                 </XStack>
             </XStack>
@@ -98,6 +110,18 @@ export default ({ element, width, onDelete, ...props }: any) => {
                         : <Text color={"$color9"}>No rules added yet</Text>
                 }
             </YStack>
+            
+            <Dialog open={editSettingsDialog} onOpenChange={seteditSettingsDialog}>
+                <Dialog.Portal className='DialogEditDisplayName'>
+                    <Dialog.Overlay className='DialogEditDisplayName'/>
+                    <Dialog.Content overflow="hidden" p={"$8"} height={'600px'} width={"600px"} className='DialogEditDisplayName'>
+                        <Text fos="$8" fow="600" className='DialogEditDisplayName'>Edit the display name</Text>
+                        <Text className='DialogEditDisplayName'>{selectedBoard?.name}</Text>
+
+                        <Dialog.Close />
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog>
         </YStack>
     )
 }
