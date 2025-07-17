@@ -30,7 +30,7 @@ const registerCards = (app, context) => {
             html: `
 //@react
 reactCard(\`
-  async function validarOpenAIKey(apiKey) {
+  async function validateKey(apiKey) {
    // return true or false if the key is valid or not
     return true;
   }
@@ -40,7 +40,7 @@ reactCard(\`
           <View className="no-drag">
             <KeySetter
               nameKey={data?.configParams?.nameKey?.defaultValue}
-              validate={validarOpenAIKey}
+              validate={validateKey}
               onAdd={(key) => {
                 // alert("add: "+key)
               }}
