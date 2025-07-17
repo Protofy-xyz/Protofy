@@ -66,7 +66,7 @@ export const DashboardCard = ({
                     onHoverOut={() => setHovered(false)}
                     key={id}
                     borderRadius={10}
-                    backgroundColor={hideFrame?"transparent":"$bgPanel"}
+                    backgroundColor={hideFrame?"transparent":"var(--bgPanel)"}
                     flex={1}
                     position="relative"
                     {...containerProps}

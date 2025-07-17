@@ -36,9 +36,9 @@ export const useActionBar = (actionBar?, onActionBarEvent?) => {
     pos="fixed"
     elevation={10}
     bw={1}
-    boc="$gray6"
+    boc="var(--gray6)"
     animation="quick"
-    bc="$bgPanel"
+    bc="var(--bgPanel)"
     zi={99999}
     b={currentBar.visible === false ? -200 : 16}
     gap="$3"
