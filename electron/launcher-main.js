@@ -156,11 +156,22 @@ app.whenReady().then(async () => {
       //remove the zip file
       fs.unlinkSync(zipFilePath);
       console.log('Zip file removed:', zipFilePath);
+
+      //run the removeDevMode script inside the project folder
+      const removeDevModeScript = path.join(projectFolderPath, 'scripts', 'removeDevMode.js');
+      require(removeDevModeScript);
+      console.log('removeDevMode script executed');
+
+      //run the download-binaries script inside the project folder
+      const downloadBinariesScript = path.join(projectFolderPath, 'scripts', 'download-bins.js');
+      require(downloadBinariesScript)(AdmZip, require('tar'))
+      console.log('download-bins script executed');
       //reply to the renderer process
       respond({
         mimeType: 'application/json',
         data: Buffer.from(JSON.stringify({ success: true, message: 'done' }))
       });
+
     } else if (
       request.method === 'GET' &&
       /^\/api\/v1\/projects\/[^\/]+\/delete$/.test(pathname)
