@@ -5,8 +5,9 @@ import { usePrompt } from 'protolib/context/PromptAtom'
 import { PaginatedData } from 'protolib/lib/SSR';
 import { Palette } from '@tamagui/lucide-icons';
 import { API } from 'protobase';
-import { createConfig, useToastController, YStack } from '@my/ui';
+import { createConfig, useToastController, YStack, H3 } from '@my/ui';
 import { Monaco } from 'protolib/components/Monaco';
+import { Tinted } from 'protolib/components/Tinted';
 
 const sourceUrl = '/api/core/v1/themes'
 
@@ -25,7 +26,7 @@ export default {
           result = JSON.stringify(rawJson, null, 2)
         } catch (err) {
           console.error("DEV: Error parsing JSON: ", err)
-         }
+        }
 
         return result
       }
@@ -40,10 +41,21 @@ export default {
           numColumnsForm={2}
           name="themes"
           model={ThemeModel}
+          objectProps={{ title: "" }}
           customFieldsForms={{
-            "themes": {
-              hideLabel: false,
+            "name": {
+              hideLabel: true,
               component: (path, data, setData, mode, originalData, setFormData) => {
+                return <Tinted>
+                  <H3 color="$color8">
+                    {data}
+                  </H3>
+                </Tinted>
+              }
+            },
+            "themes": {
+              hideLabel: true,
+              component: (path, data, setData, mode, originalData) => {
                 if (originalData?.format === "css") {
                   return <>
                     <p>CSS themes are not supported in this view.</p>
