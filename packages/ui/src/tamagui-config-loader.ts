@@ -16,7 +16,7 @@ export const getConfigFromDisk = (): Record<string, any> => {
 
     return { ...themeConf?.config };
   } catch (err) {
-    console.error('Error reading config from disk:', err);
+    console.warn('The selected theme has no json file');
     return {};
   }
 };

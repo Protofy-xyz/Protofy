@@ -243,7 +243,7 @@ if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
     const { getConfigFromDisk } = require('./tamagui-config-loader');
     customConfig = getConfigFromDisk();
   } catch (e) {
-    console.error('Error loading config from disk:', e);
+    console.log('Error loading config from disk');
   }
 }
 
