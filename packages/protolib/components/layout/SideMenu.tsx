@@ -7,11 +7,15 @@ import { ThemeToggle } from '../../components/ThemeToggle'
 import { ColorToggleButton } from '../../components/ColorToggleButton'
 import { SessionLogoutButton } from '../../components/SessionLogoutButton'
 import { isElectron } from '../../lib/isElectron'
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+
+export const CollapsedSideMenuAtom = atomWithStorage('collapsedSideMenu', false)
 
 export const SideMenu = ({ sideBarColor = '$background', children, themeSwitcher = true, tintSwitcher = true, ...props }: any) => {
     const isXs = useMedia().xs
     const [open, setOpen] = useState(false)
-    const [collapsed, setCollapsed] = useState(false)
+    const [collapsed, setCollapsed] = useAtom(CollapsedSideMenuAtom)
     const width = collapsed ? 80 : 260
 
     const settingsTintSwitcher = SiteConfig.ui?.tintSwitcher
