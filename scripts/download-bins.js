@@ -75,7 +75,7 @@ module.exports = async function downloadBins(AdmZip, tar) {
       return;
     }
 
-    console.log(`⬇️  Downloading ${key}...`);
+    console.log(`⬇️  Downloading ${key} into ${archivePath}...`);
     await download(config.url, archivePath);
 
     console.log(`📦 Extracting ${key}...`);
