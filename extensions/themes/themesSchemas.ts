@@ -5,10 +5,10 @@ Protofy("features", {
 })
 
 export const ThemeSchema = Schema.object(Protofy("schema", {
-	name: z.string().id().search(),
-	insertCSS: z.boolean().optional(),
-    themes: z.any().optional(),
-    format: z.union([z.literal("json"), z.literal("css")]).optional()
+	name: z.string().id().search().static(),
+	insertCSS: z.boolean().optional().hidden(),
+    themes: z.any().optional().size(2),
+    format: z.union([z.literal("json"), z.literal("css")]).optional().hidden()
 }))
 
 Protofy("api", {

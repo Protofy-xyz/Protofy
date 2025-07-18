@@ -4,9 +4,9 @@ import { AdminPage } from 'protolib/components/AdminPage'
 import { usePrompt } from 'protolib/context/PromptAtom'
 import { PaginatedData } from 'protolib/lib/SSR';
 import { Palette } from '@tamagui/lucide-icons';
-import { addTheme, updateTheme, replaceTheme } from '@tamagui/theme'
 import { API } from 'protobase';
-import { createConfig, useToastController } from '@my/ui';
+import { createConfig, useToastController, YStack } from '@my/ui';
+import { Monaco } from 'protolib/components/Monaco';
 
 const sourceUrl = '/api/core/v1/themes'
 
@@ -19,6 +19,17 @@ export default {
 
       const toast = useToastController()
 
+      const getParsedJSON = (rawJson) => {
+        let result = rawJson
+        try {
+          result = JSON.stringify(rawJson, null, 2)
+        } catch (err) {
+          console.error("DEV: Error parsing JSON: ", err)
+         }
+
+        return result
+      }
+
       return (<AdminPage title="Themes" pageSession={pageSession}>
         <DataView
           enableAddToInitialData
@@ -26,9 +37,37 @@ export default {
           defaultView={'list'}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
-          numColumnsForm={1}
+          numColumnsForm={2}
           name="themes"
           model={ThemeModel}
+          customFieldsForms={{
+            "themes": {
+              hideLabel: false,
+              component: (path, data, setData, mode, originalData, setFormData) => {
+                if (originalData?.format === "css") {
+                  return <>
+                    <p>CSS themes are not supported in this view.</p>
+                  </>
+                }
+                return <YStack f={1} h="300px">
+                  <Monaco
+                    language='json'
+                    sourceCode={getParsedJSON(data)}
+                    onChange={d => {
+                      try {
+                        const parsed = JSON.parse(d)
+                        setData(parsed)
+                      } catch (err) {}
+                    }}
+                    options={{
+                      formatOnPaste: true,
+                      formatOnType: true
+                    }}
+                  />
+                </YStack>
+              }
+            }
+          }}
           extraMenuActions={[
             {
               text: "Use this theme",
