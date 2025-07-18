@@ -1,10 +1,10 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -85,7 +85,7 @@ const FileWidget = dynamic<any>(() =>
   { loading: () => <Tinted><Center><Spinner size='small' color="$color7" scale={4} /></Center></Tinted> }
 );
 
-const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
+const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy, onDetails }) => {
   const [menuOpened, setMenuOpened] = useState(false)
   const MenuButton = ({ text, Icon, onPress }: { text: string, Icon: any, onPress: any }) => {
     return (
@@ -113,6 +113,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy }) => {
             <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
               <YStack>
                 <MenuButton text="Duplicate" Icon={Copy} onPress={() => onCopy()} />
+                <MenuButton text="Api Details" Icon={FileJson} onPress={() => onDetails()} />
                 <MenuButton text="Delete" Icon={Trash2} onPress={() => onDelete()} />
               </YStack>
             </YStack>
@@ -138,6 +139,7 @@ const ActionCard = ({
   onEditCode = () => { },
   onDelete = () => { },
   onEdit = () => { },
+  onDetails = () => { },
   onCopy = () => { },
   data = {} as any,
   containerProps = {},
@@ -198,6 +200,7 @@ const ActionCard = ({
           id={id}
           data={data}
           onDelete={onDelete}
+          onDetails={onDetails}
           onEdit={onEdit}
           onEditCode={onEditCode}
           onCopy={onCopy}
@@ -305,6 +308,7 @@ const Board = ({ board, icons }) => {
   const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 4 }
   const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isApiDetails, setIsApiDetails] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [currentCard, setCurrentCard] = useState(null)
   const [editedCard, setEditedCard] = useState(null)
@@ -552,6 +556,11 @@ const Board = ({ board, icons }) => {
             setCurrentCard(item);
             setEditedCard(item);
           }}
+          onDetails={() => {
+            setCurrentCard(item);
+            setIsApiDetails(true);
+            const url = `/api/core/v1/boards/${board.name}/actions/${item.name}`;
+          }}
           onEditCode={() => {
             setEditCode(item.sourceFile)
           }}
@@ -571,16 +580,87 @@ const Board = ({ board, icons }) => {
     }
   })
 
+  const params = currentCard?.params || {};
+  const configParams = currentCard?.configParams || {};
+  const executeActionURL = document?.location?.origin + `/api/core/v1/boards/${board.name}/cards/${currentCard?.name}/run?${Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(configParams[key]?.defaultValue || params[key])).join('&')}&token=${currentCard?.tokens?.run || ''}`
+  const getValueURL = document?.location?.origin + `/api/core/v1/boards/${board.name}/cards/${currentCard?.name}?token=${currentCard?.tokens?.read || ''}`;
+  const hasTokens = currentCard?.tokens && Object.keys(currentCard.tokens).length > 0;
+  const apiInfo = (
+    <Stack>
+
+      {hasTokens ? (
+        <YStack space="$4">
+          <Paragraph fontSize="$4" mb="$2">
+            To read card content, use the following API endpoint:
+          </Paragraph>
+          <XStack
+            ai="center"
+            jc="space-between"
+            p="$3"
+            br="$4"
+            backgroundColor="$backgroundStrong"
+            gap="$3"
+          >
+            <Paragraph fontFamily="monospace" fontSize="$2" selectable>
+              {getValueURL}
+            </Paragraph>
+            <TamaButton
+              size="$2"
+              chromeless
+              icon={Copy}
+              onPress={() => navigator.clipboard.writeText(getValueURL)}
+            />
+          </XStack>
+
+          <Paragraph fontSize="$4" mt="$4" mb="$2">
+            To execute the card, use:
+          </Paragraph>
+          <XStack
+            ai="center"
+            jc="space-between"
+            p="$3"
+            br="$4"
+            backgroundColor="$backgroundStrong"
+            gap="$3"
+          >
+            <Paragraph
+              fontFamily="monospace"
+              fontSize="$2"
+              selectable
+              style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}
+            >
+              {executeActionURL}
+            </Paragraph>
+            <TamaButton
+              size="$2"
+              chromeless
+              icon={Copy}
+              onPress={() =>
+                navigator.clipboard.writeText(executeActionURL)
+              }
+            />
+          </XStack>
+
+        </YStack>
+      ) : (
+        <Paragraph fontSize="$4" mb="$2">
+          This card does not have API access enabled.
+        </Paragraph>
+      )}
+    </Stack>
+  );
+
+
   return (
     <YStack flex={1}>
 
-      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors}/>
+      <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
 
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
         p="$5"
         acceptCaption="Delete"
-        setOpen={setIsDeleting} Add commentMore actions
+        setOpen={setIsDeleting}
         open={isDeleting}
         onAccept={async (seter) => {
           await deleteCard(currentCard)
@@ -591,6 +671,16 @@ const Board = ({ board, icons }) => {
       >
       </AlertDialog>
 
+      <AlertDialog
+        acceptButtonProps={{ color: "white", backgroundColor: "$color6" }}
+        p="$5"
+        acceptCaption="Close"
+        setOpen={setIsApiDetails}
+        open={isApiDetails}
+        onAccept={() => setIsApiDetails(false)}
+        title={`Api Details for "${currentCard?.name}"`}
+        description={apiInfo}
+      />
       <Theme reset>
         <Dialog modal open={isEditing} onOpenChange={setIsEditing}>
           <Dialog.Portal zIndex={100000} overflow='hidden'>
@@ -608,13 +698,13 @@ const Board = ({ board, icons }) => {
             >
               <ActionCardSettings board={board} actions={actions} states={states} icons={icons} card={currentCard} onEdit={(data) => {
                 setEditedCard(data)
-              }} errors={errors}/>
-              
+              }} errors={errors} />
+
 
               <Dialog.Close displayWhenAdapted asChild>
                 <Tinted><TamaButton onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
-                 
+
                   try {
                     await checkCard(newItems, editedCard)
                     setErrors([]); // Clear errors if validation passes

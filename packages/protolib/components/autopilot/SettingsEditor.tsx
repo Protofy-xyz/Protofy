@@ -1,6 +1,7 @@
 import { YStack, XStack, Label, Input, Checkbox } from '@my/ui'
 import { Check } from 'lucide-react'
 import { Monaco } from '../Monaco'
+import { v4 as uuidv4 } from 'uuid';
 
 export const SettingsEditor = ({
     card,
@@ -40,7 +41,33 @@ export const SettingsEditor = ({
     return (
         <XStack f={1} gap="$4">
             <YStack gap="$1" w={300}>
-
+                <XStack ai="center" gap="$2">
+                    <Checkbox
+                        w="$2"
+                        h="$2"
+                        focusStyle={{ outlineWidth: 0 }}
+                        checked={Object.keys(cardData.tokens ?? {}).length > 0}
+                        onCheckedChange={(checked) => {
+                            if (checked) {
+                                setCardData({
+                                    ...cardData, tokens: {
+                                        'read': uuidv4(),
+                                        'run': uuidv4()
+                                    }
+                                })
+                            } else {
+                                const { tokens, ...rest } = cardData
+                                setCardData(rest)
+                            }
+                        }}
+                        className="no-drag"
+                    >
+                        <Checkbox.Indicator>
+                            <Check size={16} />
+                        </Checkbox.Indicator>
+                    </Checkbox>
+                    <Label>API access</Label>
+                </XStack>
                 {renderCheckbox('Display title', 'displayTitle')}
                 {renderCheckbox('Display icon', 'displayIcon')}
                 {renderCheckbox('Display frame', 'displayFrame')}
