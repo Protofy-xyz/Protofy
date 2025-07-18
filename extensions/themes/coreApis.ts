@@ -1,53 +1,90 @@
 import { ThemeModel } from "./";
+import ThemeService from "./themeService";
 import { AutoAPI, getRoot, handler } from 'protonode'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
-import { API, getServiceToken } from "protobase";
-
+import { getServiceToken } from "protobase";
 
 export const dataDir = (root) => fspath.join(root, "/data/themes/")
 
+const copyCssToPublic = async (source, target) => {
+    const cssContent = await fs.readFile(source, 'utf8');
+    if (!cssContent) {
+        return { error: 'CSS content is empty' }
+    }
+    await fs.writeFile(target, cssContent);
+}
+
+const CSS_TARGET_PATH = `${getRoot()}/data/public/themes/adminpanel.css`
 
 const getDB = (path, req, session) => {
     const isProd = process.env.NODE_ENV === 'production';
     const envFomat = isProd ? 'css' : 'json';
+    const availableFormats = isProd ? ['json', 'css'] : ['json'];
 
     const db = {
         async *iterator() {
-            // console.log("Iterator")
             try {
                 await fs.access(dataDir(getRoot(req)), fs.constants.F_OK)
             } catch (error) {
                 console.log("Creating deviceDefinitions folder")
                 await fs.mkdir(dataDir(getRoot(req)))
             }
+
+            const fileMap = {};
             const files = (await fs.readdir(dataDir(getRoot(req)))).filter(f => {
                 const filenameSegments = f.split('.')
-                return !fsSync.lstatSync(fspath.join(dataDir(getRoot(req)), f)).isDirectory() && (filenameSegments[filenameSegments.length - 1] === envFomat)
+                const currentFormat = filenameSegments[filenameSegments.length - 1]
+                return !fsSync.lstatSync(fspath.join(dataDir(getRoot(req)), f)).isDirectory() && availableFormats.includes(currentFormat)
             })
-            // console.log("Files: ", files)
-            for (const file of files) {
-                //read file content
-                const fileContent = await fs.readFile(dataDir(getRoot(req)) + file, 'utf8')
-                const filenameSegments = file.split('.')
-                const fileName = filenameSegments.slice(0, -1).join()
-                yield [file.name, envFomat == "json" ? fileContent : JSON.stringify({ format: envFomat, name: fileName })];
 
+            for (const file of files) {
+                const filenameSegments = file.split('.');
+                const currentFormat = filenameSegments.pop();
+                const fileName = filenameSegments.join('.');
+
+                if (!fileMap[fileName]) {
+                    fileMap[fileName] = {
+                        name: fileName,
+                        format: []
+                    };
+                }
+
+                if (!fileMap[fileName].format.includes(currentFormat)) {
+                    fileMap[fileName].format.push(currentFormat);
+                }
+            }
+
+            const result: any[] = Object.values(fileMap);
+
+            for (const entry of result) {
+                let jsonContent = {};
+                if (entry.format.includes('json')) {
+                    const fileContent = await fs.readFile(dataDir(getRoot(req)) + entry.name + ".json", 'utf8');
+                    jsonContent = JSON.parse(fileContent);
+                }
+                yield [entry.name, JSON.stringify({ ...entry, ...jsonContent })];
             }
         },
 
         async del(key, value) {
-            const filePath = dataDir(getRoot(req)) + key + "." + envFomat
-            try {
-                await fs.unlink(filePath)
-            } catch (error) {
-                console.log("Error deleting file: " + filePath)
+            const dir = dataDir(getRoot(req));
+        
+            for (const format of availableFormats) {
+                const filePath = fspath.join(dir, `${key}.${format}`);
+                try {
+                    if (fsSync.existsSync(filePath)) {
+                        await fs.unlink(filePath);
+                    }
+                } catch (error) {
+                    console.log(`Error deleting file: ${filePath}`);
+                }
             }
         },
 
         async put(key, value) {
-            const filePath = dataDir(getRoot(req)) + key + "." + envFomat
+            const filePath = dataDir(getRoot(req)) + key + ".json"
             try {
                 await fs.writeFile(filePath, value)
             } catch (error) {
@@ -56,17 +93,32 @@ const getDB = (path, req, session) => {
         },
 
         async get(key) {
-            const filePath = dataDir(getRoot(req)) + key + "." + envFomat
-            try {
-                if (envFomat == "json") {
-                    const fileContent = await fs.readFile(filePath, 'utf8')
-                    return fileContent
-                } else {
-                    return JSON.stringify({ format: envFomat, name: key })
+            const dir = dataDir(getRoot(req));
+            const formatList: string[] = [];
+
+            for (const format of availableFormats) {
+                const filePath = fspath.join(dir, `${key}.${format}`);
+                if (fsSync.existsSync(filePath)) {
+                    formatList.push(format);
                 }
-            } catch (error) {
-                throw new Error("File not found")
             }
+
+            if (formatList.length === 0) {
+                throw new Error("File not found");
+            }
+
+            let jsonContent = {};
+            if (formatList.includes("json")) {
+                const jsonPath = fspath.join(dir, `${key}.json`);
+                const fileContent = await fs.readFile(jsonPath, "utf8");
+                jsonContent = JSON.parse(fileContent);
+            }
+
+            return JSON.stringify({
+                name: key,
+                format: formatList,
+                ...jsonContent
+            });
         }
     };
 
@@ -98,47 +150,44 @@ export default (app, context) => {
         }
 
         let type
-
-        if (!css && format == "css") { // If css is not provided, is because is prod and css are already generated
-            type = "db-css"
+        
+        if (css && format.includes("json")) { // If css is provided, is because is dev and we need to generate the css file
+            type = "css-and-json"
+        } else if (!css && format.includes("css")) { // If css is not provided, is because is prod and css are already generated
+            type = "only-css-compiled"
         }
 
-        if (css) { // If css is provided, is because is dev and we need to generate the css file
-            type = "db-json"
-        }
 
         if (!type) {
             return res.status(400).json({ error: 'Invalid request' });
         }
 
         const token = getServiceToken()
-        const updateSettingRes = await API.post(`/api/core/v1/settings/theme?token=${token}`, { name: "theme", value: themeId })
+        const updateSettingRes = await ThemeService.selectTheme({ themeId: themeId, token: token })
 
         if (updateSettingRes.isError) {
-            const createSettingRes = await API.post(`/api/core/v1/settings?token=${token}`, { name: "theme", value: themeId })
-            if (createSettingRes.isError) {
-                return res.status(500).json({ error: 'Error updating theme setting' });
-            }
+            return res.status(500).json({ error: 'Error updating theme setting' });
         }
-        
-        const adminPanelThemePath = `${getRoot(req)}/data/public/themes/adminpanel.css`
+
         const updatedThemeCssPath = dataDir(getRoot(req)) + themeId + ".css"
-        
-        if (type == "db-json") {
+
+        if (type == "css-and-json") {
             try {
                 await fs.writeFile(updatedThemeCssPath, css)
-                await fs.writeFile(adminPanelThemePath, css)
+                await fs.writeFile(CSS_TARGET_PATH, css)
             } catch (error) {
                 console.error("Error creating file: ", error)
                 return res.status(500).json({ error: 'Error updating CSS' });
             }
         }
-        
-        if (type == "db-css") {
+
+        if (type == "only-css-compiled") {
             // copy the css file to the public folder
             try {
-                const cssContent = await fs.readFile(updatedThemeCssPath, 'utf8');
-                await fs.writeFile(adminPanelThemePath, cssContent);
+                const copyRes = await copyCssToPublic(updatedThemeCssPath, CSS_TARGET_PATH);
+                if (copyRes?.error) {
+                    return res.status(500).json({ error: copyRes.error });
+                }
             } catch (error) {
                 console.error("Error reading or writing CSS file: ", error);
                 return res.status(500).json({ error: 'Error updating CSS' });

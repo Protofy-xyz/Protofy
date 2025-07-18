@@ -71,6 +71,7 @@ app.whenReady().then(async () => {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
+    console.log('Request for:', pathname);
     if (request.method === 'GET' && pathname === '/api/v1/projects') {
       const projects = readProjects();
       const responseBody = JSON.stringify({
@@ -86,9 +87,32 @@ app.whenReady().then(async () => {
         data: Buffer.from(responseBody)
       });
       return;
+    } else if (
+      request.method === 'GET' &&
+      /^\/api\/v1\/projects\/[^\/]+\/delete$/.test(pathname)
+    ) {
+      const match = pathname.match(/^\/api\/v1\/projects\/([^\/]+)\/delete$/);
+      const projectName = match?.[1];
+
+      if (projectName) {
+        const projects = readProjects();
+        const updatedProjects = projects.filter(project => project.name !== projectName);
+        writeProjects(updatedProjects);
+        respond({
+          mimeType: 'application/json',
+          data: Buffer.from(JSON.stringify({ success: true, message: 'Project deleted successfully' }))
+        });
+      } else {
+        respond({
+          mimeType: 'application/json',
+          data: Buffer.from(JSON.stringify({ success: false, message: 'Invalid project name' }))
+        });
+      }
+      return;
     }
     respond({ statusCode: 404, data: Buffer.from('not found') });
   });
+
 
 
   if (!isDev) {

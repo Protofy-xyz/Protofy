@@ -128,6 +128,8 @@ interface DataViewProps {
     hidePagination?: boolean;
     title?: React.ReactNode | undefined;
     createElement?: (data: any) => Promise<any>;
+    addOpened?: boolean;
+    setAddOpened?: (opened: boolean) => void;
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -274,7 +276,9 @@ const DataViewInternal = forwardRef(({
     hideDeleteAll = false,
     hidePagination = false,
     title = undefined,
-    createElement = undefined
+    createElement = undefined,
+    addOpened = undefined,
+    setAddOpened = undefined
 }: DataViewProps, ref: any) => {
 
     const displayName = (entityName ?? pluralName) ?? name
@@ -291,7 +295,7 @@ const DataViewInternal = forwardRef(({
     const [_items, setItems] = useRemoteStateList(initialItems, fetch, 'notifications/' + model.getModelName() + "/#", model, quickRefresh, disableNotifications);
     const items: any = _items
     const [currentItems, setCurrentItems] = useState<PendingResult | undefined>(initialItems ?? getPendingResult('pending'))
-    const [createOpen, setCreateOpen] = useState(false)
+    const [createOpen, setCreateOpen] = useState(addOpened ?? false)
     const [deleteOpen, setDeleteOpen] = useState(false)
     const { push, mergePush, removePush, replace } = usePageParams(state)
     const [selected, setSelected] = useState([])
@@ -303,6 +307,12 @@ const DataViewInternal = forwardRef(({
     const extraFiltersStates = Object.entries(state).filter((st) => extraFiltersKeys.includes(st[0]))
 
     const isXs = useMedia().xs
+
+    useUpdateEffect(() => {
+        if(addOpened !== undefined) {
+            setCreateOpen(addOpened)
+        }
+    }, [addOpened])
 
     useQueryState(setState)
 
@@ -566,7 +576,12 @@ const DataViewInternal = forwardRef(({
                     p={"$2"}
                     pt="$5"
                     pl="$5"
-                    setOpen={setCreateOpen}
+                    setOpen={(v) => {
+                        setCreateOpen(v);
+                        if (setAddOpened) {
+                            setAddOpened(v);
+                        }
+                    }}
                     open={createOpen}
                     hideAccept={true}
                     description={""}
@@ -596,6 +611,9 @@ const DataViewInternal = forwardRef(({
                                             }
                                             //fetch(setItems)
                                             setCreateOpen(false);
+                                            if(setAddOpened) {
+                                                setAddOpened(false);
+                                            }
                                             toast.show(name + ' created', {
                                                 message: obj.getId()
                                             })
