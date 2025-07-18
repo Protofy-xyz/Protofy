@@ -92,7 +92,7 @@ module.exports = async function downloadBins(AdmZip, tar) {
   }
 
   async function main() {
-    if (!existsSync('bin')) mkdirSync('bin');
+    if (!existsSync(path.join(__dirname, '..', 'bin'))) mkdirSync(path.join(__dirname, '..', 'bin'));
     //check if running on Windows
     if (process.platform === 'win32') {
       setupPlatform('win', targets.win);
