@@ -7,7 +7,7 @@ Protofy("features", {
 export const ThemeSchema = Schema.object(Protofy("schema", {
 	name: z.string().id().search().static(),
     config: z.any().optional().size(2),
-    format: z.union([z.literal("json"), z.literal("css")]).optional().hidden()
+    format: z.array(z.union([z.literal("json"), z.literal("css")])).optional().hidden()
 }))
 
 Protofy("api", {

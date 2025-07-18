@@ -1,3 +1,4 @@
+import React from 'react'
 import { ThemeModel, ThemeType } from '.'
 import { DataView } from 'protolib/components/DataView'
 import { AdminPage } from 'protolib/components/AdminPage'
@@ -5,7 +6,7 @@ import { usePrompt } from 'protolib/context/PromptAtom'
 import { PaginatedData } from 'protolib/lib/SSR';
 import { Palette } from '@tamagui/lucide-icons';
 import { API } from 'protobase';
-import { createConfig, useToastController, YStack, H3 } from '@my/ui';
+import { createConfig, useToastController, YStack, H3, Text } from '@my/ui';
 import { Monaco } from 'protolib/components/Monaco';
 import { Tinted } from 'protolib/components/Tinted';
 
@@ -29,6 +30,22 @@ export default {
         }
 
         return result
+      }
+
+
+      const refreshCss = () => {
+        const newHref = `/public/themes/adminpanel.css?v=${Date.now()}`
+
+        let link = document.querySelector('#dynamic-tamagui-css') as HTMLLinkElement
+
+        if (!link) {
+          link = document.createElement('link')
+          link.id = 'dynamic-tamagui-css'
+          link.rel = 'stylesheet'
+          document.head.appendChild(link)
+        }
+
+        link.href = newHref
       }
 
       return (<AdminPage title="Themes" pageSession={pageSession}>
@@ -56,9 +73,9 @@ export default {
             "config": {
               hideLabel: true,
               component: (path, data, setData, mode, originalData) => {
-                if (originalData?.format === "css") {
+                if (!originalData?.format?.includes("json")) {
                   return <>
-                    <p>CSS themes are not supported in this view.</p>
+                    <Text fontSize="$3" color="$gray9">This theme does not have an editable version.</Text>
                   </>
                 }
                 return <YStack f={1} h="300px">
@@ -69,7 +86,7 @@ export default {
                       try {
                         const parsed = JSON.parse(d)
                         setData(parsed)
-                      } catch (err) {}
+                      } catch (err) { }
                     }}
                     options={{
                       formatOnPaste: true,
@@ -89,7 +106,7 @@ export default {
                   themeId: element.getId(),
                   format: element.get("format")
                 }
-                if (element.get("format") != "css") {
+                if (element.get("config")) {
                   const Tamagui = createConfig({ ...element.get("config") })
                   updateData["css"] = Tamagui.getCSS()
                 }
@@ -97,22 +114,9 @@ export default {
 
                 if (updateRes.isError) return toast.show("Error setting theme.", { tint: 'red' })
 
-                // const newHref = `/public/tamagui/adminpanel/tamagui-${element.getId()}.css?v=${Date.now()}`
-                const newHref = `/public/themes/adminpanel.css?v=${Date.now()}`
-
-                let link = document.querySelector('#dynamic-tamagui-css') as HTMLLinkElement
-
-                if (!link) {
-                  link = document.createElement('link')
-                  link.id = 'dynamic-tamagui-css'
-                  link.rel = 'stylesheet'
-                  document.head.appendChild(link)
-                }
-
-                link.href = newHref
-
+                refreshCss()
               },
-              isVisible: () => true,
+              isVisible: (ele: ThemeType) => true,
               menus: ["item"]
             }
           ]}
