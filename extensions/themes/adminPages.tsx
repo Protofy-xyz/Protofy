@@ -53,7 +53,7 @@ export default {
                 </Tinted>
               }
             },
-            "themes": {
+            "config": {
               hideLabel: true,
               component: (path, data, setData, mode, originalData) => {
                 if (originalData?.format === "css") {
@@ -90,7 +90,7 @@ export default {
                   format: element.get("format")
                 }
                 if (element.get("format") != "css") {
-                  const Tamagui = createConfig({ ...element.getData() })
+                  const Tamagui = createConfig({ ...element.get("config") })
                   updateData["css"] = Tamagui.getCSS()
                 }
                 const updateRes = await API.post("/api/core/v1/themes/update-css", updateData)

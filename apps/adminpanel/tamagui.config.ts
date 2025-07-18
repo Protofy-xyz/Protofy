@@ -44,7 +44,7 @@ export async function makeTamaguiConfigFromDB(): Promise<{
   try {
     const themeStr = await getElementFromDB("themes", selectedThemeId)
     const theme = JSON.parse(themeStr || '{}')
-    selectedPack = theme
+    selectedPack = theme?.config ?? selectedPack
   } catch (error) { }
 
   const tamagui = createConfig(selectedPack)

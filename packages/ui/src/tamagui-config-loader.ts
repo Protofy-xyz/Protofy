@@ -14,7 +14,7 @@ export const getConfigFromDisk = (): Record<string, any> => {
     const themeData = fs.readFileSync(themesPath, 'utf8');
     const themeConf = JSON.parse(themeData);
 
-    return { ...themeConf };
+    return { ...themeConf?.config };
   } catch (err) {
     console.error('Error reading config from disk:', err);
     return {};
