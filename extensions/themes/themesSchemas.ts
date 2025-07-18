@@ -5,7 +5,7 @@ Protofy("features", {
 })
 
 export const ThemeSchema = Schema.object(Protofy("schema", {
-	name: z.string().id().search().static(),
+	name: z.string().id().search().static().size(2),
     config: z.any().optional().size(2),
     format: z.array(z.union([z.literal("json"), z.literal("css")])).optional().hidden()
 }))
