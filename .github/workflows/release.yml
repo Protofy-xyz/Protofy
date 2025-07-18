@@ -25,9 +25,6 @@ jobs:
       - name: Prepare dev
         run: yarn prepare-dev
 
-      - name: Package
-        run: yarn package
-
       - name: Shrink
         run: yarn shrink
 
