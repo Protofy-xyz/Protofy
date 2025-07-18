@@ -1,5 +1,5 @@
 import { BoardModel } from "./boardsSchemas";
-import { AutoAPI, getRoot } from 'protonode'
+import { AutoAPI, getRoot, handler } from 'protonode'
 import { API, getLogger, ProtoMemDB, generateEvent } from 'protobase'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
@@ -554,9 +554,9 @@ export default async (app, context) => {
         }
     })
 
-    const handleBoardAction = async (req, res, params) => {
-        const actions = await getBoardActions(req.params.boardId);
-        const action = actions.find(a => a.name === req.params.action);
+    const handleBoardAction = async (boardId, action_or_card_id, res, params) => {
+        const actions = await getBoardActions(boardId);
+        const action = actions.find(a => a.name === action_or_card_id);
 
         if (!action) {
             res.send({ error: "Action not found" });
@@ -569,14 +569,14 @@ export default async (app, context) => {
         }
 
         await generateEvent({
-            path: `actions/boards/${req.params.boardId}/${req.params.action}/run`,
+            path: `actions/boards/${boardId}/${action_or_card_id}/run`,
             from: 'system',
             user: 'system',
             ephemeral: true,
             payload: {
                 status: 'running',
-                action: req.params.action,
-                boardId: req.params.boardId,
+                action: action_or_card_id,
+                boardId: boardId,
                 params
             },
         }, getServiceToken());
@@ -585,24 +585,24 @@ export default async (app, context) => {
         let rulesCode = action.rulesCode.trim();
 
         const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
-        ${getExecuteAction(await getActions(), req.params.boardId)}
+        ${getExecuteAction(await getActions(), boardId)}
         ${rulesCode}
     `);
 
         try {
             let response = null;
             try {
-                response = await wrapper(states, states?.boards?.[req.params.boardId] ?? {}, params, params, token, API);
+                response = await wrapper(states, states?.boards?.[boardId] ?? {}, params, params, token, API);
             } catch (err) {
                 await generateEvent({
-                    path: `actions/boards/${req.params.boardId}/${req.params.action}/code/error`,
+                    path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,
                     from: 'system',
                     user: 'system',
                     ephemeral: true,
                     payload: {
                         status: 'code_error',
-                        action: req.params.action,
-                        boardId: req.params.boardId,
+                        action: action_or_card_id,
+                        boardId: boardId,
                         params,
                         stack: err.stack,
                         message: err.message,
@@ -620,23 +620,23 @@ export default async (app, context) => {
                 response = response[action.responseKey];
             }
 
-            const prevValue = await context.state.get({ group: 'boards', tag: req.params.boardId, name: action.name });
+            const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: action.name });
             if (response !== prevValue) {
-                await context.state.set({ group: 'boards', tag: req.params.boardId, name: action.name, value: response, emitEvent: true });
-                Manager.update(`../../data/boards/${req.params.boardId}.js`, 'states', action.name, response);
+                await context.state.set({ group: 'boards', tag: boardId, name: action.name, value: response, emitEvent: true });
+                Manager.update(`../../data/boards/${boardId}.js`, 'states', action.name, response);
             }
 
             res.json(response);
 
             await generateEvent({
-                path: `actions/boards/${req.params.boardId}/${req.params.action}/done`,
+                path: `actions/boards/${boardId}/${action_or_card_id}/done`,
                 from: 'system',
                 user: 'system',
                 ephemeral: true,
                 payload: {
                     status: 'done',
-                    action: req.params.action,
-                    boardId: req.params.boardId,
+                    action: action_or_card_id,
+                    boardId: boardId,
                     params,
                     response
                 },
@@ -644,14 +644,14 @@ export default async (app, context) => {
 
         } catch (err) {
             await generateEvent({
-                path: `actions/boards/${req.params.boardId}/${req.params.action}/error`,
+                path: `actions/boards/${boardId}/${action_or_card_id}/error`,
                 from: 'system',
                 user: 'system',
                 ephemeral: true,
                 payload: {
                     status: 'error',
-                    action: req.params.action,
-                    boardId: req.params.boardId,
+                    action: action_or_card_id,
+                    boardId: boardId,
                     params,
                     stack: err.stack,
                     message: err.message,
@@ -666,12 +666,54 @@ export default async (app, context) => {
 
     // Aceptar GET
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), (req, res) => {
-        handleBoardAction(req, res, req.query)
+        handleBoardAction(req.params.boardId, req.params.action, res, req.query)
     })
+
+    const hasAccessToken = async (tokenType, session, cardId, boardId, token) => {
+        const board = await getBoard(boardId);
+        if (!board.cards || !Array.isArray(board.cards)) {
+            return false
+        }
+        const card = board.cards.find(c => c.name === cardId);
+        if (!card) {
+            return false;
+        }
+
+        if (card.tokens && card.tokens[tokenType]) {
+            const cardToken = card.tokens[tokenType];
+            if (cardToken === token || (session && session.user.admin)) {
+                return true;
+            }
+        } else {
+            if (session && session.user.admin) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    app.get('/api/core/v1/boards/:boardId/cards/:cardId', handler(async (req, res, session, next) => {
+        //get read token from card
+        if(!(await hasAccessToken('read', session, req.params.cardId, req.params.boardId, req.query.token))) {
+            res.status(403).send({ error: "Forbidden: Invalid token" });
+        } else {
+            const value = ProtoMemDB('states').get('boards', req.params.boardId, req.params.cardId);
+            res.send(value || null);
+        }
+    }))
+
+    app.get('/api/core/v1/boards/:boardId/cards/:cardId/run', handler(async (req, res, session, next) => {
+        //get read token from card
+        if(!(await hasAccessToken('run', session, req.params.cardId, req.params.boardId, req.query.token))) {
+            res.status(403).send({ error: "Forbidden: Invalid token" });
+        } else {
+            handleBoardAction(req.params.boardId, req.params.cardId, res, req.query);
+        }
+    }))
 
     // Aceptar POST
     app.post('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), (req, res) => {
-        handleBoardAction(req, res, req.body)
+        handleBoardAction(req.params.boardId, req.params.action, res, req.body)
     })
 
     app.get('/api/core/v1/boards/:boardId', requireAdmin(), async (req, res) => {

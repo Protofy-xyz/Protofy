@@ -69,11 +69,17 @@ const getDB = (path, req, session) => {
         },
 
         async del(key, value) {
-            const filePath = dataDir(getRoot(req)) + key + "." + envFomat
-            try {
-                await fs.unlink(filePath)
-            } catch (error) {
-                console.log("Error deleting file: " + filePath)
+            const dir = dataDir(getRoot(req));
+        
+            for (const format of availableFormats) {
+                const filePath = fspath.join(dir, `${key}.${format}`);
+                try {
+                    if (fsSync.existsSync(filePath)) {
+                        await fs.unlink(filePath);
+                    }
+                } catch (error) {
+                    console.log(`Error deleting file: ${filePath}`);
+                }
             }
         },
 
