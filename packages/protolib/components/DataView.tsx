@@ -126,7 +126,8 @@ interface DataViewProps {
     hideSearch?: boolean;
     hideDeleteAll?: boolean;
     hidePagination?: boolean;
-    title?: React.ReactNode | undefined
+    title?: React.ReactNode | undefined;
+    createElement?: (data: any) => Promise<any>;
 }
 
 export const DataView = (props: DataViewProps & { ready?: boolean }) => {
@@ -272,7 +273,8 @@ const DataViewInternal = forwardRef(({
     hideSearch = false,
     hideDeleteAll = false,
     hidePagination = false,
-    title = undefined
+    title = undefined,
+    createElement = undefined
 }: DataViewProps, ref: any) => {
 
     const displayName = (entityName ?? pluralName) ?? name
@@ -583,9 +585,14 @@ const DataViewInternal = forwardRef(({
                                         console.log('Saving from editable object: ', data)
                                         try {
                                             const obj = model.load(data)
-                                            const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                            if (result.isError) {
-                                                throw result.error
+                                            let result;
+                                            if (createElement) {
+                                                result = await createElement(obj.create().getData())
+                                            } else {
+                                                result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                                if (result.isError) {
+                                                    throw result.error
+                                                }
                                             }
                                             //fetch(setItems)
                                             setCreateOpen(false);
@@ -605,10 +612,17 @@ const DataViewInternal = forwardRef(({
                                     console.log('Saving from editable object: ', data)
                                     try {
                                         const obj = model.load(data)
-                                        const result = await API.post(sourceUrl, onAdd(obj.create().getData()))
-                                        if (result.isError) {
-                                            throw result.error
+
+                                        let result;
+                                        if (createElement) {
+                                            result = await createElement(obj.create().getData())
+                                        } else {
+                                            result = await API.post(sourceUrl, onAdd(obj.create().getData()))
+                                            if (result.isError) {
+                                                throw result.error
+                                            }
                                         }
+
                                         //fetch(setItems)
                                         setCreateOpen(false);
                                         toast.show(name + ' created', {
@@ -696,7 +710,7 @@ const DataViewInternal = forwardRef(({
                     setOpen={setDeleteOpen}
                     open={deleteOpen}
                     onAccept={async (setOpen) => {
-                        await API.get('/api/core/v1/databases/'+ name + '/delete')
+                        await API.get('/api/core/v1/databases/' + name + '/delete')
                         document.location.reload()
                     }}
                     title={'Delete'}

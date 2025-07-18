@@ -1,15 +1,35 @@
-const { app, BrowserWindow, protocol, session } = require('electron');
+const { app, BrowserWindow, protocol, session, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { Readable } = require('stream');
 
 const isDev = process.argv.includes('--dev');
-
-const PROJECTS_DIR = process.platform === 'darwin'
-  ? path.join(app.getPath('userData'), 'vento-projects')
-  : path.resolve('projects');
+const PROJECTS_DIR = path.join(app.getPath('userData'), 'vento-projects');
+const PROJECTS_FILE = path.join(PROJECTS_DIR, 'projects.json');
 
 if (!fs.existsSync(PROJECTS_DIR)) {
   fs.mkdirSync(PROJECTS_DIR, { recursive: true });
+}
+
+function readProjects() {
+  try {
+    if (fs.existsSync(PROJECTS_FILE)) {
+      return JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf-8'));
+    } else {
+      return [];
+    }
+  } catch (err) {
+    console.error('Error reading projects.json:', err);
+    return [];
+  }
+}
+
+function writeProjects(projects) {
+  try {
+    fs.writeFileSync(PROJECTS_FILE, JSON.stringify(projects, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error writing projects.json:', err);
+  }
 }
 
 let mainWindow;
@@ -23,7 +43,8 @@ function createWindow() {
     contextIsolation: true,
     nodeIntegration: false,
     webSecurity: !isDev,
-    allowRunningInsecureContent: isDev
+    allowRunningInsecureContent: isDev,
+    preload: path.join(__dirname, 'preload-launcher.js'),
   };
 
   mainWindow = new BrowserWindow({
@@ -50,40 +71,25 @@ app.whenReady().then(async () => {
     const url = new URL(request.url);
     const pathname = url.pathname;
 
-    const projects = [
-      {
-        name: 'Project 1',
-        version: '1.0',
-        status: 'downloaded',
-        description: 'This is a sample project for demonstration purposes.'
-      }, 
-      {
-        name: 'Project 2',
-        version: '1.1',
-        status: 'pending',
-        description: 'This is another sample project with a different status.'
-      }
-    ]
-    if (pathname.startsWith('/api/v1/projects')) {
-      // Simula una API con JSON
-      const responseBody = JSON.stringify({items: projects, total: projects.length, itemsPerPage: projects.length, page: 0, pages: 1});
+    if (request.method === 'GET' && pathname === '/api/v1/projects') {
+      const projects = readProjects();
+      const responseBody = JSON.stringify({
+        items: projects,
+        total: projects.length,
+        itemsPerPage: projects.length,
+        page: 0,
+        pages: 1
+      });
+
       respond({
         mimeType: 'application/json',
         data: Buffer.from(responseBody)
       });
       return;
     }
-
-    // Si es un archivo estático
-    if (pathname.startsWith('/launcher/')) {
-      const filePath = path.join(__dirname, pathname);
-      respond({ path: filePath });
-      return;
-    }
-
-    // Not found
     respond({ statusCode: 404, data: Buffer.from('not found') });
   });
+
 
   if (!isDev) {
     // Interceptar rutas file:// en producción
@@ -114,4 +120,11 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (!mainWindow) createWindow();
+});
+
+ipcMain.on('create-project', (event, newProject) => {
+  const projects = readProjects();
+  projects.push(newProject);
+  writeProjects(projects);
+  event.reply('create-project-done', { success: true });
 });
