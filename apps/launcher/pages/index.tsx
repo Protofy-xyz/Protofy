@@ -80,6 +80,7 @@ function CardElement({ element, width }) {
 const objModel = ProtoModel.getClassFromDefinition(obj)
 
 const MainView = () => {
+  const [reload, setReload] = useState(0)
   const [result, loading, error] = useFetch('https://api.github.com/repos/Protofy-xyz/Vento/releases', null, true)
 
   let parsedResult = JSON.parse(result ?? '[]')
@@ -91,6 +92,7 @@ const MainView = () => {
   console.log('versions', versions)
   return <XStack f={1}>
     <DataView
+      key={reload}
       disableViewSelector={true}
       defaultView='grid'
       hidePagination={true}
@@ -102,10 +104,6 @@ const MainView = () => {
       model={objModel}
       disableNotifications={true}
       onSelectItem={(item) => {
-        return false
-      }}
-      onAdd={(data) => {
-        console.log('onAdd', data)
         return false
       }}
       disableItemSelection={true}
@@ -123,7 +121,7 @@ const MainView = () => {
           window.electronAPI.createProject(data);
 
           window.electronAPI.onProjectCreated((result) => {
-            console.log('Resultado:', result);
+            setReload((prev) => prev + 1);
           });
         }
       }}
