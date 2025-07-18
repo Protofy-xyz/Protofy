@@ -47,7 +47,7 @@
     "sync": "git fetch upstream && git merge upstream/main",
     "fix": "manypkg fix",
     "check-deps": "check-dependency-version-consistency .",
-    "shrink": "node scripts/shrink.js",
+    "shrink": "node scripts/removeDevMode.js && node scripts/shrink.js",
     "clean": "yarn workspaces foreach --all run clean",
     "vento-update-setup": "git remote add vento git@github.com:Protofy-xyz/Vento.git",
     "vento-update": "git fetch vento && git rebase vento/main && yarn clean",
