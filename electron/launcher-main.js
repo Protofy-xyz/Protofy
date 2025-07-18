@@ -5,6 +5,7 @@ const { Readable } = require('stream');
 
 const isDev = process.argv.includes('--dev');
 const PROJECTS_DIR = path.join(app.getPath('userData'), 'vento-projects');
+console.log('Projects directory:', PROJECTS_DIR);
 const PROJECTS_FILE = path.join(PROJECTS_DIR, 'projects.json');
 
 if (!fs.existsSync(PROJECTS_DIR)) {
@@ -14,7 +15,13 @@ if (!fs.existsSync(PROJECTS_DIR)) {
 function readProjects() {
   try {
     if (fs.existsSync(PROJECTS_FILE)) {
-      return JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf-8'));
+      const projects = JSON.parse(fs.readFileSync(PROJECTS_FILE, 'utf-8'));
+      return projects.map(project => {
+        return {
+          ...project,
+          status: fs.existsSync(path.join(PROJECTS_DIR, project.name)) ? 'downloaded' : 'pending',
+        }
+      })
     } else {
       return [];
     }
@@ -74,6 +81,7 @@ app.whenReady().then(async () => {
     console.log('Request for:', pathname);
     if (request.method === 'GET' && pathname === '/api/v1/projects') {
       const projects = readProjects();
+
       const responseBody = JSON.stringify({
         items: projects,
         total: projects.length,
@@ -89,6 +97,72 @@ app.whenReady().then(async () => {
       return;
     } else if (
       request.method === 'GET' &&
+      /^\/api\/v1\/projects\/[^\/]+\/download$/.test(pathname)
+    ) {
+      const match = pathname.match(/^\/api\/v1\/projects\/([^\/]+)\/download$/);
+      const projectName = match?.[1];
+
+      //read project to get version
+      const projects = readProjects();
+      const project = projects.find(p => p.name === projectName);
+      if (!project) {
+        respond({
+          statusCode: 404,
+          data: Buffer.from('Project not found')
+        });
+        return;
+      }
+
+      //get zip url from github
+      const url = 'https://api.github.com/repos/Protofy-xyz/Vento/releases/tags/v' + project.version
+      const response = await fetch(url)
+      const data = await response.json()
+      const zipBallUrl = data?.zipball_url
+      if(!zipBallUrl) {
+        respond({
+          statusCode: 404,
+          data: Buffer.from('Release not found')
+        });
+        return;
+      }
+
+      //download the zip file to PROJECTS_DIR
+      const zipFilePath = path.join(PROJECTS_DIR, `${projectName}.zip`);
+      const zipResponse = await fetch(zipBallUrl);
+      if (!zipResponse.ok) {
+        respond({
+          statusCode: zipResponse.status,
+          data: Buffer.from('Failed to download project zip')
+        });
+        return;
+      }
+      const arrayBuffer = await zipResponse.arrayBuffer();
+      const zipBuffer = Buffer.from(arrayBuffer);
+      fs.writeFileSync(zipFilePath, zipBuffer);
+      console.log('Project downloaded:', zipFilePath);
+
+      //extract the zip file with adm-zip
+      const AdmZip = require('adm-zip');
+      const zip = new AdmZip(zipFilePath);
+      const extractPath = path.join(PROJECTS_DIR);
+      zip.extractAllTo(extractPath, true);
+      console.log('Project extracted to:', extractPath);
+      //rename the extracted folder to the project name
+      const extractedFolderName = zip.getEntries()[0].entryName.split('/')[0];
+      const extractedFolderPath = path.join(extractPath, extractedFolderName);
+      const projectFolderPath = path.join(PROJECTS_DIR, projectName);
+      fs.renameSync(extractedFolderPath, projectFolderPath);
+      console.log('Project folder renamed to:', projectFolderPath);
+      //remove the zip file
+      fs.unlinkSync(zipFilePath);
+      console.log('Zip file removed:', zipFilePath);
+      //reply to the renderer process
+      respond({
+        mimeType: 'application/json',
+        data: Buffer.from(JSON.stringify({ success: true, message: 'done' }))
+      });
+    } else if (
+      request.method === 'GET' &&
       /^\/api\/v1\/projects\/[^\/]+\/delete$/.test(pathname)
     ) {
       const match = pathname.match(/^\/api\/v1\/projects\/([^\/]+)\/delete$/);
@@ -98,6 +172,11 @@ app.whenReady().then(async () => {
         const projects = readProjects();
         const updatedProjects = projects.filter(project => project.name !== projectName);
         writeProjects(updatedProjects);
+        const projectPath = path.join(PROJECTS_DIR, projectName);
+        if (fs.existsSync(projectPath)) {
+          fs.rmSync(projectPath, { recursive: true, force: true });
+          console.log('Project deleted:', projectPath);
+        }
         respond({
           mimeType: 'application/json',
           data: Buffer.from(JSON.stringify({ success: true, message: 'Project deleted successfully' }))
@@ -148,7 +227,11 @@ app.on('activate', () => {
 
 ipcMain.on('create-project', (event, newProject) => {
   const projects = readProjects();
-  projects.push(newProject);
+  projects.push({
+    ...newProject,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  });
   writeProjects(projects);
   event.reply('create-project-done', { success: true });
 });

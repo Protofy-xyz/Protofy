@@ -66,6 +66,7 @@
     "react-native-web": "~0.19.12"
   },
   "dependencies": {
+    "adm-zip": "^0.5.16",
     "minimist": "1.2.8",
     "node-gyp": "^10.1.0",
     "pm2": "^5.3.0",
@@ -77,7 +78,6 @@
     "@babel/runtime": "^7.24.6",
     "@manypkg/cli": "^0.21.4",
     "@types/adm-zip": "^0",
-    "adm-zip": "^0.5.16",
     "async": "3.2.5",
     "check-dependency-version-consistency": "^4.1.0",
     "electron": "29.4.6",

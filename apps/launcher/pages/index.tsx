@@ -6,8 +6,8 @@ import { Page } from 'protolib/components/Page'
 import { basicParticlesMask } from 'protolib/components/particles/particlesMasks/basicParticlesMask'
 import { ProtoModel, z } from 'protobase'
 import { DataView } from 'protolib/components/DataView'
-import { Paragraph, Popover, XStack, YStack } from 'tamagui'
-import { Download, MoreVertical, Play, X } from '@tamagui/lucide-icons'
+import { Button, H2, H3, Paragraph, Popover, Spinner, XStack, YStack } from 'tamagui'
+import { AlertTriangle, AudioLines, Bird, Download, MoreVertical, Play, X } from '@tamagui/lucide-icons'
 import { InteractiveIcon } from 'protolib/components/InteractiveIcon'
 import { Tinted } from 'protolib/components/Tinted'
 import { useFetch } from 'protolib'
@@ -22,8 +22,13 @@ const obj = {
     "name": {
       "type": "string",
       "params": [],
-      "modifiers": []
-    }
+      "modifiers": [
+        {
+          "name": "id",
+          "params": []
+        }
+      ]
+    },
   },
   "apiOptions": {
     "name": "project",
@@ -32,8 +37,9 @@ const obj = {
   "filePath": "data/objects/project.ts"
 }
 
-function CardElement({ element, width }) {
+function CardElement({ element, width, onDelete, onDownload }) {
   const [menuOpened, setMenuOpened] = useState(false)
+  const [downloading, setDownloading] = useState(false)
   return (
     <YStack borderRadius={10} p="$4" jc="center" cursor="auto" backgroundColor="rgba(0, 0, 0, 0.6)">
       <XStack f={1} ai="center">
@@ -46,7 +52,12 @@ function CardElement({ element, width }) {
           </Popover.Trigger>
           <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
             <Tinted>
-              <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
+              <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={async (e) => {
+                //call deleteProject with element.id
+                await fetch(`app://localhost/api/v1/projects/${element.name}/delete`)
+                //document.location.reload()
+                onDelete?.(element)
+              }}>
                 <YStack>
                   <XStack cursor="pointer" ai="center">Delete</XStack>
                 </YStack>
@@ -68,7 +79,13 @@ function CardElement({ element, width }) {
         </XStack>}
 
         {element.status == 'pending' && <XStack>
-          <InteractiveIcon size={20} IconColor="var(--color)" Icon={Download} />
+          {downloading ? <Tinted><Spinner /></Tinted> : <InteractiveIcon size={20} IconColor="var(--color)" Icon={Download} onPress={async () => {
+            const url = 'app://localhost/api/v1/projects/' + element.name + '/download'
+            setDownloading(true)
+            const result = await fetch(url)
+            setDownloading(false)
+            onDownload?.()
+          }} />}
         </XStack>}
       </XStack>
 
@@ -81,6 +98,7 @@ const objModel = ProtoModel.getClassFromDefinition(obj)
 
 const MainView = () => {
   const [reload, setReload] = useState(0)
+  const [addOpened, setAddOpened] = useState(false)
   const [result, loading, error] = useFetch('https://api.github.com/repos/Protofy-xyz/Vento/releases', null, true)
 
   let parsedResult = JSON.parse(result ?? '[]')
@@ -92,6 +110,8 @@ const MainView = () => {
   console.log('versions', versions)
   return <XStack f={1}>
     <DataView
+      addOpened={addOpened}
+      setAddOpened={setAddOpened}
       key={reload}
       disableViewSelector={true}
       defaultView='grid'
@@ -113,8 +133,15 @@ const MainView = () => {
       dataTableGridProps={{
         marginTop: '$10',
         getCard: (element: any, width: any) => {
-          return <CardElement element={element} width={width} />
-        }
+          return <CardElement element={element} width={width} onDelete={() => setReload((prev) => prev + 1)} onDownload={() => setReload((prev) => prev + 1)} />
+        },
+        emptyMessage: <YStack position="absolute" top={-120} left={0} width={'100vw'} height={'100vh'} flex={1} alignItems="center" justifyContent="center" space="$4" pointerEvents='none'>
+          <YStack ai="center" jc="center" space="$2" o={0.4} pointerEvents='none' userSelect='none'>
+            <Bird size="$7" />
+            <H2>Empty project list</H2>
+          </YStack>
+          <Tinted><Button pointerEvents='auto' onPress={() => setAddOpened(true)}>Add project</Button></Tinted>
+        </YStack>
       }}
       createElement={async (data) => {
         if (typeof window !== 'undefined' && window.electronAPI) {
