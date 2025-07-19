@@ -116,7 +116,7 @@ app.whenReady().then(async () => {
       }
 
       //get zip url from github
-      const url = 'https://api.github.com/repos/Protofy-xyz/Vento/releases/tags/v' + project.version
+      const url = 'https://api.github.com/repos/Protofy-xyz/Vento/releases/tags/' + (project.version == 'latest' ? 'latest' : 'v'+project.version);
       const response = await fetch(url)
       const data = await response.json()
       const zipBallUrl = data?.assets[0]?.browser_download_url;
