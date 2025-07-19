@@ -8,6 +8,8 @@ const PROJECTS_DIR = path.join(app.getPath('userData'), 'vento-projects');
 console.log('Projects directory:', PROJECTS_DIR);
 const PROJECTS_FILE = path.join(PROJECTS_DIR, 'projects.json');
 
+let hasRun = false;
+
 if (!fs.existsSync(PROJECTS_DIR)) {
   fs.mkdirSync(PROJECTS_DIR, { recursive: true });
 }
@@ -213,13 +215,17 @@ app.whenReady().then(async () => {
 
 
       const projectFolderPath = path.join(PROJECTS_DIR, projectName);
+      hasRun = true;
       require(projectFolderPath+'/electron/main.js');
       //reply to the renderer process
       respond({
         mimeType: 'application/json',
         data: Buffer.from(JSON.stringify({ success: true, message: 'done' }))
       });
-
+      //close the main window
+      if (mainWindow) {
+        mainWindow.close();
+      }
     }
     respond({ statusCode: 404, data: Buffer.from('not found') });
   });
@@ -250,7 +256,9 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
-  app.quit();
+  if(!hasRun) {
+    app.quit();
+  }
 });
 
 app.on('activate', () => {
