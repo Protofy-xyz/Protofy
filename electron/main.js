@@ -241,8 +241,8 @@ app.whenReady().then(async () => {
     await runYarn('kill'); // Ensure any previous PM2 processes are killed
     console.log('💣 Previous PM2 processes killed.');
 
-    await runYarn('prepare-dev');
-    
+    // await runYarn('prepare-dev');
+
     const args = require('minimist')(process.argv.slice(2));
     runYarn(args.dev ? 'dev-fast' : 'start-fast' ,line => {
       if (line.includes('Service Started: core')) {

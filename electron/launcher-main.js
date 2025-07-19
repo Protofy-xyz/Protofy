@@ -117,7 +117,7 @@ app.whenReady().then(async () => {
       const url = 'https://api.github.com/repos/Protofy-xyz/Vento/releases/tags/v' + project.version
       const response = await fetch(url)
       const data = await response.json()
-      const zipBallUrl = data?.zipball_url
+      const zipBallUrl = data?.assets[0]?.browser_download_url;
       if (!zipBallUrl) {
         respond({
           statusCode: 404,
