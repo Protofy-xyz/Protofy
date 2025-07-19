@@ -2,7 +2,7 @@
   "name": "site",
   "main": "electron/launcher-main.js",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "workspaces": [
     "apps/adminpanel",
     "apps/api",
@@ -54,7 +54,10 @@
     "python": "node apps/python/run.js",
     "git-origin-setup": "node scripts/git-origin-setup.js",
     "app-dev": "electron . --dev",
-    "app-package": "electron-builder -c electron-builder.yml build",
+    "app-package-win": "electron-builder -c electron-builder.yml --win --x64",
+    "app-package-mac": "electron-builder -c electron-builder.yml --mac --arm64",
+    "app-package-linux": "electron-builder -c electron-builder.yml --linux --x64",
+    "app-package-all": "electron-builder -c electron-builder.yml --win --mac --linux",
     "download-binaries": "node scripts/download-bins.js",
     "clean-deps": "shx rm -rf node_modules"
   },
