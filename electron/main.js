@@ -9,6 +9,7 @@ const process = require('process');
 const fs = require('fs');
 
 const rootPath = path.join(__dirname, '..')
+console.log('📂 Root path:', rootPath);
 
 //get path to the local Node.js binary
 let nodePath = os.platform() === 'win32' ? path.join(rootPath, 'bin/node.exe') : path.join(rootPath, 'bin/node') 
