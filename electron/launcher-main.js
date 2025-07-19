@@ -144,15 +144,9 @@ app.whenReady().then(async () => {
       //extract the zip file with adm-zip
       const AdmZip = require('adm-zip');
       const zip = new AdmZip(zipFilePath);
-      const extractPath = path.join(PROJECTS_DIR);
-      zip.extractAllTo(extractPath, true);
-      console.log('Project extracted to:', extractPath);
-      //rename the extracted folder to the project name
-      const extractedFolderName = zip.getEntries()[0].entryName.split('/')[0];
-      const extractedFolderPath = path.join(extractPath, extractedFolderName);
       const projectFolderPath = path.join(PROJECTS_DIR, projectName);
-      fs.renameSync(extractedFolderPath, projectFolderPath);
-      console.log('Project folder renamed to:', projectFolderPath);
+      zip.extractAllTo(projectFolderPath, true);
+      console.log('Project extracted to:', projectFolderPath);
       //remove the zip file
       fs.unlinkSync(zipFilePath);
       console.log('Zip file removed:', zipFilePath);
