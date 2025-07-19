@@ -118,7 +118,7 @@ app.whenReady().then(async () => {
       const response = await fetch(url)
       const data = await response.json()
       const zipBallUrl = data?.zipball_url
-      if(!zipBallUrl) {
+      if (!zipBallUrl) {
         respond({
           statusCode: 404,
           data: Buffer.from('Release not found')
@@ -199,6 +199,33 @@ app.whenReady().then(async () => {
         });
       }
       return;
+    } else if (
+      request.method === 'GET' &&
+      /^\/api\/v1\/projects\/[^\/]+\/run$/.test(pathname)
+    ) {
+      const match = pathname.match(/^\/api\/v1\/projects\/([^\/]+)\/run$/);
+      const projectName = match?.[1];
+
+      //read project to get version
+      const projects = readProjects();
+      const project = projects.find(p => p.name === projectName);
+      if (!project) {
+        respond({
+          statusCode: 404,
+          data: Buffer.from('Project not found')
+        });
+        return;
+      }
+
+
+      const projectFolderPath = path.join(PROJECTS_DIR, projectName);
+      require(projectFolderPath+'/electron/main.js');
+      //reply to the renderer process
+      respond({
+        mimeType: 'application/json',
+        data: Buffer.from(JSON.stringify({ success: true, message: 'done' }))
+      });
+
     }
     respond({ statusCode: 404, data: Buffer.from('not found') });
   });
@@ -229,7 +256,7 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  app.quit();
 });
 
 app.on('activate', () => {

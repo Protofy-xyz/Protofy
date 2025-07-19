@@ -75,7 +75,10 @@ function CardElement({ element, width, onDelete, onDownload }) {
 
         </Paragraph>
         {element.status == 'downloaded' && <XStack>
-          <InteractiveIcon size={20} IconColor="var(--color)" Icon={Play} />
+          <InteractiveIcon size={20} IconColor="var(--color)" Icon={Play} onPress={async () => {
+            const url = 'app://localhost/api/v1/projects/' + element.name + '/run'
+            const result = await fetch(url)
+          }} />
         </XStack>}
 
         {element.status == 'pending' && <XStack>

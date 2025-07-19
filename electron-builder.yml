@@ -23,16 +23,13 @@ linux:
     - target: dir
       arch: x64
   icon: "apps/adminpanel/public/favicon.ico"
-asar: false
 files:
   - electron/**
-  - "!**/node_modules"
-  - "!**/node_modules/**"
-  - "!node_modules"
-  - "!node_modules/**"
+  - node_modules/adm-zip/**
+  - node_modules/tar/**
+  - package.json
   - "!**/*.log"
   - "!.git"
   - "!.gitignore"
 buildDependenciesFromSource: false
 npmRebuild: false
-afterPack: ./scripts/afterPack.js
