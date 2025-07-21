@@ -48,7 +48,7 @@ export const ItemMenu = ({ type, sourceUrl = '', enableAddToInitialData = false,
             <Popover.Trigger>
                 <InteractiveIcon id={`more-btn-${sourceUrl.split("/").slice(-1)}`} Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} ml={"$3"}></InteractiveIcon>
             </Popover.Trigger>
-            <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" bc={"$color1"} >
+            <Popover.Content padding={0} space={0} left={"$7"} top={"$2"} bw={1} boc="$borderColor" br="$4" bc={"$color1"} >
                 <Tinted>
                     <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
                         <YStack>

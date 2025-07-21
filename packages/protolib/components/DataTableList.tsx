@@ -112,7 +112,7 @@ export const DataTableList = ({
                     <Theme reset>
                         <XStack>
                             <Stack mt={"$2"} ml="$3" o={0.8}>
-                                <Checkbox focusStyle={{ outlineWidth: 0 }} checked={selected.length > 1} onPress={(e) => {
+                                <Checkbox focusStyle={{ outlineWidth: 0 }} br="$2" checked={selected.length > 1} onPress={(e) => {
                                     if (selected.length) {
                                         setSelected([])
                                     } else {
@@ -142,6 +142,7 @@ export const DataTableList = ({
                             <Checkbox
                                 id={`select-checkbox-${model.load(row).getId()}`}
                                 focusStyle={{ outlineWidth: 0 }}
+                                br="$2"
                                 onPress={() => {
                                     const getCurrentId = (item) => model.load(item).getId();
                                     const currentId = getCurrentId(row);

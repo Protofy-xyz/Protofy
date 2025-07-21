@@ -823,7 +823,7 @@ const DataViewInternal = forwardRef(({
                                         }}
                                     />
                                 </Tinted>}
-                                {!disableViewSelector && <ButtonGroup marginLeft="$3" boc="$gray5">
+                                {!disableViewSelector && <ButtonGroup marginLeft="$3" boc="$gray5" br="$4">
                                     {
                                         tableViews.map((v, index) => <ActiveGroupButton id={'tableView-' + v.name} key={index} onSetActive={() => push('view', v.name)} activeId={index}>
                                             {React.createElement(v.icon, { size: "$1", strokeWidth: 1 })}
