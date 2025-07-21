@@ -8,7 +8,8 @@ import {
     LayoutDashboard,
     Zap,
     HelpingHand,
-    Blocks
+    Blocks,
+    Palette
 } from '@tamagui/lucide-icons'
 import { MonitorCog as RawMonitorCog } from 'lucide-react'
 import { styled } from 'tamagui'
@@ -43,7 +44,8 @@ export default ({ boards, objects }) => {
         { "name": "Services", "icon": HelpingHand, "href": "/workspace/services" },
         { "name": "Databases", "icon": Database, href: "/workspace/databases" },
         { "name": "Files", "icon": "folder", "href": "/workspace/files?path=/", "path": "" },
-        { "name": "Settings", "icon": Cog, "href": "/workspace/settings" }
+        { "name": "Settings", "icon": Cog, "href": "/workspace/settings" },
+        { "name": "Themes", "icon": Palette, "href": "/workspace/themes" }
     ]
 
     const objectsMenu = objectsWithPage.length ? objectsWithPage.map((obj) => {

@@ -125,7 +125,7 @@ export default {
       return (<AdminPage title="Themes" pageSession={pageSession}>
         <DataView
           enableAddToInitialData
-          disableViews={["grid"]}
+          disableViews={["raw", "grid"]}
           defaultView={'list'}
           sourceUrl={sourceUrl}
           initialItems={initialItems}
