@@ -32,7 +32,7 @@ export const getFieldPreview = (key, row, def, plain?) => {
         </XStack> : ''
     }
 
-    return <Text>{row[key]}</Text>
+    return <Text fos="$3">{row[key]}</Text>
 }
 
 type DataTableListState = {

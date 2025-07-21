@@ -42,7 +42,7 @@ export const useActionBar = (actionBar?, onActionBarEvent?) => {
     zi={99999}
     b={currentBar.visible === false ? -200 : 16}
     gap="$3"
-    br="$5"
+    br="var(--radius-5)"
     enterStyle={{ b: -200 }}
   >
     {

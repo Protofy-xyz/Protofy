@@ -31,7 +31,7 @@ export const LineChart: React.FC<LineChartProps> = ({
     dataKey,
     nameKey,
     colors,
-    color = '#8884d8',
+    color = 'var(--color8)',
     tooltipFormatter = (value) => `${value}`,
     isAnimationActive = false,
     aspect = 1,

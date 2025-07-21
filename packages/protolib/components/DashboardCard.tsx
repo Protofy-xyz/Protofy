@@ -65,7 +65,7 @@ export const DashboardCard = ({
                     onHoverIn={() => setHovered(true)}
                     onHoverOut={() => setHovered(false)}
                     key={id}
-                    borderRadius={10}
+                    borderRadius="var(--radius-6)"
                     backgroundColor={hideFrame?"transparent":"var(--bgPanel)"}
                     flex={1}
                     position="relative"
@@ -116,11 +116,11 @@ export const DashboardCard = ({
                             left={0}
                             right={0}
                             bottom={0}
-                            borderRadius={10}
+                            borderRadius={"var(--radius-6)"}
                             borderWidth={2}
                             borderStyle="dashed"
                             borderColor={
-                                status === 'error' ? "$red7" : '$colorTransparent'
+                                status === 'error' ? "var(--red7)" : 'transparent'
                             }
                             pointerEvents="none"
                             style={{ zIndex: 0 }}

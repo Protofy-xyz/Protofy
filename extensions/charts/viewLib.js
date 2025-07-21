@@ -1,2 +1,2 @@
-const chartColors = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AA00FF", "#FF007F", "#7B00FF", "#00FF7F", "#FF4500", "#4682B4"]
+const chartColors = ["var(--blue9)", "var(--orange9)", "var(--yellow9)", "var(--green9)", "var(--purple9)", "var(--pink9)", "var(--red9)"]
 
