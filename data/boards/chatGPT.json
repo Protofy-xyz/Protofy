@@ -1,6 +1,9 @@
 {
     "name": "chatGPT",
     "icon": "openai",
+    "settings": {
+        "backgroundImage": "/public/backgrounds/blue-gradient.png"
+    },
     "layouts": {
         "lg": [
             {
@@ -188,7 +191,7 @@
             "name": "Message response",
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
-            "rulesCode": "states?.chatGPT?.conversation?.chatResponse",
+            "rulesCode": "return ``",
             "type": "value"
         },
         {
@@ -223,7 +226,8 @@
             "rulesCode": "return `# 🧠 ChatGPT Interaction Board\r\n\r\nThis board lets you chat with ChatGPT using the OpenAI API.Follow these simple steps to get started:\r\n\r\n## 🔑 Step 1: Get Your API Key\r\n\r\n1. Go to[OpenAI's API Keys page](https://platform.openai.com/account/api-keys).\r\n2. Log in and click ** \"Create new secret key\" **.\r\n3. Copy and save your key securely — it won't be shown again.\r\n\r\n    > ⚠️ ** Keep it secret! ** Your API key is private and usage - based.\r\n\r\n## 🔑 Step 2: Set Your API Key\r\n\r\n1. Add your key on Key Setter card and click \"+\" to add. \r\n\r\n## 💬 Step 3: Chat with ChatGPT\r\n\r\n- Enter your message in the ** input box **.\r\n- Click the ** \"Send\" ** button to interact.\r\n- You’ll receive a response from ChatGPT below.\r\n\r\nStart chatting now and build your own AI assistant! 🚀\r\n`",
             "editorOptions": {
                 "defaultTab": "value"
-            }
+            },
+            "displayFrame": true
         }
     ],
     "autopilot": false,

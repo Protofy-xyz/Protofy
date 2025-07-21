@@ -8,6 +8,7 @@ export const CardSchema = Schema.object({
     name: z.string().id(),
     label: z.string().optional(),
     type: z.string(),
+    settings: z.any().optional(),
     description: z.string().optional(),
     rules: z.array(z.string()).optional(),
     params: z.record(z.string(), z.any()).optional(),

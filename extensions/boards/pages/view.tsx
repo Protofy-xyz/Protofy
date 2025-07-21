@@ -651,7 +651,7 @@ const Board = ({ board, icons }) => {
   );
 
   return (
-    <YStack flex={1} p="$6" backgroundImage={board.backgroundImage ? `url(${board.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
+    <YStack flex={1} p="$6" backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
 
