@@ -552,7 +552,7 @@ const DataViewInternal = forwardRef(({
     const realActiveView = activeViewIndex == -1 ? 0 : activeViewIndex
 
     return (<AsyncView atom={currentItems}>
-        <YStack ref={ref} height="100%" f={1}>
+        <YStack ref={ref} height="100%" f={1} p="$6">
             <ActiveGroup initialState={realActiveView}>
                 {
                     state.editFile && <FileWidget

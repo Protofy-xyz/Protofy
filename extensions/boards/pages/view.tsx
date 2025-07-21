@@ -652,7 +652,7 @@ const Board = ({ board, icons }) => {
 
 
   return (
-    <YStack flex={1}>
+    <YStack flex={1}  p="$6">
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
 

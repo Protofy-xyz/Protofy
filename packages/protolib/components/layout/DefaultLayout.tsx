@@ -75,7 +75,7 @@ export const DefaultLayout = React.forwardRef(({
         <Tinted><ToastArea /></Tinted>
         <XStack f={1}>
           {sideMenu}
-          <YStack f={1} p="$6">
+          <YStack f={1}>
             <YStack>
               {header}
             </YStack>

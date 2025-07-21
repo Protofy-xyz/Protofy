@@ -4,7 +4,7 @@ import { Center } from 'protolib/components/Center';
 import { SSR } from 'protolib/lib/SSR';
 import { AdminPage } from 'protolib/components/AdminPage';
 import dynamic from 'next/dynamic'
-import { Spinner } from '@my/ui'
+import { Spinner, YStack } from '@my/ui'
 import { useRouter } from 'next/router';
 
 const FileBrowser = dynamic<any>(() =>
@@ -19,7 +19,9 @@ function FilesPage({initialFilesState, pageSession}:any) {
 
   return (
       <AdminPage pageSession={pageSession} title={"Files"} >
-        <FileBrowser initialFilesState={initialFilesState} router={routeAdapter} />
+        <YStack f={1} p="$6">
+          <FileBrowser initialFilesState={initialFilesState} router={routeAdapter} />
+        </YStack>
       </AdminPage>
   )
 }

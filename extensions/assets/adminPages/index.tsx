@@ -46,68 +46,70 @@ function FilesPage({ initialFilesState, pageSession }: any) {
       title={"assets"}
       onActionBarEvent={onActionBarEvent}
     >
-      <FileBrowser
-        router={routeAdapter}
-        initialFilesState={initialFilesState}
-        explorer={{
-          i18n: {
-            locale: 'en',                     // idioma activo
-            messages: {
-              'chonky.fileList.nothingToShow': `You don't have any assets installed. Find new assets by clicking on “Go to the Store”.`,
+      <YStack f={1} p="$6">
+        <FileBrowser
+          router={routeAdapter}
+          initialFilesState={initialFilesState}
+          explorer={{
+            i18n: {
+              locale: 'en',                     // idioma activo
+              messages: {
+                'chonky.fileList.nothingToShow': `You don't have any assets installed. Find new assets by clicking on “Go to the Store”.`,
+              },
             },
-          },
-          disableNavBar: true,
-          getExtendedFileProps: f => ({
-            isDir: false,
-            name: f.name,
-            ext: "",
-            thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
-          }),
-          onFileAction: (data) => {
-            if (data.id == "mouse_click_file") {
-              return false
-            }
-            return true
-          },
-          extraActions: [
-            {
-              getComponent: (selected, path, setCustomAction) => {
-                if (selected.length) {
-                  return <Stack f={1}>
-                    <YStack f={1} pt="$3">
-                      {selected.map(a => <Text key={a}>· {a.name}</Text>)}
-                    </YStack>
-                    <Tinted>
-                      <Button onPress={() => onInstallAssets(selected, setCustomAction)}>
-                        {loading ? <Spinner /> : "Install"}
-                      </Button>
-                    </Tinted>
-                  </Stack>
-                }
-                return <></>
-              },
-              title: "Install Assets",
-              filter: (path, selected) => {
-                return selected.length > 0
-              },
-              size: {
-                width: 500,
-                height: 200
-              },
-              action: {
-                id: "intall-assets",
-                button: {
-                  name: "Install Assets",
-                  toolbar: true,
-                  // icon: ChonkyIconName.share
-                  // group: 'link'
-                }
+            disableNavBar: true,
+            getExtendedFileProps: f => ({
+              isDir: false,
+              name: f.name,
+              ext: "",
+              thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
+            }),
+            onFileAction: (data) => {
+              if (data.id == "mouse_click_file") {
+                return false
               }
+              return true
             },
-          ]
-        }}
+            extraActions: [
+              {
+                getComponent: (selected, path, setCustomAction) => {
+                  if (selected.length) {
+                    return <Stack f={1}>
+                      <YStack f={1} pt="$3">
+                        {selected.map(a => <Text key={a}>· {a.name}</Text>)}
+                      </YStack>
+                      <Tinted>
+                        <Button onPress={() => onInstallAssets(selected, setCustomAction)}>
+                          {loading ? <Spinner /> : "Install"}
+                        </Button>
+                      </Tinted>
+                    </Stack>
+                  }
+                  return <></>
+                },
+                title: "Install Assets",
+                filter: (path, selected) => {
+                  return selected.length > 0
+                },
+                size: {
+                  width: 500,
+                  height: 200
+                },
+                action: {
+                  id: "intall-assets",
+                  button: {
+                    name: "Install Assets",
+                    toolbar: true,
+                    // icon: ChonkyIconName.share
+                    // group: 'link'
+                  }
+                }
+              },
+            ]
+          }}
 
-      />
+        />
+      </YStack>
     </AdminPage>
   )
 }
