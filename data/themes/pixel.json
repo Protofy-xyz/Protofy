@@ -1,0 +1,145 @@
+{
+    "name": "pixel",
+    "config": {
+        "tokens": {
+            "radius": {
+                "0": 0,
+                "1": 0,
+                "2": 0,
+                "3": 0,
+                "4": 0,
+                "5": 0,
+                "6": 0,
+                "7": 0,
+                "8": 0,
+                "9": 0,
+                "10": 0
+            }
+        },
+        "fonts": {
+            "heading": {
+                "family": "Munro",
+                "size": {
+                    "1": 14,
+                    "2": 16,
+                    "3": 20,
+                    "4": 24,
+                    "5": 28,
+                    "6": 32
+                },
+                "lineHeight": {
+                    "1": 20,
+                    "2": 22,
+                    "3": 26,
+                    "4": 30,
+                    "5": 34,
+                    "6": 40
+                },
+                "weight": {
+                    "1": "400",
+                    "2": "700"
+                },
+                "letterSpacing": {
+                    "1": 0,
+                    "2": -0.5
+                }
+            },
+            "body": {
+                "family": "Munro",
+                "size": {
+                    "1": 12,
+                    "2": 14,
+                    "3": 16,
+                    "4": 18
+                },
+                "lineHeight": {
+                    "1": 18,
+                    "2": 20,
+                    "3": 22,
+                    "4": 24
+                },
+                "weight": {
+                    "1": "400",
+                    "2": "700"
+                },
+                "letterSpacing": {
+                    "1": 0,
+                    "2": -0.5
+                }
+            }
+        },
+        "themes": {
+            "light": {},
+            "dark": {},
+            "dark_gray": {
+                "color8": "#dddddd",
+                "bgPanel": "hsl(0, 0%, 17%)",
+                "bgContent": "hsl(15, 0%, 11%)"
+            },
+            "light_gray": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F8F8F8"
+            },
+            "dark_orange": {
+                "bgPanel": "hsl(20, 11.40%, 15.50%)",
+                "bgContent": "hsl(36, 31%, 10%)"
+            },
+            "light_orange": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_yellow": {
+                "color1": "#30302e",
+                "color2": "#3b372d",
+                "bgPanel": "#383A44",
+                "bgContent": "#2A2D36"
+            },
+            "light_yellow": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_green": {
+                "color8": "#FED139",
+                "color10": "#6BBFDA",
+                "bgPanel": "#231E37",
+                "bgContent": "#382E4E"
+            },
+            "light_green": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_blue": {
+                "bgPanel": "hsl(215, 28%, 17%)",
+                "bgContent": "hsl(221, 41%, 11%)"
+            },
+            "light_blue": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_purple": {
+                "bgPanel": "#353244",
+                "bgContent": "#292636"
+            },
+            "light_purple": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_pink": {
+                "bgPanel": "#252A47",
+                "bgContent": "#1D233D"
+            },
+            "light_pink": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            },
+            "dark_red": {
+                "bgPanel": "#000000",
+                "bgContent": "hsl(0, 6%, 8%)"
+            },
+            "light_red": {
+                "bgPanel": "#FFFFFF",
+                "bgContent": "#F3F4F6"
+            }
+        }
+    }
+}
