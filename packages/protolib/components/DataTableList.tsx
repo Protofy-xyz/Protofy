@@ -1,4 +1,4 @@
-import { Checkbox, Stack, Theme, XStack, Circle, Spacer, YStack } from "@my/ui"
+import { Checkbox, Stack, Theme, XStack, Circle, Spacer, YStack, Text } from "@my/ui"
 import { DataTable2 } from "./DataTable2";
 import { Tinted } from "./Tinted";
 import { CheckCheck, Check, Pencil } from '@tamagui/lucide-icons'
@@ -32,7 +32,7 @@ export const getFieldPreview = (key, row, def, plain?) => {
         </XStack> : ''
     }
 
-    return row[key]
+    return <Text>{row[key]}</Text>
 }
 
 type DataTableListState = {
