@@ -19,7 +19,7 @@ export const PanelLayout = ({ panelBgColor = undefined, menuContent, children, S
   return (
     <Layout
       header={<></>}
-      sideMenu={<SideMenu mt={appBarHeight} sideBarColor={_panelBgColor} style={{borderRadius: "0px 14px 14px 0px"}}>{menuContent}</SideMenu>}
+      sideMenu={<SideMenu mt={appBarHeight} sideBarColor={_panelBgColor} borderTopRightRadius={"$6"} borderBottomRightRadius={"$6"}>{menuContent}</SideMenu>}
       footer={
         null
         // <AppBar dettached={false} translucid={false} position="bottom">
