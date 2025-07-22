@@ -40,6 +40,15 @@ const FirstSlide = ({ selected, setSelected, options }) => {
     });
   }, [options, search, selectedGroups]);
 
+  const groupedOptions = useMemo(() => {
+    return filteredOptions.reduce((acc, opt) => {
+      const groupKey = opt.group ?? "__no_group__";
+      if (!acc[groupKey]) acc[groupKey] = [];
+      acc[groupKey].push(opt);
+      return acc;
+    }, {});
+  }, [filteredOptions]);
+
   return (
     <YStack>
       <Tinted>
@@ -61,7 +70,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
             onChangeText={setSearch}
           />
         </XStack>
-        <XStack gap="$2" mb="$4">
+        <XStack gap="$2" mb="$4" flexWrap="wrap">
           {groups.map((group) => {
             const isActive = selectedGroups.includes(group);
             return (
@@ -81,44 +90,58 @@ const FirstSlide = ({ selected, setSelected, options }) => {
           })}
         </XStack>
 
-        <ScrollView mah="800px" h="50vh">
-          <SelectGrid>
-            {filteredOptions.map((option) => (
+        <ScrollView mah="800px">
+          {Object.entries(groupedOptions).map(([group, options]) => (
+            <YStack key={group} mb="$3">
+              {group !== "__no_group__" && (
+                <>
+                  <Text fontSize="$5" fontWeight="600" mb="$2">{group}</Text>
+                  <YStack height="1px" bg="$gray6" mb="$3" />
+                </>
+              )}
 
-              <XStack
-                w={420}
-                key={option.id}
-                gap={"$2"}
-                p={"$2"}
-                cursor="pointer"
-                onPress={() => setSelected(option)}
-                borderRadius={"$3"}
-                ai="center"
-                bc={selected?.id === option.id ? "$color4" : "$gray3"}
-                bw={"1px"}
-                boc={selected?.id === option.id ? "$color7" : "$gray5"}
-                hoverStyle={{ bc: "$color4", boc: "$color7" }}
-              >
-                <YStack br={isAction(option) ? "$10" : "$2"} p={"$2"} bc={option?.defaults?.color ? option?.defaults?.color : isAction(option) ? "$yellow7" : "$blue7"} >
-                  {
-                    option?.defaults?.icon
-                      ? <img
-                        src={getIconUrl(option.defaults.icon)}
-                        width={20}
-                        height={20}
-                      />
-                      :
-                      isAction(option)
-                        ? <ArrowBigDownDash />
-                        : <Activity />
-                  }
-                </YStack>
-                <Text fow={selected?.id === option.id && "600"} >{option.name}</Text>
-              </XStack>
-            ))}
-          </SelectGrid>
+              <SelectGrid>
+                {options.map((option) => (
+                  <XStack
+                    w={420}
+                    key={option.id}
+                    gap={"$2"}
+                    p={"$2"}
+                    cursor="pointer"
+                    onPress={() => setSelected(option)}
+                    borderRadius={"$3"}
+                    ai="center"
+                    bc={selected?.id === option.id ? "$color4" : "$gray3"}
+                    bw={"1px"}
+                    boc={selected?.id === option.id ? "$color7" : "$gray5"}
+                    hoverStyle={{ bc: "$color4", boc: "$color7" }}
+                  >
+                    <YStack
+                      br={isAction(option) ? "$10" : "$2"}
+                      p={"$2"}
+                      bc={
+                        option?.defaults?.color
+                          ? option?.defaults?.color
+                          : isAction(option)
+                            ? "$yellow7"
+                            : "$blue7"
+                      }
+                    >
+                      {option?.defaults?.icon ? (
+                        <img src={getIconUrl(option.defaults.icon)} width={20} height={20} />
+                      ) : isAction(option) ? (
+                        <ArrowBigDownDash />
+                      ) : (
+                        <Activity />
+                      )}
+                    </YStack>
+                    <Text fow={selected?.id === option.id && "600"}>{option.name}</Text>
+                  </XStack>
+                ))}
+              </SelectGrid>
+            </YStack>
+          ))}
         </ScrollView>
-
         <Spacer marginBottom="$8" />
       </Tinted>
     </YStack>
