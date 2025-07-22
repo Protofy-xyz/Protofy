@@ -1165,12 +1165,12 @@ return card({
             icon: 'file-stack',
             width: 2,
             height: 12,
-            description: 'Display a queue of items',
+            description: 'Interactive queue of items',
             type: 'action',
             editorOptions: {
                 defaultTab: "value"
             },
-            html: "// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget(props) {\n    console.log('react widget: ', props.value)\n    return (\n        <Tinted>\n            <ViewList \n              items={props.value} \n              onClear={(items) => execute_action('queue', {action: 'clear'})}\n              onPush={(item) => execute_action('queue', {action: 'push', item})}\n              onDeleteItem={(item, index) => execute_action('queue', {action: 'remove', index})} \n            />\n        </Tinted>\n    );\n  }\n\n`, data.domId, data)\n",
+            html: "// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget(props) {\n    console.log('react widget: ', props.value)\n    return (\n        <Tinted>\n            <ViewList \n              items={props.value} \n              onClear={(items) => execute_action('${data.name}', {action: 'clear'})}\n              onPush={(item) => execute_action('${data.name}', {action: 'push', item})}\n              onDeleteItem={(item, index) => execute_action('${data.name}', {action: 'remove', index})} \n            />\n        </Tinted>\n    );\n  }\n\n`, data.domId, data)\n",
             displayResponse: true,
             rulesCode: "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.[name]) ? board?.[name] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.[name]) ? board[name] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.[name]) ? board?.[name] : []).concat([params.item]);\r\n}",
             params: {
