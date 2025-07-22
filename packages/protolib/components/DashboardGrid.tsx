@@ -5,7 +5,7 @@ import { Tinted } from './Tinted';
 const ResponsiveGridLayout = WidthProvider(Responsive);
     
 
-export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, padding = 10, backgroundColor, ...props }) => {
+export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, padding = 10, settings = {}, ...props }) => {
     return (
         <Tinted>
             <ResponsiveGridLayout
@@ -19,6 +19,7 @@ export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, pad
                 rowHeight={30}
                 draggableCancel=".no-drag"
                 style={{height: '100%', overflow: 'auto'}}
+                {...settings}
             >
                 {items.map((item) => (
                     <Stack flex={1} key={item.key}>{item.content}</Stack>

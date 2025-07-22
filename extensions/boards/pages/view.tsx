@@ -788,6 +788,7 @@ const Board = ({ board, icons }) => {
               />
               : <YStack f={1}><DashboardGrid
                 items={cards}
+                settings={board.settings}
                 layouts={boardRef.current.layouts}
                 onLayoutChange={(layout, layouts) => {
                   if (breakpointCancelRef.current == breakpointRef.current) {
