@@ -191,7 +191,7 @@
             "name": "Message response",
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
-            "rulesCode": "return ``",
+            "rulesCode": "return states?.chatGPT?.conversation?.chatResponse",
             "type": "value"
         },
         {
