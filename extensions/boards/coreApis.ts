@@ -584,7 +584,7 @@ export default async (app, context) => {
         const states = await context.state.getStateTree();
         let rulesCode = action.rulesCode.trim();
 
-        const wrapper = new AsyncFunction('states', 'board', 'userParams', 'params', 'token', 'API', `
+        const wrapper = new AsyncFunction('boardName', 'name','states', 'board', 'userParams', 'params', 'token', 'API', `
         ${getExecuteAction(await getActions(), boardId)}
         ${rulesCode}
     `);
@@ -592,7 +592,7 @@ export default async (app, context) => {
         try {
             let response = null;
             try {
-                response = await wrapper(states, states?.boards?.[boardId] ?? {}, params, params, token, API);
+                response = await wrapper(boardId, action_or_card_id, states, states?.boards?.[boardId] ?? {}, params, params, token, API);
             } catch (err) {
                 await generateEvent({
                     path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,
@@ -621,7 +621,7 @@ export default async (app, context) => {
             }
 
             const prevValue = await context.state.get({ group: 'boards', tag: boardId, name: action.name });
-            if (response !== prevValue) {
+            if (JSON.stringify(response) !== JSON.stringify(prevValue)) {
                 await context.state.set({ group: 'boards', tag: boardId, name: action.name, value: response, emitEvent: true });
                 Manager.update(`../../data/boards/${boardId}.js`, 'states', action.name, response);
             }
@@ -1165,14 +1165,14 @@ return card({
             icon: 'file-stack',
             width: 2,
             height: 12,
-            description: 'Display a queue of items',
+            description: 'Interactive queue of items',
             type: 'action',
             editorOptions: {
                 defaultTab: "value"
             },
-            html: "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget() {\n    return (\n        <Tinted>\n            {/* you can use data.value here to access the value */}\n            <ViewList items={data.value} onClear={(items) => execute_action('queue', {action: 'clear'})} onDeleteItem={(item, index) => execute_action('queue', {action: 'remove', index})} />\n\n        </Tinted>\n    );\n  }\n\n`, data.domId)\n",
+            html: "// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget(props) {\n    console.log('react widget: ', props.value)\n    return (\n        <Tinted>\n            <ViewList \n              items={props.value} \n              onClear={(items) => execute_action('${data.name}', {action: 'clear'})}\n              onPush={(item) => execute_action('${data.name}', {action: 'push', item})}\n              onDeleteItem={(item, index) => execute_action('${data.name}', {action: 'remove', index})} \n            />\n        </Tinted>\n    );\n  }\n\n`, data.domId, data)\n",
             displayResponse: true,
-            rulesCode: "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.['queue']) ? board['queue'] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.['queue']) ? board?.['queue'] : []).concat([params.item]);\r\n}",
+            rulesCode: "if (params.action == 'reset') {\r\n    return [];\r\n} else if (params.action == 'pop') {\r\n    return (Array.isArray(board?.[name]) ? board?.[name] : []).slice(1);\r\n} else if (params.action == 'remove') {\r\n    const queue = Array.isArray(board?.[name]) ? board[name] : [];\r\n    const index = parseInt(params.index, 10);\r\n    return queue.slice(0, index).concat(queue.slice(index + 1));\r\n} else if(params.action == 'clear') {\r\n    return []\r\n} else {\r\n    return (Array.isArray(board?.[name]) ? board?.[name] : []).concat([params.item]);\r\n}",
             params: {
                 item: "",
                 action: "action to perform in the queue: push, pop, clear"
