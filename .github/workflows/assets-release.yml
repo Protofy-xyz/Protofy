@@ -1,0 +1,53 @@
+name: Release Assets
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Ej: v1.0.0, v2.3.1
+
+jobs:
+  package-assets:
+    if: github.repository != 'Protofy.xyz/Vento'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for assets-release.json
+        id: check_assets
+        run: |
+          if [ -f "assets-release.json" ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+          else
+            echo "⚠️ No assets-release.json found. Skipping zip creation."
+            echo "found=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Install zip and jq
+        run: sudo apt-get update && sudo apt-get install -y zip jq
+
+      - name: Create ZIPs for each asset package
+        if: steps.check_assets.outputs.found == 'true'
+        run: |
+          mkdir -p dist
+          TAG_NAME=${{ github.ref_name }}
+
+          # Recorre cada objeto del array del JSON
+          jq -c '.[]' assets-release.json | while read -r item; do
+            NAME=$(echo "$item" | jq -r '.name')
+            FILES=$(echo "$item" | jq -r '.files[]')
+
+            echo "Empaquetando $NAME-$TAG_NAME.zip con los archivos:"
+            echo "$FILES"
+
+            zip_name="dist/${NAME}-${TAG_NAME}.zip"
+            zip "$zip_name" $FILES
+          done
+
+      - name: Upload all ZIPs to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
