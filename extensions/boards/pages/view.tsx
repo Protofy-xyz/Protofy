@@ -29,6 +29,7 @@ import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext
 import { isElectron } from 'protolib/lib/isElectron'
 import { useAtom } from 'jotai'
 import { AppState } from 'protolib/components/AdminPanel'
+import { BoardSettingsEditor } from '../components/BoardSettingsEditor'
 
 class ValidationError extends Error {
   errors: string[];
@@ -301,6 +302,8 @@ const Board = ({ board, icons }) => {
     rulesOpened,
     setAddOpened,
     setRulesOpened,
+    setDialogOpen,
+    dialogOpen
   } = useBoardControls();
 
   const breakpointCancelRef = useRef(null) as any
@@ -478,14 +481,7 @@ const Board = ({ board, icons }) => {
 
   const onEditBoard = async () => {
     try {
-      const newBoard = JSON.parse(boardCode)
-      const boardRes = await API.post(`/api/core/v1/boards/${board.name}`, newBoard)
-      if (!boardRes.isError) {
-        boardRef.current = newBoard
-        setItems(newBoard.cards)
-        push('json', 'false')
-        removeReplace('json')
-      }
+      await API.post(`/api/core/v1/boards/${board.name}`, boardRef.current)
     } catch (err) {
       alert('Error editing board')
     }
@@ -654,6 +650,15 @@ const Board = ({ board, icons }) => {
     <YStack flex={1} p="$6" backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
+      <BoardSettingsEditor 
+        settings={board.settings}
+        open={dialogOpen == "settings"}
+        setOpen={v => setDialogOpen(v ? "settings" : "")}
+        onSave={sttngs => {
+          boardRef.current.settings = sttngs
+          onEditBoard()
+        }}
+      />
 
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
@@ -768,10 +773,6 @@ const Board = ({ board, icons }) => {
         </Dialog>
       </Theme>
 
-
-
-
-
       <XStack f={1}>
         <YStack f={1}>
           {
@@ -864,7 +865,8 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     toggleJson,
     saveJson,
     toggleAutopilot,
-    openAdd
+    openAdd,
+    setDialogOpen
   } = useBoardControls();
   const [appState, setAppState] = useAtom(AppState)
 
@@ -883,6 +885,9 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     }
     if (event.type === 'open-add') {
       openAdd();
+    }
+    if (event.type === 'board-settings') {
+      setDialogOpen("settings");
     }
   }
 

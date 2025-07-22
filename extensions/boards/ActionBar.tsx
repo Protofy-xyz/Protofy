@@ -1,4 +1,4 @@
-import { X, Save, Plus, Pause, Play, ClipboardList, Activity } from 'lucide-react';
+import { X, Save, Plus, Pause, Play, ClipboardList, Activity, Cog, Settings, Settings2, LayoutDashboard } from 'lucide-react';
 import { Tinted } from 'protolib/components/Tinted';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
@@ -18,6 +18,12 @@ const getActionBar = (generateEvent) => {
       </Tinted>
     ]
     : [
+      <>
+        <Tinted>
+          <ActionBarButton Icon={LayoutDashboard} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "board-settings" })} />
+        </Tinted>
+        <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
+      </>,
       <Tinted>
         <ActionBarButton Icon={Plus} onPress={() => generateEvent({ type: "open-add" })} />
       </Tinted>,
