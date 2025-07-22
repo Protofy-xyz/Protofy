@@ -479,10 +479,14 @@ window.WidgetWrapper = window.WidgetWrapper || (({ children }) =>
 );
 
 window.updateReactCardProps = (uuid, newProps) => {
+    console.log('Updating React card props for:', uuid, newProps);
     const root = window._reactWidgets?.[uuid];
     const Component = window._reactWidgetComponents?.[uuid];
-    if (!root || !Component) return;
-
+    if (!root || !Component) {
+        console.warn('No React root or component found for:', uuid);
+        return;
+    }
+    
     const element = React.createElement(
         window.WidgetWrapper,
         null,
