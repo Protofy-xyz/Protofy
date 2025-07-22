@@ -64,7 +64,7 @@ function Widget() {
                     }
 
                 }} hideInterface={true} ref={canvasRef} hideGridY={true} hideGridX={true} backgroundColor='var(--bgPanel)' className="no-drag" style={{ width: "100%", height: "100%" }} brushRadius={2} lazyRadius={6} brushColor={color} />
-                <div style={{ position: "absolute", top: '10px', right: '10px', opacity: opacity, transition: 'opacity 0.3s ease-in-out' }}>
+                <div style={{ position: "absolute", top: '30px', right: '10px', opacity: opacity, transition: 'opacity 0.3s ease-in-out' }}>
                     <InteractiveIcon onPress={undo} Icon="undo" IconColor='var(--color)' size={24} style={{  }} />
                     <InteractiveIcon onPress={clear} Icon="circle-x" IconColor='var(--color)' size={24} style={{ marginBottom: "10px" }} />
                 </div>

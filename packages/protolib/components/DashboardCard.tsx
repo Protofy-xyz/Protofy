@@ -66,7 +66,7 @@ export const DashboardCard = ({
                     onHoverOut={() => setHovered(false)}
                     key={id}
                     borderRadius="var(--radius-6)"
-                    backgroundColor={hideFrame?"transparent":"var(--bgPanel)"}
+                    backgroundColor={hideFrame ? "transparent" : "var(--bgPanel)"}
                     flex={1}
                     position="relative"
                     {...containerProps}
@@ -127,44 +127,42 @@ export const DashboardCard = ({
                         />
                     )}
 
-                    {(title || cardActions) && (
+                    {(title && !hideTitle) && (
                         <XStack
                             w="100%"
                             btrr={9}
                             btlr={9}
-                            mt={hideTitle ? 0 : 10}
+                            mt={"$3"}
                             h={20}
                             ai="center"
                             zIndex={1}
                             {...titleProps}
                         >
-                            {title && !hideTitle ? (
-                                <Paragraph
-                                    flex={1}
-                                    fow="500"
-                                    textOverflow={"ellipsis"}
-                                    textAlign="center"
-                                    overflow="hidden"
-                                    whiteSpace={"nowrap"}
-                                    fos={"$4"}
-                                >
-                                    {title}
-                                </Paragraph>
-                            ) : null}
-                            <XStack
-                                position="absolute"
-                                mt={hideTitle ? 15 : 0}
-                                right={0}
-                                className="no-drag"
-                                mr="$3.5"
-                                opacity={hovered ? 0.75 : 0}
-                                pressStyle={{ opacity: 0.9 }}
+                            <Paragraph
+                                flex={1}
+                                fow="500"
+                                textOverflow={"ellipsis"}
+                                textAlign="center"
+                                overflow="hidden"
+                                whiteSpace={"nowrap"}
+                                fos={"$4"}
                             >
-                                {cardActions}
-                            </XStack>
+                                {title}
+                            </Paragraph>
                         </XStack>
                     )}
-
+                    {cardActions && <XStack
+                        position="absolute"
+                        right={0}
+                        className="no-drag"
+                        mr="$3.5"
+                        opacity={hovered ? 0.75 : 0}
+                        pressStyle={{ opacity: 0.9 }}
+                        zi={999}
+                    >
+                        {cardActions}
+                    </XStack>
+                    }
                     <YStack
                         flex={1}
                         style={{ overflowY: 'auto', maxHeight: '100%', zIndex: 1 }}
