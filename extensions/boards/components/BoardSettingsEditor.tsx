@@ -42,13 +42,9 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
         if (cleaned.compactType === "default" || !cleaned.compactType) {
             delete cleaned.compactType
         }
-        if (cleaned.allowOverlap) {
-            if (cleaned.allowOverlap === "yes") {
-                cleaned.allowOverlap = true
-            } else if (cleaned.allowOverlap === "no") {
-                cleaned.allowOverlap = false
-            } else {
-                delete cleaned.compactType
+        if (Object.keys(cleaned).includes("allowOverlap")) {
+            if ((cleaned.allowOverlap != true && cleaned.allowOverlap != false)) {
+                delete cleaned.allowOverlap
             }
         }
         return cleaned
@@ -112,8 +108,8 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
                         <SelectList
                             triggerProps={{ backgroundColor: "$gray3", borderWidth: 0 }}
                             title={"Overlap"}
-                            value={currentSettings?.allowOverlap || "default"}
-                            elements={[{value: "default", caption: "default"}, {value: "yes", caption: "yes"}, {value: "no", caption: "no"}]}
+                            value={currentSettings?.allowOverlap == true ? "yes" : currentSettings?.allowOverlap == false ? "no" : "default"}
+                            elements={[{value: "default", caption: "default"}, {value: true, caption: "yes"}, {value: false, caption: "no"}]}
                             setValue={(value) => setCurrentSettings({ ...currentSettings, allowOverlap: value })}
                         />
                     </YStack>
