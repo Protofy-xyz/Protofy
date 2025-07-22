@@ -17,6 +17,7 @@ import { API } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
 import { Spinner } from '@my/ui' 
 import { ViewList } from 'protolib/components/ViewList';
+import { ViewObject } from 'protolib/components/ViewObject';
 import { JSONView } from 'protolib/components/JSONView';
 import { ProtoThemeProvider } from 'protolib/components/ProtoThemeProvider';
 import { CameraPreview } from 'protolib/components/vision/CameraPreview';
@@ -41,6 +42,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(FileBrowser, 'FileBrowser');
     TransferComponent(Spinner, 'Spinner');
     TransferComponent(ViewList, 'ViewList');
+    TransferComponent(ViewObject, 'ViewObject');
     TransferComponent(JSONView, 'JSONView');
     TransferComponent(ProtoThemeProvider, 'ProtoThemeProvider');
     TransferComponent(CameraPreview, 'CameraPreview');
