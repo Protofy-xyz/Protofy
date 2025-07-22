@@ -7,6 +7,7 @@ on:
 
 jobs:
   release:
+    if: github.repository == 'Protofy.xyz/Vento'
     runs-on: ubuntu-latest
 
     steps:
