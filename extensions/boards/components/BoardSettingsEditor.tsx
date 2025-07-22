@@ -108,26 +108,26 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
                 </XStack>
                 <XStack alignItems="center">
                     <ColumnTitle>Overlap</ColumnTitle>
-                    <YStack>
+                    <YStack w={127}>
                         <SelectList
                             triggerProps={{ backgroundColor: "$gray3", borderWidth: 0 }}
                             title={"Overlap"}
                             value={currentSettings?.allowOverlap || "default"}
-                            elements={["default", "yes", "no"]}
-                            onValueChange={(value) => setCurrentSettings({ ...currentSettings, compactType: value })}
+                            elements={[{value: "default", caption: "default"}, {value: "yes", caption: "yes"}, {value: "no", caption: "no"}]}
+                            setValue={(value) => setCurrentSettings({ ...currentSettings, allowOverlap: value })}
                         />
                     </YStack>
                 </XStack>
                 <XStack alignItems="center">
                     <ColumnTitle>{"Compact type"}</ColumnTitle>
-                    <YStack>
+                    <YStack  w={127}>
                         <SelectList
                             triggerProps={{ backgroundColor: "$gray3", borderWidth: 0 }}
                             title={"Compact Type"}
                             value={currentSettings?.compactType || "default"}
                             placeholder="Select compact type"
-                            elements={["default", "vertical", "horizontal"]}
-                            onValueChange={(value) => setCurrentSettings({ ...currentSettings, compactType: value === "default" ? null : value })}
+                            elements={[{value: "default", caption: "default"}, {value: "vertical", caption: "vertical"}, {value: "horizontal", caption: "horizontal"}]}
+                            setValue={(value) => setCurrentSettings({ ...currentSettings, compactType: value })}
                         />
                     </YStack>
                 </XStack>
