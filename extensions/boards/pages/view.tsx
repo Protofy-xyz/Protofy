@@ -104,7 +104,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy, onDetails
   return <Tinted>
     <XStack pt={"$2"}>
       {data?.sourceFile && <CardIcon Icon={Cable} onPress={onEditCode} />}
-      <CardIcon Icon={Settings} onPress={onEdit} />
+
       <Popover onOpenChange={setMenuOpened} open={menuOpened} allowFlip>
         <Popover.Trigger>
           <CardIcon Icon={MoreVertical} onPress={(e) => { e.stopPropagation(); setMenuOpened(true) }} />
@@ -113,6 +113,7 @@ const CardActions = ({ id, data, onEdit, onDelete, onEditCode, onCopy, onDetails
           <Tinted>
             <YStack alignItems="center" justifyContent="center" padding={"$3"} paddingVertical={"$3"} onPress={(e) => e.stopPropagation()}>
               <YStack>
+                <MenuButton text="Settings" Icon={Settings} onPress={() => onEdit()} />
                 <MenuButton text="Duplicate" Icon={Copy} onPress={() => onCopy()} />
                 <MenuButton text="Api Details" Icon={FileJson} onPress={() => onDetails()} />
                 <MenuButton text="Delete" Icon={Trash2} onPress={() => onDelete()} />
