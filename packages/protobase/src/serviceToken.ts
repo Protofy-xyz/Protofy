@@ -2,10 +2,10 @@ import { genToken } from './crypt';
 var serviceToken = ''
 
 export const getServiceToken = () => {
-    if(!serviceToken) {
-        serviceToken = genToken({id:'system', type: 'system', admin: true})
-    }
-    return serviceToken
+    // if(!serviceToken) {
+    return serviceToken = genToken({id:'system', type: 'system', admin: true})
+    // }
+    // return serviceToken
 }
 
 export const getDeviceToken = (deviceId,isAdmin:boolean=false) =>{
