@@ -1,4 +1,4 @@
-import { YStack, XStack, Spacer, ScrollView, useThemeName, Input, Text } from '@my/ui'
+import { YStack, XStack, Spacer, ScrollView, useThemeName, Input, Text, Button } from '@my/ui'
 import { AlertDialog } from '../../components/AlertDialog';
 import { Slides } from '../../components/Slides'
 import { useEffect, useMemo, useState } from 'react';
@@ -18,38 +18,73 @@ const FirstSlide = ({ selected, setSelected, options }) => {
   const themeName = useThemeName()
   const [search, setSearch] = useState('')
   const isAction = (option) => option.defaults?.type === 'action'
+  const [selectedGroups, setSelectedGroups] = useState([]);
+
+  // Extrae los grupos disponibles de las options
+  const groups = useMemo(() => {
+    return [...new Set(options.map(o => o.group).filter(Boolean))];
+  }, [options]);
+
+  const toggleGroup = (group) => {
+    setSelectedGroups((prev) =>
+      prev.includes(group) ? prev.filter(g => g !== group) : [...prev, group]
+    );
+  };
 
   const filteredOptions = useMemo(() => {
-    const lowerSearch = search.toLowerCase()
+    const lowerSearch = search.toLowerCase();
     return options.filter(opt => {
-      return opt.name?.toLowerCase().includes(lowerSearch)
-    })
-  }, [options, search])
+      const matchSearch = opt.name?.toLowerCase().includes(lowerSearch);
+      const matchGroup = selectedGroups.length === 0 || selectedGroups.includes(opt.group);
+      return matchSearch && matchGroup;
+    });
+  }, [options, search, selectedGroups]);
 
   return (
     <YStack>
-      <XStack pb={8} mt={-15} mb={15} position="relative">
-        <Search pos="absolute" left="$3" top={14} size={16} pointerEvents="none" />
-        <Input
-          bg="$gray3"
-          color="$gray12"
-          paddingLeft="$7"
-          bw={themeName === 'dark' ? 0 : 1}
-          h="47px"
-          boc={'$gray5'}
-          w="100%"
-          placeholder="search..."
-          placeholderTextColor="$gray9"
-          outlineColor="$gray8"
-          value={search}
-          onChangeText={setSearch}
-        />
-      </XStack>
+      <Tinted>
+        <XStack pb={8} mt={-15} mb={15} position="relative">
 
-      <ScrollView mah="800px" h="50vh">
-        <SelectGrid>
-          {filteredOptions.map((option) => (
-            <Tinted>
+          <Search pos="absolute" left="$3" top={14} size={16} pointerEvents="none" />
+          <Input
+            bg="$gray3"
+            color="$gray12"
+            paddingLeft="$7"
+            bw={themeName === 'dark' ? 0 : 1}
+            h="47px"
+            boc={'$gray5'}
+            w="100%"
+            placeholder="search..."
+            placeholderTextColor="$gray9"
+            outlineColor="$gray8"
+            value={search}
+            onChangeText={setSearch}
+          />
+        </XStack>
+        <XStack gap="$2" mb="$4">
+          {groups.map((group) => {
+            const isActive = selectedGroups.includes(group);
+            return (
+              <Button
+                key={group}
+                onPress={() => toggleGroup(group)}
+                style={{
+                  backgroundColor: isActive ? 'var(--color4)' : 'var(--gray3)',
+                  borderColor: isActive ? 'var(--color7)' : 'var(--gray5)',
+                  borderWidth: '1px',
+                  color: isActive ? 'white' : 'inherit',
+                }}
+              >
+                {group}
+              </Button>
+            );
+          })}
+        </XStack>
+
+        <ScrollView mah="800px" h="50vh">
+          <SelectGrid>
+            {filteredOptions.map((option) => (
+
               <XStack
                 w={420}
                 key={option.id}
@@ -80,12 +115,12 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                 </YStack>
                 <Text fow={selected?.id === option.id && "600"} >{option.name}</Text>
               </XStack>
-            </Tinted>
-          ))}
-        </SelectGrid>
-      </ScrollView>
+            ))}
+          </SelectGrid>
+        </ScrollView>
 
-      <Spacer marginBottom="$8" />
+        <Spacer marginBottom="$8" />
+      </Tinted>
     </YStack>
   )
 }
@@ -96,7 +131,7 @@ const iconTable = {
   'action': 'zap'
 }
 
-const SecondSlide = ({ card, board, selected, states, icons, actions, setCard,errors }) => {
+const SecondSlide = ({ card, board, selected, states, icons, actions, setCard, errors }) => {
   return <YStack mb={"$4"} f={1} mah="1200px" h="64vh">
 
     <ActionCardSettings board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
@@ -145,37 +180,39 @@ const extraCards = [
     id: 'value'
   }]
 
-function flattenTree(obj) {
+function flattenTree(obj, currentGroup = null) {
   let leaves = [];
 
-  function traverse(node) {
+  function traverse(node, group) {
     if (node && typeof node === 'object') {
       if (node.name) {
-        // Es una hoja, la añadimos al resultado
-        leaves.push(node);
+        leaves.push({ ...node, group: group }); // añade el grupo a cada hoja
       } else {
-        // Recorremos las propiedades del nodo
-        Object.values(node).forEach(traverse);
+        for (const [key, value] of Object.entries(node)) {
+          traverse(value, group ?? key); // el primer nivel se considera grupo
+        }
       }
     }
   }
 
-  traverse(obj);
+  traverse(obj, currentGroup);
   return leaves;
 }
+
 const useCards = (extraCards = []) => {
   const availableCards = useProtoStates({}, 'cards/#', 'cards')
+  console.log('availableCards', availableCards)
   return [...extraCards, ...flattenTree(availableCards)]
 }
 
-export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, onFinish, states, icons, actions, errors}) => {
+export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, onFinish, states, icons, actions, errors }) => {
   const cards = useCards(extraCards)
   const [selectedCard, setSelectedCard] = useState(cards[0])
   const [card, setCard] = useState()
 
   useEffect(() => {
     if (selectedCard) {
-      setCard({ key: "key", width: selectedCard.defaults.type === 'value'?1:2, height: selectedCard.defaults.type === 'value'? 4:6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type], ...selectedCard.defaults })
+      setCard({ key: "key", width: selectedCard.defaults.type === 'value' ? 1 : 2, height: selectedCard.defaults.type === 'value' ? 4 : 6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type], ...selectedCard.defaults })
     } else {
       setCard(undefined)
     }
@@ -197,10 +234,10 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
           styles={{ w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
           lastButtonCaption="Create"
           onFinish={async () => {
-            try{
+            try {
               await onFinish(card)
               setAddOpened(false)
-            }catch(e){
+            } catch (e) {
               console.error("Error creating card: ", e)
             }
           }}
