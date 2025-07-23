@@ -30,36 +30,36 @@
             "width": 2,
             "height": 6,
             "icon": "circle-stop",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
             "type": "action",
             "name": "stop",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
-            "buttonLabel": "Stop"
+            "buttonLabel": ""
         },
         {
             "key": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
             "width": 2,
             "height": 6,
             "icon": "play",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
             "type": "action",
             "name": "play",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
-            "buttonLabel": "Play"
+            "buttonLabel": ""
         },
         {
             "key": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
             "width": 2,
             "height": 6,
             "icon": "circle-pause",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
             "type": "action",
             "name": "pause",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
-            "buttonLabel": "Pause"
+            "buttonLabel": ""
         },
         {
             "key": "action_1751541935642",
@@ -87,9 +87,9 @@
     "layouts": {
         "lg": [
             {
-                "w": 2,
-                "h": 6,
-                "x": 10,
+                "w": 3,
+                "h": 4,
+                "x": 3,
                 "y": 0,
                 "i": "action_1751494497585",
                 "moved": false,
@@ -98,9 +98,9 @@
             },
             {
                 "w": 2,
-                "h": 6,
+                "h": 4,
                 "x": 0,
-                "y": 0,
+                "y": 6,
                 "i": "action_1751496924165",
                 "moved": false,
                 "static": false,
@@ -108,9 +108,9 @@
             },
             {
                 "w": 2,
-                "h": 6,
+                "h": 4,
                 "x": 2,
-                "y": 0,
+                "y": 6,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false,
@@ -118,18 +118,18 @@
             },
             {
                 "w": 2,
-                "h": 6,
+                "h": 4,
                 "x": 4,
-                "y": 0,
+                "y": 6,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 2,
-                "h": 6,
-                "x": 8,
+                "w": 3,
+                "h": 4,
+                "x": 0,
                 "y": 0,
                 "i": "action_1751541935642",
                 "moved": false,
@@ -139,9 +139,9 @@
         ],
         "md": [
             {
-                "w": 4,
-                "h": 6,
-                "x": 20,
+                "w": 6,
+                "h": 5,
+                "x": 6,
                 "y": 0,
                 "i": "action_1751494497585",
                 "moved": false,
@@ -149,39 +149,39 @@
                 "isResizable": true
             },
             {
-                "w": 5,
-                "h": 6,
+                "w": 4,
+                "h": 4,
                 "x": 0,
-                "y": 0,
+                "y": 7,
                 "i": "action_1751496924165",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 5,
-                "h": 6,
-                "x": 5,
-                "y": 0,
+                "w": 4,
+                "h": 4,
+                "x": 4,
+                "y": 7,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 5,
-                "h": 6,
-                "x": 10,
-                "y": 0,
+                "w": 4,
+                "h": 4,
+                "x": 8,
+                "y": 7,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 4,
-                "h": 6,
-                "x": 16,
+                "w": 6,
+                "h": 5,
+                "x": 0,
                 "y": 0,
                 "i": "action_1751541935642",
                 "moved": false,
@@ -191,44 +191,44 @@
         ],
         "sm": [
             {
-                "w": 2,
-                "h": 5,
-                "x": 0,
-                "y": 10,
+                "w": 1,
+                "h": 6,
+                "x": 1,
+                "y": 6,
                 "i": "action_1751494497585",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 4,
                 "x": 0,
-                "y": 0,
+                "y": 8,
                 "i": "action_1751496924165",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
-                "x": 1,
-                "y": 5,
+                "h": 4,
+                "x": 0,
+                "y": 0,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 4,
                 "x": 0,
-                "y": 5,
+                "y": 4,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 6,
                 "x": 1,
                 "y": 0,
                 "i": "action_1751541935642",
@@ -238,44 +238,44 @@
         ],
         "xs": [
             {
-                "w": 2,
-                "h": 5,
-                "x": 0,
-                "y": 10,
+                "w": 1,
+                "h": 6,
+                "x": 1,
+                "y": 6,
                 "i": "action_1751494497585",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 4,
                 "x": 0,
-                "y": 0,
+                "y": 8,
                 "i": "action_1751496924165",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
-                "x": 1,
-                "y": 5,
+                "h": 4,
+                "x": 0,
+                "y": 0,
                 "i": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 4,
                 "x": 0,
-                "y": 5,
+                "y": 4,
                 "i": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
                 "moved": false,
                 "static": false
             },
             {
                 "w": 1,
-                "h": 5,
+                "h": 6,
                 "x": 1,
                 "y": 0,
                 "i": "action_1751541935642",
@@ -283,5 +283,8 @@
                 "static": false
             }
         ]
+    },
+    "settings": {
+        "compactType": "horizontal"
     }
 }

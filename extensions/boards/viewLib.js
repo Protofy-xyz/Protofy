@@ -319,10 +319,72 @@ const youtubeEmbed = ({ url }) => {
   `;
 };
 
-const paramsForm = ({ data }) => {
+const paramsForm = ({ data, mode = "default" }) => {
     const allKeys = Object.keys(data.params || {});
+
+    const actionButtons = {
+        "default": `<button
+                id="${data.name}-run-button"
+                class="no-drag"
+                type="submit"
+                style="
+                    width: 100%;
+                    max-width: 100%;
+                    padding: 10px;
+                    text-align: center;
+                    margin-top: 15px;
+                    background-color: ${data.color};
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: filter 0.2s ease-in-out;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                "
+                onmouseover="this.style.filter='brightness(1.05)'"
+                onmouseout="this.style.filter='none'"
+                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
+                onmouseup="this.style.filter='brightness(1.05)'"
+            >
+                <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
+                    ${data.buttonLabel ? data.buttonLabel : "Run"}
+                </a>
+            </button>`,
+        "full": `<button
+                id="${data.name}-run-button"
+                class="no-drag"
+                type="submit"
+                style="
+                    width: 100%;
+                    max-width: 100%;
+                    flex: 1;
+                    display: flex;
+                    padding: 10px;
+                    text-align: center;
+                    background-color: ${data.color};
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    transition: filter 0.2s ease-in-out;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                "
+                onmouseover="this.style.filter='brightness(1.05)'"
+                onmouseout="this.style.filter='none'"
+                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
+                onmouseup="this.style.filter='brightness(1.05)'"
+            >
+                <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
+                    ${data.icon && data.displayIcon !== false ? icon({ name: data.icon, size: 48, color: data.color, style: 'margin-left: 5px;' }) : ''}
+                    ${data.buttonLabel}
+                </a>
+            </button>`
+    }
+
     return `<form
-            style="width: 100%; margin-top: 15px;"
+            style="width: 100%; height: 100%; display: flex; flex-direction: column; margin-top: ${mode == "full" ? "0px" : "15px"};"
             onsubmit='event.preventDefault();const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeAction(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
         >
             ${allKeys.map(key => {
@@ -384,41 +446,13 @@ const paramsForm = ({ data }) => {
                     `;
     }).join('')
         }
-
-            ${data.type == 'action' ? `<button
-                id="${data.name}-run-button"
-                class="no-drag"
-                type="submit"
-                style="
-                    width: 100%;
-                    max-width: 100%;
-                    padding: 10px;
-                    text-align: center;
-                    margin-top: 15px;
-                    background-color: ${data.color};
-                    border: none;
-                    border-radius: 8px;
-                    cursor: pointer;
-                    transition: filter 0.2s ease-in-out;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                "
-                onmouseover="this.style.filter='brightness(1.05)'"
-                onmouseout="this.style.filter='none'"
-                onmousedown="this.style.filter='saturate(1.2) contrast(1.2) brightness(0.85)'"
-                onmouseup="this.style.filter='brightness(1.05)'"
-            >
-                <a style="color: ${data.color};filter: brightness(0.5); font-weight: 400;">
-                    ${data.buttonLabel ? data.buttonLabel : "Run"}
-                </a>
-            </button>`: ``}
+            ${data.type == 'action' ? actionButtons[actionButtons[mode] ? mode : "default"] : ``}
         </form>`
 }
 
-const cardAction = ({ data, content }) => {
+const cardAction = ({ data, content, mode }) => {
     const value = data.value
-    let fullHeight = false;
+    let fullHeight = true;
     console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
     if (value !== undefined && typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
         fullHeight = true;
@@ -438,7 +472,7 @@ const cardAction = ({ data, content }) => {
         value: content ?? data.value ?? 'N/A'
     }) : ''}
 
-        ${data.displayButton !== false ? paramsForm({ data }) : ''}
+        ${data.displayButton !== false ? paramsForm({ data, mode }) : ''}
     </div>
     `;
 };
@@ -469,13 +503,13 @@ const cardValue = ({ value, style = '', id = null }) => {
 
 const SafeProvider = window.Provider || (({ children }) => children);
 window.WidgetWrapper = window.WidgetWrapper || (({ children }) =>
-  React.createElement(
-    SafeProvider,
-    { disableRootThemeClass: true },
-    React.createElement(ErrorBoundary, {
-      fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops')
-    }, children)
-  )
+    React.createElement(
+        SafeProvider,
+        { disableRootThemeClass: true },
+        React.createElement(ErrorBoundary, {
+            fallback: React.createElement('div', { style: { color: 'red' } }, 'Oops')
+        }, children)
+    )
 );
 
 window.updateReactCardProps = (uuid, newProps) => {
@@ -486,7 +520,7 @@ window.updateReactCardProps = (uuid, newProps) => {
         console.warn('No React root or component found for:', uuid);
         return;
     }
-    
+
     const element = React.createElement(
         window.WidgetWrapper,
         null,
