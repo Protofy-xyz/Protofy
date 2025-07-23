@@ -35,19 +35,21 @@
             "name": "stop",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
-            "buttonLabel": ""
+            "buttonLabel": "",
+            "buttonMode": "full"
         },
         {
             "key": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
             "width": 2,
             "height": 6,
             "icon": "play",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
+            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "play",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
-            "buttonLabel": ""
+            "buttonLabel": "",
+            "buttonMode": "full"
         },
         {
             "key": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
@@ -59,7 +61,8 @@
             "name": "pause",
             "displayResponse": false,
             "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
-            "buttonLabel": ""
+            "buttonLabel": "",
+            "buttonMode": "full"
         },
         {
             "key": "action_1751541935642",
