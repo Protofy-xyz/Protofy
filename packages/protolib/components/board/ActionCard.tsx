@@ -52,10 +52,10 @@ export const ParamsForm = ({ data, children }) => {
             <YStack w={"100%"} ai="center" jc="center" f={1}>
 
                 {children}
-                <YStack w={"100%"} ai="center" jc="center" mt={data.buttonMode !== "full" ? "$5": 0}>
+                <YStack w={"100%"} ai="center" jc="center" mt={data.buttonMode !== "full" ? "$5" : 0}>
                     {allKeys.map((key) => {
                         const cfg = data.configParams?.[key] || {};
-                        const { visible = true, defaultValue = "" } = cfg;
+                        const { visible = true, defaultValue = "", type = 'string' } = cfg;
                         const placeholder = data.params[key] ?? "";
 
                         if (!visible) {
@@ -81,7 +81,26 @@ export const ParamsForm = ({ data, children }) => {
                                 }}
                             >
                                 <Text ml="20px" mb="$2">{key}</Text>
-                                <input
+                                {type == 'text' && <textarea
+                                    className="no-drag"
+                                    name={key}
+                                    style={{
+                                        backgroundColor: "var(--gray1)",
+                                        flex: 1,
+                                        padding: "5px 10px",
+                                        border: "0.5px solid var(--gray7)",
+                                        borderRadius: "8px",
+                                        boxSizing: "border-box",
+                                        minWidth: "100px",
+                                        marginLeft: "10px",
+                                        marginRight: "10px",
+                                        resize: "none", // o "none" si no quieres que pueda cambiar el tamaño
+                                    }}
+                                    defaultValue={defaultValue}
+                                    placeholder={placeholder}
+                                    rows={12} // Número de filas iniciales
+                                />}
+                                {type !== 'text' && <input
                                     className="no-drag"
                                     type="text"
                                     name={key}
@@ -98,7 +117,7 @@ export const ParamsForm = ({ data, children }) => {
                                     }}
                                     defaultValue={defaultValue}
                                     placeholder={placeholder}
-                                />
+                                />}
                             </YStack>
                         );
                     })}
