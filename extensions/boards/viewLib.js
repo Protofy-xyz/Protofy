@@ -319,7 +319,7 @@ const youtubeEmbed = ({ url }) => {
   `;
 };
 
-const paramsForm = ({ data, mode = "default" }) => {
+const paramsForm = ({ data }) => {
     const allKeys = Object.keys(data.params || {});
 
     const actionButtons = {
@@ -384,7 +384,7 @@ const paramsForm = ({ data, mode = "default" }) => {
     }
 
     return `<form
-            style="width: 100%; height: 100%; display: flex; flex-direction: column; margin-top: ${mode == "full" ? "0px" : "15px"};"
+            style="width: 100%; height: 100%; display: flex; flex-direction: column; margin-top: ${data.buttonMode == "full" ? "0px" : "15px"};"
             onsubmit='event.preventDefault();const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeAction(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
         >
             ${allKeys.map(key => {
@@ -446,11 +446,11 @@ const paramsForm = ({ data, mode = "default" }) => {
                     `;
     }).join('')
         }
-            ${data.type == 'action' ? actionButtons[actionButtons[mode] ? mode : "default"] : ``}
+            ${data.type == 'action' ? actionButtons[actionButtons[data.buttonMode] ? data.buttonMode : "default"] : ``}
         </form>`
 }
 
-const cardAction = ({ data, content, mode }) => {
+const cardAction = ({ data, content }) => {
     const value = data.value
     let fullHeight = false;
     console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
@@ -461,7 +461,7 @@ const cardAction = ({ data, content, mode }) => {
      <div style="
         display: flex;
         width: 99%;
-        height: ${fullHeight || mode == "full" ? '100%' : 'auto'};
+        height: ${fullHeight || data.buttonMode == "full" ? '100%' : 'auto'};
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -472,7 +472,7 @@ const cardAction = ({ data, content, mode }) => {
         value: content ?? data.value ?? 'N/A'
     }) : ''}
 
-        ${data.displayButton !== false ? paramsForm({ data, mode }) : ''}
+        ${data.displayButton !== false ? paramsForm({ data }) : ''}
     </div>
     `;
 };
