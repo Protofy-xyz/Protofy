@@ -180,24 +180,25 @@ reactCard(\`
     const value = props.value;
     const fullHeight = value !== undefined && typeof value !== "string" && typeof value !== "number" && typeof value !== "boolean";
 
+    const content = <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? "20px" : "0px"} ai="center" jc="center" width="100%">
+        {props.icon && props.displayIcon !== false && (
+            <Icon name={props.icon} size={48} color={props.color}/>
+        )}
+        {props.displayResponse !== false && (
+            <CardValue value={value ?? "N/A"} />
+        )}
+    </YStack>
+
     return (
         <Tinted>
           <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
             <ActionCard data={props}>
-              <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? "20px" : "0px"} ai="center" jc="center" width="100%">
-                  {props.icon && props.displayIcon !== false && (
-                      <Icon name={props.icon} size={48} color={props.color}/>
-                  )}
-                  {props.displayResponse !== false && (
-                      <CardValue value={value ?? "N/A"} />
-                  )}
-              </YStack>
+              {props.displayButton !== false ? <ParamsForm data={props}>{content}</ParamsForm> : props.displayResponse !== false && content}
             </ActionCard>
           </ProtoThemeProvider>
         </Tinted>
     );
   }
-
 \`, data.domId, data)
 
 `

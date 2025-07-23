@@ -170,7 +170,7 @@ export const ParamsForm = ({ data, children }) => {
 export const ActionCard = ({ data, children }) => {
     return (
         <YStack height="100%" justifyContent="center" alignItems="center" className="no-drag">
-            {data.displayButton !== false ? <ParamsForm data={data}>{children}</ParamsForm> : data.displayResponse !== false && children}
+            {children}
         </YStack>
     );
 };
