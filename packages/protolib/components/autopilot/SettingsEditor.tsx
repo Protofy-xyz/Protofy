@@ -98,6 +98,7 @@ export const SettingsEditor = ({
                                     }
                                     setCardData({ ...newData })
                                 })}
+                                {renderCheckbox('Display icon', 'displayButtonIcon', cardData.displayButtonIcon === true)}
                             </YStack>
                         )}
                     </>

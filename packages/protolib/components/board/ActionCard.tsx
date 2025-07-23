@@ -167,14 +167,14 @@ export const ParamsForm = ({ data, children }) => {
                                     gap: "5px",
                                 }}
                             >
-                                {data.icon && data.displayIcon !== false && data.buttonMode === 'full' && (
+                                {data.icon && (data.displayButtonIcon || data.buttonMode === 'full') ? (
                                     <Icon
                                         name={data.icon}
-                                        size={48}
+                                        size={data.buttonMode === 'full' ? 48 : 24}
                                         color={data.color}
                                         style={{ marginLeft: "5px" }}
                                     />
-                                )}
+                                ):<></>}
                                 {loading ? "..." : data.buttonLabel || "Run"}
                             </span>
                         </button>
