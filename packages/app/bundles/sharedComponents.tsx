@@ -22,6 +22,8 @@ import { JSONView } from 'protolib/components/JSONView';
 import { ProtoThemeProvider } from 'protolib/components/ProtoThemeProvider';
 import { CameraPreview } from 'protolib/components/vision/CameraPreview';
 import { CameraCard } from 'protolib/components/vision/CameraCard';
+import { ActionCard, ParamsForm } from 'protolib/components/board/ActionCard';
+import { CardValue } from 'protolib/components/board/CardValue';
 
 export const transferExtensionComponents = () => {
     TransferComponent(UsersView, 'UsersView');
@@ -47,6 +49,9 @@ export const transferExtensionComponents = () => {
     TransferComponent(ProtoThemeProvider, 'ProtoThemeProvider');
     TransferComponent(CameraPreview, 'CameraPreview');
     TransferComponent(CameraCard, 'CameraCard');
+    TransferComponent(ActionCard, 'ActionCard');
+    TransferComponent(CardValue, 'CardValue');
+    TransferComponent(ParamsForm, 'ParamsForm');
 }
 
 

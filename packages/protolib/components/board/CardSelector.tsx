@@ -175,12 +175,19 @@ return card({
 `,
   action: `
 // data contains: data.icon, data.color, data.name, data.params
-return card({
-    content: \`
-        \${cardIcon({ data, size: '48' })}
-        \${cardAction({ data })}
-    \`
-});
+reactCard(\`
+  function Widget(props) {
+    return (
+        <Tinted>
+          <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
+            <ActionCard data={props} />
+          </ProtoThemeProvider>
+        </Tinted>
+    );
+  }
+
+\`, data.domId, data)
+
 `
 }
 
