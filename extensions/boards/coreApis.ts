@@ -562,7 +562,7 @@ export default async (app, context) => {
                 return Number(value);
             case 'boolean':
                 return value === 'true' || value === true;
-            case 'object':
+            case 'json':
                 try {
                     return JSON.parse(value);
                 } catch (e) {
@@ -576,7 +576,7 @@ export default async (app, context) => {
                 }
             case 'card':
                 return value; // Assuming card is a string identifier
-            case 'markdown':
+            case 'text':
                 return value; // Assuming markdown is a string
             default:
                 return value; // Default case, return as is
