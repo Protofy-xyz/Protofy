@@ -4,7 +4,7 @@ import { Slides } from '../../components/Slides'
 import { useEffect, useMemo, useState } from 'react';
 import { ActionCardSettings } from '../autopilot/ActionCardSettings';
 import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
-import { AlignLeft, Braces, Copy, Search, ArrowBigDownDash, Activity } from "@tamagui/lucide-icons";
+import { Search, ScanEye, Rocket } from "@tamagui/lucide-icons";
 import { Tinted } from '../Tinted';
 import { getIconUrl } from '../IconSelect';
 
@@ -130,9 +130,9 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                       {option?.defaults?.icon ? (
                         <img src={getIconUrl(option.defaults.icon)} width={20} height={20} />
                       ) : isAction(option) ? (
-                        <ArrowBigDownDash />
+                        <Rocket />
                       ) : (
-                        <Activity />
+                        <ScanEye />
                       )}
                     </YStack>
                     <Text fow={selected?.id === option.id && "600"}>{option.name}</Text>
@@ -191,7 +191,7 @@ const extraCards = [
       name: 'card',
       displayResponse: true
     },
-    name: 'Empty card',
+    name: 'Action card',
     id: 'action'
   }
   , {
@@ -199,7 +199,7 @@ const extraCards = [
       type: 'value',
       name: 'value'
     },
-    name: 'Display a value',
+    name: 'Observer card',
     id: 'value'
   }]
 
