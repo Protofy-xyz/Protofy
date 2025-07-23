@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CardValue } from "./CardValue";
 import { XStack, YStack, Text } from "@my/ui";
 
-const Icon = ({ name, size, color, style }) => {
+export const Icon = ({ name, size, color, style }) => {
     return (
         <div
             style={{
@@ -167,31 +167,10 @@ export const ParamsForm = ({ data, children }) => {
     );
 };
 
-export const ActionCard = ({ data }) => {
-    const value = data.value;
-    const fullHeight =
-        value !== undefined &&
-        typeof value !== "string" &&
-        typeof value !== "number" &&
-        typeof value !== "boolean";
-
-
-    const valueComp = <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? "$4" : "$0"} ai="center" jc="center" width="100%">
-        {data.icon && data.displayIcon !== false && (
-            <Icon
-                name={data.icon}
-                size={48}
-                color={data.color}
-            />
-        )}
-        {data.displayResponse !== false && (
-            <CardValue value={value ?? "N/A"} />
-        )}
-    </YStack>
+export const ActionCard = ({ data, children }) => {
     return (
         <YStack height="100%" justifyContent="center" alignItems="center" className="no-drag">
-
-            {data.displayButton !== false ? <ParamsForm data={data}>{valueComp}</ParamsForm> : data.displayResponse !== false && valueComp}
+            {data.displayButton !== false ? <ParamsForm data={data}>{children}</ParamsForm> : data.displayResponse !== false && children}
         </YStack>
     );
 };

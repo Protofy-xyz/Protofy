@@ -15,17 +15,19 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 import { API } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
-import { Spinner } from '@my/ui' 
+import { Spinner, XStack, YStack } from '@my/ui' 
 import { ViewList } from 'protolib/components/ViewList';
 import { ViewObject } from 'protolib/components/ViewObject';
 import { JSONView } from 'protolib/components/JSONView';
 import { ProtoThemeProvider } from 'protolib/components/ProtoThemeProvider';
 import { CameraPreview } from 'protolib/components/vision/CameraPreview';
 import { CameraCard } from 'protolib/components/vision/CameraCard';
-import { ActionCard, ParamsForm } from 'protolib/components/board/ActionCard';
+import { ActionCard, ParamsForm, Icon } from 'protolib/components/board/ActionCard';
 import { CardValue } from 'protolib/components/board/CardValue';
 
 export const transferExtensionComponents = () => {
+    TransferComponent(XStack, 'XStack');
+    TransferComponent(YStack, 'YStack');
     TransferComponent(UsersView, 'UsersView');
     TransferComponent(ServicesView, 'ServicesView');
     TransferComponent(PieChart, 'PieChart');
@@ -52,6 +54,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(ActionCard, 'ActionCard');
     TransferComponent(CardValue, 'CardValue');
     TransferComponent(ParamsForm, 'ParamsForm');
+    TransferComponent(Icon, 'Icon');
 }
 
 

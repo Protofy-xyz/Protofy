@@ -177,10 +177,22 @@ return card({
 // data contains: data.icon, data.color, data.name, data.params
 reactCard(\`
   function Widget(props) {
+    const value = props.value;
+    const fullHeight = value !== undefined && typeof value !== "string" && typeof value !== "number" && typeof value !== "boolean";
+
     return (
         <Tinted>
           <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
-            <ActionCard data={props} />
+            <ActionCard data={props}>
+              <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? "20px" : "0px"} ai="center" jc="center" width="100%">
+                  {props.icon && props.displayIcon !== false && (
+                      <Icon name={props.icon} size={48} color={props.color}/>
+                  )}
+                  {props.displayResponse !== false && (
+                      <CardValue value={value ?? "N/A"} />
+                  )}
+              </YStack>
+            </ActionCard>
           </ProtoThemeProvider>
         </Tinted>
     );
