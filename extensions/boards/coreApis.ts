@@ -597,11 +597,14 @@ export default async (app, context) => {
             return;
         }
 
+        
         //cast params to each param type
         for (const param in params) {
-            const type = action.configParams[param]?.type;
-            if (type) {
-                params[param] = castValueToType(params[param], type);
+            if(action.configParams && action.configParams[param]) {
+                const type = action.configParams[param]?.type;
+                if (type) {
+                    params[param] = castValueToType(params[param], type);
+                }
             }
         }
 
