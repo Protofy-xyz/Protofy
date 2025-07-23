@@ -452,7 +452,7 @@ const paramsForm = ({ data, mode = "default" }) => {
 
 const cardAction = ({ data, content, mode }) => {
     const value = data.value
-    let fullHeight = true;
+    let fullHeight = false;
     console.log('cardaction: ', data.value, data.name, typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean')
     if (value !== undefined && typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
         fullHeight = true;
@@ -461,7 +461,7 @@ const cardAction = ({ data, content, mode }) => {
      <div style="
         display: flex;
         width: 99%;
-        height: ${fullHeight ? '100%' : 'auto'};
+        height: ${fullHeight || mode == "full" ? '100%' : 'auto'};
         flex-direction: column;
         align-items: center;
         justify-content: center;
