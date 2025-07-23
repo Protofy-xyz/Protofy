@@ -20,14 +20,14 @@ export const SettingsEditor = ({
         setCardData({ ...cardData, [key]: checked })
     }
 
-    const renderCheckbox = (label: string, key: string) => (
+    const renderCheckbox = (label: string, key: string, checked?, onCheckedChange?) => (
         <XStack ai="center" gap="$2">
             <Checkbox
                 w="$2"
                 h="$2"
                 focusStyle={{ outlineWidth: 0 }}
-                checked={getChecked(key)}
-                onCheckedChange={handleCheckboxChange(key)}
+                checked={checked ?? getChecked(key)}
+                onCheckedChange={onCheckedChange ?? handleCheckboxChange(key)}
                 className="no-drag"
             >
                 <Checkbox.Indicator>
@@ -77,7 +77,7 @@ export const SettingsEditor = ({
                         {renderCheckbox('Display button', 'displayButton')}
 
                         {getChecked('displayButton') && (
-                            <XStack ai="center" ml="$6">
+                            <YStack ai="flex-start" ml="$6" ac="flex-start">
                                 <Input
                                     outlineColor="$colorTransparent"
                                     id="button-text-input"
@@ -89,7 +89,16 @@ export const SettingsEditor = ({
                                     }}
                                     className="no-drag"
                                 />
-                            </XStack>
+                                {renderCheckbox('Button Full', 'buttonMode', cardData.buttonMode === 'full', (checked: boolean) => {
+                                    let newData = { ...cardData }
+                                    if (checked) {
+                                        newData.buttonMode = 'full'
+                                    } else {
+                                        delete newData.buttonMode
+                                    }
+                                    setCardData({ ...newData })
+                                })}
+                            </YStack>
                         )}
                     </>
                 )}
