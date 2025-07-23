@@ -34,7 +34,8 @@
             "type": "action",
             "name": "stop",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
+            "buttonLabel": "Stop"
         },
         {
             "key": "action_1751496924165_vento_copy_93tzyi1mktzk5l5e3rzvd",
@@ -45,7 +46,8 @@
             "type": "action",
             "name": "play",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
+            "buttonLabel": "Play"
         },
         {
             "key": "action_1751496924165_vento_copy_ya70m91d1pqe88ir9evlew",
@@ -56,7 +58,8 @@
             "type": "action",
             "name": "pause",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})"
+            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
+            "buttonLabel": "Pause"
         },
         {
             "key": "action_1751541935642",
