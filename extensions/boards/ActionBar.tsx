@@ -20,7 +20,7 @@ const getActionBar = (generateEvent) => {
     : [
       <>
         <Tinted>
-          <ActionBarButton Icon={LayoutDashboard} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "board-settings" })} />
+          <ActionBarButton Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
         </Tinted>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
       </>,
