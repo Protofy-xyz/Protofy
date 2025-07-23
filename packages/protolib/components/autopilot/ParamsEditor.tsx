@@ -1,15 +1,16 @@
-import { YStack, XStack, Label, Button, Input, ScrollView } from '@my/ui'
+import { YStack, XStack, Label, Button, Input, ScrollView, Select } from '@my/ui'
 import { Eye, Trash } from '@tamagui/lucide-icons'
 import { useState, useEffect, useCallback } from 'react'
 import { InteractiveIcon } from '../InteractiveIcon'
 import { nanoid } from 'nanoid'
 import { useUpdateEffect } from 'usehooks-ts'
+import { SelectList } from '../SelectList'
 
 export const ParamsEditor = ({
   params = {},
   setParams,
   configParams = {},
-  setConfigParams = (x) => {},
+  setConfigParams = (x) => { },
   mode = 'action'
 }) => {
   const [rows, setRows] = useState(() => {
@@ -21,6 +22,7 @@ export const ParamsEditor = ({
       description: params[key] ?? '',
       visible: configParams[key]?.visible ?? true,
       defaultValue: configParams[key]?.defaultValue ?? '',
+      type: configParams[key]?.type ?? 'string',
     }))
   })
 
@@ -28,16 +30,16 @@ export const ParamsEditor = ({
     const newParams = {}
     const newConfigParams = {}
     console.log("rows", rows)
-    rows.forEach(({ paramKey, description, visible, defaultValue }) => {
+    rows.forEach(({ paramKey, description, visible, defaultValue, type }) => {
 
       if (!paramKey.trim()) return
 
       newParams[paramKey] = description
-      newConfigParams[paramKey] = { visible, defaultValue }
+      newConfigParams[paramKey] = { visible, defaultValue, type }
     })
     console.log("params", newParams)
     setParams(newParams)
-    if(mode == 'action') {
+    if (mode == 'action') {
       console.log("configParams", newConfigParams)
       setConfigParams(newConfigParams)
     }
@@ -52,6 +54,7 @@ export const ParamsEditor = ({
         description: '',
         visible: true,
         defaultValue: '',
+        type: 'string',
       },
     ])
   }, [])
@@ -95,6 +98,17 @@ export const ParamsEditor = ({
     )
   }, [])
 
+  const handleChangeType = useCallback((rowId, newType) => {
+    setRows((prev) =>
+      prev.map((row) => {
+        if (row.rowId !== rowId) return row
+        return { ...row, type: newType }
+      })
+    )
+  }, [])
+
+  const types = ["string", "number", "boolean", "object", "array", "card", "markdown"]
+
   return (
     <YStack flex={1} height="100%" borderRadius="$3" p="$3" backgroundColor="$gray3" overflow="hidden" >
       <XStack alignItems="center" justifyContent="space-between">
@@ -103,14 +117,16 @@ export const ParamsEditor = ({
       </XStack>
 
       <ScrollView mt="$3" flex={1}>
-        {rows.map(({ rowId, paramKey, description, visible, defaultValue }) => (
+        {rows.map(({ rowId, paramKey, description, visible, defaultValue, type }) => (
           <XStack key={rowId} space="$2" alignItems="center" padding="$2" borderRadius="$2" >
             {mode == 'action' && <InteractiveIcon Icon={Eye} IconColor={visible ? 'var(--color10)' : 'var(--gray9)'} onPress={() => handleToggleVisible(rowId)} />}
 
-            <Input placeholder={mode == 'action' ? "Param Key": "name"} flex={2} value={paramKey} onChange={(e) => handleChangeParamKey(rowId, e.target.value)} />
+            <Input placeholder={mode == 'action' ? "Param Key" : "name"} flex={1} value={paramKey} onChange={(e) => handleChangeParamKey(rowId, e.target.value)} />
 
-            <Input placeholder={mode == 'action' ? "Description": "value"} flex={4} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
-
+            <Input placeholder={mode == 'action' ? "Description" : "value"} flex={4} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
+            <XStack f={2}>
+              <SelectList title="Select type" elements={types} value={type ?? "string"} setValue={(value) => handleChangeType(rowId, value)} />
+            </XStack>
             {mode == 'action' && <Input placeholder="Default Value" flex={2} value={defaultValue} onChange={(e) => handleChangeDefaultValue(rowId, e.target.value)} />}
 
             <InteractiveIcon Icon={Trash} IconColor="var(--red10)" onPress={() => handleRemoveParam(rowId)} />
