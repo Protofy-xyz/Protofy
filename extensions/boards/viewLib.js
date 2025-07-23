@@ -259,13 +259,19 @@ const boardImage = ({ src, alt = '', style = '' }) => {
 };
 
 const markdown = (card) => {
+
     reactCard(`
+
+    function escapeMarkdownForTemplate(md) {
+        return md.replace(/\\\\/g, '\\\\\\\\').replace(/\`/g, '\\\\\\\`')
+    }
+
   function Widget(props) {
     const text = props?.value ?? '';
     return (
         <View className="no-drag" height="100%">
             <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>
-                <Markdown data={text} setData={(newtext) => setCardData('${card.key}', 'rulesCode', 'return \`'+newtext+'\`')} />
+                <Markdown data={text} setData={(newtext) => setCardData('${card.key}', 'rulesCode', 'return \`'+escapeMarkdownForTemplate(newtext)+'\`')} />
             </ProtoThemeProvider>
         </View>
     );
