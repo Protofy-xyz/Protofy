@@ -554,6 +554,35 @@ export default async (app, context) => {
         }
     })
 
+    const castValueToType = (value, type) => {
+        switch (type) {
+            case 'string':
+                return String(value);
+            case 'number':
+                return Number(value);
+            case 'boolean':
+                return value === 'true' || value === true;
+            case 'object':
+                try {
+                    return JSON.parse(value);
+                } catch (e) {
+                    return {};
+                }
+            case 'array':
+                try {
+                    return JSON.parse(value);
+                } catch (e) {
+                    return [];
+                }
+            case 'card':
+                return value; // Assuming card is a string identifier
+            case 'markdown':
+                return value; // Assuming markdown is a string
+            default:
+                return value; // Default case, return as is
+        }
+    }
+
     const handleBoardAction = async (boardId, action_or_card_id, res, params) => {
         const actions = await getBoardActions(boardId);
         const action = actions.find(a => a.name === action_or_card_id);
@@ -566,6 +595,14 @@ export default async (app, context) => {
         if (!action.rulesCode) {
             res.send({ error: "No code found for action" });
             return;
+        }
+
+        //cast params to each param type
+        for (const param in params) {
+            const type = action.configParams[param]?.type;
+            if (type) {
+                params[param] = castValueToType(params[param], type);
+            }
         }
 
         await generateEvent({
