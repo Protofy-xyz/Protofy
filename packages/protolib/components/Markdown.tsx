@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm'
 import { Tinted } from "./Tinted";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Monaco } from "./Monaco";
 import { useThemeSetting } from '@tamagui/next-theme'
 import useKeypress from 'react-use-keypress';
@@ -12,6 +12,12 @@ export function Markdown({ data, readOnly = false, setData }) {
   const { resolvedTheme } = useThemeSetting();
 
   const code = useRef(text);
+
+  useEffect(() => {
+    if (data) {
+      code.current = data;
+    }
+  }, [data]);
 
 
   useKeypress(['Escape'], (event) => {
@@ -33,7 +39,7 @@ export function Markdown({ data, readOnly = false, setData }) {
     }}>
       {editing && <Monaco
         height={"100%"}
-        path={'markdown.md'}
+        path={data.id + '_markdown.md'}
         darkMode={resolvedTheme === 'dark'}
         sourceCode={code.current}
         onChange={(newCode) => {
