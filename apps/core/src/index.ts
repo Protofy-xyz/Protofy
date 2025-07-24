@@ -27,7 +27,9 @@ const watch = () => {
     console.log('Watcher already enabled, skipping...')
     return;
   }
+
   watchEnabled = true;
+  
   const pathsToWatch = [
     'src/**',
     '../../extensions/**',
