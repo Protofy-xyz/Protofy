@@ -391,7 +391,7 @@ const paramsForm = ({ data }) => {
 
     return `<form
             style="width: 100%; height: 100%; display: flex; flex-direction: column; margin-top: ${data.buttonMode == "full" ? "0px" : "15px"};"
-            onsubmit='event.preventDefault();const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeAction(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
+            onsubmit='event.preventDefault();const btn = document.getElementById("${data.name}-run-button");const prevCaption = btn.innerHTML; btn.innerHTML = "...";window.executeActionForm(event, "${data.name}").then(() => btn.innerHTML = prevCaption)'
         >
             ${allKeys.map(key => {
         const cfg = data.configParams?.[key] || {};

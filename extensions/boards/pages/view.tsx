@@ -375,7 +375,11 @@ const Board = ({ board, icons }) => {
   }
 
   useEffect(() => {
-    window['executeAction'] = async (event, card) => {
+    window['executeAction'] = async (card, params) => {
+      return await window['onRunListeners'][card](card, params);
+    };
+    
+    window['executeActionForm'] = async (event, card) => {
       //This allows to call the action from <ActtionRunner />
       event.preventDefault();
       const formData = new FormData(event.target);

@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { CardValue } from "./CardValue";
-import { XStack, YStack, Text } from "@my/ui";
+import { XStack, YStack, Text, Switch } from "@my/ui";
+import { useThemeSetting } from '@tamagui/next-theme'
+import { Monaco } from "../Monaco";
+import { selectContextMenuTriggerFile } from "chonky";
+import { min } from "moment";
+import { Tinted } from "../Tinted";
 
 export const Icon = ({ name, size, color, style }) => {
     return (
@@ -27,11 +32,24 @@ export const ParamsForm = ({ data, children }) => {
     const allKeys = Object.keys(data.params || {});
     const [loading, setLoading] = useState(false);
 
+    const { resolvedTheme } = useThemeSetting()
+    const contentRef = useRef({});
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await window["executeAction"](e, data.name);
+            const formData = new FormData(e.target);
+            const params = Object.fromEntries(formData['entries']());
+
+            const cleanedParams = contentRef.current || {};
+            for (const key in params) {
+                if (params[key] || params[key] === "0") {
+                    cleanedParams[key] = params[key];
+                }
+            }
+
+            await window['executeAction'](data.name, cleanedParams);
         } finally {
             setLoading(false);
         }
@@ -100,7 +118,34 @@ export const ParamsForm = ({ data, children }) => {
                                     placeholder={placeholder}
                                     rows={12} // Número de filas iniciales
                                 />}
-                                {type !== 'text' && <input
+
+                                {type == 'json' || type == 'array' && <XStack mx="10px" f={1} height={200}><Monaco
+                                    language='json'
+                                    darkMode={resolvedTheme === 'dark'}
+                                    sourceCode={defaultValue}
+                                    onChange={(code) => contentRef.current[key] = code}
+                                    options={{
+                                        formatOnPaste: true,
+                                        formatOnType: true,
+                                        minimap: { enabled: false },
+                                        lineNumbers: "off"
+                                    }}
+                                /></XStack>}
+
+                                {type == 'boolean' && <Tinted><Switch
+                                    ml="12px"
+                                    id="autopilot-switch"
+                                    size="$4"
+                                    defaultChecked={contentRef.current[key] ? contentRef.current[key] === "true": defaultValue === "true"}
+                                    onCheckedChange={(value) => {
+                                        contentRef.current[key] = value ? "true" : "false";
+                                    }}
+                                    className="no-drag" // Hace que el switch no sea draggable
+                                >
+                                    <Switch.Thumb className="no-drag" animation="quick" />
+                                </Switch></Tinted>}
+
+                                {type !== 'text' && type !== 'json' && type !== 'array' && type !== 'boolean' && <input
                                     className="no-drag"
                                     type="text"
                                     name={key}
@@ -174,7 +219,7 @@ export const ParamsForm = ({ data, children }) => {
                                         color={data.color}
                                         style={{ marginLeft: "5px" }}
                                     />
-                                ):<></>}
+                                ) : <></>}
                                 {loading ? "..." : data.buttonLabel || "Run"}
                             </span>
                         </button>
