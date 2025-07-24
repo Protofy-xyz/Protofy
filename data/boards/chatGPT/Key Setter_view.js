@@ -13,10 +13,10 @@ reactCard(`
               nameKey={data?.configParams?.nameKey?.defaultValue}
               validate={validateKey}
               onAdd={(key) => {
-                // alert("add: "+key)
+                settings.set('ai.enabled', true)
               }}
               onRemove={(key) => {
-                // alert("remove: "+key)
+                settings.del('ai.enabled')
               }}
             />
           </View>
