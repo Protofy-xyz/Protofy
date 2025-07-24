@@ -35,3 +35,19 @@
     display: list-item;
     margin-bottom: 0.25em;
 }
+
+.markdown-body pre,
+.markdown-body code {
+    background-color: var(--color1) !important;
+    color: var(--color) !important;
+    font-family: monospace;
+    font-size: 13px;
+    border-radius: 4px;
+    padding: 0.5em;
+    display: block;
+    overflow-x: auto;
+}
+
+.markdown-body pre {
+    margin: 0.5em 0;
+}
