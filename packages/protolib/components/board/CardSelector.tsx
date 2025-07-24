@@ -53,10 +53,9 @@ const FirstSlide = ({ selected, setSelected, options }) => {
   }, [filteredOptions]);
 
   return (
-    <YStack>
+    <YStack f={1}>
       <Tinted>
-        <XStack pb={8} mt={-15} mb={15} position="relative">
-
+        <XStack pb={8} mb={5} position="relative">
           <Search pos="absolute" left="$3" top={14} size={16} pointerEvents="none" />
           <Input
             bg="$gray3"
@@ -93,7 +92,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
           })}
         </XStack>
 
-        <ScrollView mah="800px">
+        <ScrollView>
           {Object.entries(groupedOptions).map(([group, options]) => (
             <YStack key={group} mb="$3">
               {group !== "__no_group__" && (
@@ -145,7 +144,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
             </YStack>
           ))}
         </ScrollView>
-        <Spacer marginBottom="$8" />
+        <Spacer marginBottom="$1" />
       </Tinted>
     </YStack>
   )
@@ -158,8 +157,7 @@ const iconTable = {
 }
 
 const SecondSlide = ({ card, board, selected, states, icons, actions, setCard, errors }) => {
-  return <YStack mb={"$4"} f={1} mah="1200px" h="64vh">
-
+  return <YStack mb={"$4"} f={1}>
     <ActionCardSettings board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
       setCard(data)
     }} errors={errors} />
@@ -302,9 +300,10 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
     description={""}
   >
     <YStack f={1} jc="center" ai="center" >
-      <XStack mr="$5">
+      <XStack f={1} mr="$5">
         <Slides
-          styles={{ w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
+          hideHeader={true}
+          styles={{ f:1, w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
           lastButtonCaption="Create"
           onFinish={async () => {
             try {

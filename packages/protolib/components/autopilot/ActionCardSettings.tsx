@@ -41,8 +41,8 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
       <Tinted>
         <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
 
-        <YStack mt="$3" f={1}>
-          <XStack width="100%" m={"$5"} mt={"$4"} jc={"center"} w={"100%"} >
+        <YStack mt="$2" f={1}>
+          <XStack width="100%" mb="$2" mt={"$2"} jc={"center"} w={"100%"} >
             <XStack h={"100%"}>
               {/* @ts-ignore */}
               <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>

@@ -2,7 +2,7 @@ import { XStack, YStack, Text, Stack, Button } from '@my/ui'
 import { useState } from 'react'
 import { Tinted } from './Tinted'
 
-export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", styles = {} }) => {
+export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", styles = {}, hideHeader = false }) => {
   const [step, setStep] = useState(0)
   const totalSlides = slides.length
   const prev_step = step > 1 ? step - 1 : 0
@@ -15,15 +15,15 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", styl
 
   return (
     <YStack
-      id="admin-dataview-create-dlg" p="$3" f={1} w={800} mah={700} {...styles} >
-      <XStack id="admin-eo" mt="$4" justifyContent="space-between" width="100%">
+      id="admin-dataview-create-dlg" p="$3" pt="$0" f={1} w={800} {...styles} >
+      {!hideHeader && <XStack id="admin-eo" justifyContent="space-between" width="100%">
         <Stack flex={1}>
           <Text fontWeight={"500"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>
         </Stack>
         <Stack flex={1} alignItems="flex-end">
           <Text fontWeight={"500"} fontSize={16} color="$gray9">[{step + 1}/{totalSlides}]</Text>
         </Stack>
-      </XStack>
+      </XStack> }
 
       <Tinted>
         <Stack>
@@ -31,11 +31,11 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", styl
         </Stack>
       </Tinted>
 
-      <Stack mt={"$6"}>
+      <Stack f={1} mt={"$2"}>
         {slides[step].component}
       </Stack>
 
-      <XStack gap={40} jc='center' mb={"$5"} flex={1} alignItems="flex-end">
+      <XStack gap={40} jc='center' mb={"$1"} alignItems="flex-end">
         {step !== 0 && (
           <Button w={250} onPress={(e) => {
             e.stopPropagation()
