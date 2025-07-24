@@ -123,11 +123,11 @@ export const ParamsEditor = ({
 
             <Input placeholder={mode == 'action' ? "Param Key" : "name"} flex={1} value={paramKey} onChange={(e) => handleChangeParamKey(rowId, e.target.value)} />
 
-            <Input placeholder={mode == 'action' ? "Description" : "value"} flex={4} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
+            <Input placeholder={mode == 'action' ? "Description" : "value"} flex={2} value={description} onChange={(e) => handleChangeDescription(rowId, e.target.value)} />
             <XStack width="150px">
               <SelectList title="Select type" elements={types} value={type ?? "string"} setValue={(value) => handleChangeType(rowId, value)} />
             </XStack>
-            {mode == 'action' && <Input placeholder="Default Value" flex={2} value={defaultValue} onChange={(e) => handleChangeDefaultValue(rowId, e.target.value)} />}
+            {mode == 'action' && <Input placeholder="Default Value" flex={4} value={defaultValue} onChange={(e) => handleChangeDefaultValue(rowId, e.target.value)} />}
 
             <InteractiveIcon Icon={Trash} IconColor="var(--red10)" onPress={() => handleRemoveParam(rowId)} />
           </XStack>
