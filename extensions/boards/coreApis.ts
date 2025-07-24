@@ -597,7 +597,7 @@ export default async (app, context) => {
             return;
         }
 
-        
+
         //cast params to each param type
         for (const param in params) {
             if(action.configParams && action.configParams[param]) {
@@ -624,7 +624,7 @@ export default async (app, context) => {
         const states = await context.state.getStateTree();
         let rulesCode = action.rulesCode.trim();
 
-        const wrapper = new AsyncFunction('boardName', 'name','states', 'board', 'userParams', 'params', 'token', 'API', `
+        const wrapper = new AsyncFunction('boardName', 'name','states', 'boardActions', 'board', 'userParams', 'params', 'token', 'API', `
         ${getExecuteAction(await getActions(), boardId)}
         ${rulesCode}
     `);
@@ -632,7 +632,7 @@ export default async (app, context) => {
         try {
             let response = null;
             try {
-                response = await wrapper(boardId, action_or_card_id, states, states?.boards?.[boardId] ?? {}, params, params, token, API);
+                response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API);
             } catch (err) {
                 await generateEvent({
                     path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,

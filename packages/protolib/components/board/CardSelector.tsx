@@ -7,6 +7,7 @@ import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { Search, ScanEye, Rocket } from "@tamagui/lucide-icons";
 import { Tinted } from '../Tinted';
 import { getIconUrl } from '../IconSelect';
+import { useThemeSetting } from '@tamagui/next-theme'
 
 const SelectGrid = ({ children }) => {
   return <XStack jc="flex-start" ai="center" gap={25} flexWrap='wrap'>
@@ -16,6 +17,8 @@ const SelectGrid = ({ children }) => {
 
 const FirstSlide = ({ selected, setSelected, options }) => {
   const themeName = useThemeName()
+  const { resolvedTheme } = useThemeSetting()
+  const darkMode = resolvedTheme == 'dark'
   const [search, setSearch] = useState('')
   const isAction = (option) => option.defaults?.type === 'action'
   const [selectedGroups, setSelectedGroups] = useState([]);
@@ -128,7 +131,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                       }
                     >
                       {option?.defaults?.icon ? (
-                        <img src={getIconUrl(option.defaults.icon)} width={20} height={20} />
+                        <img src={getIconUrl(option.defaults.icon)} width={20} height={20} style={darkMode ?{ filter: 'brightness(0) saturate(100%) invert(1)' }: {}}  />
                       ) : isAction(option) ? (
                         <Rocket />
                       ) : (
@@ -201,7 +204,8 @@ reactCard(\`
   }
 \`, data.domId, data)
 
-`
+`,
+
 }
 
 const extraCards = [
@@ -213,15 +217,41 @@ const extraCards = [
     },
     name: 'Action card',
     id: 'action'
-  }
-  , {
+  },
+  {
+    defaults: {
+      type: 'action',
+      name: 'card',
+      displayResponse: true,
+      rulesCode: "const preprompt = `\r\n<instructions>You are integrated into a board system.\r\nThe board is composed of states and actions.\r\nYou will receive a user message and your mission is to generate a json response.\r\nOnly respond with a JSON in the following format:\r\n\r\n{\r\n    \"response\": \"whatever you want to say\",\r\n    \"actions\": [\r\n        {\r\n            \"name\": \"action_1\",\r\n            \"params\": {\r\n                \"example_param\": \"example_value\"\r\n            } \r\n        }\r\n    ]\r\n}\r\n\r\nThe key response will be shown to the user as a response to the user prompt.\r\nThe actions array can be empty if the user prompt requires no actions to be executed.\r\nWhen executing an action, always use the action name. Never use the action id to execute actions, just the name. \r\n\r\n</instructions>\r\n<board_actions>\r\n${JSON.stringify(boardActions)}\r\n</board_action>\r\n<board_states>\r\n${JSON.stringify(board)}\r\n</board_states>\r\n\r\nThe user prompt is:\r\n\r\n${params.prompt}\r\n`\r\n\r\nconst response = await execute_action(\"/api/v1/chatgpt/send/prompt\", { message: preprompt});\r\nconst cleanResponse = response.trim().replace(/```json\\s*/i, '').replace(/\\s*```$/, '');\r\n\r\ntry {\r\n    const parsedResponse = JSON.parse(cleanResponse)\r\n    parsedResponse.actions.forEach((action) => {\r\n        execute_action(action.name, action.params)\r\n    })\r\n    return parsedResponse.response\r\n} catch(e) {\r\n\r\n}\r\n\r\n",
+      html: "\n// data contains: data.icon, data.color, data.name, data.params\nreactCard(`\n  function Widget(props) {\n    const value = props.value;\n    const fullHeight = true\n\n    const content = <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? \"20px\" : \"0px\"} ai=\"center\" jc=\"center\" width=\"100%\">\n        {props.icon && props.displayIcon !== false && (\n            <Icon name={props.icon} size={48} color={props.color}/>\n        )}\n        {props.displayResponse !== false && (\n            <CardValue mode=\"markdown\" value={value ?? \"N/A\"} />\n        )}\n    </YStack>\n\n    return (\n        <Tinted>\n          <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>\n            <ActionCard data={props}>\n              {props.displayButton !== false ? <ParamsForm data={props}>{content}</ParamsForm> : props.displayResponse !== false && content}\n            </ActionCard>\n          </ProtoThemeProvider>\n        </Tinted>\n    );\n  }\n`, data.domId, data)\n\n",
+      params: {
+        prompt: ""
+      },
+      configParams: {
+        prompt: {
+          visible: true,
+          defaultValue: "",
+          type: "text"
+        }
+      },
+      displayIcon: false,
+      displayButton: true,
+      displayButtonIcon: true,
+      icon: 'sparkles'
+    },
+    name: 'AI card',
+    id: 'aiaction',
+  },
+  {
     defaults: {
       type: 'value',
       name: 'value'
     },
     name: 'Observer card',
     id: 'value'
-  }]
+  }
+]
 
 function flattenTree(obj, currentGroup = null) {
   let leaves = [];

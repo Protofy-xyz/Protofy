@@ -6,8 +6,8 @@ import { Monaco } from "./Monaco";
 import { useThemeSetting } from '@tamagui/next-theme'
 import useKeypress from 'react-use-keypress';
 
-export function Markdown({ data, readOnly = false, setData }) {
-  const text = data ?? '';
+export function Markdown({ data, readOnly = false, setData=undefined }) {
+  const text = data ? (typeof data === 'string' ? data : String(data)) : '';
   const [editing, setEditing] = useState(false);
   const { resolvedTheme } = useThemeSetting();
 
@@ -22,7 +22,7 @@ export function Markdown({ data, readOnly = false, setData }) {
 
   useKeypress(['Escape'], (event) => {
     if (editing) {
-      setData(code.current);
+      if(setData) setData(code.current);
       setEditing(false);
       event.preventDefault();
     }
