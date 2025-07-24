@@ -170,11 +170,9 @@
             "width": 2,
             "height": 6,
             "icon": "openai",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data })}\n    `\n});\n",
             "name": "Send message",
             "color": "#74AA9C",
             "description": "send a message to chatGPT",
-            "rulesCode": "execute_action(\"/api/v1/chatgpt/send/prompt\", { message: params.message});",
             "params": {
                 "message": "message"
             },
@@ -187,11 +185,9 @@
             "width": 2,
             "height": 6,
             "icon": "openai",
-            "html": "//@react\r\nreturn markdown(data)",
             "name": "Message response",
             "color": "#74AA9C",
             "description": "chatGPT last chat response",
-            "rulesCode": "return states?.chatGPT?.conversation?.chatResponse",
             "type": "value"
         },
         {
@@ -199,11 +195,9 @@
             "width": 4,
             "height": 4,
             "icon": "key",
-            "html": "\n//@react\nreactCard(`\n  async function validateKey(apiKey) {\n   // return true or false if the key is valid or not\n    return true;\n  }\n\n  function Widget() {\n    return (\n          <View className=\"no-drag\">\n            <KeySetter\n              nameKey={data?.configParams?.nameKey?.defaultValue}\n              validate={validateKey}\n              onAdd={(key) => {\n                // alert(\"add: \"+key)\n              }}\n              onRemove={(key) => {\n                // alert(\"remove: \"+key)\n              }}\n            />\n          </View>\n    );\n  }\n\n`, data.domId)\n\n            ",
             "name": "Key Setter",
             "description": "Displays a key setter for a specific key or in case already set displays key is set",
             "type": "value",
-            "rulesCode": "",
             "params": {
                 "nameKey": "The key name to set"
             },
@@ -219,11 +213,9 @@
             "width": 3,
             "height": 12,
             "icon": "file-text",
-            "html": "//@react\r\nreturn markdown(data)",
             "name": "Read Me",
             "description": "Render formatted markdown using ReactMarkdown",
             "type": "value",
-            "rulesCode": "return `# 🧠 ChatGPT Interaction Board\r\n\r\nThis board lets you chat with ChatGPT using the OpenAI API.Follow these simple steps to get started:\r\n\r\n## 🔑 Step 1: Get Your API Key\r\n\r\n1. Go to[OpenAI's API Keys page](https://platform.openai.com/account/api-keys).\r\n2. Log in and click ** \"Create new secret key\" **.\r\n3. Copy and save your key securely — it won't be shown again.\r\n\r\n    > ⚠️ ** Keep it secret! ** Your API key is private and usage - based.\r\n\r\n## 🔑 Step 2: Set Your API Key\r\n\r\n1. Add your key on Key Setter card and click \"+\" to add. \r\n\r\n## 💬 Step 3: Chat with ChatGPT\r\n\r\n- Enter your message in the ** input box **.\r\n- Click the ** \"Send\" ** button to interact.\r\n- You’ll receive a response from ChatGPT below.\r\n\r\nStart chatting now and build your own AI assistant! 🚀\r\n`",
             "editorOptions": {
                 "defaultTab": "value"
             },

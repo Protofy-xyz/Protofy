@@ -213,6 +213,29 @@ const getBoard = async (boardId) => {
 
     try {
         fileContent = JSON.parse(fileContent);
+        //iterate over cards and add the rulesCode and html properties from the card file
+        for (let i = 0; i < fileContent.cards.length; i++) {
+            const card = fileContent.cards[i];
+
+            if (!card || card.rulesCode || card.html) { //legacy card, skip
+                continue;
+            }
+            //read the card file from the board folder
+            const cardFilePath = BoardsDir(getRoot()) + boardId + '/' + card.name + '.js'
+            const cardHTMLFilePath = BoardsDir(getRoot()) + boardId + '/' + card.name + '_view.js'
+            if (fsSync.existsSync(cardFilePath)) {
+                const cardContent = await fs.readFile(cardFilePath, 'utf8')
+                card.rulesCode = cardContent
+            } else {
+                console.warn("Card file not found: " + cardFilePath)
+            }
+            if (fsSync.existsSync(cardHTMLFilePath)) {
+                const cardHTMLContent = await fs.readFile(cardHTMLFilePath, 'utf8')
+                card.html = cardHTMLContent
+            } else {
+                console.warn("Card HTML file not found: " + cardHTMLFilePath)
+            }
+        }
     } catch (error) {
         logger.error({ error }, "Error parsing board file: " + filePath);
         throw new HttpError(500, "Error parsing board file");
@@ -264,7 +287,6 @@ const getDB = (path, req, session) => {
         },
 
         async put(key, value) {
-
             // try to create the board file in the boards folder
             // console.log("Creating board: ", JSON.stringify({key,value}))
             value = JSON.parse(value)
@@ -288,15 +310,43 @@ boardConnect(run)`
                 fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
             }
 
+            //check if the board directory exists, if not, create it
+            try {
+                await fs.access(BoardsDir(getRoot(req)), fs.constants.F_OK)
+            } catch (error) {
+                console.log("Creating boards folder")
+                await fs.mkdir(BoardsDir(getRoot(req)))
+            }
+
+            //check if the board directory inside boards exists, if not, create it
+            try {
+                await fs.access(BoardsDir(getRoot(req)) + key, fs.constants.F_OK)
+            } catch (error) {
+                console.log("Creating board folder: ", key)
+                await fs.mkdir(BoardsDir(getRoot(req)) + key)
+            }
+
             await acquireLock(filePath);
             removeActions({ group: 'boards', tag: key })
             try {
-                await fs.writeFile(filePath, JSON.stringify(value, null, 4))
                 //register actions for each card
                 console.log('cards: ', value.cards)
                 if (value.cards && Array.isArray(value.cards)) {
+                    for (let i = 0; i < value.cards.length; i++) {
+                        //create a file for each card, in the board folder
+                        const card = value.cards[i];
+                        const code = card.rulesCode
+                        const html = card.html
+                        const cardFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '.js'
+                        const cardHTMLFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '_view.js'
+                        await fs.writeFile(cardFilePath, code)
+                        await fs.writeFile(cardHTMLFilePath, html)
+                        delete card.rulesCode
+                        delete card.html
+                    }
                     const actionsCards = value.cards.filter(c => c && c.type === 'action')
                     for (let i = 0; i < actionsCards.length; i++) {
+
                         const card = actionsCards[i];
                         console.log("Adding action: ", JSON.stringify(card, null, 4))
                         addAction({
@@ -312,8 +362,9 @@ boardConnect(run)`
                         })
                     }
                 }
+                await fs.writeFile(filePath, JSON.stringify(value, null, 4))
             } catch (error) {
-                console.error("Error creating file: " + filePath, error)
+                console.error("Error creating file: " + filePath, error, error.stack)
             } finally {
                 releaseLock(filePath);
             }
@@ -600,7 +651,7 @@ export default async (app, context) => {
 
         //cast params to each param type
         for (const param in params) {
-            if(action.configParams && action.configParams[param]) {
+            if (action.configParams && action.configParams[param]) {
                 const type = action.configParams[param]?.type;
                 if (type) {
                     params[param] = castValueToType(params[param], type);
@@ -624,7 +675,7 @@ export default async (app, context) => {
         const states = await context.state.getStateTree();
         let rulesCode = action.rulesCode.trim();
 
-        const wrapper = new AsyncFunction('boardName', 'name','states', 'boardActions', 'board', 'userParams', 'params', 'token', 'API', `
+        const wrapper = new AsyncFunction('boardName', 'name', 'states', 'boardActions', 'board', 'userParams', 'params', 'token', 'API', `
         ${getExecuteAction(await getActions(), boardId)}
         ${rulesCode}
     `);
@@ -734,7 +785,7 @@ export default async (app, context) => {
 
     app.get('/api/core/v1/boards/:boardId/cards/:cardId', handler(async (req, res, session, next) => {
         //get read token from card
-        if(!(await hasAccessToken('read', session, req.params.cardId, req.params.boardId, req.query.token))) {
+        if (!(await hasAccessToken('read', session, req.params.cardId, req.params.boardId, req.query.token))) {
             res.status(403).send({ error: "Forbidden: Invalid token" });
         } else {
             const value = ProtoMemDB('states').get('boards', req.params.boardId, req.params.cardId);
@@ -744,7 +795,7 @@ export default async (app, context) => {
 
     app.get('/api/core/v1/boards/:boardId/cards/:cardId/run', handler(async (req, res, session, next) => {
         //get read token from card
-        if(!(await hasAccessToken('run', session, req.params.cardId, req.params.boardId, req.query.token))) {
+        if (!(await hasAccessToken('run', session, req.params.cardId, req.params.boardId, req.query.token))) {
             res.status(403).send({ error: "Forbidden: Invalid token" });
         } else {
             handleBoardAction(req.params.boardId, req.params.cardId, res, req.query);

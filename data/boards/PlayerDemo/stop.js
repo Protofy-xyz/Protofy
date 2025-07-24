@@ -1,0 +1,1 @@
+return execute_action("system_state", {name: "stop"}) && execute_action("time", {time: "1"})

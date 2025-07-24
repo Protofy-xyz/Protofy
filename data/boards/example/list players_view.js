@@ -1,0 +1,1 @@
+return dataView('players', data.domId)

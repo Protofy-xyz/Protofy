@@ -1,0 +1,1 @@
+return execute_action("/api/v1/actions/players/list", userParams)

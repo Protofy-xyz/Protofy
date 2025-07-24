@@ -8,11 +8,9 @@
             "width": 2,
             "height": 6,
             "icon": "activity",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "system_state",
             "displayResponse": true,
-            "rulesCode": "return params.name",
             "params": {
                 "name": ""
             },
@@ -30,11 +28,9 @@
             "width": 2,
             "height": 6,
             "icon": "circle-stop",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
             "type": "action",
             "name": "stop",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"stop\"}) && execute_action(\"time\", {time: \"1\"})",
             "buttonLabel": "",
             "buttonMode": "full"
         },
@@ -43,11 +39,9 @@
             "width": 2,
             "height": 6,
             "icon": "play",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "play",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"play\"})",
             "buttonLabel": "",
             "buttonMode": "full"
         },
@@ -56,11 +50,9 @@
             "width": 2,
             "height": 6,
             "icon": "circle-pause",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardAction({ data, mode: \"full\" })}\n    `\n});\n",
             "type": "action",
             "name": "pause",
             "displayResponse": false,
-            "rulesCode": "return execute_action(\"system_state\", {name: \"pause\"})",
             "buttonLabel": "",
             "buttonMode": "full"
         },
@@ -69,11 +61,9 @@
             "width": 2,
             "height": 6,
             "icon": "clock-1",
-            "html": "\n// data contains: data.icon, data.color, data.name, data.params\nreturn card({\n    content: `\n        ${cardIcon({ data, size: '48' })}\n        ${cardAction({ data })}\n    `\n});\n",
             "type": "action",
             "name": "time",
             "displayResponse": true,
-            "rulesCode": "return params.time",
             "params": {
                 "time": ""
             },
