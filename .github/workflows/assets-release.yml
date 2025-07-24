@@ -7,7 +7,7 @@ on:
 
 jobs:
   package-assets:
-    if: github.repository != 'Protofy.xyz/Vento'
+    if: github.repository != 'Protofy-xyz/Vento'
     runs-on: ubuntu-latest
     permissions:
       contents: write
