@@ -17,7 +17,8 @@ export default (app, context) => {
             description: "send a chatGPT prompt",
             params: { prompt: "message value to send" },
             emitEvent: true,
-            token: await getServiceToken()
+            token: await getServiceToken(),
+            method: 'post'
         })
     }
 
@@ -65,13 +66,8 @@ export default (app, context) => {
         })
     }
 
-    app.get("/api/v1/chatgpt/send/prompt", handler(async (req, res, session) => {
-        if (!session || !session.user.admin) {
-            res.status(401).send({ error: "Unauthorized" })
-            return
-        }
+    const handleSendPrompt = async (message, res) => {
         console.log('--------------------------------------------------------------------------------------')
-        const { message } = req.query;
         if (!message) {
             res.status(400).send({ error: "Message parameter is required" });
             return;
@@ -84,8 +80,10 @@ export default (app, context) => {
             return;
         }
 
+        console.log('************** chatgpt before:')
         chatGPTPrompt({
             message: message, done: (response, msg) => {
+                console.log('************** chatgpt: ', response, msg)
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "userMessage", value: message, emitEvent: true });
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "chatResponse", value: msg, emitEvent: true });
                 res.send(msg);
@@ -94,6 +92,23 @@ export default (app, context) => {
                 res.status(500).send({ error: err || "An error occurred" });
             }
         })
+    }
+
+    app.post("/api/v1/chatgpt/send/prompt", handler(async (req, res, session) => {
+        if (!session || !session.user.admin) {
+            res.status(401).send({ error: "Unauthorized" })
+            return
+        }
+        handleSendPrompt(req.body.message, res)
+    }))
+
+    app.get("/api/v1/chatgpt/send/prompt", handler(async (req, res, session) => {
+        console.log('************** chatgpt send prompt')
+        if (!session || !session.user.admin) {
+            res.status(401).send({ error: "Unauthorized" })
+            return
+        }
+        handleSendPrompt(req.query.message, res)
 
     }))
     registerActions(context);
