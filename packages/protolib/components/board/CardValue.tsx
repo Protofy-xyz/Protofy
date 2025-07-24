@@ -16,6 +16,8 @@ export const CardValue = ({ value, style = {}, id = undefined, mode = undefined 
         </ScrollView>
     }
 
+    value = typeof value === 'string' ? value : String(value)
+
     if (typeof value === 'string' && value.length > 100 || value.includes("\n")) {
         return <XStack mt="20px" width="calc(100% - 20px)" f={1}><textarea
             className="no-drag"
