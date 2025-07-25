@@ -107,6 +107,8 @@ const cardState = {}
 export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
     const [loaded, setLoaded] = useState(viewLib !== null);
     const [uuid, setuuid] = useState(() => uuidv4());
+    const [containerKey, setContainerKey] = useState(() => uuidv4());
+    const displayedHTML = useRef();
     const [theme, setTheme] = useRootTheme();
 
     if (cardState[uuid] === undefined) {
@@ -114,12 +116,12 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
     }
 
     const cardType = html.match(/^\/\/@([^\n\r]*)/);
-    if(cardType && cardType[1]) {
+    if (cardType && cardType[1]) {
 
         const cardTypeMatch = html.match(/^[ \t\r\n]*\/\/@([^\n\r]*)/m);
         const cardType = cardTypeMatch ? cardTypeMatch[1].trim() : null;
-        if(cardType === 'card/react') {
-            html = 'reactCard(`'+ html.replace('\\', '\\\\').replace(/`/g, '\\`') +'`, data.domId, data)'
+        if (cardType === 'card/react') {
+            html = 'reactCard(`' + html.replace('\\', '\\\\').replace(/`/g, '\\`') + '`, data.domId, data)'
         }
         // Do something with the card type
     }
@@ -139,25 +141,53 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
 
     const htmlContainerRef = useRef(null);
 
-    // Este useEffect es clave para ReactCards ya montadas
+
+    useEffect(() => {
+        if (isReactWidget(html)) {
+            setContainerKey(uuidv4());
+        }
+    }, [html]);
+
     useEffect(() => {
         if (!loaded || !viewLib) return;
+        if (!isReactWidget(html)) return;
 
-        if (isReactWidget(html)) {
-            // Ya montado antes
-            if (window._reactWidgets?.[uuid]) {
-                window.updateReactCardProps?.(uuid, dataForCard);
-                return
-            }
+        const el = document.getElementById(uuid);
+        if (!el) {
+            console.warn("⚠️ div not ready yet, skipping reactCard execution for", uuid);
+            return;
         }
 
-        // HTML normal o tarjeta react sin redenrizar, siempre regenerar
-        const innerHtml = getHTML(html, viewLib, dataForCard);
-        if (htmlContainerRef.current) {
+        console.log("🔁 Running getHTML (ReactCard) for:", uuid);
+
+        try {
+            getHTML(html, viewLib, dataForCard);
+        } catch (err) {
+            console.error("❌ Error executing getHTML for reactCard:", err);
+        }
+    }, [containerKey, loaded, viewLib]);
+
+    // Este useEffect es clave para ReactCards ya montadas
+    useEffect(() => {
+        console.log('Updating HTMLView for card:', uuid, 'with data:', dataForCard);
+        if (!loaded || !viewLib) return;
+
+
+        if (html == displayedHTML.current && isReactWidget(html) && window._reactWidgets?.[uuid]) {
+            console.log("React card already mounted, skipping update");
+            // Ya montado antes y el codigo no ha cambiado
+            window.updateReactCardProps?.(uuid, dataForCard);
+            return
+        }
+        console.log("not a react card or code changed, updating...");
+        displayedHTML.current = html;
+        if (htmlContainerRef.current && !isReactWidget(html)) {
+            // HTML normal o tarjeta react sin redenrizar, siempre regenerar
+            const innerHtml = getHTML(html, viewLib, dataForCard);
             htmlContainerRef.current.innerHTML = innerHtml;
         }
-        
-    }, [html, JSON.stringify(data), loaded]);
+
+    }, [html, JSON.stringify(data), viewLib, loaded]);
 
     // Cargar viewLib
     useEffect(() => {
@@ -177,7 +207,7 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
         };
     }, []);
 
-    return <div id={uuid} ref={htmlContainerRef} {...props} />;
+    return <div id={uuid} key={containerKey} ref={htmlContainerRef} {...props} />;
 };
 
 export const CardValue = ({ Icon, id = null, value, setData = (data, id) => { }, html, color = "var(--color7)", ...props }) => {

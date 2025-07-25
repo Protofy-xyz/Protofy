@@ -557,15 +557,20 @@ const reactCard = (jsx, rootId, initialProps = {}) => {
         window[key] = window.ProtoComponents[key];
     });
 
-    if (window._reactWidgets?.[rootId]) {
-        window.updateReactCardProps(rootId, initialProps);
-        return;
-    }
-
     const jsxCode = `
-        ${jsx}  // define Widget(props)
+        ${jsx}
 
         const container = document.getElementById("${rootId}");
+
+        if (window._reactWidgets?.["${rootId}"]) {
+            console.log("Unmounting previous React widget for rootId:", "${rootId}");
+            window._reactWidgets["${rootId}"].unmount();
+            delete window._reactWidgets["${rootId}"];
+            delete window._reactWidgetComponents["${rootId}"];
+        } else {
+            console.log("Mounting new React widget for rootId:", "${rootId}");    
+        }
+
         const root = ReactDOM.createRoot(container);
 
         window._reactWidgets = window._reactWidgets || {};
@@ -582,6 +587,8 @@ const reactCard = (jsx, rootId, initialProps = {}) => {
 
         root.render(element);
     `;
+
+    console.log("Compiling JSX code for rootId:", "${rootId}", jsxCode);
 
     const compiled = Babel.transform(jsxCode, {
         presets: ['react'],
