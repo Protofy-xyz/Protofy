@@ -147,19 +147,16 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
             // Ya montado antes
             if (window._reactWidgets?.[uuid]) {
                 window.updateReactCardProps?.(uuid, dataForCard);
-            } else {
-                const innerHtml = getHTML(html, viewLib, dataForCard);
-                if (htmlContainerRef.current) {
-                    htmlContainerRef.current.innerHTML = innerHtml;
-                }
-            }
-        } else {
-            // HTML normal, siempre regenerar
-            const innerHtml = getHTML(html, viewLib, dataForCard);
-            if (htmlContainerRef.current) {
-                htmlContainerRef.current.innerHTML = innerHtml;
+                return
             }
         }
+
+        // HTML normal o tarjeta react sin redenrizar, siempre regenerar
+        const innerHtml = getHTML(html, viewLib, dataForCard);
+        if (htmlContainerRef.current) {
+            htmlContainerRef.current.innerHTML = innerHtml;
+        }
+        
     }, [html, JSON.stringify(data), loaded]);
 
     // Cargar viewLib
