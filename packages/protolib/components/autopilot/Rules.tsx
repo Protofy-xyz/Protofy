@@ -35,7 +35,7 @@ export const RuleItem = ({ value, loading, onDelete, onEdit }) => {
   )
 }
 
-export const Rules = ({ rules, onAddRule, onDeleteRule, onEditRule, loadingIndex, onReloadRules = async (rules) => {}}) => {
+export const Rules = ({ rules, loading=false, onAddRule, onDeleteRule, onEditRule, loadingIndex, onReloadRules = async (rules) => {}}) => {
   const [newRule, setNewRule] = useState('')
   const [generating, setGenerating] = useState(false)
   
@@ -100,7 +100,7 @@ export const Rules = ({ rules, onAddRule, onDeleteRule, onEditRule, loadingIndex
           color={newRule.trim().length > 2 || !newRule.trim().length ? '$background' : '$gray9'}
           hoverStyle={{ backgroundColor: '$blue10' }}
           circular
-          icon={loadingIndex === rules.length || generating ? Spinner : (newRule.trim().length > 1 ? Plus : RotateCcw)}
+          icon={loadingIndex === rules.length || generating || loading ? Spinner : (newRule.trim().length > 1 ? Plus : RotateCcw)}
           scaleIcon={1.4}
           onPress={newRule.trim().length > 1 ? addRule : reloadRules}
         />

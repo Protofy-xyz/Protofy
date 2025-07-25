@@ -216,7 +216,7 @@ const generateParamsDeclaration = (cardData) => {
     return `declare const params: {\n${params}\n};`;
 }
 
-export const AutopilotEditor = ({ cardData, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
+export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
@@ -466,6 +466,7 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                         <YStack
                             flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
                             <Rules
+                                loading={loading}
                                 rules={rules}
                                 onAddRule={onAddRule}
                                 onDeleteRule={onDeleteRule}

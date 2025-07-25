@@ -6,10 +6,12 @@ import { AutopilotEditor } from './AutopilotEditor'
 export const RuleEditor = ({ board, actions, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData={} }) => {
     const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
     const [value, setValue] = useState()
+    const [loading, setLoading] = useState(false)
   
     const getRulesCode = async (force?) => {
       if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
         setHasCode(false)
+        setLoading(true)
         const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states, rules: cardData.rules, ...extraCompilerData })
         if (!code?.data?.jsCode) return
         setCardData({
@@ -18,6 +20,7 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
           rulesExplained: code.data?.explanation
         })
         setHasCode(true)
+        setLoading(false)
       }
     }
   
@@ -41,6 +44,7 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
     }, [cardData.rules])
   
     return <AutopilotEditor
+    loading={loading}
     cardData={cardData}
     board={board}
     panels={cardData.type == 'value' ? ['states'] : ['actions', 'states']}
