@@ -17,7 +17,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
 
     return (
         <PanelGroup direction="horizontal">
-            <Panel defaultSize={25}>
+            {/* <Panel defaultSize={25}>
                 <YStack
                     flex={1}
                     height="100%"
@@ -30,7 +30,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
                     <HTMLView html={code} data={data} />
                 </YStack>
             </Panel>
-            <CustomPanelResizeHandle direction="vertical" />
+            <CustomPanelResizeHandle direction="vertical" /> */}
             <Panel defaultSize={75}>
                 <YStack
                     flex={1}

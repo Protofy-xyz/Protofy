@@ -113,7 +113,18 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
         cardState[uuid] = {};
     }
 
-    const isReactWidget = (html) => html.includes('reactCard') || html.includes('//@react');
+    const cardType = html.match(/^\/\/@([^\n\r]*)/);
+    if(cardType && cardType[1]) {
+
+        const cardTypeMatch = html.match(/^[ \t\r\n]*\/\/@([^\n\r]*)/m);
+        const cardType = cardTypeMatch ? cardTypeMatch[1].trim() : null;
+        if(cardType === 'card/react') {
+            html = 'reactCard(`'+ html.replace('\\', '\\\\').replace(/`/g, '\\`') +'`, data.domId, data)'
+        }
+        // Do something with the card type
+    }
+
+    const isReactWidget = (html) => html.includes('reactCard') || html.includes('//@react') || html.includes('//@card/react');
 
     const dataForCard = {
         ...data,
