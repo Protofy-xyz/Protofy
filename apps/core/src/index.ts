@@ -22,8 +22,12 @@ import { startMqtt } from './mqtt';
 const isFullDev = process.env.FULL_DEV === '1';
 let watchEnabled = false
 
+const isWatchEnabled = () =>{
+  return watchEnabled;
+}
+
 const watch = () => {
-  if(watchEnabled) { 
+  if(isWatchEnabled()) { 
     console.log('Watcher already enabled, skipping...')
     return;
   }
@@ -49,7 +53,7 @@ const watch = () => {
   var restarting = false
   var restartTimer = null
   watcher.on('change', async (path) => {
-    if(!watchEnabled) {
+    if(!isWatchEnabled()) {
       console.log('Changed detected in file: ', path, ' but watch is not enabled, skipping restart...');
       return;
     }
