@@ -227,13 +227,13 @@ const getBoard = async (boardId) => {
                 const cardContent = await fs.readFile(cardFilePath, 'utf8')
                 card.rulesCode = cardContent
             } else {
-                console.warn("Card file not found: " + cardFilePath)
+                card.rulesCode = ''
             }
             if (fsSync.existsSync(cardHTMLFilePath)) {
                 const cardHTMLContent = await fs.readFile(cardHTMLFilePath, 'utf8')
                 card.html = cardHTMLContent
             } else {
-                console.warn("Card HTML file not found: " + cardHTMLFilePath)
+                card.html = ''
             }
         }
     } catch (error) {
@@ -339,8 +339,17 @@ boardConnect(run)`
                         const html = card.html
                         const cardFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '.js'
                         const cardHTMLFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '_view.js'
-                        await fs.writeFile(cardFilePath, code)
-                        await fs.writeFile(cardHTMLFilePath, html)
+                        if(code) {
+                            await fs.writeFile(cardFilePath, code)
+                        } else {
+                            try { await fs.unlink(cardFilePath) } catch(e) {}
+                        }
+                        if(html) {
+                            await fs.writeFile(cardHTMLFilePath, html ? html :'')
+                        } else {
+                            try { await fs.unlink(cardHTMLFilePath) } catch(e) {}
+                        }
+
                         delete card.rulesCode
                         delete card.html
                     }
