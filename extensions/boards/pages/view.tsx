@@ -1,10 +1,10 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, BookDashed, SquareDashedBottom, SquareDashedBottomCode, NotepadTextDashed, Scan } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack, H2, H1, H3 } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -309,8 +309,7 @@ const Board = ({ board, icons }) => {
 
   const breakpointCancelRef = useRef(null) as any
   const dedupRef = useRef() as any
-  const addCard = { key: 'addwidget', type: 'addWidget', width: 2, height: 4 }
-  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : [addCard]))
+  const [items, setItems] = useState((board.cards && board.cards.length ? [...board.cards.filter(i => i).filter(key => key != 'addwidget')] : []))
   const [isDeleting, setIsDeleting] = useState(false)
   const [isApiDetails, setIsApiDetails] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -359,7 +358,7 @@ const Board = ({ board, icons }) => {
     setAutomationInfo(automationInfo.data)
     if (dataData.status == 'loaded') {
       let newItems = (dataData.data?.cards || []).filter(card => card)
-      if (!newItems || newItems.length == 0) newItems = [addCard]
+      if (!newItems || newItems.length == 0) newItems = []
       setItems(newItems)
     }
   }
@@ -378,7 +377,7 @@ const Board = ({ board, icons }) => {
     window['executeAction'] = async (card, params) => {
       return await window['onRunListeners'][card](card, params);
     };
-    
+
     window['executeActionForm'] = async (event, card) => {
       //This allows to call the action from <ActtionRunner />
       event.preventDefault();
@@ -444,7 +443,7 @@ const Board = ({ board, icons }) => {
     // }
     const lyt = {}
     Object.keys(gridSizes).forEach(key => {
-        lyt[key] = computeLayout(items, gridSizes[key], { layout: board?.layouts?.[key] });
+      lyt[key] = computeLayout(items, gridSizes[key], { layout: board?.layouts?.[key] });
     });
     return lyt
   }, [items, board?.layouts])
@@ -660,7 +659,7 @@ const Board = ({ board, icons }) => {
     <YStack flex={1} p="$6" backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
-      <BoardSettingsEditor 
+      <BoardSettingsEditor
         settings={board.settings}
         open={dialogOpen == "settings"}
         setOpen={v => setDialogOpen(v ? "settings" : "")}
@@ -797,7 +796,7 @@ const Board = ({ board, icons }) => {
                   formatOnType: true
                 }}
               />
-              : <YStack f={1}><DashboardGrid
+              : <YStack f={1}>{cards.length > 0 ? <DashboardGrid
                 items={cards}
                 settings={board.settings}
                 layouts={boardRef.current.layouts}
@@ -834,7 +833,11 @@ const Board = ({ board, icons }) => {
                     breakpointCancelRef.current = null //reset the cancel flag after 1 second
                   }, 1000)
                 }}
-              /></YStack>
+              /> : <YStack f={1} top={-100} ai="center" jc="center" gap="$5" o={0.1} className="no-drag">
+                {/* <Scan size="$15" /> */}
+                <H1>{board.name} is empty</H1>
+                <H3>Click on the + button to add a new card</H3>
+              </YStack>}</YStack>
           }
         </YStack>
         <div
