@@ -2,6 +2,7 @@ import { getLogger } from "protobase";
 import { getServiceToken } from '@extensions/apis/coreContext';
 import { getKey } from "@extensions/keys/coreContext";
 import OpenAI from 'openai';
+import axios from "axios";
 
 const logger = getLogger()
 
@@ -92,11 +93,47 @@ export const chatGPTSession = async ({
 
 export const chatGPTPrompt = async ({
     message,
+    images = [],
     ...props
-
 }: any & { message: string }) => {
-    let response = await chatGPTSession({
+
+    const imgMessages = [];
+
+    if (images.length > 0) {
+        const imageContent = await Promise.all(
+            images.map(async (url) => {
+                try {
+                    const response = await axios.get(url, {
+                        responseType: "text", // Ya es base64 como texto plano
+                    });
+
+                    const base64 = response.data.trim();
+
+                    return {
+                        type: "image_url",
+                        image_url: {
+                            url: base64
+                        }
+                    };
+                } catch (err) {
+                    console.warn(`Error fetching image from ${url}:`, err);
+                    return null;
+                }
+            })
+        );
+
+        const validImages = imageContent.filter(Boolean);
+        if (validImages.length > 0) {
+            imgMessages.push({
+                role: "user",
+                content: validImages
+            });
+        }
+    }
+
+    const response = await chatGPTSession({
         messages: [
+            ...imgMessages,
             {
                 role: "user",
                 content: message
@@ -104,21 +141,21 @@ export const chatGPTPrompt = async ({
         ],
         ...props,
         done: (response) => {
-            let message = ""
+            let msg = "";
             if (response.choices && response.choices.length) {
-                message = response.choices[0]
+                msg = response.choices[0];
             }
-            if (props.done) props.done(response, message)
+            if (props.done) props.done(response, msg);
         },
-        error: (err)=>{
-            if(props.error) {
+        error: (err) => {
+            if (props.error) {
                 props.error(err.message);
             }
         }
-    })
+    });
 
-    return response
-}
+    return response;
+};
 
 type ChatGPTRequest = {
     apiKey?: string;

@@ -281,7 +281,7 @@ export default async (app: Application, context: typeof APIContext) => {
             "type": "action",
             "method": "post",
             "displayButton": true,
-            "rulesCode": "return params.picture",
+            "rulesCode": "return {\r\n    frame: params.picture,\r\n    type: \"frame\"\r\n}",
             "params": {
                 "mode": "manual or auto (auto is experimental)",
                 "fps": "fps to capture"

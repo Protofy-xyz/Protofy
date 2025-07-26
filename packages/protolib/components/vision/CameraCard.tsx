@@ -37,7 +37,7 @@ export const CameraCard = ({ params, onPicture }) => {
         const ctx = canvas.getContext("2d");
         if (ctx) {
             ctx.drawImage(video, 0, 0, width, height);
-            const base64Image = canvas.toDataURL("image/png");
+            const base64Image = canvas.toDataURL("image/jpeg");
             onPicture(base64Image);
         }
     };

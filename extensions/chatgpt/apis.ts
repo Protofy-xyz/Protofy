@@ -66,8 +66,9 @@ export default (app, context) => {
         })
     }
 
-    const handleSendPrompt = async (message, res) => {
+    const handleSendPrompt = async (message, images, res) => {
         console.log('--------------------------------------------------------------------------------------')
+        console.log('************** chatgpt send prompt: ', message, images)
         if (!message) {
             res.status(400).send({ error: "Message parameter is required" });
             return;
@@ -82,6 +83,7 @@ export default (app, context) => {
 
         console.log('************** chatgpt before:')
         chatGPTPrompt({
+            images: images || [],
             message: message, done: (response, msg) => {
                 console.log('************** chatgpt: ', response, msg)
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "userMessage", value: message, emitEvent: true });
@@ -99,7 +101,7 @@ export default (app, context) => {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
-        handleSendPrompt(req.body.message, res)
+        handleSendPrompt(req.body.message, req.body.images, res)
     }))
 
     app.get("/api/v1/chatgpt/send/prompt", handler(async (req, res, session) => {
@@ -108,7 +110,7 @@ export default (app, context) => {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
-        handleSendPrompt(req.query.message, res)
+        handleSendPrompt(req.query.message, req.query.images, res)
 
     }))
     registerActions(context);
