@@ -274,7 +274,7 @@ export default async (app: Application, context: typeof APIContext) => {
         defaults: {
             "width": 3,
             "height": 12,
-            "icon": "table-properties",
+            "icon": "camera",
             "html": "//@card/react\nfunction Widget(props) {\n    return (\n        <Tinted>\n            <CameraCard params={props.configParams} onPicture={async (picture64) => {\n              const url = document.location.origin + (await execute_action('/api/core/v1/vision/frame/set', {id: 'frame', image: picture64}))\n              execute_action(props.name, {picture: url})\n            }}/>\n        </Tinted>\n    );\n  }\n",
             "name": "camera",
             "description": "Display a React component",
