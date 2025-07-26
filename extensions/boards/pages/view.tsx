@@ -6,7 +6,7 @@ import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
-import { DashboardGrid } from 'protolib/components/DashboardGrid';
+import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
 import { CenterCard } from '@extensions/services/widgets'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -436,12 +436,17 @@ const Board = ({ board, icons }) => {
   }
 
   const layouts = useMemo(() => {
-    return {
-      lg: computeLayout(items, { totalCols: 24, normalW: 8, normalH: 6, doubleW: 8, doubleH: 6 }, { layout: board?.layouts?.lg }),
-      md: computeLayout(items, { totalCols: 24, normalW: 10, normalH: 6, doubleW: 10, doubleH: 6 }, { layout: board?.layouts?.md }),
-      sm: computeLayout(items, { totalCols: 2, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.sm }),
-      xs: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 6, doubleW: 1, doubleH: 6 }, { layout: board?.layouts?.sm }),
-    }
+    // return {
+    //   lg: computeLayout(items, { totalCols: 24, normalW: 8, normalH: 6, doubleW: 8, doubleH: 6 }, { layout: board?.layouts?.lg }),
+    //   md: computeLayout(items, { totalCols: 24, normalW: 10, normalH: 6, doubleW: 10, doubleH: 6 }, { layout: board?.layouts?.md }),
+    //   sm: computeLayout(items, { totalCols: 2, normalW: 2, normalH: 6, doubleW: 2, doubleH: 6 }, { layout: board?.layouts?.sm }),
+    //   xs: computeLayout(items, { totalCols: 1, normalW: 1, normalH: 6, doubleW: 1, doubleH: 6 }, { layout: board?.layouts?.sm }),
+    // }
+    const lyt = {}
+    Object.keys(gridSizes).forEach(key => {
+        lyt[key] = computeLayout(items, gridSizes[key], { layout: board?.layouts?.[key] });
+    });
+    return lyt
   }, [items, board?.layouts])
 
   boardRef.current.layouts = layouts

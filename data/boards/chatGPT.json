@@ -7,7 +7,7 @@
     "layouts": {
         "lg": [
             {
-                "w": 6,
+                "w": 36,
                 "h": 6,
                 "x": 0,
                 "y": 0,
@@ -17,8 +17,8 @@
                 "isResizable": true
             },
             {
-                "w": 13,
-                "h": 14,
+                "w": 36,
+                "h": 21,
                 "x": 0,
                 "y": 6,
                 "i": "value_1750256790295",
@@ -27,9 +27,9 @@
                 "isResizable": true
             },
             {
-                "w": 7,
-                "h": 6,
-                "x": 6,
+                "w": 41,
+                "h": 4,
+                "x": 36,
                 "y": 0,
                 "i": "value_1750261498829",
                 "moved": false,
@@ -37,10 +37,10 @@
                 "isResizable": true
             },
             {
-                "w": 11,
-                "h": 20,
-                "x": 13,
-                "y": 0,
+                "w": 41,
+                "h": 23,
+                "x": 36,
+                "y": 4,
                 "i": "value_1752225293068",
                 "moved": false,
                 "static": false,
@@ -49,38 +49,38 @@
         ],
         "md": [
             {
-                "w": 12,
+                "w": 26,
                 "h": 6,
-                "x": 0,
-                "y": 10,
+                "x": 37,
+                "y": 4,
                 "i": "action_1750256774576",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 24,
-                "h": 21,
-                "x": 0,
-                "y": 16,
+                "w": 26,
+                "h": 14,
+                "x": 37,
+                "y": 10,
                 "i": "value_1750256790295",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 12,
-                "h": 6,
-                "x": 12,
-                "y": 10,
+                "w": 26,
+                "h": 4,
+                "x": 37,
+                "y": 0,
                 "i": "value_1750261498829",
                 "moved": false,
                 "static": false,
                 "isResizable": true
             },
             {
-                "w": 24,
-                "h": 10,
+                "w": 37,
+                "h": 24,
                 "x": 0,
                 "y": 0,
                 "i": "value_1752225293068",
@@ -94,7 +94,7 @@
                 "w": 2,
                 "h": 5,
                 "x": 0,
-                "y": 5,
+                "y": 19,
                 "i": "action_1750256774576",
                 "moved": false,
                 "static": false
@@ -103,7 +103,7 @@
                 "w": 2,
                 "h": 17,
                 "x": 0,
-                "y": 10,
+                "y": 24,
                 "i": "value_1750256790295",
                 "moved": false,
                 "static": false
@@ -112,54 +112,58 @@
                 "w": 2,
                 "h": 5,
                 "x": 0,
-                "y": 0,
+                "y": 14,
                 "i": "value_1750261498829",
                 "moved": false,
                 "static": false
             },
             {
-                "i": "value_1752225293068",
-                "x": 0,
-                "y": 0,
                 "w": 2,
                 "h": 14,
+                "x": 0,
+                "y": 0,
+                "i": "value_1752225293068",
+                "moved": false,
+                "static": false,
                 "isResizable": true
             }
         ],
         "xs": [
             {
-                "w": 2,
+                "w": 1,
                 "h": 5,
                 "x": 0,
-                "y": 5,
+                "y": 19,
                 "i": "action_1750256774576",
                 "moved": false,
                 "static": false
             },
             {
-                "w": 2,
+                "w": 1,
                 "h": 17,
                 "x": 0,
-                "y": 10,
+                "y": 24,
                 "i": "value_1750256790295",
                 "moved": false,
                 "static": false
             },
             {
-                "w": 2,
+                "w": 1,
                 "h": 5,
                 "x": 0,
-                "y": 0,
+                "y": 14,
                 "i": "value_1750261498829",
                 "moved": false,
                 "static": false
             },
             {
-                "i": "value_1752225293068",
+                "w": 1,
+                "h": 14,
                 "x": 0,
                 "y": 0,
-                "w": 2,
-                "h": 14,
+                "i": "value_1752225293068",
+                "moved": false,
+                "static": false,
                 "isResizable": true
             }
         ]
