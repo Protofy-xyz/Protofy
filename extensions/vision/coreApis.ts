@@ -229,7 +229,7 @@ export default async (app: Application, context: typeof APIContext) => {
             "width": 2,
             "height": 8,
             "icon": "table-properties",
-            "html": "//@react\nreactCard(`\n  function Widget(props) {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            <CameraCard params={props.configParams} onPicture={(picture64) => {\n              execute_action(props.name, {picture: picture64})\n            }}/>\n          </View>\n        </Tinted>\n    );\n  }\n\n`, data.domId, data)\n",
+            "html": "//@card/react\nfunction Widget(props) {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            <CameraCard params={props.configParams} onPicture={(picture64) => {\n              execute_action(props.name, {picture: picture64})\n            }}/>\n          </View>\n        </Tinted>\n    );\n  }\n",
             "name": "camera",
             "description": "Display a React component",
             "type": "action",
