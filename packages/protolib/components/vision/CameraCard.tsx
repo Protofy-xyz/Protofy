@@ -69,7 +69,7 @@ export const CameraCard = ({ params, onPicture }) => {
     }, [fps]);
 
     return useMemo(() => (
-        <YStack ai="center" space="$4">
+        <YStack ai="center" space="$4" height="100%">
 
             <video
                 ref={videoRef}
@@ -87,10 +87,13 @@ export const CameraCard = ({ params, onPicture }) => {
             <canvas ref={canvasRef} style={{ display: "none" }} />
 
             {params?.mode?.defaultValue == 'manual' && <Button
+                position="absolute"
                 icon={Camera}
                 onPress={captureImage}
                 theme="active"
                 size="$4"
+                bottom={20}
+                className="no-drag"
             >
                 Take picture
             </Button>}

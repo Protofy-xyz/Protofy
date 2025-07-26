@@ -116,7 +116,7 @@ export const ParamsForm = ({ data, children }) => {
                                     }}
                                     defaultValue={defaultValue}
                                     placeholder={placeholder}
-                                    rows={12} // Número de filas iniciales
+                                    rows={6} // Número de filas iniciales
                                 />}
 
                                 {type == 'json' || type == 'array' && <XStack mx="10px" f={1} height={200}><Monaco

@@ -79,6 +79,8 @@ const locks = {
     "count": false
 }
 
+let frames = {}
+
 export default async (app: Application, context: typeof APIContext) => {
 
     addCard({
@@ -126,6 +128,50 @@ export default async (app: Application, context: typeof APIContext) => {
         } finally {
             locks["detect"] = false;
         }
+    })
+
+    app.post('/api/core/v1/vision/frame/set', async (req, res) => {
+        const { image } = req.body;
+        const { id } = req.body;
+        if(!id) {
+            return res.status(400).send({ error: "ID is required" });
+        }
+        frames[id as string] = image;
+        res.send('/api/core/v1/vision/frame/get?id=' + id);
+    })
+
+    addAction({
+        group: 'vision',
+        name: 'set',
+        url: "/api/core/v1/vision/frame/set",
+        tag: 'frame',
+        description: "set a frame to be used later",
+        params: {
+            id: "frame id",
+            image: "base64 image"
+        },
+        method: 'post',
+        emitEvent: true
+    })
+
+    app.get('/api/core/v1/vision/frame/get', async (req, res) => {
+        const { id } = req.query;
+        if(frames[id as string]) {
+            return res.send(frames[id as string]);
+        }
+        return res.status(404).send({ error: "Frame not found" });
+    })
+
+    addAction({
+        group: 'vision',
+        name: 'get',
+        url: "/api/core/v1/vision/frame/get",
+        tag: 'frame',
+        description: "get a previously set frame",
+        params: {
+            id: "frame id"
+        },
+        emitEvent: true
     })
 
     addAction({
@@ -226,10 +272,10 @@ export default async (app: Application, context: typeof APIContext) => {
         templateName: 'Board Camera',
         name: 'web_camera',
         defaults: {
-            "width": 2,
-            "height": 8,
+            "width": 3,
+            "height": 12,
             "icon": "table-properties",
-            "html": "//@card/react\nfunction Widget(props) {\n    return (\n        <Tinted>\n          <View className=\"no-drag\">\n            <CameraCard params={props.configParams} onPicture={(picture64) => {\n              execute_action(props.name, {picture: picture64})\n            }}/>\n          </View>\n        </Tinted>\n    );\n  }\n",
+            "html": "//@card/react\nfunction Widget(props) {\n    return (\n        <Tinted>\n            <CameraCard params={props.configParams} onPicture={async (picture64) => {\n              const url = document.location.origin + (await execute_action('/api/core/v1/vision/frame/set', {id: 'frame', image: picture64}))\n              execute_action(props.name, {picture: url})\n            }}/>\n        </Tinted>\n    );\n  }\n",
             "name": "camera",
             "description": "Display a React component",
             "type": "action",

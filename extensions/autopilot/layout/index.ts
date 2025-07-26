@@ -1,3 +1,5 @@
+let lastPlacedPosition = { x: -1, y: 0 };
+
 export function create2DArray(rows, cols, value = false) {
     const arr = [];
     for (let i = 0; i < rows; i++) {
@@ -44,32 +46,51 @@ export function findSpaceInRows(occupied, startRow, w, h) {
  * extiende el array si es necesario y devuelve { x, y, w, h }.
  */
 export function placeWidget(occupied, w, h) {
-    let row = 0;
-    const maxRows = 1000; // 🔧 PATCH: límite de seguridad
+    const totalCols = occupied[0].length;
+    const maxRows = 1000;
 
-    while (row < maxRows) { // 🔧 PATCH: antes era while (true)
-        // Aseguramos que existan suficientes filas en 'occupied' para verificar row..row+h-1
-        while (row + h > occupied.length) {
-            // Añadimos más filas al final
-            occupied.push(new Array(occupied[0].length).fill(false));
-        }
-
-        // Intentamos buscar espacio en la fila 'row'
-        const startCol = findSpaceInRows(occupied, row, w, h);
-        if (startCol != null) {
-            // ¡Encontramos un hueco! Marcamos esas celdas como ocupadas
-            for (let r = row; r < row + h; r++) {
-                for (let c = startCol; c < startCol + w; c++) {
-                    occupied[r][c] = true;
-                }
-            }
-            return { x: startCol, y: row, w, h };
-        }
-        // Si no encontramos hueco, incrementamos la fila y volvemos a probar
-        row++;
+    // Aseguramos que haya suficientes filas
+    while (occupied.length < lastPlacedPosition.y + h) {
+        occupied.push(new Array(totalCols).fill(false));
     }
 
-    throw new Error(`No se pudo colocar el widget de tamaño w=${w}, h=${h} tras ${maxRows} filas.`); // 🔧 PATCH
+    // Intentamos colocar a la derecha de la última tarjeta colocada
+    const startY = lastPlacedPosition.y;
+    const startX = lastPlacedPosition.x + 1;
+
+    for (let row = startY; row < maxRows; row++) {
+        while (occupied.length < row + h) {
+            occupied.push(new Array(totalCols).fill(false));
+        }
+
+        const colStart = (row === startY) ? startX : 0;
+        for (let col = colStart; col <= totalCols - w; col++) {
+            let fits = true;
+            for (let dy = 0; dy < h && fits; dy++) {
+                for (let dx = 0; dx < w && fits; dx++) {
+                    if (occupied[row + dy][col + dx]) {
+                        fits = false;
+                    }
+                }
+            }
+
+            if (fits) {
+                // Marcar como ocupado
+                for (let dy = 0; dy < h; dy++) {
+                    for (let dx = 0; dx < w; dx++) {
+                        occupied[row + dy][col + dx] = true;
+                    }
+                }
+
+                // Actualiza el último widget colocado
+                lastPlacedPosition = { x: col, y: row };
+
+                return { x: col, y: row, w, h };
+            }
+        }
+    }
+
+    throw new Error("No se pudo colocar el widget");
 }
 
 /**
@@ -78,25 +99,46 @@ export function placeWidget(occupied, w, h) {
  * - normalW, normalH: ancho y alto (en unidades de grid) de un widget "normal".
  * - doubleW, doubleH: ancho y alto de un widget "doble".
  */
-export function computeLayout(items, config, options:any={}) {
+export function computeLayout(items, config, options: any = {}) {
     const { doubleWidgets = [], layout = {} } = options;
     // console.log('doubleWidgets', doubleWidgets);
     const { totalCols, normalW, normalH, doubleW, doubleH } = config;
+    lastPlacedPosition = { x: -1, y: 0 };
 
+    if (Array.isArray(layout)) {
+        for (const l of layout) {
+            if (typeof l.x === 'number' && typeof l.y === 'number') {
+                const right = l.x + (l.w ?? 1);
+                const bottom = l.y + (l.h ?? 1);
+                const currentBottom = lastPlacedPosition.y + 1;
+
+                if (l.y === lastPlacedPosition.y && right > lastPlacedPosition.x) {
+                    // misma fila, más a la derecha
+                    lastPlacedPosition.x = right - 1;
+                }
+
+                if (bottom - 1 > lastPlacedPosition.y) {
+                    // fila más abajo, actualizamos y usamos su x final
+                    lastPlacedPosition.y = bottom - 1;
+                    lastPlacedPosition.x = l.x + (l.w ?? 1) - 1;
+                }
+            }
+        }
+    }
     // Iniciamos occupied con 1 sola fila (la iremos ampliando según sea necesario).
     let occupied = create2DArray(1, totalCols, false);
     const newlayout = [];
 
     for (const widget of items) {
         const prevLayout = layout && layout.find && layout.find((l) => l.i == widget.key)
-        if(prevLayout){
+        if (prevLayout) {
             newlayout.push(prevLayout);
             continue;
         }
         let w, h;
-        if(widget.width && widget.height && !prevLayout){
-            w = Math.ceil(widget.width * (normalW/4));
-            h = Math.ceil(widget.height * (normalH/5.5));
+        if (widget.width && widget.height && !prevLayout) {
+            w = Math.ceil(widget.width * (normalW / 4));
+            h = Math.ceil(widget.height * (normalH / 5.5));
         } else if (doubleWidgets.includes(widget.key)) {
             // Widget "doble"
             w = doubleW;
