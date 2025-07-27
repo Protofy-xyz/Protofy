@@ -10,7 +10,7 @@ import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
 import { CenterCard } from '@extensions/services/widgets'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'usehooks-ts'
+import { useEffectOnce, useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from 'protolib/components/Tinted'
 import { useProtoStates } from '@extensions/protomemdb/lib/useProtoStates'
 import { CardSelector } from 'protolib/components/board/CardSelector'
@@ -415,12 +415,10 @@ const Board = ({ board, icons }) => {
       }
     }
   }, [actions])
-  useUpdateEffect(() => {
-    // console.log('///////////////////////////////////////////////////////')
-    // console.log('Board states: ', states)
-    // console.log('///////////////////////////////////////////////////////')
+
+  useEffectOnce(() => {
     reloadBoard()
-  }, [states, actions])
+  })
 
   const boardRef = React.useRef(board)
 
