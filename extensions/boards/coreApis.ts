@@ -10,6 +10,7 @@ import { removeActions } from "@extensions/actions/coreContext/removeActions";
 import fileActions from "@extensions/files/fileActions";
 import { addCard } from "@extensions/cards/coreContext/addCard";
 import { Manager } from "./manager";
+import { dbProvider, getDBOptions } from 'protonode';
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
@@ -742,6 +743,11 @@ export default async (app, context) => {
                 },
             }, getServiceToken());
 
+            // if persistValue is true
+            if(action.persistValue) {
+                const db = dbProvider.getDB('board_'+boardId);
+                await db.put(action.name, response === undefined? '' : JSON.stringify(response, null, 4));
+            }
         } catch (err) {
             await generateEvent({
                 path: `actions/boards/${boardId}/${action_or_card_id}/error`,
@@ -1386,7 +1392,7 @@ return card({
         }
     }, BOARD_REFRESH_INTERVAL)
 
-    const registerActions = async () => {
+    const registerActions = async (first?) => {
         //register actions for each board
         const boards = await getBoards()
         for (const board of boards) {
@@ -1404,11 +1410,22 @@ return card({
                         params: card.params ?? {},
                         configParams: card.configParams ?? undefined,
                         emitEvent: i === actionsCards.length - 1,
-                        token: await getServiceToken()
+                        token: await getServiceToken(),
+                        persistValue: card.persistValue ?? false,
                     })
+                    if(first && card.persistValue) {
+                        // if persistValue is true, save the board state
+                        const db = dbProvider.getDB('board_' + board);
+                        try {
+                            const content = await db.get(card.name);
+                            await context.state.set({ group: 'boards', tag: board, name: card.name, value: JSON.parse(content), emitEvent: true });
+                        } catch (error) {
+                            logger.info("No previous value in DB found for card: ", card.name);
+                        }
+                    }
                 }
             }
         }
     }
-    registerActions()
+    registerActions(true)
 }

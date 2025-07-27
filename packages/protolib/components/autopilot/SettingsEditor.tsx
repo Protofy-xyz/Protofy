@@ -68,6 +68,7 @@ export const SettingsEditor = ({
                     </Checkbox>
                     <Label>API access</Label>
                 </XStack>
+                {card.type === 'action' && renderCheckbox('Keep value permanently', 'persistValue', cardData.persistValue ? true : false)}
                 {renderCheckbox('Display title', 'displayTitle')}
                 {renderCheckbox('Display icon', 'displayIcon')}
                 {renderCheckbox('Display frame', 'displayFrame')}

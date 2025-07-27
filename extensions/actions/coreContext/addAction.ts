@@ -16,6 +16,7 @@ export const addAction = async (options: {
     receiveBoard?: boolean,
     token?: string,
     responseKey?: string,
+    persistValue?: boolean,
 }) => {
     const group = options.group || 'system'
     const name = options.name
