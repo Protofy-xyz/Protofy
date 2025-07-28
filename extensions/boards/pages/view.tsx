@@ -870,7 +870,22 @@ const Board = ({ board, icons }) => {
 }
 
 const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession }) => {
-  const {
+  console.log('BoardViewLoader', boardData, iconsData, params)
+  return <AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
+    <BoardControlsProvider autopilotRunning={boardData?.data?.autopilot} boardName={params.board} >
+      <BoardViewAdmin
+        params={params}
+        pageSession={pageSession}
+        workspace={workspace}
+        boardData={boardData}
+        iconsData={iconsData}
+      />
+    </BoardControlsProvider>
+  </AsyncView>
+}
+
+export const BoardViewAdmin = ({params, pageSession, workspace, boardData, iconsData}) => {
+    const {
     rulesOpened,
     setRulesOpened,
     toggleJson,
@@ -879,7 +894,6 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
     openAdd,
     setDialogOpen
   } = useBoardControls();
-  const [appState, setAppState] = useAtom(AppState)
 
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {
@@ -901,21 +915,18 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
       setDialogOpen("settings");
     }
   }
-
-  return <AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
-    <AdminPage
-      title={params.board + " board"}
-      workspace={workspace}
-      pageSession={pageSession}
-      onActionBarEvent={onFloatingBarEvent}
-    >
-      {boardData.status == 'error' && <ErrorMessage
-        msg="Error loading board"
-        details={boardData.error.error}
-      />}
-      {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
-    </AdminPage>
-  </AsyncView>
+  return <AdminPage
+    title={params.board + " board"}
+    workspace={workspace}
+    pageSession={pageSession}
+    onActionBarEvent={onFloatingBarEvent}
+  >
+    {boardData.status == 'error' && <ErrorMessage
+      msg="Error loading board"
+      details={boardData.error.error}
+    />}
+    {boardData.status == 'loaded' && <Board board={boardData.data} icons={iconsData.data?.icons} />}
+  </AdminPage>
 }
 
 export const BoardView = ({ workspace, pageState, initialItems, itemData, pageSession, extraData, board, icons }: any) => {
@@ -927,7 +938,7 @@ export const BoardView = ({ workspace, pageState, initialItems, itemData, pageSe
   usePendingEffect((s) => { API.get({ url: `/api/core/v1/icons` }, s) }, setIconsData, icons)
   useIsAdmin(() => '/workspace/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
 
-  return (<BoardControlsProvider boardName={params.board}>
+  return (
     <BoardViewLoader
       workspace={workspace}
       boardData={boardData}
@@ -935,6 +946,5 @@ export const BoardView = ({ workspace, pageState, initialItems, itemData, pageSe
       params={params}
       pageSession={pageSession}
     />
-  </BoardControlsProvider>
   )
 }

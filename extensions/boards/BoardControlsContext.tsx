@@ -28,12 +28,12 @@ export const useBoardControls = () => useContext(BoardControlsContext)!;
 export const BoardControlsProvider: React.FC<{
   boardName: string;
   children: React.ReactNode;
-}> = ({ boardName, children }) => {
-  const [isJSONView, setIsJSONView] = useState(false);
-  const [addOpened, setAddOpened] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState<any>("");
-  const [autopilot, setAutopilot] = useState(false);
-  const [rulesOpened, setRulesOpened] = useState(false);
+}> = ({ boardName, children, mode='board', addMenu = 'closed', dialog = '', autopilotRunning = false, rules='closed' }) => {
+  const [isJSONView, setIsJSONView] = useState(mode === 'json');
+  const [addOpened, setAddOpened] = useState(addMenu === 'open');
+  const [dialogOpen, setDialogOpen] = useState<any>(dialog || '');
+  const [autopilot, setAutopilot] = useState(autopilotRunning);
+  const [rulesOpened, setRulesOpened] = useState(rules === 'open');
 
   const toggleJson = () => setIsJSONView(v => !v);
   const openAdd = () => setAddOpened(true);
