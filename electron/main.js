@@ -234,7 +234,7 @@ app.whenReady().then(async () => {
     createLogWindow(); // Show logs immediately
     
     //if run from app-dev, skip install since this will delete devdependencies, including electron itself
-    if(!global.skipInstall) {
+    if(!global.skipInstall && !process.env.SKIP_INSTALL) {
       await runYarn('workspaces focus --all --production');
       console.log('✅ Yarn completed successfully.');
     }
