@@ -98,7 +98,7 @@ async function runYarn(command = '', onLog=(x) => {}) {
   });
 }
 
-function waitForPortHttp(url, timeout = 120000, interval = 500) {
+function waitForPortHttp(url, timeout = 120000, interval = 1000) {
   //get port host and path from url
   const urlObj = new URL(url);
   const port = urlObj.port || (urlObj.protocol === 'http:' ? 80 : 443);
@@ -110,7 +110,7 @@ function waitForPortHttp(url, timeout = 120000, interval = 500) {
     const start = Date.now();
 
     const check = () => {
-      const req = http.get({ hostname, port, path, timeout: 2000 }, res => {
+      const req = http.get({ hostname, port, path, timeout: 5000 }, res => {
         if (res.statusCode >= 200 && res.statusCode < 400) {
           resolve(); // ✅ Servidor disponible y responde correctamente
         } else {
