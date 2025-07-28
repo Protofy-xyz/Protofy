@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { Readable } = require('stream');
 
-const isDev = process.argv.includes('--dev');
+const isDev = process.argv.includes('--ui-dev');
 const PROJECTS_DIR = path.join(app.getPath('userData'), 'vento-projects');
 console.log('Projects directory:', PROJECTS_DIR);
 const PROJECTS_FILE = path.join(PROJECTS_DIR, 'projects.json');
@@ -216,16 +216,17 @@ app.whenReady().then(async () => {
 
       const projectFolderPath = path.join(PROJECTS_DIR, projectName);
       hasRun = true;
-      require(projectFolderPath+'/electron/main.js');
+      //close the main window
+      if (mainWindow) {
+        mainWindow.close();
+      }
+      const startMain = require(projectFolderPath+'/electron/main.js');
+      startMain(projectFolderPath);
       //reply to the renderer process
       respond({
         mimeType: 'application/json',
         data: Buffer.from(JSON.stringify({ success: true, message: 'done' }))
       });
-      //close the main window
-      if (mainWindow) {
-        mainWindow.close();
-      }
     }
     respond({ statusCode: 404, data: Buffer.from('not found') });
   });
