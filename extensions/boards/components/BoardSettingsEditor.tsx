@@ -85,6 +85,21 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
                     />
                 </XStack>
                 <XStack alignItems="center">
+                    <ColumnTitle>Autoplay</ColumnTitle>
+                    <Checkbox
+                        w="$2"
+                        h="$2"
+                        focusStyle={{ outlineWidth: 0 }}
+                        checked={currentSettings?.autoplay ?? false}
+                        onCheckedChange={(checked) => setCurrentSettings({ ...currentSettings, autoplay: checked })}
+                        className="no-drag"
+                    >
+                        <Checkbox.Indicator>
+                            <Check size={16} />
+                        </Checkbox.Indicator>
+                    </Checkbox>
+                </XStack>
+                <XStack alignItems="center">
                     <ColumnTitle>{"Margin"}</ColumnTitle>
                     <ColInput
                         w={60}
@@ -109,20 +124,20 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
                             triggerProps={{ backgroundColor: "$gray3", borderWidth: 0 }}
                             title={"Overlap"}
                             value={currentSettings?.allowOverlap == true ? "yes" : currentSettings?.allowOverlap == false ? "no" : "default"}
-                            elements={[{value: "default", caption: "default"}, {value: true, caption: "yes"}, {value: false, caption: "no"}]}
+                            elements={[{ value: "default", caption: "default" }, { value: true, caption: "yes" }, { value: false, caption: "no" }]}
                             setValue={(value) => setCurrentSettings({ ...currentSettings, allowOverlap: value })}
                         />
                     </YStack>
                 </XStack>
                 <XStack alignItems="center">
                     <ColumnTitle>{"Compact type"}</ColumnTitle>
-                    <YStack  w={127}>
+                    <YStack w={127}>
                         <SelectList
                             triggerProps={{ backgroundColor: "$gray3", borderWidth: 0 }}
                             title={"Compact Type"}
                             value={currentSettings?.compactType || "default"}
                             placeholder="Select compact type"
-                            elements={[{value: "default", caption: "default"}, {value: "vertical", caption: "vertical"}, {value: "horizontal", caption: "horizontal"}]}
+                            elements={[{ value: "default", caption: "default" }, { value: "vertical", caption: "vertical" }, { value: "horizontal", caption: "horizontal" }]}
                             setValue={(value) => setCurrentSettings({ ...currentSettings, compactType: value })}
                         />
                     </YStack>

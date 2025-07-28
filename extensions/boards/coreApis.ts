@@ -25,6 +25,7 @@ const autopilotState = {}
 const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
 
 const memory = {}
+let alreadyStarted = false
 
 export const getExecuteAction = (actions, board = '') => `
 const actions = ${JSON.stringify(actions)}
@@ -850,15 +851,13 @@ export default async (app, context) => {
         }
     })
 
-    app.get('/api/core/v1/boards/:boardId/autopilot/on', requireAdmin(), async (req, res) => {
-        const boardId = req.params.boardId;
-
-        const started = await Manager.start('../../data/boards/' + req.params.boardId + '.js', async () => {
+    const startAutoPilot = async (boardId, res?) => {
+        const started = await Manager.start('../../data/boards/' + boardId + '.js', async () => {
             const states = await context.state.getStateTree();
             return {
-                boardId: req.params.boardId,
-                states: states.boards && states.boards[req.params.boardId] ? states.boards[req.params.boardId] : {},
-                actions: await context.state.get({ group: 'boards', tag: req.params.boardId, chunk: 'actions', defaultValue: {} })
+                boardId: boardId,
+                states: states.boards && states.boards[boardId] ? states.boards[boardId] : {},
+                actions: await context.state.get({ group: 'boards', tag: boardId, chunk: 'actions', defaultValue: {} })
             }
         }, () => {
             autopilotState[boardId] = false;
@@ -867,12 +866,17 @@ export default async (app, context) => {
         if (started) {
             autopilotState[boardId] = true;
             logger.info(`Autopilot started for board: ${boardId}`);
-            res.send({ result: 'started', message: "Board started", board: req.params.boardId });
+            if(res) res.send({ result: 'started', message: "Board started", board: boardId });
 
         } else {
             logger.info(`Autopilot already running for board: ${boardId}`);
-            res.send({ result: 'already_running', message: "Board already running", board: req.params.boardId });
+            if(res) res.send({ result: 'already_running', message: "Board already running", board: boardId });
         }
+
+    }
+    app.get('/api/core/v1/boards/:boardId/autopilot/on', requireAdmin(), async (req, res) => {
+        const boardId = req.params.boardId;
+        startAutoPilot(boardId, res);
     })
 
     app.get('/api/core/v1/viewLib', requireAdmin(), async (req, res) => {
@@ -1392,6 +1396,32 @@ return card({
             }
         }
     }, BOARD_REFRESH_INTERVAL)
+
+    context.events.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            if(!alreadyStarted) {
+                alreadyStarted = true;
+                logger.info("API is ready, starting autopilot for all boards with autoplay enabled")
+                const boards = await getBoards()
+                for (const board of boards) {
+                    const boardContent = await getBoard(board)
+                    if (boardContent.settings?.autoplay) {
+                        logger.info(`Autopilot enabled for board: ${board}, starting...`)
+                        try {
+                            await startAutoPilot(board);
+                        } catch (error) {
+                            logger.error(`Error starting autopilot for board: ${board}`, error);
+                        }
+                    }
+                }
+            }
+        },
+        "services/api/ready",
+        "api"
+    )
+
 
     const registerActions = async (first?) => {
         //register actions for each board
