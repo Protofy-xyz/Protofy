@@ -98,7 +98,7 @@ async function runYarn(command = '', onLog=(x) => {}) {
   });
 }
 
-function waitForPortHttp(url, timeout = 30000, interval = 500) {
+function waitForPortHttp(url, timeout = 120000, interval = 500) {
   //get port host and path from url
   const urlObj = new URL(url);
   const port = urlObj.port || (urlObj.protocol === 'http:' ? 80 : 443);
