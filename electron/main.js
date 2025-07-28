@@ -196,6 +196,9 @@ module.exports = function start(rootPath) {
             additionalArguments: [`--session=${encoded}`],
             contextIsolation: true,
             nodeIntegration: false,
+            sandbox: false,
+            webSecurity: true,
+            media: true
           },
           fullscreen: fullscreen
         });
