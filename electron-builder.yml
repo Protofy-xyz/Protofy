@@ -12,7 +12,9 @@ mac:
   icon: apps/adminpanel/public/icon.icns
   hardenedRuntime: true
   gatekeeperAssess: false
-
+  extendInfo:
+    NSCameraUsageDescription: "Esta aplicación necesita acceso a la cámara"
+    NSMicrophoneUsageDescription: "Esta aplicación necesita acceso al micrófono"
 win:
   target:
     - portable
