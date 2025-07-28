@@ -3588,14 +3588,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@extensions/playwright@workspace:extensions/playwright":
-  version: 0.0.0-use.local
-  resolution: "@extensions/playwright@workspace:extensions/playwright"
-  dependencies:
-    playwright: "npm:1.41.0"
-  languageName: unknown
-  linkType: soft
-
 "@extensions/protoinfra@workspace:extensions/protoinfra":
   version: 0.0.0-use.local
   resolution: "@extensions/protoinfra@workspace:extensions/protoinfra"
