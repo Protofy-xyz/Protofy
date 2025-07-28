@@ -61,6 +61,13 @@ const mqtt = getMQTTClient(serviceName, getServiceToken(), async () => {
             logger.error({ error: error.toString() }, "Error loading automation: " + file)
         });
     })
+
+    generateEvent({
+        path: 'services/api/ready', //do not use serviceName here, since core depends on this event to autostart boards
+        from: 'api', 
+        user: 'system', 
+        payload: { state: 'ready' }
+    }, getServiceToken())
 })
 
 mqtt.on("message", (messageTopic, message) => {
