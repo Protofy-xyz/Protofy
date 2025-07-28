@@ -11,7 +11,6 @@
   </a>
 </h4>
 
-
 <h2><p align="center" style="font-size: 20px">AI Driven Machine Automation Platform</p>
 <p align="center" style="font-size:15px">Natural Language Autopilot system for smart and industrial devices</p></h2> 
 
