@@ -64,6 +64,7 @@ export const addCard = async (options: {
                 from: "states",
                 user: 'system',
                 payload: content,
+                ephemeral: true
             }, getServiceToken())
         }
     }
