@@ -197,6 +197,15 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                         <Tinted>
                             <FileBrowser
                                 ref={fileBrowserRef}
+                                disableDragAndDrop={true}
+                                disableDefaultFileActions={actionsToDisable}
+                                //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
+                                disableSelection={false}
+                                darkMode={resolvedTheme == 'dark'}
+                                files={parsedFiles}
+                                folderChain={folderChain}
+                                fileActions={myFileActions}
+                                {...props}
                                 onFileAction={(data) => {
                                     if (props.onFileAction && typeof props.onFileAction === 'function') {
                                         const actionRes = props.onFileAction(data);
@@ -231,15 +240,6 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                         logger.info({ data }, "File action")
                                     }
                                 }}
-                                disableDragAndDrop={true}
-                                disableDefaultFileActions={actionsToDisable}
-                                //defaultFileViewActionId={ChonkyActions.ToggleHiddenFiles.id} 
-                                disableSelection={false}
-                                darkMode={resolvedTheme == 'dark'}
-                                files={parsedFiles}
-                                folderChain={folderChain}
-                                fileActions={myFileActions}
-                                {...props}
                             >
                                 {!props.disableNavBar && <FileNavbar />}
                                 {!props.disableFileToolbar && <FileToolbar />}
