@@ -7,7 +7,7 @@ on:
 
 jobs:
   package-assets:
-    if: github.repository != 'Protofy-xyz/Vento'
+    if: github.repository != 'Protofy.xyz/Vento'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -31,20 +31,26 @@ jobs:
 
       - name: Create ZIPs for each asset package
         if: steps.check_assets.outputs.found == 'true'
+        shell: bash
         run: |
           mkdir -p dist
           TAG_NAME=${{ github.ref_name }}
 
-          # Recorre cada objeto del array del JSON
+          shopt -s globstar nullglob  # Activa globstar para que ** funcione
           jq -c '.[]' assets-release.json | while read -r item; do
             NAME=$(echo "$item" | jq -r '.name')
-            FILES=$(echo "$item" | jq -r '.files[]')
-
-            echo "Empaquetando $NAME-$TAG_NAME.zip con los archivos:"
-            echo "$FILES"
+            echo "Empaquetando $NAME-$TAG_NAME.zip"
 
             zip_name="dist/${NAME}-${TAG_NAME}.zip"
-            zip "$zip_name" $FILES
+
+            # Recolectar archivos de forma recursiva
+            FILES=""
+            for pattern in $(echo "$item" | jq -r '.files[]'); do
+              FILES="$FILES $(eval echo $pattern)"
+            done
+
+            echo "Incluyendo archivos: $FILES"
+            zip -r "$zip_name" $FILES
           done
 
       - name: Upload all ZIPs to GitHub Release
