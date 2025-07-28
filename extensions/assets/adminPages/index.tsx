@@ -45,6 +45,7 @@ function FilesPage({ initialFilesState, pageSession }: any) {
       pageSession={pageSession}
       title={"assets"}
       onActionBarEvent={onActionBarEvent}
+      actionBar={{ hideable: false }}
     >
       <YStack f={1} p="$6">
         <FileBrowser
