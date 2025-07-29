@@ -6,7 +6,7 @@
   <a href="https://github.com/protofy-xyz/protofy/graphs/contributors">
     <img src="https://img.shields.io/github/contributors-anon/protofy-xyz/protofy?color=yellow&style=flat" alt="contributors" style="height: 20px;">
   </a>
-  <a href="https://discord.gg/VpeZxMFfYW">
+  <a href="https://discord.gg/protofy">
     <img src="https://img.shields.io/badge/discord-7289da.svg?style=flat&logo=discord" alt="discord" style="height: 20px;">
   </a>
 </h4>
