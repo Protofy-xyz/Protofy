@@ -1,24 +1,34 @@
 import { API } from "protobase";
-import { getLogger } from "protobase";
+import { getLogger, getServiceToken } from "protobase";
 
 const logger = getLogger()
 
-export const getKey = async ({ key = '', done = (key) => {}, error = (err) => {}, token = '' }) => {
-    if(!key) {
+export const getKey = async ({ key = '', done = (key) => { }, error = (err) => { }, token = '' }) => {
+    if (!key) {
+        logger.error("Error getting key: No key provided")
         error("No key provided")
         return
     }
 
-    var urlEnch = '/api/core/v1/keys/' + key
-
-    if (token) {
-        urlEnch = urlEnch + "?token=" + token
+    if (!token) {
+        token = getServiceToken()
     }
+
+    var urlEnch = '/api/core/v1/keys/' + key
+    urlEnch = urlEnch + "?token=" + token
+    
 
     const result = await API.get(urlEnch)
 
     if (result.isError) {
-        if (error) error(result.error?.error ?? result.error)
+        if(process.env[key]) {
+            if (done) done(process.env[key])
+            return process.env[key]
+        }
+        if (error) {
+            logger.error({ error: result.error?.error ?? result.error }, "Error getting key: " + key)
+            error(result.error?.error ?? result.error)
+        }
         return
     }
 

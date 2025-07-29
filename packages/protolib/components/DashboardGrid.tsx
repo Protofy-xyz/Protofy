@@ -18,6 +18,7 @@ export const DashboardGrid = ({ items = [], layouts = {}, borderRadius = 10, pad
                 {...props}
                 className="layout"
                 layouts={layouts}
+                margin={[6, 6]}
                 breakpoints={{ lg: 1500, md: 800, sm: 400, xs: 0 }}
                 rowHeight={30}
                 draggableCancel=".no-drag"
