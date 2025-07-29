@@ -16,6 +16,7 @@ const create = (assetName) => {
             "tag1",
             "tag2"
         ],
+        "version": "0.0.1", 
         "packagedFiles": [
         ]
     };
