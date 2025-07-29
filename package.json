@@ -62,7 +62,7 @@
     "download-binaries": "node scripts/download-bins.js",
     "clean-deps": "shx rm -rf node_modules",
     "gen-latest": "git tag -f latest && git push --force origin latest",
-    "assets": "node extensions/assets/scripts/assets.js"
+    "assets": "node extensions/assets/scripts/index.js"
   },
   "resolutions": {
     "react": "18.2.0",
