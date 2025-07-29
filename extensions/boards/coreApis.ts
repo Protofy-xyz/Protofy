@@ -479,7 +479,7 @@ export default async (app, context) => {
                     }
 
                     let rulesCode = card.rulesCode.trim();
-                    if (!rulesCode.startsWith('return ')) {
+                    if (rulesCode.split("\n").length == 1 && !rulesCode.startsWith('return ')) {
                         rulesCode = 'return ' + rulesCode;
                     }
                     const wrapper = new AsyncFunction('states', 'board', 'data', 'memory', `
