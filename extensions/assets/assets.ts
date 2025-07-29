@@ -3,34 +3,53 @@ const fs = require('fs');
 const path = require('path');
 const pm2 = require('pm2');
 
-function copyFolderStructure(sourceDir, targetDir) {
+function moveAssetStructure(sourceDir, targetDir) {
     if (!fs.existsSync(sourceDir)) {
         console.error(`Source folder "${sourceDir}" does not exist.`);
         return;
     }
 
-    // .vento is a config folder that should not be copied
-    const entries = fs.readdirSync(sourceDir, { withFileTypes: true }).filter(entry => entry.name != ".vento" );
-    
-    for (const entry of entries) {
-        const srcPath = path.join(sourceDir, entry.name);
-        const destPath = path.join(targetDir, entry.name);
+    const copiedFiles: any = [];
+    const ventoDir = path.join(sourceDir, '.vento');
+    const logPath = path.join(ventoDir, 'copiedFiles.json');
 
-        if (entry.isDirectory()) {
-            // Create the directory in the destination if it doesn't exist
-            if (!fs.existsSync(destPath)) {
-                fs.mkdirSync(destPath, { recursive: true });
-            }
-            copyFolderStructure(srcPath, destPath);
-        } else if (entry.isFile()) {
-            // Copy the file if it doesn't exist in the destination
-            if (!fs.existsSync(destPath)) {
-                fs.copyFileSync(srcPath, destPath);
-            } else {
-                // If the file already exists, you can choose to skip or overwrite
+    function walkAndMove(currentSource, currentTarget) {
+        const entries = fs.readdirSync(currentSource, { withFileTypes: true })
+                          .filter(entry => entry.name !== '.vento');
+
+        for (const entry of entries) {
+            const srcPath = path.join(currentSource, entry.name);
+            const destPath = path.join(currentTarget, entry.name);
+
+            if (entry.isDirectory()) {
+                if (!fs.existsSync(destPath)) {
+                    fs.mkdirSync(destPath, { recursive: true });
+                }
+                walkAndMove(srcPath, destPath);
+
+                // delete the original directory if it is empty
+                const remaining = fs.readdirSync(srcPath).filter(name => name !== '.vento');
+                if (remaining.length === 0) {
+                    fs.rmdirSync(srcPath);
+                }
+            } else if (entry.isFile()) {
+                if (!fs.existsSync(destPath)) {
+                    fs.copyFileSync(srcPath, destPath);
+                    fs.unlinkSync(srcPath); // delete the original file
+                    const relativePath = path.relative(sourceDir, srcPath);
+                    copiedFiles.push(relativePath);
+                }
             }
         }
     }
+
+    walkAndMove(sourceDir, targetDir);
+
+    if (!fs.existsSync(ventoDir)) {
+        fs.mkdirSync(ventoDir);
+    }
+
+    fs.writeFileSync(logPath, JSON.stringify(copiedFiles, null, 2), 'utf-8');
 }
 
 export function installAsset(assetName) {
@@ -47,7 +66,7 @@ export function installAsset(assetName) {
 
     const targetDir = path.join(__dirname, '..', '..');
 
-    copyFolderStructure(sourceDir, targetDir);
+    moveAssetStructure(sourceDir, targetDir);
     execSync(`node ../../.yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
     pm2.connect((err) => {
         if (err) {
