@@ -7,7 +7,6 @@ const GetKey = ({ node = {}, nodeData = {}, children }: any) => {
     return (
         <Node icon={Key} node={node} isPreview={!node.id} title='Get Key' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'key', field: 'mask-key', type: 'input' }]} />
-            <NodeParams id={node.id} params={[{ label: 'token', field: 'mask-token', type: 'input' }]} />
             <div style={{height: '3px'}} />
             <NodeOutput id={node.id} type={'input'} label={'On Read'} vars={['key']} handleId={'mask-done'} />
             <NodeOutput id={node.id} type={'input'} label={'Error'} vars={['err']} handleId={'mask-error'} />
