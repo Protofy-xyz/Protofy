@@ -34,7 +34,7 @@ const package = (assetName) => {
     // Create the zip and add the folder
     try {
         const zip = new AdmZip();
-        zip.addLocalFolder(assetDir, assetName); // preserve folder name inside the zip
+        zip.addLocalFolder(assetDir);
         zip.writeZip(outputZip);
         console.log(`✔ Package created: ${outputZip}`);
     } catch (err) {
