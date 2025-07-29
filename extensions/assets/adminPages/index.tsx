@@ -65,7 +65,7 @@ function FilesPage({ initialFilesState, pageSession }: any) {
               ext: "",
               thumbnailUrl: "/api/core/v1/files?path=data/assets/" + f.name + "/.vento/icon.png",
             }),
-            onFileAction: (data) => {
+            fileActionCheck: (data) => {
               if (data.id == "mouse_click_file") {
                 return false
               }

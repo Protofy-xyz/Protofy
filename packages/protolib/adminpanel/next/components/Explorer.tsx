@@ -205,11 +205,10 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                 files={parsedFiles}
                                 folderChain={folderChain}
                                 fileActions={myFileActions}
-                                {...props}
                                 onFileAction={(data) => {
-                                    if (props.onFileAction && typeof props.onFileAction === 'function') {
-                                        const actionRes = props.onFileAction(data);
-                                        if (actionRes === false) return
+                                    if (props.fileActionCheck && typeof props.fileActionCheck === 'function') {
+                                        const actionCheck = props.fileActionCheck(data);
+                                        if (actionCheck === false) return
                                     }
                                     if (data.id == 'open_files') {
                                         onOpen(data.payload.targetFile)
@@ -240,6 +239,7 @@ export const Explorer = ({ currentPath, customActions, onOpen, onChangeSelection
                                         logger.info({ data }, "File action")
                                     }
                                 }}
+                                {...props}
                             >
                                 {!props.disableNavBar && <FileNavbar />}
                                 {!props.disableFileToolbar && <FileToolbar />}
