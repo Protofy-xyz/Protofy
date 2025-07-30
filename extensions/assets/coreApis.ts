@@ -6,6 +6,7 @@ import { promises } from 'fs';
 import path from "path";
 import {installAsset} from "./assets"
 import AdmZip from 'adm-zip';
+import { c } from "tar";
 
 const root = path.join(process.cwd(), "..", "..");
 const logger = getLogger();
@@ -78,23 +79,47 @@ const decompressAndInstallAsset = async (context, zipFile) => {
     });
 };
 
+const unpackage = async (context, zipFile) => {
+    const zipPath = path.join(assetsRoot, zipFile);
+    const assetName = zipFile.replace(".zip", "");
+    const assetPath = path.join(assetsRoot, assetName);
+
+    await decompressZip({
+        zipPath,
+        outputPath: assetPath,
+        done: async (outputPath) => {
+            console.log(`Decompressed ${zipFile} to ${outputPath}`);
+
+            await waitForFolderReady(assetPath);
+
+            // await context.os2.deleteFile({
+            //     path: `${assetsDir}/${zipFile}`,
+            // });
+        },
+        error: (err) => {
+            console.error(`Error decompressing ${zipFile}:`, err);
+        },
+    });
+};
+
 export default (app, context) => {
 
     // on upload file to assets folder, install the asset
-    // context.events.onEvent(
-    //     context.mqtt,
-    //     context,
-    //     async (event) => {
-    //         // call the install
-    //         const payload = event.payload || {};
-    //         if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
-    //             await decompressAndInstallAsset(context, payload.filename);
-    //         }
+    context.events.onEvent(
+        context.mqtt,
+        context,
+        async (event) => {
+            // call the install
+            const payload = event.payload || {};
+            if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
+                // await decompressAndInstallAsset(context, payload.filename);
+                await unpackage(context, payload.filename)
+            }
 
-    //     },
-    //     "files/write/file",
-    //     "core"
-    // )
+        },
+        "files/write/file",
+        "core"
+    )
 
     app.get('/api/core/v1/assets/install/all', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
@@ -132,6 +157,9 @@ export default (app, context) => {
                 }
             },
         })
+        console.log(`Assets installed.`);
+        await API.get("/api/core/v1/reloadBoards", getServiceToken())
+        console.log(`Board reloaded after installing asset.`);
         // TODO: return all the installed assets
         res.send({ "result": "All assets installed successfully." });
     }))
@@ -153,7 +181,9 @@ export default (app, context) => {
             installAsset(asset)
         }
 
-        // await API.get()
+        console.log(`Assets installed.`);
+        await API.get("/api/core/v1/reloadBoards", getServiceToken())
+        console.log(`Board reloaded after installing asset.`);
 
         res.send({ "result": "All assets installed successfully." });
     }))
