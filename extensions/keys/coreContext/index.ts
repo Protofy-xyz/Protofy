@@ -15,8 +15,10 @@ export const getKey = async ({ key = '', done = (key) => { }, error = (err) => {
     }
 
     var urlEnch = '/api/core/v1/keys/' + key
-    urlEnch = urlEnch + "?token=" + token
-    
+
+    if (token) {
+        urlEnch = urlEnch + "?token=" + token
+    }
 
     const result = await API.get(urlEnch)
 
