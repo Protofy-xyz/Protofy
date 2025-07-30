@@ -81,20 +81,20 @@ const decompressAndInstallAsset = async (context, zipFile) => {
 export default (app, context) => {
 
     // on upload file to assets folder, install the asset
-    context.events.onEvent(
-        context.mqtt,
-        context,
-        async (event) => {
-            // call the install
-            const payload = event.payload || {};
-            if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
-                await decompressAndInstallAsset(context, payload.filename);
-            }
+    // context.events.onEvent(
+    //     context.mqtt,
+    //     context,
+    //     async (event) => {
+    //         // call the install
+    //         const payload = event.payload || {};
+    //         if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
+    //             await decompressAndInstallAsset(context, payload.filename);
+    //         }
 
-        },
-        "files/write/file",
-        "core"
-    )
+    //     },
+    //     "files/write/file",
+    //     "core"
+    // )
 
     app.get('/api/core/v1/assets/install/all', handler(async (req, res, session) => {
         if (!session || !session.user.admin) {
@@ -152,6 +152,8 @@ export default (app, context) => {
         for (const asset of assetsToInstall) {
             installAsset(asset)
         }
+
+        // await API.get()
 
         res.send({ "result": "All assets installed successfully." });
     }))
