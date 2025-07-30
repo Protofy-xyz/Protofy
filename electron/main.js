@@ -8,11 +8,9 @@ const os = require('os');
 const process = require('process');
 const fs = require('fs');
 
-module.exports = function start(rootPath) {
-  console.log('🚀 Starting Vento Launcher...');
-  console.log('📂 Root path:', rootPath);
 
-  //get path to the local Node.js binary
+function getNodePath(rootPath) {
+    //get path to the local Node.js binary
   let nodePath = os.platform() === 'win32' ? path.join(rootPath, 'bin/node.exe') : path.join(rootPath, 'bin/node')
   const hasLocalNode = fs.existsSync(nodePath);
 
@@ -23,6 +21,14 @@ module.exports = function start(rootPath) {
     nodePath = 'node'
     console.warn('🟡 No local Node.js binary found. Using system Node.js.');
   }
+  return nodePath;
+}
+
+module.exports = function start(rootPath) {
+  console.log('🚀 Starting Vento Launcher...');
+  console.log('📂 Root path:', rootPath);
+
+  const nodePath = getNodePath(rootPath);
 
   process.chdir(rootPath);
   console.log('🟢 Starting app...');
