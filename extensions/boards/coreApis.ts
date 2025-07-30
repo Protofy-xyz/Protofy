@@ -1422,8 +1422,12 @@ return card({
         "api"
     )
 
+    app.get('/api/core/v1/reloadBoards', requireAdmin(), async (req, res) => {
+        registerActions()
+        res.send({ message: "Boards reloaded" })
+    })
 
-    const registerActions = async (first?) => {
+    const registerActions = async () => {
         //register actions for each board
         const boards = await getBoards()
         for (const board of boards) {
@@ -1441,10 +1445,9 @@ return card({
                         params: card.params ?? {},
                         configParams: card.configParams ?? undefined,
                         emitEvent: i === actionsCards.length - 1,
-                        token: await getServiceToken(),
                         persistValue: card.persistValue ?? false,
                     })
-                    if(first && card.persistValue) {
+                    if(card.persistValue) {
                         // if persistValue is true, save the board state
                         const db = dbProvider.getDB('board_' + board);
                         try {
@@ -1458,5 +1461,5 @@ return card({
             }
         }
     }
-    registerActions(true)
+    registerActions()
 }
