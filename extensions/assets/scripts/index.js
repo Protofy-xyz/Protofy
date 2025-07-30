@@ -1,42 +1,25 @@
+const [,, action, assetName] = process.argv;
 
-const action = process.argv[2];
-if (action == 'create') {
+if (!assetName) {
+    console.error('Please provide an asset name as the second parameter.');
+    process.exit(1);
+}
 
-    if (process.argv.length < 3) {
-        console.error('Please provide an asset name as the second parameter.');
-        process.exit(1);
-    }
-    const assetName = process.argv[3];
-    const create = require('./create').create;
-    create(assetName);
-}else if(action == 'prepare'){
-    if (process.argv.length < 3) {
-        console.error('Please provide an asset name as the second parameter.');
-        process.exit(1);
-    }
-    const assetName = process.argv[3];
-    const prepare = require('./prepare').prepare;
-    prepare(assetName);
-}else if(action == 'package'){
-    if (process.argv.length < 3) {
-        console.error('Please provide an asset name as the second parameter.');
-        process.exit(1);
-    }
-    const assetName = process.argv[3];
-    const package = require('./package').package;
-    package(assetName);
+const actions = {
+    create: { module: './create', fn: 'create' },
+    prepare: { module: './prepare', fn: 'prepare' },
+    package: { module: './package', fn: 'package' },
+    clean: { module: './clean', fn: 'clean' },
+    install: { module: './install', fn: 'installAsset' },
+    unpackage: { module: './unpackage', fn: 'unpackage' }
+};
 
-}else if(action == 'clean'){
-    if (process.argv.length < 3) {
-        console.error('Please provide an asset name as the second parameter.');
-        process.exit(1);
-    }
-    const assetName = process.argv[3];
-    const clean = require('./clean').clean;
-    clean(assetName);
+const entry = actions[action];
 
-}else{
+if (!entry) {
     console.error('Invalid action');
     process.exit(1);
 }
 
+const func = require(entry.module)[entry.fn];
+func(assetName);
