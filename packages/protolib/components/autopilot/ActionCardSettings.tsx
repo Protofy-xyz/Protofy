@@ -1,5 +1,5 @@
 import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info } from '@tamagui/lucide-icons'
-import { Text, YStack, XStack, ToggleGroup, Paragraph } from '@my/ui'
+import { Text, YStack, XStack, ToggleGroup, Paragraph, Input, Button } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
@@ -12,6 +12,8 @@ import { Markdown } from '../Markdown'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { SettingsEditor } from './SettingsEditor'
+import { ComponentCodeGeneration } from './ComponentCodeGeneration'
+import { ViewEditor } from './ViewEditor'
 
 export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors }) => {
   const [cardData, setCardData] = useState(card);
@@ -188,8 +190,8 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
                 }))
               }}
             />}
-            {tab == 'view' && <HTMLEditor setHTMLCode={setHTMLCode} htmlCode={cardData.html} data={{ ...cardData, icon: cardData.icon, color: cardData.color, name: cardData.name, params: cardData.params }} />}
-            {tab === 'raw' && <SettingsEditor card={card} cardData={cardData} setCardData={setCardData} resolvedTheme={resolvedTheme}/>}
+            {tab == 'view' && <ViewEditor cardData={cardData} setHTMLCode={setHTMLCode} />}
+            {tab === 'raw' && <SettingsEditor card={card} cardData={cardData} setCardData={setCardData} resolvedTheme={resolvedTheme} />}
           </Tinted>
 
         </YStack>

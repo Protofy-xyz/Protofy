@@ -14,7 +14,7 @@ import { CodeView } from '@extensions/files/intents';
 import { ClipboardList, Save, Sparkles } from '@tamagui/lucide-icons'
 
 
-export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef, board, actions, states, resolvedTheme }) => {
+export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef, board, actions, states, resolvedTheme, onChange }) => {
     const boardStates = states.boards ? states.boards[board.name] : {}
     const boardActions = actions.boards ? actions.boards[board.name] : {}
 
@@ -61,6 +61,7 @@ export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef,
                 {icons}
                 <XStack cursor='pointer' onPress={() => {
                     API.post(`/api/core/v1/boards/${board.name}/uicode`, {code: editedCode.current})
+                    onChange ? onChange(editedCode.current) : null
                 }} o={0.8} pressStyle={{ opacity: 0.8 }} ml="$5" hoverStyle={{ opacity: 1 }}>
                     <Save size="$1" color="var(--color)" />
                 </XStack>

@@ -20,15 +20,16 @@ const getActionBar = (generateEvent) => {
     'BoardView': [
       <>
         <Tinted>
-          <ActionBarButton Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
+          <ActionBarButton tooltipText="Board Settings" Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
         </Tinted>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
       </>,
       <Tinted>
-        <ActionBarButton Icon={Plus} onPress={() => generateEvent({ type: "open-add" })} />
+        <ActionBarButton tooltipText="Add Card" Icon={Plus} onPress={() => generateEvent({ type: "open-add" })} />
       </Tinted>,
       <Tinted>
         <ActionBarButton
+          tooltipText={autopilot ? "Pause Autopilot" : "Play Autopilot"}
           beating={autopilot}
           fill={!autopilot}
           Icon={autopilot ? Pause : Play}
@@ -40,28 +41,28 @@ const getActionBar = (generateEvent) => {
         />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={rulesOpened} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
+        <ActionBarButton tooltipText={rulesOpened ? "Close Rules" : "Open Rules"} selected={rulesOpened} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
+        <ActionBarButton tooltipText={statesOpened ? "Close States" : "Open States"} selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
+        <ActionBarButton tooltipText="UI Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </Tinted>,
       <>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-        <ActionLogsButton />
+        <ActionLogsButton tooltipText="Logs"/>
       </>,
     ],
     'uiView': [
       <Tinted>
-        <ActionBarButton selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
+        <ActionBarButton tooltipText="Board Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={rulesOpened} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+        <ActionBarButton tooltipText="Code" selected={rulesOpened} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
+        <ActionBarButton tooltipText={statesOpened ? "Close States" : "Open States"} selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
     ]
   }
