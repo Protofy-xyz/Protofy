@@ -178,7 +178,11 @@ export default (app, context) => {
         }
 
         for (const asset of assetsToInstall) {
-            installAsset(asset)
+            try{
+                installAsset(asset)
+            } catch (error) {
+                console.error(`Error installing asset ${asset}:`, error);
+            }
         }
 
         console.log(`Assets installed.`);
