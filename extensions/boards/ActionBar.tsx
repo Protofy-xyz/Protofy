@@ -45,9 +45,9 @@ const getActionBar = (generateEvent) => {
       <Tinted>
         <ActionBarButton selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
-      // <Tinted>
-      //   <ActionBarButton selected={uiCodeOpened} Icon={Eye} onPress={() => generateEvent({ type: "toggle-uicode" })} />
-      // </Tinted>,
+      <Tinted>
+        <ActionBarButton selected={uiCodeOpened} Icon={Eye} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+      </Tinted>,
       <>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
         <ActionLogsButton/>

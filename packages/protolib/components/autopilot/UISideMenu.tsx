@@ -60,7 +60,7 @@ export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef,
                 </XStack> */}
                 {icons}
                 <XStack cursor='pointer' onPress={() => {
-                    API.post(`/api/core/v1/boards/${board.name}/uicode`, uiCode)
+                    API.post(`/api/core/v1/boards/${board.name}/uicode`, {code: editedCode.current})
                 }} o={0.8} pressStyle={{ opacity: 0.8 }} ml="$5" hoverStyle={{ opacity: 1 }}>
                     <Save size="$1" color="var(--color)" />
                 </XStack>
