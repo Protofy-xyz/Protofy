@@ -158,7 +158,7 @@ export default (app, context) => {
             },
         })
         console.log(`Assets installed.`);
-        await API.get("/api/core/v1/reloadBoards", getServiceToken())
+        await API.get("/api/core/v1/reloadBoards?token=" +getServiceToken())
         console.log(`Board reloaded after installing asset.`);
         // TODO: return all the installed assets
         res.send({ "result": "All assets installed successfully." });
@@ -182,7 +182,7 @@ export default (app, context) => {
         }
 
         console.log(`Assets installed.`);
-        await API.get("/api/core/v1/reloadBoards", getServiceToken())
+        await API.get("/api/core/v1/reloadBoards?token=" +getServiceToken())
         console.log(`Board reloaded after installing asset.`);
 
         res.send({ "result": "All assets installed successfully." });
