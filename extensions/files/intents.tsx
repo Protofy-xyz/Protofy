@@ -338,7 +338,7 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
     <XStack position="absolute" left={20} top={-30}>
       {leftIcons}
     </XStack>
-    {!disableFlowMode && <XStack position="absolute" right={20} top={-30}>
+    <XStack position="absolute" right={20} top={-30}>
       {extraPanels.map(v => {
         const LICon = v.icon;
         return <IconContainer selected={mode == v.id} key={v.id} onPress={() => setMode(v.id)}>
@@ -349,17 +349,17 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
         {/* <SizableText mr={"$2"}>Save</SizableText> */}
         <Sparkles color="var(--color)" size={"$1"} />
       </IconContainer>}
-      <IconContainer selected={mode == 'flow'} onPress={() => setMode('flow')}>
+      {!disableFlowMode && <IconContainer selected={mode == 'flow'} onPress={() => setMode('flow')}>
         {/* <SizableText mr={"$2"}>Save</SizableText> */}
         <Workflow color="var(--color)" size={"$1"} />
-      </IconContainer>
+      </IconContainer>}
       <IconContainer selected={mode == 'code'} onPress={() => setMode('code')}>
         {/* <SizableText mr={"$2"}>Save</SizableText> */}
         <Code color="var(--color)" size={"$1"} />
       </IconContainer>
       {icons}
       {children}
-    </XStack>}
+    </XStack>
     {getBody()}
     <XStack opacity={0} top={-200000} position={"absolute"}>
       <Flows preload={true} primary={"#f00"} />

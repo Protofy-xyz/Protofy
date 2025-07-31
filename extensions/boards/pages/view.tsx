@@ -73,7 +73,7 @@ const { useParams } = createParam()
 
 const ActionRunner = dynamic(() => import('protolib/components/ActionRunner').then(mod => mod.ActionRunner), { ssr: false })
 const RulesSideMenu = dynamic(() => import('protolib/components/autopilot/RulesSideMenu').then(mod => mod.RulesSideMenu), { ssr: false })
-
+const UISideMenu = dynamic(() => import('protolib/components/autopilot/UISideMenu').then(mod => mod.UISideMenu), { ssr: false })
 const CardIcon = ({ Icon, onPress, ...props }) => {
   return <Tinted>
     <XStack {...props} right={-10} hoverStyle={{ bg: '$backgroundFocus' }} pressStyle={{ bg: '$backgroundPress' }} borderRadius="$5" alignItems="center" justifyContent="center" cursor="pointer" p="$2" onPress={onPress}>
@@ -318,6 +318,8 @@ const Board = ({ board, icons }) => {
     setDialogOpen,
     statesOpened,
     setStatesOpened,
+    setUiCodeOpened,
+    uiCodeOpened,
     dialogOpen
   } = useBoardControls();
 
@@ -332,6 +334,7 @@ const Board = ({ board, icons }) => {
   const [editCode, setEditCode] = useState('')
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
+  const [uicodeInfo, setUICodeInfo] = useState();
   const [rulesSize, setRulesSize] = useState(1010)
   const [statesSize, setStatesSize] = useState(700)
   const [errors, setErrors] = useState<string[]>([])
@@ -370,7 +373,9 @@ const Board = ({ board, icons }) => {
   const reloadBoard = async () => {
     const dataData = await API.get(`/api/core/v1/boards/${board.name}`)
     const automationInfo = await API.get(`/api/core/v1/boards/${board.name}/automation`)
+    const UICodeInfo = await API.get(`/api/core/v1/boards/${board.name}/uicode`)
     setAutomationInfo(automationInfo.data)
+    setUICodeInfo(UICodeInfo.data)
     if (dataData.status == 'loaded') {
       let newItems = (dataData.data?.cards || []).filter(card => card)
       if (!newItems || newItems.length == 0) newItems = []
@@ -854,7 +859,7 @@ const Board = ({ board, icons }) => {
           }
         </YStack>
         <div
-          onClick={() => setRulesOpened(false)}
+          onClick={() => {setRulesOpened(false)}}
           style={{ width: "100vw", height: "120vh", position: "fixed", right: rulesOpened ? 0 : "-100vw" }}
         ></div>
         {
@@ -883,6 +888,32 @@ const Board = ({ board, icons }) => {
           <XStack position="fixed" animation="quick" right={statesOpened ? 40 : -statesSize} top={"70px"} width={statesSize} height="calc(100vh - 100px)" borderWidth={2} br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
             <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
             <BoardStateView board={board} />
+          </XStack>
+        }
+        <div
+          onClick={() => {setUiCodeOpened(false)}}
+          style={{ width: "100vw", height: "120vh", position: "fixed", right: uiCodeOpened ? 0 : "-100vw" }}
+        ></div>
+        {
+          <XStack position="fixed" animation="quick" right={uiCodeOpened ? 40 : -rulesSize} top={"70px"} width={rulesSize} height="calc(100vh - 100px)">
+
+            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
+
+            {uicodeInfo && <UISideMenu leftIcons={<XStack zIndex={9999}>
+              <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                setRulesSize(prev => {
+                  if (prev === 1010) {
+                    iconRotate.current.style.rotate = '180deg'
+                  } else {
+                    iconRotate.current.style.rotate = '0deg'
+                  }
+                  return prev === 1010 ? window.innerWidth - 330 : 1010
+                })
+              }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                <ArrowLeft size="$1" color="var(--color)" />
+              </XStack>
+            </XStack>}
+              uiCode={uicodeInfo} boardRef={boardRef} board={board} actions={actions} states={states}></UISideMenu>}
           </XStack>
         }
       </XStack>
@@ -915,7 +946,9 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
     openAdd,
     setDialogOpen,
     setStatesOpened,
-    statesOpened
+    statesOpened,
+    setUiCodeOpened,
+    uiCodeOpened
   } = useBoardControls();
 
   const onFloatingBarEvent = (event) => {
@@ -924,6 +957,9 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
     }
     if (event.type === 'toggle-states') {
       setStatesOpened(!statesOpened);
+    }
+    if (event.type === 'toggle-uicode') {
+      setUiCodeOpened(!uiCodeOpened);
     }
     if (event.type === 'toggle-json') {
       toggleJson();

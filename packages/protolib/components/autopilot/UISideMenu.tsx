@@ -13,58 +13,13 @@ import { ArrowFunction } from 'ts-morph';
 import { CodeView } from '@extensions/files/intents';
 import { ClipboardList, Save, Sparkles } from '@tamagui/lucide-icons'
 
-function generateStateDeclarations(obj) {
-    const recurse = (o) => {
-        return (
-            '{\n' +
-            Object.entries(o ?? {})
-                .map(([key, val]) => {
-                    if (typeof val === 'object' && val !== null) {
-                        return `  ${key}: ${recurse(val)};`;
-                    } else {
-                        return `  ${key}: any;`;
-                    }
-                })
-                .join('\n') +
-            '\n}'
-        );
-    };
 
-    return `declare const states: ${recurse(obj)};`;
-}
-
-
-export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo, boardRef, board, actions, states, resolvedTheme }) => {
+export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef, board, actions, states, resolvedTheme }) => {
     const boardStates = states.boards ? states.boards[board.name] : {}
     const boardActions = actions.boards ? actions.boards[board.name] : {}
 
-    const boardStatesDeclarations = useMemo(() => {
-        return generateStateDeclarations(boardStates)
-    }, [boardStates]);
-
-    const boardDeclaration = useMemo(() => {
-        const possibleNames = Object.keys(boardActions ?? {}).map(name => `"${name}"`).join(' | ')
-        return `declare const board: {\n` +
-            `  onChange: (params: { name: string, changed: (value: any) => void }) => void;\n` +
-            `  execute_action: (params: { name: ${possibleNames}, params?: Record<string, any> }) => Promise<any>;\n` +
-            `  id: string;\n` +
-            `  log: (...args: any[]) => void;\n` +
-            `};` +
-            '\n};';
-    }, [board.name]);
-
-    const code = useMemo(() => {
-        const sourceFile = toSourceFile(automationInfo.code)
-        const definition = getDefinition(sourceFile, '"code"')
-        if (definition && ArrowFunction.isArrowFunction(definition)) {
-            return definition.getBodyText()
-        }
-        return ''
-    }, [automationInfo.code]);
-
-
-    const savedCode = useRef(code)
-    const editedCode = useRef(code)
+    const savedCode = useRef(uiCode.code)
+    const editedCode = useRef(uiCode.code)
     const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
     const toast = useToastController()
     const isAIEnabled = useSettingValue('ai.enabled', false);
@@ -89,9 +44,9 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
                     console.error(e)
                 }
             }}
-            disableAIPanels={!isAIEnabled}
-            defaultMode={isAIEnabled ? 'rules' : 'flow'}
-            rules={board.rules}
+            disableAIPanels={true}
+            disableFlowMode={true}
+            defaultMode={'code'}
             leftIcons={
                 <XStack zIndex={9999} gap="$3" ml="$2">
                     {leftIcons}
@@ -105,10 +60,7 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
                 </XStack> */}
                 {icons}
                 <XStack cursor='pointer' onPress={() => {
-                    const sourceFile = toSourceFile(automationInfo.code)
-                    const definition = getDefinition(sourceFile, '"code"').getBody()
-                    definition.replaceWithText("{\n" + editedCode.current + "\n}");
-                    API.post(`/api/core/v1/boards/${board.name}/automation`, { code: sourceFile.getFullText() })
+                    API.post(`/api/core/v1/boards/${board.name}/uicode`, uiCode)
                 }} o={0.8} pressStyle={{ opacity: 0.8 }} ml="$5" hoverStyle={{ opacity: 1 }}>
                     <Save size="$1" color="var(--color)" />
                 </XStack>
@@ -120,15 +72,8 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
             onCodeChange={(code) => {
                 editedCode.current = code
             }}
-            path={board.name + '.ts'}
+            path={board.name + '_ui.jsx'}
             sourceCode={editedCode}
-            monacoOnMount={(editor, monaco) => {
-                monaco.languages.typescript.typescriptDefaults.addExtraLib(
-                    boardDeclaration + "\n" +
-                    boardStatesDeclarations,
-                    'ts:filename/customTypes.d.ts'
-                );
-            }}
             monacoOptions={{
                 folding: true,
                 lineDecorationsWidth: 0,

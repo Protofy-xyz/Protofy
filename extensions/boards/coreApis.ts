@@ -581,6 +581,41 @@ export default async (app, context) => {
         return board.cards.filter(c => c.type === 'action');
     }
 
+    app.get('/api/core/v1/boards/:boardId/uicode', requireAdmin(), async (req, res) => {
+        try {
+            const boardId = req.params.boardId;
+            const filePath = BoardsDir(getRoot()) + boardId + '_ui.js';
+            if (!fsSync.existsSync(filePath)) {
+                res.send({ code: '' });
+                return;
+            }
+            const fileContent = await fs.readFile(filePath, 'utf8');
+            res.send({ code: fileContent });
+        } catch (error) {
+            logger.error({ error }, "Error getting board automation");
+            res.status(500).send({ error: "Internal Server Error" });
+        }
+    })
+
+    app.post('/api/core/v1/boards/:boardId/uicode', requireAdmin(), async (req, res) => {
+        try {
+            const boardId = req.params.boardId;
+            const filePath = BoardsDir(getRoot()) + boardId + '_ui.js';
+            try {
+                await fs.writeFile(filePath, req.body.code);
+                res.send({ message: "Board ui code updated successfully" });
+            } catch (error) {
+                logger.error({ error }, "Error writing board ui code file");
+                res.status(500).send({ error: "Internal Server Error" });
+            } finally {
+                releaseLock(filePath);
+            }
+        } catch (error) {
+            logger.error({ error }, "Error updating board ui code");
+            res.status(500).send({ error: "Internal Server Error" });
+        }
+    })
+
     app.get('/api/core/v1/boards/:boardId/automation', requireAdmin(), async (req, res) => {
         try {
             const boardId = req.params.boardId;
