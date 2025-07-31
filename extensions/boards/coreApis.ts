@@ -623,6 +623,17 @@ export default async (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
+    app.post('/api/core/v1/autopilot/getComponent',  async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "componentGenerator", sourceComponent: req.body.sourceComponent, request: req.body.request});
+        if (req.query.debug) {
+            console.log("Prompt: ", prompt)
+        }
+        let reply = await callModel(prompt, context)
+        console.log('REPLY: ', reply)
+        const jsCode = reply.choices[0].message.content
+        res.send({ jsCode: cleanCode(jsCode) })
+    })
+
     const getBoardActions = async (boardId) => {
         const board = await getBoard(boardId);
         if (!board.cards || !Array.isArray(board.cards)) {
