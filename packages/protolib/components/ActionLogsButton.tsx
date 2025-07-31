@@ -5,7 +5,7 @@ import { ActionBarButton } from "./ActionBarWidget"
 import { Tinted } from "./Tinted"
 import { Activity } from 'lucide-react'
 
-export const ActionLogsButton = () => {
+export const ActionLogsButton = ({...props}) => {
   const [appState, setAppState] = useAtom(AppState)
   
   const onToggleLogs = () => {
@@ -17,6 +17,6 @@ export const ActionLogsButton = () => {
   }
   
   return <Tinted>
-    <ActionBarButton selected={appState.logsPanelOpened} Icon={Activity} onPress={onToggleLogs} />
+    <ActionBarButton selected={appState.logsPanelOpened} Icon={Activity} onPress={onToggleLogs} {...props}/>
   </Tinted>
 }

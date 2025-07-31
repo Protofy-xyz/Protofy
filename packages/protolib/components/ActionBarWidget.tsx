@@ -58,6 +58,7 @@ export const useActionBar = (actionBar?, onActionBarEvent?) => {
         })
       }
       {!(currentBar.hideable == false) && <ActionBarButton
+        tooltipText="Hide Action Bar"
         Icon={ArrowDown}
         onPress={() => setHidden(!hidden)}
       />}
