@@ -30,6 +30,7 @@ import { isElectron } from 'protolib/lib/isElectron'
 import { useAtom } from 'jotai'
 import { AppState } from 'protolib/components/AdminPanel'
 import { BoardSettingsEditor } from '../components/BoardSettingsEditor'
+import { JSONView } from 'protolib/components/JSONView'
 
 class ValidationError extends Error {
   errors: string[];
@@ -297,6 +298,17 @@ const getExecuteAction = (board, rawActions) => {
   }
 }
 
+const BoardStateView = ({ board }) => {
+  const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
+  const data = states?.boards?.[board.name]
+  return <XStack p={"$4"} flex={1} flexDirection="column" gap="$4">
+    {data && <JSONView src={data ?? {}} />}
+    {!data && <Center>
+      <Paragraph size="$8" o={0.4}>No states found for this board</Paragraph>
+    </Center>}
+  </XStack>
+}
+
 const Board = ({ board, icons }) => {
   const {
     addOpened,
@@ -304,6 +316,8 @@ const Board = ({ board, icons }) => {
     setAddOpened,
     setRulesOpened,
     setDialogOpen,
+    statesOpened,
+    setStatesOpened,
     dialogOpen
   } = useBoardControls();
 
@@ -319,6 +333,7 @@ const Board = ({ board, icons }) => {
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
   const [rulesSize, setRulesSize] = useState(1010)
+  const [statesSize, setStatesSize] = useState(700)
   const [errors, setErrors] = useState<string[]>([])
   // const initialBreakPoint = useInitialBreakpoint()
   const breakpointRef = useRef('') as any
@@ -864,6 +879,12 @@ const Board = ({ board, icons }) => {
               automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
           </XStack>
         }
+        {
+          <XStack position="fixed" animation="quick" right={statesOpened ? 40 : -statesSize} top={"70px"} width={statesSize} height="calc(100vh - 100px)" borderWidth={2} br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
+            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
+            <BoardStateView board={board} />
+          </XStack>
+        }
       </XStack>
     </YStack>
   )
@@ -884,20 +905,25 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
   </AsyncView>
 }
 
-export const BoardViewAdmin = ({params, pageSession, workspace, boardData, iconsData}) => {
-    const {
+export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, iconsData }) => {
+  const {
     rulesOpened,
     setRulesOpened,
     toggleJson,
     saveJson,
     toggleAutopilot,
     openAdd,
-    setDialogOpen
+    setDialogOpen,
+    setStatesOpened,
+    statesOpened
   } = useBoardControls();
 
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {
       setRulesOpened(!rulesOpened);
+    }
+    if (event.type === 'toggle-states') {
+      setStatesOpened(!statesOpened);
     }
     if (event.type === 'toggle-json') {
       toggleJson();

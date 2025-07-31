@@ -16,6 +16,10 @@ interface Controls {
   toggleRules: () => void;
   setRulesOpened: (value: boolean) => void;
 
+  statesOpened: boolean;
+  toggleStates: () => void;
+  setStatesOpened: (value: boolean) => void;
+
   dialogOpen: "" | "settings";
   setDialogOpen: (value: "" | "settings") => void;
   
@@ -34,10 +38,12 @@ export const BoardControlsProvider: React.FC<{
   const [dialogOpen, setDialogOpen] = useState<any>(dialog || '');
   const [autopilot, setAutopilot] = useState(autopilotRunning);
   const [rulesOpened, setRulesOpened] = useState(rules === 'open');
+  const [statesOpened, setStatesOpened] = useState(false);
 
   const toggleJson = () => setIsJSONView(v => !v);
   const openAdd = () => setAddOpened(true);
   const toggleRules = () => setRulesOpened(v => !v);
+  const toggleStates = () => setStatesOpened(v => !v);
 
   const toggleAutopilot = useCallback(async () => {
     setAutopilot(v => !v);
@@ -53,6 +59,7 @@ export const BoardControlsProvider: React.FC<{
       autopilot, toggleAutopilot,
       rulesOpened, toggleRules,
       saveJson, setAddOpened, setRulesOpened,
+      statesOpened, toggleStates, setStatesOpened,
       setDialogOpen, dialogOpen
     }}>
       {children}
