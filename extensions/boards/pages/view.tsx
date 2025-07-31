@@ -805,7 +805,7 @@ const Board = ({ board, icons }) => {
         <YStack f={1}>
           {
             viewMode === 'ui' ? <HTMLView style={{ width: "100%", height: "100%" }}
-              html={uicodeInfo?.code} data={board} setData={(data) => {
+              html={uicodeInfo?.code} data={{board, state: states?.boards?.[board.name]}} setData={(data) => {
                 console.log('wtf set data from board', data)
               }} /> : isJSONView
               ? <Monaco
@@ -903,7 +903,10 @@ const Board = ({ board, icons }) => {
 
             <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
 
-            {uicodeInfo && <UISideMenu leftIcons={<XStack zIndex={9999}>
+            {uicodeInfo && <UISideMenu onChange={(code) => {
+              console.log('Updated UI Code:', code);
+              setUICodeInfo({ code });
+            }} leftIcons={<XStack zIndex={9999}>
               <XStack ref={iconRotate} cursor='pointer' onPress={() => {
                 setRulesSize(prev => {
                   if (prev === 1010) {

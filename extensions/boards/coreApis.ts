@@ -312,6 +312,56 @@ boardConnect(run)`
                 fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
             }
 
+            if(!fsSync.existsSync(BoardsDir(getRoot(req)) + key) + '_ui.js') {
+                const boardUIFileContent = `//@card/react
+//board is the board object
+//state is the state of the board
+
+function Widget({board, state}) {
+    const cards = board.cards.reduce((total, card) => {
+        return {
+            ...total,
+            [card.name]: card
+        }
+    }, {})
+
+
+    return <XStack gap="$5" width="100%" f={1}>
+        <YStack>
+            {
+                Object.keys(cards).map(card => {
+                    return <YStack height="60px" jc="center" gap={"$4"}>
+                        <div>{card}</div>
+                    </YStack>
+                })
+            }
+        </YStack>
+        <YStack>
+            {
+                Object.keys(cards).map(card => {
+                    return <XStack ai="center" height="60px" gap={"$4"}>
+                        <div>{state?.[card]}</div>
+                    </XStack>
+                })
+            }
+        </YStack>
+        <YStack>
+            {
+                Object.keys(cards).map(card => {
+                    return <XStack ai="center" height="60px" gap={"$4"}>
+                        {cards[card] && cards[card].type == 'action' ? <Button onPress={() => {
+                            execute_action(card, {})
+                        }}>Run</Button> : ''}
+                    </XStack>
+                })
+            }
+        </YStack>
+    </XStack>
+}
+                `
+                fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '_ui.js', boardUIFileContent)
+            }
+
             //check if the board directory exists, if not, create it
             try {
                 await fs.access(BoardsDir(getRoot(req)), fs.constants.F_OK)
