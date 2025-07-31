@@ -8,7 +8,7 @@ import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
-import { CenterCard } from '@extensions/services/widgets'
+import { CenterCard, HTMLView } from '@extensions/services/widgets'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useEffectOnce, useUpdateEffect } from 'usehooks-ts'
 import { Tinted } from 'protolib/components/Tinted'
@@ -320,7 +320,8 @@ const Board = ({ board, icons }) => {
     setStatesOpened,
     setUiCodeOpened,
     uiCodeOpened,
-    dialogOpen
+    dialogOpen,
+    viewMode
   } = useBoardControls();
 
   const breakpointCancelRef = useRef(null) as any
@@ -803,7 +804,10 @@ const Board = ({ board, icons }) => {
       <XStack f={1}>
         <YStack f={1}>
           {
-            isJSONView
+            viewMode === 'ui' ? <HTMLView style={{ width: "100%", height: "100%" }}
+              html={uicodeInfo?.code} data={board} setData={(data) => {
+                console.log('wtf set data from board', data)
+              }} /> : isJSONView
               ? <Monaco
                 language='json'
                 darkMode={resolvedTheme === 'dark'}
@@ -859,7 +863,7 @@ const Board = ({ board, icons }) => {
           }
         </YStack>
         <div
-          onClick={() => {setRulesOpened(false)}}
+          onClick={() => { setRulesOpened(false) }}
           style={{ width: "100vw", height: "120vh", position: "fixed", right: rulesOpened ? 0 : "-100vw" }}
         ></div>
         {
@@ -891,7 +895,7 @@ const Board = ({ board, icons }) => {
           </XStack>
         }
         <div
-          onClick={() => {setUiCodeOpened(false)}}
+          onClick={() => { setUiCodeOpened(false) }}
           style={{ width: "100vw", height: "120vh", position: "fixed", right: uiCodeOpened ? 0 : "-100vw" }}
         ></div>
         {

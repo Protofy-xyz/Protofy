@@ -1,4 +1,4 @@
-import { X, Save, Plus, Pause, Play, ClipboardList, Activity, Eye, Settings, Settings2, LayoutDashboard, Book } from 'lucide-react';
+import { X, Save, Plus, Pause, Play, ClipboardList, Activity, Eye, Settings, Settings2, LayoutDashboard, Book, Code } from 'lucide-react';
 import { Tinted } from 'protolib/components/Tinted';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
@@ -6,18 +6,18 @@ import { Separator } from '@my/ui';
 import { ActionLogsButton } from 'protolib/components/ActionLogsButton';
 
 const getActionBar = (generateEvent) => {
-  const { isJSONView, autopilot, rulesOpened, statesOpened, uiCodeOpened } = useBoardControls();
+  const { isJSONView, autopilot, rulesOpened, statesOpened, uiCodeOpened, setViewMode, viewMode } = useBoardControls();
 
-  return isJSONView
-    ? [
+  const bars = {
+    'JSONView': [
       <Tinted>
         <ActionBarButton Icon={X} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "toggle-json" })} />
       </Tinted>,
       <Tinted>
         <ActionBarButton Icon={Save} onPress={() => generateEvent({ type: "save-json" })} />
       </Tinted>
-    ]
-    : [
+    ],
+    'BoardView': [
       <>
         <Tinted>
           <ActionBarButton Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
@@ -46,13 +46,29 @@ const getActionBar = (generateEvent) => {
         <ActionBarButton selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton selected={uiCodeOpened} Icon={Eye} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+        <ActionBarButton selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </Tinted>,
       <>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-        <ActionLogsButton/>
+        <ActionLogsButton />
       </>,
+    ],
+    'uiView': [
+      <Tinted>
+        <ActionBarButton selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
+      </Tinted>,
+      <Tinted>
+        <ActionBarButton selected={rulesOpened} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+      </Tinted>,
+      <Tinted>
+        <ActionBarButton selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
+      </Tinted>,
     ]
+  }
+
+  return isJSONView
+    ? bars['JSONView']
+    : viewMode === 'ui' ? bars['uiView'] : bars['BoardView'];
 };
 
 export default getActionBar;

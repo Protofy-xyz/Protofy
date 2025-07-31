@@ -24,6 +24,9 @@ interface Controls {
   toggleUiCode: () => void;
   setUiCodeOpened: (value: boolean) => void;
 
+  viewMode: "board" | "json" | "ui";
+  setViewMode: (mode: "board" | "json" | "ui") => void;
+
   dialogOpen: "" | "settings";
   setDialogOpen: (value: "" | "settings") => void;
   
@@ -44,6 +47,7 @@ export const BoardControlsProvider: React.FC<{
   const [rulesOpened, setRulesOpened] = useState(rules === 'open');
   const [statesOpened, setStatesOpened] = useState(false);
   const [uiCodeOpened, setUiCodeOpened] = useState(false);
+  const [viewMode, setViewMode] = useState<"board" | "json" | "ui">('board');
 
   const toggleJson = () => setIsJSONView(v => !v);
   const openAdd = () => setAddOpened(true);
@@ -67,7 +71,8 @@ export const BoardControlsProvider: React.FC<{
       saveJson, setAddOpened, setRulesOpened,
       statesOpened, toggleStates, setStatesOpened,
       setDialogOpen, dialogOpen,
-      uiCodeOpened, toggleUiCode, setUiCodeOpened
+      uiCodeOpened, toggleUiCode, setUiCodeOpened,
+      viewMode, setViewMode
     }}>
       {children}
     </BoardControlsContext.Provider>
