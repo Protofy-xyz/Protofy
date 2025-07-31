@@ -1,0 +1,51 @@
+name: Build & Release Latest
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    if: github.repository == 'Protofy-xyz/Vento'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Prepare dev
+        run: yarn prepare-dev
+
+      - name: Shrink
+        run: yarn shrink
+
+      - name: Create release zip
+        run: |
+          zip -r release-latest.zip . -x ".git/*" "node_modules/*" "release-*.zip"
+
+      - name: Create or update latest tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag -f latest
+          git push origin -f latest
+
+      - name: Create GitHub Release (latest)
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest release
+          files: release-latest.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
