@@ -552,49 +552,189 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-const reactCard = (jsx, rootId, initialProps = {}) => {
-    Object.keys(window.ProtoComponents || {}).forEach(key => {
-        window[key] = window.ProtoComponents[key];
-    });
+window.reactCard = (jsx, rootId, initialProps = {}) => {
+    const isFrameCard = jsx.includes('//@card/reactframe');
 
-    const jsxCode = `
-        ${jsx}
+    if (!isFrameCard) {
+        Object.keys(window.ProtoComponents || {}).forEach(key => {
+            window[key] = window.ProtoComponents[key];
+        });
 
-        const container = document.getElementById("${rootId}");
+        const jsxCode = `
+            ${jsx}
 
-        if (window._reactWidgets?.["${rootId}"]) {
-            console.log("Unmounting previous React widget for rootId:", "${rootId}");
-            window._reactWidgets["${rootId}"].unmount();
-            delete window._reactWidgets["${rootId}"];
-            delete window._reactWidgetComponents["${rootId}"];
-        } else {
-            console.log("Mounting new React widget for rootId:", "${rootId}");    
+            const container = document.getElementById("${rootId}");
+
+            if (window._reactWidgets?.["${rootId}"]) {
+                window._reactWidgets["${rootId}"].unmount();
+                delete window._reactWidgets["${rootId}"];
+                delete window._reactWidgetComponents["${rootId}"];
+            }
+
+            const root = ReactDOM.createRoot(container);
+
+            window._reactWidgets = window._reactWidgets || {};
+            window._reactWidgets["${rootId}"] = root;
+
+            window._reactWidgetComponents = window._reactWidgetComponents || {};
+            window._reactWidgetComponents["${rootId}"] = Widget;
+
+            const element = React.createElement(
+                window.WidgetWrapper,
+                null,
+                React.createElement(Widget, ${JSON.stringify(initialProps)})
+            );
+
+            root.render(element);
+        `;
+
+        const compiled = Babel.transform(jsxCode, { presets: ['react'] }).code;
+        eval(compiled);
+        return;
+    }
+
+    // 🧠 MODO IFRAMED CON //@card/reactframe
+    jsx = Babel.transform(jsx, { presets: ['react'] }).code;
+
+    const iframeId = `iframe-${rootId}`;
+    const target = document.getElementById(rootId);
+    if (!target) {
+        console.warn(`⛔ No div found with id "${rootId}"`);
+        return;
+    }
+
+    window.reactCardSetters = window.reactCardSetters || {};
+    window.reactCardSetters[rootId] = {
+        setCardData: initialProps.setCardData,
+        setCardState: initialProps.setCardState,
+    };
+
+    if (!window._reactCardPostListener) {
+        window._reactCardPostListener = true;
+        window.addEventListener("message", (e) => {
+            const { type, rootId, action, payload } = e.data || {};
+            if (type === "cardEvent" && rootId && action) {
+                const fn = window.reactCardSetters?.[rootId]?.[action];
+                if (typeof fn === "function") fn(payload);
+            }
+        });
+    }
+
+    const safeProps = {};
+    for (const key in initialProps) {
+        if (typeof initialProps[key] !== 'function') {
+            safeProps[key] = initialProps[key];
         }
+    }
+    safeProps.rootId = rootId;
 
-        const root = ReactDOM.createRoot(container);
+    let iframe = document.getElementById(iframeId);
+    if (!iframe) {
+        iframe = document.createElement("iframe");
+        iframe.id = iframeId;
+        iframe.name = rootId; // <--- 💡 importante
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "none";
 
-        window._reactWidgets = window._reactWidgets || {};
-        window._reactWidgets["${rootId}"] = root;
+        // NO onload: el postMessage se dispara desde dentro del iframe al cargar
+        target.innerHTML = "";
+        target.appendChild(iframe);
 
-        window._reactWidgetComponents = window._reactWidgetComponents || {};
-        window._reactWidgetComponents["${rootId}"] = Widget;
+        iframe.srcdoc = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    html, body, #mount { margin: 0; padding: 0; width: 100%; height: 100%;overflow:auto; }
+    canvas { display: block; }
+  </style>
+  <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+  <script type="importmap-shim">
+  {
+    "imports": {
+      "react": "https://esm.sh/react@18.2.0",
+      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+      "@react-three/fiber": "https://esm.sh/@react-three/fiber",
+      "@react-three/drei": "https://esm.sh/@react-three/drei"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="mount"></div>
+  <script type="module-shim">
+    // Enviar READY inmediatamente tras cargar el iframe
+    window.parent.postMessage({ type: "iframeReady", rootId: window.name }, "*");
 
-        const element = React.createElement(
-          window.WidgetWrapper,
-          null,
-          React.createElement(Widget, ${JSON.stringify(initialProps)})
-        );
+    let root;
+    async function render(jsx, props) {
+      const React = await import('react');
+      const ReactDOM = await import('react-dom/client');
+      const mount = document.getElementById('mount');
+      mount.innerHTML = "";
 
+      try {
+        const send = (action, payload) => {
+          window.parent.postMessage({
+            type: 'cardEvent',
+            rootId: props.rootId,
+            action,
+            payload
+          }, '*');
+        };
+
+        props.setCardData = (p) => send("setCardData", p);
+        props.setCardState = (p) => send("setCardState", p);
+
+        const cleanJSX = jsx.split('\\n').filter(line => !line.trim().startsWith('//@')).join('\\n');
+        const WidgetFactory = new Function("React", "props", \`
+          \${cleanJSX}
+          return typeof Widget === 'function' ? Widget : (window.Widget || null);
+        \`);
+        const Widget = WidgetFactory(React, props);
+        const element = React.createElement(Widget, props);
+
+        root = ReactDOM.createRoot(mount);
         root.render(element);
-    `;
+      } catch (e) {
+        mount.innerHTML = '<pre style="color:red">' + e.stack + '</pre>';
+        console.error("❌ Error in iframe render:", e);
+      }
+    }
 
-    console.log("Compiling JSX code for rootId:", "${rootId}", jsxCode);
+    window.addEventListener("message", (e) => {
+      const { type, jsx, props } = e.data || {};
+      if (type === "reactCardUpdate") render(jsx, props);
+    });
+  </script>
+</body>
+</html>
+        `;
+    } else {
+        iframe.contentWindow?.postMessage({
+            type: "reactCardUpdate",
+            jsx,
+            props: safeProps
+        }, "*");
+    }
 
-    const compiled = Babel.transform(jsxCode, {
-        presets: ['react'],
-    }).code;
+    // Este bloque ya no necesita fallback
+    const handleIframeReady = (e) => {
+        if (e.data?.type === "iframeReady" && e.data.rootId === rootId) {
+            iframe.contentWindow?.postMessage({
+                type: "reactCardUpdate",
+                jsx,
+                props: safeProps
+            }, "*");
+            window.removeEventListener("message", handleIframeReady);
+        }
+    };
+    window.addEventListener("message", handleIframeReady);
 
-    eval(compiled);
+    window._reactWidgets = window._reactWidgets || {};
+    window._reactWidgets[rootId] = iframe;
 };
 
 const dataView = (object, root) => {

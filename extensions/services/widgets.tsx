@@ -120,7 +120,7 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
 
         const cardTypeMatch = html.match(/^[ \t\r\n]*\/\/@([^\n\r]*)/m);
         const cardType = cardTypeMatch ? cardTypeMatch[1].trim() : null;
-        if (cardType === 'card/react') {
+        if (cardType === 'card/react' || cardType === 'card/reactframe') {
             html = 'reactCard(`' + html.replace('\\', '\\\\').replace(/`/g, '\\`') + '`, data.domId, data)'
         }
         // Do something with the card type
