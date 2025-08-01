@@ -51,13 +51,24 @@ const getActionBar = (generateEvent) => {
       </Tinted>,
       <>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-        <ActionLogsButton tooltipText="Logs"/>
+        <ActionLogsButton tooltipText="Logs" />
       </>,
     ],
     'uiView': [
       <Tinted>
         <ActionBarButton tooltipText="Board Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </Tinted>,
+      <Tinted><ActionBarButton
+        tooltipText={autopilot ? "Pause Autopilot" : "Play Autopilot"}
+        beating={autopilot}
+        fill={!autopilot}
+        Icon={autopilot ? Pause : Play}
+        iconProps={{ ml: autopilot ? 0 : 2 }}
+        onPress={() => generateEvent({ type: "toggle-autopilot" })}
+        hoverStyle={{ bg: 'var(--color5)' }}
+        bc={autopilot ? 'var(--color7)' : 'transparent'}
+        br="$20"
+      /></Tinted>,
       <Tinted>
         <ActionBarButton tooltipText="Code" selected={rulesOpened} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
       </Tinted>,

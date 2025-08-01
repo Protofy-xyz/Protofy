@@ -39,7 +39,8 @@ export const useBoardControls = () => useContext(BoardControlsContext)!;
 export const BoardControlsProvider: React.FC<{
   boardName: string;
   children: React.ReactNode;
-}> = ({ boardName, children, mode='board', addMenu = 'closed', dialog = '', autopilotRunning = false, rules='closed' }) => {
+  board: any;
+}> = ({ boardName, children, mode='board', addMenu = 'closed', dialog = '', autopilotRunning = false, rules='closed', board }) => {
   const [isJSONView, setIsJSONView] = useState(mode === 'json');
   const [addOpened, setAddOpened] = useState(addMenu === 'open');
   const [dialogOpen, setDialogOpen] = useState<any>(dialog || '');
@@ -58,6 +59,10 @@ export const BoardControlsProvider: React.FC<{
   const toggleAutopilot = useCallback(async () => {
     setAutopilot(v => !v);
     await API.get(`/api/core/v1/boards/${boardName}/autopilot/${!autopilot ? 'on' : 'off'}`);
+    console.log('board:', board)
+    if(board?.settings?.showBoardUIOnPlay && !autopilot) {
+      setViewMode('ui');
+    }
   }, [boardName, autopilot]);
 
   const saveJson = () => {/* llama a onEditBoard o lógica equivalente */ };

@@ -931,7 +931,7 @@ const Board = ({ board, icons }) => {
 const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession }) => {
   console.log('BoardViewLoader', boardData, iconsData, params)
   return <AsyncView ready={boardData.status != 'loading' && iconsData.status != 'loading'}>
-    <BoardControlsProvider autopilotRunning={boardData?.data?.autopilot} boardName={params.board} >
+    <BoardControlsProvider board={boardData?.data} autopilotRunning={boardData?.data?.autopilot} boardName={params.board} >
       <BoardViewAdmin
         params={params}
         pageSession={pageSession}

@@ -100,6 +100,21 @@ export const BoardSettingsEditor = ({ settings, open, setOpen, onSave, errors })
                     </Checkbox>
                 </XStack>
                 <XStack alignItems="center">
+                    <ColumnTitle>Show board UI on play</ColumnTitle>
+                    <Checkbox
+                        w="$2"
+                        h="$2"
+                        focusStyle={{ outlineWidth: 0 }}
+                        checked={currentSettings?.showBoardUIOnPlay ?? false}
+                        onCheckedChange={(checked) => setCurrentSettings({ ...currentSettings, showBoardUIOnPlay: checked })}
+                        className="no-drag"
+                    >
+                        <Checkbox.Indicator>
+                            <Check size={16} />
+                        </Checkbox.Indicator>
+                    </Checkbox>
+                </XStack>
+                <XStack alignItems="center">
                     <ColumnTitle>{"Margin"}</ColumnTitle>
                     <ColInput
                         w={60}
