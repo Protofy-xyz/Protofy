@@ -1,21 +1,19 @@
-import { getAuth, handler, getServiceToken } from "protonode";
-import { API, Protofy, getLogger } from "protobase";
-import { Application } from "express";
+import { handler, getServiceToken, AutoAPI, getRoot } from "protonode";
+import { API, getLogger } from "protobase";
 import * as fs from 'fs';
 import { promises } from 'fs';
-import path from "path";
-import {installAsset} from "./assets"
+import fsPath, { relative } from "path";
+import { installAsset } from "./assets"
 import AdmZip from 'adm-zip';
-import { c } from "tar";
+import { AssetsModel } from "./models/assets";
 
-const root = path.join(process.cwd(), "..", "..");
+const root = fsPath.join(process.cwd(), "..", "..");
 const logger = getLogger();
 
-
 const assetsDir = "/data/assets"
-const assetsRoot = path.join(root, assetsDir);
+const assetsRoot = fsPath.join(root, assetsDir);
 
-if(fs.existsSync(assetsRoot) === false) {
+if (fs.existsSync(assetsRoot) === false) {
     fs.mkdirSync(assetsRoot, { recursive: true });
 }
 
@@ -55,9 +53,9 @@ const waitForFolderReady = async (folderPath, retries = 10, delay = 200) => {
 };
 
 const decompressAndInstallAsset = async (context, zipFile) => {
-    const zipPath = path.join(assetsRoot, zipFile);
+    const zipPath = fsPath.join(assetsRoot, zipFile);
     const assetName = zipFile.replace(".zip", "");
-    const assetPath = path.join(assetsRoot, assetName);
+    const assetPath = fsPath.join(assetsRoot, assetName);
 
     await decompressZip({
         zipPath,
@@ -80,21 +78,29 @@ const decompressAndInstallAsset = async (context, zipFile) => {
 };
 
 const unpackage = async (context, zipFile) => {
-    const zipPath = path.join(assetsRoot, zipFile);
+    const zipPath = fsPath.join(assetsRoot, zipFile);
     const assetName = zipFile.replace(".zip", "");
-    const assetPath = path.join(assetsRoot, assetName);
+    const assetPath = fsPath.join(assetsRoot, assetName);
 
     await decompressZip({
         zipPath,
         outputPath: assetPath,
         done: async (outputPath) => {
-            console.log(`Decompressed ${zipFile} to ${outputPath}`);
 
             await waitForFolderReady(assetPath);
 
-            // await context.os2.deleteFile({
-            //     path: `${assetsDir}/${zipFile}`,
-            // });
+            const topic = "notifications/assets/create"
+            console.log(`Publishing to topic: ${topic}`);
+            let payload = ""
+            console.log("type of payload: ", typeof (await parseAssetEntry(assetName, getRoot())));
+            try {
+                payload = JSON.stringify(await parseAssetEntry(assetName, getRoot()))
+            } catch (error) {
+                console.error(`Error parsing asset entry for ${assetName}:`, error);
+            }
+
+            context.mqtt.publish(topic, payload);
+
         },
         error: (err) => {
             console.error(`Error decompressing ${zipFile}:`, err);
@@ -102,7 +108,182 @@ const unpackage = async (context, zipFile) => {
     });
 };
 
+const dataDir = (root, ...rest) => fsPath.join(root, "/data/assets/", ...rest)
+const joinPath = (...args) => fsPath.join(...args)
+
+const parseAssetEntry = async (fileName, rootPath): Promise<any | null> => {
+    const fullPath = dataDir(rootPath, fileName);
+    const isZip = fileName.endsWith(".zip");
+    const isDir = fs.lstatSync(fullPath).isDirectory();
+
+    if (!isZip && !isDir) return null;
+
+    const asset: any = {
+        name: fileName.replace(".zip", ""),
+        format: [],
+        assetFiles: [],
+    };
+
+    if (isDir) {
+        const ventoPath = dataDir(rootPath, fileName, ".vento");
+        const assetJsonPath = dataDir(rootPath, fileName, ".vento", "asset.json");
+        const iconPath = dataDir(rootPath, fileName, ".vento", "icon.png");
+
+        if (!fs.existsSync(ventoPath) || !fs.existsSync(assetJsonPath)) return null;
+
+        try {
+            const assetsJsonContent = await promises.readFile(assetJsonPath, 'utf8');
+            asset["assetJson"] = JSON.parse(assetsJsonContent);
+        } catch (_) { }
+
+        if (fs.existsSync(iconPath)) {
+            asset["icon"] = fileName + "/.vento/icon.png";
+        }
+
+        const getFilesRecursively = async (dir) => {
+            const files = await promises.readdir(dir, { withFileTypes: true });
+            for (const f of files) {
+                if (f.isDirectory() && !f.name.startsWith('.vento')) {
+                    await getFilesRecursively(joinPath(dir, f.name));
+                } else if (f.isFile()) {
+                    asset.assetFiles.push({
+                        name: f.name,
+                        relativePath: relative(fullPath, joinPath(dir, f.name)),
+                    });
+                }
+            }
+        };
+        await getFilesRecursively(fullPath);
+
+        asset.format.push("dir");
+    } else {
+        asset.format.push("zip");
+    }
+
+    return asset;
+};
+
+
+const getDB = (path, req, session) => {
+    const isProd = process.env.NODE_ENV === 'production';
+    // const envFomat = isProd ? 'css' : 'json';
+    const availableFormats = isProd ? ['json', 'css'] : ['json'];
+
+    const db = {
+        async *iterator() {
+            const rootPath = getRoot(req);
+            const baseDir = dataDir(rootPath);
+
+            try {
+                await promises.access(baseDir, promises.constants.F_OK);
+            } catch {
+                await promises.mkdir(baseDir);
+            }
+
+            const filesAndDirs = await promises.readdir(baseDir);
+            const assetsMap = {};
+
+            for (const file of filesAndDirs) {
+                const parsed = await parseAssetEntry(file, rootPath);
+                if (!parsed) continue;
+
+                if (!assetsMap[parsed.name]) {
+                    assetsMap[parsed.name] = {
+                        name: parsed.name,
+                        format: [],
+                        assetFiles: parsed.assetFiles,
+                        ...(parsed.assetJson ? { assetJson: parsed.assetJson } : {}),
+                        ...(parsed.icon ? { icon: parsed.icon } : {}),
+                    };
+                }
+
+                assetsMap[parsed.name].format.push(...parsed.format);
+            }
+
+            for (const entry of Object.values(assetsMap)) {
+                yield [entry.name, JSON.stringify(entry)];
+            }
+        },
+
+        async del(key, value) {
+            const rootPath = getRoot(req);
+            const dir = dataDir(rootPath);
+
+            const zipPath = fsPath.join(dir, `${key}.zip`);
+            const folderPath = fsPath.join(dir, key);
+
+            // Delete the zip file if it exists
+            try {
+                if (fs.existsSync(zipPath)) {
+                    await promises.unlink(zipPath);
+                    console.log(`Deleted zip: ${zipPath}`);
+                }
+            } catch (err) {
+                console.error(`Error deleting zip file ${zipPath}:`, err);
+            }
+
+            // Delete the folder if it exists
+            try {
+                if (fs.existsSync(folderPath)) {
+                    await promises.rm(folderPath, { recursive: true, force: true });
+                    console.log(`Deleted folder: ${folderPath}`);
+                }
+            } catch (err) {
+                console.error(`Error deleting folder ${folderPath}:`, err);
+            }
+        },
+
+        async put(key, value) {
+            // const filePath = dataDir(getRoot(req)) + key + ".json"
+            // try {
+            //     await promises.writeFile(filePath, value)
+            // } catch (error) {
+            //     console.error("Error creating file: " + filePath, error)
+            // }
+        },
+
+        async get(key) {
+            const rootPath = getRoot(req);
+            const baseDir = dataDir(rootPath);
+            const filesAndDirs = (await promises.readdir(baseDir)).filter(f => f.startsWith(key));
+
+            const asset = {
+                name: key,
+                format: [],
+                assetFiles: []
+            };
+
+            for (const file of filesAndDirs) {
+                const parsed = await parseAssetEntry(file, rootPath);
+                if (!parsed) continue;
+
+                asset.format.push(...parsed.format);
+                asset.assetFiles.push(...(parsed.assetFiles || []));
+                if (parsed.assetJson) asset["assetJson"] = parsed.assetJson;
+                if (parsed.icon) asset["icon"] = parsed.icon;
+            }
+
+            return JSON.stringify(asset);
+        }
+    };
+
+    return db;
+}
+
+
 export default (app, context) => {
+
+    const AssetsAutoAPI = AutoAPI({
+        modelName: 'assets',
+        modelType: AssetsModel,
+        prefix: '/api/core/v1/',
+        dbName: 'assets',
+        getDB: getDB,
+        requiresAdmin: ['*'],
+        notify: (entityModel, action) => {
+            context.mqtt.publish(entityModel.getNotificationsTopic(action), entityModel.getNotificationsPayload())
+        }
+    })
 
     // on upload file to assets folder, install the asset
     context.events.onEvent(
@@ -112,7 +293,6 @@ export default (app, context) => {
             // call the install
             const payload = event.payload || {};
             if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
-                // await decompressAndInstallAsset(context, payload.filename);
                 await unpackage(context, payload.filename)
             }
 
@@ -158,7 +338,7 @@ export default (app, context) => {
             },
         })
         console.log(`Assets installed.`);
-        await API.get("/api/core/v1/reloadBoards?token=" +getServiceToken())
+        await API.get("/api/core/v1/reloadBoards?token=" + getServiceToken())
         console.log(`Board reloaded after installing asset.`);
         // TODO: return all the installed assets
         res.send({ "result": "All assets installed successfully." });
@@ -178,7 +358,7 @@ export default (app, context) => {
         }
 
         for (const asset of assetsToInstall) {
-            try{
+            try {
                 installAsset(asset)
             } catch (error) {
                 console.error(`Error installing asset ${asset}:`, error);
@@ -186,9 +366,11 @@ export default (app, context) => {
         }
 
         console.log(`Assets installed.`);
-        await API.get("/api/core/v1/reloadBoards?token=" +getServiceToken())
+        await API.get("/api/core/v1/reloadBoards?token=" + getServiceToken())
         console.log(`Board reloaded after installing asset.`);
 
         res.send({ "result": "All assets installed successfully." });
     }))
+
+    AssetsAutoAPI(app, context)
 }
