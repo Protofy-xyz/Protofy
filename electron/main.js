@@ -10,7 +10,7 @@ const fs = require('fs');
 
 
 function getNodePath(rootPath) {
-    //get path to the local Node.js binary
+  //get path to the local Node.js binary
   let nodePath = os.platform() === 'win32' ? path.join(rootPath, 'bin/node.exe') : path.join(rootPath, 'bin/node')
   const hasLocalNode = fs.existsSync(nodePath);
 
@@ -304,6 +304,13 @@ module.exports = function start(rootPath) {
       scrollBounce: false,
       webPreferences: {
         preload: path.join(__dirname, "windows", window, 'preload.js'),
+      }
+    });
+
+    ipcMain.on('refresh-window', (event) => {
+      const win = BrowserWindow.fromWebContents(event.sender);
+      if (win) {
+        win.reload();
       }
     });
 
