@@ -553,229 +553,186 @@ class ErrorBoundary extends React.Component {
 }
 
 window.reactCard = (jsx, rootId, initialProps = {}) => {
-    const isFrameCard = jsx.includes('//@card/reactframe');
+  const isFrameCard = jsx.includes('//@card/reactframe');
+  console.log('debugjsx:host:enter', { rootId, isFrameCard, jsxLen: jsx?.length });
 
-    if (!isFrameCard) {
-        Object.keys(window.ProtoComponents || {}).forEach(key => {
-            window[key] = window.ProtoComponents[key];
-        });
-
-        const jsxCode = `
-            ${jsx}
-
-            const container = document.getElementById("${rootId}");
-
-            if (window._reactWidgets?.["${rootId}"]) {
-                window._reactWidgets["${rootId}"].unmount();
-                delete window._reactWidgets["${rootId}"];
-                delete window._reactWidgetComponents["${rootId}"];
-            }
-
-            const root = ReactDOM.createRoot(container);
-
-            window._reactWidgets = window._reactWidgets || {};
-            window._reactWidgets["${rootId}"] = root;
-
-            window._reactWidgetComponents = window._reactWidgetComponents || {};
-            window._reactWidgetComponents["${rootId}"] = Widget;
-
-            const element = React.createElement(
-                window.WidgetWrapper,
-                null,
-                React.createElement(Widget, ${JSON.stringify(initialProps)})
-            );
-
-            root.render(element);
-        `;
-
-        const compiled = Babel.transform(jsxCode, { presets: ['react'] }).code;
-        eval(compiled);
-        return;
+  // ----- MODO CLÁSICO (sin iframe) -----
+  if (!isFrameCard) {
+    try {
+      const jsxCode = `
+        ${jsx}
+        const container = document.getElementById("${rootId}");
+        if (window._reactWidgets?.["${rootId}"]) window._reactWidgets["${rootId}"].unmount();
+        const root = ReactDOM.createRoot(container);
+        const element = React.createElement(Widget, ${JSON.stringify(initialProps)});
+        root.render(element);
+        window._reactWidgets = window._reactWidgets || {};
+        window._reactWidgets["${rootId}"] = root;
+      `;
+      const compiled = Babel.transform(jsxCode, { presets: [['react', { runtime: 'classic' }]] }).code;
+      eval(compiled);
+    } catch (err) {
+      console.error('debugjsx:classic:error', err);
     }
+    return;
+  }
 
-    // 🧠 MODO IFRAMED CON //@card/reactframe
-    jsx = Babel.transform(jsx, { presets: ['react'] }).code;
+  // ----- MODO IFRAMED -----
+  const target = document.getElementById(rootId);
+  if (!target) return console.warn(`⛔ No div found with id "${rootId}"`);
 
-    const iframeId = `iframe-${rootId}`;
-    const target = document.getElementById(rootId);
-    if (!target) {
-        console.warn(`⛔ No div found with id "${rootId}"`);
-        return;
-    }
+  const safeProps = {};
+  for (const k in initialProps) if (typeof initialProps[k] !== 'function') safeProps[k] = initialProps[k];
+  safeProps.rootId = rootId;
 
-    window.reactCardSetters = window.reactCardSetters || {};
-    window.reactCardSetters[rootId] = {
-        setCardData: initialProps.setCardData,
-        setCardState: initialProps.setCardState,
-    };
+  target.innerHTML = "";
+  const iframe = document.createElement("iframe");
+  iframe.id = `iframe-${rootId}`;
+  iframe.name = rootId;
+  iframe.style.cssText = "width:100%;height:100%;border:none;";
+  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+  // CSP permisiva solo dentro del iframe (para inline + blob:)
+  iframe.setAttribute('csp',
+    "default-src 'self' https: blob: data:; " +
+    "script-src 'unsafe-inline' 'unsafe-eval' https: blob: data:; " +
+    "style-src 'unsafe-inline' https:; " +
+    "img-src data: https: blob:; " +
+    "connect-src https: blob: data:; " +
+    "worker-src blob: data:; " +
+    "object-src 'none';"
+  );
 
-    if (!window._reactCardPostListener) {
-        window._reactCardPostListener = true;
-        window.addEventListener("message", (e) => {
-            const { type, rootId, action, payload } = e.data || {};
-            if (type === "cardEvent" && rootId && action) {
-                const fn = window.reactCardSetters?.[rootId]?.[action];
-                if (typeof fn === "function") fn(payload);
-            }
-        });
-    }
-
-    const safeProps = {};
-    for (const key in initialProps) {
-        if (typeof initialProps[key] !== 'function') {
-            safeProps[key] = initialProps[key];
-        }
-    }
-    safeProps.rootId = rootId;
-
-    let iframe = document.getElementById(iframeId);
-    if (!iframe) {
-        iframe = document.createElement("iframe");
-        iframe.id = iframeId;
-        iframe.name = rootId; // <--- 💡 importante
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
-        iframe.style.border = "none";
-
-        // NO onload: el postMessage se dispara desde dentro del iframe al cargar
-        target.innerHTML = "";
-        target.appendChild(iframe);
-
-        iframe.srcdoc = `
-<!DOCTYPE html>
+  const srcdoc = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
   <style>
-    html, body, #mount { margin: 0; padding: 0; width: 100%; height: 100%;overflow:auto; }
-    canvas { display: block; }
+    html, body, #mount { margin:0; padding:0; width:100%; height:100%; overflow:auto; }
+    canvas { display:block; }
+    pre { white-space: pre-wrap; }
   </style>
-  <script async src="https://ga.jspm.io/npm:es-module-shims@1.6.3/dist/es-module-shims.js"></script>
-  <script type="importmap-shim">
-  {
-    "imports": {
-      "react": "https://esm.sh/react@18.2.0",
-      "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-      "@react-three/fiber": "https://esm.sh/@react-three/fiber",
-      "@react-three/drei": "https://esm.sh/@react-three/drei"
-    }
-  }
-  </script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
   <div id="mount"></div>
-  <script type="module-shim">
-    // Enviar READY inmediatamente tras cargar el iframe
-    window.parent.postMessage({ type: "iframeReady", rootId: window.name }, "*");
+  <script type="module">
+    function post(tag, data) {
+      let msg;
+      try { msg = typeof data === 'string' ? data : JSON.stringify(data, (k,v)=> typeof v === 'function' ? '[fn]' : v); }
+      catch { msg = String(data); }
+      try { window.parent.postMessage({ type:'debugjsx', tag, rootId: window.name, msg }, '*'); } catch {}
+      console.log('debugjsx:ifr:'+tag, data);
+    }
 
-    let root;
-    async function render(jsx, props) {
-      const React = await import('react');
-      const ReactDOM = await import('react-dom/client');
+    post('boot', { name: window.name });
+    window.parent.postMessage({ type: 'iframeReady', rootId: window.name }, '*');
+
+    // Reescribe imports bare a URLs ESM
+    function mapImports(src) {
+      const alias = (s) => {
+        const map = {
+          'react': 'https://esm.sh/react@18.2.0',
+          'react-dom/client': 'https://esm.sh/react-dom@18.2.0/client',
+          'react/jsx-runtime': 'https://esm.sh/react@18.2.0/jsx-runtime',
+          '@react-three/fiber': 'https://esm.sh/@react-three/fiber',
+          '@react-three/drei': 'https://esm.sh/@react-three/drei',
+          'three': 'https://esm.sh/three'
+        };
+        return map[s] || s;
+      };
+      // import X from 'pkg'
+      src = src.replace(/(^|\\n)\\s*import\\s+[^'"]+from\\s*['"]([^'"]+)['"];?/g, (m, p1, spec) => p1 + m.slice(p1.length).replace(spec, alias(spec)));
+      // import 'pkg'
+      src = src.replace(/(^|\\n)\\s*import\\s*['"]([^'"]+)['"];?/g, (m, p1, spec) => p1 + m.slice(p1.length).replace(spec, alias(spec)));
+      return src;
+    }
+
+    async function render(userCode, props) {
+      post('render:enter', { len: userCode?.length });
+
+      let React, ReactDOM;
+      try {
+        React = await import('https://esm.sh/react@18.2.0');
+        ReactDOM = await import('https://esm.sh/react-dom@18.2.0/client');
+      } catch (err) {
+        document.getElementById('mount').innerHTML = '<pre style="color:red">Deps load error: '+(err?.message||err)+'</pre>';
+        post('deps:error', err?.message || err);
+        return;
+      }
+
       const mount = document.getElementById('mount');
-      mount.innerHTML = "";
+      mount.innerHTML = '';
 
       try {
-        const send = (action, payload) => {
-          window.parent.postMessage({
-            type: 'cardEvent',
-            rootId: props.rootId,
-            action,
-            payload
-          }, '*');
-        };
+        // 1) Limpia //@ y reescribe imports a URLs
+        let code = (userCode || '')
+          .split('\\n').filter(l => !l.trim().startsWith('//@')).join('\\n');
+        code = mapImports(code);
 
-        props.setCardData = (p) => send("setCardData", p);
-        props.setCardState = (p) => send("setCardState", p);
+        // 2) ¿El usuario ya importa React?
+        const hasReactImport = /(^|\\n)\\s*import\\s+React(\\s|,|from)/m.test(code);
+        // 3) ¿Exporta default?
+        const hasDefault = /(^|\\n)\\s*export\\s+default\\b/m.test(code);
 
-        const cleanJSX = jsx.split('\\n').filter(line => !line.trim().startsWith('//@')).join('\\n');
-        const WidgetFactory = new Function("React", "props", \`
-          \${cleanJSX}
-          return typeof Widget === 'function' ? Widget : (window.Widget || null);
-        \`);
-        const Widget = WidgetFactory(React, props);
-        const element = React.createElement(Widget, props);
+        // 4) Si no hay import React, lo inyectamos (para runtime clásico)
+        if (!hasReactImport) {
+          code = \`import React from 'https://esm.sh/react@18.2.0';\\n\` + code;
+        }
 
-        root = ReactDOM.createRoot(mount);
-        root.render(element);
+        // 5) Transpila TODO (runtime clásico -> evita react/jsx-runtime)
+        const transpiled = window.Babel.transform(code, {
+          presets: [['react', { runtime: 'classic' }]],
+          filename: 'widget.jsx',
+          parserOpts: { sourceType: 'module' }
+        }).code;
+
+        // 6) Asegura export default
+        const footer = hasDefault ? '' : '\\nexport default (typeof Widget !== "undefined" ? Widget : null);';
+        const modCode = transpiled + footer;
+
+        // 7) Carga como módulo
+        const url = URL.createObjectURL(new Blob([modCode], { type: 'application/javascript' }));
+        const mod = await import(url);
+        const Widget = mod.default;
+
+        if (!Widget) {
+          mount.innerHTML = '<pre style="color:red">No Widget found (default export)</pre>';
+          post('render:no-widget', {});
+          return;
+        }
+
+        const root = ReactDOM.createRoot(mount);
+        root.render(React.createElement(Widget, props));
+        post('render:done', {});
       } catch (e) {
-        mount.innerHTML = '<pre style="color:red">' + e.stack + '</pre>';
-        console.error("❌ Error in iframe render:", e);
+        post('render:error', e?.stack || e);
+        mount.innerHTML = '<pre style="color:red">'+(e?.stack||String(e))+'</pre>';
       }
     }
 
-    window.addEventListener("message", (e) => {
+    window.addEventListener('message', (e) => {
       const { type, jsx, props } = e.data || {};
-      if (type === "reactCardUpdate") render(jsx, props);
+      if (type === 'reactCardUpdate') render(jsx, props);
     });
   </script>
 </body>
-</html>
-        `;
-    } else {
-        iframe.contentWindow?.postMessage({
-            type: "reactCardUpdate",
-            jsx,
-            props: safeProps
-        }, "*");
+</html>`;
+
+  const onReady = (e) => {
+    if (e.data?.type === 'iframeReady' && e.data.rootId === rootId) {
+      iframe.contentWindow?.postMessage({ type: 'reactCardUpdate', jsx, props: safeProps }, '*');
+      window.removeEventListener('message', onReady);
     }
+  };
+  window.addEventListener('message', onReady);
 
-    // Este bloque ya no necesita fallback
-    const handleIframeReady = (e) => {
-        if (e.data?.type === "iframeReady" && e.data.rootId === rootId) {
-            iframe.contentWindow?.postMessage({
-                type: "reactCardUpdate",
-                jsx,
-                props: safeProps
-            }, "*");
-            window.removeEventListener("message", handleIframeReady);
-        }
-    };
-    window.addEventListener("message", handleIframeReady);
+  target.appendChild(iframe);
+  iframe.srcdoc = srcdoc;
+  console.log('debugjsx:host:iframe-appended', { rootId, iframeId: iframe.id });
 
-    window._reactWidgets = window._reactWidgets || {};
-    window._reactWidgets[rootId] = iframe;
+  window._reactWidgets = window._reactWidgets || {};
+  window._reactWidgets[rootId] = iframe;
 };
-
-const dataView = (object, root) => {
-    return reactCard(`
-  function InnerWidget(props) {
-    const object = props.object
-    const objExists = object ? true : false
-    let objModel = null
-    let apiUrl = null
-    if (objExists) {
-        objModel = ProtoModel.getClassFromDefinition(object)
-        const { name, prefix } = objModel.getApiOptions()
-        console.log("Object API options", { name, prefix })
-        apiUrl = prefix + name
-    }
-
-    return <ProtoDataView
-            disableRouting={true}
-            sourceUrl={apiUrl}
-            numColumnsForm={1}
-            name={object?.name}
-            model={objModel}
-            hideFilters={false}
-      />
-  }
-
-  function Widget() {
-    return (
-        <MqttWrapper>
-            <Tinted>
-                <View className="no-drag">
-                    {/* you can use data.value here to access the value */}
-                    <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
-                </View>
-            </Tinted>
-        </MqttWrapper>
-    );
-  }
-
-`, root)
-}
 
 const getStates = () => {
     return window.protoStates || {};
