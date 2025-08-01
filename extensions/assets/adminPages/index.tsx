@@ -101,7 +101,7 @@ function FilesPage({ initialFilesState, pageSession, initialItems, pageState }: 
               , false, undefined, true, '115px'),
             DataTable2.column("", row => <AssetIcon element={row} h="50px" w="50px" br="$4" />, false, undefined, true, '90px'),
             DataTable2.column("name", row => row.name, false, undefined, true, '150px'),
-            DataTable2.column("description", row => row.assetJson.description, false, undefined, true, '400px'),
+            DataTable2.column("description", row => row?.assetJson?.description, false, undefined, true, '400px'),
             DataTable2.column("files to install", row => <XStack
               gap="$2"
               ai="center"
