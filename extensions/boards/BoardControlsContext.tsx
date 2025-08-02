@@ -60,8 +60,9 @@ export const BoardControlsProvider: React.FC<{
     setAutopilot(v => !v);
     await API.get(`/api/core/v1/boards/${boardName}/autopilot/${!autopilot ? 'on' : 'off'}`);
     console.log('board:', board)
-    if(board?.settings?.showBoardUIOnPlay && !autopilot) {
-      setViewMode('ui');
+    if(board?.settings?.showBoardUIOnPlay) {
+      if(!autopilot) setViewMode('ui');
+      if(autopilot) setViewMode('board');
     }
   }, [boardName, autopilot]);
 
