@@ -553,58 +553,83 @@ class ErrorBoundary extends React.Component {
 }
 
 window.reactCard = (jsx, rootId, initialProps = {}) => {
-  const isFrameCard = jsx.includes('//@card/reactframe');
-  console.log('debugjsx:host:enter', { rootId, isFrameCard, jsxLen: jsx?.length });
+    const isFrameCard = jsx.includes('//@card/reactframe');
+    console.log('debugjsx:host:enter', { rootId, isFrameCard, jsxLen: jsx?.length });
 
-  // ----- MODO CLÁSICO -----
-  if (!isFrameCard) {
-    try {
-      const jsxCode = `
+    // ----- MODO CLÁSICO -----
+    if (!isFrameCard) {
+        Object.keys(window.ProtoComponents || {}).forEach(key => {
+            window[key] = window.ProtoComponents[key];
+        });
+
+        const jsxCode = `
         ${jsx}
+
         const container = document.getElementById("${rootId}");
-        if (window._reactWidgets?.["${rootId}"]) window._reactWidgets["${rootId}"].unmount();
+
+        if (window._reactWidgets?.["${rootId}"]) {
+            console.log("Unmounting previous React widget for rootId:", "${rootId}");
+            window._reactWidgets["${rootId}"].unmount();
+            delete window._reactWidgets["${rootId}"];
+            delete window._reactWidgetComponents["${rootId}"];
+        } else {
+            console.log("Mounting new React widget for rootId:", "${rootId}");    
+        }
+
         const root = ReactDOM.createRoot(container);
-        const element = React.createElement(Widget, ${JSON.stringify(initialProps)});
-        root.render(element);
+
         window._reactWidgets = window._reactWidgets || {};
         window._reactWidgets["${rootId}"] = root;
-      `;
-      const compiled = Babel.transform(jsxCode, { presets: [['react', { runtime: 'classic' }]] }).code;
-      eval(compiled);
-      console.log('debugjsx:host:classic-rendered', { rootId });
-    } catch (err) {
-      console.error('debugjsx:host:classic:error', err);
+
+        window._reactWidgetComponents = window._reactWidgetComponents || {};
+        window._reactWidgetComponents["${rootId}"] = Widget;
+
+        const element = React.createElement(
+          window.WidgetWrapper,
+          null,
+          React.createElement(Widget, ${JSON.stringify(initialProps)})
+        );
+
+        root.render(element);
+    `;
+
+        console.log("Compiling JSX code for rootId:", "${rootId}", jsxCode);
+
+        const compiled = Babel.transform(jsxCode, {
+            presets: ['react'],
+        }).code;
+
+        eval(compiled);
+        return
     }
-    return;
-  }
 
-  // ----- MODO IFRAMED -----
-  const target = document.getElementById(rootId);
-  if (!target) return console.warn(`⛔ No div found with id "${rootId}"`);
+    // ----- MODO IFRAMED -----
+    const target = document.getElementById(rootId);
+    if (!target) return console.warn(`⛔ No div found with id "${rootId}"`);
 
-  const safeProps = {};
-  for (const k in initialProps) {
-    if (typeof initialProps[k] !== 'function') safeProps[k] = initialProps[k];
-  }
-  safeProps.rootId = rootId;
+    const safeProps = {};
+    for (const k in initialProps) {
+        if (typeof initialProps[k] !== 'function') safeProps[k] = initialProps[k];
+    }
+    safeProps.rootId = rootId;
 
-  target.innerHTML = "";
-  const iframe = document.createElement("iframe");
-  iframe.id = `iframe-${rootId}`;
-  iframe.name = rootId;
-  iframe.style.cssText = "width:100%;height:100%;border:none;";
-  iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-  iframe.setAttribute('csp',
-    "default-src 'self' https: blob: data:; " +
-    "script-src 'unsafe-inline' 'unsafe-eval' https: blob: data:; " +
-    "style-src 'unsafe-inline' https:; " +
-    "img-src data: https: blob:; " +
-    "connect-src https: blob: data:; " +
-    "worker-src blob: data:; " +
-    "object-src 'none';"
-  );
+    target.innerHTML = "";
+    const iframe = document.createElement("iframe");
+    iframe.id = `iframe-${rootId}`;
+    iframe.name = rootId;
+    iframe.style.cssText = "width:100%;height:100%;border:none;";
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+    iframe.setAttribute('csp',
+        "default-src 'self' https: blob: data:; " +
+        "script-src 'unsafe-inline' 'unsafe-eval' https: blob: data:; " +
+        "style-src 'unsafe-inline' https:; " +
+        "img-src data: https: blob:; " +
+        "connect-src https: blob: data:; " +
+        "worker-src blob: data:; " +
+        "object-src 'none';"
+    );
 
-  const srcdoc = `<!DOCTYPE html>
+    const srcdoc = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
@@ -699,22 +724,22 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
 </body>
 </html>`;
 
-  const onReady = (e) => {
-    if (e.data?.type === 'iframeReady' && e.data.rootId === rootId) {
-      console.log('debugjsx:host:iframe-ready', { rootId });
-      iframe.contentWindow?.postMessage({ type: 'reactCardUpdate', jsx, props: safeProps }, '*');
-      window.removeEventListener('message', onReady);
-    }
-  };
-  window.addEventListener('message', onReady);
+    const onReady = (e) => {
+        if (e.data?.type === 'iframeReady' && e.data.rootId === rootId) {
+            console.log('debugjsx:host:iframe-ready', { rootId });
+            iframe.contentWindow?.postMessage({ type: 'reactCardUpdate', jsx, props: safeProps }, '*');
+            window.removeEventListener('message', onReady);
+        }
+    };
+    window.addEventListener('message', onReady);
 
-  target.appendChild(iframe);
-  const blob = new Blob([srcdoc], { type: 'text/html' });
-  iframe.src = URL.createObjectURL(blob);
-  console.log('debugjsx:host:iframe-appended', { rootId, iframeId: iframe.id });
+    target.appendChild(iframe);
+    const blob = new Blob([srcdoc], { type: 'text/html' });
+    iframe.src = URL.createObjectURL(blob);
+    console.log('debugjsx:host:iframe-appended', { rootId, iframeId: iframe.id });
 
-  window._reactWidgets = window._reactWidgets || {};
-  window._reactWidgets[rootId] = iframe;
+    window._reactWidgets = window._reactWidgets || {};
+    window._reactWidgets[rootId] = iframe;
 };
 
 const getStates = () => {
