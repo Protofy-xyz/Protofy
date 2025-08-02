@@ -342,15 +342,15 @@ boardConnect(run)`
                         const html = card.html
                         const cardFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '.js'
                         const cardHTMLFilePath = BoardsDir(getRoot(req)) + key + '/' + card.name + '_view.js'
-                        if(code) {
+                        if (code) {
                             await fs.writeFile(cardFilePath, code)
                         } else {
-                            try { await fs.unlink(cardFilePath) } catch(e) {}
+                            try { await fs.unlink(cardFilePath) } catch (e) { }
                         }
-                        if(html) {
-                            await fs.writeFile(cardHTMLFilePath, html ? html :'')
+                        if (html) {
+                            await fs.writeFile(cardHTMLFilePath, html ? html : '')
                         } else {
-                            try { await fs.unlink(cardHTMLFilePath) } catch(e) {}
+                            try { await fs.unlink(cardHTMLFilePath) } catch (e) { }
                         }
 
                         delete card.rulesCode
@@ -574,8 +574,8 @@ export default async (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
-    app.post('/api/core/v1/autopilot/getComponent',  async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "componentGenerator", sourceComponent: req.body.sourceComponent, request: req.body.request});
+    app.post('/api/core/v1/autopilot/getComponent', async (req, res) => {
+        const prompt = await context.autopilot.getPromptFromTemplate({ templateName: "componentGenerator", sourceComponent: req.body.sourceComponent, request: req.body.request });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }
@@ -792,9 +792,9 @@ export default async (app, context) => {
             }, getServiceToken());
 
             // if persistValue is true
-            if(action.persistValue) {
-                const db = dbProvider.getDB('board_'+boardId);
-                await db.put(action.name, response === undefined? '' : JSON.stringify(response, null, 4));
+            if (action.persistValue) {
+                const db = dbProvider.getDB('board_' + boardId);
+                await db.put(action.name, response === undefined ? '' : JSON.stringify(response, null, 4));
             }
         } catch (err) {
             await generateEvent({
@@ -913,11 +913,11 @@ export default async (app, context) => {
         if (started) {
             autopilotState[boardId] = true;
             logger.info(`Autopilot started for board: ${boardId}`);
-            if(res) res.send({ result: 'started', message: "Board started", board: boardId });
+            if (res) res.send({ result: 'started', message: "Board started", board: boardId });
 
         } else {
             logger.info(`Autopilot already running for board: ${boardId}`);
-            if(res) res.send({ result: 'already_running', message: "Board already running", board: boardId });
+            if (res) res.send({ result: 'already_running', message: "Board already running", board: boardId });
         }
 
     }
@@ -1388,6 +1388,73 @@ return card({
         emitEvent: true
     });
 
+
+    addCard({
+        group: 'memory',
+        tag: 'matrix',
+        id: 'board_interactive_matrix',
+        templateName: 'Matrix grid',
+        name: 'interactive',
+        defaults: {
+            name: 'matrix',
+            icon: 'grid-3x3',
+            width: 4,
+            height: 12,
+            description: 'Interactive matrix grid',
+            type: 'action',
+            editorOptions: {
+                defaultTab: "value"
+            },
+            "rulesCode": "const matrix = board?.[name];\r\n\r\nif (params.action === 'reset') {\r\n  const width = params.width;\r\n  const height = params.height;\r\n  const initialValue = params.value;\r\n\r\n  if (!Number.isInteger(width) || width <= 0 ||\r\n      !Number.isInteger(height) || height <= 0) {\r\n    throw new TypeError('matrix reset error: width and height should positive numbers');\r\n  }\r\n\r\n  // Nueva matriz de height x width\r\n  return Array.from({ length: height }, () =>\r\n    Array.from({ length: width }, () => initialValue)\r\n  );\r\n} else {\r\n  if (!Array.isArray(matrix)) {\r\n    throw new Error('matrix set error: cannot set a value in an empty matrix');\r\n  }\r\n\r\n  const posX = params.x;\r\n  const posY = params.y;\r\n  const val = params.value;\r\n\r\n  if (!Number.isInteger(posY) || posY < 0 || posY >= matrix.length) {\r\n    throw new RangeError(`matrix set error: y out of range: ${posY}`);\r\n  }\r\n  const row = matrix[posY];\r\n  if (!Array.isArray(row)) {\r\n    throw new TypeError(`matrix set error: invalud row`);\r\n  }\r\n  if (!Number.isInteger(posX) || posX < 0 || posX >= row.length) {\r\n    throw new RangeError(`matrix set error x out of range: ${posX}`);\r\n  }\r\n\r\n  // Copia inmutable y set\r\n  const next = matrix.map(r => r.slice());\r\n  next[posY][posX] = val;\r\n  return next;\r\n}",
+            "html": "//@card/react\n\nfunction MatrixTable({ data }) {\n  const rows = Array.isArray(data) ? data : []\n  const maxCols = rows.reduce((m, r) => Math.max(m, Array.isArray(r) ? r.length : 0), 0)\n\n  const wrapStyle = {\n    width: '100%',\n    height: '100%',\n    overflow: 'auto',\n  }\n  const tableStyle = {\n    borderCollapse: 'collapse',\n    width: '100%',\n    height: '100%',\n  }\n  const cellStyle = {\n    border: '1px solid #ccc',\n    padding: '6px 8px',\n    textAlign: 'center',\n  }\n\n  return (\n    <div style={wrapStyle}>\n      <table style={tableStyle}>\n        <tbody>\n          {rows.map((row, rIdx) => (\n            <tr key={rIdx}>\n              {Array.from({ length: maxCols }).map((_, cIdx) => {\n                const v = Array.isArray(row) ? row[cIdx] : undefined\n                const text = v == null ? '' : String(v)\n                return <td key={cIdx} style={cellStyle}>{text}</td>\n              })}\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  )\n}\n\nfunction Widget(card) {\n  const value = card.value;\n  const isMatrix = Array.isArray(value) && value.every(r => Array.isArray(r));\n  const fullHeight = value !== undefined && typeof value !== \"string\" && typeof value !== \"number\" && typeof value !== \"boolean\";\n\n  const content = (\n    <YStack f={1} h=\"100%\" miH={0} mt={fullHeight ? \"20px\" : \"0px\"} ai=\"stretch\" jc=\"flex-start\" width=\"100%\">\n      {card.icon && card.displayIcon !== false && (\n        <Icon name={card.icon} size={48} color={card.color} />\n      )}\n\n      {card.displayResponse !== false && (\n        isMatrix ? (\n          <YStack f={1} miH={0} width=\"100%\">\n            <MatrixTable data={value} />\n          </YStack>\n        ) : (\n          <YStack f={1} miH={0} width=\"100%\"><h1>{value !== undefined ? String(value) : 'Empty matrix grid'}</h1></YStack>\n        )\n      )}\n    </YStack>\n  );\n\n  return (\n    <Tinted>\n      <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>\n        <ActionCard data={card} style={{ height: '100%'}}>\n          {card.displayButton !== false ? (\n            <ParamsForm data={card} style={{ height: '100%' }}>\n              {content}\n            </ParamsForm>\n          ) : (\n            card.displayResponse !== false && content\n          )}\n        </ActionCard>\n      </ProtoThemeProvider>\n    </Tinted>\n  );\n}",
+            displayResponse: true,
+            "params": {
+                "x": "position  x only needed when using setCell",
+                "y": "position y only needed when using setCell",
+                "action": "reset or setCell",
+                "value": "initialization value when using reset, value for cell when using setCell",
+                "width": "width of the matrix: needed for reset",
+                "height": "height of the matrix: needed for reset"
+            },
+            "configParams": {
+                "x": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "number"
+                },
+                "y": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "number"
+                },
+                "action": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "string"
+                },
+                "value": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "string"
+                },
+                "width": {
+                    "visible": true,
+                    "defaultValue": "3",
+                    "type": "number"
+                },
+                "height": {
+                    "visible": true,
+                    "defaultValue": "3",
+                    "type": "number"
+                }
+            },
+            displayButton: true,
+            displayIcon: false
+        },
+        emitEvent: true
+    });
+
+
     addCard({
         group: 'board',
         tag: "react",
@@ -1448,7 +1515,7 @@ return card({
         context.mqtt,
         context,
         async (event) => {
-            if(!alreadyStarted) {
+            if (!alreadyStarted) {
                 alreadyStarted = true;
                 logger.info("API is ready, starting autopilot for all boards with autoplay enabled")
                 const boards = await getBoards()
@@ -1494,7 +1561,7 @@ return card({
                         emitEvent: i === actionsCards.length - 1,
                         persistValue: card.persistValue ?? false,
                     })
-                    if(card.persistValue) {
+                    if (card.persistValue) {
                         // if persistValue is true, save the board state
                         const db = dbProvider.getDB('board_' + board);
                         try {
