@@ -556,7 +556,7 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
   const isFrameCard = jsx.includes('//@card/reactframe');
   console.log('debugjsx:host:enter', { rootId, isFrameCard, jsxLen: jsx?.length });
 
-  // ----- MODO CLÁSICO (sin iframe) -----
+  // ----- MODO CLÁSICO -----
   if (!isFrameCard) {
     try {
       const jsxCode = `
@@ -571,8 +571,9 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
       `;
       const compiled = Babel.transform(jsxCode, { presets: [['react', { runtime: 'classic' }]] }).code;
       eval(compiled);
+      console.log('debugjsx:host:classic-rendered', { rootId });
     } catch (err) {
-      console.error('debugjsx:classic:error', err);
+      console.error('debugjsx:host:classic:error', err);
     }
     return;
   }
@@ -582,7 +583,9 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
   if (!target) return console.warn(`⛔ No div found with id "${rootId}"`);
 
   const safeProps = {};
-  for (const k in initialProps) if (typeof initialProps[k] !== 'function') safeProps[k] = initialProps[k];
+  for (const k in initialProps) {
+    if (typeof initialProps[k] !== 'function') safeProps[k] = initialProps[k];
+  }
   safeProps.rootId = rootId;
 
   target.innerHTML = "";
@@ -591,7 +594,6 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
   iframe.name = rootId;
   iframe.style.cssText = "width:100%;height:100%;border:none;";
   iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-  // CSP permisiva solo dentro del iframe (para inline + blob:)
   iframe.setAttribute('csp',
     "default-src 'self' https: blob: data:; " +
     "script-src 'unsafe-inline' 'unsafe-eval' https: blob: data:; " +
@@ -611,11 +613,13 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
     canvas { display:block; }
     pre { white-space: pre-wrap; }
   </style>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js" onload="console.log('debugjsx:ifr:babel-loaded')"></script>
 </head>
 <body>
   <div id="mount"></div>
   <script type="module">
+    console.log('debugjsx:ifr:script-start');
+
     function post(tag, data) {
       let msg;
       try { msg = typeof data === 'string' ? data : JSON.stringify(data, (k,v)=> typeof v === 'function' ? '[fn]' : v); }
@@ -627,33 +631,17 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
     post('boot', { name: window.name });
     window.parent.postMessage({ type: 'iframeReady', rootId: window.name }, '*');
 
-    // Reescribe imports bare a URLs ESM
-    function mapImports(src) {
-      const alias = (s) => {
-        const map = {
-          'react': 'https://esm.sh/react@18.2.0',
-          'react-dom/client': 'https://esm.sh/react-dom@18.2.0/client',
-          'react/jsx-runtime': 'https://esm.sh/react@18.2.0/jsx-runtime',
-          '@react-three/fiber': 'https://esm.sh/@react-three/fiber',
-          '@react-three/drei': 'https://esm.sh/@react-three/drei',
-          'three': 'https://esm.sh/three'
-        };
-        return map[s] || s;
-      };
-      // import X from 'pkg'
-      src = src.replace(/(^|\\n)\\s*import\\s+[^'"]+from\\s*['"]([^'"]+)['"];?/g, (m, p1, spec) => p1 + m.slice(p1.length).replace(spec, alias(spec)));
-      // import 'pkg'
-      src = src.replace(/(^|\\n)\\s*import\\s*['"]([^'"]+)['"];?/g, (m, p1, spec) => p1 + m.slice(p1.length).replace(spec, alias(spec)));
-      return src;
-    }
-
     async function render(userCode, props) {
       post('render:enter', { len: userCode?.length });
 
       let React, ReactDOM;
       try {
+        post('deps:begin', {});
         React = await import('https://esm.sh/react@18.2.0');
         ReactDOM = await import('https://esm.sh/react-dom@18.2.0/client');
+        window.React = React;
+        window.ReactDOM = ReactDOM;
+        post('deps:ok', {});
       } catch (err) {
         document.getElementById('mount').innerHTML = '<pre style="color:red">Deps load error: '+(err?.message||err)+'</pre>';
         post('deps:error', err?.message || err);
@@ -664,33 +652,23 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
       mount.innerHTML = '';
 
       try {
-        // 1) Limpia //@ y reescribe imports a URLs
-        let code = (userCode || '')
-          .split('\\n').filter(l => !l.trim().startsWith('//@')).join('\\n');
-        code = mapImports(code);
-
-        // 2) ¿El usuario ya importa React?
-        const hasReactImport = /(^|\\n)\\s*import\\s+React(\\s|,|from)/m.test(code);
-        // 3) ¿Exporta default?
+        let code = (userCode || '').split('\\n').filter(l => !l.trim().startsWith('//@')).join('\\n');
         const hasDefault = /(^|\\n)\\s*export\\s+default\\b/m.test(code);
+        post('babel:start', { hasDefault });
 
-        // 4) Si no hay import React, lo inyectamos (para runtime clásico)
-        if (!hasReactImport) {
-          code = \`import React from 'https://esm.sh/react@18.2.0';\\n\` + code;
-        }
-
-        // 5) Transpila TODO (runtime clásico -> evita react/jsx-runtime)
         const transpiled = window.Babel.transform(code, {
           presets: [['react', { runtime: 'classic' }]],
           filename: 'widget.jsx',
           parserOpts: { sourceType: 'module' }
         }).code;
 
-        // 6) Asegura export default
         const footer = hasDefault ? '' : '\\nexport default (typeof Widget !== "undefined" ? Widget : null);';
-        const modCode = transpiled + footer;
+        const injectedReactGlobals = \`
+  const React = window.React;
+  const ReactDOM = window.ReactDOM;
+\`;
+        const modCode = injectedReactGlobals + '\\n' + transpiled + footer;
 
-        // 7) Carga como módulo
         const url = URL.createObjectURL(new Blob([modCode], { type: 'application/javascript' }));
         const mod = await import(url);
         const Widget = mod.default;
@@ -712,7 +690,10 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
 
     window.addEventListener('message', (e) => {
       const { type, jsx, props } = e.data || {};
-      if (type === 'reactCardUpdate') render(jsx, props);
+      if (type === 'reactCardUpdate') {
+        post('msg:reactCardUpdate', {});
+        render(jsx, props);
+      }
     });
   </script>
 </body>
@@ -720,6 +701,7 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
 
   const onReady = (e) => {
     if (e.data?.type === 'iframeReady' && e.data.rootId === rootId) {
+      console.log('debugjsx:host:iframe-ready', { rootId });
       iframe.contentWindow?.postMessage({ type: 'reactCardUpdate', jsx, props: safeProps }, '*');
       window.removeEventListener('message', onReady);
     }
@@ -727,7 +709,8 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
   window.addEventListener('message', onReady);
 
   target.appendChild(iframe);
-  iframe.srcdoc = srcdoc;
+  const blob = new Blob([srcdoc], { type: 'text/html' });
+  iframe.src = URL.createObjectURL(blob);
   console.log('debugjsx:host:iframe-appended', { rootId, iframeId: iframe.id });
 
   window._reactWidgets = window._reactWidgets || {};
