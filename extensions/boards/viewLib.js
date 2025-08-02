@@ -518,12 +518,48 @@ window.WidgetWrapper = window.WidgetWrapper || (({ children }) =>
     )
 );
 
+function deepCloneWithoutFunctions(obj) {
+    if (typeof obj === 'function') return undefined;
+    if (Array.isArray(obj)) return obj.map(deepCloneWithoutFunctions);
+    if (obj && typeof obj === 'object') {
+        const result = {};
+        for (const key in obj) {
+            const val = deepCloneWithoutFunctions(obj[key]);
+            if (val !== undefined) result[key] = val;
+        }
+        return result;
+    }
+    return obj;
+}
+
 window.updateReactCardProps = (uuid, newProps) => {
-    console.log('Updating React card props for:', uuid, newProps);
-    const root = window._reactWidgets?.[uuid];
+    console.log('🔁 Updating React card props for:', uuid, newProps);
+    const target = window._reactWidgets?.[uuid];
     const Component = window._reactWidgetComponents?.[uuid];
-    if (!root || !Component) {
-        console.warn('No React root or component found for:', uuid);
+
+    if (!target) {
+        console.warn('⚠️ No React root or iframe found for:', uuid);
+        return;
+    }
+
+    // Si es un iframe (card/reactframe)
+    if (target.tagName === 'IFRAME') {
+        const safeProps = deepCloneWithoutFunctions(newProps);
+        try {
+            target.contentWindow?.postMessage({
+                type: 'reactCardUpdate',
+                props: safeProps
+            }, '*');
+            console.log('✅ Props sent to iframe:', uuid);
+        } catch (err) {
+            console.error('❌ Failed to postMessage to iframe:', err);
+        }
+        return;
+    }
+
+    // Si es un ReactDOM root (card/react)
+    if (!Component) {
+        console.warn('⚠️ No component found for:', uuid);
         return;
     }
 
@@ -533,7 +569,7 @@ window.updateReactCardProps = (uuid, newProps) => {
         React.createElement(Component, newProps)
     );
 
-    root.render(element);
+    target.render(element);
 };
 
 class ErrorBoundary extends React.Component {
@@ -656,7 +692,22 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
     post('boot', { name: window.name });
     window.parent.postMessage({ type: 'iframeReady', rootId: window.name }, '*');
 
+    let lastUserCode = null;
+
     async function render(userCode, props) {
+        post('render:enter', { len: userCode?.length });
+
+        if (!userCode && lastUserCode) {
+            userCode = lastUserCode;
+        } else {
+            lastUserCode = userCode;
+        }
+
+        if (!userCode) {
+            document.getElementById('mount').innerHTML = '<pre style="color:red">No JSX code provided</pre>';
+            post('render:error', 'No JSX code provided');
+            return;
+        }
       post('render:enter', { len: userCode?.length });
 
       let React, ReactDOM;
