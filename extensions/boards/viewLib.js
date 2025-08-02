@@ -692,25 +692,16 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
     post('boot', { name: window.name });
     window.parent.postMessage({ type: 'iframeReady', rootId: window.name }, '*');
 
-    let lastUserCode = null;
+    // Estado persistente dentro del iframe para evitar parpadeos
+    let React = null;
+    let ReactDOM = null;
+    let root = null;                 // ReactDOM root (se crea una sola vez)
+    let CurrentWidget = null;        // Componente compilado actual
+    let lastUserCode = null;         // Código JSX previo (para recompilar solo si cambia)
+    let lastPropsJSON = '';          // Props previas (para evitar renders redundantes)
 
-    async function render(userCode, props) {
-        post('render:enter', { len: userCode?.length });
-
-        if (!userCode && lastUserCode) {
-            userCode = lastUserCode;
-        } else {
-            lastUserCode = userCode;
-        }
-
-        if (!userCode) {
-            document.getElementById('mount').innerHTML = '<pre style="color:red">No JSX code provided</pre>';
-            post('render:error', 'No JSX code provided');
-            return;
-        }
-      post('render:enter', { len: userCode?.length });
-
-      let React, ReactDOM;
+    async function ensureDeps() {
+      if (React && ReactDOM) return;
       try {
         post('deps:begin', {});
         React = await import('https://esm.sh/react@18.2.0');
@@ -721,54 +712,93 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
       } catch (err) {
         document.getElementById('mount').innerHTML = '<pre style="color:red">Deps load error: '+(err?.message||err)+'</pre>';
         post('deps:error', err?.message || err);
+        throw err;
+      }
+    }
+
+    function cleanCode(src) {
+      return (src || '').split('\\n').filter(l => !l.trim().startsWith('//@')).join('\\n');
+    }
+
+    async function compileIfNeeded(userCode) {
+      if (!userCode && lastUserCode) {
+        // Solo props update: no recompilar
+        return false;
+      }
+      if (!userCode) {
+        const mount = document.getElementById('mount');
+        mount.innerHTML = '<pre style="color:red">No JSX code provided</pre>';
+        post('render:error', 'No JSX code provided');
+        throw new Error('No JSX code provided');
+      }
+      if (userCode === lastUserCode && CurrentWidget) {
+        // Código idéntico y ya tenemos Widget
+        return false;
+      }
+
+      const code = cleanCode(userCode);
+      const hasDefault = /(^|\\n)\\s*export\\s+default\\b/m.test(code);
+      post('babel:start', { hasDefault });
+
+      const transpiled = window.Babel.transform(code, {
+        presets: [['react', { runtime: 'classic' }]],
+        filename: 'widget.jsx',
+        parserOpts: { sourceType: 'module' }
+      }).code;
+
+      const footer = hasDefault ? '' : '\\nexport default (typeof Widget !== "undefined" ? Widget : null);';
+      const injectedReactGlobals = \`
+const React = window.React;
+const ReactDOM = window.ReactDOM;
+\`;
+      const modCode = injectedReactGlobals + '\\n' + transpiled + footer;
+
+      const url = URL.createObjectURL(new Blob([modCode], { type: 'application/javascript' }));
+      const mod = await import(url);
+      const W = mod.default;
+
+      if (!W) {
+        const mount = document.getElementById('mount');
+        mount.innerHTML = '<pre style="color:red">No Widget found (default export)</pre>';
+        post('render:no-widget', {});
+        throw new Error('No Widget found');
+      }
+
+      CurrentWidget = W;
+      lastUserCode = userCode;
+      post('compile:ok', { bytes: modCode.length });
+      return true;
+    }
+
+    function renderWithProps(props) {
+      const mount = document.getElementById('mount');
+      if (!root) {
+        // Crear root una sola vez → evita parpadeo del canvas
+        root = ReactDOM.createRoot(mount);
+      }
+      const nextJSON = JSON.stringify(props || {});
+      if (nextJSON === lastPropsJSON) {
+        post('render:skip-same-props', {});
         return;
       }
+      lastPropsJSON = nextJSON;
+      root.render(React.createElement(CurrentWidget, props));
+      post('render:done', {});
+    }
 
-      const mount = document.getElementById('mount');
-      mount.innerHTML = '';
-
-      try {
-        let code = (userCode || '').split('\\n').filter(l => !l.trim().startsWith('//@')).join('\\n');
-        const hasDefault = /(^|\\n)\\s*export\\s+default\\b/m.test(code);
-        post('babel:start', { hasDefault });
-
-        const transpiled = window.Babel.transform(code, {
-          presets: [['react', { runtime: 'classic' }]],
-          filename: 'widget.jsx',
-          parserOpts: { sourceType: 'module' }
-        }).code;
-
-        const footer = hasDefault ? '' : '\\nexport default (typeof Widget !== "undefined" ? Widget : null);';
-        const injectedReactGlobals = \`
-  const React = window.React;
-  const ReactDOM = window.ReactDOM;
-\`;
-        const modCode = injectedReactGlobals + '\\n' + transpiled + footer;
-
-        const url = URL.createObjectURL(new Blob([modCode], { type: 'application/javascript' }));
-        const mod = await import(url);
-        const Widget = mod.default;
-
-        if (!Widget) {
-          mount.innerHTML = '<pre style="color:red">No Widget found (default export)</pre>';
-          post('render:no-widget', {});
-          return;
-        }
-
-        const root = ReactDOM.createRoot(mount);
-        root.render(React.createElement(Widget, props));
-        post('render:done', {});
-      } catch (e) {
-        post('render:error', e?.stack || e);
-        mount.innerHTML = '<pre style="color:red">'+(e?.stack||String(e))+'</pre>';
-      }
+    async function handleUpdate(userCode, props) {
+      post('render:enter', { len: userCode?.length });
+      await ensureDeps();
+      const compiled = await compileIfNeeded(userCode);
+      // Si se recompiló el componente, simplemente volvemos a renderizar con nuevas props
+      renderWithProps(props);
     }
 
     window.addEventListener('message', (e) => {
       const { type, jsx, props } = e.data || {};
       if (type === 'reactCardUpdate') {
-        post('msg:reactCardUpdate', {});
-        render(jsx, props);
+        post('msg:reactCardUpdate', { hasCode: !!jsx });
+        handleUpdate(jsx, props);
       }
     });
   </script>
