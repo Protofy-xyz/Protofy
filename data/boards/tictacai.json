@@ -1,0 +1,903 @@
+{
+    "name": "tictacai",
+    "cards": [
+        {
+            "key": "action_1754155173070",
+            "width": 4,
+            "height": 12,
+            "icon": "grid-3x3",
+            "name": "game",
+            "description": "# Game\r\n\r\nGame board, 3x3 matrix with the current game state.\r\n\r\n# Matrix / Grid\r\n\r\nCreates and manipulates bi-dimensional grids. The grid is stored as a bidimensional\r\narray where the first level is the row, and second level is the column.\r\n\r\n## Accessing a specific position given row and column\r\n\r\n```js\r\nmatrix[row][column]\r\n```\r\n\r\n## Actions\r\n\r\n### `reset`\r\n\r\nCreates a new matrix with the given dimensions and initializes all cells with a value.\r\n\r\n**Parameters:**\r\n\r\n* `action`: `\"reset\"`\r\n* `width`: number of columns (must be a positive integer)\r\n* `height`: number of rows (must be a positive integer)\r\n* `value`: initial value for all cells\r\n\r\n**Example:**\r\n\r\n```json\r\n{\r\n  \"action\": \"reset\",\r\n  \"width\": 3,\r\n  \"height\": 3,\r\n  \"value\": \"\"\r\n}\r\n```\r\n\r\n**Effect:**\r\nResets the matrix to a 3×3 grid with all cells initialized to an empty string (`\"\"`).\r\n\r\n---\r\n\r\n### `setCell`\r\n\r\nSets a specific cell at position `(x, y)` to the given value.\r\nCoordinates are 0-based: `x` is the column index, `y` is the row index.\r\n\r\n**Parameters:**\r\n\r\n* `action`: `\"setCell\"`\r\n* `x`: column index\r\n* `y`: row index\r\n* `value`: value to set in the specified cell\r\n\r\n**Example:**\r\n\r\n```json\r\n{\r\n  \"action\": \"setCell\",\r\n  \"x\": 1,\r\n  \"y\": 2,\r\n  \"value\": \"X\"\r\n}\r\n```\r\n\r\n**Effect:**\r\nSets the value `\"X\"` in the cell located at column 1, row 2.",
+            "type": "action",
+            "editorOptions": {
+                "defaultTab": "value"
+            },
+            "displayResponse": true,
+            "params": {
+                "x": "position  x only needed when using setCell",
+                "y": "position y only needed when using setCell",
+                "action": "reset or setCell",
+                "value": "initialization value when using reset, value for cell when using setCell",
+                "width": "width of the matrix: needed for reset",
+                "height": "height of the matrix: needed for reset"
+            },
+            "defaultValue": [
+                [
+                    "",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    ""
+                ],
+                [
+                    "",
+                    "",
+                    ""
+                ]
+            ],
+            "configParams": {
+                "x": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "number"
+                },
+                "y": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "number"
+                },
+                "action": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "string"
+                },
+                "value": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "string"
+                },
+                "width": {
+                    "visible": true,
+                    "defaultValue": "3",
+                    "type": "number"
+                },
+                "height": {
+                    "visible": true,
+                    "defaultValue": "3",
+                    "type": "number"
+                }
+            },
+            "displayButton": true,
+            "displayIcon": false
+        },
+        {
+            "key": "action_1754171812711",
+            "width": 2,
+            "height": 6,
+            "icon": "eraser",
+            "type": "action",
+            "name": "new game",
+            "displayResponse": false,
+            "buttonLabel": "New game",
+            "displayIcon": false,
+            "displayTitle": true,
+            "displayFrame": true,
+            "displayButtonIcon": false,
+            "description": "Inicia un nuevo juego, ejecuta esta accion para empezar un nuevo juego.",
+            "rules": [
+                "reseta el valor de game y pon un valor de '-' en una matriz de 3x3",
+                "reset Player A y Player B"
+            ]
+        },
+        {
+            "key": "action_1754172148122",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "type": "action",
+            "name": "move",
+            "displayResponse": true,
+            "params": {
+                "row": "row to choose",
+                "col": "column to choose"
+            },
+            "configParams": {
+                "row": {
+                    "visible": true,
+                    "defaultValue": "0",
+                    "type": "number"
+                },
+                "col": {
+                    "visible": true,
+                    "defaultValue": "0",
+                    "type": "number"
+                }
+            },
+            "displayIcon": false,
+            "description": "Use this action to make a move in the board. \r\nPass the row and column choosen, and your piece will be placed there."
+        },
+        {
+            "key": "action_1754172968283",
+            "width": 3,
+            "height": 12,
+            "icon": "sparkles",
+            "type": "action",
+            "name": "Player A",
+            "displayResponse": true,
+            "params": {
+                "prompt": ""
+            },
+            "configParams": {
+                "prompt": {
+                    "visible": false,
+                    "defaultValue": "",
+                    "type": "text"
+                }
+            },
+            "displayIcon": false,
+            "displayButton": true,
+            "displayButtonIcon": true,
+            "buttonLabel": "Move Player A",
+            "description": "Player A: usa esta accion para que mueva el player A"
+        },
+        {
+            "key": "value_1754173318440",
+            "width": 3,
+            "height": 12,
+            "icon": "file-text",
+            "name": "prompt",
+            "description": "Render formatted markdown using ReactMarkdown",
+            "type": "value",
+            "editorOptions": {
+                "defaultTab": "value"
+            }
+        },
+        {
+            "key": "action_1754172968283_vento_copy_ktk7zy2f3rtp2xvkd8p7d",
+            "width": 3,
+            "height": 12,
+            "icon": "sparkles",
+            "type": "action",
+            "name": "Player B",
+            "displayResponse": true,
+            "params": {
+                "prompt": ""
+            },
+            "configParams": {
+                "prompt": {
+                    "visible": false,
+                    "defaultValue": "",
+                    "type": "text"
+                }
+            },
+            "displayIcon": false,
+            "displayButton": true,
+            "displayButtonIcon": true,
+            "buttonLabel": "Move Player B",
+            "description": "Player B: usa esta accion para que mueva el player B"
+        },
+        {
+            "key": "value_1754173318440_vento_copy_cfjioizbuxpabdx5ushy",
+            "width": 3,
+            "height": 12,
+            "icon": "file-text",
+            "name": "prompt _2",
+            "description": "Render formatted markdown using ReactMarkdown",
+            "type": "value",
+            "editorOptions": {
+                "defaultTab": "value"
+            }
+        },
+        {
+            "key": "action_1754226848105",
+            "width": 2,
+            "height": 12,
+            "icon": "file-stack",
+            "name": "stats",
+            "description": "Interactive object",
+            "type": "action",
+            "editorOptions": {
+                "defaultTab": "value"
+            },
+            "displayResponse": true,
+            "params": {
+                "key": "key",
+                "value": "value"
+            },
+            "configParams": {
+                "key": {
+                    "visible": true,
+                    "defaultValue": ""
+                },
+                "value": {
+                    "visible": true,
+                    "defaultValue": ""
+                }
+            },
+            "displayButton": false
+        },
+        {
+            "key": "action_1754226953383",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "type": "action",
+            "name": "reset stats",
+            "displayResponse": false,
+            "displayIcon": false,
+            "displayTitle": true,
+            "buttonLabel": "reset stats"
+        },
+        {
+            "key": "value_1754238566839",
+            "width": 2.5,
+            "height": 10,
+            "icon": "chart-pie",
+            "name": "Ratio",
+            "description": "## Pie Chart\r\n\r\nDisplays a pie chart using Recharts.\r\n\r\nThe data should be an array of objects with the properties name and value. The name is the name for the element in the chart, and the value is the numerical value for this elements in the chart.",
+            "type": "value",
+            "params": {
+                "nameKey": "name",
+                "dataKey": "value"
+            },
+            "rules": [
+                "lee los stats de board.stats y ponlos en el grafico"
+            ]
+        },
+        {
+            "key": "action_1754226953383_vento_copy_3hd8dew5tr9uteg63ec17",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "type": "action",
+            "name": "Player A win",
+            "displayResponse": false,
+            "displayIcon": false,
+            "displayTitle": true,
+            "buttonLabel": "Player A win",
+            "rules": [
+                "agrega 1 al numero de victorias de A en los stats",
+                "si stats no existe o es un objeto vacio, ejecuta 'reset stats'",
+                "el valor de retorno final es null, solo son importantes los dos execute_action"
+            ]
+        },
+        {
+            "key": "action_1754226953383_vento_copy_9vujarutkmsohoasqopfsf",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "type": "action",
+            "name": "Player B win",
+            "displayResponse": false,
+            "displayIcon": false,
+            "displayTitle": true,
+            "buttonLabel": "Player B win",
+            "rules": [
+                "agrega 1 al numero de victorias de B en los stats",
+                "si stats no existe o es un objeto vacio, ejecuta 'reset stats'",
+                "el valor de retorno final es null, solo son importantes los dos execute_action"
+            ]
+        },
+        {
+            "key": "value_1754252721218",
+            "width": 1,
+            "height": 4,
+            "icon": "tag",
+            "type": "value",
+            "name": "remaining_moves",
+            "rules": [
+                "devuelve el numero de casillas vacias que quedan en el board"
+            ],
+            "description": "Cuantos movimientos quedan disponibles, si llega a 0 no quedan movimientos"
+        },
+        {
+            "key": "value_1754253692596",
+            "width": 1,
+            "height": 4,
+            "icon": "tag",
+            "type": "value",
+            "name": "turn",
+            "rules": [
+                "si el numero de movimientos que quedan disponibles es impar, es el turno de A, si es par, es el turno de B. si es 0, es el turno '-'. devuelve el turno."
+            ],
+            "displayIcon": false
+        },
+        {
+            "key": "action_1754226953383_vento_copy_zao7ws687fgli9siu4b2m",
+            "width": 2,
+            "height": 6,
+            "icon": "zap",
+            "type": "action",
+            "name": "Draw",
+            "displayResponse": false,
+            "displayIcon": false,
+            "displayTitle": true,
+            "buttonLabel": "Player A win",
+            "rules": [
+                "agrega 1 al numero de empates en los stats",
+                "si stats no existe o es un objeto vacio, ejecuta 'reset stats'",
+                "el valor de retorno final es null, solo son importantes los dos execute_action",
+                "el valor en los stats para los empates es 'Draw'"
+            ]
+        },
+        {
+            "key": "value_1754256344524",
+            "width": 3,
+            "height": 10,
+            "icon": "pencil",
+            "name": "sketch",
+            "freeze": true,
+            "description": "Draw something",
+            "type": "value",
+            "displayTitle": false,
+            "drawing": "{\"lines\":[],\"width\":400,\"height\":400}"
+        }
+    ],
+    "autopilot": false,
+    "layouts": {
+        "lg": [
+            {
+                "w": 18,
+                "h": 14,
+                "x": 15,
+                "y": 0,
+                "i": "action_1754155173070",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 9,
+                "h": 4,
+                "x": 24,
+                "y": 14,
+                "i": "action_1754171812711",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 9,
+                "h": 10,
+                "x": 15,
+                "y": 18,
+                "i": "action_1754172148122",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 15,
+                "h": 18,
+                "x": 0,
+                "y": 0,
+                "i": "action_1754172968283",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 15,
+                "h": 10,
+                "x": 0,
+                "y": 18,
+                "i": "value_1754173318440",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 15,
+                "h": 18,
+                "x": 33,
+                "y": 0,
+                "i": "action_1754172968283_vento_copy_ktk7zy2f3rtp2xvkd8p7d",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 15,
+                "h": 10,
+                "x": 33,
+                "y": 18,
+                "i": "value_1754173318440_vento_copy_cfjioizbuxpabdx5ushy",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 17,
+                "h": 16,
+                "x": 48,
+                "y": 0,
+                "i": "action_1754226848105",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 8,
+                "h": 4,
+                "x": 65,
+                "y": 0,
+                "i": "action_1754226953383",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 25,
+                "h": 12,
+                "x": 48,
+                "y": 16,
+                "i": "value_1754238566839",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 8,
+                "h": 4,
+                "x": 65,
+                "y": 12,
+                "i": "action_1754226953383_vento_copy_3hd8dew5tr9uteg63ec17",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 8,
+                "h": 4,
+                "x": 65,
+                "y": 8,
+                "i": "action_1754226953383_vento_copy_9vujarutkmsohoasqopfsf",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 9,
+                "h": 5,
+                "x": 24,
+                "y": 18,
+                "i": "value_1754252721218",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 9,
+                "h": 4,
+                "x": 15,
+                "y": 14,
+                "i": "value_1754253692596",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 8,
+                "h": 4,
+                "x": 65,
+                "y": 4,
+                "i": "action_1754226953383_vento_copy_zao7ws687fgli9siu4b2m",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            },
+            {
+                "w": 9,
+                "h": 5,
+                "x": 24,
+                "y": 23,
+                "i": "value_1754256344524",
+                "moved": false,
+                "static": false,
+                "isResizable": true
+            }
+        ],
+        "md": [
+            {
+                "i": "action_1754155173070",
+                "x": 0,
+                "y": 7,
+                "w": 30,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754171812711",
+                "x": 30,
+                "y": 20,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172148122",
+                "x": 45,
+                "y": 26,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283",
+                "x": 0,
+                "y": 53,
+                "w": 23,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440",
+                "x": 23,
+                "y": 66,
+                "w": 23,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283_vento_copy_ktk7zy2f3rtp2xvkd8p7d",
+                "x": 0,
+                "y": 86,
+                "w": 23,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440_vento_copy_cfjioizbuxpabdx5ushy",
+                "x": 23,
+                "y": 99,
+                "w": 23,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226848105",
+                "x": 46,
+                "y": 112,
+                "w": 15,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383",
+                "x": 0,
+                "y": 126,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754238566839",
+                "x": 15,
+                "y": 132,
+                "w": 19,
+                "h": 11,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_3hd8dew5tr9uteg63ec17",
+                "x": 34,
+                "y": 142,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_9vujarutkmsohoasqopfsf",
+                "x": 49,
+                "y": 148,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754252721218",
+                "x": 0,
+                "y": 155,
+                "w": 8,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754253692596",
+                "x": 8,
+                "y": 159,
+                "w": 8,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_zao7ws687fgli9siu4b2m",
+                "x": 16,
+                "y": 163,
+                "w": 15,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754256344524",
+                "x": 31,
+                "y": 169,
+                "w": 23,
+                "h": 11,
+                "isResizable": true
+            }
+        ],
+        "sm": [
+            {
+                "i": "action_1754155173070",
+                "x": 0,
+                "y": 19,
+                "w": 2,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754171812711",
+                "x": 0,
+                "y": 33,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172148122",
+                "x": 1,
+                "y": 39,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283",
+                "x": 0,
+                "y": 67,
+                "w": 2,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440",
+                "x": 0,
+                "y": 81,
+                "w": 2,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283_vento_copy_ktk7zy2f3rtp2xvkd8p7d",
+                "x": 0,
+                "y": 102,
+                "w": 2,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440_vento_copy_cfjioizbuxpabdx5ushy",
+                "x": 0,
+                "y": 116,
+                "w": 2,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226848105",
+                "x": 0,
+                "y": 130,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383",
+                "x": 1,
+                "y": 143,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754238566839",
+                "x": 0,
+                "y": 150,
+                "w": 2,
+                "h": 11,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_3hd8dew5tr9uteg63ec17",
+                "x": 0,
+                "y": 161,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_9vujarutkmsohoasqopfsf",
+                "x": 1,
+                "y": 167,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754252721218",
+                "x": 0,
+                "y": 174,
+                "w": 1,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754253692596",
+                "x": 1,
+                "y": 178,
+                "w": 1,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_zao7ws687fgli9siu4b2m",
+                "x": 0,
+                "y": 183,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754256344524",
+                "x": 0,
+                "y": 190,
+                "w": 2,
+                "h": 11,
+                "isResizable": true
+            }
+        ],
+        "xs": [
+            {
+                "i": "action_1754155173070",
+                "x": 0,
+                "y": 21,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754171812711",
+                "x": 0,
+                "y": 35,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172148122",
+                "x": 0,
+                "y": 42,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283",
+                "x": 0,
+                "y": 70,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440",
+                "x": 0,
+                "y": 84,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754172968283_vento_copy_ktk7zy2f3rtp2xvkd8p7d",
+                "x": 0,
+                "y": 105,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754173318440_vento_copy_cfjioizbuxpabdx5ushy",
+                "x": 0,
+                "y": 119,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226848105",
+                "x": 0,
+                "y": 133,
+                "w": 1,
+                "h": 14,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383",
+                "x": 0,
+                "y": 147,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754238566839",
+                "x": 0,
+                "y": 154,
+                "w": 1,
+                "h": 11,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_3hd8dew5tr9uteg63ec17",
+                "x": 0,
+                "y": 165,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_9vujarutkmsohoasqopfsf",
+                "x": 0,
+                "y": 172,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754252721218",
+                "x": 0,
+                "y": 179,
+                "w": 1,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754253692596",
+                "x": 0,
+                "y": 184,
+                "w": 1,
+                "h": 5,
+                "isResizable": true
+            },
+            {
+                "i": "action_1754226953383_vento_copy_zao7ws687fgli9siu4b2m",
+                "x": 0,
+                "y": 189,
+                "w": 1,
+                "h": 7,
+                "isResizable": true
+            },
+            {
+                "i": "value_1754256344524",
+                "x": 0,
+                "y": 196,
+                "w": 1,
+                "h": 11,
+                "isResizable": true
+            }
+        ]
+    },
+    "settings": {
+        "showBoardUIOnPlay": false
+    },
+    "rules": [
+        "vigila los cambios sobre turn, y cuando turn sea A, haz que el jugador A mueva, cuando turn sea B, haz que el jugador B mueva, a no ser que el tablero esté completo. si el tablero está completo, no hagas nada.",
+        "inicia un nuevo juego al arrancar",
+        "en cada movimiento, mira quien ha ganado y dale la victoria al jugador que toca",
+        "para decidir quien ha ganado, necesitas buscar si hay lineas horizontales o verticales o diagonales de 3 de tipo 'x' o 'o'. Si hay linea de x, ha ganado el jugador A. Si hay linea de 'o', ha ganado el jugador B. Si no hay lineas, entonces no ha ganado nadie, han empatado entonces pulsa Draw."
+    ]
+}
