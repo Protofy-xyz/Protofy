@@ -12,7 +12,7 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
       if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
         const boardStates = states?.[board.name] ?? {}
         //remove cardData.name key from boardStates
-        delete boardStates[cardData.name]
+        if(cardData.type == 'value') delete boardStates[cardData.name]
         setHasCode(false)
         setLoading(true)
         const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states: boardStates, rules: cardData.rules, ...extraCompilerData })
