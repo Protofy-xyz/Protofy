@@ -162,7 +162,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
             />}
             {(tab == 'rules' || !tab) && <RuleEditor
               board={board}
-              extraCompilerData={{ userParams: cardData.params, actions: actions }}
+              extraCompilerData={{ userParams: cardData.params, actions: actions?.boards[board.name] }}
               onCodeChange={(cardData, states) => {
                 return "rules processed"
               }}

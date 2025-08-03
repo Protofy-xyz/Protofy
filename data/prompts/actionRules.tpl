@@ -86,4 +86,10 @@ Take it into consideration to check if you need to adapt the values before retur
 If the rules request to reset a board state/card, it can be done with:
 
 await execute_action("/api/core/v1/board/cardreset", {name: 'name_of_the_card_to_reset'})
+
+YOU CAN'T USE await execute_action("reset", ...) instead of execute_action("/api/core/v1/board/cardreset", ...). You need to use the full url for cardreset.
 </reset_card>
+
+<previous_value>
+You can check the previous value by checking: board[name], since 'name' is your own name. If the user asks for values relative to the previous value, use board[name].
+</previous_value>

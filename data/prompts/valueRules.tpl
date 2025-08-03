@@ -59,3 +59,7 @@ The code you are generating will be used to resolve the final value for the card
 
 Take it into consideration to check if you need to adapt the values before returning them, to make it compatible with what the card is expecting.
 </context>
+
+<previous_value>
+You can check the previous value by checking: board[name], since 'name' is your own name. If the user asks for values relative to the previous value, use board[name].
+</previous_value>
