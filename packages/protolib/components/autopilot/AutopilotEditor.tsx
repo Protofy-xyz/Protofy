@@ -11,20 +11,24 @@ import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
 import { useSettingValue } from "protolib/lib/useSetting";
 import { CodeView } from '@extensions/files/intents';
 
-function flattenObject(obj, prefix = "") {
+function flattenObject(obj, prefix = "", maxDepth = undefined, currentDepth = 1) {
     let result = [];
-
     for (let key in obj) {
         if (!obj.hasOwnProperty(key)) continue;
 
         const value = obj[key];
         const newPath = prefix ? prefix + " -> " + key : key;
 
-        if (typeof value === "object" && value !== null) {
-            const nested = flattenObject(value, newPath);
+        if (typeof value === "object" && value !== null && currentDepth < maxDepth) {
+            if(Object.keys(value).length > 0) {
+            const nested = flattenObject(value, prefix, maxDepth, currentDepth + 1);
             result.push(...nested);
+            } else {
+                result.push([[newPath], JSON.stringify(newPath)]);
+            }
+
         } else {
-            result.push([[newPath], [value]]);
+            result.push([[newPath], newPath]);
         }
     }
 
@@ -100,40 +104,14 @@ function generateStatesDeclaration(name, statesObj: any): string {
     return `declare const ${name}: ${tsType};`;
 }
 
-const FormattedView = ({ level1Priority = '', level2Priority = '', copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
+const FormattedView = ({maxDepth = 1, copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
     const [showCopied, setShowCopied] = useState<number | null>(null)
 
     // Evita recalcular si `data` no cambia
     const list = useMemo(() => {
         if (!data || typeof data !== 'object') return [];
-
-        const orderedData: Record<string, any> = {};
-        const level1Keys = Object.keys(data);
-
-        const sortedLevel1Keys = [
-            ...(level1Priority && level1Keys.includes(level1Priority) ? [level1Priority] : []),
-            ...level1Keys.filter(k => k !== level1Priority),
-        ];
-
-        for (const level1Key of sortedLevel1Keys) {
-            const level1Val = data[level1Key];
-            if (typeof level1Val !== 'object') continue;
-
-            orderedData[level1Key] = {};
-
-            const level2Keys = Object.keys(level1Val);
-            const sortedLevel2Keys = [
-                ...(level2Priority && level2Keys.includes(level2Priority) ? [level2Priority] : []),
-                ...level2Keys.filter(k => k !== level2Priority),
-            ];
-
-            for (const level2Key of sortedLevel2Keys) {
-                orderedData[level1Key][level2Key] = level1Val[level2Key];
-            }
-        }
-
-        return flattenObject(orderedData);
-    }, [data, level1Priority, level2Priority]);
+        return flattenObject(data, "", maxDepth);
+    }, [data, maxDepth]);
 
     const handleCopy = useCallback((text: string, index: number) => {
         const copiedText = onCopy(text)
@@ -246,7 +224,7 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
 
     const isAIEnabled = useSettingValue('ai.enabled', false);
     const filteredData = useMemo(() => {
-        const filtered = filterObjectBySearch(cleanedActions, search)
+        const filtered = filterObjectBySearch(cleanedActions?.[board.name] ?? {}, search)
         return filtered
     }, [cleanedActions, search]);
     const filteredStateData = useMemo(() => {
@@ -254,36 +232,7 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
         return filtered
     }, [states, stateSearch]);
 
-    const actionData = useMemo(() => {
-        const result: Record<string, any> = {};
-
-        const level1Priority = [board.name];
-
-        const level1Keys = Object.keys(filteredData || {});
-        const sortedLevel1Keys = [
-            ...level1Priority.filter(k => level1Keys.includes(k)),
-            ...level1Keys.filter(k => !level1Priority.includes(k))
-        ];
-
-        for (const level1Key of sortedLevel1Keys) {
-            const level1Value = filteredData?.[level1Key];
-            if (typeof level1Value === 'object') {
-                result[level1Key] = {};
-
-                const level2Keys = Object.keys(level1Value || {});
-
-
-                for (const level2Key of level2Keys) {
-                    const level2Value = level1Value?.[level2Key];
-                    if (typeof level2Value === 'object' && level2Value['url']) {
-                        result[level1Key][level2Key] = JSON.stringify(level2Value);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }, [filteredData, board.name]);
+    const actionData = filteredData
 
     const statesPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
@@ -294,7 +243,7 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
     const actionsPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
             {inputMode === "formatted" && <FormattedView hideValue={true} onCopy={text => {
-                const val = JSON.parse(text);
+                const val = actions[board.name][text];
                 if (!val || !val.url) return '';
                 const targetBoard = getBoardIdFromActionUrl(val.url);
                 let copyVal = val.url;
