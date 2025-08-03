@@ -6,7 +6,7 @@ import { on } from 'events';
 
 
 const processes = new Map();
-
+let watchers = {}
 export const Manager = {
     start: async (file, getContext, onExit, skipWatch?) => {
         const context = getContext ? await getContext() : {};
@@ -40,6 +40,11 @@ export const Manager = {
             console.log(`[Manager] board file ${file} exited with code ${code}`);
             processes.delete(file);
             onExit && onExit(file, code);
+            //remove watcher
+            if(watchers[file]) {
+                watchers[file].close();
+                delete watchers[file];
+            }
         });
 
         if(skipWatch) {
@@ -47,13 +52,17 @@ export const Manager = {
         }
         //set watcher for file changes
         let timer = null;
-        watch(file, { persistent: true, ignoreInitial: true })
+        watchers[file] = watch(file, { persistent: true, ignoreInitial: true })
             .on('change', (changedFile) => {
                 console.log(`[Manager] File changed: ${changedFile}`);
                 if (timer) {
                     clearTimeout(timer);
                 }
                 timer = setTimeout(() => {
+                    if (!processes.has(file)) {
+                        console.warn(`[Manager] No process found for file ${file}, skipping restart.`);
+                        return;
+                    }
                     console.log(`[Manager] Stopping board file ${file} due to change`);
                     Manager.stop(file);
                     setTimeout(() => {
@@ -76,8 +85,6 @@ export const Manager = {
         if (child) {
             processes.delete(file);
             child.kill();
-            //remove watcher
-            watch(file).close();
             return true
         } else {
             return false
