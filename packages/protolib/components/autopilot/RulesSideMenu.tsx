@@ -90,7 +90,7 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
                 }
             }}
             disableAIPanels={!isAIEnabled}
-            defaultMode={isAIEnabled ? 'rules' : 'flow'}
+            defaultMode={isAIEnabled ? 'rules' : 'code'}
             rules={board.rules}
             leftIcons={
                 <XStack zIndex={9999} gap="$3" ml="$2">
