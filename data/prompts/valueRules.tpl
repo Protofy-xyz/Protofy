@@ -52,3 +52,10 @@ ALWAYS add a comment on top of the generated code explaining what the code does 
 Simulate a real comment by a professional programmer, speaking about the code does.
 Always use in the comment the same human language used in the rules.
 </very_important>
+
+<context>
+The code you are generating will be used to resolve the final value for the card: 
+{{{card}}}
+
+Take it into consideration to check if you need to adapt the values before returning them, to make it compatible with what the card is expecting.
+</context>

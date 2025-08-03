@@ -13,7 +13,7 @@ export default (app, context) => {
             height: 10,
             name: "Pie Chart",
             icon: "chart-pie",
-            description: "Displays a pie chart using Recharts",
+            description: "## Pie Chart\r\n\r\nDisplays a pie chart using Recharts.\r\n\r\nThe data should be an array of objects with the properties name and value. The name is the name for the element in the chart, and the value is the numerical value for this elements in the chart.",
             rulesCode: "return [{\r\n    \"name\": \"john\",\r\n    \"value\": 33\r\n}, {\r\n    \"name\": \"mike\",\r\n    \"value\": 20\r\n}, {\r\n    \"name\": \"susan\",\r\n    \"value\": 10\r\n}, {\r\n    \"name\": \"ton\",\r\n    \"value\": 30\r\n}]",
             type: 'value',
             html: `
