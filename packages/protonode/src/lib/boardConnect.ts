@@ -15,7 +15,7 @@ export function boardConnect(run) {
     const token = protonode.getServiceToken()
     const listeners = {}
 
-    const onChange = ({ name, key = undefined,  changed }) => {
+    const onChange = ({ name, key = undefined,  changed, inmediate = true }) => {
         if(!name && key) {
             console.warn('onChange called with key but no name, using key as name. key is a deprected parameter, please use name instead.');
             name = key;
@@ -24,6 +24,9 @@ export function boardConnect(run) {
             listeners[name] = [];
         }
         listeners[name].push(changed);
+        if(inmediate) {
+            changed(context.states[name]);
+        }
     }
 
     async function execute_action({ name, params = {}, done = (result) => {}, error = (err) =>{} }) {
