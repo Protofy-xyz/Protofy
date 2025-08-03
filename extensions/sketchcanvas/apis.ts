@@ -15,7 +15,7 @@ export default (app, context) => {
             icon: "pencil",
             description: "Draw something",
             type: 'value',
-            html: "return sketch(data)"
+            html: "//reactCard\r\nreturn sketch(data)"
         },
         token: getServiceToken(),
         emitEvent: true
