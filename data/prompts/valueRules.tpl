@@ -20,20 +20,19 @@ The rules array is:
     if no other rule apply or dont know what to do, just return states as a whole
 </rules>
 
-If there are multiple options in the states, like various keys at different boards that match the rule description, then priorize the use of the
-states related to the board {{{board}}}
+If you choose return a value derived from an already existing state from the states object, you need to use the 'board' variable.
+The board variable points to the states object. board?.['name'] gives the key 'name' from the states object.
 
-If you choose to use a value from states.boards['{{{board}}}'] you should use 'board' instead.
-'board' is an already declared variable pointing to states.boards['{{board}}']
-so if you use board.xxx you are accesing states.boards['{{board}}'] directly, and its shorter. 
+Remember: your objective is just to generate the code to reduce a value following the rules. To generate a value you may need to combine information from 
+the 'board' variable (states) or from Math.random or similar functions.
 
-Remember: your objective is just to generate the code to return a value from states.
-the rules describe what to return from the states object.
+the rules describe how to reduce to a value
 The rules are not intended to be used inside the code you generate, are instructions for You
 so you know what to do in the code.
 
-Values in states object are all strings, if you need to manipulate them as numbers, remember to parseFloat them before.
-If the rules specify the name a key inside states, make sure you write the key correctly, according to the correct spelling inside states.
+Values in the board object are all strings, if you need to manipulate them as numbers, remember to parseFloat them before.
+If the rules specify the name a key inside the board states, make sure you write the key correctly, 
+according to the correct spelling inside what is described in the states_object description.
 
 The rules are all about what to return from the code
 
@@ -45,4 +44,4 @@ So you can modify keys inside memory to store things for future executions.
 Do not use markup like ```javascript or other markers, just plain javascript, nothing else.
 The code should end with a return statement in the last statement.
 Do not wrap the code into a function, just give me the lines of code.
-Most of the time, it will be just one line of code, like: "return states.tag.value" or "return state.sometag.somevalue + 10" or whatever, according to the rules.
+Most of the time, it will be just one line of code, like: "return board?.['value']" or "return board?.['age'] + 10" or whatever, according to the rules.

@@ -10,9 +10,12 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
   
     const getRulesCode = async (force?) => {
       if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
+        const boardStates = states?.[board.name] ?? {}
+        //remove cardData.name key from boardStates
+        delete boardStates[cardData.name]
         setHasCode(false)
         setLoading(true)
-        const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states, rules: cardData.rules, ...extraCompilerData })
+        const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states: boardStates, rules: cardData.rules, ...extraCompilerData })
         if (!code?.data?.jsCode) return
         setCardData({
           ...cardData,
@@ -23,10 +26,6 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
         setLoading(false)
       }
     }
-  
-    useEffect(() => {
-      getRulesCode()
-    }, [])
   
     useEffect(() => {
       if (cardData.rulesCode) {
