@@ -81,3 +81,9 @@ The code you are generating will be used to resolve the final value for the card
 
 Take it into consideration to check if you need to adapt the values before returning them, to make it compatible with what the card is expecting.
 </context>
+
+<reset_card>
+If the rules request to reset a board state/card, it can be done with:
+
+await execute_action("/api/core/v1/board/cardreset", {name: 'name_of_the_card_to_reset'})
+</reset_card>
