@@ -220,8 +220,6 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
-
-    const [stateInputMode, setStateInputMode] = useState<"json" | "formatted">("formatted")
     const [stateSearch, setStateSearch] = useState('')
 
     const cleanedActions = useMemo(() => {
@@ -252,7 +250,7 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
         return filtered
     }, [cleanedActions, search]);
     const filteredStateData = useMemo(() => {
-        const filtered = filterObjectBySearch(states, stateSearch)
+        const filtered = filterObjectBySearch(states?.[board.name] ?? {}, stateSearch)
         return filtered
     }, [states, stateSearch]);
 
@@ -289,20 +287,9 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
 
     const statesPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
-            {stateInputMode === "formatted" && <FormattedView level1Priority={board.name} copyIndex={0} onCopy={text => {
-                const parts = text[0].split('->').map(p => p.trim());
-                let inBoard = false;
-                if (text[0].startsWith(board.name + ' -> ')) {
-                    //skip boards -> boardName ->
-                    parts.splice(0, 1);
-                    inBoard = true;
-                }
-
-                return (!inBoard ? 'states' : 'board') + parts.map(p => `?.[${isNaN(Number(p)) ? `'${p}'` : p}]`).join('');
-            }} data={filteredStateData} />}
-            {stateInputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} />}
+            <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} />
         </YStack>
-    }, [filteredStateData, stateInputMode, board?.name]);
+    }, [filteredStateData, board?.name]);
 
     const actionsPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
@@ -429,22 +416,6 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                             </XStack>
                             <XStack jc="space-between" width="100%">
                                 <p>State</p>
-                                <XStack gap="$2">
-                                    <Button
-                                        icon={AlignLeft}
-                                        bc={inputMode === "formatted" ? "$color5" : "$gray4"}
-                                        scaleIcon={1.6}
-                                        size="$2"
-                                        onPress={() => setStateInputMode("formatted")}
-                                    />
-                                    <Button
-                                        icon={Braces}
-                                        bc={inputMode === "json" ? "$color5" : "$gray4"}
-                                        scaleIcon={1.6}
-                                        size="$2"
-                                        onPress={() => setStateInputMode("json")}
-                                    />
-                                </XStack>
                             </XStack>
                             <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
                                 <Tinted>

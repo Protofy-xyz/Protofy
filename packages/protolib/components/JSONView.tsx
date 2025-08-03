@@ -1,38 +1,49 @@
 import dynamic from 'next/dynamic'
 import { useThemeSetting } from '@tamagui/next-theme'
 
-//load reactjsonview with dynamic 
+// Carga dinámica
 const ReactJsonView = dynamic(() => import('@microlink/react-json-view'), { ssr: false })
+
 const overrideCss = `
   .string-value { color: var(--color9) !important; }
-`;
+`
 
-export const JSONView = (props) => {
-    const { resolvedTheme } = useThemeSetting()
-    const darkMode = resolvedTheme == 'dark'
-    let value = props.src
-    //if value is a string, number or boolean, wrap it in an object
-    if (typeof value !== 'object') {
-        value = { value }
-    }
-    return <>
-        <style>{overrideCss}</style>
-        <ReactJsonView
-            theme={darkMode ? 'eighties' : 'rjv-default'}
-            enableClipboard={false}
-            name={false}
-            indentWidth={2}
-            displayDataTypes={false}
-            quotesOnKeys={false}
-            displayObjectSize={false}
-            {...props}
-            style={{
-                dataTypes: {
-                    string: 'red'
-                },
-                backgroundColor: 'transparent',
-                ...props?.style,
-            }}
-            src={value}
-        /></>
+export const JSONView = ({ src, onSelectKey, ...props }) => {
+  const { resolvedTheme } = useThemeSetting()
+  const darkMode = resolvedTheme === 'dark'
+
+  let value = src
+  if (typeof value !== 'object') {
+    value = { value }
+  }
+
+  return (
+    <>
+      <style>{overrideCss}</style>
+      <ReactJsonView
+        theme={darkMode ? 'eighties' : 'rjv-default'}
+        enableClipboard={(copy) => {
+        const path = 'board' + copy.namespace
+            .filter(v => v)
+            .map(k => `?.[${JSON.stringify(k)}]`)
+            .join('')
+
+        console.log('Key path:', path)
+        navigator.clipboard.writeText(path)
+        return false
+        }}
+        name={false}
+        indentWidth={2}
+        displayDataTypes={false}
+        quotesOnKeys={false}
+        displayObjectSize={false}
+        {...props}
+        style={{
+          backgroundColor: 'transparent',
+          ...props?.style,
+        }}
+        src={value}
+      />
+    </>
+  )
 }
