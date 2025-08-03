@@ -823,6 +823,46 @@ const ReactDOM = window.ReactDOM;
     window._reactWidgets[rootId] = iframe;
 };
 
+const dataView = (object, root) => {
+    return reactCard(`
+  function InnerWidget(props) {
+    const object = props.object
+    const objExists = object ? true : false
+    let objModel = null
+    let apiUrl = null
+    if (objExists) {
+        objModel = ProtoModel.getClassFromDefinition(object)
+        const { name, prefix } = objModel.getApiOptions()
+        console.log("Object API options", { name, prefix })
+        apiUrl = prefix + name
+    }
+
+    return <ProtoDataView
+            disableRouting={true}
+            sourceUrl={apiUrl}
+            numColumnsForm={1}
+            name={object?.name}
+            model={objModel}
+            hideFilters={false}
+      />
+  }
+
+  function Widget() {
+    return (
+        <MqttWrapper>
+            <Tinted>
+                <View className="no-drag">
+                    {/* you can use data.value here to access the value */}
+                    <ObjectViewLoader widget={InnerWidget} object={"${object}Model"} />
+                </View>
+            </Tinted>
+        </MqttWrapper>
+    );
+  }
+
+`, root)
+}
+
 const getStates = () => {
     return window.protoStates || {};
 }
