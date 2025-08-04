@@ -37,7 +37,7 @@ export default ({ boards, objects }) => {
     const manageBoards = { "name": "Manage Boards", "icon": MonitorCog, "href": '/workspace/boards' }
 
     const systemMenu = [
-        { "name": "Assets", "icon": Blocks, "href": "/workspace/assets?path=%2Fdata%2Fassets", "path": "" },
+        { "name": "Assets", "icon": Blocks, "href": "/workspace/assets" },
         { "name": "Users", "icon": "users", "href": "/workspace/users" },
         { "name": "Keys", "icon": Key, "href": "/workspace/keys" },
         // { "name": "Settings", "icon": Wrench, "href": "/workspace/settings" },
