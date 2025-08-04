@@ -83,7 +83,7 @@ function FilesPage({ initialFilesState, pageSession, initialItems, pageState }: 
       onActionBarEvent={onActionBarEvent}
       actionBar={{ hideable: false }}
     >
-      <YStack f={1} p="$6">
+      <YStack f={1}>
         <DataView
           openMode="view"
           sourceUrl={sourceUrl}
