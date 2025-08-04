@@ -1,9 +1,11 @@
+import { LOGS_EXTENSION } from "./models/assets";
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const pm2 = require('pm2');
 
-function moveAssetStructure(sourceDir, targetDir) {
+function moveAssetStructure(sourceDir, targetDir, logsDir = "") {
     if (!fs.existsSync(sourceDir)) {
         console.error(`Source folder "${sourceDir}" does not exist.`);
         return;
@@ -11,7 +13,6 @@ function moveAssetStructure(sourceDir, targetDir) {
 
     const copiedFiles: any = [];
     const ventoDir = path.join(sourceDir, '.vento');
-    const logPath = path.join(ventoDir, 'copiedFiles.json');
 
     function walkAndMove(currentSource, currentTarget) {
         const entries = fs.readdirSync(currentSource, { withFileTypes: true })
@@ -49,7 +50,11 @@ function moveAssetStructure(sourceDir, targetDir) {
         fs.mkdirSync(ventoDir);
     }
 
-    fs.writeFileSync(logPath, JSON.stringify(copiedFiles, null, 2), 'utf-8');
+    if (logsDir) {
+        fs.mkdirSync(logsDir, { recursive: true });
+        const copiedFilesPath = path.join(logsDir, 'copiedFiles.json');
+        fs.writeFileSync(copiedFilesPath, JSON.stringify(copiedFiles, null, 2), 'utf-8');
+    }
 }
 
 export function installAsset(assetName) {
@@ -65,8 +70,9 @@ export function installAsset(assetName) {
     }
 
     const targetDir = path.join(__dirname, '..', '..');
+    const logsDir = path.join(__dirname, '..', '..', 'data', 'assets', assetName + LOGS_EXTENSION);
 
-    moveAssetStructure(sourceDir, targetDir);
+    moveAssetStructure(sourceDir, targetDir, logsDir);
     execSync(`node ../../.yarn/releases/yarn-4.1.0.cjs`, { stdio: 'inherit' });
     pm2.connect((err) => {
         if (err) {

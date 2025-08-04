@@ -5,7 +5,7 @@ import { promises } from 'fs';
 import fsPath, { relative } from "path";
 import { installAsset } from "./assets"
 import AdmZip from 'adm-zip';
-import { AssetsModel } from "./models/assets";
+import { AssetsModel, LOGS_EXTENSION } from "./models/assets";
 
 const root = fsPath.join(process.cwd(), "..", "..");
 const logger = getLogger();
@@ -18,15 +18,35 @@ if (fs.existsSync(assetsRoot) === false) {
 }
 
 const decompressZip = async (options) => {
-    const zipPath = options.zipPath;
-    const outputPath = options.outputPath;
-    const done = options.done || (() => { });
-    const error = options.error;
+    const { zipPath, outputPath, onlyVento = false, done = () => { }, error } = options;
 
     try {
         const zip = new AdmZip(zipPath);
-        await promises.mkdir(outputPath, { recursive: true });
-        zip.extractAllTo(outputPath, true);
+
+        if (!onlyVento) {
+            await promises.mkdir(outputPath, { recursive: true });
+            zip.extractAllTo(outputPath, true);
+            done(outputPath);
+            return;
+        }
+
+        const entries = zip.getEntries();
+        for (const entry of entries) {
+            if (!entry.entryName.startsWith(".vento/")) continue;
+
+            const destPath = fsPath.join(outputPath, entry.entryName);
+
+            if (entry.isDirectory) {
+                await promises.mkdir(destPath, { recursive: true });
+            } else {
+                const destDir = fsPath.dirname(destPath);
+                await promises.mkdir(destDir, { recursive: true });
+
+                const data = entry.getData();
+                await promises.writeFile(destPath, data);
+            }
+        }
+
         done(outputPath);
     } catch (err) {
         if (error) {
@@ -77,7 +97,7 @@ const decompressAndInstallAsset = async (context, zipFile) => {
     });
 };
 
-const unpackage = async (context, zipFile) => {
+const unpackage = async (context, zipFile, options = {}) => {
     const zipPath = fsPath.join(assetsRoot, zipFile);
     const assetName = zipFile.replace(".zip", "");
     const assetPath = fsPath.join(assetsRoot, assetName);
@@ -89,10 +109,8 @@ const unpackage = async (context, zipFile) => {
 
             await waitForFolderReady(assetPath);
 
-            const topic = "notifications/assets/create"
-            console.log(`Publishing to topic: ${topic}`);
+            const topic = `notifications/assets/${options["onlyVento"] ? "create" : "update"}`
             let payload = ""
-            console.log("type of payload: ", typeof (await parseAssetEntry(assetName, getRoot())));
             try {
                 payload = JSON.stringify(await parseAssetEntry(assetName, getRoot()))
             } catch (error) {
@@ -105,6 +123,7 @@ const unpackage = async (context, zipFile) => {
         error: (err) => {
             console.error(`Error decompressing ${zipFile}:`, err);
         },
+        ...options
     });
 };
 
@@ -115,16 +134,23 @@ const parseAssetEntry = async (fileName, rootPath): Promise<any | null> => {
     const fullPath = dataDir(rootPath, fileName);
     const isZip = fileName.endsWith(".zip");
     const isDir = fs.lstatSync(fullPath).isDirectory();
+    const isLogs = fs.lstatSync(fullPath).isDirectory() && fileName.endsWith(LOGS_EXTENSION);
 
-    if (!isZip && !isDir) return null;
+    if (!isZip && !isDir && !isLogs) return null;
+
+    if (isZip) {
+        fileName = fileName.replace(".zip", "");
+    } else if (isLogs) {
+        fileName = fileName.replace(LOGS_EXTENSION, "");
+    }
 
     const asset: any = {
-        name: fileName.replace(".zip", ""),
+        name: fileName,
         format: [],
         assetFiles: [],
     };
 
-    if (isDir) {
+    if (isDir && !isLogs) {
         const ventoPath = dataDir(rootPath, fileName, ".vento");
         const assetJsonPath = dataDir(rootPath, fileName, ".vento", "asset.json");
         const iconPath = dataDir(rootPath, fileName, ".vento", "icon.png");
@@ -156,6 +182,8 @@ const parseAssetEntry = async (fileName, rootPath): Promise<any | null> => {
         await getFilesRecursively(fullPath);
 
         asset.format.push("dir");
+    } else if (isLogs) {
+        asset.format.push("logs");
     } else {
         asset.format.push("zip");
     }
@@ -165,9 +193,6 @@ const parseAssetEntry = async (fileName, rootPath): Promise<any | null> => {
 
 
 const getDB = (path, req, session) => {
-    const isProd = process.env.NODE_ENV === 'production';
-    // const envFomat = isProd ? 'css' : 'json';
-    const availableFormats = isProd ? ['json', 'css'] : ['json'];
 
     const db = {
         async *iterator() {
@@ -293,7 +318,7 @@ export default (app, context) => {
             // call the install
             const payload = event.payload || {};
             if (payload.path == assetsDir && (payload.mimetype == "application/x-zip-compressed" || payload.mimetype == "application/zip")) {
-                await unpackage(context, payload.filename)
+                await unpackage(context, payload.filename, { onlyVento: true });
             }
 
         },
@@ -359,6 +384,7 @@ export default (app, context) => {
 
         for (const asset of assetsToInstall) {
             try {
+                await unpackage(context, asset + ".zip");
                 installAsset(asset)
             } catch (error) {
                 console.error(`Error installing asset ${asset}:`, error);

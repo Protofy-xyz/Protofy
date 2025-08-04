@@ -5,6 +5,8 @@ Protofy("features", {
     "adminPage": "/objects/view?object=assetsModel"
 })
 
+export const LOGS_EXTENSION = "_logs"
+
 export const BaseAssetsSchema = Schema.object(Protofy("schema", {
 	name: z.string().id().search(),
 }))

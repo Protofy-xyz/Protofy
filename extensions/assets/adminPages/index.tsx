@@ -1,3 +1,4 @@
+import React from 'react';
 import { withSession } from 'protolib/lib/Session';
 import { Tinted } from 'protolib/components/Tinted';
 import { Center } from 'protolib/components/Center';
@@ -35,9 +36,9 @@ const AssetIcon = ({ element, ...props }) => {
 }
 
 const InstallButton = ({ element, loading, ...props }) => {
-  const hasFiles = element.assetFiles && element.assetFiles.length > 0;
-  return <Button disabled={!hasFiles} w="100%" bc={hasFiles ? "$color7" : "$gray6"} {...props}>
-    {loading.includes(element.name) ? "Installing..." : hasFiles ? "Install" : "Nothing to Install"}
+  const isInstalled = element.format?.includes("logs")
+  return <Button w="100%" bc={!isInstalled ? "$color7" : "$gray6"} {...props}>
+    {loading.includes(element.name) ? "Installing..." : !isInstalled ? "Install" : "Reinstall"}
   </Button>
 }
 
@@ -96,36 +97,21 @@ function FilesPage({ initialFilesState, pageSession, initialItems, pageState }: 
           quickRefresh={true}
           onSelectItem={() => { }}
           columns={DataTable2.columns(
-            DataTable2.column("", row =>
-              <InstallButton element={row} loading={loading} br="$10" size="$3" w="80px" onPress={() => onInstallAsset(row.name)} />
-              , false, undefined, true, '115px'),
             DataTable2.column("", row => <AssetIcon element={row} h="50px" w="50px" br="$4" />, false, undefined, true, '90px'),
             DataTable2.column("name", row => row.name, false, undefined, true, '150px'),
             DataTable2.column("description", row => row?.assetJson?.description, false, undefined, true, '400px'),
-            DataTable2.column("files to install", row => <XStack
-              gap="$2"
-              ai="center"
-            >
-              <Text>{row.assetFiles?.length}</Text>
-              <File size={16} />
-            </XStack>, false, undefined, true, '150px'),
+            DataTable2.column("", row =>
+              <InstallButton element={row} loading={loading} br="$10" size="$3" w="80px" onPress={() => onInstallAsset(row.name)} />
+              , false, undefined, true, '115px'),
           )}
           dataTableGridProps={{
             marginTop: '$10',
             getCard: (element: any, width: any) => {
-              const hasFiles = element.assetFiles && element.assetFiles.length > 0;
               return <YStack br="$6" w={width} bc="$bgPanel" overflow='hidden'>
                 <AssetIcon element={element} />
                 <YStack p="$4" gap="$4" ai="flex-start">
                   <XStack jc="space-between" w="100%">
                     <Text fontSize="$8" fow="600">{element.name}</Text>
-                    <XStack
-                      gap="$2"
-                      ai="center"
-                    >
-                      <Text fontSize="$6" color="$gray9">{element.assetFiles?.length}</Text>
-                      <File size={20} color="$gray9" />
-                    </XStack>
                   </XStack>
                   <InstallButton element={element} loading={loading} onPress={() => onInstallAsset(element.name)} />
                 </YStack>
