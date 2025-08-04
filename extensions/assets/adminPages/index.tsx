@@ -22,7 +22,7 @@ const sourceUrl = '/api/core/v1/assets'
 const AssetIcon = ({ element, ...props }) => {
   return <>
     {element.icon ? <Image
-      src={"/api/core/v1/files?path=data/assets/" + element.icon}
+      src={`/api/core/v1/files?path=data/assets/${element.name}/${element.icon}`}
       alt={element.name}
       width="100%"
       height="180px"

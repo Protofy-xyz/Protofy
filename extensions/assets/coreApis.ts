@@ -128,67 +128,119 @@ const unpackage = async (context, zipFile, options = {}) => {
 };
 
 const dataDir = (root, ...rest) => fsPath.join(root, "/data/assets/", ...rest)
-const joinPath = (...args) => fsPath.join(...args)
 
-const parseAssetEntry = async (fileName, rootPath): Promise<any | null> => {
-    const fullPath = dataDir(rootPath, fileName);
-    const isZip = fileName.endsWith(".zip");
-    const isDir = fs.lstatSync(fullPath).isDirectory();
-    const isLogs = fs.lstatSync(fullPath).isDirectory() && fileName.endsWith(LOGS_EXTENSION);
+const isZipFile = (fileName) => fileName.endsWith(".zip");
+const isLogsFolder = (fileName) => fileName.endsWith(LOGS_EXTENSION);
 
-    if (!isZip && !isDir && !isLogs) return null;
+const getAssetType = async (fullPath, fileName) => {
+    if (isZipFile(fileName)) return "zip";
+    if (isLogsFolder(fileName)) return "logs";
 
-    if (isZip) {
-        fileName = fileName.replace(".zip", "");
-    } else if (isLogs) {
-        fileName = fileName.replace(LOGS_EXTENSION, "");
+    try {
+        const stats = await promises.lstat(fullPath);
+        if (stats.isDirectory()) return "dir";
+    } catch (_) {}
+    
+    return null;
+};
+
+const readAssetMetadata = async (basePath) => {
+    const assetJsonPath = fsPath.join(basePath, ".vento", "asset.json");
+    const iconPath = fsPath.join(basePath, ".vento", "icon.png");
+    const readmePath = fsPath.join(basePath, ".vento", "README.md");
+
+    if (!fs.existsSync(assetJsonPath)) return null;
+
+    const asset = {};
+
+    try {
+        asset["assetJson"] = JSON.parse(await promises.readFile(assetJsonPath, 'utf8'));
+    } catch (_) {}
+
+    if (fs.existsSync(iconPath)) {
+        asset["icon"] = ".vento/icon.png";
     }
 
-    const asset: any = {
-        name: fileName,
-        format: [],
-        assetFiles: [],
-    };
-
-    if (isDir && !isLogs) {
-        const ventoPath = dataDir(rootPath, fileName, ".vento");
-        const assetJsonPath = dataDir(rootPath, fileName, ".vento", "asset.json");
-        const iconPath = dataDir(rootPath, fileName, ".vento", "icon.png");
-
-        if (!fs.existsSync(ventoPath) || !fs.existsSync(assetJsonPath)) return null;
-
+    if (fs.existsSync(readmePath)) {
         try {
-            const assetsJsonContent = await promises.readFile(assetJsonPath, 'utf8');
-            asset["assetJson"] = JSON.parse(assetsJsonContent);
-        } catch (_) { }
-
-        if (fs.existsSync(iconPath)) {
-            asset["icon"] = fileName + "/.vento/icon.png";
-        }
-
-        const getFilesRecursively = async (dir) => {
-            const files = await promises.readdir(dir, { withFileTypes: true });
-            for (const f of files) {
-                if (f.isDirectory() && !f.name.startsWith('.vento')) {
-                    await getFilesRecursively(joinPath(dir, f.name));
-                } else if (f.isFile()) {
-                    asset.assetFiles.push({
-                        name: f.name,
-                        relativePath: relative(fullPath, joinPath(dir, f.name)),
-                    });
-                }
-            }
-        };
-        await getFilesRecursively(fullPath);
-
-        asset.format.push("dir");
-    } else if (isLogs) {
-        asset.format.push("logs");
-    } else {
-        asset.format.push("zip");
+            asset["readme"] = await promises.readFile(readmePath, 'utf8');
+        } catch (_) {}
     }
 
     return asset;
+};
+
+const collectAssetFiles = async (baseDir, assetName) => {
+    const fullAssetPath = fsPath.join(baseDir, assetName);
+    const assetFiles: any = [];
+
+    const getFilesRecursively = async (dir) => {
+        const files = await promises.readdir(dir, { withFileTypes: true });
+        for (const f of files) {
+            const absPath = fsPath.join(dir, f.name);
+            if (f.isDirectory() && !f.name.startsWith('.vento')) {
+                await getFilesRecursively(absPath);
+            } else if (f.isFile()) {
+                assetFiles.push({
+                    name: f.name,
+                    relativePath: relative(fullAssetPath, absPath),
+                });
+            }
+        }
+    };
+
+    await getFilesRecursively(fullAssetPath);
+    return assetFiles;
+};
+
+const parseAssetEntry = async (fileName, rootPath) => {
+    const fullPath = dataDir(rootPath, fileName);
+    const type = await getAssetType(fullPath, fileName);
+    if (!type) return null;
+
+    const baseName = fileName.replace(/(\.zip|\.logs)$/i, "");
+
+    const asset = {
+        name: baseName,
+        format: [type],
+        assetFiles: [],
+    };
+
+    if (type === "dir") {
+        const metadata = await readAssetMetadata(fullPath);
+        if (!metadata) return null;
+        Object.assign(asset, metadata);
+
+        asset.assetFiles = await collectAssetFiles(dataDir(rootPath), baseName);
+    }
+
+    return asset;
+};
+
+const listAssets = async (rootPath) => {
+    const baseDir = dataDir(rootPath);
+    const filesAndDirs = await promises.readdir(baseDir);
+    const assetsMap = {};
+
+    for (const entry of filesAndDirs) {
+        const parsed = await parseAssetEntry(entry, rootPath);
+        if (!parsed) continue;
+
+        const name = parsed.name;
+
+        if (!assetsMap[name]) {
+            assetsMap[name] = { ...parsed };
+        } else {
+            assetsMap[name].format = Array.from(new Set([
+                ...assetsMap[name].format,
+                ...parsed.format,
+            ]));
+
+            assetsMap[name].assetFiles.push(...(parsed.assetFiles || []));
+        }
+    }
+
+    return Object.values(assetsMap);
 };
 
 
@@ -197,36 +249,9 @@ const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
             const rootPath = getRoot(req);
-            const baseDir = dataDir(rootPath);
-
-            try {
-                await promises.access(baseDir, promises.constants.F_OK);
-            } catch {
-                await promises.mkdir(baseDir);
-            }
-
-            const filesAndDirs = await promises.readdir(baseDir);
-            const assetsMap = {};
-
-            for (const file of filesAndDirs) {
-                const parsed = await parseAssetEntry(file, rootPath);
-                if (!parsed) continue;
-
-                if (!assetsMap[parsed.name]) {
-                    assetsMap[parsed.name] = {
-                        name: parsed.name,
-                        format: [],
-                        assetFiles: parsed.assetFiles,
-                        ...(parsed.assetJson ? { assetJson: parsed.assetJson } : {}),
-                        ...(parsed.icon ? { icon: parsed.icon } : {}),
-                    };
-                }
-
-                assetsMap[parsed.name].format.push(...parsed.format);
-            }
-
-            for (const entry of Object.values(assetsMap)) {
-                yield [entry.name, JSON.stringify(entry)];
+            const assets = await listAssets(rootPath);
+            for (const asset of assets) {
+                yield [asset.name, JSON.stringify(asset)];
             }
         },
 
@@ -269,26 +294,9 @@ const getDB = (path, req, session) => {
 
         async get(key) {
             const rootPath = getRoot(req);
-            const baseDir = dataDir(rootPath);
-            const filesAndDirs = (await promises.readdir(baseDir)).filter(f => f.startsWith(key));
-
-            const asset = {
-                name: key,
-                format: [],
-                assetFiles: []
-            };
-
-            for (const file of filesAndDirs) {
-                const parsed = await parseAssetEntry(file, rootPath);
-                if (!parsed) continue;
-
-                asset.format.push(...parsed.format);
-                asset.assetFiles.push(...(parsed.assetFiles || []));
-                if (parsed.assetJson) asset["assetJson"] = parsed.assetJson;
-                if (parsed.icon) asset["icon"] = parsed.icon;
-            }
-
-            return JSON.stringify(asset);
+            const assets: any[] = await listAssets(rootPath);
+            const found = assets.find(asset => asset.name === key);
+            return found ? JSON.stringify(found) : null;
         }
     };
 
