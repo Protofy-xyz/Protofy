@@ -292,7 +292,7 @@ export default (app, context) => {
         async (event) => {
             // call the install
             const payload = event.payload || {};
-            if (payload.path == assetsDir && payload.mimetype == "application/x-zip-compressed") {
+            if (payload.path == assetsDir && (payload.mimetype == "application/x-zip-compressed" || payload.mimetype == "application/zip")) {
                 await unpackage(context, payload.filename)
             }
 
