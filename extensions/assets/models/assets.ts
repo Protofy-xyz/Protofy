@@ -50,6 +50,15 @@ export class AssetsModel extends ProtoModel<AssetsModel> {
 
 	list(search?, session?, extraData?, params?, jsCode?): AssetsType[] {
         const result = super.list(search, session, extraData, params, jsCode)
+
+        const tag = params?.tag
+        if (tag) {
+            const resultTags = result.assetJson.tags
+            if (!resultTags || !Array.isArray(resultTags) || !resultTags.includes(tag)) {
+                return
+            }
+        }
+
         return result
     }
 
