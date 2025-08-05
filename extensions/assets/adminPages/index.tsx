@@ -99,7 +99,7 @@ function FilesPage({ initialFilesState, pageSession, initialItems, pageState }: 
           columns={DataTable2.columns(
             DataTable2.column("", row => <AssetIcon element={row} h="50px" w="50px" br="$4" />, false, undefined, true, '90px'),
             DataTable2.column("name", row => row.name, false, undefined, true, '150px'),
-            DataTable2.column("description", row => row?.assetJson?.description, false, undefined, true, '400px'),
+            DataTable2.column("description", row => row?.description, false, undefined, true, '400px'),
             DataTable2.column("", row =>
               <InstallButton element={row} loading={loading} br="$10" size="$3" w="80px" onPress={() => onInstallAsset(row.name)} />
               , false, undefined, true, '115px'),
