@@ -1,4 +1,4 @@
-import { handler, getServiceToken, AutoAPI, getRoot } from "protonode";
+import { handler, getServiceToken, AutoAPI, getRoot, requireAdmin } from "protonode";
 import { API, getLogger } from "protobase";
 import * as fs from 'fs';
 import { promises } from 'fs';
@@ -409,6 +409,65 @@ export default (app, context) => {
 
         res.send({ "result": "All assets installed successfully." });
     }))
+
+    app.get('/api/core/v1/assets/:id/config', requireAdmin(), async (req, res) => {
+        const assetId = req.params.id;
+        const rootPath = getRoot(req);
+        const assetPath = dataDir(rootPath, assetId);
+
+        if (!fs.existsSync(assetPath)) {
+            res.status(404).send({ error: "Asset not found" });
+            return;
+        }
+
+        const configPath = fsPath.join(assetPath, ".vento", "asset.json");
+        if (!fs.existsSync(configPath)) {
+            res.status(404).send({ error: "Asset configuration not found" });
+            return;
+        }
+       
+        const configContent = await promises.readFile(configPath, 'utf8');
+        try {
+            const configJson = JSON.parse(configContent);
+            res.send(configJson);
+        } catch (error) {
+            console.error(`Error parsing asset config for ${assetId}:`, error);
+            res.status(500).send({ error: "Invalid asset configuration format" });
+        }
+    })
+   
+    app.post('/api/core/v1/assets/:id/config', requireAdmin(), async (req, res) => {
+        const assetId = req.params.id;
+        const rootPath = getRoot(req);
+        const assetPath = dataDir(rootPath, assetId);
+
+        if (!fs.existsSync(assetPath)) {
+            res.status(404).send({ error: "Asset not found" });
+            return;
+        }
+
+        const ventoPath = fsPath.join(assetPath, ".vento");
+        if (!fs.existsSync(ventoPath)) {
+            res.status(404).send({ error: "Asset configuration not found" });
+            return;
+        }
+        const configPath = fsPath.join(ventoPath, "asset.json");
+        const configContent = req.body;
+
+        try {
+            await promises.writeFile(configPath, JSON.stringify(configContent, null, 2), 'utf8');
+            
+            const assets: any[] = await listAssets(rootPath);
+            const found = assets.find(asset => asset.name === assetId);
+            context.mqtt.publish(`notifications/assets/update`, JSON.stringify(found));
+
+            res.send({ message: "Asset configuration updated successfully", data: configContent });
+        } catch (error) {
+            console.error(`Error updating asset config for ${assetId}:`, error);
+            res.status(500).send({ error: "Failed to update asset configuration" });
+        }
+
+    })
 
     AssetsAutoAPI(app, context)
 }
