@@ -151,10 +151,14 @@ const readAssetMetadata = async (basePath) => {
 
     if (!fs.existsSync(assetJsonPath)) return null;
 
-    const asset = {};
+    let asset = {};
 
     try {
-        asset["assetJson"] = JSON.parse(await promises.readFile(assetJsonPath, 'utf8'));
+        const assetJson = JSON.parse(await promises.readFile(assetJsonPath, 'utf8'));
+        asset = {
+            ...asset,
+            ...assetJson,
+        }
     } catch (_) {}
 
     if (fs.existsSync(iconPath)) {
@@ -200,7 +204,7 @@ const parseAssetEntry = async (fileName, rootPath) => {
 
     const baseName = fileName.replace(/(\.zip|\.logs)$/i, "");
 
-    const asset = {
+    let asset = {
         name: baseName,
         format: [type],
         assetFiles: [],
