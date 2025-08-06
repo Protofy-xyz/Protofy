@@ -189,9 +189,8 @@ function Widget(card) {
 
 function Widget(card) {
   const value = card.value;
-  const fullHeight = value !== undefined && typeof value !== "string" && typeof value !== "number" && typeof value !== "boolean";
 
-  const content = <YStack f={fullHeight ? 1 : undefined}  mt={fullHeight ? "20px" : "0px"} ai="center" jc="center" width="100%">
+  const content = <YStack f={1}  mt={"20px"} ai="center" jc="center" width="100%">
       {card.icon && card.displayIcon !== false && (
           <Icon name={card.icon} size={48} color={card.color}/>
       )}

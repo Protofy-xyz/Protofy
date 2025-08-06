@@ -18,11 +18,12 @@ export const CardValue = ({ value, style = {}, id = undefined, mode = undefined 
 
     value = typeof value === 'string' ? value : String(value)
 
-    if (typeof value === 'string' && value.length > 100 || value.includes("\n")) {
+    if (typeof value === 'string' && value.length > 20 || value.includes("\n")) {
         return <XStack mt="20px" width="calc(100% - 20px)" f={1}><textarea
             className="no-drag"
             style={{
-                backgroundColor: "var(--gray1)",
+                color: "var(--color9)",
+                backgroundColor: "var(--bgContent)",
                 flex: 1,
                 padding: "5px 10px",
                 border: "0.5px solid var(--gray7)",
@@ -32,8 +33,6 @@ export const CardValue = ({ value, style = {}, id = undefined, mode = undefined 
             }}
             value={value}
             readOnly
-
-            rows={10} // Número de filas iniciales
         /></XStack>
     }
     return <div id={id} style={{
