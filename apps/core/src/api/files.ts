@@ -172,10 +172,10 @@ const handleFilesDownloadRequest = async (req, res) => {
 }
 
 const handleDirectoryCreateRequest = async (req, res, session) => {
-    const name = req.params.path || '';
-
+    const name = req.params.path || req.body.path || '';
     const dirPath = path.join(getRoot(req), name);
     try {
+        logger.info(`Creating directory at path: ${dirPath}`);
         await fs.mkdir(dirPath, { recursive: true }); // recursive: true permite crear directorios anidados si no existen
         generateEvent({
             path: 'files/create/dir',
@@ -260,6 +260,8 @@ app.post('/api/core/v1/files', requireAdmin(), upload.single('file'), handler(ha
 app.post('/api/core/v1/files/:path(*)', requireAdmin(), upload.single('file'), handler(handleFilesWriteRequest));
 // Route to download files in /api/core/v1/download/*
 app.get('/api/core/v1/download', requireAdmin(), handler(handleFilesDownloadRequest));
+
+app.post('/api/core/v1/directories', requireAdmin(), handler(handleDirectoryCreateRequest));
 // Route to create directories in /api/core/v1/directories/*
 app.post('/api/core/v1/directories/:path(*)', requireAdmin(), handler(handleDirectoryCreateRequest));
 

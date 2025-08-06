@@ -3,6 +3,18 @@ import { addCard } from '@extensions/cards/coreContext/addCard';
 import { getServiceToken } from 'protobase';
 
 export default async (app, context) => {
+    addAction({
+        group: 'directories',
+        name: 'create',
+        url: "/api/core/v1/directories",
+        tag: 'operations',
+        description: "Create a directory",
+        method: 'post',
+        params: {
+            path: "Path to the directory to create",
+        },
+        emitEvent: true
+    })
 
     addAction({
         group: 'files',
@@ -13,8 +25,7 @@ export default async (app, context) => {
         params: {
             path: "Path to the file or directory to read",
         },
-        emitEvent: true,
-        token: await getServiceToken()
+        emitEvent: true
     })
 
     addCard({
@@ -36,8 +47,7 @@ export default async (app, context) => {
             rulesCode: `return await execute_action("/api/core/v1/files", userParams)`,
             displayResponse: true
         },
-        emitEvent: true,
-        token: getServiceToken()
+        emitEvent: true
     })
 
     addAction({
@@ -50,8 +60,7 @@ export default async (app, context) => {
             path: "Path to the file to download",
             url: "URL to download the file from"
         },
-        emitEvent: true,
-        token: await getServiceToken()
+        emitEvent: true
     })
 
     addCard({
@@ -74,7 +83,6 @@ export default async (app, context) => {
             rulesCode: `return await execute_action("/api/core/v1/download", params)`,
             displayResponse: true
         },
-        emitEvent: true,
-        token: getServiceToken()
+        emitEvent: true
     })
 }
