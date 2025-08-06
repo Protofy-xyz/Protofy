@@ -15,9 +15,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
 
     const { resolvedTheme } = useThemeSetting();
 
-    return (
-        <PanelGroup direction="horizontal">
-            {/* <Panel defaultSize={25}>
+  {/* <Panel defaultSize={25}>
                 <YStack
                     flex={1}
                     height="100%"
@@ -31,31 +29,32 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
                 </YStack>
             </Panel>
             <CustomPanelResizeHandle direction="vertical" /> */}
-            <Panel defaultSize={75}>
-                <YStack
-                    flex={1}
-                    height="100%"
-                    alignItems="center"
-                    justifyContent="center"
-                    backgroundColor="$gray3"
-                    borderRadius="$3"
-                    p="$3"
-                >
-                    <Monaco
-                        path={'html-rules-' + data.name + '.ts'}
-                        darkMode={resolvedTheme === 'dark'}
-                        sourceCode={htmlCode}
-                        onChange={(newCode) => { setCode(newCode); setHTMLCode(newCode) }}
-                        options={{
-                            folding: false,
-                            lineDecorationsWidth: 0,
-                            lineNumbersMinChars: 0,
-                            lineNumbers: false,
-                            minimap: { enabled: false }
-                        }}
-                    />
-                </YStack>
-            </Panel>
-        </PanelGroup>
-    );
+  return (
+    <Panel defaultSize={75}>
+      <YStack
+        flex={1}
+        height="100%"
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="$gray3"
+        borderRadius="$3"
+        p="$3"
+      >
+        <Monaco
+          path={'html-rules-' + data.name + '.ts'}
+          darkMode={resolvedTheme === 'dark'}
+          sourceCode={htmlCode}
+          onChange={(newCode) => { setCode(newCode); setHTMLCode(newCode) }}
+          options={{
+            folding: false,
+            lineDecorationsWidth: 0,
+            lineNumbersMinChars: 0,
+            lineNumbers: false,
+            minimap: { enabled: false }
+          }}
+        />
+      </YStack>
+    </Panel>
+
+  );
 };

@@ -6,6 +6,8 @@ import { Monaco } from "../Monaco";
 import { useThemeSetting } from '@tamagui/next-theme';
 import Icon from "components/Icon";
 import { FadeLoader, PulseLoader } from 'react-spinners';
+import { Panel } from "react-resizable-panels";
+
 
 export const ComponentCodeGeneration = ({ htmlCode, setHTMLCode }) => {
   const [loading, setLoading] = useState(false)
@@ -22,55 +24,57 @@ export const ComponentCodeGeneration = ({ htmlCode, setHTMLCode }) => {
   }
 
 
-  return <YStack width={"500px"} height={"100%"} borderRadius="$3" gap="$2">
-    <XStack gap="$2">
-      <Input placeholder='table component with two rows and two columns' w="100%"
-        onChange={(e) => setQuery(e.target?.value)}
-        value={query}
-      />
-      <Button
-        onPress={() => getRulesCode()}
-      >
-        Generate
-      </Button>
-    </XStack>
-    <YStack flex={1} jc="center" ai="center" >
-      {
-        loading
-          ? <PulseLoader
-            color='#ececec'
-          />
-          : <YStack
-            flex={1}
-            height="100%"
-            width="100%"
-            alignItems="center"
-            justifyContent="center"
-            backgroundColor="$gray3"
-            borderRadius="$3"
-            p="$3"
-          >
-            <Monaco
-              sourceCode={aiComponent || "// type into the input to generate a new version"}
-              path={'aiComponent.ts'}
-              darkMode={resolvedTheme === 'dark'}
-              options={{
-                folding: false,
-                lineDecorationsWidth: 0,
-                lineNumbersMinChars: 0,
-                lineNumbers: false,
-                minimap: { enabled: false }
-              }}
+  return <Panel defaultSize={30} minSize={30}>
+    <YStack width={"100%"} height={"100%"} borderRadius="$3" gap="$2">
+      <XStack gap="$2">
+        <Input placeholder='table component with two rows and two columns' w="100%"
+          onChange={(e) => setQuery(e.target?.value)}
+          value={query}
+        />
+        <Button
+          onPress={() => getRulesCode()}
+        >
+          Generate
+        </Button>
+      </XStack>
+      <YStack flex={1} jc="center" ai="center" >
+        {
+          loading
+            ? <PulseLoader
+              color='#ececec'
             />
-          </YStack>
+            : <YStack
+              flex={1}
+              height="100%"
+              width="100%"
+              alignItems="center"
+              justifyContent="center"
+              backgroundColor="$gray3"
+              borderRadius="$3"
+              p="$3"
+            >
+              <Monaco
+                sourceCode={aiComponent || "// type into the input to generate a new version"}
+                path={'aiComponent.ts'}
+                darkMode={resolvedTheme === 'dark'}
+                options={{
+                  folding: false,
+                  lineDecorationsWidth: 0,
+                  lineNumbersMinChars: 0,
+                  lineNumbers: false,
+                  minimap: { enabled: false }
+                }}
+              />
+            </YStack>
 
-      }
-    </YStack>
-    <Button
-      onPress={() => setHTMLCode(aiComponent)}
-    >
-      <GitMerge size={"$1"} />
-      merge changes
-    </Button>
-  </YStack >
+        }
+      </YStack>
+      <Button
+        onPress={() => setHTMLCode(aiComponent)}
+      >
+        <GitMerge size={"$1"} />
+        merge changes
+      </Button>
+    </YStack >
+  </Panel>
 }
