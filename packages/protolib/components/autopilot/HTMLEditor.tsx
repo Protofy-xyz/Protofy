@@ -29,9 +29,7 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
                 </YStack>
             </Panel>
             <CustomPanelResizeHandle direction="vertical" /> */}
-  return (
-    <Panel defaultSize={75}>
-      <YStack
+  return ( <YStack
         flex={1}
         height="100%"
         alignItems="center"
@@ -54,7 +52,5 @@ export const HTMLEditor = ({ htmlCode, setHTMLCode, data }) => {
           }}
         />
       </YStack>
-    </Panel>
-
   );
 };

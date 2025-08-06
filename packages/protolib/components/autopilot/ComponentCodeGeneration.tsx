@@ -24,8 +24,7 @@ export const ComponentCodeGeneration = ({ htmlCode, setHTMLCode }) => {
   }
 
 
-  return <Panel defaultSize={30} minSize={30}>
-    <YStack width={"100%"} height={"100%"} borderRadius="$3" gap="$2">
+  return  <YStack width={"100%"} height={"100%"} borderRadius="$3" gap="$2">
       <XStack gap="$2">
         <Input placeholder='table component with two rows and two columns' w="100%"
           onChange={(e) => setQuery(e.target?.value)}
@@ -76,5 +75,4 @@ export const ComponentCodeGeneration = ({ htmlCode, setHTMLCode }) => {
         merge changes
       </Button>
     </YStack >
-  </Panel>
 }
