@@ -1,0 +1,8 @@
+{
+    "name": "@extensions/pdf",
+    "version": "1.0.0",
+    "description": "PDF extension for Vento",
+    "dependencies": {
+        "pdf-parse": "^1.1.1"
+    }
+}
