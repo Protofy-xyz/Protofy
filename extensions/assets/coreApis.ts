@@ -197,12 +197,18 @@ const collectAssetFiles = async (baseDir, assetName) => {
     return assetFiles;
 };
 
+const normalizeFileName = (fileName) => {
+    return fileName
+        .replace(/(\.zip|\.logs)$/i, "")
+        .replace(/_logs$/i, "");
+}
+
 const parseAssetEntry = async (fileName, rootPath) => {
     const fullPath = dataDir(rootPath, fileName);
     const type = await getAssetType(fullPath, fileName);
     if (!type) return null;
 
-    const baseName = fileName.replace(/(\.zip|\.logs)$/i, "");
+    const baseName = normalizeFileName(fileName);
 
     let asset = {
         name: baseName,
@@ -212,10 +218,10 @@ const parseAssetEntry = async (fileName, rootPath) => {
 
     if (type === "dir") {
         const metadata = await readAssetMetadata(fullPath);
-        if (!metadata) return null;
-        Object.assign(asset, metadata);
-
-        asset.assetFiles = await collectAssetFiles(dataDir(rootPath), baseName);
+        if (metadata) {
+            Object.assign(asset, metadata);
+            asset.assetFiles = await collectAssetFiles(dataDir(rootPath), baseName);
+        }
     }
 
     return asset;
