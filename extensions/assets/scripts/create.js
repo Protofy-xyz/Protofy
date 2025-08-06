@@ -11,7 +11,7 @@ const create = (assetName) => {
     const assetsReleaseContent = {
         "name": assetName,
         "description": "asset description",
-        "author_name": "@author",
+        "author": "@author",
         "tags": [
             "tag1",
             "tag2"
