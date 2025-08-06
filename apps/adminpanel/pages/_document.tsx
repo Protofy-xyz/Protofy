@@ -24,6 +24,11 @@ export default class Document extends NextDocument {
             rel="stylesheet"
             href="/public/themes/adminpanel.css"
           />
+          <link
+            rel="stylesheet"
+            id="dynamic-fonts-css"
+            href={`/api/core/v1/themes/get-fonts-css?v=${Date.now()}`} // opcional si querés bustear caché
+          />
           <style
             dangerouslySetInnerHTML={{
               __html: tamagui.getCSS({

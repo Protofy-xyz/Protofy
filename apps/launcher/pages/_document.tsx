@@ -18,6 +18,11 @@ export default class Document extends NextDocument {
             id={rnwStyle.id}
             dangerouslySetInnerHTML={{ __html: rnwStyle.textContent }}
           />
+          <link
+            rel="stylesheet"
+            id="dynamic-fonts-css"
+            href={`/api/core/v1/themes/get-fonts-css?v=${Date.now()}`} // opcional si querés bustear caché
+          />
           <style
             dangerouslySetInnerHTML={{
               __html: Tamagui.getCSS({

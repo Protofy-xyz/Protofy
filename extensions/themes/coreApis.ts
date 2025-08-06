@@ -1,6 +1,6 @@
 import { ThemeModel } from "./";
 import ThemeService from "./themeService";
-import { AutoAPI, getRoot, handler } from 'protonode'
+import { AutoAPI, getRoot, handler, requireAdmin } from 'protonode'
 import { promises as fs } from 'fs';
 import * as fsSync from 'fs';
 import * as fspath from 'path';
@@ -70,7 +70,7 @@ const getDB = (path, req, session) => {
 
         async del(key, value) {
             const dir = dataDir(getRoot(req));
-        
+
             for (const format of availableFormats) {
                 const filePath = fspath.join(dir, `${key}.${format}`);
                 try {
@@ -150,7 +150,7 @@ export default (app, context) => {
         }
 
         let type
-        
+
         if (css && format.includes("json")) { // If css is provided, is because is dev and we need to generate the css file
             type = "css-and-json"
         } else if (!css && format.includes("css")) { // If css is not provided, is because is prod and css are already generated
@@ -196,4 +196,30 @@ export default (app, context) => {
 
         return res.status(200).json({ message: 'CSS updated successfully' });
     }))
+
+    app.get('/api/core/v1/themes/get-fonts-css', requireAdmin(), async (req, res) => {
+        const fontsDir = fspath.join(getRoot(req), 'data/public/fonts')
+        const files = fsSync.existsSync(fontsDir) ? fsSync.readdirSync(fontsDir) : []
+
+        const fontFaces = files
+            .filter((f) => /\.(woff2?|ttf)$/.test(f))
+            .map((file) => {
+                const name = file.replace(/\.(woff2?|ttf)$/, '')
+                const ext = fspath.extname(file).slice(1)
+                const url = `/public/fonts/${file}`
+                const format = ext === 'woff2' ? 'woff2' : 'truetype'
+
+                return `
+@font-face {
+  font-family: '${name}';
+  src: url('${url}') format('${format}');
+  font-display: swap;
+}
+`
+            })
+            .join('\n')
+
+        res.setHeader('Content-Type', 'text/css')
+        res.send(fontFaces)
+    })
 }

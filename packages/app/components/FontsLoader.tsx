@@ -18,7 +18,8 @@ import {
 
 export const FontsLoader = () => (
   <>
-    <LoadFont woff2File="/public/fonts/roboto-regular.woff2" cssFile="/public/fonts/roboto-regular.css" />
+    {/* fonts of data/public/fonts are loaded dynamicly */}
+    {/* <LoadFont woff2File="/public/fonts/roboto-regular.woff2" cssFile="/public/fonts/roboto-regular.css" />
     <LoadInter200 />
     <LoadInter300 />
     <LoadInter400 />
@@ -31,6 +32,6 @@ export const FontsLoader = () => (
     <LoadMunro />
     <LoadCherryBomb />
     <LoadJostMedium />
-    <LoadJostRegular />
+    <LoadJostRegular /> */}
   </>
 )
