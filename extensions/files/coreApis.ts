@@ -16,6 +16,26 @@ export default async (app, context) => {
         emitEvent: true
     })
 
+    addCard({
+        group: 'directories',
+        tag: 'operations',
+        id: 'directory_create',
+        templateName: 'Create Directory',
+        name: 'directories_create',
+        defaults: {
+            width: 2,
+            height: 8,
+            type: "action",
+            icon: 'folder-plus',
+            name: 'create directory',
+            description: 'Create a directory',
+            params: {
+                path: "Path to the directory to create",
+            },
+            rulesCode: "return await execute_action(\"/api/core/v1/directories\", userParams)",
+        }
+    })
+
     addAction({
         group: 'files',
         name: 'read',
