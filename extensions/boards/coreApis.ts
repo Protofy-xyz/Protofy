@@ -247,6 +247,26 @@ const getBoard = async (boardId) => {
     return fileContent;
 }
 
+const cleanObsoleteCardFiles = (boardId, newCardNames, req) => {
+    const boardFolder = BoardsDir(getRoot(req)) + boardId + '/';
+    if (!fsSync.existsSync(boardFolder)) return;
+
+    const files = fsSync.readdirSync(boardFolder);
+
+    const validFileNames = new Set();
+
+    for (const name of newCardNames) {
+        validFileNames.add(name + '.js');
+        validFileNames.add(name + '_view.js');
+    }
+
+    for (const file of files) {
+        if ((file.endsWith('.js') || file.endsWith('_view.js')) && !validFileNames.has(file)) {
+            fsSync.unlinkSync(boardFolder + file);
+        }
+    }
+};
+
 const getDB = (path, req, session) => {
     const db = {
         async *iterator() {
@@ -336,6 +356,8 @@ boardConnect(run)`
                 //register actions for each card
                 console.log('cards: ', value.cards)
                 if (value.cards && Array.isArray(value.cards)) {
+                    const newCardNames = value.cards.map(card => card.name);
+                    cleanObsoleteCardFiles(key, newCardNames, req);
                     for (let i = 0; i < value.cards.length; i++) {
                         //create a file for each card, in the board folder
                         const card = value.cards[i];
@@ -404,9 +426,6 @@ boardConnect(run)`
 
     return db;
 }
-
-
-
 class HttpError extends Error {
     constructor(public status: number, message: string) {
         super(message);
