@@ -6,6 +6,6 @@ contextBridge.exposeInMainWorld('api', {
   }
 });
 
-// contextBridge.exposeInMainWorld('electronAPI', {
-//   onAssetDownloaded: (callback) => ipcRenderer.on('asset-downloaded', (_event, data) => callback(data)),
-// });
+contextBridge.exposeInMainWorld('electronAPI', {
+  onAssetDownloaded: (callback) => ipcRenderer.on('asset-downloaded', (_event, data) => callback(data)),
+});
