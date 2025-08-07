@@ -105,4 +105,34 @@ export default async (app, context) => {
         },
         emitEvent: true
     })
+
+
+
+    addCard({
+        group: 'files',
+        tag: 'board',
+        id: 'file_board',
+        templateName: 'Add a file to the board',
+        name: 'append',
+        defaults: {
+            width: 2,
+            height: 12,
+            "icon": "file",
+            "type": "action",
+            "name": "file",
+            "displayResponse": true,
+            "params": {
+                "path": "path to the file"
+            },
+            "configParams": {
+                "path": {
+                    "visible": true,
+                    "defaultValue": "",
+                    "type": "string"
+                }
+            },
+            "rulesCode": "return {\n    type: 'file',\n    path: params.path\n}",
+            "html": "//@card/react\n\nfunction Widget(card) {\n  const value = card.value;\n\n  const content = <YStack f={1}  mt={\"20px\"} ai=\"center\" jc=\"center\" width=\"100%\">\n      {card.icon && card.displayIcon !== false && (\n          <Icon name={card.icon} size={48} color={card.color}/>\n      )}\n      {card.displayResponse !== false && (\n          <CardValue value={value?.path ?? \"N/A\"} />\n      )}\n  </YStack>\n\n  return (\n      <Tinted>\n        <ProtoThemeProvider forcedTheme={window.TamaguiTheme}>\n          <ActionCard data={card}>\n            {card.displayButton !== false ? <ParamsForm data={card}>{content}</ParamsForm> : card.displayResponse !== false && content}\n          </ActionCard>\n        </ProtoThemeProvider>\n      </Tinted>\n  );\n}\n"
+        }
+    })
 }

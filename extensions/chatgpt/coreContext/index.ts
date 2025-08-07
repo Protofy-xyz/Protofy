@@ -3,6 +3,7 @@ import { getServiceToken } from '@extensions/apis/coreContext';
 import { getKey } from "@extensions/keys/coreContext";
 import OpenAI from 'openai';
 import axios from "axios";
+import fs from "fs";
 
 const logger = getLogger()
 
@@ -17,6 +18,27 @@ export const getChatGPTApiKey = async () => {
     }
     return apiKey;
 
+}
+
+async function uploadFileToOpenAI(filePath: string): Promise<string> {
+    let apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+        try {
+            apiKey = await getKey({ key: "OPENAI_API_KEY", token: getServiceToken() });
+        } catch (err) {
+            console.error("Error fetching key:", err);
+        }
+    }
+    if (!apiKey) {
+        throw new Error("No API Key provided");
+    }
+
+    const client = new OpenAI({ apiKey });
+    const file = await client.files.create({
+        file: fs.createReadStream(filePath),
+        purpose: "assistants"
+    });
+    return file.id;
 }
 
 export const chatGPTSession = async ({
@@ -94,10 +116,21 @@ export const chatGPTSession = async ({
 export const chatGPTPrompt = async ({
     message,
     images = [],
+    files = [],
     ...props
 }: any & { message: string }) => {
 
-    const imgMessages = [];
+    const content: any[] = [
+        { type: "text", text: message }
+    ];
+
+    for (const file of files) {
+        const file_id = await uploadFileToOpenAI(file);
+        content.push({
+            type: "file",
+            file: { file_id }  // <- ¡CORRECTO!
+        });
+    }
 
     if (images.length > 0) {
         const imageContent = await Promise.all(
@@ -107,7 +140,8 @@ export const chatGPTPrompt = async ({
                         responseType: "text", // Ya es base64 como texto plano
                     });
 
-                    const base64 = response.data.trim();
+                    const base64 = response.data?.trim?.();
+                    if (!base64) return null;
 
                     return {
                         type: "image_url",
@@ -123,20 +157,14 @@ export const chatGPTPrompt = async ({
         );
 
         const validImages = imageContent.filter(Boolean);
-        if (validImages.length > 0) {
-            imgMessages.push({
-                role: "user",
-                content: validImages
-            });
-        }
+        content.push(...validImages);
     }
 
     const response = await chatGPTSession({
         messages: [
-            ...imgMessages,
             {
                 role: "user",
-                content: message
+                content
             }
         ],
         ...props,

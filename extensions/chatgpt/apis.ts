@@ -2,7 +2,7 @@ import { chatGPTPrompt, getChatGPTApiKey } from "./coreContext"
 import { addAction } from "@extensions/actions/coreContext/addAction";
 import { addCard } from "@extensions/cards/coreContext/addCard";
 import { getLogger, getServiceToken } from 'protobase';
-import { handler } from 'protonode'
+import { handler, getRoot } from 'protonode'
 
 
 export default (app, context) => {
@@ -66,9 +66,9 @@ export default (app, context) => {
         })
     }
 
-    const handleSendPrompt = async (message, images, res) => {
+    const handleSendPrompt = async (message, images, files, res) => {
         console.log('--------------------------------------------------------------------------------------')
-        console.log('************** chatgpt send prompt: ', message, images)
+        console.log('************** chatgpt send prompt: ', message, images, files)
         if (!message) {
             res.status(400).send({ error: "Message parameter is required" });
             return;
@@ -84,6 +84,7 @@ export default (app, context) => {
         console.log('************** chatgpt before:')
         chatGPTPrompt({
             images: images || [],
+            files: files.map(file => getRoot() + file) || [],
             message: message, done: (response, msg) => {
                 console.log('************** chatgpt: ', response, msg)
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "userMessage", value: message, emitEvent: true });
@@ -101,16 +102,16 @@ export default (app, context) => {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
-        handleSendPrompt(req.body.message, req.body.images, res)
+        console.log('************** chatgpt send prompt: ', req.body.message, req.body.images, req.body.files)
+        handleSendPrompt(req.body.message, req.body.images, req.body.files, res)
     }))
 
     app.get("/api/v1/chatgpt/send/prompt", handler(async (req, res, session) => {
-        console.log('************** chatgpt send prompt')
         if (!session || !session.user.admin) {
             res.status(401).send({ error: "Unauthorized" })
             return
         }
-        handleSendPrompt(req.query.message, req.query.images, res)
+        handleSendPrompt(req.query.message, req.query.images, req.query.files, res)
 
     }))
     registerActions(context);
