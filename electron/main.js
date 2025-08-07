@@ -1,5 +1,6 @@
 // 📦 main.js
 const { app, BrowserWindow, session, ipcMain, shell } = require('electron');
+const https = require('https');
 const http = require('http');
 const path = require('path');
 const { spawn } = require('child_process');
@@ -7,7 +8,7 @@ const os = require('os');
 const process = require('process');
 const fs = require('fs');
 // const { generateEvent, getServiceToken } = require('protobase');
-const { https } = require('follow-redirects');
+// const { https } = require('follow-redirects');
 
 function getNodePath(rootPath) {
   //get path to the local Node.js binary
@@ -326,12 +327,12 @@ module.exports = function start(rootPath) {
     const file = fs.createWriteStream(filePath);
 
     https.get(url, (response) => {
-      const contentType = response.headers['content-type'];
-      if (!contentType.includes('zip')) {
-        console.error('❌ Invalid content type:', contentType);
-        response.resume(); // descartar contenido
-        return;
-      }
+      // const contentType = response.headers['content-type'];
+      // if (!contentType.includes('zip')) {
+      //   console.error('❌ Invalid content type:', contentType);
+      //   response.resume(); // descartar contenido
+      //   return;
+      // }
       response.pipe(file);
       file.on('finish', () => {
         file.close();
