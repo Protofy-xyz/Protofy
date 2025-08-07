@@ -6,7 +6,7 @@ const { spawn } = require('child_process');
 const os = require('os');
 const process = require('process');
 const fs = require('fs');
-const { generateEvent, getServiceToken } = require('protobase');
+// const { generateEvent, getServiceToken } = require('protobase');
 const { https } = require('follow-redirects');
 
 function getNodePath(rootPath) {
@@ -336,14 +336,14 @@ module.exports = function start(rootPath) {
       file.on('finish', () => {
         file.close();
 
-        generateEvent({
-          path: 'files/write/file',
-          from: 'core',
-          user: "system",
-          payload: { 'path': "/data/assets", "filename": zipName, mimetype: "application/zip" }
-        }, getServiceToken())
+        // generateEvent({
+        //   path: 'files/write/file',
+        //   from: 'core',
+        //   user: "system",
+        //   payload: { 'path': "/data/assets", "filename": zipName, mimetype: "application/zip" }
+        // }, getServiceToken())
 
-        browserWindow.webContents.send('asset-downloaded', { name: assetName });
+        // browserWindow.webContents.send('asset-downloaded', { name: assetName });
       });
     }).on('error', (err) => {
       fs.unlink(filePath, () => { });
