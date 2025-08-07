@@ -32,6 +32,8 @@ import { AppState } from 'protolib/components/AdminPanel'
 import { BoardSettingsEditor } from '../components/BoardSettingsEditor'
 import { JSONView } from 'protolib/components/JSONView'
 
+const defaultCardMethod: "post" | "get" = 'post'
+
 class ValidationError extends Error {
   errors: string[];
 
@@ -596,8 +598,12 @@ const Board = ({ board, icons }) => {
 
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
-            const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
-            return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
+            if(defaultCardMethod === 'post') {
+              return (await API.post(`/api/core/v1/boards/${board.name}/actions/${name}`, params)).data;
+            } else {
+              const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
+              return (await API.get(`/api/core/v1/boards/${board.name}/actions/${name}?${paramsStr}`)).data;
+            }
           }}
         />
       };

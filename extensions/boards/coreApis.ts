@@ -1561,6 +1561,7 @@ return card({
                         configParams: card.configParams ?? undefined,
                         emitEvent: i === actionsCards.length - 1,
                         persistValue: card.persistValue ?? false,
+                        method: card.method ?? 'get'
                     })
                     if (card.persistValue) {
                         // if persistValue is true, save the board state
