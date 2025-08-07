@@ -1,13 +1,12 @@
 // 📦 main.js
 const { app, BrowserWindow, session, ipcMain, shell } = require('electron');
-const http = require('http');
 const https = require('https');
+const http = require('http');
 const path = require('path');
 const { spawn } = require('child_process');
 const os = require('os');
 const process = require('process');
 const fs = require('fs');
-
 
 function getNodePath(rootPath) {
   //get path to the local Node.js binary
@@ -22,6 +21,36 @@ function getNodePath(rootPath) {
     console.warn('🟡 No local Node.js binary found. Using system Node.js.');
   }
   return nodePath;
+}
+
+function generateEvent(event, token = '') {
+  const postData = JSON.stringify(event);
+
+  const options = {
+    hostname: 'localhost',
+    port: 8000,
+    path: '/api/core/v1/events?token=' + token,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Content-Length': Buffer.byteLength(postData),
+    }
+  };
+
+  const req = http.request(options, (res) => {
+    res.setEncoding('utf8');
+    res.on('data', () => {});
+    res.on('end', () => {
+      console.log('✅ Event sent:', event.path);
+    });
+  });
+
+  req.on('error', (e) => {
+    console.error('❌ Failed to send event:', e.message);
+  });
+
+  req.write(postData);
+  req.end();
 }
 
 module.exports = function start(rootPath) {
@@ -42,6 +71,8 @@ module.exports = function start(rootPath) {
 
   let logWindow = null;
   let mainWindow = null;
+  let browserWindow = null;
+  let userSession = null;
 
   function logToRenderer(msg) {
     try {
@@ -176,7 +207,7 @@ module.exports = function start(rootPath) {
       console.log(`${key}=${value}`);
     }
     console.log('📦 Creating main window...');
-    const userSession = genNewSession()
+    userSession = genNewSession()
     const sessionStr = JSON.stringify(userSession);
     const encoded = encodeURIComponent(sessionStr);
 
@@ -295,7 +326,7 @@ module.exports = function start(rootPath) {
   });
 
   ipcMain.on('open-window', (event, { window }) => {
-    const browserWindow = new BrowserWindow({
+    browserWindow = new BrowserWindow({
       width: 1100,
       height: 800,
       title: window,
@@ -320,14 +351,29 @@ module.exports = function start(rootPath) {
   ipcMain.on('download-asset', (event, { url, assetName }) => {
     // save to downloads: app.getPath('downloads')
     console.log("downloading asset:", assetName)
-    const filePath = path.join(__dirname, "data", "assets", assetName + '.zip');
+    const zipName = assetName + '.zip'
+    const filePath = path.join(__dirname, "..", "data", "assets", zipName);
     const file = fs.createWriteStream(filePath);
 
     https.get(url, (response) => {
+      const contentType = response.headers['content-type'];
+      if (!contentType.includes('zip')) {
+        console.error('❌ Invalid content type:', contentType);
+        response.resume(); // descartar contenido
+        return;
+      }
       response.pipe(file);
       file.on('finish', () => {
         file.close();
-        console.log('asset download complete:', filePath);
+
+        generateEvent({
+          path: 'files/write/file',
+          from: 'core',
+          user: "system",
+          payload: { 'path': "/data/assets", "filename": zipName, mimetype: "application/zip" }
+        }, userSession?.token)
+
+        browserWindow.webContents.send('asset-downloaded', { name: assetName });
       });
     }).on('error', (err) => {
       fs.unlink(filePath, () => { });
