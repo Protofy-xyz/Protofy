@@ -1,6 +1,6 @@
 import { Info, X, Trash2 } from '@tamagui/lucide-icons'
 import { useEffect, useState } from 'react'
-import { Button, Input, Paragraph, SizableText, View, XStack, YStack } from 'tamagui'
+import { Button, Input, Paragraph, SizableText, View, XStack, YStack, ScrollView } from 'tamagui'
 
 export function ViewObject({
     object = {},
@@ -27,6 +27,7 @@ export function ViewObject({
 
     return (
         <YStack className="no-drag" height="100%" f={1} p="$3" gap="$2">
+            <ScrollView>
             {entries.length ? (
                 <YStack f={1}>
                     <XStack jc="space-between" ai="center">
@@ -76,8 +77,9 @@ export function ViewObject({
                     </Paragraph>
                 </YStack>
             )}
+            </ScrollView>
 
-            <XStack mt="$4" gap="$2">
+            <XStack mt="$2" gap="$2">
                 <Input flex={1} value={newKey} onChangeText={setNewKey} placeholder="New key" />
                 <Input flex={1} value={newValue} onChangeText={setNewValue} placeholder="New value" />
                 <Button disabled={!newKey} onPress={handleAdd}>
