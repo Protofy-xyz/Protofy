@@ -15,7 +15,7 @@ export function boardConnect(run) {
     const token = protonode.getServiceToken()
     const listeners = {}
 
-    const onChange = ({ name, key = undefined,  changed, inmediate = true }) => {
+    const onChange = ({ name, key = undefined,  changed, inmediate = false }) => {
         if(!name && key) {
             console.warn('onChange called with key but no name, using key as name. key is a deprected parameter, please use name instead.');
             name = key;
@@ -61,7 +61,7 @@ export function boardConnect(run) {
                 token = action.token
             }
             //console.log('url: ', url+'?token='+token)
-            const response = await API.post(url + '?token=' + token, data);
+            const response = await API.post(url + '?token=' + (token ? token : protonode.getServiceToken()), data);
             if(response.isError) {
                 console.error('Error executing action: ', response.error);
                 error(response.error);

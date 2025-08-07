@@ -285,9 +285,6 @@ const getExecuteAction = (board, rawActions) => {
 
     if (action.method === 'post') {
       let { token, ...data } = params;
-      if (action.token) {
-        token = action.token
-      }
       //console.log('url: ', action.url+'?token='+token)
       const response = await API.post(action.url, data);
       return response.data
