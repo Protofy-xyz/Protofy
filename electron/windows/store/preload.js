@@ -5,3 +5,7 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.send('download-asset', { url, assetName })
   }
 });
+
+// contextBridge.exposeInMainWorld('electronAPI', {
+//   onAssetDownloaded: (callback) => ipcRenderer.on('asset-downloaded', (_event, data) => callback(data)),
+// });
