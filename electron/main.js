@@ -1,13 +1,13 @@
 // 📦 main.js
 const { app, BrowserWindow, session, ipcMain, shell } = require('electron');
 const http = require('http');
-const https = require('https');
 const path = require('path');
 const { spawn } = require('child_process');
 const os = require('os');
 const process = require('process');
 const fs = require('fs');
-
+const { generateEvent, getServiceToken } = require('protobase');
+const { https } = require('follow-redirects');
 
 function getNodePath(rootPath) {
   //get path to the local Node.js binary
@@ -42,6 +42,7 @@ module.exports = function start(rootPath) {
 
   let logWindow = null;
   let mainWindow = null;
+  let browserWindow = null;
 
   function logToRenderer(msg) {
     try {
@@ -295,7 +296,7 @@ module.exports = function start(rootPath) {
   });
 
   ipcMain.on('open-window', (event, { window }) => {
-    const browserWindow = new BrowserWindow({
+    browserWindow = new BrowserWindow({
       width: 1100,
       height: 800,
       title: window,
@@ -320,14 +321,29 @@ module.exports = function start(rootPath) {
   ipcMain.on('download-asset', (event, { url, assetName }) => {
     // save to downloads: app.getPath('downloads')
     console.log("downloading asset:", assetName)
-    const filePath = path.join(__dirname, "data", "assets", assetName + '.zip');
+    const zipName = assetName + '.zip'
+    const filePath = path.join(__dirname, "..", "data", "assets", zipName);
     const file = fs.createWriteStream(filePath);
 
     https.get(url, (response) => {
+      const contentType = response.headers['content-type'];
+      if (!contentType.includes('zip')) {
+        console.error('❌ Invalid content type:', contentType);
+        response.resume(); // descartar contenido
+        return;
+      }
       response.pipe(file);
       file.on('finish', () => {
         file.close();
-        console.log('asset download complete:', filePath);
+
+        generateEvent({
+          path: 'files/write/file',
+          from: 'core',
+          user: "system",
+          payload: { 'path': "/data/assets", "filename": zipName, mimetype: "application/zip" }
+        }, getServiceToken())
+
+        browserWindow.webContents.send('asset-downloaded', { name: assetName });
       });
     }).on('error', (err) => {
       fs.unlink(filePath, () => { });
