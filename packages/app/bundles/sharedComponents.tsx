@@ -67,7 +67,6 @@ export const transferExtensionComponents = () => {
     TransferComponent(Tinted, 'Tinted');
     TransferComponent(DataView, 'ProtoDataView');
     TransferComponent(ObjectViewLoader, 'ObjectViewLoader');
-    TransferComponent(API, 'API');
     TransferComponent(ProtoModel, 'ProtoModel');
     TransferComponent(MqttWrapper, 'MqttWrapper');
 }
