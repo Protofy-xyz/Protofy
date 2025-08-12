@@ -12,13 +12,8 @@ interface Controls {
   autopilot: boolean;
   toggleAutopilot: () => void;
 
-  rulesOpened: boolean;
-  toggleRules: () => void;
-  setRulesOpened: (value: boolean) => void;
-
-  statesOpened: boolean;
-  toggleStates: () => void;
-  setStatesOpened: (value: boolean) => void;
+  setTabVisible: (value: string) => void;
+  tabVisible: string;
 
   uiCodeOpened: boolean;
   toggleUiCode: () => void;
@@ -27,9 +22,6 @@ interface Controls {
   viewMode: "board" | "json" | "ui";
   setViewMode: (mode: "board" | "json" | "ui") => void;
 
-  dialogOpen: "" | "settings";
-  setDialogOpen: (value: "" | "settings") => void;
-  
   saveJson: () => void;
 }
 
@@ -43,17 +35,13 @@ export const BoardControlsProvider: React.FC<{
 }> = ({ boardName, children, mode='board', addMenu = 'closed', dialog = '', autopilotRunning = false, rules='closed', board }) => {
   const [isJSONView, setIsJSONView] = useState(mode === 'json');
   const [addOpened, setAddOpened] = useState(addMenu === 'open');
-  const [dialogOpen, setDialogOpen] = useState<any>(dialog || '');
   const [autopilot, setAutopilot] = useState(autopilotRunning);
-  const [rulesOpened, setRulesOpened] = useState(rules === 'open');
-  const [statesOpened, setStatesOpened] = useState(false);
+  const [tabVisible, setTabVisible] = useState<string>("");
   const [uiCodeOpened, setUiCodeOpened] = useState(false);
   const [viewMode, setViewMode] = useState<"board" | "json" | "ui">('board');
 
   const toggleJson = () => setIsJSONView(v => !v);
   const openAdd = () => setAddOpened(true);
-  const toggleRules = () => setRulesOpened(v => !v);
-  const toggleStates = () => setStatesOpened(v => !v);
   const toggleUiCode = () => setUiCodeOpened(v => !v);
 
   const toggleAutopilot = useCallback(async () => {
@@ -73,12 +61,10 @@ export const BoardControlsProvider: React.FC<{
       isJSONView, toggleJson,
       addOpened, openAdd,
       autopilot, toggleAutopilot,
-      rulesOpened, toggleRules,
-      saveJson, setAddOpened, setRulesOpened,
-      statesOpened, toggleStates, setStatesOpened,
-      setDialogOpen, dialogOpen,
+      saveJson, setAddOpened,
       uiCodeOpened, toggleUiCode, setUiCodeOpened,
-      viewMode, setViewMode
+      viewMode, setViewMode,
+      setTabVisible, tabVisible
     }}>
       {children}
     </BoardControlsContext.Provider>

@@ -6,7 +6,7 @@ import { Separator } from '@my/ui';
 import { ActionLogsButton } from 'protolib/components/ActionLogsButton';
 
 const getActionBar = (generateEvent) => {
-  const { isJSONView, autopilot, rulesOpened, statesOpened, uiCodeOpened, setViewMode, viewMode } = useBoardControls();
+  const { isJSONView, autopilot, setViewMode, viewMode, tabVisible } = useBoardControls();
 
   const bars = {
     'JSONView': [
@@ -20,7 +20,7 @@ const getActionBar = (generateEvent) => {
     'BoardView': [
       <>
         <Tinted>
-          <ActionBarButton tooltipText="Board Settings" Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
+          <ActionBarButton tooltipText="Board Settings" selected={tabVisible == "board-settings"} Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
         </Tinted>
         <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
       </>,
@@ -41,10 +41,10 @@ const getActionBar = (generateEvent) => {
         />
       </Tinted>,
       <Tinted>
-        <ActionBarButton tooltipText={rulesOpened ? "Close Rules" : "Open Rules"} selected={rulesOpened} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
+        <ActionBarButton tooltipText={tabVisible == "rules" ? "Close Rules" : "Open Rules"} selected={tabVisible == "rules"} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton tooltipText={statesOpened ? "Close States" : "Open States"} selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
+        <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
       <Tinted>
         <ActionBarButton tooltipText="UI Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
@@ -70,10 +70,10 @@ const getActionBar = (generateEvent) => {
         br="$20"
       /></Tinted>,
       <Tinted>
-        <ActionBarButton tooltipText="Code" selected={rulesOpened} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+        <ActionBarButton tooltipText="Code" selected={tabVisible == "rules"} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
       </Tinted>,
       <Tinted>
-        <ActionBarButton tooltipText={statesOpened ? "Close States" : "Open States"} selected={statesOpened} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
+        <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
       </Tinted>,
     ]
   }

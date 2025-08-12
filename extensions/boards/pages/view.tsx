@@ -1,10 +1,10 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, BookDashed, SquareDashedBottom, SquareDashedBottomCode, NotepadTextDashed, Scan } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, LayoutDashboard } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
 import ErrorMessage from "protolib/components/ErrorMessage"
-import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack, H2, H1, H3 } from '@my/ui'
+import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack, H1, H3 } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
 import { AlertDialog } from 'protolib/components/AlertDialog';
@@ -26,11 +26,9 @@ import { Center } from 'protolib/components/Center'
 import dynamic from 'next/dynamic'
 import { useEventEffect } from '@extensions/events/hooks'
 import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext'
-import { isElectron } from 'protolib/lib/isElectron'
-import { useAtom } from 'jotai'
-import { AppState } from 'protolib/components/AdminPanel'
 import { BoardSettingsEditor } from '../components/BoardSettingsEditor'
 import { JSONView } from 'protolib/components/JSONView'
+import { FloatingWindow } from '../components/FloatingWindow'
 
 const defaultCardMethod: "post" | "get" = 'post'
 
@@ -311,16 +309,12 @@ const BoardStateView = ({ board }) => {
 const Board = ({ board, icons }) => {
   const {
     addOpened,
-    rulesOpened,
     setAddOpened,
-    setRulesOpened,
-    setDialogOpen,
-    statesOpened,
-    setStatesOpened,
     setUiCodeOpened,
     uiCodeOpened,
-    dialogOpen,
-    viewMode
+    viewMode,
+    tabVisible,
+    setTabVisible
   } = useBoardControls();
 
   const breakpointCancelRef = useRef(null) as any
@@ -335,7 +329,7 @@ const Board = ({ board, icons }) => {
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
   const [uicodeInfo, setUICodeInfo] = useState();
-  const [rulesSize, setRulesSize] = useState(1010)
+  const [windowSize, setWindowSize] = useState(1010)
   const [statesSize, setStatesSize] = useState(700)
   const [errors, setErrors] = useState<string[]>([])
   // const initialBreakPoint = useInitialBreakpoint()
@@ -595,7 +589,7 @@ const Board = ({ board, icons }) => {
 
           value={states?.boards?.[board.name]?.[item.name] ?? undefined}
           onRun={async (name, params) => {
-            if(defaultCardMethod === 'post') {
+            if (defaultCardMethod === 'post') {
               return (await API.post(`/api/core/v1/boards/${board.name}/actions/${name}`, params)).data;
             } else {
               const paramsStr = Object.keys(params ?? {}).map(key => key + '=' + encodeURIComponent(params[key])).join('&');
@@ -681,15 +675,6 @@ const Board = ({ board, icons }) => {
     <YStack flex={1} p="$6" backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
-      <BoardSettingsEditor
-        settings={board.settings}
-        open={dialogOpen == "settings"}
-        setOpen={v => setDialogOpen(v ? "settings" : "")}
-        onSave={sttngs => {
-          boardRef.current.settings = sttngs
-          onEditBoard()
-        }}
-      />
 
       <AlertDialog
         acceptButtonProps={{ color: "white", backgroundColor: "$red9" }}
@@ -808,7 +793,7 @@ const Board = ({ board, icons }) => {
         <YStack f={1}>
           {
             viewMode === 'ui' ? <HTMLView style={{ width: "100%", height: "100%" }}
-              html={uicodeInfo?.code} data={{board, state: states?.boards?.[board.name]}} setData={(data) => {
+              html={uicodeInfo?.code} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
                 console.log('wtf set data from board', data)
               }} /> : isJSONView
               ? <Monaco
@@ -865,44 +850,57 @@ const Board = ({ board, icons }) => {
               </YStack>}</YStack>
           }
         </YStack>
-        <div
-          onClick={() => { setRulesOpened(false) }}
-          style={{ width: "100vw", height: "120vh", position: "fixed", right: rulesOpened ? 0 : "-100vw" }}
-        ></div>
-        {
-          <XStack position="fixed" animation="quick" right={rulesOpened ? 40 : -rulesSize} top={"70px"} width={rulesSize} height="calc(100vh - 100px)">
-
-            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
-
-            {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
-              <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                setRulesSize(prev => {
-                  if (prev === 1010) {
-                    iconRotate.current.style.rotate = '180deg'
-                  } else {
-                    iconRotate.current.style.rotate = '0deg'
-                  }
-                  return prev === 1010 ? window.innerWidth - 330 : 1010
-                })
-              }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                <ArrowLeft size="$1" color="var(--color)" />
-              </XStack>
-            </XStack>}
-              automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
-          </XStack>
-        }
-        {
-          <XStack position="fixed" animation="quick" right={statesOpened ? 40 : -statesSize} top={"70px"} width={statesSize} height="calc(100vh - 100px)" borderWidth={2} br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
-            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
-            <BoardStateView board={board} />
-          </XStack>
-        }
+        <FloatingWindow
+          visible={tabVisible}
+          selectedTab={tabVisible}
+          onChangeTab={setTabVisible}
+          windowSize={windowSize}
+          tabs={{
+            "rules": {
+              "label": "Rules",
+              "icon": ClipboardList,
+              "content": <>
+                {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
+                  <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                    setWindowSize(prev => {
+                      if (prev === 1010) {
+                        iconRotate.current.style.rotate = '180deg'
+                      } else {
+                        iconRotate.current.style.rotate = '0deg'
+                      }
+                      return prev === 1010 ? window.innerWidth - 330 : 1010
+                    })
+                  }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                    <ArrowLeft size="$1" color="var(--color)" />
+                  </XStack>
+                </XStack>}
+                  automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+              </>
+            },
+            "states": {
+              "label": "States",
+              "icon": Book,
+              "content": <BoardStateView board={board} />
+            },
+            ...(viewMode != "ui" ? { "board-settings": {
+              "label": "Settings",
+              "icon": LayoutDashboard,
+              "content": <BoardSettingsEditor
+                settings={board.settings}
+                onSave={sttngs => {
+                  boardRef.current.settings = sttngs
+                  onEditBoard()
+                }}
+              />
+            }} : {})
+          }}
+        />
         <div
           onClick={() => { setUiCodeOpened(false) }}
           style={{ width: "100vw", height: "120vh", position: "fixed", right: uiCodeOpened ? 0 : "-100vw" }}
         ></div>
         {
-          <XStack position="fixed" animation="quick" right={uiCodeOpened ? 40 : -rulesSize} top={"70px"} width={rulesSize} height="calc(100vh - 100px)">
+          <XStack position="fixed" animation="quick" right={uiCodeOpened ? 40 : -windowSize} top={"70px"} width={windowSize} height="calc(100vh - 100px)">
 
             <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
 
@@ -911,7 +909,7 @@ const Board = ({ board, icons }) => {
               setUICodeInfo({ code });
             }} leftIcons={<XStack zIndex={9999}>
               <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                setRulesSize(prev => {
+                setWindowSize(prev => {
                   if (prev === 1010) {
                     iconRotate.current.style.rotate = '180deg'
                   } else {
@@ -948,25 +946,22 @@ const BoardViewLoader = ({ workspace, boardData, iconsData, params, pageSession 
 
 export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, iconsData }) => {
   const {
-    rulesOpened,
-    setRulesOpened,
     toggleJson,
     saveJson,
     toggleAutopilot,
     openAdd,
-    setDialogOpen,
-    setStatesOpened,
-    statesOpened,
     setUiCodeOpened,
-    uiCodeOpened
+    uiCodeOpened,
+    setTabVisible,
+    tabVisible
   } = useBoardControls();
 
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {
-      setRulesOpened(!rulesOpened);
+      setTabVisible(tabVisible === 'rules' ? "" : 'rules');
     }
     if (event.type === 'toggle-states') {
-      setStatesOpened(!statesOpened);
+      setTabVisible(tabVisible === 'states' ? "" : 'states');
     }
     if (event.type === 'toggle-uicode') {
       setUiCodeOpened(!uiCodeOpened);
@@ -984,7 +979,7 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
       openAdd();
     }
     if (event.type === 'board-settings') {
-      setDialogOpen("settings");
+      setTabVisible(tabVisible === 'board-settings' ? "" : 'board-settings');
     }
   }
   return <AdminPage

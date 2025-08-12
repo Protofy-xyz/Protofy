@@ -138,7 +138,7 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
             }}
         />
     }, [resolvedTheme, board.name, theme, editedCode.current, isAIEnabled]);
-    return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)' borderWidth={2} br="$5" elevation={60} shadowOpacity={0.2} shadowColor={"black"} bw={1} boc="$gray6">
+    return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)'>
         <Tinted>
             <YStack flex={1} mt="$5" height="100%" alignItems="center" justifyContent="center" borderRadius="$3" >
                 {flows}
