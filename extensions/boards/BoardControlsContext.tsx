@@ -15,10 +15,6 @@ interface Controls {
   setTabVisible: (value: string) => void;
   tabVisible: string;
 
-  uiCodeOpened: boolean;
-  toggleUiCode: () => void;
-  setUiCodeOpened: (value: boolean) => void;
-
   viewMode: "board" | "json" | "ui";
   setViewMode: (mode: "board" | "json" | "ui") => void;
 
@@ -37,12 +33,10 @@ export const BoardControlsProvider: React.FC<{
   const [addOpened, setAddOpened] = useState(addMenu === 'open');
   const [autopilot, setAutopilot] = useState(autopilotRunning);
   const [tabVisible, setTabVisible] = useState<string>("");
-  const [uiCodeOpened, setUiCodeOpened] = useState(false);
   const [viewMode, setViewMode] = useState<"board" | "json" | "ui">('board');
 
   const toggleJson = () => setIsJSONView(v => !v);
   const openAdd = () => setAddOpened(true);
-  const toggleUiCode = () => setUiCodeOpened(v => !v);
 
   const toggleAutopilot = useCallback(async () => {
     setAutopilot(v => !v);
@@ -62,7 +56,6 @@ export const BoardControlsProvider: React.FC<{
       addOpened, openAdd,
       autopilot, toggleAutopilot,
       saveJson, setAddOpened,
-      uiCodeOpened, toggleUiCode, setUiCodeOpened,
       viewMode, setViewMode,
       setTabVisible, tabVisible
     }}>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, LayoutDashboard } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, LayoutDashboard, Code } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
@@ -310,8 +310,6 @@ const Board = ({ board, icons }) => {
   const {
     addOpened,
     setAddOpened,
-    setUiCodeOpened,
-    uiCodeOpened,
     viewMode,
     tabVisible,
     setTabVisible
@@ -330,7 +328,6 @@ const Board = ({ board, icons }) => {
   const [automationInfo, setAutomationInfo] = useState();
   const [uicodeInfo, setUICodeInfo] = useState();
   const [windowSize, setWindowSize] = useState(1010)
-  const [statesSize, setStatesSize] = useState(700)
   const [errors, setErrors] = useState<string[]>([])
   // const initialBreakPoint = useInitialBreakpoint()
   const breakpointRef = useRef('') as any
@@ -856,74 +853,72 @@ const Board = ({ board, icons }) => {
           onChangeTab={setTabVisible}
           windowSize={windowSize}
           tabs={{
-            "rules": {
-              "label": "Rules",
-              "icon": ClipboardList,
-              "content": <>
-                {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
-                  <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                    setWindowSize(prev => {
-                      if (prev === 1010) {
-                        iconRotate.current.style.rotate = '180deg'
-                      } else {
-                        iconRotate.current.style.rotate = '0deg'
-                      }
-                      return prev === 1010 ? window.innerWidth - 330 : 1010
-                    })
-                  }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                    <ArrowLeft size="$1" color="var(--color)" />
-                  </XStack>
-                </XStack>}
-                  automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
-              </>
-            },
             "states": {
               "label": "States",
               "icon": Book,
               "content": <BoardStateView board={board} />
             },
-            ...(viewMode != "ui" ? { "board-settings": {
-              "label": "Settings",
-              "icon": LayoutDashboard,
-              "content": <BoardSettingsEditor
-                settings={board.settings}
-                onSave={sttngs => {
-                  boardRef.current.settings = sttngs
-                  onEditBoard()
-                }}
-              />
-            }} : {})
+            ...(viewMode != "ui" ? {
+              "rules": {
+                "label": "Rules",
+                "icon": ClipboardList,
+                "content": <>
+                  {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
+                    <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                      setWindowSize(prev => {
+                        if (prev === 1010) {
+                          iconRotate.current.style.rotate = '180deg'
+                        } else {
+                          iconRotate.current.style.rotate = '0deg'
+                        }
+                        return prev === 1010 ? window.innerWidth - 330 : 1010
+                      })
+                    }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                      <ArrowLeft size="$1" color="var(--color)" />
+                    </XStack>
+                  </XStack>}
+                    automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+                </>
+              },
+              "board-settings": {
+                "label": "Settings",
+                "icon": LayoutDashboard,
+                "content": <BoardSettingsEditor
+                  settings={board.settings}
+                  onSave={sttngs => {
+                    boardRef.current.settings = sttngs
+                    onEditBoard()
+                  }}
+                />
+              }
+            } : {
+              "uicode": {
+                "label": "Code",
+                "icon": Code,
+                "content": <>
+                  {uicodeInfo && <UISideMenu onChange={(code) => {
+                    console.log('Updated UI Code:', code);
+                    setUICodeInfo({ code });
+                  }} leftIcons={<XStack zIndex={9999}>
+                    <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                      setWindowSize(prev => {
+                        if (prev === 1010) {
+                          iconRotate.current.style.rotate = '180deg'
+                        } else {
+                          iconRotate.current.style.rotate = '0deg'
+                        }
+                        return prev === 1010 ? window.innerWidth - 330 : 1010
+                      })
+                    }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                      <ArrowLeft size="$1" color="var(--color)" />
+                    </XStack>
+                  </XStack>}
+                    uiCode={uicodeInfo} boardRef={boardRef} board={board} actions={actions} states={states}></UISideMenu>}
+                </>
+              }
+            })
           }}
         />
-        <div
-          onClick={() => { setUiCodeOpened(false) }}
-          style={{ width: "100vw", height: "120vh", position: "fixed", right: uiCodeOpened ? 0 : "-100vw" }}
-        ></div>
-        {
-          <XStack position="fixed" animation="quick" right={uiCodeOpened ? 40 : -windowSize} top={"70px"} width={windowSize} height="calc(100vh - 100px)">
-
-            <XStack zIndex={-1} width="100%" br="$5" height={"100%"} position="absolute" top="0" left="0" backgroundColor={darkMode ? '$bgPanel' : 'white'} opacity={1}></XStack>
-
-            {uicodeInfo && <UISideMenu onChange={(code) => {
-              console.log('Updated UI Code:', code);
-              setUICodeInfo({ code });
-            }} leftIcons={<XStack zIndex={9999}>
-              <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                setWindowSize(prev => {
-                  if (prev === 1010) {
-                    iconRotate.current.style.rotate = '180deg'
-                  } else {
-                    iconRotate.current.style.rotate = '0deg'
-                  }
-                  return prev === 1010 ? window.innerWidth - 330 : 1010
-                })
-              }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                <ArrowLeft size="$1" color="var(--color)" />
-              </XStack>
-            </XStack>}
-              uiCode={uicodeInfo} boardRef={boardRef} board={board} actions={actions} states={states}></UISideMenu>}
-          </XStack>
-        }
       </XStack>
     </YStack>
   )
@@ -950,8 +945,6 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
     saveJson,
     toggleAutopilot,
     openAdd,
-    setUiCodeOpened,
-    uiCodeOpened,
     setTabVisible,
     tabVisible
   } = useBoardControls();
@@ -964,7 +957,7 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
       setTabVisible(tabVisible === 'states' ? "" : 'states');
     }
     if (event.type === 'toggle-uicode') {
-      setUiCodeOpened(!uiCodeOpened);
+      setTabVisible(tabVisible === 'uicode' ? "" : 'uicode');
     }
     if (event.type === 'toggle-json') {
       toggleJson();

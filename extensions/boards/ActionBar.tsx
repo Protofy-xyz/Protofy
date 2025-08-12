@@ -70,7 +70,7 @@ const getActionBar = (generateEvent) => {
         br="$20"
       /></Tinted>,
       <Tinted>
-        <ActionBarButton tooltipText="Code" selected={tabVisible == "rules"} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
+        <ActionBarButton tooltipText="Code" selected={tabVisible == "uicode"} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
       </Tinted>,
       <Tinted>
         <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
