@@ -15,7 +15,7 @@ export const ActionBarButton = ({ Icon, selected = false, ...props }) => {
       scaleIcon={1.8}
       w={size}
       h={size}
-      hoverStyle={{ bg: '$gray2' }}
+      hoverStyle={{ bg: '$gray2', scale: 1.05 }}
       {...props}
     >
       <Icon size={20} color={selected ? "var(--color8)" : "var(--color)"} fill={props.fill ? "var(--color)" : "transparent"} {...props.iconProps} />
@@ -48,7 +48,7 @@ export const useActionBar = (actionBar?, onActionBarEvent?) => {
       bc="var(--bgPanel)"
       zi={99999}
       b={currentBar.visible === false || hidden ? -200 : 16}
-      gap="$3"
+      gap="$2.5"
       br="var(--radius-5)"
       enterStyle={{ b: -200 }}
     >

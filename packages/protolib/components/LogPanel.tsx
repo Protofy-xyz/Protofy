@@ -89,7 +89,7 @@ export const LogPanel = ({AppState}) => {
     };
     const hoverStyle = React.useMemo(() => ({ bc: "$" + tint + "4" }), [tint]);
 
-    return <YStack>
+    return <YStack f={1}>
         <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
             <Input
                 focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}

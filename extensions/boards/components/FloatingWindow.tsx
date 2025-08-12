@@ -36,7 +36,7 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs, window
                             const isSelected = selectedTab === tab;
                             return <XStack
                                 key={index}
-                                onPress={() =>  onChangeTab(tab)}
+                                onPress={() => onChangeTab(tab)}
                                 cursor="pointer"
                                 paddingVertical="$2"
                                 paddingHorizontal="$4"

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, LayoutDashboard, Code } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, Code, Activity } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
@@ -7,6 +7,7 @@ import ErrorMessage from "protolib/components/ErrorMessage"
 import { YStack, XStack, Paragraph, Button as TamaButton, Dialog, Theme, Spinner, Popover, Text, Stack, H1, H3 } from '@my/ui'
 import { computeLayout } from '@extensions/autopilot/layout';
 import { DashboardGrid, gridSizes } from 'protolib/components/DashboardGrid';
+import { LogPanel } from 'protolib/components/LogPanel';
 import { AlertDialog } from 'protolib/components/AlertDialog';
 import { CenterCard, HTMLView } from '@extensions/services/widgets'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -29,6 +30,8 @@ import { BoardControlsProvider, useBoardControls } from '../BoardControlsContext
 import { BoardSettingsEditor } from '../components/BoardSettingsEditor'
 import { JSONView } from 'protolib/components/JSONView'
 import { FloatingWindow } from '../components/FloatingWindow'
+import { useAtom } from 'protolib/lib/Atom'
+import { AppState } from 'protolib/components/AdminPanel'
 
 const defaultCardMethod: "post" | "get" = 'post'
 
@@ -334,6 +337,7 @@ const Board = ({ board, icons }) => {
   const { query, removeReplace, push } = usePageParams({})
   const isJSONView = query.json == 'true'
   const iconRotate = useRef(null) as any
+  const [appState, setAppState] = useAtom(AppState)
 
   const [addKey, setAddKey] = useState(0)
 
@@ -880,9 +884,14 @@ const Board = ({ board, icons }) => {
                     automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
                 </>
               },
+              "logs": {
+                "label": "Logs",
+                "icon": Activity,
+                "content": <LogPanel AppState={AppState}/>
+              },
               "board-settings": {
                 "label": "Settings",
-                "icon": LayoutDashboard,
+                "icon": Settings,
                 "content": <BoardSettingsEditor
                   settings={board.settings}
                   onSave={sttngs => {
@@ -890,7 +899,7 @@ const Board = ({ board, icons }) => {
                     onEditBoard()
                   }}
                 />
-              }
+              },
             } : {
               "uicode": {
                 "label": "Code",
@@ -952,6 +961,9 @@ export const BoardViewAdmin = ({ params, pageSession, workspace, boardData, icon
   const onFloatingBarEvent = (event) => {
     if (event.type === 'toggle-rules') {
       setTabVisible(tabVisible === 'rules' ? "" : 'rules');
+    }
+    if (event.type === 'toggle-logs') {
+      setTabVisible(tabVisible === 'logs' ? "" : 'logs');
     }
     if (event.type === 'toggle-states') {
       setTabVisible(tabVisible === 'states' ? "" : 'states');

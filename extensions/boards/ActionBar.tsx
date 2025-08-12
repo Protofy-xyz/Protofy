@@ -1,80 +1,56 @@
-import { X, Save, Plus, Pause, Play, ClipboardList, Activity, Eye, Settings, Settings2, LayoutDashboard, Book, Code } from 'lucide-react';
-import { Tinted } from 'protolib/components/Tinted';
+import { X, Save, Plus, Pause, Play, ClipboardList, Activity, Eye, Settings, Presentation, LayoutDashboard, Book, Code } from 'lucide-react';
 import { useBoardControls } from './BoardControlsContext';
 import { ActionBarButton } from 'protolib/components/ActionBarWidget';
 import { Separator } from '@my/ui';
-import { ActionLogsButton } from 'protolib/components/ActionLogsButton';
 
 const getActionBar = (generateEvent) => {
   const { isJSONView, autopilot, setViewMode, viewMode, tabVisible } = useBoardControls();
 
   const bars = {
     'JSONView': [
-      <Tinted>
-        <ActionBarButton Icon={X} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "toggle-json" })} />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton Icon={Save} onPress={() => generateEvent({ type: "save-json" })} />
-      </Tinted>
+      <ActionBarButton Icon={X} iconProps={{ color: 'var(--gray9)' }} onPress={() => generateEvent({ type: "toggle-json" })} />,
+      <ActionBarButton Icon={Save} onPress={() => generateEvent({ type: "save-json" })} />
     ],
     'BoardView': [
+      <ActionBarButton tooltipText="Add Card" Icon={Plus} onPress={() => generateEvent({ type: "open-add" })} />,
+      <ActionBarButton tooltipText={tabVisible == "rules" ? "Close Rules" : "Open Rules"} selected={tabVisible == "rules"} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />,
+      <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />,
+      <ActionBarButton
+        tooltipText={autopilot ? "Pause Autopilot" : "Play Autopilot"}
+        beating={autopilot}
+        fill={true}
+        Icon={autopilot ? Pause : Play}
+        iconProps={{ ml: autopilot ? 0 : 2, fill: "var(--bgPanel)", color: "var(--bgPanel)" }}
+        onPress={() => generateEvent({ type: "toggle-autopilot" })}
+        hoverStyle={{ scale: 1.05 }}
+        bc={autopilot ? 'var(--color8)' : "var(--color)"}
+        br={"$20"}
+      />,
+      <ActionBarButton tooltipText="Logs" selected={tabVisible == "logs"} Icon={Activity} onPress={() => generateEvent({ type: "toggle-logs" })} />,
+      <ActionBarButton tooltipText="Board Settings" selected={tabVisible == "board-settings"} Icon={Settings} onPress={() => generateEvent({ type: "board-settings" })} />,
       <>
-        <Tinted>
-          <ActionBarButton tooltipText="Board Settings" selected={tabVisible == "board-settings"} Icon={LayoutDashboard} onPress={() => generateEvent({ type: "board-settings" })} />
-        </Tinted>
-        <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-      </>,
-      <Tinted>
-        <ActionBarButton tooltipText="Add Card" Icon={Plus} onPress={() => generateEvent({ type: "open-add" })} />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton
-          tooltipText={autopilot ? "Pause Autopilot" : "Play Autopilot"}
-          beating={autopilot}
-          fill={!autopilot}
-          Icon={autopilot ? Pause : Play}
-          iconProps={{ ml: autopilot ? 0 : 2 }}
-          onPress={() => generateEvent({ type: "toggle-autopilot" })}
-          hoverStyle={{ bg: 'var(--color5)' }}
-          bc={autopilot ? 'var(--color7)' : 'transparent'}
-          br="$20"
-        />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton tooltipText={tabVisible == "rules" ? "Close Rules" : "Open Rules"} selected={tabVisible == "rules"} Icon={ClipboardList} onPress={() => generateEvent({ type: "toggle-rules" })} />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton tooltipText="UI Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
-      </Tinted>,
-      <>
-        <Separator vertical boc="$gray7" mt="7px" maxHeight="20px" mx="-5px" />
-        <ActionLogsButton tooltipText="Logs" />
+        <Separator vertical borderColor="var(--gray7)" h="30px" />
+        <ActionBarButton tooltipText="UI Mode" selected={viewMode === "ui"} Icon={Presentation} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </>,
     ],
     'uiView': [
-      <Tinted>
-        <ActionBarButton tooltipText="Board Mode" selected={viewMode === "ui"} Icon={Eye} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
-      </Tinted>,
-      <Tinted><ActionBarButton
+      <ActionBarButton tooltipText="Code" selected={tabVisible == "uicode"} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />,
+      <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />,
+      <ActionBarButton
         tooltipText={autopilot ? "Pause Autopilot" : "Play Autopilot"}
         beating={autopilot}
-        fill={!autopilot}
+        fill={true}
         Icon={autopilot ? Pause : Play}
-        iconProps={{ ml: autopilot ? 0 : 2 }}
+        iconProps={{ ml: autopilot ? 0 : 2, fill: "var(--bgPanel)", color: "var(--bgPanel)" }}
         onPress={() => generateEvent({ type: "toggle-autopilot" })}
-        hoverStyle={{ bg: 'var(--color5)' }}
-        bc={autopilot ? 'var(--color7)' : 'transparent'}
-        br="$20"
-      /></Tinted>,
-      <Tinted>
-        <ActionBarButton tooltipText="Code" selected={tabVisible == "uicode"} Icon={Code} onPress={() => generateEvent({ type: "toggle-uicode" })} />
-      </Tinted>,
-      <Tinted>
-        <ActionBarButton tooltipText={tabVisible == "states" ? "Close States" : "Open States"} selected={tabVisible == "states"} Icon={Book} onPress={() => generateEvent({ type: "toggle-states" })} />
-      </Tinted>,
+        hoverStyle={{ scale: 1.05 }}
+        bc={'var(--color)'}
+        br={"$20"}
+      />,
+      <>
+        <Separator vertical borderColor="var(--gray8)" h="30px" ml="$2.5" />
+        <ActionBarButton tooltipText="Board Mode" Icon={LayoutDashboard} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
+      </>,
     ]
   }
 
