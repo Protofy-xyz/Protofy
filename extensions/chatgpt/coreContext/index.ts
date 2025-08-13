@@ -3,7 +3,7 @@ import { getServiceToken } from '@extensions/apis/coreContext';
 import { getKey } from "@extensions/keys/coreContext";
 import OpenAI from 'openai';
 import axios from "axios";
-import fs from "fs";
+import * as fs from "fs";
 
 const logger = getLogger()
 
