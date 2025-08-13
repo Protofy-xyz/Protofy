@@ -887,7 +887,7 @@ const Board = ({ board, icons }) => {
               "logs": {
                 "label": "Logs",
                 "icon": Activity,
-                "content": <LogPanel AppState={AppState}/>
+                "content": <LogPanel AppState={AppState} />
               },
               "board-settings": {
                 "label": "Settings",
@@ -905,24 +905,33 @@ const Board = ({ board, icons }) => {
                 "label": "Code",
                 "icon": Code,
                 "content": <>
-                  {uicodeInfo && <UISideMenu onChange={(code) => {
-                    console.log('Updated UI Code:', code);
-                    setUICodeInfo({ code });
-                  }} leftIcons={<XStack zIndex={9999}>
-                    <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                      setWindowSize(prev => {
-                        if (prev === 1010) {
-                          iconRotate.current.style.rotate = '180deg'
-                        } else {
-                          iconRotate.current.style.rotate = '0deg'
-                        }
-                        return prev === 1010 ? window.innerWidth - 330 : 1010
-                      })
-                    }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                      <ArrowLeft size="$1" color="var(--color)" />
-                    </XStack>
-                  </XStack>}
-                    uiCode={uicodeInfo} boardRef={boardRef} board={board} actions={actions} states={states}></UISideMenu>}
+                  {uicodeInfo && <UISideMenu
+                    onChange={(code) => {
+                      console.log('Updated UI Code:', code);
+                      setUICodeInfo({ code });
+                    }}
+                    leftIcons={
+                      <XStack zIndex={9999}>
+                        <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                          setWindowSize(prev => {
+                            if (prev === 1010) {
+                              iconRotate.current.style.rotate = '180deg'
+                            } else {
+                              iconRotate.current.style.rotate = '0deg'
+                            }
+                            return prev === 1010 ? window.innerWidth - 330 : 1010
+                          })
+                        }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                          <ArrowLeft size="$1" color="var(--color)" />
+                        </XStack>
+                      </XStack>
+                    }
+                    uiCode={uicodeInfo}
+                    boardRef={boardRef}
+                    board={board}
+                    actions={actions}
+                    states={states}
+                  />}
                 </>
               }
             })
