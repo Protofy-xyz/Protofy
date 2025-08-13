@@ -10,7 +10,7 @@ import { Input } from '@my/ui'
 
 export function ViewList({ items, onDeleteItem = (item, index) => { }, onClear = (items) => { }, onPush = (item) => { } }) {
   const [itemsList, setItemsList] = useState(items ?? [])
-  const [addText, setAddText] = useState('dd')
+  const [addText, setAddText] = useState('')
   const renderItem = ({ item, index }) => (
     <ViewListItem item={item} index={index} onDeleteItem={onDeleteItem} />
   )
