@@ -3,6 +3,8 @@ dotenv.config({ path: '../../.env' });
 import { getServiceToken } from 'protonode'
 import { setConfig, getLogger, generateEvent } from 'protobase';
 import { getBaseConfig } from '@my/config'
+import { pathToFileURL } from 'url';
+
 setConfig(getBaseConfig('api', process, getServiceToken()))
 require('events').EventEmitter.defaultMaxListeners = 100;
 const logger = getLogger()
@@ -22,6 +24,12 @@ const coreAddr = process.env.CORE_URL || 'http://localhost:8000/api/core/v1/boar
 
 
 const start = async () => {
+  try {
+    const BundleDbProvider = await import(pathToFileURL(require.resolve('app/bundles/dbProviders')).href);
+    BundleDbProvider.default()
+  } catch (error) {
+    logger.error({ error: error.toString() }, "Server error");
+  }
   //dynamic import of app from ./api.ts
   const module = await import('./api.js')
   const server = http.createServer(module.default);

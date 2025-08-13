@@ -9,7 +9,6 @@ global.defaultRoute = '/api/core/v1'
 global.appName = 'core'
 import { getServiceToken, getApp, getMQTTClient, handler } from 'protonode'
 setConfig(getBaseConfig("core", process, getServiceToken()))
-import adminModules from './api'
 require('events').EventEmitter.defaultMaxListeners = 100;
 const { createExpressProxy, handleUpgrade } = require('app/proxy.js')
 
@@ -87,7 +86,6 @@ export const startCore = (ready?) => {
 
   startMqtt(config)
   logger.info({ config: getConfigWithoutSecrets(config) }, "Service Started: core")
-  logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
   const mqtt = getMQTTClient('core', getServiceToken())
 
   const topicSub = (mqtt, topic, cb) => {
@@ -110,9 +108,12 @@ export const startCore = (ready?) => {
   }
 
   try {
-
-    import(pathToFileURL(require.resolve('app/bundles/coreApis')).href).then((BundleAPI) => {
-      BundleAPI.default(app, { mqtt, topicSub, topicPub, ...BundleContext })
+    import(pathToFileURL(require.resolve('app/bundles/dbProviders')).href).then(async (DBBundle) => {
+      DBBundle.default().then(() => {
+        import(pathToFileURL(require.resolve('app/bundles/coreApis')).href).then((BundleAPI) => {
+          BundleAPI.default(app, { mqtt, topicSub, topicPub, ...BundleContext });
+        });
+      });
     })
 
   } catch (error) {

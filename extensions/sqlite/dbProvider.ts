@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import Database from 'better-sqlite3'
-import { ProtoDB, ProtoDBConfig } from '../protodb'
+import { ProtoDB, ProtoDBConfig } from 'protonode'
 import { getLogger } from 'protobase'
 
 const logger = getLogger()
@@ -23,6 +23,11 @@ export class ProtoSqliteDB extends ProtoDB {
     const db = new Database(dbPath, { fileMustExist: false, ...options })
     this.prepareSchema(db)
     db.close()
+  }
+
+  static getDBPath(dbPath: string) {
+    const [dbName, env] = dbPath.split('/').reverse()
+    return '../../data/' + (env ? env + '/databases/' : 'databases/') + dbName
   }
 
   /** Crea las tablas si no existen */
@@ -50,7 +55,7 @@ export class ProtoSqliteDB extends ProtoDB {
   }
 
   static connect(dbPath: string, options?: any, config?: ProtoDBConfig) {
-    return new ProtoSqliteDB(dbPath, options, config)
+    return new ProtoSqliteDB(this.getDBPath(dbPath), options, config)
   }
 
   static getInstance(dbPath: string, options?: any, config?: ProtoDBConfig) {
@@ -59,10 +64,11 @@ export class ProtoSqliteDB extends ProtoDB {
 
   /** Inicializa en disco y precarga initialData */
   static async initDB(dbPath: string, initialData = {}, options?: SQLiteOptions): Promise<void> {
-    const dir = path.dirname(dbPath)
+
+    const dir = path.dirname(this.getDBPath(dbPath))
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 
-    const db = new Database(dbPath, { fileMustExist: false })
+    const db = new Database(this.getDBPath(dbPath), { fileMustExist: false })
     db.exec(`
       CREATE TABLE IF NOT EXISTS entries (
         id          TEXT PRIMARY KEY,
@@ -224,7 +230,7 @@ export class ProtoSqliteDB extends ProtoDB {
 
   // — Iterador para list() —
 
-  *iterator() {
+  * iterator() {
     const db = new Database(this.path, { fileMustExist: false, ...this.options })
     try {
       const stmt = db.prepare(`SELECT id, data FROM entries`)

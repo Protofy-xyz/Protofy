@@ -1,21 +1,30 @@
-import { ProtoSqliteDB }  from './dbproviders/sqlite';
-import { ProtoDB } from './protodb';
+import { pathToFileURL } from 'url';
 
-const getDBPath = (dbPath) => {
-    const [dbName, env] = dbPath.split('/').reverse()
-    return '../../data/' + (env ? env + '/databases/' : 'databases/') + dbName
+export type ProtoDBProvider = {
+    initDB: (...args: any[]) => any | Promise<any>;
+    connect: (...args: any[]) => any | Promise<any>;
+    closeDBS: () => Promise<void>;
+};
+
+const providerRegistry = new Map<string, ProtoDBProvider>();
+
+export function getDBProvider(): ProtoDBProvider {
+    const providerName = process.env.DB_PROVIDER ?? "sqlite"
+    const provider = providerRegistry.get(providerName);
+    if (!provider) throw new Error(`[db] Provider not registered: '${providerName}'`);
+    return provider;
 }
 
 export const connectDB = (dbPath: string, initialData?: Object, options?) => {
-    return ProtoSqliteDB.initDB(getDBPath(dbPath), initialData, options)
+    return getDBProvider().initDB(dbPath, initialData, options);
 }
 
 export const getDB = (dbPath: string, req?, session?) => {
-    return ProtoSqliteDB.connect(getDBPath(dbPath))
+    return getDBProvider().connect(dbPath);
 }
 
 export const closeDBS = async () => {
-    return await ProtoSqliteDB.closeDBS()
+    return getDBProvider().closeDBS();
 }
 
 export const dbProvider = {
@@ -35,4 +44,17 @@ export const getDBOptions = (modelType, dbOptions?) => {
             ...dbOptions
         }
     }
+}
+
+export function registerDBProvider(name: string, provider: ProtoDBProvider): string {
+    const key = String(name).toLowerCase();
+
+    if (providerRegistry.has(key)) {
+        console.error(`[db] Provider '${key}' is already registered`);
+        return key;
+    }
+
+    providerRegistry.set(key, provider);
+    console.log("[db] Provider registered:", key, provider);
+    return key;
 }
