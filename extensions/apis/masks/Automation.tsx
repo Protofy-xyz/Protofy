@@ -11,7 +11,7 @@ const Automation = (node: any = {}, nodeData = {}) => {
     const [loading, setLoading] = React.useState(false)
     
     return (
-        <Node icon={Plug} node={node} isPreview={!node?.id} title='Automation' id={node.id} color={color} skipCustom={true}>
+        <Node icon={Plug} node={node} isPreview={!node?.id} title='Task' id={node.id} color={color} skipCustom={true}>
             <NodeParams id={node.id} params={[{ label: 'Name', static: true, field: 'param-3', type: 'input' }]} />
             <NodeParams id={node.id} params={[{ label: 'Manual response', field: 'param-4', type: 'boolean', static: true }]} />
             <div style={{marginTop: '20px'}}>

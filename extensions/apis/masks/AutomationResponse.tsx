@@ -4,11 +4,11 @@ import { Reply } from '@tamagui/lucide-icons';
 const AutomationResponse = ({ node = {}, nodeData = {}, children }: any) => {
 
     const nodeParams: Field[] = [
-        { label: 'Response', field: 'param-2', type: 'input'}
+        { label: 'Result', field: 'param-2', type: 'input'}
     ] as Field[]
 
     return (
-        <Node icon={Reply} node={node} isPreview={!node.id} title='Action Response' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
+        <Node icon={Reply} node={node} isPreview={!node.id} title='Task Result' color="#FFDF82" id={node.id} skipCustom={true} disableInput disableOutput>
             <NodeParams id={node.id} params={nodeParams} />
         </Node>
     )

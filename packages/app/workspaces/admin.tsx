@@ -27,7 +27,7 @@ export default ({ boards, objects }) => {
     const objectsWithPage = objects ? objects.filter(o => o?.features?.adminPage) : []
 
     const integrations = [
-        { "name": "Actions", "icon": Zap, "href": "/workspace/actions" },
+        { "name": "Tasks", "icon": Zap, "href": "/workspace/tasks" },
         { "name": "Devices", "icon": Router, "href": "/workspace/devices" },
         { "name": "Events", "icon": "activity", "href": "/workspace/events" },
     ]

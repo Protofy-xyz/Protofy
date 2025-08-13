@@ -12,7 +12,7 @@ const AutomationNode = ({ node = {}, nodeData = {}, children }: any) => {
     const [response, setResponse] = React.useState(null)
 
     return (
-        <Node icon={Plug} node={node} isPreview={!node.id} title='Action' color={color} id={node.id} skipCustom={true}>
+        <Node icon={Plug} node={node} isPreview={!node.id} title='Task' color={color} id={node.id} skipCustom={true}>
             <NodeParams id={node.id} params={[
                 { label: 'Name', field: 'mask-name', type: 'input' },
                 { label: 'Description', field: 'mask-description', type: 'input' },

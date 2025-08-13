@@ -10,7 +10,7 @@ export const paths = {
         'visualui',
     ],
     apis:[
-        'actions'
+        'tasks'
     ],
     boards: [
         'view'

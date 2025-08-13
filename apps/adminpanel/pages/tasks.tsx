@@ -8,7 +8,7 @@ export default function Page(props: any) {
   return (
     <>
       <Head>
-        <title>{projectName + " - Apis"}</title>
+        <title>{projectName + " - Tasks"}</title>
       </Head>
       <ApisPage.apis.component {...props} />
     </>

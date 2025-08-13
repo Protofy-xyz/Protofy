@@ -61,9 +61,9 @@ export const automation = async (options: {
         //add card
         addCard({
             group: 'automations',
-            tag: 'actions',
+            tag: 'tasks',
             id: name.split('/').join('_'),
-            templateName: 'Run '+name.split('/').join('_')+' action',
+            templateName: 'Run '+name.split('/').join('_')+' task',
             name: 'automations_'+name.split('/').join('_'),
             defaults: {
                 name: name.split('/').join('_'),

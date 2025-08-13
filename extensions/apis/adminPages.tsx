@@ -175,7 +175,7 @@ export default {
             usePendingEffect((s) => { API.get({ url: objectsSourceUrl }, s) }, setObjects, extraData?.objects)
 
 
-            return (<AdminPage title="Actions" pageSession={pageSession}>
+            return (<AdminPage title="Tasks" pageSession={pageSession}>
                 <AlertDialog
                     p={"$2"}
                     pt="$5"
@@ -310,8 +310,8 @@ export default {
                     sourceUrl={sourceUrl}
                     initialItems={initialItems}
                     numColumnsForm={1}
-                    name="Action"
-                    entityName='Actions'
+                    name="Task"
+                    entityName='Tasks'
                     columns={DataTable2.columns(
                         DataTable2.column("name", row => row.name, 'name', row => <XStack id={"apis-datatable-" + row.name}><Text>{row.name}</Text></XStack>),
                         DataTable2.column("type", row => row.type, 'type', row => <Chip text={row.type.toUpperCase()} color={row.type == 'AutoAPI' ? '$color5' : '$gray5'} />),

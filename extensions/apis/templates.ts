@@ -5,13 +5,13 @@ export const apiTemplates = {
     "custom-api": {
         id: "custom-api-diagram",
         name: "Diagram + AI",
-        description: 'Use visual diagrams and AI to create custom actions to be used in your boards',
+        description: 'Use visual diagrams and AI to create custom tasks to be used in your boards',
         icon: Shapes
     },
     "custom-api-code": {
         id: "custom-api",
         name: "Code + AI",
-        description: 'Use code and AI to create custom actions to be used in your boards',
+        description: 'Use code and AI to create custom tasks to be used in your boards',
         icon: PencilRuler
     }
     // "iot-router": {
