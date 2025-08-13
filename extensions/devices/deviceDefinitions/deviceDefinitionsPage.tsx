@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { CircuitBoard, Tag, BookOpen, Router, Cog } from '@tamagui/lucide-icons'
+import { CircuitBoard, Tag, BookOpen, Router, Cog, Upload} from '@tamagui/lucide-icons'
 import { DeviceDefinitionModel } from './deviceDefinitionsSchemas'
 import { API, z, getPendingResult } from 'protobase'
 import { DeviceCoreModel } from '../devicecores'
@@ -7,15 +7,17 @@ import { DeviceBoardModel } from "../deviceBoards"
 import { usePendingEffect } from "protolib/lib/usePendingEffect"
 import { Chip } from "protolib/components/Chip"
 import { DataTable2 } from "protolib/components/DataTable2"
-import { DataView } from "protolib/components/DataView"
+import { DataView, DataViewActionButton } from "protolib/components/DataView"
 import { AdminPage } from "protolib/components/AdminPage"
 import { PaginatedData } from "protolib/lib/SSR"
 import { ConfigComponent } from "./ConfigComponent" //TODO: Delete this file when WLED case integrated on ConfigEditor
 import { ConfigEditor } from "./ConfigEditor"
-import { Button, Input, XStack } from '@my/ui'
+import { Button, Input, XStack, YStack, Text } from '@my/ui'
 import { Tinted } from "protolib/components/Tinted"
 import { usePageParams } from "protolib/next"
 import { InteractiveIcon } from "protolib/components/InteractiveIcon"
+import { AlertDialog } from 'protolib/components/AlertDialog'
+
 
 const DeviceDefitionIcons = {
   name: Tag,
@@ -30,6 +32,8 @@ export default {
   component: ({ workspace, pageState, initialItems, itemData, pageSession, extraData }: any) => {
     const [coresList, setCoresList] = useState(extraData?.cores ?? getPendingResult('pending'))
     const [selectedDefinition, setSelectedDefinition] = useState(null)
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false)
+
     usePendingEffect((s) => { API.get({ url: coresSourceUrl }, s) }, setCoresList, extraData?.cores)
     const cores = coresList.isLoaded ? coresList.data.items.map(i => DeviceCoreModel.load(i).getData()) : []
     const { replace } = usePageParams(pageState)
@@ -51,6 +55,10 @@ export default {
       return { components: JSON.stringify(components) + ';' }
     }
 
+    // WIP adding upload dialog
+    //     extraActions ={[
+    //   <DataViewActionButton icon={Upload} description="Upload a Definition" onPress={() => {console.log("Upload button pressed"); setUploadDialogOpen(true);}}>Extra Action 1</DataViewActionButton>,
+    // ]}
     return (<AdminPage title="Device Definitions" workspace={workspace} pageSession={pageSession}>
       {!selectedDefinition
         ? <DataView
@@ -115,6 +123,22 @@ export default {
           definition={selectedDefinition?.data}
         />
       }
+      <AlertDialog
+                    p={"$2"}
+                    pt="$5"
+                    pl="$5"
+                    setOpen={setUploadDialogOpen}
+                    open={uploadDialogOpen}
+                    hideAccept={true}
+                    description={""}
+                >
+                    <YStack f={1} jc="center" ai="center">
+                        <XStack mr="$5">
+                          <Text fontWeight={"600"} fontSize={34} color="$color9">Upload your device definition file</Text>
+
+                        </XStack>
+                    </YStack>
+      </AlertDialog>
     </AdminPage>
     )
   },
