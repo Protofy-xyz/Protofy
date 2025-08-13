@@ -84,7 +84,7 @@ export default (app, context) => {
         console.log('************** chatgpt before:')
         chatGPTPrompt({
             images: images || [],
-            files: files.map(file => getRoot() + file) || [],
+            files: (files || []).map(file => getRoot() + file),
             message: message, done: (response, msg) => {
                 console.log('************** chatgpt: ', response, msg)
                 context.state.set({ group: 'chatGPT', tag: "conversation", name: "userMessage", value: message, emitEvent: true });
