@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { API } from 'protobase'
 import {Tinted} from '../components/Tinted'
 import { Pencil } from '@tamagui/lucide-icons'
@@ -9,7 +9,6 @@ import { Session } from '../lib/useSession'
 import { useAtom } from 'jotai'
 import { useIsEditing } from './useIsEditing'
 import { useToastController } from '@my/ui'
-import { AppConfContext, SiteConfigType } from "../providers/AppConf"
 import { palettes } from 'app/bundles/palettes'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
@@ -35,28 +34,37 @@ export const useEditor = (fn, options: OptionsProps) => {
 
 export const useEdit = (fn, userComponents = {}, path = "/apps/next/pages/test.tsx", editorUsers = ["admin"], context = {}, visualUiContext: any = undefined, options = {}) => {
   const [session] = useAtom(Session)
+  const [isClient, setIsClient] = useState(false); // 👈 clave anti-hydration
   const edit = useIsEditing()
+  
+  useEffect(() => setIsClient(true), []);
+
 
   const metadata = {
     "tamagui": getTokens(),
     "context": context
   }
-
+  
   const isAdmin = editorUsers.includes(session?.user?.type)
-
+  
   if (!isAdmin) return fn
-  else if (edit) {
+  
+  if (!isClient) {
+    return fn;
+  }
+   
+  if (edit) {
     return <VisualUILoader userComponents={userComponents} path={path} metadata={metadata} visualUiContext={visualUiContext} />
   }
   else {
     const onEdit = () => {
       window.location.href = window.location.href + (!window.location.href.includes('?') ? '?' : '&') + '_visualui_edit_=page'
     }
-
+    
     const triggerProps = {
       ...(options['triggerProps'] ?? { top: "$4", right: "$4" })
     }
-
+    
     return <div style={{ flex: 1, display: 'flex' }}>
       {fn}
       <Tinted>

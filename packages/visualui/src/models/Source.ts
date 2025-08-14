@@ -192,6 +192,10 @@ export class Source {
             custom = { ...custom, "children": "StringLiteral" }
         }
 
+        if (name == 'ReactCode') { // ReactCode is a special case
+            props = { ...props, "codeBlock": node.getText()  }    
+        }
+
         return {
             "type": {
                 "resolvedName": name
