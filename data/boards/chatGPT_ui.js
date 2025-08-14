@@ -34,7 +34,7 @@ function Widget({ board, state, ...props }) {
     }, [state["Message response"]])
 
 
-    return <YStack h={"calc(100vh - 55px)"} ai="center" f={1} pb="10px">
+    return <YStack h={"calc(100vh - 60px)"} ai="center" f={1} pb="10px">
         <YStack gap="$3" f={1} w="100%" maw="770px" h="100%">
             <YStack f={1} gap="$3" width="100%" overflow="scroll" overflowX="hidden">
                 {
