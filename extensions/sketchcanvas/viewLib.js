@@ -32,7 +32,7 @@ function Widget() {
             console.log("Loading drawing data", drawingData?.lines?.length);
             firstLoadRef.current = drawingData?.lines?.length
             setTimeout(() => {
-                canvasRef.current.loadSaveData(data.drawing);
+                canvasRef.current?.loadSaveData(data.drawing);
             }, 100)
         }
     }, [data.drawing]);
