@@ -41,7 +41,6 @@ export default async function loadDBProviders(): Promise<number> {
                     closeDBS: () => protoDB.closeDBS?.(),
                 });
 
-                console.log(`[dbProviders] Registered protoDB provider '${key}' from ${extName}`);
                 loaded++;
             }
         } catch (e) {

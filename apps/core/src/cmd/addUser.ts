@@ -2,7 +2,6 @@ import path from 'path';
 import dotenv from 'dotenv'
 dotenv.config({ path: path.join(__dirname, "..", "..", "..", "..", ".env") });
 import { hash } from 'protonode';
-import { getDB } from 'app/bundles/storageProviders'
 import { CmdRegisterSchema, UserModel} from 'protobase';
 import moment from 'moment';
 
@@ -18,6 +17,11 @@ const dbPath = 'auth'
 
 
 const addUser = async () => {
+
+    const { default: loadDBProviders } = await import('app/bundles/dbProviders');
+    await loadDBProviders();
+    const { getDB } = await import('app/bundles/storageProviders');
+
     console.log('Adding user: ', username, 'type: ', type)
     const currentDateISO = moment().toISOString();
     try {
@@ -40,7 +44,7 @@ const addUser = async () => {
             type: type
         }
         const entityModel = UserModel.load(userData)
-        await getDB(dbPath).put(username, JSON.stringify(userData))
+        await db.put(username, JSON.stringify(userData))
         console.log("Done!")
     }
 }
