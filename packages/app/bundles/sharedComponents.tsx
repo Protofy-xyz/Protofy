@@ -15,7 +15,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm'
 import { API, ProtoModel } from 'protobase';
 import { FileBrowser } from 'protolib/adminpanel/next/components/FileBrowser';
-import { Button, Spinner, XStack, YStack, Text, View } from '@my/ui'
+import { Button, Spinner, XStack, YStack, Text, View, Input } from '@my/ui'
 import { ViewList } from 'protolib/components/ViewList';
 import { ViewObject } from 'protolib/components/ViewObject';
 import { JSONView } from 'protolib/components/JSONView';
@@ -62,6 +62,7 @@ export const transferExtensionComponents = () => {
     TransferComponent(Icon, 'Icon');
     TransferComponent(Button, 'Button');
     TransferComponent(Text, 'Text');
+    TransferComponent(Input, 'Input');
     TransferComponent(View, 'View');
     TransferComponent(Provider, 'Provider');
     TransferComponent(Tinted, 'Tinted');
