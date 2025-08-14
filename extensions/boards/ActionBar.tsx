@@ -32,7 +32,7 @@ const getActionBar = (generateEvent) => {
       <ActionBarButton tooltipText="Board Settings" selected={tabVisible == "board-settings"} Icon={Settings} onPress={() => generateEvent({ type: "board-settings" })} />,
       <>
         <Separator vertical borderColor="var(--gray7)" h="30px" />
-        <ActionBarButton tooltipText="UI Mode" selected={viewMode === "ui"} Icon={Presentation} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
+        <ActionBarButton tooltipText="Presentation Mode" selected={viewMode === "ui"} Icon={Presentation} onPress={() => setViewMode(viewMode === "ui" ? "board" : "ui")} />
       </>,
     ],
     'uiView': [
