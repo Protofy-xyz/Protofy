@@ -1,4 +1,5 @@
 import { pathToFileURL } from 'url';
+import { ProtoSqliteDB } from './dbproviders/sqlite';
 
 export type ProtoDBProvider = {
     initDB: (...args: any[]) => any | Promise<any>;
@@ -11,7 +12,7 @@ const providerRegistry = new Map<string, ProtoDBProvider>();
 export function getDBProvider(): ProtoDBProvider {
     const providerName = process.env.DB_PROVIDER ?? "sqlite"
     const provider = providerRegistry.get(providerName);
-    if (!provider) throw new Error(`[db] Provider not registered: '${providerName}'`);
+    if (!provider) return ProtoSqliteDB
     return provider;
 }
 
