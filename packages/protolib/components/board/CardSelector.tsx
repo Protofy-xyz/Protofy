@@ -177,13 +177,14 @@ function Widget(card) {
                     <Icon name={card.icon} size={48} color={card.color}/>
                 )}
                 {card.displayResponse !== false && (
-                    <CardValue value={value ?? "N/A"} />
+                    <CardValue mode={card.markdownDisplay ? 'markdown' : 'normal'} value={value ?? "N/A"} />
                 )}
             </YStack>
         </ProtoThemeProvider>
       </Tinted>
   );
 }
+
 `,
   action: `//@card/react
 
@@ -195,7 +196,7 @@ function Widget(card) {
           <Icon name={card.icon} size={48} color={card.color}/>
       )}
       {card.displayResponse !== false && (
-          <CardValue value={value ?? "N/A"} />
+          <CardValue mode={card.markdownDisplay ? 'markdown' : 'normal'} value={value ?? "N/A"} />
       )}
   </YStack>
 

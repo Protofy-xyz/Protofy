@@ -72,6 +72,7 @@ export const SettingsEditor = ({
                 {renderCheckbox('Display title', 'displayTitle')}
                 {renderCheckbox('Display icon', 'displayIcon')}
                 {renderCheckbox('Display frame', 'displayFrame')}
+                {renderCheckbox('Markdown display', 'markdownDisplay', cardData.markdownDisplay ? true : false)}
                 {card.type === 'action' && (
                     <>
                         {renderCheckbox('Display value', 'displayResponse')}
