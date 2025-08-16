@@ -333,7 +333,7 @@ boardConnect(run)`
                 fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
             }
 
-            if(!fsSync.existsSync(BoardsDir(getRoot(req)) + key) + '_ui.js') {
+            if(!fsSync.existsSync(BoardsDir(getRoot(req)) + key + '_ui.js')) {
                 const boardUIFileContent = `//@card/react
 //board is the board object
 //state is the state of the board
