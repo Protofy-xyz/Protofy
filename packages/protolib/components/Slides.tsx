@@ -15,7 +15,7 @@ export const Slides = ({ slides, lastButtonCaption, onFinish, id = "pages", styl
 
   return (
     <YStack
-      id="admin-dataview-create-dlg" p="$3" pt="$0" f={1} w={800} {...styles} >
+      id="admin-dataview-create-dlg" p="$3" pt="$0" w={800} f={1} {...styles} >
       {!hideHeader && <XStack id="admin-eo" justifyContent="space-between" width="100%">
         <Stack flex={1}>
           <Text fontWeight={"500"} fontSize={16} color="$gray9">{titlesUpToCurrentStep}</Text>

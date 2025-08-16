@@ -1,2 +1,0 @@
-// El código genera un array de objetos para el gráfico de pastel, transformando las estadísticas de "board.stats" en el formato requerido.
-return Object.entries(board?.stats).map(([name, value]) => ({ name, value: parseFloat(value) }));

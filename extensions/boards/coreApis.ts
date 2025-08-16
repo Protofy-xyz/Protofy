@@ -13,6 +13,7 @@ import { Manager } from "./manager";
 import { dbProvider, getDBOptions } from 'protonode';
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
+const TemplatesDir = (root) => fspath.join(root, "/data/templates/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
 
 const useChatGPT = true
@@ -333,7 +334,7 @@ boardConnect(run)`
                 fsSync.writeFileSync(BoardsDir(getRoot(req)) + key + '.js', boardFileContent)
             }
 
-            if(!fsSync.existsSync(BoardsDir(getRoot(req)) + key + '_ui.js')) {
+            if (!fsSync.existsSync(BoardsDir(getRoot(req)) + key + '_ui.js')) {
                 const boardUIFileContent = `//@card/react
 //board is the board object
 //state is the state of the board
@@ -598,8 +599,77 @@ export default async (app, context) => {
         res.send(await getActions());
     });
 
+    app.post('/api/core/v1/import/board', requireAdmin(), async (req, res) => {
+        const token = getServiceToken()
+        const { name, template } = req.body;
+        console.log("Creating board:", name);
+        console.log("Template: ", template);
+
+        const boardTemplate = fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '.json', 'utf-8');
+        const boardContent = JSON.parse(boardTemplate.replace(/{{{name}}}/g, name));
+
+
+        //first create the board
+        await API.post(`/api/core/v1/boards?token=` + token, boardContent);
+
+        if (fsSync.existsSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '.js')) {
+            //then save the rules
+            const rulesCode = fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '.js', 'utf-8')
+            await API.post(`/api/core/v1/boards/${name}/automation?token=` + token, { boardId: name, code: rulesCode });
+        }
+        if(fsSync.existsSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '_ui.js')) {
+            //then save the UI
+            const uiCode = fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '_ui.js', 'utf-8')
+            await API.post(`/api/core/v1/boards/${name}/uiCode?token=` + token, { boardId: name, code: uiCode });
+        }
+        res.send({ success: true });
+    });
+
+    app.get('/api/core/v2/templates/boards', requireAdmin(), async (req, res) => {
+        const templates = fsSync.readdirSync(TemplatesDir(getRoot())).filter(file => fsSync.statSync(TemplatesDir(getRoot()) + '/' + file).isDirectory()).map(dir => {
+            return { id: dir, name: dir, description: fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + dir + '/README.md', 'utf-8') || '' };
+        });
+        res.send(templates);
+    });
+
+    app.post('/api/core/v2/templates/boards', requireAdmin(), async (req, res) => {
+        const { name, from, description } = req.body;
+        console.log("Creating board template:", name);
+        console.log("From: ", from);
+        if (!fsSync.existsSync(TemplatesDir(getRoot()))) {
+            fsSync.mkdirSync(TemplatesDir(getRoot()), { recursive: true });
+        }
+        if (fsSync.existsSync(TemplatesDir(getRoot()) + '/' + name)) {
+            //remove directory recursively
+            fsSync.rmSync(TemplatesDir(getRoot()) + '/' + name, { recursive: true, force: true });
+        }
+        fsSync.mkdirSync(TemplatesDir(getRoot()) + '/' + name, { recursive: true });
+
+        //get full board
+        const board = await getBoard(from)
+        board.name = '{{{name}}}'
+        //fill uiCode and rulesCode
+
+
+
+        //write board as {name}.json, uiCode as {name}_ui.js, rulesCode as {name}.js
+        fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '.json', JSON.stringify(board, null, 4));
+
+        if(fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '_ui.js')) {
+            const uiCode = fsSync.readFileSync(BoardsDir(getRoot()) + '/' + from + '_ui.js', 'utf-8')
+            fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '_ui.js', uiCode);
+        }
+
+        if(fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '.js')) {
+            const rulesCode = fsSync.readFileSync(BoardsDir(getRoot()) + '/' + from + '.js', 'utf-8')
+            fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '.js', rulesCode);
+        }
+        fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/README.md', description);
+        res.send({ board });
+    });
+
     app.post('/api/core/v1/autopilot/getValueCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "valueRules", card: JSON.stringify(req.body.card, null, 4), states: JSON.stringify(req.body.states , null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "valueRules", card: JSON.stringify(req.body.card, null, 4), states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }

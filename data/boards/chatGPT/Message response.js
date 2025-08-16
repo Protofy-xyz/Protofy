@@ -1,1 +1,0 @@
-return states?.chatGPT?.conversation?.chatResponse

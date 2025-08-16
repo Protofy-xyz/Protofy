@@ -1,1 +1,0 @@
-return execute_action("system_state", {name: "play"})

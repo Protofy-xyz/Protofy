@@ -1,2 +1,0 @@
-//reactCard
-return sketch(data)

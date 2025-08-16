@@ -1,17 +1,20 @@
-import { YStack, Text, XStack, Tooltip, Paragraph, Dialog, Label, Input, Button} from '@my/ui';
+import { YStack, Text, XStack, Tooltip, Paragraph, Dialog, Label, Input, Button } from '@my/ui';
 import { Tinted } from '../Tinted';
-import { Sparkles, Cog, Type } from "@tamagui/lucide-icons";
+import { Sparkles, Cog, Type, LayoutTemplate } from "@tamagui/lucide-icons";
 import { BoardModel } from '@extensions/boards/boardsSchemas';
 import { useRouter } from 'solito/navigation';
 import { getIconUrl } from '../IconSelect';
 import { ItemMenu } from '../ItemMenu';
 import { useState } from 'react';
-import { API, setErrorMap } from 'protobase';
+import { API, set, setErrorMap } from 'protobase';
 
 export default ({ element, width, onDelete, ...props }: any) => {
     const board = new BoardModel(element);
     const [editSettingsDialog, seteditSettingsDialog] = useState(false);
+    const [createTemplateDialog, setCreateTemplateDialog] = useState(false);
     const [selectedBoard, setSelectedBoard] = useState(null);
+    const [description, setDescription] = useState('');
+    const [templateName, setTemplateName] = useState(selectedBoard?.data.name);
     const router = useRouter();
     // console.log("Board", board);
 
@@ -51,6 +54,11 @@ export default ({ element, width, onDelete, ...props }: any) => {
                                 text: "Settings",
                                 icon: Cog,
                                 action: (element) => { console.log("pressed: ", element); seteditSettingsDialog(true); setSelectedBoard(element) },
+                                isVisible: (element) => true
+                            }, {
+                                text: "Create template",
+                                icon: LayoutTemplate,
+                                action: (element) => { console.log("pressed: ", element); setCreateTemplateDialog(true); setSelectedBoard(element) },
                                 isVisible: (element) => true
                             }
                         ]}
@@ -112,18 +120,71 @@ export default ({ element, width, onDelete, ...props }: any) => {
                 }
             </YStack>
 
-            <Dialog open={editSettingsDialog} onOpenChange={seteditSettingsDialog}>
-                <Dialog.Portal className='DialogEditDisplayName'>
-                    <Dialog.Overlay className='DialogEditDisplayName' />
-                    <Dialog.Content overflow="hidden" p={"$8"} height={'400px'} width={"400px"} className='DialogEditDisplayName'>
+            <Dialog open={createTemplateDialog} onOpenChange={setCreateTemplateDialog}>
+                <Dialog.Portal className='DialogPopup'>
+                    <Dialog.Overlay className='DialogPopup' />
+                    <Dialog.Content overflow="hidden" p={"$8"} height={'400px'} width={"400px"} className='DialogPopup'>
                         <YStack height="100%" justifyContent="space-between">
-                            <Text fos="$8" fow="600" mb="$3" className='DialogEditDisplayName'>Settings</Text>
-                            <XStack ai={"center"} className='DialogEditDisplayName'>
-                                <Label ml={"$2"} h={"$3.5"} size={"$5"} className='DialogEditDisplayName'> <Type color={"$color8"} mr="$2" />Display Name</Label>
+                            <Text fos="$8" fow="600" mb="$3" className='DialogPopup'>Board Template</Text>
+                            <XStack ai={"center"} className='DialogPopup'>
+                                <Label ml={"$2"} h={"$3.5"} size={"$5"} className='DialogPopup'>Name</Label>
                             </XStack>
                             <Input
                                 br={"8px"}
-                                className='DialogEditDisplayName'
+                                className='DialogPopup'
+                                value={templateName}
+                                // color={error ? '$red9' : null}
+                                onChange={(e) => {
+                                    setTemplateName(e.target.value);
+                                }}
+                            />
+
+                            <XStack ai={"center"} className='DialogPopup'>
+                                <Label ml={"$2"} h={"$3.5"} size={"$5"} className='DialogPopup'>Description</Label>
+                            </XStack>
+                            <Input
+                                br={"8px"}
+                                className='DialogPopup'
+                                value={description}
+                                onChange={(e) => {
+                                    setDescription(e.target.value);
+                                }}
+                            />
+
+                            <YStack flex={1} className='DialogPopup' />
+                            <Button className='DialogPopup' onPress={async () => {
+                                try {
+                                    await API.post(`/api/core/v2/templates/boards`, {
+                                        name: templateName,
+                                        description,
+                                        from: selectedBoard?.data?.name
+                                    })
+                                    setSelectedBoard(null);
+                                    setCreateTemplateDialog(false);
+                                } catch (e) {
+                                    console.log('e: ', e)
+                                }
+                            }}>Create
+                            </Button>
+                        </YStack>
+                        <Dialog.Close />
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog>
+
+
+            <Dialog open={editSettingsDialog} onOpenChange={seteditSettingsDialog}>
+                <Dialog.Portal className='DialogPopup'>
+                    <Dialog.Overlay className='DialogPopup' />
+                    <Dialog.Content overflow="hidden" p={"$8"} height={'400px'} width={"400px"} className='DialogPopup'>
+                        <YStack height="100%" justifyContent="space-between">
+                            <Text fos="$8" fow="600" mb="$3" className='DialogPopup'>Settings</Text>
+                            <XStack ai={"center"} className='DialogPopup'>
+                                <Label ml={"$2"} h={"$3.5"} size={"$5"} className='DialogPopup'> <Type color={"$color8"} mr="$2" />Display Name</Label>
+                            </XStack>
+                            <Input
+                                br={"8px"}
+                                className='DialogPopup'
                                 value={selectedBoard?.data.displayName}
                                 // color={error ? '$red9' : null}
                                 onChange={(e) => {
@@ -136,8 +197,8 @@ export default ({ element, width, onDelete, ...props }: any) => {
                                 }
                                 }
                             />
-                            <YStack flex={1} className='DialogEditDisplayName' />
-                            <Button className='DialogEditDisplayName' onPress={async () => {
+                            <YStack flex={1} className='DialogPopup' />
+                            <Button className='DialogPopup' onPress={async () => {
                                 try {
                                     await API.post(`/api/core/v1/boards/${selectedBoard?.data?.name}`, selectedBoard.data)
                                     setSelectedBoard(null);

@@ -1,0 +1,1 @@
+Start from scratch. Choose your way, sky is the limit.

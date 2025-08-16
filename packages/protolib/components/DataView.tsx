@@ -11,7 +11,7 @@ import { ActiveGroup } from './ActiveGroup';
 import { ActiveGroupButton } from './ActiveGroupButton';
 import { ButtonGroup } from './ButtonGroup';
 import { forwardRef, useContext, useEffect, useMemo, useState } from 'react'
-import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search, Trash } from '@tamagui/lucide-icons'
+import { Plus, LayoutGrid, List, Layers, X, ChevronLeft, ChevronRight, MapPin, Pencil, Eye, Sheet, Columns3, Search, Trash, Library } from '@tamagui/lucide-icons'
 import { getErrorMessage, useToastController } from '@my/ui'
 import { useTimeout, useUpdateEffect } from 'usehooks-ts';
 import { usePageParams, useQueryState } from '../next'
@@ -428,15 +428,14 @@ const DataViewInternal = forwardRef(({
                 itemMinHeight: 320,
                 itemMinWidth: 320,
                 emptyMessage: <ErrorMessage
-                    icon={RowIcon}
-                    msg={`Empty ${displayName} list`}
+                    icon={Library}
+                    msg={`There are no ${displayName}`}
                     detailsColor='$color'
-                    containerProps={{ mt: '-30%', o: 0.1 }}
+                    details="Use the + button to create one"
+                    containerProps={{ mt: '30vh', o: 0.1 }}
                     iconProps={{}}
                 >
-                    {/* <XStack o={0.5} space="$1" ai="center">
-                        <Button>{`Add ${name}`}</Button>
-                    </XStack> */}
+                    {/* <Button chromeless size="sm">Create a new {displayName}</Button> */}
                 </ErrorMessage>,
                 spacing: 20,
                 name,

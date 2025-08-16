@@ -25,10 +25,13 @@ const ErrorMessage = React.forwardRef(({
     return <YStack flex={1} alignItems="center" justifyContent="center" space="$4" ref={ref} {...props}>
         <YStack ai="center" space="$4" {...containerProps}>
             <Icon size="$7" {...iconProps} />
+
             <H2 fontWeight={"500"}>{msg}</H2>
             <Text color={detailsColor}>
                 {details}
             </Text>
+
+            
         </YStack>
         {children}
     </YStack>

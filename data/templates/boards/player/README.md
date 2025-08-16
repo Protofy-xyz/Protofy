@@ -1,0 +1,1 @@
+Simple demo of player controller with play, pause and stop controls
