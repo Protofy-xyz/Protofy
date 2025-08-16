@@ -673,7 +673,7 @@ const Board = ({ board, icons }) => {
   );
 
   return (
-    <YStack flex={1} p="$6" backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
+    <YStack flex={1} backgroundImage={board?.settings?.backgroundImage ? `url(${board.settings.backgroundImage})` : undefined} backgroundSize='cover' backgroundPosition='center'>
 
       <CardSelector key={addKey} board={board} addOpened={addOpened} setAddOpened={setAddOpened} onFinish={addWidget} states={states} icons={icons} actions={actions} errors={errors} />
 
@@ -793,10 +793,7 @@ const Board = ({ board, icons }) => {
       <XStack f={1}>
         <YStack f={1}>
           {
-            viewMode === 'ui' ? <HTMLView style={{ width: "100%", height: "100%" }}
-              html={uicodeInfo?.code} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
-                console.log('wtf set data from board', data)
-              }} /> : isJSONView
+            isJSONView
               ? <Monaco
                 language='json'
                 darkMode={resolvedTheme === 'dark'}
@@ -807,7 +804,7 @@ const Board = ({ board, icons }) => {
                   formatOnType: true
                 }}
               />
-              : <YStack f={1}>{cards.length > 0 ? <DashboardGrid
+              : <YStack f={1} p={"$6"}>{cards.length > 0 ? <DashboardGrid
                 items={cards}
                 settings={board.settings}
                 layouts={boardRef.current.layouts}
@@ -851,6 +848,10 @@ const Board = ({ board, icons }) => {
               </YStack>}</YStack>
           }
         </YStack>
+        <HTMLView style={{ display: viewMode == 'ui'? 'block': 'none', position: 'absolute', width: "100%", height: "100%", backgroundColor: "var(--bgContent)" }}
+            html={uicodeInfo?.code ?? ''} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
+              console.log('wtf set data from board', data)
+        }} />
         <FloatingWindow
           visible={tabVisible}
           selectedTab={tabVisible}
