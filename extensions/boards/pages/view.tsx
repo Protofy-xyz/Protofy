@@ -1,5 +1,5 @@
 import React from 'react'
-import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, Code, Activity } from '@tamagui/lucide-icons'
+import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, Code, Activity, Bot, Presentation } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
 import { useIsAdmin } from "protolib/lib/useIsAdmin"
@@ -862,79 +862,77 @@ const Board = ({ board, icons }) => {
               "icon": Book,
               "content": <BoardStateView board={board} />
             },
-            ...(viewMode != "ui" ? {
-              "rules": {
-                "label": "Rules",
-                "icon": ClipboardList,
-                "content": <>
-                  {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
-                    <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                      setWindowSize(prev => {
-                        if (prev === 1010) {
-                          iconRotate.current.style.rotate = '180deg'
-                        } else {
-                          iconRotate.current.style.rotate = '0deg'
-                        }
-                        return prev === 1010 ? window.innerWidth - 330 : 1010
-                      })
-                    }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                      <ArrowLeft size="$1" color="var(--color)" />
-                    </XStack>
-                  </XStack>}
-                    automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
-                </>
-              },
-              "logs": {
-                "label": "Logs",
-                "icon": Activity,
-                "content": <LogPanel AppState={AppState} />
-              },
-              "board-settings": {
-                "label": "Settings",
-                "icon": Settings,
-                "content": <BoardSettingsEditor
-                  settings={board.settings}
-                  onSave={sttngs => {
-                    boardRef.current.settings = sttngs
-                    onEditBoard()
+
+            "rules": {
+              "label": "Automation",
+              "icon": Bot,
+              "content": <>
+                {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
+                  <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                    setWindowSize(prev => {
+                      if (prev === 1010) {
+                        iconRotate.current.style.rotate = '180deg'
+                      } else {
+                        iconRotate.current.style.rotate = '0deg'
+                      }
+                      return prev === 1010 ? window.innerWidth - 330 : 1010
+                    })
+                  }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                    <ArrowLeft size="$1" color="var(--color)" />
+                  </XStack>
+                </XStack>}
+                  automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+              </>
+            },
+            "uicode": {
+              "label": "Presentation",
+              "icon": Presentation,
+              "content": <>
+                {uicodeInfo && <UISideMenu
+                  onChange={(code) => {
+                    console.log('Updated UI Code:', code);
+                    setUICodeInfo({ code });
                   }}
-                />
-              },
-            } : {
-              "uicode": {
-                "label": "Code",
-                "icon": Code,
-                "content": <>
-                  {uicodeInfo && <UISideMenu
-                    onChange={(code) => {
-                      console.log('Updated UI Code:', code);
-                      setUICodeInfo({ code });
-                    }}
-                    leftIcons={
-                      <XStack zIndex={9999}>
-                        <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                          setWindowSize(prev => {
-                            if (prev === 1010) {
-                              iconRotate.current.style.rotate = '180deg'
-                            } else {
-                              iconRotate.current.style.rotate = '0deg'
-                            }
-                            return prev === 1010 ? window.innerWidth - 330 : 1010
-                          })
-                        }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                          <ArrowLeft size="$1" color="var(--color)" />
-                        </XStack>
+                  leftIcons={
+                    <XStack zIndex={9999}>
+                      <XStack ref={iconRotate} cursor='pointer' onPress={() => {
+                        setWindowSize(prev => {
+                          if (prev === 1010) {
+                            iconRotate.current.style.rotate = '180deg'
+                          } else {
+                            iconRotate.current.style.rotate = '0deg'
+                          }
+                          return prev === 1010 ? window.innerWidth - 330 : 1010
+                        })
+                      }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
+                        <ArrowLeft size="$1" color="var(--color)" />
                       </XStack>
-                    }
-                    uiCode={uicodeInfo}
-                    boardRef={boardRef}
-                    board={board}
-                    actions={actions}
-                    states={states}
-                  />}
-                </>
-              }
-            })
+                    </XStack>
+                  }
+                  uiCode={uicodeInfo}
+                  boardRef={boardRef}
+                  board={board}
+                  actions={actions}
+                  states={states}
+                />}
+              </>
+            },
+            "logs": {
+              "label": "Logs",
+              "icon": Activity,
+              "content": <LogPanel AppState={AppState} />
+            },
+            "board-settings": {
+              "label": "Settings",
+              "icon": Settings,
+              "content": <BoardSettingsEditor
+                settings={board.settings}
+                onSave={sttngs => {
+                  boardRef.current.settings = sttngs
+                  onEditBoard()
+                }}
+              />
+            }
           }}
         />
       </XStack>
