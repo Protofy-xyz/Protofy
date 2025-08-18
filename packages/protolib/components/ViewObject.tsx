@@ -16,7 +16,7 @@ export function ViewObject({
 
     useEffect(() => {
         setEntries(Object.entries(object))
-    }, [object])
+    }, [Object.entries(object).toString()])
 
     const handleAdd = () => {
         if (!newKey || entries.some(([k]) => k === newKey)) return
