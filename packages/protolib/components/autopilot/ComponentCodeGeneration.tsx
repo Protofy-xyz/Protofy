@@ -56,6 +56,7 @@ export const ComponentCodeGeneration = ({ htmlCode, setHTMLCode }) => {
                 sourceCode={aiComponent || "// type into the input to generate a new version"}
                 path={'aiComponent.ts'}
                 darkMode={resolvedTheme === 'dark'}
+                onChange={(code) => setAiComponent(code)}
                 options={{
                   folding: false,
                   lineDecorationsWidth: 0,
