@@ -116,14 +116,7 @@ function FilesPage({ initialFilesState, pageSession, initialItems, pageState }: 
                   <InstallButton element={element} loading={loading} onPress={() => onInstallAsset(element.name)} />
                 </YStack>
               </YStack>
-            },
-            emptyMessage: <YStack h="100%" mt="15vh" flex={1} alignItems="center" justifyContent="center" space="$4" pointerEvents='none'>
-              <YStack ai="center" jc="center" space="$2" o={0.4} pointerEvents='none' userSelect='none'>
-                <Bird size="$7" />
-                <H2>Empty assets list</H2>
-              </YStack>
-              <Tinted><Button pointerEvents='auto' onPress={() => setExplorerVisible(true)}>Upload Asset</Button></Tinted>
-            </YStack>
+            }
           }}
           onAddButton={() => setExplorerVisible(true)}
           model={AssetsModel}
