@@ -11,13 +11,14 @@ import fileActions from "@extensions/files/fileActions";
 import { addCard } from "@extensions/cards/coreContext/addCard";
 import { Manager } from "./manager";
 import { dbProvider, getDBOptions } from 'protonode';
+import { acquireLock, releaseLock } from "./system/lock";
 
 const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 const TemplatesDir = (root) => fspath.join(root, "/data/templates/boards/")
 const BOARD_REFRESH_INTERVAL = 100 //in miliseconds
 
 const useChatGPT = true
-const writeLocks = new Map();
+
 const logger = getLogger()
 
 const processTable = {}
@@ -144,18 +145,6 @@ const getStateValue = () => `
         return states[stateName]
     }
 `
-
-async function acquireLock(filePath) {
-    while (writeLocks.has(filePath)) {
-        await new Promise(resolve => setTimeout(resolve, 10)); // Espera 10ms antes de reintentar
-    }
-    writeLocks.set(filePath, true);
-}
-
-function releaseLock(filePath) {
-    writeLocks.delete(filePath);
-}
-
 const token = getServiceToken()
 
 const callModel = async (prompt, context) => {
