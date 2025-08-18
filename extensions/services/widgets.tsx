@@ -115,18 +115,22 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
         cardState[uuid] = {};
     }
 
-    const cardType = html.match(/^\/\/@([^\n\r]*)/);
-    if (cardType && cardType[1]) {
+    const cardType = html.match(/^\/\/ ?@([^\n\r]*)/);
 
-        const cardTypeMatch = html.match(/^[ \t\r\n]*\/\/@([^\n\r]*)/m);
-        const cardType = cardTypeMatch ? cardTypeMatch[1].trim() : null;
-        if (cardType === 'card/react' || cardType === 'card/reactframe') {
-            html = 'reactCard(`' + html.replace('\\', '\\\\').replace(/`/g, '\\`') + '`, data.domId, data)'
+    if (cardType && cardType[1]) {
+        const cardTypeMatch = html.match(/^[ \t\r\n]*\/\/ ?@([^\n\r]*)/m);
+
+        const cardTypeValue = cardTypeMatch ? cardTypeMatch[1].trim() : null;
+
+        console.log("DEV: Card type detected:", cardTypeValue);
+
+        if (cardTypeValue === 'card/react' || cardTypeValue === 'card/reactframe') {
+            html = 'reactCard(`' + html.replace(/\\/g, '\\\\').replace(/`/g, '\\`') + '`, data.domId, data)';
         }
         // Do something with the card type
     }
 
-    const isReactWidget = (html) => html.includes('reactCard') || html.includes('//@react') || html.includes('//@card/react');
+    const isReactWidget = (html) => html.includes('reactCard') || html.includes('//@react') || html.includes('//@card/react') || html.includes('// @react') || html.includes('// @card/react');
 
     const dataForCard = {
         ...data,

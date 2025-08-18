@@ -109,8 +109,8 @@ export const startCore = (ready?) => {
 
   try {
     import(pathToFileURL(require.resolve('app/bundles/dbProviders')).href).then(async (DBBundle) => {
-      DBBundle.default().then(() => {
-        const adminModules = import( require.resolve('./api'))
+      DBBundle.default().then(async () => {
+        const adminModules = await import(pathToFileURL(require.resolve('./api/index')).href)
         logger.debug({ adminModules }, 'Admin modules: ', JSON.stringify(adminModules))
         import(pathToFileURL(require.resolve('app/bundles/coreApis')).href).then((BundleAPI) => {
           BundleAPI.default(app, { mqtt, topicSub, topicPub, ...BundleContext });
