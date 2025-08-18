@@ -589,7 +589,7 @@ class ErrorBoundary extends React.Component {
 }
 
 window.reactCard = (jsx, rootId, initialProps = {}) => {
-    const isFrameCard = jsx.includes('//@card/reactframe');
+    const isFrameCard = jsx.includes('//@card/reactframe') || jsx.includes('// @card/reactframe');
     console.log('debugjsx:host:enter', { rootId, isFrameCard, jsxLen: jsx?.length });
 
     // ----- MODO CLÁSICO -----
