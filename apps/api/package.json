@@ -27,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "mime-types": "^2.1.35",
     "moment": "2.29.4",
+    "node-fetch": "^2.6.0",
     "pino": "9.2.0",
     "pino-http": "10.2.0",
     "pino-pretty": "11.2.1",
