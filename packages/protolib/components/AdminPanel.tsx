@@ -87,16 +87,13 @@ export const AdminPanel = ({ children }) => {
   }, [rightPanelSize])
 
   const workspaceData = useWorkspace({ boards: boards, objects: objects })
-  const settingsLogs = workspaceData?.logs
-  const settingsLogsEnabled = settingsLogs === undefined ? true : settingsLogs
-
   // console.log('userSpaces: ', userSpaces, 'current Workspace: ', currentWorkspace)
   return rightPanelSize && <MainPanel
     borderLess={true}
     rightPanelSize={rightPanelSize}
     setRightPanelSize={setRightPanelSize}
     rightPanelStyle={{ marginRight: '20px', height: '100vh', padding: '20px', backgroundColor: 'var(--bgPanel)' }}
-    rightPanelVisible={settingsLogsEnabled && appState.logsPanelOpened}
+    rightPanelVisible={appState.logsPanelOpened}
     rightPanelResizable={true}
     centerPanelContent={workspaceData && <PanelLayout
       menuContent={<PanelMenu workspace={workspaceData} />}
@@ -105,5 +102,5 @@ export const AdminPanel = ({ children }) => {
         {children}
       </XStack>
     </PanelLayout>
-    } rightPanelContent={settingsLogsEnabled ? <LogPanel AppState={AppState} /> : null} />
+    } rightPanelContent={<></>}/>
 }
