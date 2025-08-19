@@ -14,11 +14,12 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
 
     return <>
         <div
-            onClick={() => { onChangeTab("") }}
-            style={{ width: "100vw", height: "120vh", position: "fixed", right: visible ? 0 : "-100vw" }}
+            onClick={() => {  }}
+            style={{ pointerEvents: "none",width: "100vw", height: "120vh", position: "fixed", right: visible ? 0 : "-100vw" }}
         ></div>
         {
             <YStack
+                pointerEvents='auto'
                 position="fixed"
                 animation="quick"
                 right={visible ? 40 : -windowSize}

@@ -37,6 +37,7 @@ export interface IUseSubscription {
   setMessages?: (messages: IMessage[]) => void;
   clearMessages: () => void;
   connectionStatus: string | Error;
+  onMessage: (msg: IMessage) => void;
 }
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

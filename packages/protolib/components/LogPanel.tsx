@@ -1,7 +1,7 @@
 
 import { XStack, YStack, Text, ScrollView, Popover, Input } from '@my/ui'
 import { JSONViewer } from './jsonui'
-import {JSONView} from './JSONView'
+import { JSONView } from './JSONView'
 import { useTint } from '../lib/Tints'
 import { GroupButton } from './GroupButton'
 import { ButtonGroup } from './ButtonGroup'
@@ -12,7 +12,7 @@ import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
 import React from 'react'
 import { useSubscription } from '../lib/mqtt'
-
+import { useLog } from '@extensions/logs/hooks/useLog'
 
 const types = {
     10: { name: "TRACE", color: "$green3", icon: Microscope },
@@ -52,35 +52,17 @@ const MessageList = React.memo(({ data, topic }: any) => {
     </XStack>
 })
 
-const MAX_BUFFER_MSG = 10
-export const LogPanel = ({AppState}) => {
+
+export const LogPanel = ({ AppState, logs, setLogs }) => {
     const [state, setAppState] = useAtom<any>(AppState)
     const appState: any = state
 
-    const {messages, setMessages} = useSubscription('logs/#')
-
-    const [bufferMsgs, setBufferMsgs] = useState([])
     const [filteredMessages, setFilteredMessages] = useState([])
     const [search, setSearch] = useState('')
     const initialLevels = ['info', 'warn', 'error', 'fatal']
 
-    console.log('messages', messages)
-    
     useEffect(() => {
-        if(messages.length === 0) return
-        //append new messages to the beginning of bufferMsgs
-        //if bufferMsgs > MAX_BUFFER_MSG, remove from the bottom
-        setBufferMsgs(prev => {
-            const newBuffer = [...messages, ...prev]
-            if (newBuffer.length > MAX_BUFFER_MSG) {
-                return newBuffer.slice(0, MAX_BUFFER_MSG)
-            }
-            return newBuffer
-        })
-    }, [messages])
-
-    useEffect(() => {
-        setFilteredMessages(bufferMsgs.filter((m: any) => {
+        setFilteredMessages(logs.filter((m: any) => {
             console.log('message: ', m)
             const topic = m?.topic
             const from = topic.split("/")[1]
@@ -89,7 +71,7 @@ export const LogPanel = ({AppState}) => {
             console.log('result: ', type && (!search || JSON.stringify(m).toLowerCase().includes(search.toLocaleLowerCase())) && appState.levels.includes(type.name.toLocaleLowerCase()))
             return type && (!search || JSON.stringify(m).toLowerCase().includes(search.toLocaleLowerCase())) && appState.levels.includes(type.name.toLocaleLowerCase())
         }))
-    }, [search, bufferMsgs, appState.levels])
+    }, [search, logs, appState.levels])
 
     useEffect(() => {
         if (!appState.levels) {
@@ -128,7 +110,7 @@ export const LogPanel = ({AppState}) => {
             />
             <Popover placement="bottom-start">
                 <Popover.Trigger position='absolute'>
-                    <InteractiveIcon size={20} Icon={Ban} onPress={() => setBufferMsgs([])} />
+                    <InteractiveIcon size={20} Icon={Ban} onPress={() => setLogs([])} />
                 </Popover.Trigger>
             </Popover>
             <Popover placement="bottom-start">

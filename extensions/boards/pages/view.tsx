@@ -32,6 +32,7 @@ import { JSONView } from 'protolib/components/JSONView'
 import { FloatingWindow } from '../components/FloatingWindow'
 import { useAtom } from 'protolib/lib/Atom'
 import { AppState } from 'protolib/components/AdminPanel'
+import { useLog } from '@extensions/logs/hooks/useLog'
 
 const defaultCardMethod: "post" | "get" = 'post'
 
@@ -307,6 +308,79 @@ const BoardStateView = ({ board }) => {
       <Paragraph size="$8" o={0.4}>No states found for this board</Paragraph>
     </Center>}
   </XStack>
+}
+
+const MAX_BUFFER_MSG = 1000
+const FloatingArea = ({ tabVisible, setTabVisible, board, automationInfo, boardRef, actions, states, uicodeInfo, setUICodeInfo, onEditBoard }) => {
+  const [logs, setLogs] = useState([])
+  useLog((log) => {
+    setLogs(prev => {
+      const newBuffer = [log, ...prev]
+      if (newBuffer.length > MAX_BUFFER_MSG) {
+        return newBuffer.slice(0, MAX_BUFFER_MSG)
+      }
+      return newBuffer
+    })
+  })
+
+  return <FloatingWindow
+    visible={tabVisible}
+    selectedTab={tabVisible}
+    onChangeTab={setTabVisible}
+    tabs={{
+      "states": {
+        "label": "States",
+        "icon": Book,
+        "content": <BoardStateView board={board} />
+      },
+
+      "rules": {
+        "label": "Automation",
+        "icon": Bot,
+        "content": <>
+          {automationInfo && <RulesSideMenu
+            automationInfo={automationInfo}
+            boardRef={boardRef}
+            board={board}
+            actions={actions}
+            states={states}
+          />}
+        </>
+      },
+      "uicode": {
+        "label": "Presentation",
+        "icon": Presentation,
+        "content": <>
+          {uicodeInfo && <UISideMenu
+            onChange={(code) => {
+              setUICodeInfo({ code });
+            }}
+            uiCode={uicodeInfo}
+            boardRef={boardRef}
+            board={board}
+            actions={actions}
+            states={states}
+          />}
+        </>
+      },
+      "logs": {
+        "label": "Logs",
+        "icon": Activity,
+        "content": <LogPanel AppState={AppState} logs={logs} setLogs={setLogs} />
+      },
+      "board-settings": {
+        "label": "Settings",
+        "icon": Settings,
+        "content": <BoardSettingsEditor
+          settings={board.settings}
+          onSave={sttngs => {
+            boardRef.current.settings = sttngs
+            onEditBoard()
+          }}
+        />
+      }
+    }}
+  />
 }
 
 const Board = ({ board, icons }) => {
@@ -849,64 +923,7 @@ const Board = ({ board, icons }) => {
           html={uicodeInfo?.code ?? ''} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
             console.log('wtf set data from board', data)
           }} />
-        <FloatingWindow
-          visible={tabVisible}
-          selectedTab={tabVisible}
-          onChangeTab={setTabVisible}
-          tabs={{
-            "states": {
-              "label": "States",
-              "icon": Book,
-              "content": <BoardStateView board={board} />
-            },
-
-            "rules": {
-              "label": "Automation",
-              "icon": Bot,
-              "content": <>
-                {automationInfo && <RulesSideMenu
-                  automationInfo={automationInfo}
-                  boardRef={boardRef}
-                  board={board}
-                  actions={actions}
-                  states={states}
-                />}
-              </>
-            },
-            "uicode": {
-              "label": "Presentation",
-              "icon": Presentation,
-              "content": <>
-                {uicodeInfo && <UISideMenu
-                  onChange={(code) => {
-                    setUICodeInfo({ code });
-                  }}
-                  uiCode={uicodeInfo}
-                  boardRef={boardRef}
-                  board={board}
-                  actions={actions}
-                  states={states}
-                />}
-              </>
-            },
-            "logs": {
-              "label": "Logs",
-              "icon": Activity,
-              "content": <LogPanel AppState={AppState} />
-            },
-            "board-settings": {
-              "label": "Settings",
-              "icon": Settings,
-              "content": <BoardSettingsEditor
-                settings={board.settings}
-                onSave={sttngs => {
-                  boardRef.current.settings = sttngs
-                  onEditBoard()
-                }}
-              />
-            }
-          }}
-        />
+        <FloatingArea tabVisible={tabVisible} setTabVisible={setTabVisible} board={board} automationInfo={automationInfo} boardRef={boardRef} actions={actions} states={states} uicodeInfo={uicodeInfo} setUICodeInfo={setUICodeInfo} onEditBoard={onEditBoard} />
       </XStack>
     </YStack>
   )
