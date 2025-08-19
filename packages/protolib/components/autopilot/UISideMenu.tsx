@@ -1,18 +1,14 @@
 
 import { API } from 'protobase'
-import { YStack, XStack, Button, Spinner, useToastController, useTheme } from '@my/ui'
+import { YStack, XStack, useToastController, useTheme } from '@my/ui'
 import { Tinted } from '../../components/Tinted'
-import { Rules } from '../../components/autopilot/Rules'
-import { Monaco } from '../../components/Monaco'
-import { useState, useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo } from 'react'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
 import { useSettingValue } from "../../lib/useSetting";
-import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
-import { ArrowFunction } from 'ts-morph';
 import { CodeView } from '@extensions/files/intents';
-import { ClipboardList, Save, Sparkles } from '@tamagui/lucide-icons'
-
+import { Save } from '@tamagui/lucide-icons'
+import { ComponentCodeGeneration } from './ComponentCodeGeneration'
 
 export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef, board, actions, states, resolvedTheme, onChange }) => {
     const boardStates = states.boards ? states.boards[board.name] : {}
@@ -20,9 +16,13 @@ export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef,
 
     const savedCode = useRef(uiCode.code)
     const editedCode = useRef(uiCode.code)
-    const [generatingBoardCode, setGeneratingBoardCode] = useState(false)
+    const editorRef = useRef<any>(null);
     const toast = useToastController()
     const isAIEnabled = useSettingValue('ai.enabled', false);
+
+    function handleEditorMount(editor: any) {
+        editorRef.current = editor;
+    }
 
     const theme = useTheme()
     const flows = useMemo(() => {
@@ -48,19 +48,14 @@ export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef,
             disableFlowMode={true}
             defaultMode={'code'}
             leftIcons={
-                <XStack zIndex={9999} gap="$3" ml="$2">
+                <XStack gap="$3" pl="$2">
                     {leftIcons}
                 </XStack>
             }
-            icons={<XStack zIndex={9999} gap="$3" mr="$2">
-                {/* <XStack cursor='pointer' onPress={async () => {
-                   
-                }} o={0.7} pressStyle={{ opacity: 0.7 }} hoverStyle={{ opacity: 1 }}>
-                    <Sparkles size="$1" color="var(--color)" />
-                </XStack> */}
+            icons={<XStack gap="$3">
                 {icons}
-                <XStack cursor='pointer' onPress={() => {
-                    API.post(`/api/core/v1/boards/${board.name}/uicode`, {code: editedCode.current})
+                <XStack p="$2" pr="$3" cursor='pointer' onPress={() => {
+                    API.post(`/api/core/v1/boards/${board.name}/uicode`, { code: editedCode.current })
                     onChange ? onChange(editedCode.current) : null
                 }} o={0.8} pressStyle={{ opacity: 0.8 }} ml="$5" hoverStyle={{ opacity: 1 }}>
                     <Save size="$1" color="var(--color)" />
@@ -82,11 +77,33 @@ export const UISideMenu = ({ leftIcons = <></>, icons = <></>, uiCode, boardRef,
                 lineNumbers: true,
                 minimap: { enabled: false }
             }}
+            monacoProps={{
+                onMount: handleEditorMount
+            }}
         />
     }, [resolvedTheme, board.name, theme, editedCode.current, isAIEnabled]);
     return <Tinted>
-        <YStack flex={1} mt="$5" height="100%" alignItems="center" justifyContent="center" borderRadius="$3" >
-            {flows}
+        <YStack f={1} pb="$4">
+            <PanelGroup direction="horizontal">
+                <Panel defaultSize={67}>
+                    <YStack f={1} h="100%">
+                        {flows}
+                    </YStack>
+                </Panel>
+                <CustomPanelResizeHandle direction="vertical" />
+                {isAIEnabled
+                    ? <Panel defaultSize={25} minSize={33} style={{paddingTop: "32px"}}>
+                        <ComponentCodeGeneration
+                            setHTMLCode={c => {
+                                if (editorRef.current) {
+                                    editorRef.current.setValue(c); // clean editor
+                                }
+                            }}
+                            htmlCode={uiCode.code} />
+                    </Panel>
+                    : <></>
+                }
+            </PanelGroup>
         </YStack>
     </Tinted>
 }

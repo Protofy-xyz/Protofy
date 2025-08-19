@@ -122,8 +122,6 @@ export const HTMLView = ({ html, data, setData = () => { }, ...props }) => {
 
         const cardTypeValue = cardTypeMatch ? cardTypeMatch[1].trim() : null;
 
-        console.log("DEV: Card type detected:", cardTypeValue);
-
         if (cardTypeValue === 'card/react' || cardTypeValue === 'card/reactframe') {
             html = 'reactCard(`' + html.replace(/\\/g, '\\\\').replace(/`/g, '\\`') + '`, data.domId, data)';
         }
