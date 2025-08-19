@@ -539,8 +539,6 @@ export default async (app, context) => {
         }
     })
 
-    
-
     // Aceptar GET
     app.get('/api/core/v1/boards/:boardId/actions/:action', requireAdmin(), (req, res) => {
         handleBoardAction(context, Manager, req.params.boardId, req.params.action, res, req.query)
