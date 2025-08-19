@@ -14,7 +14,7 @@ import { acquireLock, releaseLock } from "./system/lock";
 import { callModel } from "./system/ai";
 import { getExecuteAction } from "./system/getExecuteAction";
 import { registerCards } from "./system/cards";
-import { BoardsDir, getBoard, getBoards } from "./system/boards";
+import { BoardsDir, getBoard, getBoards, cleanObsoleteCardFiles } from "./system/boards";
 import { getActions, handleBoardAction } from "./system/actions";
 
 
@@ -36,25 +36,7 @@ class HttpError extends Error {
     }
 }
 
-const cleanObsoleteCardFiles = (boardId, newCardNames, req) => {
-    const boardFolder = BoardsDir(getRoot(req)) + boardId + '/';
-    if (!fsSync.existsSync(boardFolder)) return;
 
-    const files = fsSync.readdirSync(boardFolder);
-
-    const validFileNames = new Set();
-
-    for (const name of newCardNames) {
-        validFileNames.add(name + '.js');
-        validFileNames.add(name + '_view.js');
-    }
-
-    for (const file of files) {
-        if ((file.endsWith('.js') || file.endsWith('_view.js')) && !validFileNames.has(file)) {
-            fsSync.unlinkSync(boardFolder + file);
-        }
-    }
-};
 
 const getDB = (path, req, session) => {
     const db = {

@@ -3,13 +3,10 @@ import * as fsSync from 'fs';
 import * as fspath from 'path';
 import { getRoot } from 'protonode'
 import { acquireLock, releaseLock } from './lock';
+import { getLogger } from 'protobase';
+import { t } from 'tar';
 
-class HttpError extends Error {
-    constructor(public status: number, message: string) {
-        super(message);
-        this.name = "HttpError";
-    }
-}
+const logger = getLogger()
 
 export const BoardsDir = (root) => fspath.join(root, "/data/boards/")
 export const getBoards = async () => {
@@ -36,7 +33,7 @@ export const getBoard = async (boardId) => {
     try {
         fileContent = await fs.readFile(filePath, 'utf8');
     } catch (error) {
-        throw new HttpError(404, "Board not found");
+        throw new Error("Error reading board file: " + filePath);
     } finally {
         releaseLock(filePath);
     }
@@ -68,8 +65,28 @@ export const getBoard = async (boardId) => {
         }
     } catch (error) {
         logger.error({ error }, "Error parsing board file: " + filePath);
-        throw new HttpError(500, "Error parsing board file");
+        throw new Error("Error parsing board file: " + filePath);
     }
 
     return fileContent;
 }
+
+export const cleanObsoleteCardFiles = (boardId, newCardNames, req) => {
+    const boardFolder = BoardsDir(getRoot(req)) + boardId + '/';
+    if (!fsSync.existsSync(boardFolder)) return;
+
+    const files = fsSync.readdirSync(boardFolder);
+
+    const validFileNames = new Set();
+
+    for (const name of newCardNames) {
+        validFileNames.add(name + '.js');
+        validFileNames.add(name + '_view.js');
+    }
+
+    for (const file of files) {
+        if ((file.endsWith('.js') || file.endsWith('_view.js')) && !validFileNames.has(file)) {
+            fsSync.unlinkSync(boardFolder + file);
+        }
+    }
+};
