@@ -688,6 +688,17 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
       try { window.parent.postMessage({ type:'debugjsx', tag, rootId: window.name, msg }, '*'); } catch {}
       console.log('debugjsx:ifr:'+tag, data);
     }
+    let PARENT_ORIGIN = '*';
+    function setParentOrigin(o) { PARENT_ORIGIN = o || '*'; }
+
+    // --- API disponible para el JSX ---
+    function execute_action(action, payload) {
+        window.parent.postMessage(
+            { type: 'execute_action', action, rootId: window.name, payload },
+            PARENT_ORIGIN
+        );
+    }
+    window.execute_action = execute_action;
 
     post('boot', { name: window.name });
     window.parent.postMessage({ type: 'iframeReady', rootId: window.name }, '*');
@@ -750,6 +761,7 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
       const injectedReactGlobals = \`
 const React = window.React;
 const ReactDOM = window.ReactDOM;
+const execute_action = window.execute_action;
 \`;
       const modCode = injectedReactGlobals + '\\n' + transpiled + footer;
 
@@ -771,19 +783,20 @@ const ReactDOM = window.ReactDOM;
     }
 
     function renderWithProps(props) {
-      const mount = document.getElementById('mount');
-      if (!root) {
+        const mount = document.getElementById('mount');
+        if (!root) {
         // Crear root una sola vez → evita parpadeo del canvas
         root = ReactDOM.createRoot(mount);
       }
-      const nextJSON = JSON.stringify(props || {});
-      if (nextJSON === lastPropsJSON) {
+        const propsWithAPI = { ...props, execute_action };
+        const nextJSON = JSON.stringify(propsWithAPI || {});
+        if (nextJSON === lastPropsJSON) {
         post('render:skip-same-props', {});
         return;
       }
-      lastPropsJSON = nextJSON;
-      root.render(React.createElement(CurrentWidget, props));
-      post('render:done', {});
+        lastPropsJSON = nextJSON;
+        root.render(React.createElement(CurrentWidget, propsWithAPI));
+        post('render:done', {});
     }
 
     async function handleUpdate(userCode, props) {
@@ -795,24 +808,50 @@ const ReactDOM = window.ReactDOM;
     }
 
     window.addEventListener('message', (e) => {
-      const { type, jsx, props } = e.data || {};
-      if (type === 'reactCardUpdate') {
-        post('msg:reactCardUpdate', { hasCode: !!jsx });
-        handleUpdate(jsx, props);
-      }
+        const { type, jsx, props, parentOrigin, rootId } = e.data || {};
+
+        if (type === 'CONFIG' && rootId === window.name && parentOrigin) {
+            setParentOrigin(parentOrigin);
+            return;
+        }
+
+        if (type === 'reactCardUpdate') {
+            post('msg:reactCardUpdate', { hasCode: !!jsx });
+            handleUpdate(jsx, props);
+        }
     });
   </script>
 </body>
 </html>`;
 
-    const onReady = (e) => {
-        if (e.data?.type === 'iframeReady' && e.data.rootId === rootId) {
+    const onMessage = (e) => {
+        if (e.source !== iframe.contentWindow) return;
+
+        if (e.origin !== location.origin) return;
+
+        const data = e.data || {};
+        if (data.rootId !== rootId) return;
+
+        if (data.type === 'execute_action') {
+            window.execute_action(data.action, data.payload);
+        }
+
+        if (data.type === 'iframeReady' && data.rootId === rootId) {
             console.log('debugjsx:host:iframe-ready', { rootId });
+            iframe.contentWindow?.postMessage(
+                { type: 'CONFIG', rootId, parentOrigin: location.origin },
+                '*'
+            );
             iframe.contentWindow?.postMessage({ type: 'reactCardUpdate', jsx, props: safeProps }, '*');
-            window.removeEventListener('message', onReady);
         }
     };
-    window.addEventListener('message', onReady);
+
+    window._reactWidgetMsgHandlers = window._reactWidgetMsgHandlers || {};
+    if (window._reactWidgetMsgHandlers[rootId]) {
+        window.removeEventListener('message', window._reactWidgetMsgHandlers[rootId]);
+    }
+    window._reactWidgetMsgHandlers[rootId] = onMessage;
+    window.addEventListener('message', onMessage);
 
     target.appendChild(iframe);
     const blob = new Blob([srcdoc], { type: 'text/html' });
