@@ -9,6 +9,7 @@ DO NOT CHANGE ANYTHING that is not explicitly requested.
 If you are asked to rename, remove or modify props, functions, JSX elements, or styles, do so *only* where requested.
 Do not remove or add unrelated logic.
 Do not use backticks on your generated code.
+Do not change the first line comment if has one.
 </description>
 
 <code_structure>
