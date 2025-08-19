@@ -330,19 +330,16 @@ const Board = ({ board, icons }) => {
   const [boardCode, setBoardCode] = useState(JSON.stringify(board))
   const [automationInfo, setAutomationInfo] = useState();
   const [uicodeInfo, setUICodeInfo] = useState();
-  const [windowSize, setWindowSize] = useState(1010)
   const [errors, setErrors] = useState<string[]>([])
   // const initialBreakPoint = useInitialBreakpoint()
   const breakpointRef = useRef('') as any
   const { query, removeReplace, push } = usePageParams({})
   const isJSONView = query.json == 'true'
-  const iconRotate = useRef(null) as any
   const [appState, setAppState] = useAtom(AppState)
 
   const [addKey, setAddKey] = useState(0)
 
   const { resolvedTheme } = useThemeSetting()
-  const darkMode = resolvedTheme == 'dark'
 
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
 
@@ -848,15 +845,14 @@ const Board = ({ board, icons }) => {
               </YStack>}</YStack>
           }
         </YStack>
-        <HTMLView style={{ display: viewMode == 'ui'? 'block': 'none', position: 'absolute', width: "100%", height: "100%", backgroundColor: "var(--bgContent)" }}
-            html={uicodeInfo?.code ?? ''} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
-              console.log('wtf set data from board', data)
-        }} />
+        <HTMLView style={{ display: viewMode == 'ui' ? 'block' : 'none', position: 'absolute', width: "100%", height: "100%", backgroundColor: "var(--bgContent)" }}
+          html={uicodeInfo?.code ?? ''} data={{ board, state: states?.boards?.[board.name] }} setData={(data) => {
+            console.log('wtf set data from board', data)
+          }} />
         <FloatingWindow
           visible={tabVisible}
           selectedTab={tabVisible}
           onChangeTab={setTabVisible}
-          windowSize={windowSize}
           tabs={{
             "states": {
               "label": "States",
@@ -868,21 +864,13 @@ const Board = ({ board, icons }) => {
               "label": "Automation",
               "icon": Bot,
               "content": <>
-                {automationInfo && <RulesSideMenu leftIcons={<XStack zIndex={9999}>
-                  <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                    setWindowSize(prev => {
-                      if (prev === 1010) {
-                        iconRotate.current.style.rotate = '180deg'
-                      } else {
-                        iconRotate.current.style.rotate = '0deg'
-                      }
-                      return prev === 1010 ? window.innerWidth - 330 : 1010
-                    })
-                  }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                    <ArrowLeft size="$1" color="var(--color)" />
-                  </XStack>
-                </XStack>}
-                  automationInfo={automationInfo} boardRef={boardRef} board={board} actions={actions} states={states}></RulesSideMenu>}
+                {automationInfo && <RulesSideMenu
+                  automationInfo={automationInfo}
+                  boardRef={boardRef}
+                  board={board}
+                  actions={actions}
+                  states={states}
+                />}
               </>
             },
             "uicode": {
@@ -891,25 +879,8 @@ const Board = ({ board, icons }) => {
               "content": <>
                 {uicodeInfo && <UISideMenu
                   onChange={(code) => {
-                    console.log('Updated UI Code:', code);
                     setUICodeInfo({ code });
                   }}
-                  leftIcons={
-                    <XStack zIndex={9999}>
-                      <XStack ref={iconRotate} cursor='pointer' onPress={() => {
-                        setWindowSize(prev => {
-                          if (prev === 1010) {
-                            iconRotate.current.style.rotate = '180deg'
-                          } else {
-                            iconRotate.current.style.rotate = '0deg'
-                          }
-                          return prev === 1010 ? window.innerWidth - 330 : 1010
-                        })
-                      }} o={0.8} pressStyle={{ opacity: 0.8 }} hoverStyle={{ opacity: 1 }}>
-                        <ArrowLeft size="$1" color="var(--color)" />
-                      </XStack>
-                    </XStack>
-                  }
                   uiCode={uicodeInfo}
                   boardRef={boardRef}
                   board={board}

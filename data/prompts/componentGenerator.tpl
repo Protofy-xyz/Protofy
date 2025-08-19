@@ -8,6 +8,7 @@ If the original component uses standard React and may include hooks like `useSta
 DO NOT CHANGE ANYTHING that is not explicitly requested.
 If you are asked to rename, remove or modify props, functions, JSX elements, or styles, do so *only* where requested.
 Do not remove or add unrelated logic.
+Do not use backticks on your generated code.
 </description>
 
 <code_structure>
@@ -40,6 +41,7 @@ KEEP UNCHANGED all naming, logic, JSX structure, and imports unless requested.
 DO NOT REFORMAT CODE unless it's required to apply the requested changes.
 STICK TO THE REQUEST. KEEP ANY ORIGINAL COMMENT. IF DATA IS REQUIRED USE 
 DUMMY DATA. KEEP ALL COMMENTS ON THE CODE. ALL THE COMMENTS MUST BE KEEPED.
+DO NOT USE BACKTICKS.
 </very_important>
 
 <examples>

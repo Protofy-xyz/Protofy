@@ -93,18 +93,18 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
             defaultMode={isAIEnabled ? 'rules' : 'code'}
             rules={board.rules}
             leftIcons={
-                <XStack zIndex={9999} gap="$3" ml="$2">
+                <XStack gap="$3" pl="$2">
                     {leftIcons}
                 </XStack>
             }
-            icons={<XStack zIndex={9999} gap="$3" mr="$2">
+            icons={<XStack gap="$3">
                 {/* <XStack cursor='pointer' onPress={async () => {
                    
                 }} o={0.7} pressStyle={{ opacity: 0.7 }} hoverStyle={{ opacity: 1 }}>
                     <Sparkles size="$1" color="var(--color)" />
                 </XStack> */}
                 {icons}
-                <XStack cursor='pointer' onPress={() => {
+                <XStack p="$2" pr="$3" cursor='pointer' onPress={() => {
                     const sourceFile = toSourceFile(automationInfo.code)
                     const definition = getDefinition(sourceFile, '"code"').getBody()
                     definition.replaceWithText("{\n" + editedCode.current + "\n}");
@@ -140,7 +140,7 @@ export const RulesSideMenu = ({ leftIcons = <></>, icons = <></>, automationInfo
     }, [resolvedTheme, board.name, theme, editedCode.current, isAIEnabled]);
     return <YStack w="100%" backgroundColor="transparent" backdropFilter='blur(5px)'>
         <Tinted>
-            <YStack flex={1} mt="$5" height="100%" alignItems="center" justifyContent="center" borderRadius="$3" >
+            <YStack flex={1} alignItems="center" justifyContent="center">
                 {flows}
             </YStack>
         </Tinted>
