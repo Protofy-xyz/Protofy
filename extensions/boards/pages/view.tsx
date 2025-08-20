@@ -784,6 +784,7 @@ const Board = ({ board, icons }) => {
               enterStyle={{ x: 0, y: -20, opacity: 0, scale: 0.9 }}
               exitStyle={{ x: 0, y: 10, opacity: 0, scale: 0.95 }}
               gap="$4"
+              p="$0"
               w={"90vw"}
               h={"95vh"}
               maw={1600}
@@ -794,7 +795,7 @@ const Board = ({ board, icons }) => {
 
 
               <Dialog.Close displayWhenAdapted asChild>
-                <Tinted><TamaButton onPress={async () => {
+                <Tinted><TamaButton m="$4" mt="$0" onPress={async () => {
                   const newItems = items.map(item => item.key == currentCard.key ? editedCard : item)
 
                   try {

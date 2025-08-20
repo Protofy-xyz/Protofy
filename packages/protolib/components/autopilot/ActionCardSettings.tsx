@@ -23,7 +23,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   const hasEmptyRulesCode = !cardData.rulesCode
   const isCreateMode = mode === "create";
   //if there is rules code and it is a simple return string, we show the value tab by default, otherwise we show the rules tab
-  const [tab, setTab] = useState(isCreateMode ? "info" : !hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
+  const [selectedTab, setSelectedTab] = useState(isCreateMode ? "info" : !hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
 
   const { resolvedTheme } = useThemeSetting();
   useEffect(() => {
@@ -182,33 +182,42 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   return (
     <YStack f={1}>
       <Tinted>
-        <YStack f={1} gap="$4">
-          <XStack width="100%" jc={"center"} w={"100%"} >
-            <XStack h={"100%"}>
-              {/* @ts-ignore */}
-              <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-                {
-                  tabs.map((tabItem) => (
-                    <ToggleGroup.Item
-                      key={tabItem.id}
-                      value={tabItem.id}
-                      disabled={tabItem.disabled}
-                      opacity={tabItem.opacity || 1}
-                    >
-                      <XStack gap={"$2"} ai={"center"}>
-                        {tabItem.icon}
-                        <Text>{tabItem.label}</Text>
-                      </XStack>
-                    </ToggleGroup.Item>
-                  ))
-                }
-              </ToggleGroup>
-            </XStack>
+        <YStack f={1}>
+          <XStack borderBottomColor="$gray6" borderBottomWidth="1px">
+            {
+              tabs.map((tab, index) => {
+                const isSelected = selectedTab === tab.id;
+                return <XStack
+                  key={index}
+                  onPress={() => setSelectedTab(tab.id)}
+                  cursor={tab.disabled ? "default" : "pointer"}
+                  paddingVertical="$2.5"
+                  paddingHorizontal="$4"
+                  disabled={tab.disabled}
+                  style={{
+                    boxShadow: isSelected
+                      ? '0px 2px 0px var(--color8)'
+                      : 'none',
+                    transition: 'box-shadow 0.2s ease'
+                  }}
+                  justifyContent="center"
+                  gap="$2"
+                  alignItems="center"
+                  opacity={isSelected ? 1 : !tab.disabled ? 0.6 : 0.2}
+                  hoverStyle={{ opacity: tab.disabled ? null : 0.9 }}
+                >
+                  {tab.icon}
+                  <Text fontSize="$4">
+                    {tab.label}
+                  </Text>
+                </XStack>
+              })
+            }
           </XStack>
           <Tinted>
             {
               tabs.map((tabItem) => (
-                tabItem.id === (tab ?? "rules") && (
+                tabItem.id === (selectedTab ?? "rules") && (
                   <YStack key={tabItem.id} f={1} gap="$4" p="$4">
                     {tabItem.content || (
                       <YStack f={1} ai="center" jc="center">

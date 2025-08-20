@@ -14,8 +14,8 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
 
     return <>
         <div
-            onClick={() => {  }}
-            style={{ pointerEvents: "none",width: "100vw", height: "120vh", position: "fixed", right: visible ? 0 : "-100vw" }}
+            onClick={() => { }}
+            style={{ pointerEvents: "none", width: "100vw", height: "120vh", position: "fixed", right: visible ? 0 : "-100vw" }}
         ></div>
         {
             <YStack
@@ -38,10 +38,9 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                 gap="2px"
             >
                 <XStack borderBottomColor={"$gray6"} borderBottomWidth="1px">
-                    <XStack ai="center">
+                    <XStack ai="center" gap="$3" p="$2.5" px="$3">
                         <XStack
                             cursor='pointer'
-                            padding="$2"
                             onPress={() => {
                                 onChangeTab("")
                             }}
@@ -52,7 +51,6 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                         </XStack>
                         <XStack
                             cursor='pointer'
-                            padding="$2"
                             onPress={() => {
                                 setWindowSize(prev => {
                                     return prev === 1010 ? window.innerWidth - 330 : 1010
@@ -75,7 +73,7 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                                 key={index}
                                 onPress={() => onChangeTab(tab)}
                                 cursor="pointer"
-                                paddingVertical="$2"
+                                paddingVertical="$2.5"
                                 paddingHorizontal="$4"
                                 style={{
                                     boxShadow: isSelected
