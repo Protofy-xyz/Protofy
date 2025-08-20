@@ -112,7 +112,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                     }
                     return total + impText
                 }, '\n')
-                const lastImportPos = previousImports ? previousImports[previousImports.length - 1].getEnd() : 0
+                const lastImportPos = previousImports && previousImports.length ? previousImports[previousImports.length - 1].getEnd() : 0
                 const newAstContent = astContent.insertText(lastImportPos, missingJsxImportsText)
                 content = newAstContent.getText()
             }
