@@ -158,7 +158,7 @@ const iconTable = {
 
 const SecondSlide = ({ card, board, selected, states, icons, actions, setCard, errors }) => {
   return <YStack mb={"$4"} f={1}>
-    <ActionCardSettings board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
+    <ActionCardSettings mode="create" board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
       setCard(data)
     }} errors={errors} />
   </YStack>

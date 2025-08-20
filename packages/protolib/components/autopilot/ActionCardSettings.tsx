@@ -1,10 +1,10 @@
 import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info } from '@tamagui/lucide-icons'
-import { Text, YStack, XStack, ToggleGroup, Paragraph, Input, Button } from '@my/ui'
+import { Text, YStack, XStack, ToggleGroup, Paragraph, Input, Button, Label } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { ParamsEditor } from './ParamsEditor'
-import { CardSettings } from './CardSettings'
+import { CardSettings, SettingsTitle } from './CardSettings'
 import { HTMLEditor } from './HTMLEditor'
 import { useThemeSetting } from '@tamagui/next-theme';
 import { Monaco } from '../Monaco'
@@ -12,17 +12,17 @@ import { Markdown } from '../Markdown'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { SettingsEditor } from './SettingsEditor'
-import { ComponentCodeGeneration } from './ComponentCodeGeneration'
 import { ViewEditor } from './ViewEditor'
 
-export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors }) => {
+export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors, mode = "edit" }) => {
   const [cardData, setCardData] = useState(card);
   const isSimpleReturnString =
     !cardData.rulesCode ||
     /^return\s*`[\s\S]*`$/.test(cardData.rulesCode.trim());
   const hasEmptyRulesCode = !cardData.rulesCode
+  const isCreateMode = mode === "create";
   //if there is rules code and it is a simple return string, we show the value tab by default, otherwise we show the rules tab
-  const [tab, setTab] = useState(!hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
+  const [tab, setTab] = useState(isCreateMode ? "info" : !hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
 
   const { resolvedTheme } = useThemeSetting();
   useEffect(() => {
@@ -41,17 +41,15 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   return (
     <YStack f={1}>
       <Tinted>
-        <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
-
-        <YStack mt="$2" f={1}>
-          <XStack width="100%" mb="$2" mt={"$2"} jc={"center"} w={"100%"} >
+        <YStack f={1} gap="$4">
+          <XStack width="100%" jc={"center"} w={"100%"} >
             <XStack h={"100%"}>
               {/* @ts-ignore */}
               <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
                 <ToggleGroup.Item value="info">
                   <XStack gap={"$2"} ai={"center"}>
                     <Info size={"$1"} />
-                    <Text>Readme</Text>
+                    <Text>Info</Text>
                   </XStack >
                 </ToggleGroup.Item>
                 <ToggleGroup.Item
@@ -95,39 +93,45 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
           </XStack>
           <Tinted>
             {tab == 'info' &&
-              <PanelGroup direction="horizontal">
-                <Panel defaultSize={50}>
-                  <YStack
-                    flex={1} height="100%" backgroundColor="$gray3" borderRadius="$3" p="$3" >
-                    <Markdown data={cardData.description} />
-                  </YStack>
-                </Panel>
-                <CustomPanelResizeHandle direction="vertical" />
-                <Panel defaultSize={50}>
-                  <YStack
-                    flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$2" >
+              <YStack f={1} gap="$4">
+                <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
+                <YStack f={1} gap="$2">
+                  <SettingsTitle>Description</SettingsTitle>
+                  <PanelGroup direction="horizontal">
+                    {!isCreateMode && <Panel defaultSize={50}>
+                      <YStack
+                        flex={1} height="100%" backgroundColor="$gray3" borderRadius="$3" p="$3" >
+                        <Markdown data={cardData.description} />
+                      </YStack>
+                    </Panel>}
+                    <CustomPanelResizeHandle direction="vertical" />
+                    <Panel defaultSize={50}>
+                      <YStack
+                        flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$2" >
 
-                    <Monaco
-                      path={cardData.name + '_description.md'}
-                      darkMode={resolvedTheme === 'dark'}
-                      sourceCode={cardData.description}
-                      onChange={(newCode) => {
-                        setCardData({
-                          ...cardData,
-                          description: newCode
-                        })
-                      }}
-                      options={{
-                        folding: false,
-                        lineDecorationsWidth: 15,
-                        lineNumbersMinChars: 0,
-                        lineNumbers: true,
-                        minimap: { enabled: false }
-                      }}
-                    />
-                  </YStack>
-                </Panel>
-              </PanelGroup>
+                        <Monaco
+                          path={cardData.name + '_description.md'}
+                          darkMode={resolvedTheme === 'dark'}
+                          sourceCode={cardData.description}
+                          onChange={(newCode) => {
+                            setCardData({
+                              ...cardData,
+                              description: newCode
+                            })
+                          }}
+                          options={{
+                            folding: false,
+                            lineDecorationsWidth: 15,
+                            lineNumbersMinChars: 0,
+                            lineNumbers: true,
+                            minimap: { enabled: false }
+                          }}
+                        />
+                      </YStack>
+                    </Panel>
+                  </PanelGroup>
+                </YStack>
+              </YStack>
             }
 
             {tab == 'value' && <Monaco
