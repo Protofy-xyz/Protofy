@@ -99,7 +99,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
     return { [name]: UiComponent }
 }
 
-export const getBasicHtmlWrapper = (componentName) => {
+export const getBasicHtmlWrapper = (componentName, options = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -112,8 +112,10 @@ export const getBasicHtmlWrapper = (componentName) => {
     }
 
     UiComponent.craft = {
+        ...options["craft"],
         custom: {
-            hidden: true
+            hidden: true,
+            ...options["craft"]?.custom,
         },
         displayName: componentName,
     }

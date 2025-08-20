@@ -118,7 +118,7 @@ const htmlElements = [
 export default htmlElements.reduce((total, ele) => {
     total = {
         ...total,
-        ...getBasicHtmlWrapper(ele)
+        ...getBasicHtmlWrapper(ele, { craft: { custom: { hidden: false } } })
     }
     return total
 }, {})
