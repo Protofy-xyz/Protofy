@@ -10,13 +10,17 @@ const IconOption = (props) => {
   return (
     <components.Option {...props}>
       <YStack style={{ display: "flex", alignItems: "center", gap: "8px", width: '95px', height: '95px', justifyContent: 'center' }}>
-        <img
-          src={getIconUrl(props.data.value)}
-          alt={props.data.value}
-          width={40}
-          height={40}
+      <span
+          aria-label={props.data.value}
+          role="img"
           style={{
-            opacity: 0.5,
+            display: 'inline-block',
+            width: 40,
+            height: 40,
+            verticalAlign: 'middle',
+            backgroundColor: 'var(--color8)',
+            mask: `url(${getIconUrl(props.data.value)}) no-repeat center / contain`,
+            WebkitMask: `url(${getIconUrl(props.data.value)}) no-repeat center / contain`,
           }}
         />
         <Text fos="$2" o={0.6} ta="center" height="30px">
@@ -38,14 +42,17 @@ const IconSingleValue = ({ data, ...props }) => {
           padding: "0px 4px",
         }}
       >
-        <img
-          src={getIconUrl(data.value)}
-          alt={data.value}
-          width={24}
-          height={24}
+        <span
+          aria-label={data.value}
+          role="img"
           style={{
-            verticalAlign: "middle",
-            opacity: 0.5,
+            display: 'inline-block',
+            width: 24,
+            height: 24,
+            verticalAlign: 'middle',
+            backgroundColor: 'var(--color8)',
+            mask: `url(${getIconUrl(data.value)}) no-repeat center / contain`,
+            WebkitMask: `url(${getIconUrl(data.value)}) no-repeat center / contain`,
           }}
         />
         <span style={{ color: "var(--color)" }}>{data.value}</span>
