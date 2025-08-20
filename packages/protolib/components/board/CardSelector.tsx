@@ -65,7 +65,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
             h="47px"
             boc={'$gray5'}
             w="100%"
-            placeholder="search..."
+            placeholder="search card..."
             placeholderTextColor="$gray9"
             outlineColor="$gray8"
             value={search}
@@ -79,10 +79,12 @@ const FirstSlide = ({ selected, setSelected, options }) => {
               <Button
                 key={group}
                 onPress={() => toggleGroup(group)}
+                size="$3"
                 style={{
                   backgroundColor: isActive ? 'var(--color4)' : 'var(--gray3)',
                   borderColor: isActive ? 'var(--color7)' : 'var(--gray5)',
                   borderWidth: '1px',
+                  borderRadius: "$10",
                   color: isActive ? 'white' : 'inherit',
                 }}
               >
