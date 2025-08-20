@@ -181,7 +181,6 @@ export const basicPalette = {
 }
 
 export const miscellanyPalette = {
-  ...htmlBasicElements,
   ...cw(ActiveGroup, 'EyeOff', 'ActiveGroup', {}, nonDraggable, { children: <BasicPlaceHolder /> }),
   ...cw(ActiveGroupButton, 'EyeOff', 'ActiveGroupButton', {}, nonDraggable),
   ...cw(ActiveRender, 'EyeOff', 'ActiveRender', {}, nonDraggable),
@@ -299,7 +298,8 @@ export default {
     text: textPalette,
     layout: layoutPalette,
     external: external,
-    miscellany: miscellanyPalette
+    miscellany: miscellanyPalette,
+    html: htmlBasicElements,
   },
   molecules,
 }
