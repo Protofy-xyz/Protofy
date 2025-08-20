@@ -1,4 +1,4 @@
-import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info } from '@tamagui/lucide-icons'
+import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info, HelpingHand, X } from '@tamagui/lucide-icons'
 import { Text, YStack, XStack, ToggleGroup, Paragraph, Input, Button, Label } from '@my/ui'
 import { useEffect, useState } from 'react'
 import { Tinted } from '../Tinted'
@@ -13,6 +13,7 @@ import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { SettingsEditor } from './SettingsEditor'
 import { ViewEditor } from './ViewEditor'
+import { DisplayEditor } from './DisplayEditor'
 
 export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors, mode = "edit" }) => {
   const [cardData, setCardData] = useState(card);
@@ -36,7 +37,147 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
     })
   }
 
-  console.log("ActionCardSettings board: ", board)
+  const tabs = [
+    {
+      id: 'info',
+      label: 'Info',
+      icon: <Info size={"$1"} />,
+      content: <YStack f={1} gap="$4">
+        <CardSettings cardData={cardData} setCardData={setCardData} />
+        <YStack f={1} gap="$2">
+          <SettingsTitle>Description</SettingsTitle>
+          <PanelGroup direction="horizontal">
+            {!isCreateMode && <Panel defaultSize={50}>
+              <YStack
+                flex={1} height="100%" backgroundColor="$gray3" borderRadius="$3" p="$3" >
+                <Markdown data={cardData.description} />
+              </YStack>
+            </Panel>}
+            <CustomPanelResizeHandle direction="vertical" />
+            <Panel defaultSize={50}>
+              <YStack
+                flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$2" >
+
+                <Monaco
+                  path={cardData.name + '_description.md'}
+                  darkMode={resolvedTheme === 'dark'}
+                  sourceCode={cardData.description}
+                  onChange={(newCode) => {
+                    setCardData({
+                      ...cardData,
+                      description: newCode
+                    })
+                  }}
+                  options={{
+                    folding: false,
+                    lineDecorationsWidth: 15,
+                    lineNumbersMinChars: 0,
+                    lineNumbers: true,
+                    minimap: { enabled: false }
+                  }}
+                />
+              </YStack>
+            </Panel>
+          </PanelGroup>
+        </YStack>
+      </YStack>
+    },
+    {
+      id: 'value',
+      label: 'Value',
+      icon: <HelpingHand size={"$1"} />,
+      disabled: !isSimpleReturnString,
+      opacity: !isSimpleReturnString ? 0.4 : 1,
+      content: <Monaco
+        colors={{ 'editor.background': resolvedTheme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}
+        path={"value-" + cardData.name + ".ts"}
+        darkMode={resolvedTheme === 'dark'}
+        sourceCode={
+          (cardData.rulesCode?.trim().startsWith('return `') && cardData.rulesCode?.trim().endsWith('`'))
+            ? cardData.rulesCode.trim().slice(8, -1)
+            : cardData.rulesCode || ''
+        }
+        onChange={(newCode) => {
+          setCardData({
+            ...cardData,
+            rulesCode: `return \`${newCode}\``
+          })
+        }}
+        options={{
+          scrollBeyondLastLine: false,
+          scrollbar: {
+            vertical: 'auto',
+            horizontal: 'auto',
+          },
+          folding: false,
+          lineDecorationsWidth: 0,
+          lineNumbersMinChars: 0,
+          lineNumbers: "off",
+          minimap: { enabled: false },
+          formatOnPaste: true,
+          formatOnType: true,
+        }}
+      />
+    },
+    {
+      id: 'rules',
+      label: 'Rules',
+      icon: <ClipboardList size={"$1"} />,
+      content: <RuleEditor
+        board={board}
+        extraCompilerData={{ userParams: cardData.params, actions: actions?.boards[board.name] }}
+        onCodeChange={(cardData, states) => {
+          return "rules processed"
+        }}
+        actions={actions.boards || {}}
+        compiler={cardData.type == 'value' ? 'getValueCode' : 'getActionCode'}
+        states={states?.boards || {}}
+        cardData={cardData}
+        setCardData={setCardData}
+      />
+    },
+    {
+      id: 'params',
+      label: 'Params',
+      icon: <Sliders size={"$1"} />,
+      content: <ParamsEditor
+        params={cardData.params || {}}
+        setParams={(newParams) => {
+          console.log("hacemos setParams", newParams)
+          setCardData((prev) => ({
+            ...prev,
+            params: newParams,
+          }))
+        }}
+        configParams={cardData.configParams || {}}
+        setConfigParams={(newConfigParams) => {
+          console.log("hacemos setConfigParams", newConfigParams)
+          setCardData((prev) => ({
+            ...prev,
+            configParams: newConfigParams,
+          }))
+        }}
+      />
+    },
+    {
+      id: 'display',
+      label: 'Display',
+      icon: <Monitor size={"$1"} />,
+      content: <DisplayEditor icons={icons} card={card} cardData={cardData} setCardData={setCardData} />
+    },
+    {
+      id: 'view',
+      label: 'View',
+      icon: <FileCode size={"$1"} />,
+      content: <ViewEditor cardData={cardData} setHTMLCode={setHTMLCode} />
+    },
+    {
+      id: 'raw',
+      label: 'Raw',
+      icon: <Braces size={"$1"} />,
+      content: <SettingsEditor cardData={cardData} setCardData={setCardData} resolvedTheme={resolvedTheme} />
+    }
+  ]
 
   return (
     <YStack f={1}>
@@ -46,168 +187,51 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
             <XStack h={"100%"}>
               {/* @ts-ignore */}
               <ToggleGroup disableDeactivation={true} height="$3" type="single" value={tab} onValueChange={setTab}>
-                <ToggleGroup.Item value="info">
-                  <XStack gap={"$2"} ai={"center"}>
-                    <Info size={"$1"} />
-                    <Text>Info</Text>
-                  </XStack >
-                </ToggleGroup.Item>
-                <ToggleGroup.Item
-                  value="value"
-                  disabled={!isSimpleReturnString}
-                  opacity={!isSimpleReturnString ? 0.4 : 1}
-                >
-                  <XStack gap="$2" ai="center">
-                    <ClipboardList size="$1" />
-                    <Text color={!isSimpleReturnString ? '$color8' : '$color'}>
-                      Value
-                    </Text>
-                  </XStack>
-                </ToggleGroup.Item>
-                <ToggleGroup.Item value="rules">
-                  <XStack gap={"$2"} ai={"center"}>
-                    <FileCode size={"$1"} />
-                    <Text>Rules</Text>
-                  </XStack >
-                </ToggleGroup.Item>
-                <ToggleGroup.Item value="params">
-                  <XStack gap={"$2"} ai={"center"}>
-                    <Sliders size={"$1"} />
-                    <Text>Params</Text>
-                  </XStack >
-                </ToggleGroup.Item>
-                <ToggleGroup.Item value="view">
-                  <XStack gap={"$2"} ai={"center"}>
-                    <Monitor size={"$1"} />
-                    <Text>Display</Text>
-                  </XStack >
-                </ToggleGroup.Item>
-                <ToggleGroup.Item value="raw">
-                  <XStack gap={"$2"} ai={"center"}>
-                    <Braces size={"$1"} />
-                    <Text>Settings</Text>
-                  </XStack >
-                </ToggleGroup.Item>
+                {
+                  tabs.map((tabItem) => (
+                    <ToggleGroup.Item
+                      key={tabItem.id}
+                      value={tabItem.id}
+                      disabled={tabItem.disabled}
+                      opacity={tabItem.opacity || 1}
+                    >
+                      <XStack gap={"$2"} ai={"center"}>
+                        {tabItem.icon}
+                        <Text>{tabItem.label}</Text>
+                      </XStack>
+                    </ToggleGroup.Item>
+                  ))
+                }
               </ToggleGroup>
             </XStack>
           </XStack>
           <Tinted>
-            {tab == 'info' &&
-              <YStack f={1} gap="$4">
-                <CardSettings cardData={cardData} setCardData={setCardData} icons={icons} />
-                <YStack f={1} gap="$2">
-                  <SettingsTitle>Description</SettingsTitle>
-                  <PanelGroup direction="horizontal">
-                    {!isCreateMode && <Panel defaultSize={50}>
-                      <YStack
-                        flex={1} height="100%" backgroundColor="$gray3" borderRadius="$3" p="$3" >
-                        <Markdown data={cardData.description} />
+            {
+              tabs.map((tabItem) => (
+                tabItem.id === (tab ?? "rules") && (
+                  <YStack key={tabItem.id} f={1} gap="$4" p="$4">
+                    {tabItem.content || (
+                      <YStack f={1} ai="center" jc="center">
+                        <Text color="$gray11">No content available for this tab</Text>
                       </YStack>
-                    </Panel>}
-                    <CustomPanelResizeHandle direction="vertical" />
-                    <Panel defaultSize={50}>
-                      <YStack
-                        flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$2" >
-
-                        <Monaco
-                          path={cardData.name + '_description.md'}
-                          darkMode={resolvedTheme === 'dark'}
-                          sourceCode={cardData.description}
-                          onChange={(newCode) => {
-                            setCardData({
-                              ...cardData,
-                              description: newCode
-                            })
-                          }}
-                          options={{
-                            folding: false,
-                            lineDecorationsWidth: 15,
-                            lineNumbersMinChars: 0,
-                            lineNumbers: true,
-                            minimap: { enabled: false }
-                          }}
-                        />
-                      </YStack>
-                    </Panel>
-                  </PanelGroup>
-                </YStack>
-              </YStack>
+                    )}
+                  </YStack>
+                )
+              ))
             }
 
-            {tab == 'value' && <Monaco
-              colors={{ 'editor.background': resolvedTheme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}
-              path={"value-" + cardData.name + ".ts"}
-              darkMode={resolvedTheme === 'dark'}
-              sourceCode={
-                (cardData.rulesCode?.trim().startsWith('return `') && cardData.rulesCode?.trim().endsWith('`'))
-                  ? cardData.rulesCode.trim().slice(8, -1)
-                  : cardData.rulesCode || ''
-              }
-              onChange={(newCode) => {
-                setCardData({
-                  ...cardData,
-                  rulesCode: `return \`${newCode}\``
-                })
-              }}
-              options={{
-                scrollBeyondLastLine: false,
-                scrollbar: {
-                  vertical: 'auto',
-                  horizontal: 'auto',
-                },
-                folding: false,
-                lineDecorationsWidth: 0,
-                lineNumbersMinChars: 0,
-                lineNumbers: "off",
-                minimap: { enabled: false },
-                formatOnPaste: true,
-                formatOnType: true,
-              }}
-            />}
-            {(tab == 'rules' || !tab) && <RuleEditor
-              board={board}
-              extraCompilerData={{ userParams: cardData.params, actions: actions?.boards[board.name] }}
-              onCodeChange={(cardData, states) => {
-                return "rules processed"
-              }}
-              actions={actions.boards || {}}
-              compiler={cardData.type == 'value' ? 'getValueCode' : 'getActionCode'}
-              states={states?.boards || {}}
-              cardData={cardData}
-              setCardData={setCardData}
-            />}
-            {tab == 'params' && <ParamsEditor
-              params={cardData.params || {}}
-              setParams={(newParams) => {
-                console.log("hacemos setParams", newParams)
-                setCardData((prev) => ({
-                  ...prev,
-                  params: newParams,
-                }))
-              }}
-              configParams={cardData.configParams || {}}
-              setConfigParams={(newConfigParams) => {
-                console.log("hacemos setConfigParams", newConfigParams)
-                setCardData((prev) => ({
-                  ...prev,
-                  configParams: newConfigParams,
-                }))
-              }}
-            />}
-            {tab == 'view' && <ViewEditor cardData={cardData} setHTMLCode={setHTMLCode} />}
-            {tab === 'raw' && <SettingsEditor card={card} cardData={cardData} setCardData={setCardData} resolvedTheme={resolvedTheme} />}
           </Tinted>
 
         </YStack>
       </Tinted >
       {errors?.length > 0 ?
-                <YStack>
-                  {errors.map((error, index) => (
-                    <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
-                  ))}
-                </YStack>
-                : <></>
-              }
+        <YStack>
+          {errors.map((error, index) => (
+            <Paragraph key={"err" + index} color="$red9" fontSize="$4">{error}</Paragraph>
+          ))}
+        </YStack>
+        : <></>
+      }
     </YStack >
   );
 };

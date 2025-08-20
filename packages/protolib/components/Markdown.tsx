@@ -39,7 +39,7 @@ export function Markdown({ data, readOnly = false, setData=undefined }) {
     }}>
       {editing && <Monaco
         height={"100%"}
-        path={data.id + '_markdown.md'}
+        path={data?.id + '_markdown.md'}
         darkMode={resolvedTheme === 'dark'}
         sourceCode={code.current}
         onChange={(newCode) => {

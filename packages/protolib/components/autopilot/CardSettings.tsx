@@ -13,11 +13,11 @@ export const SettingsTitle = ({ children, error = "" }) => {
     </XStack>
 }
 
-export const CardSettings = ({ cardData, setCardData, icons }) => {
+export const CardSettings = ({ cardData, setCardData }) => {
 
     const [error, setError] = useState(null)
     return <XStack alignItems="center" space="$6" width="100%" >
-        <YStack flex={1} w={400} >
+        <YStack flex={1} maw={400} >
             <SettingsTitle error={error}>
                 Name <Text color={"$color8"}>*</Text>
             </SettingsTitle>
@@ -37,34 +37,6 @@ export const CardSettings = ({ cardData, setCardData, icons }) => {
                             name: t,
                     })    
                 }
-                }
-            />
-        </YStack>
-        <YStack flex={1} w={400}>
-            <SettingsTitle>
-                Icon
-            </SettingsTitle>
-            <IconSelect
-                br={"8px"}
-                icons={icons}
-                onSelect={(icon) => {
-                    setCardData({
-                        ...cardData,
-                        icon,
-                    });
-                }}
-                selected={cardData.icon}
-            />
-        </YStack>
-        <YStack flex={1} w={400}>
-            <SettingsTitle>
-                Color
-            </SettingsTitle>
-            <InputColor
-                br={"8px"}
-                color={cardData.color}
-                onChange={(e) =>
-                    setCardData({ ...cardData, color: e.hex })
                 }
             />
         </YStack>
