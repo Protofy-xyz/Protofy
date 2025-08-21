@@ -1,7 +1,7 @@
 import { XStack } from "tamagui"
 import { HTMLEditor } from "./HTMLEditor"
 import { ComponentCodeGeneration } from "./ComponentCodeGeneration"
-import { useSettingValue } from "protolib/lib/useSetting";
+import { useSettingValue } from "@extensions/settings/hooks";
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from "protolib/components/MainPanel/CustomPanelResizeHandle";
 

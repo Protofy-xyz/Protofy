@@ -5,10 +5,9 @@ import { Tinted } from "./Tinted"
 import { AlertDialog } from "./AlertDialog"
 import { usePageParams } from '../next/Params'
 import { SearchContext } from "../context/SearchContext"
-import { useSettingValue } from "../lib/useSetting";
+import { useSettingValue } from "@extensions/settings/hooks";
 
 export const SearchAIModalButton = forwardRef(({ initialState, onCancel = () => { }, onSearch = () => { }, placeholder = 'Search...', ...props }: any, ref: any) => {
-
     const isAIEnabled = useSettingValue('ai.enabled', false);
     const inputRef = useRef(null)
     const [open, setOpen] = useState(false)

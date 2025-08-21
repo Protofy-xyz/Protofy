@@ -18,7 +18,6 @@ import { Slides } from 'protolib/components/Slides';
 import { apiTemplates } from './templates'
 import { TemplateCard } from './TemplateCard';
 import { EditableObject } from 'protolib/components/EditableObject';
-import { useSubscription } from 'protolib/lib/mqtt';
 
 const APIIcons = {}
 

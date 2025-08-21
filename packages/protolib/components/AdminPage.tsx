@@ -10,8 +10,11 @@ import { BubbleChat } from './BubbleChat';
 import { useRouter } from 'next/router'
 import { useIsAdmin } from '../lib/useIsAdmin';
 import { useActionBar } from './ActionBarWidget';
+import dynamic from 'next/dynamic'
 
-export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = false, actionBar = null, onActionBarEvent = (e) => {} }: any, ref) => {
+const SettingsConnector = dynamic(() => import('@extensions/settings/components/SettingsConnector').then(mod => mod.SettingsConnector), { ssr: false })
+
+export const AdminPage = forwardRef(({ pageSession, title, children, integratedChat = false, actionBar = null, onActionBarEvent = (e) => { } }: any, ref) => {
   useSession(pageSession)
 
   useIsAdmin(() => '/workspace/auth/login?return=' + document?.location?.pathname + (document?.location?.search ? '?' + document?.location?.search : ''))
@@ -52,16 +55,17 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   }
 
   return (
-
+    <SettingsConnector>
       <Page ref={ref} title={title + " - " + projectName} backgroundColor={'$bgContent'}>
         <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName, searchStatus, setSearchStatus }}>
           <AdminPanel>
             {children}
           </AdminPanel>
         </SearchContext.Provider>
-          {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/board" />}
-          {ActionBar}
+        {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/board" />}
+        {ActionBar}
       </Page>
+    </SettingsConnector>
   )
 })
 

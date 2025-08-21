@@ -5,7 +5,7 @@ import { Tinted } from '../../components/Tinted'
 import { useRef, useMemo } from 'react'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
-import { useSettingValue } from "../../lib/useSetting";
+import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
 import { Save } from '@tamagui/lucide-icons'
 import { ComponentCodeGeneration } from './ComponentCodeGeneration'

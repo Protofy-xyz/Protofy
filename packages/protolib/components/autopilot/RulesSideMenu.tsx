@@ -7,7 +7,7 @@ import { Monaco } from '../../components/Monaco'
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { Panel, PanelGroup } from "react-resizable-panels";
 import CustomPanelResizeHandle from '../MainPanel/CustomPanelResizeHandle'
-import { useSettingValue } from "../../lib/useSetting";
+import { useSettingValue } from "@extensions/settings/hooks";
 import { getDefinition, toSourceFile } from 'protonode/dist/lib/code'
 import { ArrowFunction } from 'ts-morph';
 import { CodeView } from '@extensions/files/intents';

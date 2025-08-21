@@ -8,7 +8,7 @@ import { Monaco } from "../Monaco";
 import { JSONView } from "../JSONView";
 import { useCallback, useMemo, useState } from "react";
 import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
-import { useSettingValue } from "protolib/lib/useSetting";
+import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
 
 function flattenObject(obj, prefix = "", maxDepth = undefined, currentDepth = 1) {
