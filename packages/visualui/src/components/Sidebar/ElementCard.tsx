@@ -1,6 +1,7 @@
 import React from "react";
 import { useUITheme } from "../Theme";
 import { Icon } from "protolib/components/Icon";
+import { PublicIcon } from "protolib/components/IconSelect";
 
 type Props = {
     componentName: string,
@@ -40,7 +41,7 @@ export const ElementCard = ({ componentName, connectors, data, element }: Props)
                 textAlign: 'center', cursor: 'grab', borderRadius: '6px',
                 padding: '10px 0px', width: '100px', backgroundColor: nodeBackgroundColor
             }}>
-            <Icon
+            <PublicIcon
                 name={data.icon}
                 color={textColor}
                 size={32}
