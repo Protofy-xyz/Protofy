@@ -16,5 +16,6 @@
                 "bgContent": "hsl(15, 0%, 11%)"
             }
         }
-    }
+    },
+    "accent": "gray"
 }

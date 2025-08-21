@@ -11,9 +11,10 @@
                 "bgContent": "#292636"
             },
             "light": {
-                "bgPanel": "#FFFFFF",
-                "bgContent": "#F3F4F6"
+                "bgPanel": "#E3DEF3",
+                "bgContent": "#F1EBFA"
             }
         }
-    }
+    },
+    "accent": "purple"
 }

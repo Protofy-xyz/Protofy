@@ -11,9 +11,10 @@
                 "bgContent": "hsl(221, 41%, 11%)"
             },
             "light": {
-                "bgPanel": "#FFFFFF",
-                "bgContent": "#F3F4F6"
+                "bgPanel": "#D5E2F0",
+                "bgContent": "#E8F2F9"
             }
         }
-    }
+    },
+    "accent": "blue"
 }

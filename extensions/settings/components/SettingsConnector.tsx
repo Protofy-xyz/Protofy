@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSetAtom } from 'jotai';
 import { settingsAtom } from '../hooks';
 import { useSubscription } from 'protolib/lib/mqtt';
+import { setTintByName } from 'protolib/lib/Tints';
 
 export const SettingsConnector = ({ children }) => {
     const setSettings = useSetAtom(settingsAtom);
@@ -10,6 +11,9 @@ export const SettingsConnector = ({ children }) => {
     useEffect(() => {
         if (typeof window !== 'undefined' && window.ventoSettings) {
             setSettings(window.ventoSettings);
+            if(window.ventoSettings['theme.accent']) {
+                setTintByName(window.ventoSettings['theme.accent']);
+            }
         }
 
         // suscripción MQTT
@@ -19,6 +23,9 @@ export const SettingsConnector = ({ children }) => {
                 const action = parts[2]
                 const parsed = JSON.parse(msg.message);
                 if (parsed?.name) {
+                    if(parsed?.name === 'theme.accent') {
+                        setTintByName(parsed.value);
+                    }
                     if(action == 'delete') {
                         setSettings(prev => {
                             const newSettings = { ...prev };

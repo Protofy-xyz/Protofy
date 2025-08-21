@@ -2916,7 +2916,7 @@
 :root ._mr-2px{margin-right:2px;}
 :root ._mb-2px{margin-bottom:2px;}
 :root ._ml-2px{margin-left:2px;}
-:root ._bg-green{background-color:green;}
+:root ._bg-blue{background-color:blue;}
 @media (hover) {:root  ._bg-0hover-312414245:hover{background-color:var(--red4) !important;}}
 @media (hover) {:root  ._bg-0hover-791969433:hover{background-color:var(--gray4) !important;}}
 :root ._als-flex-end{align-self:flex-end;}
@@ -3025,33 +3025,6 @@
 :root ._l-1316330300{left:var(--space-16);}
 :root ._pb-1481558152{padding-bottom:var(--space-9);}
 :root ._ml-1481558276{margin-left:var(--space-5);}
-:root ._transform-d0t636676549{transform:translateY(249px) translateX(256.914px);}
-:root ._zi-99999{z-index:99999;}
-:root ._ai-flex-start{align-items:flex-start;}
-:root ._pt-1316330238{padding-top:var(--space-14);}
-:root ._pr-1481558276{padding-right:var(--space-5);}
-:root ._pb-1481558276{padding-bottom:var(--space-5);}
-:root ._pl-1316330238{padding-left:var(--space-14);}
-:root ._jc-flex-start{justify-content:flex-start;}
-:root ._outlineStyle-none{outline-style:none;}
-:root ._bxsh-653176302{box-shadow:0px 12px 24px var(--shadowColor);}
-:root ._transform-scale11281{transform:scale(1);}
-:root ._mah-90vh{max-height:90vh;}
-:root:root  ._o-0active-0d0t846:active{opacity:0.8 !important;}
-:root ._mt-1481558400{margin-top:var(--space-1);}
-:root ._w-760px{width:760px;}
-:root ._mt-7d0t5px46{margin-top:7.5px;}
-:root ._mr-7d0t5px46{margin-right:7.5px;}
-:root ._mb-7d0t5px46{margin-bottom:7.5px;}
-:root ._ml-7d0t5px46{margin-left:7.5px;}
-:root ._w-730px{width:730px;}
-:root ._col-549765325{color:var(--color8);}
-:root ._tt-230632984{text-transform:var(--f-tr-8);}
-:root ._fow-233016264{font-weight:var(--f-we-8);}
-:root ._ls-167744183{letter-spacing:var(--f-21-8);}
-:root ._fos-229441344{font-size:var(--f-si-8);}
-:root ._lh-222976697{line-height:var(--f-li-8);}
-:root ._h-300px{height:300px;}
-:root ._pb-1316330238{padding-bottom:var(--space-14);}
-:root ._transform-d0t1087739724{transform:translateY(297px) translateX(256.914px);}
 :root ._transform-d0t257860776{transform:translateY(345px) translateX(256.914px);}
+:root ._bg-gray{background-color:gray;}
+:root ._transform-d0t1087739724{transform:translateY(297px) translateX(256.914px);}
