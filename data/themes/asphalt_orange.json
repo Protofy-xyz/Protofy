@@ -1,0 +1,22 @@
+{
+    "name": "asphalt_orange",
+    "format": [
+        "json",
+        "css"
+    ],
+    "config": {
+        "themes": {
+            "dark": {
+                "color1": "#30302e",
+                "color2": "#3b372d",
+                "bgPanel": "#383A44",
+                "bgContent": "#2A2D36"
+            },
+            "light": {
+                "bgPanel": "#DDD",
+                "bgContent": "#EEE"
+            }
+        }
+    },
+    "accent": "orange"
+}

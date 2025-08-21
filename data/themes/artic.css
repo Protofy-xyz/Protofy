@@ -2999,12 +2999,7 @@
 :root ._als-center{align-self:center;}
 :root:root:root  ._outlineWidth-0focus-0px:focus{outline-width:0px !important;}
 @media (hover) {:root  ._bg-0hover-791969495:hover{background-color:var(--gray6) !important;}}
-:root ._btrr-0px{border-top-right-radius:0px;}
-:root ._bbrr-0px{border-bottom-right-radius:0px;}
 :root ._bg-791969495{background-color:var(--gray6);}
-:root ._btlr-0px{border-top-left-radius:0px;}
-:root ._bblr-0px{border-bottom-left-radius:0px;}
-:root ._bg-791969371{background-color:var(--gray2);}
 :root ._transform-scale41281{transform:scale(4);}
 :root ._pt-1481558276{padding-top:var(--space-5);}
 :root ._mb-1316330269{margin-bottom:var(--space-15);}
@@ -3023,14 +3018,27 @@
 :root ._mt-1px{margin-top:1px;}
 @media (hover) {:root  ._bg-0hover-549765418:hover{background-color:var(--color5) !important;}}
 :root:root  ._o-0active-0d0t746:active{opacity:0.7 !important;}
+:root ._fos-229441189{font-size:var(--f-si-3);}
 :root ._zi-150000{z-index:150000;}
 :root ._pe-auto{pointer-events:auto !important;}
 :root ._contain-layout{contain:layout;}
 :root ._l-1316330300{left:var(--space-16);}
 :root ._pb-1481558152{padding-bottom:var(--space-9);}
 :root ._ml-1481558276{margin-left:var(--space-5);}
-:root ._transform-d0t778486379{transform:translateY(297px) translateX(289.508px);}
-:root ._fos-229441189{font-size:var(--f-si-3);}
-:root ._transform-d0t636676549{transform:translateY(249px) translateX(256.914px);}
+:root ._transform-d0t1087739724{transform:translateY(297px) translateX(256.914px);}
 :root ._bg-orange{background-color:orange;}
+:root ._transform-d0t636676549{transform:translateY(249px) translateX(256.914px);}
+:root ._zi-1000000000{z-index:1000000000;}
+:root ._w-14px{width:14px;}
+:root ._h-7px{height:7px;}
+:root ._t--7px{top:-7px;}
+:root ._w-7px{width:7px;}
+:root ._t-3d0t5px46{top:3.5px;}
+:root ._fow-233016109{font-weight:var(--f-we-3);}
+:root ._ls-167744028{letter-spacing:var(--f-21-3);}
+:root ._lh-222976542{line-height:var(--f-li-3);}
+:root ._transform-d0t1788508312{transform:translateY(1200px) translateX(33.601575px);}
+:root ._b--7px{bottom:-7px;}
+:root ._b-3d0t5px46{bottom:3.5px;}
+:root ._transform-1497069385{transform:translateY(0px) translateX(42px);}
 :root ._transform-d0t837029321{transform:translateY(201px) translateX(256.914px);}
