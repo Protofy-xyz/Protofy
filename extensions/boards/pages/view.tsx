@@ -299,6 +299,7 @@ const getExecuteAction = (board, rawActions) => {
   }
 }
 
+
 const BoardStateView = ({ board }) => {
   const states = useProtoStates({}, 'states/boards/' + board.name + '/#', 'states')
   const data = states?.boards?.[board.name]
@@ -364,7 +365,7 @@ const FloatingArea = ({ tabVisible, setTabVisible, board, automationInfo, boardR
         </>
       },
       "logs": {
-        "label": "Logs",
+        "label": "Logs (" + logs.length + ")",
         "icon": Activity,
         "content": <LogPanel AppState={AppState} logs={logs} setLogs={setLogs} />
       },
