@@ -26,10 +26,6 @@ export const getContext = async (options: {
         return
     }
 
-    if(defaultValue === undefined) {
-        logger.error({}, "State defaultValue is required");
-        return
-    }
     if(name === undefined) {
         return ProtoMemDB(chunk).getByTag(group, tag) ?? defaultValue
     }
