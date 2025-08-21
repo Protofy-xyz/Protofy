@@ -53,10 +53,8 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
 
     const getWrappedComponentsFromMetadata = (components: any) => Object.entries(components).reduce<any>((acc, [name, data]: any) => {
         const visualUIData = data.metadata?.visualui
+        
         if (visualUIData) {
-            if (!acc.app) {
-                acc.app = {}
-            }
             if (visualUIData.palette) {
                 if (!acc[visualUIData.palette]) {
                     acc[visualUIData.palette] = {}
@@ -66,11 +64,12 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
                     ...uiComponentWrapper(data.component, name, data.metadata.visualui)
                 }
             } else {
-                if (!acc.app[name]) {
-                    acc.app[name] = {
-                        component: data.component,
-                        metadata: data.metadata
-                    }
+                if (!acc.app) {
+                    acc.app = {}
+                }
+                acc.app = {
+                    ...acc.app,
+                    ...uiComponentWrapper(data.component, name, data.metadata.visualui)
                 }
             }
         }
