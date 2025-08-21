@@ -206,7 +206,7 @@ const getDB = (path, req, session) => {
       
  
       //if api is selected, create an autoapi for the object
-      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "SQLite") ? "automatic-crud" : "automatic-crud-storage"
+      const templateName = value.databaseType === "Google Sheets" ? "automatic-crud-google-sheet" : (value.databaseType === "Default Provider") ? "automatic-crud" : "automatic-crud-storage"
       if (session) {
         const objectApi = APIModel.load({
           name: value.name,

@@ -4,15 +4,13 @@ import { DataView } from 'protolib/components/DataView';
 import { DataTable2 } from 'protolib/components/DataTable2';
 import { Chip } from 'protolib/components/Chip';
 import { AdminPage } from 'protolib/components/AdminPage';
-import { Pencil, Boxes, Tag } from '@tamagui/lucide-icons';
+import { Pencil } from '@tamagui/lucide-icons';
 import { usePageParams } from 'protolib/next';
 import { XStack, Text } from "@my/ui";
-import { getPendingResult, z } from 'protobase'
+import { z } from 'protobase'
 import ErrorMessage from "protolib/components/ErrorMessage"
 import { PaginatedData } from "protolib/lib/SSR"
-import { API, ProtoModel } from 'protobase'
-import { usePendingEffect } from 'protolib/lib/usePendingEffect';
-import { useState } from 'react';
+import { ProtoModel } from 'protobase'
 import { useRouter } from 'next/router'
 import { AsyncView } from 'protolib/components/AsyncView';
 import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
@@ -74,10 +72,10 @@ export default {
                         DataTable2.column("features", row => row.features, "features", row => Object.keys(row.features).map(f => <Chip mr={"$2"} text={f} color={'$gray5'} />)),
                     )}
                     extraFieldsFormsAdd={{
-                        databaseType: z.union([z.literal("SQLite"), z.literal("Google Sheets"), z.literal("JSON File")])
+                        databaseType: z.union([z.literal("Default Provider"), z.literal("Google Sheets"), z.literal("JSON File")])
                             .after("keys")
                             .label("database type")
-                            .defaultValue("SQLite"),
+                            .defaultValue("Default Provider"),
                         param: z.string()
                             .after("keys")
                             .label("Google Sheet Link")
