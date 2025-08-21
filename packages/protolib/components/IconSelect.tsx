@@ -6,23 +6,30 @@ export const getIconUrl = (icon) => {
   return `/public/icons/${icon}.svg`;
 }
 
+export const PublicIcon = ({ size = 40, name, color = 'var(--color8)' }) => {
+  return (
+    <span
+      aria-label={name}
+      role="img"
+      style={{
+        display: 'inline-block',
+        width: size,
+        height: size,
+        verticalAlign: 'middle',
+        backgroundColor: color,
+        mask: `url(${getIconUrl(name)}) no-repeat center / contain`,
+        WebkitMask: `url(${getIconUrl(name)}) no-repeat center / contain`,
+      }}
+    />
+  );
+
+}
+
 const IconOption = (props) => {
   return (
     <components.Option {...props}>
       <YStack style={{ display: "flex", alignItems: "center", gap: "8px", width: '95px', height: '95px', justifyContent: 'center' }}>
-      <span
-          aria-label={props.data.value}
-          role="img"
-          style={{
-            display: 'inline-block',
-            width: 40,
-            height: 40,
-            verticalAlign: 'middle',
-            backgroundColor: 'var(--color8)',
-            mask: `url(${getIconUrl(props.data.value)}) no-repeat center / contain`,
-            WebkitMask: `url(${getIconUrl(props.data.value)}) no-repeat center / contain`,
-          }}
-        />
+        <PublicIcon name={props.data.value} />
         <Text fos="$2" o={0.6} ta="center" height="30px">
           {props.data.value}
         </Text>
@@ -111,7 +118,7 @@ export const IconSelect = ({ icons, onSelect, selected }) => {
           }),
           singleValue: (provided) => ({
             ...provided,
-              color: "var(--color)",
+            color: "var(--color)",
           }),
           valueContainer: (provided) => ({
             ...provided,
@@ -141,7 +148,7 @@ export const IconSelect = ({ icons, onSelect, selected }) => {
               : state.isFocused
                 ? "var(--color5)"
                 : "var(--color2)",
-              color: "var(--color)", 
+            color: "var(--color)",
             cursor: "pointer",
             borderRadius: "6px",
             display: "flex",

@@ -11,6 +11,7 @@ const UiManager = dynamic(() => import('visualui'), { ssr: false })
 export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
     const [loading, setLoading] = useState(false)
     const [fileContent, setFileContent] = useState()
+    const [contentType, setContentType] = useState("")
     const [sharedComponents, setSharedComponents] = useState<any>()
     const toast = useToastController()
 
@@ -20,7 +21,12 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
     }
 
     const onSave = async (content: string) => {
-        const res = await API.post(`/api/core/v1/boards/${boardID}/uicode`, { code: content })
+        let parsedContent = content
+        // TODO: Adds support to visual ui to do not delete comments when save. "contentType" will be not necessary.
+        if (contentType && !content.startsWith(contentType)) {
+            parsedContent = `${contentType}\n${content}`
+        }
+        const res = await API.post(`/api/core/v1/boards/${boardID}/uicode`, { code: parsedContent })
         if (res && res.data) {
             toast.show("UI saved successfully")
         } else if (res && res.error) {
@@ -30,20 +36,25 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
 
 
     const getUiCode = async () => {
+        setContentType("")
         setLoading(true)
         const res = await API.get(`/api/core/v1/boards/${boardID}/uicode`)
         if (res && res.data) {
-            setFileContent(res.data.code)
+            const content = res.data.code
+            setFileContent(content)
+            // if content starts with //@ or // @ get first line and set as contentType to not delete it on save
+            if (content.startsWith("//@") || content.startsWith("// @")) {
+                const firstLine = content.split('\n')[0]
+                setContentType(firstLine)
+            }
         }
         setLoading(false)
     }
 
     const getWrappedComponentsFromMetadata = (components: any) => Object.entries(components).reduce<any>((acc, [name, data]: any) => {
         const visualUIData = data.metadata?.visualui
+        
         if (visualUIData) {
-            if (!acc.app) {
-                acc.app = {}
-            }
             if (visualUIData.palette) {
                 if (!acc[visualUIData.palette]) {
                     acc[visualUIData.palette] = {}
@@ -53,11 +64,12 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
                     ...uiComponentWrapper(data.component, name, data.metadata.visualui)
                 }
             } else {
-                if (!acc.app[name]) {
-                    acc.app[name] = {
-                        component: data.component,
-                        metadata: data.metadata
-                    }
+                if (!acc.app) {
+                    acc.app = {}
+                }
+                acc.app = {
+                    ...acc.app,
+                    ...uiComponentWrapper(data.component, name, data.metadata.visualui)
                 }
             }
         }
