@@ -75,7 +75,8 @@ const SettingsAutoAPI = AutoAPI({
     prefix: '/api/core/v1/',
     dbName: 'settings',
     getDB: getDB,
-    requiresAdmin: ['*']
+    requiresAdmin: ['*'],
+    allowUpsert: true
 })
 
 export default (app, context) => {

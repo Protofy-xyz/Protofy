@@ -189,10 +189,13 @@ export default {
               text: "Use this theme",
               icon: Palette,
               action: async (element: ThemeType) => {
+
                 let updateData: any = {
                   themeId: element.getId(),
-                  format: element.get("format")
+                  format: element.get("format"),
+                  accent: element.get("accent") ?? 'green'
                 }
+                
                 if (element.get("config")) {
                   const Tamagui = createConfig({ ...element.get("config") })
                   updateData["css"] = Tamagui.getCSS()

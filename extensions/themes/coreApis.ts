@@ -143,7 +143,7 @@ export default (app, context) => {
             return res.status(403).json({ error: 'Forbidden' });
         }
 
-        const { css, themeId, format } = req.body;
+        const { css, themeId, format, accent } = req.body;
 
         if (!themeId) {
             return res.status(400).json({ error: 'CSS and themeId are required' });
@@ -163,7 +163,7 @@ export default (app, context) => {
         }
 
         const token = getServiceToken()
-        const updateSettingRes = await ThemeService.selectTheme({ themeId: themeId, token: token })
+        const updateSettingRes = await ThemeService.selectTheme({ themeId: themeId, token: token, accent: accent })
 
         if (updateSettingRes.isError) {
             return res.status(500).json({ error: 'Error updating theme setting' });

@@ -54,6 +54,7 @@ type AutoAPIOptions = {
     onBeforeDelete?: Function,
     onAfterDelete?: Function,
     skipDatabaseIndexes?: boolean,
+    allowUpsert?: boolean,
     skipDatabaseInitialization?: boolean,
     dbOptions?: {
         batch?: boolean,
@@ -82,6 +83,7 @@ export const AutoAPI = ({
     extraData = {},
     logLevel = 'info',
     itemsPerPage = 25,
+    allowUpsert = false,
     skipStorage = async (data, session?,req?)=> false,
     onBeforeList = async (data, session?, req?) => data,
     onAfterList = async (data, session?, req?) => data,
@@ -357,6 +359,7 @@ export const AutoAPI = ({
             for (const path of dbPath) {
                 const db = getDB(path, req, session)
                 try {
+                    if(allowUpsert) throw new Error("Upsert enabled, inserting new document")
                     await db.get(entityModel.getId())
                     res.status(409).send({ error: "Already exists" })
                     return
