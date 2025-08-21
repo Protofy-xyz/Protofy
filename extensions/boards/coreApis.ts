@@ -60,23 +60,48 @@ const getDB = (path, req, session) => {
         },
 
         async del(key, value) {
-            // delete boards[key]
-            // try to delete the board file from the boards folder
             console.log("Deleting board: ", JSON.stringify({ key, value }))
-            const filePath = BoardsDir(getRoot(req)) + key + ".json"
+
+            const base = BoardsDir(getRoot(req))
+            const jsonPath = base + key + ".json"
+            const logicPath = base + key + ".js"
+            const uiPath = base + key + "_ui.js"
+            const boardDir = base + key
+
             try {
-                await fs.unlink(filePath)
+                await fs.unlink(jsonPath)
             } catch (error) {
-                console.log("Error deleting file: " + filePath)
+                console.log("Error deleting file: " + jsonPath)
             }
 
-            const tsPath = BoardsDir(getRoot(req)) + key + ".js"
             try {
-                if (fsSync.existsSync(tsPath)) {
-                    await fs.unlink(tsPath)
+                if (fsSync.existsSync(logicPath)) {
+                    await fs.unlink(logicPath)
                 }
             } catch (error) {
-                console.log("Error deleting boards automations file: " + tsPath)
+                console.log("Error deleting board automation file: " + logicPath)
+            }
+
+            try {
+                if (fsSync.existsSync(uiPath)) {
+                    await fs.unlink(uiPath)
+                }
+            } catch (error) {
+                console.log("Error deleting board UI file: " + uiPath)
+            }
+
+            try {
+                removeActions({ group: 'boards', tag: key })
+            } catch (error) {
+                console.log("Error removing actions for board: " + key)
+            }
+
+            try {
+                if (fsSync.existsSync(boardDir)) {
+                    await fs.rm(boardDir, { recursive: true, force: true })
+                }
+            } catch (error) {
+                console.log("Error deleting board dir: " + boardDir)
             }
         },
 
@@ -359,7 +384,7 @@ export default async (app, context) => {
             const rulesCode = fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '.js', 'utf-8')
             await API.post(`/api/core/v1/boards/${name}/automation?token=` + token, { boardId: name, code: rulesCode });
         }
-        if(fsSync.existsSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '_ui.js')) {
+        if (fsSync.existsSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '_ui.js')) {
             //then save the UI
             const uiCode = fsSync.readFileSync(TemplatesDir(getRoot()) + '/' + template.id + '/' + template.id + '_ui.js', 'utf-8')
             await API.post(`/api/core/v1/boards/${name}/uiCode?token=` + token, { boardId: name, code: uiCode });
@@ -397,12 +422,12 @@ export default async (app, context) => {
         //write board as {name}.json, uiCode as {name}_ui.js, rulesCode as {name}.js
         fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '.json', JSON.stringify(board, null, 4));
 
-        if(fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '_ui.js')) {
+        if (fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '_ui.js')) {
             const uiCode = fsSync.readFileSync(BoardsDir(getRoot()) + '/' + from + '_ui.js', 'utf-8')
             fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '_ui.js', uiCode);
         }
 
-        if(fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '.js')) {
+        if (fsSync.existsSync(BoardsDir(getRoot()) + '/' + from + '.js')) {
             const rulesCode = fsSync.readFileSync(BoardsDir(getRoot()) + '/' + from + '.js', 'utf-8')
             fsSync.writeFileSync(TemplatesDir(getRoot()) + '/' + name + '/' + name + '.js', rulesCode);
         }
@@ -684,7 +709,7 @@ export default async (app, context) => {
 
     })
 
-    
+
 
     app.get('/api/core/v1/board/cardreset', requireAdmin(), async (req, res) => {
         if (!req.query.name) {
