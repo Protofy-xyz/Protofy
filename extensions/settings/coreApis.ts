@@ -29,6 +29,9 @@ const getDB = (path, req, session) => {
         },
 
         async del(key, value) {
+            if(key == 'all') {
+                throw new Error("Cannot modify 'all' key")
+            }
             console.log("Deleting key: ", JSON.stringify({ key, value }))
             const filePath = fspath.join(dirPath, key + ".json");
             try {
@@ -39,6 +42,9 @@ const getDB = (path, req, session) => {
         },
 
         async put(key, value) {
+            if(key == 'all') {
+                throw new Error("Cannot modify 'all' key")
+            }
             const filePath = fspath.join(dirPath, key + ".json");
             try {
                 await fs.writeFile(filePath, value)
@@ -48,6 +54,15 @@ const getDB = (path, req, session) => {
         },
 
         async get(key) {
+            if(key == 'all') {
+                //iterate over dirPath, and combine all jsons
+                let combined = {};
+                for await (const [file, content] of db.iterator()) {
+                    const {name, value} = JSON.parse(content)
+                    combined = {...combined, [name]: value}
+                }
+                return JSON.stringify(combined);
+            }
             const filePath = fspath.join(dirPath, key + ".json");
             try {
                 const fileContent = await fs.readFile(filePath, 'utf8')
