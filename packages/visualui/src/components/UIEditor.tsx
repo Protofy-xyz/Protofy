@@ -26,7 +26,7 @@ import dynamic from 'next/dynamic';
 
 const VisualUiFlows = dynamic(() => import('./VisualUiFlows').then(mod => mod.VisualUiFlows));
 
-function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null }) {
+function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage = "", userPalettes = {}, resolveComponentsDir = "", topics, metadata = {}, contextAtom = null, settings = {} }) {
     const [_, setContext] = useVisualUiAtom(contextAtom)
     const editorRef = useRef<any>()
     const monacoRef = useRef(null);
@@ -267,6 +267,7 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
                 onSave={() => null}
                 resolveComponentsDir={resolveComponentsDir}
                 contextAtom={contextAtom}
+                settings={settings["editor"]}
             >
             </EditorLayout>
         </div>

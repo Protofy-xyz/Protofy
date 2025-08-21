@@ -28,17 +28,27 @@ export class Source {
     }
 
     // Ast -> craftNodes
-    data(customIdentifier?: () => string | number): any { // Gets craftJS nodes
+    data(customIdentifier?: () => string | number, options?: any): any { // Gets craftJS nodes
         if (customIdentifier) {
             this.identifyElements(customIdentifier)
         }
-        const content = this.getContent();
+        const content = this.getContent(options?.getMainContent);
         let craftNodes = this.toCraftNodes(content)
         craftNodes = this.addCustomProps(craftNodes) // Adds imports
         return craftNodes;
     }
 
-    getContent(): Node {
+    getContent(getMainContent?: any): Node {
+        if (getMainContent && typeof getMainContent == 'function') {
+            try {
+                const descendant = getMainContent({ ast: this.ast, SyntaxKind: SyntaxKind })
+                if (descendant) {
+                    return descendant;
+                }
+            } catch (e) {
+                console.error("Error getting main content from source", e)
+            }
+        }
         return this.getFirstDescendant('JsxElement')
     }
 
@@ -193,7 +203,7 @@ export class Source {
         }
 
         if (name == 'ReactCode') { // ReactCode is a special case
-            props = { ...props, "codeBlock": node.getText()  }    
+            props = { ...props, "codeBlock": node.getText() }
         }
 
         return {

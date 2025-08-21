@@ -22,10 +22,11 @@ export type EditorProps = {
   codeRef?: any;
   contextAtom: any;
   frame: string;
+  settings?: any;
 };
 
 
-const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null, codeRef }: EditorProps) => {
+const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponentsDir, onReady = () => { }, metadata = {}, contextAtom = null, codeRef, settings }: EditorProps) => {
   const paper = useRef<any>()
   const [loading, setLoading] = useState(true);
   const [currentPageInitialJson, setCurrentPageInitialJson] = useState({});
@@ -183,7 +184,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
 
   const loadEditorNodes = async (cnt) => {
     const source: Source = Source.parse(cnt, metadata)
-    let editorNodes = source.data()
+    let editorNodes = source.data(undefined, { getMainContent: settings?.getMainContent })
     setCurrentPageInitialJson(editorNodes)
     const availableComponents = query?.getOptions()?.resolver ?? {}
     const availableCompArr = Object.keys(availableComponents)
@@ -308,7 +309,7 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
           ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
           style={{
             flex: 1, position: 'relative', overflow: 'auto',
-            color: 'black', backgroundColor: '#f0f0f0', margin: '0 auto',
+            margin: '0 auto',
             left: 0, right: 0,
             width: frames[frame]?.width ?? '100%',
             height: frames[frame]?.height ?? '100%',
