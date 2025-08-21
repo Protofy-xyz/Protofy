@@ -93,28 +93,13 @@ export const LogPanel = ({ AppState, logs, setLogs }) => {
 
     return <YStack f={1}>
         <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
-            <Input
-                focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}
-                borderBottomWidth={1}
-                forceStyle='focus'
-                br={0}
-                backgroundColor={'$backgroundTransparent'}
-                value={search}
-                width={"100%"}
-                onChangeText={(text) => {
-                    setSearch(text);
-                }}
-                placeholder='Filter logs...'
-                bw={0}
-                paddingLeft={80}
-            />
             <Popover placement="bottom-start">
-                <Popover.Trigger position='absolute'>
+                <Popover.Trigger m="$0" p="$0">
                     <InteractiveIcon size={20} Icon={Ban} onPress={() => setLogs([])} />
                 </Popover.Trigger>
             </Popover>
             <Popover placement="bottom-start">
-                <Popover.Trigger position='absolute' left={35}>
+                <Popover.Trigger m="$0" p="$0">
                     <InteractiveIcon size={20} Icon={Filter} />
                 </Popover.Trigger>
                 <Popover.Content padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
@@ -146,6 +131,20 @@ export const LogPanel = ({ AppState, logs, setLogs }) => {
                     </ButtonGroup>
                 </Popover.Content>
             </Popover>
+            <Input
+                focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}
+                borderBottomWidth={1}
+                forceStyle='focus'
+                br={0}
+                backgroundColor={'$backgroundTransparent'}
+                value={search}
+                width={"100%"}
+                onChangeText={(text) => {
+                    setSearch(text);
+                }}
+                placeholder='Filter logs...'
+                bw={0}
+            />
         </XStack>
 
         <ScrollView bc="transparent" f={1} height={"calc( 100vh - 90px )"}>
