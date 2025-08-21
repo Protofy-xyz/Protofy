@@ -1,18 +1,18 @@
 {
-    "name": "default",
+    "name": "artic",
     "format": [
         "json",
         "css"
     ],
     "config": {
         "themes": {
+            "dark": {
+                "bgPanel": "hsl(215, 28%, 17%)",
+                "bgContent": "hsl(221, 41%, 11%)"
+            },
             "light": {
                 "bgPanel": "#FFFFFF",
                 "bgContent": "#F3F4F6"
-            },
-            "dark": {
-                "bgPanel": "#24252B",
-                "bgContent": "#1C1B21"
             }
         }
     }

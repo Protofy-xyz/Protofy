@@ -1,5 +1,5 @@
 
-import { XStack, YStack, Text, ScrollView, Popover, Input } from '@my/ui'
+import { XStack, YStack, Text, ScrollView, Popover, Input, Theme } from '@my/ui'
 import { JSONViewer } from './jsonui'
 import { JSONView } from './JSONView'
 import { useTint } from '../lib/Tints'
@@ -91,71 +91,69 @@ export const LogPanel = ({ AppState, logs, setLogs }) => {
     };
     const hoverStyle = React.useMemo(() => ({ bc: "$" + tint + "4" }), [tint]);
 
-    return <YStack f={1}>
-        <XStack ai="center" backgroundColor={'$backgroundTransparent'}>
-            <Popover placement="bottom-start">
-                <Popover.Trigger m="$0" p="$0">
-                    <InteractiveIcon size={20} Icon={Ban} onPress={() => setLogs([])} />
-                </Popover.Trigger>
-            </Popover>
-            <Popover placement="bottom-start">
-                <Popover.Trigger m="$0" p="$0">
-                    <InteractiveIcon size={20} Icon={Filter} />
-                </Popover.Trigger>
-                <Popover.Content padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
-                    <ButtonGroup mode="vertical">
-                        <GroupButton onPress={() => toggleLevel('trace')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('trace')}>
-                            <Microscope size="$1" strokeWidth={1} />
-                            <Text>Trace</Text>
-                        </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('debug')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('debug')}>
-                            <Bug size="$1" strokeWidth={1} />
-                            <Text>Debug</Text>
-                        </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('info')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('info')}>
-                            <Info size="$1" strokeWidth={1} />
-                            <Text>Info</Text>
-                        </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('warn')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('warn')}>
-                            <AlertCircle size="$1" strokeWidth={1} />
-                            <Text>Warn</Text>
-                        </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('error')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('error')}>
-                            <XCircle size="$1" strokeWidth={1} />
-                            <Text>Error</Text>
-                        </GroupButton>
-                        <GroupButton onPress={() => toggleLevel('fatal')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('fatal')}>
-                            <Bomb size="$1" strokeWidth={1} />
-                            <Text>Fatal</Text>
-                        </GroupButton>
-                    </ButtonGroup>
-                </Popover.Content>
-            </Popover>
-            <Input
-                focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 1, outlineWidth: 0 }}
-                borderBottomWidth={1}
-                forceStyle='focus'
-                br={0}
-                backgroundColor={'$backgroundTransparent'}
-                value={search}
-                width={"100%"}
-                onChangeText={(text) => {
-                    setSearch(text);
-                }}
-                placeholder='Filter logs...'
-                bw={0}
-            />
-        </XStack>
+    return <Theme>
+        <YStack f={1}>
+            <XStack ai="center" backgroundColor={'$backgroundTransparent'} borderBottomWidth={1} borderColor={"$borderColor"}>
+                <Popover placement="bottom-start">
+                    <Popover.Trigger m="$0" p="$0">
+                        <InteractiveIcon size={20} Icon={Ban} onPress={() => setLogs([])} />
+                    </Popover.Trigger>
+                </Popover>
+                <Popover placement="bottom-start">
+                    <Popover.Trigger m="$0" p="$0">
+                        <InteractiveIcon size={20} Icon={Filter} />
+                    </Popover.Trigger>
+                    <Popover.Content padding={0} space={0} bw={1} boc="$borderColor" bc={"$color1"} >
+                        <ButtonGroup mode="vertical">
+                            <GroupButton onPress={() => toggleLevel('trace')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('trace')}>
+                                <Microscope size="$1" strokeWidth={1} />
+                                <Text>Trace</Text>
+                            </GroupButton>
+                            <GroupButton onPress={() => toggleLevel('debug')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('debug')}>
+                                <Bug size="$1" strokeWidth={1} />
+                                <Text>Debug</Text>
+                            </GroupButton>
+                            <GroupButton onPress={() => toggleLevel('info')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('info')}>
+                                <Info size="$1" strokeWidth={1} />
+                                <Text>Info</Text>
+                            </GroupButton>
+                            <GroupButton onPress={() => toggleLevel('warn')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('warn')}>
+                                <AlertCircle size="$1" strokeWidth={1} />
+                                <Text>Warn</Text>
+                            </GroupButton>
+                            <GroupButton onPress={() => toggleLevel('error')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('error')}>
+                                <XCircle size="$1" strokeWidth={1} />
+                                <Text>Error</Text>
+                            </GroupButton>
+                            <GroupButton onPress={() => toggleLevel('fatal')} jc="flex-start" inActive={!appState.levels || !appState.levels.includes('fatal')}>
+                                <Bomb size="$1" strokeWidth={1} />
+                                <Text>Fatal</Text>
+                            </GroupButton>
+                        </ButtonGroup>
+                    </Popover.Content>
+                </Popover>
+                <Input
+                    focusStyle={{ borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, outlineWidth: 0 }}
+                    forceStyle='focus'
+                    br={0}
+                    backgroundColor={'$backgroundTransparent'}
+                    value={search}
+                    width={"100%"}
+                    onChangeText={(text) => {
+                        setSearch(text);
+                    }}
+                    placeholder='Filter logs...'
+                    bw={0}
+                />
+            </XStack>
 
-        <ScrollView bc="transparent" f={1} height={"calc( 100vh - 90px )"}>
-            {filteredMessages.map((m, i) => {
-                return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
-                    <Tinted>
-                        {/* @ts-ignore */}
+            <ScrollView bc="transparent" f={1} height={"calc( 100vh - 90px )"}>
+                {filteredMessages.map((m, i) => {
+                    return <XStack bc="transparent" hoverStyle={hoverStyle} key={i} btw={0} bbw={1} boc={"$color4"}>
                         <MessageList data={m.message} topic={m.topic} />
-                    </Tinted>
-                </XStack>
-            })}
-        </ScrollView>
-    </YStack>
+                    </XStack>
+                })}
+            </ScrollView>
+        </YStack>
+    </Theme>
 }

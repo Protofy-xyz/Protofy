@@ -1,18 +1,18 @@
 {
-    "name": "default",
+    "name": "purple",
     "format": [
         "json",
         "css"
     ],
     "config": {
         "themes": {
+            "dark": {
+                "bgPanel": "#353244",
+                "bgContent": "#292636"
+            },
             "light": {
                 "bgPanel": "#FFFFFF",
                 "bgContent": "#F3F4F6"
-            },
-            "dark": {
-                "bgPanel": "#24252B",
-                "bgContent": "#1C1B21"
             }
         }
     }

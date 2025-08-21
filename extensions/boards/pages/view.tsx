@@ -323,7 +323,6 @@ const FloatingArea = ({ tabVisible, setTabVisible, board, automationInfo, boardR
       return newBuffer
     })
   })
-
   return <FloatingWindow
     visible={tabVisible}
     selectedTab={tabVisible}
