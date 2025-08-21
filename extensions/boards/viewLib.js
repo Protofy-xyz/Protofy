@@ -595,7 +595,7 @@ window.reactCard = (jsx, rootId, initialProps = {}) => {
     // ----- MODO CLÁSICO -----
     if (!isFrameCard) {
         Object.keys(window.ProtoComponents || {}).forEach(key => {
-            window[key] = window.ProtoComponents[key];
+            window[key] = window.ProtoComponents[key]?.component;
         });
 
         const jsxCode = `
