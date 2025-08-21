@@ -125,7 +125,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
       icon: <ClipboardList size={"$1"} />,
       content: <RuleEditor
         board={board}
-        extraCompilerData={{ userParams: cardData.params, actions: actions?.boards[board.name] }}
+        extraCompilerData={{ userParams: cardData.params, actions: actions?.boards?.[board.name] }}
         onCodeChange={(cardData, states) => {
           return "rules processed"
         }}
