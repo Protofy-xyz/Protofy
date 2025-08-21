@@ -29,6 +29,16 @@ export function getTints() {
   }
 }
 
+export const setTintByName = (tintName: ThemeName) => {
+  const index = getTints().tints.indexOf(tintName)
+  if (index !== -1) {
+    console.log('Setting default tint: ', tintName)
+    setTintIndex(index)
+  } else {
+    console.error("TINT NOT FOUND: ", tintName)
+  }
+}
+
 export function useTints() {
   const [val, setVal] = useState(getTints())
 
