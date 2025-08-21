@@ -294,7 +294,6 @@ function flattenTree(obj, currentGroup = null) {
 
 const useCards = (extraCards = []) => {
   const availableCards = useProtoStates({}, 'cards/#', 'cards')
-  console.log('availableCards', availableCards)
   return [...extraCards, ...flattenTree(availableCards)]
 }
 
