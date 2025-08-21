@@ -99,7 +99,7 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
     return { [name]: UiComponent }
 }
 
-export const getBasicHtmlWrapper = (componentName, options = {}) => {
+export const getBasicHtmlWrapper = (componentName, options: any = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -108,7 +108,7 @@ export const getBasicHtmlWrapper = (componentName, options = {}) => {
             selected: node.events.selected,
             custom: node.data.custom,
         }));
-        return React.createElement(componentName, { ...props, ref: connect })
+        return React.createElement(componentName, { ...props, children: props?.children ? props?.children : options["visualUIOnlyFallbackProps"].children, ref: connect })
     }
 
     UiComponent.craft = {

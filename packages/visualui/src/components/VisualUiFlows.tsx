@@ -16,7 +16,7 @@ export const VisualUiFlows = (props) => {
     const getNodePropsData = (nodeName, propsData, data) => Object.keys(propsData).reduce((total, key) => {
         var value: any = propsData[key]
         var keyName = `prop-${key}`
-        const valueKind = data?.kinds[key] ?? getKindName(value)
+        const valueKind = data?.kinds?.[key] ?? getKindName(value)
 
         var propValue = { key, value, kind: valueKind }
 

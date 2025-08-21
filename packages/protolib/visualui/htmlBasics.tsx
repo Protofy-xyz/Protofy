@@ -1,124 +1,35 @@
-import { getBasicHtmlWrapper } from './visualuiWrapper'
+import { BasicPlaceHolder, getBasicHtmlWrapper } from './visualuiWrapper'
 
-const htmlElements = [
-    "a",
-    "abbr",
-    "address",
-    "area",
-    "article",
-    "aside",
-    "audio",
-    "b",
-    "base",
-    "bdi",
-    "bdo",
-    "blockquote",
-    "body",
-    "br",
-    "button",
-    "canvas",
-    "caption",
-    "cite",
-    "code",
-    "col",
-    "colgroup",
-    "data",
-    "datalist",
-    "dd",
-    "del",
-    "details",
-    "dfn",
-    "dialog",
-    "div",
-    "dl",
-    "dt",
-    "em",
-    "embed",
-    "fieldset",
-    "figcaption",
-    "figure",
-    "footer",
-    "form",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "h6",
-    "head",
-    "header",
-    "hgroup",
-    "hr",
-    "html",
-    "i",
-    "iframe",
-    "img",
-    "input",
-    "ins",
-    "kbd",
-    "label",
-    "legend",
-    "li",
-    "link",
-    "main",
-    "map",
-    "mark",
-    "meta",
-    "meter",
-    "nav",
-    "noscript",
-    "object",
-    "ol",
-    "optgroup",
-    "option",
-    "output",
-    "p",
-    "param",
-    "picture",
-    "pre",
-    "progress",
-    "q",
-    "rp",
-    "rt",
-    "ruby",
-    "s",
-    "samp",
-    "script",
-    "section",
-    "select",
-    "small",
-    "source",
-    "span",
-    "strong",
-    "style",
-    "sub",
-    "summary",
-    "sup",
-    "svg",
-    "table",
-    "tbody",
-    "td",
-    "template",
-    "textarea",
-    "tfoot",
-    "th",
-    "thead",
-    "time",
-    "title",
-    "tr",
-    "track",
-    "u",
-    "ul",
-    "var",
-    "video",
-    "wbr",
-    "small", "cite", "sub", "sup", "abbr", "time", "kbd", "samp", "var", "mark", "bdo", "bdi", "ruby", "rt", "rp", "noscript", "details", "summary", "wbr", "template"
-];
+const htmlElements = {
+    "text": ["a", "abbr", "b", "bdi", "bdo", "cite", "code", "data", "dfn", "em", "h1", "h2", "h3", "h4", "h5", "h6", "i", "ins", "kbd", "mark", "q", "rp", "rt", "ruby", "s", "samp", "small", "span", "strong", "sub", "sup", "time", "u", "var", "wbr"],
+    "container": ["address", "article", "aside", "blockquote", "body", "caption", "colgroup", "div", "dl", "dt", "dd",
+        "fieldset", "figcaption", "figure", "footer", "form", "head",
+        "header", "hgroup", "html", "li", "main", "nav", "ol", "p", "pre", "section", "table", "tbody", "td",
+        "tfoot", "th", "thead", "tr", "ul"
+    ],
+    "miscellany": [
+        "area", "audio", "base", "br", "button", "canvas", "col", "datalist", "del", "details", "dialog",
+        "embed", "hr", "iframe", "img", "input", "label", "legend", "link", "map", "meta", "meter", "object",
+        "optgroup", "option", "output", "param", "picture", "progress", "script", "select", "source",
+        "style", "summary", "svg", "template", "textarea", "title", "track", "video"
+    ]
+}
 
-export default htmlElements.reduce((total, ele) => {
-    total = {
-        ...total,
-        ...getBasicHtmlWrapper(ele, { craft: { custom: { hidden: false } } })
-    }
-    return total
+const baseProps = {
+    craft: { custom: { hidden: true } },
+}
+
+const categoryProps = {
+    text: { craft: { custom: { hidden: false, kinds: { children: "string" } }, props: { children: "hello world!" } } }, // inline, sin placeholder
+    container: { craft: { custom: { hidden: false } }, visualUIOnlyFallbackProps: { children: <BasicPlaceHolder /> } }, // mismo que base
+}
+
+export default Object.entries(htmlElements).reduce((acc, [category, tags]) => {
+    tags.forEach(ele => {
+        acc = {
+            ...acc,
+            ...getBasicHtmlWrapper(ele, { ...baseProps, ...categoryProps[category] })
+        }
+    })
+    return acc
 }, {})
