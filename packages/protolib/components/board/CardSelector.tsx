@@ -8,6 +8,7 @@ import { Search, ScanEye, Rocket } from "@tamagui/lucide-icons";
 import { Tinted } from '../Tinted';
 import { getIconUrl } from '../IconSelect';
 import { useThemeSetting } from '@tamagui/next-theme'
+import { v4 as uuidv4 } from 'uuid';
 
 const SelectGrid = ({ children }) => {
   return <XStack jc="flex-start" ai="center" gap={25} flexWrap='wrap'>
@@ -132,7 +133,7 @@ const FirstSlide = ({ selected, setSelected, options }) => {
                       }
                     >
                       {option?.defaults?.icon ? (
-                        <img src={getIconUrl(option.defaults.icon)} width={20} height={20} style={darkMode ?{ filter: 'brightness(0) saturate(100%) invert(1)' }: {}}  />
+                        <img src={getIconUrl(option.defaults.icon)} width={20} height={20} style={darkMode ? { filter: 'brightness(0) saturate(100%) invert(1)' } : {}} />
                       ) : isAction(option) ? (
                         <Rocket />
                       ) : (
@@ -152,18 +153,27 @@ const FirstSlide = ({ selected, setSelected, options }) => {
   )
 }
 
-
 const iconTable = {
   'value': 'tag',
   'action': 'zap'
 }
 
-const SecondSlide = ({ card, board, selected, states, icons, actions, setCard, errors }) => {
-  return <YStack mb={"$4"} f={1}>
-    <ActionCardSettings mode="create" board={board} states={states} icons={icons} card={card} actions={actions} onEdit={(data) => {
-      setCard(data)
-    }} errors={errors} />
-  </YStack>
+const SecondSlide = ({ remountKey, card, board, states, icons, actions, setCard, errors }) => {
+  return (
+    <YStack mb="$4" f={1}>
+      <ActionCardSettings
+        key={remountKey}
+        mode="create"
+        board={board}
+        states={states}
+        icons={icons}
+        card={card}
+        actions={actions}
+        onEdit={(data) => setCard(data)}
+        errors={errors}
+      />
+    </YStack>
+  )
 }
 
 const typeCodes = {
@@ -288,58 +298,86 @@ const useCards = (extraCards = []) => {
   return [...extraCards, ...flattenTree(availableCards)]
 }
 
+const makeDefaultCard = (tpl) => ({
+  key: "key",
+  width: tpl?.defaults?.type === 'value' ? 1 : 2,
+  height: tpl?.defaults?.type === 'value' ? 4 : 6,
+  icon: iconTable[tpl?.defaults?.type],
+  html: typeCodes[tpl?.defaults?.type],
+  ...tpl?.defaults,
+})
+
 export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, onFinish, states, icons, actions, errors }) => {
   const cards = useCards(extraCards)
-  const [selectedCard, setSelectedCard] = useState(cards[0])
-  const [card, setCard] = useState()
+
+  const [selectedCard, setSelectedCard] = useState(null)
+  const [card, setCard] = useState(null)
+  const [remountKey, setRemountKey] = useState(uuidv4())
 
   useEffect(() => {
-    if (selectedCard) {
-      setCard({ key: "key", width: selectedCard.defaults.type === 'value' ? 1 : 2, height: selectedCard.defaults.type === 'value' ? 4 : 6, icon: iconTable[selectedCard.defaults.type], html: typeCodes[selectedCard.defaults.type], ...selectedCard.defaults })
-    } else {
-      setCard(undefined)
+    if (cards?.length && !selectedCard) {
+      setSelectedCard(cards[0])
     }
+  }, [cards, selectedCard])
+
+  useEffect(() => {
+    if (!selectedCard) return
+    setCard(makeDefaultCard(selectedCard))
+    setRemountKey(uuidv4())
   }, [selectedCard])
-  return <AlertDialog
-    integratedChat
-    p={"$2"}
-    pt="$5"
-    pl="$5"
-    setOpen={setAddOpened}
-    open={addOpened}
-    onFinish={() => setCard(undefined)}
-    hideAccept={true}
-    description={""}
-  >
-    <YStack f={1} jc="center" ai="center" >
-      <XStack f={1} mr="$5">
-        <Slides
-          hideHeader={true}
-          styles={{ f:1, w: "90vw", maw: 1400, h: "90vh", mah: 1200 }}
-          lastButtonCaption="Create"
-          onFinish={async () => {
-            try {
-              await onFinish(card)
-              setAddOpened(false)
-            } catch (e) {
-              console.error("Error creating card: ", e)
-            }
-          }}
-          slides={[
-            {
-              name: "Create new widget",
-              title: "Select the widget",
-              component: <FirstSlide options={cards} selected={selectedCard} setSelected={setSelectedCard} />
-            },
-            {
-              name: "Configure your widget",
-              title: "Configure your widget",
-              component: <SecondSlide board={board} states={states} icons={icons} actions={actions} card={card} setCard={setCard} errors={errors} />
-            }
-          ]
-          }></Slides>
-      </XStack>
-      {/* </ScrollView> */}
-    </YStack>
-  </AlertDialog>
+
+  useEffect(() => {
+    if (!addOpened) return
+    const tpl = selectedCard ?? cards?.[0]
+    if (tpl) {
+      setCard(makeDefaultCard(tpl))
+    }
+    setRemountKey(uuidv4())
+  }, [addOpened])
+
+ return <AlertDialog
+      integratedChat
+      p="$2"
+      pt="$5"
+      pl="$5"
+      setOpen={setAddOpened}
+      open={addOpened}
+      hideAccept
+      description=""
+    >
+      <YStack f={1} jc="center" ai="center">
+        <XStack f={1} mr="$5">
+          <Slides
+            hideHeader
+            styles={{ f:1, w:"90vw", maw:1400, h:"90vh", mah:1200 }}
+            lastButtonCaption="Create"
+            onFinish={async () => {
+              try {
+                await onFinish(card)
+                setAddOpened(false)
+              } catch (e) {
+                console.error("Error creating card: ", e)
+              }
+            }}
+            slides={[
+              {
+                name: "Create new widget",
+                title: "Select the widget",
+                component: (
+                  <FirstSlide options={cards} selected={selectedCard} setSelected={setSelectedCard}
+                  />
+                ),
+              },
+              {
+                name: "Configure your widget",
+                title: "Configure your widget",
+                component: card ? (
+                  <SecondSlide remountKey={remountKey} board={board} states={states} icons={icons} actions={actions} card={card} setCard={setCard} errors={errors} />
+                ) : null, 
+              },
+            ]}
+          />
+        </XStack>
+      </YStack>
+    </AlertDialog>
 }
