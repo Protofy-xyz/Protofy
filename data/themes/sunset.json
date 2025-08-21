@@ -1,5 +1,5 @@
 {
-    "name": "default",
+    "name": "sunset",
     "format": [
         "json",
         "css"
@@ -11,8 +11,8 @@
                 "bgContent": "#F3F4F6"
             },
             "dark": {
-                "bgPanel": "#24252B",
-                "bgContent": "#1C1B21"
+                "bgPanel": "hsl(20, 11.40%, 15.50%)",
+                "bgContent": "hsl(36, 31%, 10%)"
             }
         }
     }

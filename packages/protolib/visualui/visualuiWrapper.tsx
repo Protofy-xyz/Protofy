@@ -28,6 +28,29 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         namedImports: [{ alias: undefined, name: name }]
         // defaultImport: componentName
     }
+
+    return uiComponentWrapper(Component, name, {
+        craft: {
+            related: {},
+            custom: {
+                icon,
+                ...importInfo,
+                context: uiData['custom']?.context || {},
+                kinds: uiData['custom']?.kinds || {},
+            },
+            props: defaultProps,
+            displayName: name,
+            rules: {
+                canMoveIn: () => false,
+                ...uiData['rules']
+            }
+        },
+        visualUIOnlyFallbackProps,
+        editableText
+    })
+}
+
+export const uiComponentWrapper = (Component, componentName, options = {}) => {
     const UiComponent = (props) => {
         let {
             connectors: { connect },
@@ -39,9 +62,9 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
         }));
         const { actions } = useEditor()
 
-        return <Component ref={connect} {...visualUIOnlyFallbackProps} {...props}>
+        return <Component ref={connect} {...options["visualUIOnlyFallbackProps"]} {...props}>
             {
-                editableText && (typeof props.children == 'string' || typeof props.children == 'number')
+                options["editableText"] && (typeof props.children == 'string' || typeof props.children == 'number')
                     ? <ContentEditable
                         innerRef={connect}
                         html={props.children.toString()}
@@ -55,48 +78,16 @@ export const getComponentWrapper = (importName) => (Component, icon, name, defau
                             setProp((prop) => (prop.children = e.target.value), 500);
                         }}
                     />
-                    : props.children ? props.children : visualUIOnlyFallbackProps.children
+                    : props.children ? props.children : options["visualUIOnlyFallbackProps"]?.children
             }
         </Component>
     }
 
-    var defaultRules = {}
-    if (editableText) {
-        defaultRules = {
-            canMoveIn: () => false
-        }
-    }
-
-    var data = { context: {}, kinds: {}, props: {} }
-
-    Object.keys(defaultProps).forEach(prop => {
-        var value = defaultProps[prop].value
-        if (defaultProps[prop].kind && value) {
-            data.kinds[prop] = defaultProps[prop].kind
-            data.context[prop] = value
-            data.props[prop] = value
-        } else {
-            data.props[prop] = defaultProps[prop]
-        }
-    }, {})
-
     UiComponent.craft = {
-        related: {},
-        custom: {
-            icon,
-            ...importInfo,
-            context: data.context,
-            kinds: data.kinds,
-            ...uiData['custom'],
-        },
-        props: data.props,
-        displayName: name,
-        rules: {
-            ...defaultRules,
-            ...uiData['rules']
-        },
+        ...options["craft"],
+        displayName: componentName,
     }
-    return { [name]: UiComponent }
+    return { [componentName]: UiComponent }
 }
 
 export const getBasicHtmlWrapper = (componentName, options: any = {}) => {

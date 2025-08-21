@@ -52,19 +52,16 @@ export const AdminPage = forwardRef(({ pageSession, title, children, integratedC
   }
 
   return (
-    <Tinted>
+
       <Page ref={ref} title={title + " - " + projectName} backgroundColor={'$bgContent'}>
         <SearchContext.Provider value={{ search, setSearch, searchName, setSearchName, searchStatus, setSearchStatus }}>
           <AdminPanel>
             {children}
           </AdminPanel>
         </SearchContext.Provider>
-        <Tinted>
           {integratedChat && settingsAssistantEnabled && <BubbleChat apiUrl="/api/v1/chatbots/board" />}
           {ActionBar}
-        </Tinted>
       </Page>
-    </Tinted>
   )
 })
 

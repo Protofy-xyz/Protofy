@@ -1,5 +1,5 @@
 //transfers components from nextjs to the individual react renderers inside each react card
-export const TransferComponent = (component, name) => {
+export const TransferComponent = (component, name, metadata = {}) => {
     if (typeof window === 'undefined') {
         return;
     }
@@ -18,6 +18,9 @@ export const TransferComponent = (component, name) => {
 
 
     //@ts-ignore
-    window.ProtoComponents[name] = component;
+    window.ProtoComponents[name] = {
+        component,
+        metadata
+    };
     
 }

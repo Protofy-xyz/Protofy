@@ -1,5 +1,5 @@
 {
-    "name": "default",
+    "name": "gray",
     "format": [
         "json",
         "css"
@@ -8,11 +8,12 @@
         "themes": {
             "light": {
                 "bgPanel": "#FFFFFF",
-                "bgContent": "#F3F4F6"
+                "bgContent": "#F8F8F8"
             },
             "dark": {
-                "bgPanel": "#24252B",
-                "bgContent": "#1C1B21"
+                "color8": "#dddddd",
+                "bgPanel": "hsl(0, 0%, 17%)",
+                "bgContent": "hsl(15, 0%, 11%)"
             }
         }
     }

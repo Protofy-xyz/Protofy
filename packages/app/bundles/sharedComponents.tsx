@@ -25,14 +25,40 @@ import { CameraCard } from 'protolib/components/vision/CameraCard';
 import { ActionCard, ParamsForm, Icon } from 'protolib/components/board/ActionCard';
 import { CardValue } from 'protolib/components/board/CardValue';
 import { Provider } from 'app/provider'
-import { Tinted } from 'protolib/components/Tinted'; 
-import { DataView} from 'protolib/components/DataView';
+import { Tinted } from 'protolib/components/Tinted';
+import { DataView } from 'protolib/components/DataView';
 import { ObjectViewLoader } from 'protolib/components/ObjectViewLoader';
 import { MqttWrapper } from 'protolib/components/MqttWrapper';
+import { BasicPlaceHolder } from 'protolib/visualui/visualuiWrapper';
+
+const layoutMetadata = {
+    visualui: {
+        palette: "basic",
+        craft: {
+            custom: {
+                icon: "layout-grid",
+            },
+        },
+        visualUIOnlyFallbackProps: { children: <BasicPlaceHolder /> }
+    }
+}
+
+const textMetadata = {
+    visualui: {
+        palette: "basic",
+        craft: {
+            custom: {
+                icon: "type",
+            },
+            props: { children: "hello world!" },
+        },
+        editableText: true
+    }
+}
 
 export const transferExtensionComponents = () => {
-    TransferComponent(XStack, 'XStack');
-    TransferComponent(YStack, 'YStack');
+    TransferComponent(XStack, 'XStack', layoutMetadata);
+    TransferComponent(YStack, 'YStack', layoutMetadata);
     TransferComponent(UsersView, 'UsersView');
     TransferComponent(ServicesView, 'ServicesView');
     TransferComponent(PieChart, 'PieChart');
@@ -59,11 +85,31 @@ export const transferExtensionComponents = () => {
     TransferComponent(ActionCard, 'ActionCard');
     TransferComponent(CardValue, 'CardValue');
     TransferComponent(ParamsForm, 'ParamsForm');
-    TransferComponent(Icon, 'Icon');
-    TransferComponent(Button, 'Button');
-    TransferComponent(Text, 'Text');
+    TransferComponent(Icon, 'Icon', {
+        visualui: {
+            palette: "basic",
+            craft: {
+                custom: {
+                    icon: "squirrel",
+                },
+                props: { name: "squirrel", size: 24, color: "var(--color8)" },
+            },
+        }
+    });
+    TransferComponent(Button, 'Button', {
+        visualui: {
+            palette: "basic",
+            craft: {
+                custom: {
+                    icon: "square-mouse-pointer",
+                },
+                props: { children: "press me" },
+            },
+        }
+    });
+    TransferComponent(Text, 'Text', textMetadata);
     TransferComponent(Input, 'Input');
-    TransferComponent(View, 'View');
+    TransferComponent(View, 'View', layoutMetadata);
     TransferComponent(Provider, 'Provider');
     TransferComponent(Tinted, 'Tinted');
     TransferComponent(DataView, 'ProtoDataView');

@@ -26,7 +26,8 @@ const getElementFromDB = async (db: string, key: string) => {
 
 export async function makeTamaguiConfigFromDB(): Promise<{
   tamagui: ReturnType<typeof createConfig>
-  pack: any
+  pack: any,
+  accent?: string
 }> {
   let selectedThemeId = "default"
 
@@ -40,14 +41,15 @@ export async function makeTamaguiConfigFromDB(): Promise<{
   }
 
   let selectedPack = config // fallback
-
+  let accent: string | undefined
   try {
     const themeStr = await getElementFromDB("themes", selectedThemeId)
     const theme = JSON.parse(themeStr || '{}')
     selectedPack = theme?.config ?? selectedPack
+    accent = theme?.accent
   } catch (error) { }
 
   const tamagui = createConfig(selectedPack)
 
-  return { tamagui, pack: selectedPack }
+  return { tamagui, pack: selectedPack, accent }
 }
