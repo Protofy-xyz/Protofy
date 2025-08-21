@@ -47,7 +47,7 @@ export default class Document extends NextDocument {
     return (
       <Html lang="en">
         <Head>
-          <script src="/api/core/v1/settings.js" />
+          <script src={"/api/core/v1/settings.js?" + Date.now()} />
           <link rel="icon" href="/favicon.png" />
           {/* <link rel="icon" href="/favicon.svg" type="image/svg+xml" /> */}
 
