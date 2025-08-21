@@ -243,6 +243,68 @@ function Widget({board, state}) {
                         })
                     }
                 }
+                const statesDB = ProtoMemDB('states');
+                const group = 'boards';
+                const tag = key; // boardId
+                try {
+                    for (const card of (value.cards ?? [])) {
+                        if (card.previousName && card.previousName !== card.name) {
+                            const oldName = card.previousName;
+                            const newName = card.name;
+
+                            const oldVal = statesDB.get(group, tag, oldName);
+                            if (oldVal !== undefined) {
+                                statesDB.set(group, tag, newName, oldVal);
+                                generateEvent({
+                                    path: `states/${group}/${tag}/${newName}/update`,
+                                    from: "states",
+                                    user: 'system',
+                                    payload: { value: oldVal },
+                                    ephemeral: true
+                                }, getServiceToken());
+                            }
+
+                            statesDB.remove(group, tag, oldName);
+
+                            generateEvent({
+                                path: `states/${group}/${tag}/${oldName}/delete`,
+                                from: "states",
+                                user: 'system',
+                                payload: {},
+                                ephemeral: true
+                            }, getServiceToken());
+
+                            delete card.previousName;
+
+                            Manager.update(`../../data/boards/${tag}.js`, 'states', newName, oldVal);
+                            Manager.update(`../../data/boards/${tag}.js`, 'states', oldName, undefined);
+                        }
+                    }
+                } catch (e) {
+                    console.log('State rename error for board', key, e);
+                }
+                // --- PRUNE: orphan states ---
+                try {
+                    const currentStates = statesDB.getByTag(group, tag) || {};
+                    const validNames = new Set((value.cards ?? []).map(c => c.name));
+
+                    for (const stateName of Object.keys(currentStates)) {
+                        if (!validNames.has(stateName)) {
+                            statesDB.remove(group, tag, stateName);
+                            generateEvent({
+                                path: `states/${group}/${tag}/${stateName}/delete`,
+                                from: "states",
+                                user: 'system',
+                                payload: {},
+                                ephemeral: true
+                            }, getServiceToken());
+
+                            Manager.update(`../../data/boards/${tag}.js`, 'states', stateName, undefined);
+                        }
+                    }
+                } catch (e) {
+                    console.log('Prune orphan states error for board', key, e);
+                }
                 await fs.writeFile(filePath, JSON.stringify(value, null, 4))
             } catch (error) {
                 console.error("Error creating file: " + filePath, error, error.stack)
