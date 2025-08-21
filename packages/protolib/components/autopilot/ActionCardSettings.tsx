@@ -1,6 +1,6 @@
 import { Braces, Monitor, ClipboardList, Sliders, FileCode, Info, HelpingHand, X } from '@tamagui/lucide-icons'
 import { Text, YStack, XStack, ToggleGroup, Paragraph, Input, Button, Label } from '@my/ui'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Tinted } from '../Tinted'
 import { RuleEditor } from './RuleEditor'
 import { ParamsEditor } from './ParamsEditor'
@@ -17,6 +17,8 @@ import { DisplayEditor } from './DisplayEditor'
 
 export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors, mode = "edit" }) => {
   const [cardData, setCardData] = useState(card);
+  const originalNameRef = useRef(card?.name ?? null)
+
   const isSimpleReturnString =
     !cardData.rulesCode ||
     /^return\s*`[\s\S]*`$/.test(cardData.rulesCode.trim());
@@ -27,8 +29,16 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
 
   const { resolvedTheme } = useThemeSetting();
   useEffect(() => {
-    onEdit(cardData);
-  }, [cardData, onEdit]);
+    const payload = { ...cardData }
+    const original = originalNameRef.current
+    if (!isCreateMode && original && payload?.name && payload.name !== original) {
+      payload.previousName = original
+    } else {
+      delete payload.previousName
+    }
+    onEdit(payload);
+  }, [cardData, onEdit, isCreateMode]);
+
 
   const setHTMLCode = (code) => {
     setCardData({
