@@ -14,11 +14,21 @@ export default config
 
 const root = getRoot();
 
-const getElementFromDB = async (db: string, key: string) => {
-  const filePath = `${root}/data/${db}/${key}.json`
+const getTheme = async (key: string) => {
+  const filePath = `${root}/data/themes/${key}.json`
   try {
     const fileContent = await fs.readFile(filePath, 'utf8')
     return fileContent
+  } catch (error) {
+    throw new Error("File not found")
+  }
+}
+
+const getSetting = async (key: string) => {
+  const filePath = `${root}/data/settings/${key}`
+  try {
+    const fileContent = await fs.readFile(filePath, 'utf8')
+    return JSON.parse(fileContent)
   } catch (error) {
     throw new Error("File not found")
   }
@@ -32,10 +42,7 @@ export async function makeTamaguiConfigFromDB(): Promise<{
   let selectedThemeId = "default"
 
   try {
-
-    const themeSettingsStr = await getElementFromDB("settings", "theme")
-    const themeSettings = JSON.parse(themeSettingsStr || '{}')
-    selectedThemeId = themeSettings?.value ?? "default"
+    selectedThemeId = await getSetting("theme")
   } catch (error) {
     selectedThemeId = "default"
   }
@@ -43,7 +50,7 @@ export async function makeTamaguiConfigFromDB(): Promise<{
   let selectedPack = config // fallback
   let accent: string | undefined
   try {
-    const themeStr = await getElementFromDB("themes", selectedThemeId)
+    const themeStr = await getTheme(selectedThemeId)
     const theme = JSON.parse(themeStr || '{}')
     selectedPack = theme?.config ?? selectedPack
     accent = theme?.accent

@@ -9,6 +9,5 @@ export const useSettings = () => useAtom(settingsAtom);
 
 export const useSettingValue = <T = any>(key: string, defaultValue?: T): T => {
   const [settings] = useSettings();
-  console.log('settings: ', settings)
   return (settings[key] ?? defaultValue) as T;
 };
