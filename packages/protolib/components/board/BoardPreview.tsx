@@ -40,8 +40,15 @@ export default ({ element, width, onDelete, ...props }: any) => {
                         <Text fos="$2" fow="600" >{board?.get("name")}</Text>
                     </YStack>
                 </XStack>
-                <XStack ai={"center"} >
-                    <Tinted> <Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
+                <XStack
+                    ai={"center"}
+                    onClick={(e) => { e.stopPropagation?.(); e.preventDefault?.(); }}
+                    onPointerDown={(e) => { e.stopPropagation?.(); }}
+                    onMouseDown={(e) => { e.stopPropagation?.(); }}
+                    onPress={(e) => { e.stopPropagation?.(); }}
+                >
+                    <Tinted><Sparkles color={board.get("autopilot") ? "$color8" : "$gray8"} /></Tinted>
+
                     <ItemMenu
                         type={"item"}
                         mt={"1px"}
@@ -53,13 +60,14 @@ export default ({ element, width, onDelete, ...props }: any) => {
                             {
                                 text: "Settings",
                                 icon: Cog,
-                                action: (element) => { console.log("pressed: ", element); seteditSettingsDialog(true); setSelectedBoard(element) },
-                                isVisible: (element) => true
-                            }, {
+                                action: (element) => { seteditSettingsDialog(true); setSelectedBoard(element) },
+                                isVisible: () => true
+                            },
+                            {
                                 text: "Create template",
                                 icon: LayoutTemplate,
-                                action: (element) => { console.log("pressed: ", element); setCreateTemplateDialog(true); setSelectedBoard(element) },
-                                isVisible: (element) => true
+                                action: (element) => { setCreateTemplateDialog(true); setSelectedBoard(element) },
+                                isVisible: () => true
                             }
                         ]}
                     />
