@@ -18,8 +18,8 @@ const dbPath = 'auth'
 
 const addUser = async () => {
 
-    const { default: loadDBProviders } = await import('app/bundles/dbProviders');
-    await loadDBProviders();
+    const { default: loadDBProvider } = await import('app/bundles/dbProviders');
+    await loadDBProvider();
     const { getDB } = await import('app/bundles/storageProviders');
 
     console.log('Adding user: ', username, 'type: ', type)
