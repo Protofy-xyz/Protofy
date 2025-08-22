@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { pathToFileURL } from 'url';
-import { registerDBProvider, ProtoDB } from 'protonode';
+import { registerDBProvider, ProtoDB, getRoot } from 'protonode';
+import * as fspath from 'path';
 
 const extensionsPath = '../../extensions';
+const dirPath = fspath.join(getRoot(), "/data/settings/")
 
 function findModule(baseDir: string): string | null {
     const fullPath = path.join(baseDir, `dbProvider.ts`);
@@ -11,43 +13,44 @@ function findModule(baseDir: string): string | null {
     return null;
 }
 
-export default async function loadDBProviders(): Promise<number> {
+export default async function loadDBProvider(customProvider?: string): Promise<boolean> {
+    
+    const dbProviderConfigPath = fspath.join(dirPath, 'DB_PROVIDER');
+    let providerName: string;
 
-    const files = fs.readdirSync(extensionsPath);
-    let loaded = 0;
-
-    for (const extName of files) {
-        const fullPath = findModule(path.join(extensionsPath, extName));
-        if (!fullPath) continue;
-
-        try {
-            let provider = await import(pathToFileURL(fullPath).href);
-
-            const protoDBs = Object.values(provider).filter((value: any) =>
-                typeof value === 'function' && value.prototype && value.prototype instanceof ProtoDB
-            );
-
-            if (!protoDBs.length) {
-                console.warn(`[dbProviders] ${extName}/dbProvider doesn't export any ProtoDB classes`);
-                continue;
-            }
-
-            for (const protoDB of protoDBs as any[]) {
-                const key = (protoDB.type || extName).toString().toLowerCase();
-
-                registerDBProvider(key, {
-                    initDB: (...args: any[]) => protoDB.initDB?.(...args),
-                    connect: (...args: any[]) => protoDB.connect?.(...args),
-                    closeDBS: () => protoDB.closeDBS?.(),
-                });
-
-                loaded++;
-            }
-        } catch (e) {
-            console.error(`[dbProviders] Error loading ${extName}:`, e);
-        }
+    try {
+        const dbProviderConfigContent = await fs.promises.readFile(dbProviderConfigPath, 'utf8');
+        providerName = JSON.parse(dbProviderConfigContent)
+    } catch {
+        providerName = customProvider ?? 'sqlite'; // Default db provider
     }
 
-    if (!loaded) console.warn('[dbProviders] No providers registered from extensions');
-    return loaded;
+    const fullPath = findModule(path.join(extensionsPath, providerName));
+    if (!fullPath) {
+        console.warn(`${providerName}/dbProvider not found`);
+        return false;
+    }
+
+    try {
+        const providerModule = await import(pathToFileURL(fullPath).href);
+        const protoDB: any = Object.values(providerModule).find(
+            (value: any) => typeof value === 'function' && value.prototype instanceof ProtoDB
+        );
+
+        if (!protoDB) {
+            console.warn(`${providerName}/dbProvider doesn't export a ProtoDB class`);
+            return false;
+        }
+
+        registerDBProvider({
+            initDB: (...args: any[]) => protoDB.initDB?.(...args),
+            connect: (...args: any[]) => protoDB.connect?.(...args),
+            closeDBS: () => protoDB.closeDBS?.(),
+        });
+
+        return true;
+    } catch (e) {
+        console.error(`Error loading DB provider ${providerName}:`, e);
+        return false;
+    }
 }
