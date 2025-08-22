@@ -1583,6 +1583,86 @@ export const UIMasks = [
         ]
     },
     {
+        "id": "Button",
+        "title": "Button",
+        "path": "*",
+        "type": "JsxElement",
+        "filter": {
+            "name": "Button"
+        },
+        "body": [
+            {
+                "type": "child",
+                "data": [
+                    {
+                        "label": "text",
+                        "field": "child-1",
+                        "type": "child"
+                    }
+                ],
+                "disableAdd": true
+            },
+            {
+                "type": "custom-field",
+                "data": [
+                    {
+                        "label": "color",
+                        "field": "prop-bc",
+                        "type": "color",
+                        "staticLabel": true,
+                        "section": "basic"
+                    },
+                    {
+                        "label": "margin",
+                        "field": "prop-margin",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "padding",
+                        "field": "prop-padding",
+                        "staticLabel": true,
+                        "type": "range-theme",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "alignSelf",
+                        "field": "prop-alignSelf",
+                        "staticLabel": true,
+                        "type": "alignment-items",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "textAlign",
+                        "field": "prop-textAlign",
+                        "staticLabel": true,
+                        "type": "alignment-text",
+                        "section": "layout"
+                    },
+                    {
+                        "label": "width",
+                        "field": "prop-width",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    },
+                    {
+                        "label": "height",
+                        "field": "prop-height",
+                        "staticLabel": true,
+                        "type": "input",
+                        "section": "dimensions"
+                    }
+                ]
+            },
+            {
+                "type": "prop",
+                "data": []
+            }
+        ]
+    },
+    {
         "id": "RainbowText",
         "title": "RainbowText",
         "path": "*",
