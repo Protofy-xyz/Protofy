@@ -8,7 +8,7 @@ import { Spinner, useToastController, YStack } from '@my/ui'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useBoardVisualUI = ({ boardID, onDismiss }: { boardID: string, onDismiss?: any }) => {
+export const useBoardVisualUI = ({ boardID, onDismiss, onAfterSave }: { boardID: string, onDismiss?: any, onAfterSave?: any }) => {
     const [loading, setLoading] = useState(false)
     const [fileContent, setFileContent] = useState()
     const [contentType, setContentType] = useState("")
@@ -29,6 +29,7 @@ export const useBoardVisualUI = ({ boardID, onDismiss }: { boardID: string, onDi
         const res = await API.post(`/api/core/v1/boards/${boardID}/uicode`, { code: parsedContent })
         if (res && res.data) {
             toast.show("UI saved successfully")
+            onAfterSave && onAfterSave({code: parsedContent})
         } else if (res && res.error) {
             toast.show("Error saving UI", { tint: "red" })
         }
