@@ -45,9 +45,9 @@ const MessageList = React.memo(({ data, topic }: any) => {
                     <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
                 </XStack>
             </XStack>
-            <JSONView
+            <Tinted><JSONView
                 src={cleanData}
-            />
+            /></Tinted>
         </YStack>
     </XStack>
 })

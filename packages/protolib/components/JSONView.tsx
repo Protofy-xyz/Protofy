@@ -8,7 +8,7 @@ const overrideCss = `
   .string-value { color: var(--color9) !important; }
 `
 
-export const JSONView = ({ src, onSelectKey, ...props }) => {
+export const JSONView = ({ src, onSelectKey=(key) => {}, ...props }) => {
   const { resolvedTheme } = useThemeSetting()
   const darkMode = resolvedTheme === 'dark'
 
