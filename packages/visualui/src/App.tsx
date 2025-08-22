@@ -10,12 +10,13 @@ type Props = {
 	_currentPage?: string,
 	isVSCode?: boolean,
 	onSave?: Function,
+	onDismiss?: Function,
 	metadata?: any
-  contextAtom: any,
-  settings?: any
+	contextAtom: any,
+	settings?: any
 }
 
-export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null, metadata = {}, contextAtom, settings = {} }: Props) => {
+export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "@/uikit", _currentPage = "", onSave = () => null, onDismiss, metadata = {}, contextAtom, settings = {} }: Props) => {
 	const [currentPage, setCurrentPage] = useState(_currentPage);
 
 	const onSendMessage = async (event: any) => {
@@ -29,6 +30,12 @@ export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "
 			case "save":
 				const content = payload.content
 				onSave(formatText(content))
+				break;
+			case "dismiss":
+				if (onDismiss) {
+					onDismiss()
+					return true
+				}
 				break;
 		}
 	}
@@ -44,7 +51,7 @@ export default ({ userPalettes = {}, _sourceCode = "", _resolveComponentsDir = "
 						sendMessage={onSendMessage}
 						resolveComponentsDir={`${_resolveComponentsDir}/`}
 						metadata={metadata}
-            			contextAtom={contextAtom}
+						contextAtom={contextAtom}
 						settings={settings}
 					/>
 					: null

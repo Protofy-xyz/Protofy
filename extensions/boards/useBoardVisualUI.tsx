@@ -8,7 +8,7 @@ import { Spinner, useToastController, YStack } from '@my/ui'
 
 const UiManager = dynamic(() => import('visualui'), { ssr: false })
 
-export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
+export const useBoardVisualUI = ({ boardID, onDismiss }: { boardID: string, onDismiss?: any }) => {
     const [loading, setLoading] = useState(false)
     const [fileContent, setFileContent] = useState()
     const [contentType, setContentType] = useState("")
@@ -103,6 +103,7 @@ export const useBoardVisualUI = ({ boardID }: { boardID: string }) => {
             }}
             _sourceCode={fileContent}
             onSave={onSave}
+            onDismiss={onDismiss}
             contextAtom={undefined}
             settings={{
                 editor: {

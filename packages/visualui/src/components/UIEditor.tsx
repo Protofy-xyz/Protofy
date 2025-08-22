@@ -148,7 +148,9 @@ function UIEditor({ isActive = true, sourceCode = "", sendMessage, currentPage =
         monacoRef.current = code;
     }
 
-    const onCancelEdit = () => {
+    const onCancelEdit = async () => {
+        const hasCancel = await sendMessage({ type: 'dismiss' })
+        if (hasCancel) return
         document.location.href = document.location.href.split('?')[0]
     }
 
