@@ -204,7 +204,7 @@ export default {
 
                 if (updateRes.isError) return toast.show("Error setting theme.", { tint: 'red' })
 
-                refreshCss()
+                document.location.reload()
               },
               isVisible: (ele: ThemeType) => true,
               menus: ["item"]
