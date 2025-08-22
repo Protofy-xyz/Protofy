@@ -110,7 +110,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
     try {
         let response = null;
         try {
-            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, getLogger('boards', boardId, action.name ));
+            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
         } catch (err) {
             await generateEvent({
                 path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,
