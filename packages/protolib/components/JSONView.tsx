@@ -22,16 +22,6 @@ export const JSONView = ({ src, onSelectKey=(key) => {}, ...props }) => {
       <style>{overrideCss}</style>
       <ReactJsonView
         theme={darkMode ? 'eighties' : 'rjv-default'}
-        enableClipboard={(copy) => {
-        const path = 'board' + copy.namespace
-            .filter(v => v)
-            .map(k => `?.[${JSON.stringify(k)}]`)
-            .join('')
-
-        console.log('Key path:', path)
-        navigator.clipboard.writeText(path)
-        return false
-        }}
         name={false}
         indentWidth={2}
         displayDataTypes={false}

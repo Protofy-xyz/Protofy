@@ -42,7 +42,7 @@ const MessageList = React.memo(({ data, topic }: any) => {
     const type = topic.split("/")[2]
     const Icon = types[type]?.icon
     const message = JSON.parse(data)
-    const { level, time, pid, hostname, msg, name, ...cleanData } = message
+    const { level, time, pid, hostname, msg, name, _meta, ...cleanData } = message
     return <XStack
         p="$3"
         ml={"$0"}
