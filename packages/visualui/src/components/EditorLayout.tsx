@@ -309,15 +309,16 @@ const Editor = ({ frame = "desktop", topics, currentPageContent, resolveComponen
           ref={(ref) => { paper.current = ref; connectors.select(connectors.hover(ref, null), null) }}
           style={{
             flex: 1, position: 'relative', overflow: 'auto',
-            margin: '0 auto',
-            left: 0, right: 0,
-            width: frames[frame]?.width ?? '100%',
+            // margin: '0 auto',
+            display: 'flex',
+            // left: 0, right: 0,
+            // width: frames[frame]?.width ?? '100%',
             height: frames[frame]?.height ?? '100%',
-            marginTop: frames[frame]?.marginTop ?? ''
+            // marginTop: frames[frame]?.marginTop ?? '',
           }}
         >
           <ErrorBoundary>
-            <div id="editor-frame-container">
+            <div id="editor-frame-container" style={{ display: 'flex', flex: 1 }}>
               <Frame />
             </div>
           </ErrorBoundary>
