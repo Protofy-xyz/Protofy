@@ -1,11 +1,17 @@
 import pino from 'pino';
 import { getConfig } from './Config';
 
-export const getLogger = (logId='default', userConfig?) => {
+export const getLogger = (meta?: Object, userConfig?) => {
   const config = userConfig ?? getConfig()
-  const logger  = pino(config.logger)
-  
-  //wrapper for pino, allowing to have a third parameter id, to correlate messages with specific code nodes
+  const baseLogger = pino(config.logger)
+
+  let logger = baseLogger
+  if (meta && typeof meta !== 'string') {
+    logger = baseLogger.child({
+      _meta: {...meta}
+    })
+  }
+
   return {
     error: (data, msg?, id?) => logger.error(data, msg),
     fatal: (data, msg?, id?) => logger.fatal(data, msg),

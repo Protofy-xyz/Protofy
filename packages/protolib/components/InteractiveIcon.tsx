@@ -1,6 +1,6 @@
 import { XStack, StackProps } from '@my/ui';
 
-export const InteractiveIcon = ({ Icon, IconColor = 'var(--color8)', DisabledIconColor = 'var(--gray9)', disabled = false, size = 18, ...props }: { IconColor?: string, DisabledIconColor?: string, Icon: any, size?: number } & StackProps) => {
+export const InteractiveIcon = ({ Icon, IconColor = 'var(--color10)', DisabledIconColor = 'var(--gray9)', disabled = false, size = 18, ...props }: { IconColor?: string, DisabledIconColor?: string, Icon: any, size?: number } & StackProps) => {
   let mode = "react"
   if (typeof Icon == 'string') {
     mode = "string"

@@ -1,5 +1,5 @@
 
-import { XStack, YStack, Text, ScrollView, Popover, Input, Theme } from '@my/ui'
+import { XStack, YStack, Text, ScrollView, Popover, Input, Theme, Spacer } from '@my/ui'
 import { JSONViewer } from './jsonui'
 import { JSONView } from './JSONView'
 import { useTint } from '../lib/Tints'
@@ -23,6 +23,20 @@ const types = {
     60: { name: "FATAL", color: "$red10", icon: Bomb }
 }
 
+function formatTimestamp(ts) {
+  const d = new Date(ts)
+
+  const time = d.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+
+  const date = d.toLocaleDateString() // respeta el orden del locale
+
+  return `${time} ${date}` // sin coma en medio
+}
+
 const MessageList = React.memo(({ data, topic }: any) => {
     const from = topic.split("/")[1]
     const type = topic.split("/")[2]
@@ -34,20 +48,23 @@ const MessageList = React.memo(({ data, topic }: any) => {
         ml={"$0"}
         ai="center"
         jc="center"
+        f={1}
     >
-        <YStack>
-            <XStack left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" width="fit-content" ml={"$3"}>
-                <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9}>
+        <YStack f={1}>
+            <XStack f={1} left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" ml={"$3"}>
+                <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9} f={1}>
                     {/* <Chip text={types[type]?.name+"("+topic+")"} color={types[type]?.color} h={25} /> */}
                     <XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
                     {/* <Chip text={types[type]?.name} color={types[type]?.color} h={25} /> */}
                     <Text o={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
                     <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
+                    <Spacer f={1} />
+                    <Text o={0.5} fontSize={13} fontWeight={"400"}>{formatTimestamp(time)}</Text>
                 </XStack>
             </XStack>
-            <JSONView
+            <Tinted><JSONView
                 src={cleanData}
-            />
+            /></Tinted>
         </YStack>
     </XStack>
 })

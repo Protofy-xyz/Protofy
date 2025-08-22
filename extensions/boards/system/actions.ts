@@ -6,8 +6,6 @@ import { getExecuteAction } from "./getExecuteAction";
 import fetch from 'node-fetch';
 import { getLogger } from 'protobase';
 
-const logger = getLogger()
-
 const getBoardActions = async (boardId) => {
     const board = await getBoard(boardId);
     if (!board.cards || !Array.isArray(board.cards)) {
@@ -112,7 +110,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
     try {
         let response = null;
         try {
-            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, logger);
+            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
         } catch (err) {
             await generateEvent({
                 path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,

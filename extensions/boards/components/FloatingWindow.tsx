@@ -2,6 +2,7 @@ import { createElement, useState, useRef } from 'react';
 import { XStack, YStack, Text } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { X, Minimize2, Maximize2 } from '@tamagui/lucide-icons'
+import { Tinted } from 'protolib/components/Tinted';
 
 export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
     const openWindowSize = 1010
@@ -69,7 +70,7 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                     {
                         tabs && Object.keys(tabs).length > 0 && Object.keys(tabs).map((tab, index) => {
                             const isSelected = selectedTab === tab;
-                            return <XStack
+                            return <Tinted><XStack
                                 key={index}
                                 onPress={() => onChangeTab(tab)}
                                 cursor="pointer"
@@ -91,7 +92,7 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                                 {tabs[tab].label && <Text fontSize="$4">
                                     {tabs[tab].label}
                                 </Text>}
-                            </XStack>
+                            </XStack></Tinted>
                         })
                     }
                 </XStack>
