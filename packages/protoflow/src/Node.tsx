@@ -569,7 +569,7 @@ interface NodeProps {
     adaptiveTitleSize?: boolean
 }
 
-const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column', draggable = true, icon = null, container = false, title = '', children, isPreview = false, id, params = [], output = { label: '', field: 'value', type: 'output' }, color = undefined, node, skipCustom = false, topics, style = {}, dataOutput = DataOutput.data, contentStyle = {} }: NodeProps) => {
+const Node = ({ adaptiveTitleSize = true, modeParams = 'column', mode = 'column', draggable, icon = null, container = false, title = '', children, isPreview = false, id, params = [], output = { label: '', field: 'value', type: 'output' }, color = undefined, node, skipCustom = false, topics, style = {}, dataOutput = DataOutput.data, contentStyle = {} }: NodeProps) => {
     const useFlowsStore = useContext(FlowStoreContext)
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const customComponents = useFlowsStore(state => state.customComponents)

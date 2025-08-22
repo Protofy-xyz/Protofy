@@ -348,6 +348,7 @@ const Diagram = React.forwardRef(({
                 edgeTypes={edgeTypes}
                 zoomOnScroll={nodePreview !== 'preview'}
                 panOnDrag={nodePreview !== 'preview'}
+                nodesDraggable={nodePreview !== 'preview'}
                 minZoom={0.05}
                 maxZoom={2}
                 onInit={(reactFlowInstance: any) => {
