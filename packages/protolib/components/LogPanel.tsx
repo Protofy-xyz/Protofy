@@ -24,25 +24,29 @@ const types = {
 }
 
 function formatTimestamp(ts) {
-  const d = new Date(ts)
+    const d = new Date(ts)
 
-  const time = d.toLocaleTimeString(undefined, {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit'
-  })
+    const time = d.toLocaleTimeString(undefined, {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    })
 
-  const date = d.toLocaleDateString() // respeta el orden del locale
+    const date = d.toLocaleDateString() // respeta el orden del locale
 
-  return `${time} ${date}` // sin coma en medio
+    return `${time} ${date}` // sin coma en medio
 }
 
 const MessageList = React.memo(({ data, topic }: any) => {
-    const from = topic.split("/")[1]
+    const sender = topic.split("/")[1]
     const type = topic.split("/")[2]
     const Icon = types[type]?.icon
     const message = JSON.parse(data)
     const { level, time, pid, hostname, msg, name, _meta, ...cleanData } = message
+
+    const from = _meta && _meta.card && _meta.board ? <Text o={0.7} fontSize={14} fontWeight={"500"}>
+        {'[board] ' + _meta.board + ' ' + _meta.card}
+    </Text> : <Text o={0.7} fontSize={14} fontWeight={"500"}>[{sender}]</Text>
     return <XStack
         p="$3"
         ml={"$0"}
@@ -51,15 +55,18 @@ const MessageList = React.memo(({ data, topic }: any) => {
         f={1}
     >
         <YStack f={1}>
-            <XStack f={1} left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" ml={"$3"}>
+            <XStack f={1} left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" ml={"$1"}>
                 <XStack ai="center" hoverStyle={{ o: 1 }} o={0.9} f={1}>
+                    <Tinted><XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack></Tinted>
                     {/* <Chip text={types[type]?.name+"("+topic+")"} color={types[type]?.color} h={25} /> */}
-                    <XStack mr={"$2"}><Icon size={20} strokeWidth={2} color={types[type]?.color} /></XStack>
                     {/* <Chip text={types[type]?.name} color={types[type]?.color} h={25} /> */}
-                    <Text o={0.7} fontSize={14} fontWeight={"500"}>[{from}]</Text>
+                    {from}
                     <Text ml={"$3"} o={0.9} fontSize={14} fontWeight={"500"}>{msg}</Text>
                     <Spacer f={1} />
-                    <Text o={0.5} fontSize={13} fontWeight={"400"}>{formatTimestamp(time)}</Text>
+                    <XStack ai='center' space="$2">
+                        <Text o={0.5} fontSize={13} fontWeight={"400"}>{formatTimestamp(time)}</Text>
+                    </XStack>
+
                 </XStack>
             </XStack>
             <Tinted><JSONView

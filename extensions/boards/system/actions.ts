@@ -111,6 +111,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
         let response = null;
         try {
             response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
+            getLogger({module: 'boards', board: boardId, card: action.name }).info({ value: response }, "New value for card");
         } catch (err) {
             await generateEvent({
                 path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,
@@ -129,7 +130,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
                 },
             }, getServiceToken());
 
-            console.error("Error executing action code: ", err);
+            getLogger({module: 'boards', board: boardId, card: action.name }).error({err},"Error executing card: ");
             res.status(500).send({ _err: "e_code", error: "Error executing action code", message: err.message, stack: err.stack, name: err.name, code: err.code });
             return;
         }
