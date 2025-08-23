@@ -1,6 +1,6 @@
 
+import React from 'react'
 import { XStack, YStack, Text, ScrollView, Popover, Input, Theme, Spacer } from '@my/ui'
-import { JSONViewer } from './jsonui'
 import { JSONView } from './JSONView'
 import { useTint } from '../lib/Tints'
 import { GroupButton } from './GroupButton'
@@ -10,9 +10,7 @@ import { Ban, Microscope, Bug, Info, AlertCircle, XCircle, Bomb, Filter } from '
 import { Tinted } from './Tinted'
 import { useAtom } from 'jotai';
 import { useEffect, useState } from 'react'
-import React from 'react'
-import { useSubscription } from '../lib/mqtt'
-import { useLog } from '@extensions/logs/hooks/useLog'
+import { useHighlightedCard } from '@extensions/boards/store/boardStore'
 
 const types = {
     10: { name: "TRACE", color: "$green3", icon: Microscope },
@@ -47,12 +45,23 @@ const MessageList = React.memo(({ data, topic }: any) => {
     const from = _meta && _meta.card && _meta.board ? <Text o={0.7} fontSize={14} fontWeight={"500"}>
         {'[board] ' + _meta.board + ' ' + _meta.card}
     </Text> : <Text o={0.7} fontSize={14} fontWeight={"500"}>[{sender}]</Text>
+
+    const [highlightedCardState, setHighlightedCard] = useHighlightedCard()
+
     return <XStack
         p="$3"
         ml={"$0"}
         ai="center"
         jc="center"
         f={1}
+        onHoverIn={() => {
+            if (_meta?.board && _meta?.card) {
+                setHighlightedCard(_meta.board + '/' + _meta.card)
+            }
+        }}
+        onHoverOut={() => {
+            setHighlightedCard("")
+        }}
     >
         <YStack f={1}>
             <XStack f={1} left={-12} hoverStyle={{ bc: "$color6" }} cursor="pointer" ai="center" mb="$2" py={3} px="$2" ml={"$1"}>
@@ -66,7 +75,6 @@ const MessageList = React.memo(({ data, topic }: any) => {
                     <XStack ai='center' space="$2">
                         <Text o={0.5} fontSize={13} fontWeight={"400"}>{formatTimestamp(time)}</Text>
                     </XStack>
-
                 </XStack>
             </XStack>
             <Tinted><JSONView
@@ -87,12 +95,12 @@ export const LogPanel = ({ AppState, logs, setLogs }) => {
 
     useEffect(() => {
         setFilteredMessages(logs.filter((m: any) => {
-            console.log('message: ', m)
+            // console.log('message: ', m)
             const topic = m?.topic
             const from = topic.split("/")[1]
             //@ts-ignore
             const type = types[topic.split("/")[2]]
-            console.log('result: ', type && (!search || JSON.stringify(m).toLowerCase().includes(search.toLocaleLowerCase())) && appState.levels.includes(type.name.toLocaleLowerCase()))
+            // console.log('result: ', type && (!search || JSON.stringify(m).toLowerCase().includes(search.toLocaleLowerCase())) && appState.levels.includes(type.name.toLocaleLowerCase()))
             return type && (!search || JSON.stringify(m).toLowerCase().includes(search.toLocaleLowerCase())) && appState.levels.includes(type.name.toLocaleLowerCase())
         }))
     }, [search, logs, appState.levels])

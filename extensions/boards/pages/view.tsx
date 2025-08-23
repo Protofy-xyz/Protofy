@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { Cable, Copy, Plus, Trash2, Settings, MoreVertical, X, ArrowLeft, Book, FileJson, ClipboardList, Code, Activity, Bot, Presentation } from '@tamagui/lucide-icons'
 import { API, getPendingResult } from 'protobase'
 import { AdminPage } from "protolib/components/AdminPage"
@@ -33,6 +33,7 @@ import { FloatingWindow } from '../components/FloatingWindow'
 import { useAtom } from 'protolib/lib/Atom'
 import { AppState } from 'protolib/components/AdminPanel'
 import { useLog } from '@extensions/logs/hooks/useLog'
+import { isHighlightedCard } from '@extensions/boards/store/boardStore'
 
 const defaultCardMethod: "post" | "get" = 'post'
 
@@ -154,6 +155,9 @@ const ActionCard = ({
 }) => {
   const [status, setStatus] = useState<'idle' | 'running' | 'error'>('idle')
   const lockRef = useRef(false)
+  const highlighted = isHighlightedCard(board?.name, data?.name)
+
+  console.log('highlightedCard: ', highlighted, board?.name + '/' + data?.name)
 
   useEventEffect((payload, msg) => {
     try {
@@ -196,6 +200,7 @@ const ActionCard = ({
 
   return (
     <CenterCard
+      highlighted={highlighted}
       status={status}
       hideTitle={data.displayTitle === false}
       hideFrame={data.displayFrame === false}

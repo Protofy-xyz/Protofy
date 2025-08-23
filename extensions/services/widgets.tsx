@@ -39,9 +39,9 @@ export const ServiceMemoryUsageChart = ({ title, id }) => {
     );
 };
 
-export const CenterCard = ({ status, title, hideTitle, hideFrame, id, children, onPress = () => { }, ...props }) => {
+export const CenterCard = ({ highlighted = false, status, title, hideTitle, hideFrame, id, children, onPress = () => { }, ...props }) => {
     return (
-        <DashboardCard status={status} hideTitle={hideTitle} hideFrame={hideFrame} title={title} id={id} {...props}>
+        <DashboardCard highlighted={highlighted} status={status} hideTitle={hideTitle} hideFrame={hideFrame} title={title} id={id} {...props}>
             <YStack onPress={onPress} borderRadius={10} backgroundColor="$bgColor" flex={1} justifyContent='center' alignItems='center'>
                 <YStack alignItems="center" justifyContent="center" f={1} width="100%">
                     {children}

@@ -12,6 +12,7 @@ interface DashboardCardProps {
     titleProps?: StackProps;
     containerProps?: StackProps;
     cardActions?: ReactNode;
+    highlighted?: boolean;
 }
 
 export const DashboardCard = ({
@@ -23,7 +24,8 @@ export const DashboardCard = ({
     title,
     cardActions = <></>,
     titleProps = {},
-    containerProps = {}
+    containerProps = {},
+    highlighted = false
 }: DashboardCardProps) => {
     const [hovered, setHovered] = useState(false);
     const [showRunning, setShowRunning] = useState(false);
@@ -76,7 +78,7 @@ export const DashboardCard = ({
                         ...containerProps.style,
                     }}
                 >
-                    {showRunning && (
+                    {(showRunning || highlighted) && (
                         <div
                             style={{
                                 position: 'absolute',
@@ -96,14 +98,16 @@ export const DashboardCard = ({
                                     height="calc(100% - 2px)"
                                     fill="none"
                                     stroke="var(--color7)"
-                                    strokeWidth="2"
-                                    strokeDasharray="8 4"
-                                    strokeDashoffset="0"
+                                    strokeWidth={highlighted ? "3" : "2"}
                                     rx="10"
                                     ry="10"
-                                    style={{
-                                        animation: 'dashOffset 2s linear infinite',
-                                    }}
+                                    {...(highlighted
+                                        ? {} // borde fijo, sin dash
+                                        : {
+                                            strokeDasharray: "8 4",
+                                            strokeDashoffset: "0",
+                                            style: { animation: "dashOffset 2s linear infinite" },
+                                        })}
                                 />
                             </svg>
                         </div>
@@ -117,11 +121,9 @@ export const DashboardCard = ({
                             right={0}
                             bottom={0}
                             borderRadius={"var(--radius-6)"}
-                            borderWidth={2}
-                            borderStyle="dashed"
-                            borderColor={
-                                status === 'error' ? "var(--red7)" : 'transparent'
-                            }
+                            borderWidth={highlighted ? 3 : 2}
+                            borderStyle={highlighted ? "solid" : "dashed"}
+                            borderColor={status === "error" ? "var(--red7)" : "transparent"}
                             pointerEvents="none"
                             style={{ zIndex: 0 }}
                         />
