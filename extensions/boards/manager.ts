@@ -3,7 +3,9 @@ import { fork } from 'child_process';
 import * as path from 'path';
 import { watch } from 'chokidar';
 import { on } from 'events';
+import { getLogger } from 'protobase';
 
+const logger = getLogger()
 
 const processes = new Map();
 let watchers = {}
@@ -38,6 +40,9 @@ export const Manager = {
         // Limpieza si el hijo se cierra
         child.on('exit', (code) => {
             console.log(`[Manager] board file ${file} exited with code ${code}`);
+            if(code) {
+                logger.info(`Autopilot crashed for file: ${file} with code ${code}`);
+            }
             processes.delete(file);
             onExit && onExit(file, code);
             //remove watcher

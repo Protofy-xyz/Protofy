@@ -764,8 +764,10 @@ export default async (app, context) => {
         const boardId = req.params.boardId;
         const stopped = Manager.stop('../../data/boards/' + req.params.boardId + '.js');
         if (stopped) {
-            res.send({ result: 'sopped', message: "Board stopped", board: req.params.boardId });
+            logger.info(`Autopilot stopped for board: ${boardId}`);
+            res.send({ result: 'stopped', message: "Board stopped", board: req.params.boardId });
         } else {
+            logger.info(`Autopilot not running for board: ${boardId}`);
             res.send({ result: 'already_stopped', message: "Board already stopped or not running", board: req.params.boardId });
         }
 
