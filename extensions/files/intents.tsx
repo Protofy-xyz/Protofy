@@ -145,32 +145,34 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath = 
   }, [fileContent]);
 
   return <AsyncView ready={loaded}>
-    <CodeView disableAIPanels={true} masksPath={masksPath} defaultMode={defaultMode.current} path={path} extraIcons={extraIcons} sourceCode={sourceCode} fileContent={fileContent} isModified={isModified} setIsModified={setIsModified}>
-      <SaveButton
-        onSave={() => originalSourceCode.current = sourceCode.current}
-        checkStatus={() => sourceCode.current != originalSourceCode.current}
-        defaultState={"unavailable"}
-        path={path}
-        getContent={() => {
-          if (isPartial.current) {
-            const sourceFile = toSourceFile(fileContent.data)
-            const definition = getDefinition(sourceFile, '"code"').getBody()
-            definition.replaceWithText("{\n" + sourceCode.current + "\n}");
-            const code = prettier.format(sourceFile.getFullText(), {
-              quoteProps: "consistent",
-              plugins: [parserTypeScript],
-              parser: "typescript"
-            })
-            if (code) {
-              return code
+    <Tinted>
+      <CodeView disableAIPanels={true} masksPath={masksPath} defaultMode={defaultMode.current} path={path} extraIcons={extraIcons} sourceCode={sourceCode} fileContent={fileContent} isModified={isModified} setIsModified={setIsModified}>
+        <SaveButton
+          onSave={() => originalSourceCode.current = sourceCode.current}
+          checkStatus={() => sourceCode.current != originalSourceCode.current}
+          defaultState={"unavailable"}
+          path={path}
+          getContent={() => {
+            if (isPartial.current) {
+              const sourceFile = toSourceFile(fileContent.data)
+              const definition = getDefinition(sourceFile, '"code"').getBody()
+              definition.replaceWithText("{\n" + sourceCode.current + "\n}");
+              const code = prettier.format(sourceFile.getFullText(), {
+                quoteProps: "consistent",
+                plugins: [parserTypeScript],
+                parser: "typescript"
+              })
+              if (code) {
+                return code
+              }
             }
-          }
-          return sourceCode.current
-        }}
-        positionStyle={{ position: "relative" }}
-      />
-      {extraIcons}
-    </CodeView>
+            return sourceCode.current
+          }}
+          positionStyle={{ position: "relative" }}
+        />
+        {extraIcons}
+      </CodeView>
+    </Tinted>
   </AsyncView>
 }
 
@@ -205,7 +207,7 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
       return extraPanel.content;
     }
     if (mode == 'rules') {
-      return <YStack flex={1} height="100%" alignItems="center" justifyContent="center" boxShadow="0 0 10px rgba(0,0,0,0.1)" borderRadius="$3" p="$3" >
+      return <YStack flex={1} height="100%" alignItems="center" justifyContent="center" borderRadius="$3">
         <Rules
           rules={savedRules}
           onReloadRules={async (rules) => {
@@ -239,7 +241,7 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
         const [snippetName, setSnippetName] = useState();
         const [fragmentText, setFragmentText] = useState(dumpFragment());
         return (
-          <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" style={{ boxShadow: '0px 0px 33px 0px rgba(0, 0, 0, 0.1)' }} onPress={(e) => e.stopPropagation()}>
+          <YStack w={350} bg="$backgroundStrong" br="$6" p="$4" gap="$4" onPress={(e) => e.stopPropagation()}>
             <XStack f={1} jc="space-between" ai="center">
               <Tinted>
                 <Text color={"$color7"} fontWeight={"500"}>Edit from code</Text>

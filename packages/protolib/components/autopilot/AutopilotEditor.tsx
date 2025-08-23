@@ -1,13 +1,13 @@
 import { Panel, PanelGroup } from "react-resizable-panels";
-import { YStack, ScrollView, Spinner, Text, Input, XStack, Button } from "@my/ui";
+import { YStack, ScrollView, Spinner, Text, Input, XStack, Button, useTheme } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { Rules } from "./Rules";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Monaco } from "../Monaco";
 import { JSONView } from "../JSONView";
-import { useCallback, useMemo, useState } from "react";
-import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { AlignLeft, Braces, Copy, Save, Search } from "@tamagui/lucide-icons";
 import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
 
@@ -20,9 +20,9 @@ function flattenObject(obj, prefix = "", maxDepth = undefined, currentDepth = 1)
         const newPath = prefix ? prefix + " -> " + key : key;
 
         if (typeof value === "object" && value !== null && currentDepth < maxDepth) {
-            if(Object.keys(value).length > 0) {
-            const nested = flattenObject(value, prefix, maxDepth, currentDepth + 1);
-            result.push(...nested);
+            if (Object.keys(value).length > 0) {
+                const nested = flattenObject(value, prefix, maxDepth, currentDepth + 1);
+                result.push(...nested);
             } else {
                 result.push([[newPath], JSON.stringify(newPath)]);
             }
@@ -104,7 +104,7 @@ function generateStatesDeclaration(name, statesObj: any): string {
     return `declare const ${name}: ${tsType};`;
 }
 
-const FormattedView = ({maxDepth = 1, copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
+const FormattedView = ({ maxDepth = 1, copyIndex = 1, displayIndex = 1, data, hideValue = false, onCopy = (text) => text }) => {
     const [showCopied, setShowCopied] = useState<number | null>(null)
 
     // Evita recalcular si `data` no cambia
@@ -237,15 +237,15 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
     const statesPanel = useMemo(() => {
         return <YStack gap="$2" ai="flex-start">
             <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredStateData} enableClipboard={(copy) => {
-        const path = 'board' + copy.namespace
-            .filter(v => v)
-            .map(k => `?.[${JSON.stringify(k)}]`)
-            .join('')
+                const path = 'board' + copy.namespace
+                    .filter(v => v)
+                    .map(k => `?.[${JSON.stringify(k)}]`)
+                    .join('')
 
-        console.log('Key path:', path)
-        navigator.clipboard.writeText(path)
-        return false
-        }} />
+                console.log('Key path:', path)
+                navigator.clipboard.writeText(path)
+                return false
+            }} />
         </YStack>
     }, [filteredStateData, board?.name]);
 
@@ -275,30 +275,70 @@ ${Object.entries(val.params || {}).map(([key, value]) => {
         const decl = generateStatesDeclaration('states', { board: states });
         return `
 ${decl}
-${cardData.type == 'action' ? `declare function execute_action(name_or_url: string, params?: Record<string, any>): void;`: ''}
+${cardData.type == 'action' ? `declare function execute_action(name_or_url: string, params?: Record<string, any>): void;` : ''}
 ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
     }, [states, cardData]);
 
-    const monacoEditor = useMemo(() => {
-        return <Monaco
-            path={'autopilot-rules.js'}
-            darkMode={resolvedTheme === 'dark'}
-            sourceCode={rulesCode}
-            onChange={setRulesCode}
-            onMount={(editor, monaco) => {
 
-                monaco.languages.typescript.javascriptDefaults.addExtraLib(declarations);
+    const theme = useTheme()
+    const savedCode = useRef(rulesCode)
+    const editedCode = useRef(rulesCode)
+    const flows = useMemo(() => {
+        return <CodeView
+            onApplyRules={async (rules) => {
+
             }}
-            options={{
-                folding: false,
+            disableAIPanels={!isAIEnabled}
+            defaultMode={'code'}
+            rules={board.rules}
+            viewPort={{ x: 20, y: window.innerHeight / 8, zoom: 0.8 }}
+            onFlowChange={(code) => {
+                editedCode.current = code
+                setRulesCode(code)
+            }}
+            onCodeChange={(code) => {
+                editedCode.current = code
+                setRulesCode(code)
+            }}
+            path={board.name + '.ts'}
+            sourceCode={editedCode}
+            monacoOnMount={(editor, monaco) => {
+                monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions?.({
+                    // no desactives validaciones salvo que sea necesario
+                    // noSemanticValidation: false,
+                    // noSyntaxValidation: false,
+                    // @ts-ignore: algunas versiones soportan esta opción
+                    diagnosticCodesToIgnore: [1375], // evita el error si ya inyectas export {}
+                });
+                monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+                    target: monaco.languages.typescript.ScriptTarget.ESNext,
+                    module: monaco.languages.typescript.ModuleKind.ESNext,
+                    allowNonTsExtensions: true,
+                    allowJs: true,
+                    allowSyntheticDefaultImports: true,
+                    moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+                    noEmit: true,
+                    typeRoots: ["node_modules/@types"],
+                    allowUmdGlobalAccess: true,
+                    resolveJsonModule: true,
+                    isolatedModules: false,
+                    useDefineForClassFields: true,
+                    lib: ["esnext"],
+                })
+                monaco.languages.typescript.typescriptDefaults.addExtraLib(
+                    declarations,
+                    'ts:filename/customTypes.d.ts'
+                );
+            }}
+            monacoOptions={{
+                folding: true,
                 lineDecorationsWidth: 0,
                 lineNumbersMinChars: 0,
-                lineNumbers: false,
+                lineNumbers: true,
                 minimap: { enabled: false }
             }}
         />
-
-    }, [rulesCode, resolvedTheme, setRulesCode, cardData.type, cardData.params, states]);
+    }, [resolvedTheme, board.name, theme, isAIEnabled]);
 
     return (
         <PanelGroup direction="horizontal">
@@ -390,26 +430,9 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
 
             {/* Rigth panel */}
             <Panel defaultSize={70} minSize={20}>
-                <PanelGroup direction="vertical">
-                    {isAIEnabled && <Panel defaultSize={66} minSize={0} maxSize={100}>
-                        <YStack
-                            flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
-                            <Rules
-                                loading={loading}
-                                rules={rules}
-                                onAddRule={onAddRule}
-                                onDeleteRule={onDeleteRule}
-                                loadingIndex={-1}
-                            />
-                        </YStack>
-                    </Panel>}
-                    <CustomPanelResizeHandle direction="horizontal" />
-                    <Panel defaultSize={isAIEnabled ? 34 : 100} minSize={0} maxSize={100}>
-                        <YStack flex={1} height="100%" alignItems="center" justifyContent="center" backgroundColor="$gray3" borderRadius="$3" p="$3" >
-                            {monacoEditor}
-                        </YStack>
-                    </Panel>
-                </PanelGroup>
+                <YStack flex={1} height="100%" borderRadius="$3" p="$3" gap="$2" backgroundColor="$gray3" overflow="hidden" >
+                    <Tinted>{flows}</Tinted>
+                </YStack>
             </Panel>
         </PanelGroup>
     );

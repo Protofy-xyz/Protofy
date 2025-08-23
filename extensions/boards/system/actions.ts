@@ -102,7 +102,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
     const states = await context.state.getStateTree();
     let rulesCode = action.rulesCode.trim();
 
-    const wrapper = new AsyncFunction('boardName', 'name', 'states', 'boardActions', 'board', 'userParams', 'params', 'token', 'API', 'fetch', 'logger', `
+    const wrapper = new AsyncFunction('boardName', 'name', 'states', 'boardActions', 'board', 'userParams', 'params', 'token', 'context', 'API', 'fetch', 'logger', `
         ${getExecuteAction(await getActions(context), boardId)}
         ${rulesCode}
     `);
@@ -110,7 +110,7 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
     try {
         let response = null;
         try {
-            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
+            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, context, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
             getLogger({module: 'boards', board: boardId, card: action.name }).info({ value: response }, "New value for card");
         } catch (err) {
             await generateEvent({

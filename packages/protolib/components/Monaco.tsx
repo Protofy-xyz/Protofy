@@ -6,12 +6,52 @@ import { useTheme } from '@my/ui';
 import { useTint } from '../lib/Tints'
 import { Tinted } from './Tinted'
 import { useEffect } from 'react';
+import convert from 'color-convert';
 
 // loader.config({
 //     paths: {
 //         vs: '/public/monaco',
 //     },
 // });
+
+function toHex(colorStr) {
+  // Hex directo
+  if (/^#([0-9a-f]{3,8})$/i.test(colorStr)) {
+    // normalizamos a #RRGGBB
+    const hex = colorStr.replace(/^#/, "");
+    if (hex.length === 3) {
+      return (
+        "#" +
+        hex
+          .split("")
+          .map((c) => c + c)
+          .join("")
+          .toUpperCase()
+      );
+    }
+    return "#" + hex.slice(0, 6).toUpperCase();
+  }
+
+  // RGB(a)
+  let m = colorStr.match(
+    /^rgba?\(([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*[\d.]+)?\)$/i
+  );
+  if (m) {
+    const [r, g, b] = m.slice(1, 4).map(Number);
+    return "#" + convert.rgb.hex(r, g, b);
+  }
+
+  // HSL(a)
+  m = colorStr.match(
+    /^hsla?\(([\d.]+)\s*,\s*([\d.]+)%\s*,\s*([\d.]+)%(?:\s*,\s*[\d.]+)?\)$/i
+  );
+  if (m) {
+    const [h, s, l] = m.slice(1, 4).map(Number);
+    return "#" + convert.hsl.hex(h, s, l);
+  }
+
+  throw new Error("Formato de color no reconocido: " + colorStr);
+}
 
 type Props = {
     darkMode?: boolean,
@@ -20,6 +60,8 @@ type Props = {
     onSave?: any,
     onEscape?: any,
     path?: string,
+    bgColorDark?: string,
+    bgColorLight?: string,
     colors?: {
         [key: string]: string;
     }
@@ -82,8 +124,7 @@ export const Monaco = ({
 
     let lightTokenColor = theme[tint + '7'].val
     lightTokenColor = lightTokenColor.startsWith('hsl') ? hslStringToHex(lightTokenColor) : lightTokenColor
-    // console.log('token color: ', theme[tint+'10'].val, tokenColor)
-
+    // console.log('token color: ', theme[tint+'10'].val, tokenColor)   
     useEffect(() => {
         if (!monaco) return;
 
@@ -96,7 +137,7 @@ export const Monaco = ({
                 { token: 'punctuation', foreground: tokenColor },
             ],
             colors: {
-                'editor.background': resolvedTheme === 'dark' ? '#151515' : '#FFFFFF',
+                'editor.background': '#ffffff00',
                 ...colors
             }
         });
