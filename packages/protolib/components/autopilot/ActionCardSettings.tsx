@@ -14,8 +14,10 @@ import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { SettingsEditor } from './SettingsEditor'
 import { ViewEditor } from './ViewEditor'
 import { DisplayEditor } from './DisplayEditor'
+import { useUpdateEffect } from 'usehooks-ts'
 
 export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors, mode = "edit" }) => {
+
   const [cardData, setCardData] = useState(card);
   const originalNameRef = useRef(card?.name ?? null)
 
@@ -28,7 +30,8 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   const [selectedTab, setSelectedTab] = useState(isCreateMode ? "info" : !hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
 
   const { resolvedTheme } = useThemeSetting();
-  useEffect(() => {
+
+  useUpdateEffect(() => {
     const payload = { ...cardData }
     const original = originalNameRef.current
     if (!isCreateMode && original && payload?.name && payload.name !== original) {
@@ -37,8 +40,7 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
       delete payload.previousName
     }
     onEdit(payload);
-  }, [cardData, onEdit, isCreateMode]);
-
+  }, [cardData]);
 
   const setHTMLCode = (code) => {
     setCardData({
