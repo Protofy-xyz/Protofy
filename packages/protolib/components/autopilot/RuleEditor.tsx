@@ -3,47 +3,41 @@ import { useEffect, useState } from 'react'
 import { useUpdateEffect } from 'usehooks-ts'
 import { AutopilotEditor } from './AutopilotEditor'
 
-export const RuleEditor = ({ board, actions, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData={} }) => {
-    const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
-    const [value, setValue] = useState()
-    const [loading, setLoading] = useState(false)
-  
-    const getRulesCode = async (force?) => {
-      if ((!hasCode || force) && cardData.rules && cardData.rules.length > 0) {
-        const boardStates = states?.[board.name] ?? {}
-        //remove cardData.name key from boardStates
-        if(cardData.type == 'value') delete boardStates[cardData.name]
-        setHasCode(false)
-        setLoading(true)
-        const code = await API.post('/api/core/v1/autopilot/'+compiler+'?debug=true', { board: board.name, states: boardStates, rules: cardData.rules, card: cardData,...extraCompilerData })
-        if (!code?.data?.jsCode) return
-        setCardData({
-          ...cardData,
-          rulesCode: code.data.jsCode,
-          rulesExplained: code.data?.explanation
-        })
-        setHasCode(true)
-        setLoading(false)
+
+export const RuleEditor = ({ board, actions, states, cardData, setCardData, compiler, onCodeChange, extraCompilerData = {} }) => {
+  const [hasCode, setHasCode] = useState(cardData.rulesCode !== undefined)
+  const [value, setValue] = useState()
+  const [key, setKey] = useState(0)
+
+  const getRulesCode = async (rules) => {
+    if (rules && rules.length > 0) {
+      const boardStates = states?.[board.name] ?? {}
+      //remove cardData.name key from boardStates
+      if (cardData.type == 'value') delete boardStates[cardData.name]
+      setHasCode(false)
+      const code = await API.post('/api/core/v1/autopilot/' + compiler + '?debug=true', { board: board.name, states: boardStates, rules: rules, card: cardData, ...extraCompilerData })
+      if (!code?.data?.jsCode) return {}
+      setHasCode(true)
+      return {
+        rulesCode: code.data.jsCode,
+        rulesExplained: code.data?.explanation
       }
     }
-  
-    useEffect(() => {
-      if (cardData.rulesCode) {
-        try {
-          const value = onCodeChange(cardData, states)
-          console.log('got value: ', value)
-          setValue(value)
-        } catch(e) {}
-  
-      }
-    }, [cardData.rulesCode])
-  
-    useUpdateEffect(() => {
-      getRulesCode(true)
-    }, [cardData.rules])
-  
-    return <AutopilotEditor
-    loading={loading}
+    return {rulesCode: '//empty rules', rulesExplained: 'The rules are empty'}
+  }
+
+  useEffect(() => {
+    if (cardData.rulesCode) {
+      try {
+        const value = onCodeChange(cardData, states)
+        console.log('got value: ', value)
+        setValue(value)
+      } catch (e) { }
+    }
+  }, [cardData.rulesCode])
+
+  return <AutopilotEditor
+    key={key}
     cardData={cardData}
     board={board}
     panels={cardData.type == 'value' ? ['states'] : ['actions', 'states']}
@@ -52,16 +46,20 @@ export const RuleEditor = ({ board, actions, states, cardData, setCardData, comp
         ...cardData,
         rulesCode
       })
-    }} rulesCode={cardData.rulesCode} actions={actions} states={states} rules={cardData.rules ?? []} value={value} onDeleteRule={(index) => {
-      setCardData({
+    }}
+    rulesCode={cardData.rulesCode}
+    actions={actions}
+    states={states}
+    rules={cardData.rules ?? []}
+    value={value}
+    setRules={async (rules) => {
+      const newData = {
         ...cardData,
-        rules: cardData.rules?.filter((_, i) => i !== index)
-      });
-    }} onAddRule={(e, rule) => {
-      setCardData({
-        ...cardData,
-        rules: cardData.rules ? [...cardData.rules, rule] : [rule]
-      });
-    }} valueReady={hasCode} />
-  }
-  
+        ...(await getRulesCode(rules)),
+        rules
+      }
+      setKey(prev => prev + 1)
+      setCardData(newData)
+    }}
+    valueReady={hasCode} />
+}

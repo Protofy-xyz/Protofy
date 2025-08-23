@@ -41,4 +41,7 @@ async function execute_action(url_or_name, params={}) {
         return response.data
     }
 }
+async function executeAction({name, params = {}}) {
+    return execute_action(name, params);
+}
 `

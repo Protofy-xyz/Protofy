@@ -12,6 +12,9 @@ export const paths = {
     apis:[
         'tasks'
     ],
+    rules: [
+        'rules'
+    ],
     boards: [
         'view'
     ]

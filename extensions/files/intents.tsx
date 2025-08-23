@@ -29,6 +29,8 @@ import { getFlowsCustomSnippets } from "app/bundles/snippets"
 import { getFlowsMenuConfig } from "app/bundles/flows"
 import { getFlowMasks, getFlowsCustomComponents } from "app/bundles/masks"
 import { Rules } from 'protolib/components/autopilot/Rules'
+import { Panel, PanelGroup } from "react-resizable-panels";
+import CustomPanelResizeHandle from 'protolib/components/MainPanel/CustomPanelResizeHandle'
 
 const GLTFViewer = dynamic(() => import('protolib/adminpanel/features/components/ModelViewer'), {
   loading: () => <Center>
@@ -176,8 +178,8 @@ const FlowsViewer = ({ extraIcons, path, isModified, setIsModified, masksPath = 
   </AsyncView>
 }
 
-export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons = <></>, icons = <></>, disableFlowMode = false, masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoProps = {}, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, rules = [], onApplyRules = async (rules) => { }, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
-  const pathname = usePathname();
+export const CodeView = ({ rulesWithFlows = false, pathname = undefined, disableAIPanels = false, extraPanels = [], leftIcons = <></>, icons = <></>, disableFlowMode = false, masksPath = undefined, defaultMode = 'flow', monacoOnMount = (editor, monaco) => { }, monacoInstance = null, monacoProps = {}, monacoOptions = {}, onCodeChange = (code) => { }, onFlowChange = (code) => { }, fileContent = null, path, rules = [], onApplyRules = async (rules) => { }, sourceCode, isModified = false, setIsModified = (x) => { }, query = {}, children = <></>, viewPort = undefined }) => {
+  pathname = pathname ?? usePathname();
   const theme = useTheme()
   const tint = useTint().tint
   const toast = useToastController();
@@ -201,42 +203,8 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
     />
   }, [sourceCode.current, path, resolvedTheme])
 
-  const getBody = () => {
-    const extraPanel = extraPanels.find(v => v.id == mode);
-    if (extraPanel) {
-      return extraPanel.content;
-    }
-    if (mode == 'rules') {
-      return <YStack flex={1} height="100%" alignItems="center" justifyContent="center" borderRadius="$3">
-        <Rules
-          rules={savedRules}
-          onReloadRules={async (rules) => {
-            setSavedRules(rules)
-            await onApplyRules(rules)
-          }}
-          onAddRule={async (e, rule) => {
-            const newRules = [...(savedRules ?? []), rule]
-            setSavedRules(newRules)
-            await onApplyRules(newRules)
-          }}
-          onDeleteRule={async (index) => {
-            setSavedRules(savedRules.filter((_, i) => i != index))
-            await onApplyRules(savedRules.filter((_, i) => i != index))
-          }}
-          onEditRule={async (index, rule) => {
-            const newRules = [...savedRules]
-            newRules[index] = rule
-            setSavedRules(newRules)
-          }}
-          loadingIndex={-1}
-        />
-        <YStack mt="auto" pt="$3">
-
-        </YStack>
-      </YStack>
-    }
-    if (mode == 'code') return monaco
-    if (mode == 'flow') return <Flows
+  const getFlows = () => {
+    return <Flows
       nodeMenu={({ nodeId, dumpFragment, closeMenu, updateFragment }) => {
         const [snippetName, setSnippetName] = useState();
         const [fragmentText, setFragmentText] = useState(dumpFragment());
@@ -334,6 +302,55 @@ export const CodeView = ({ disableAIPanels = false, extraPanels = [], leftIcons 
       path={path}
       themeMode={resolvedTheme}
       primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />
+  }
+
+  const getBody = () => {
+    const extraPanel = extraPanels.find(v => v.id == mode);
+    if (extraPanel) {
+      return extraPanel.content;
+    }
+    if (mode == 'rules') {
+      return <PanelGroup direction="vertical">
+        <Panel defaultSize={50}>
+          <YStack flex={1} height="100%" alignItems="center" justifyContent="center" borderRadius="$3">
+            <Rules
+              rules={savedRules}
+              onReloadRules={async (rules) => {
+                setSavedRules(rules)
+                await onApplyRules(rules)
+              }}
+              onAddRule={async (e, rule) => {
+                const newRules = [...(savedRules ?? []), rule]
+                setSavedRules(newRules)
+                await onApplyRules(newRules)
+              }}
+              onDeleteRule={async (index) => {
+                setSavedRules(savedRules.filter((_, i) => i != index))
+                await onApplyRules(savedRules.filter((_, i) => i != index))
+              }}
+              onEditRule={async (index, rule) => {
+                const newRules = [...savedRules]
+                newRules[index] = rule
+                setSavedRules(newRules)
+              }}
+              loadingIndex={-1}
+            />
+            <YStack mt="auto" pt="$3">
+
+            </YStack>
+          </YStack>
+        </Panel>
+        <CustomPanelResizeHandle direction="horizontal" />
+
+        <Panel defaultSize={50} minSize={33} style={{ paddingTop: "32px" }}>
+          <YStack f={1} h="100%">
+            {getFlows()}
+          </YStack>
+        </Panel>
+      </PanelGroup>
+    }
+    if (mode == 'code') return monaco
+    if (mode == 'flow') return getFlows()
   }
 
   const content = <YStack f={1} width={"100%"}>

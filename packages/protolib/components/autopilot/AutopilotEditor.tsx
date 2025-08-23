@@ -6,7 +6,7 @@ import { Rules } from "./Rules";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { Monaco } from "../Monaco";
 import { JSONView } from "../JSONView";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AlignLeft, Braces, Copy, Save, Search } from "@tamagui/lucide-icons";
 import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
@@ -194,7 +194,7 @@ const generateParamsDeclaration = (cardData) => {
     return `declare const params: {\n${params}\n};`;
 }
 
-export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, onAddRule = (e, rule) => { }, onDeleteRule = (index) => { } }) => {
+export const AutopilotEditor = ({ cardData, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, setRules}) => {
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
@@ -260,11 +260,11 @@ export const AutopilotEditor = ({ cardData, loading = false, board, panels = ['a
                     copyVal = val.name
                 }
 
-                return `await execute_action("${copyVal}", {
+                return `await executeAction({name: "${copyVal}", params: {
 ${Object.entries(val.params || {}).map(([key, value]) => {
                     return `\t${key}: '', // ${value}`;
                 }).join('\n')}
-})`
+}})`
             }} data={actionData} />}
             {inputMode == "json" && <JSONView collapsed={3} style={{ backgroundColor: 'var(--gray3)' }} src={filteredData} />}
         </YStack>
@@ -275,7 +275,7 @@ ${Object.entries(val.params || {}).map(([key, value]) => {
         const decl = generateStatesDeclaration('states', { board: states });
         return `
 ${decl}
-${cardData.type == 'action' ? `declare function execute_action(name_or_url: string, params?: Record<string, any>): void;` : ''}
+${cardData.type == 'action' ? `declare function executeAction({name: string, params?: Record<string, any>}): void;` : ''}
 ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
     }, [states, cardData]);
 
@@ -285,12 +285,14 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
     const editedCode = useRef(rulesCode)
     const flows = useMemo(() => {
         return <CodeView
+            rulesWithFlows={true}
+            pathname={'/rules'}
             onApplyRules={async (rules) => {
-
+                return await setRules(rules)
             }}
             disableAIPanels={!isAIEnabled}
-            defaultMode={'code'}
-            rules={board.rules}
+            defaultMode={isAIEnabled ? 'rules' : 'code'}
+            rules={rules}
             viewPort={{ x: 20, y: window.innerHeight / 8, zoom: 0.8 }}
             onFlowChange={(code) => {
                 editedCode.current = code
@@ -304,15 +306,14 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
             sourceCode={editedCode}
             monacoOnMount={(editor, monaco) => {
                 monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions?.({
-                    // no desactives validaciones salvo que sea necesario
                     // noSemanticValidation: false,
                     // noSyntaxValidation: false,
-                    // @ts-ignore: algunas versiones soportan esta opción
-                    diagnosticCodesToIgnore: [1375], // evita el error si ya inyectas export {}
+                    // @ts-ignore
+                    diagnosticCodesToIgnore: [1375, 1108],
                 });
                 monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
                     target: monaco.languages.typescript.ScriptTarget.ESNext,
-                    module: monaco.languages.typescript.ModuleKind.ESNext,
+                    module: monaco.languages.typescript.ModuleKind.None,
                     allowNonTsExtensions: true,
                     allowJs: true,
                     allowSyntheticDefaultImports: true,
