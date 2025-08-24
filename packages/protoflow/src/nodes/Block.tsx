@@ -178,7 +178,8 @@ const Block = (node) => {
     const thick = 8;                 // borde izquierdo
     const thin = borderWidth;        // borde fino
     const color = typeConf[type].color;
-    const left = isEmpty ? 108 : -thick
+    const left = isEmpty ? undefined : -thick
+    const right = isEmpty ? -thick + -5 : undefined
     const bg = "rgba(0,0,0," + (resolvedTheme == 'dark' ? '0.2' : '0.04') + ")"; // fondo semitransparente
     return (
         <Node
@@ -239,7 +240,7 @@ const Block = (node) => {
                     const isAddVisible = isLast && blockEdgesPos.includes(i) || blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
 
                     return <>
-                        <FlowPort portSize={25} borderColor={resolvedTheme == 'dark' ? '#222' : primaryColor} borderWidth={"5px"} key={i} id={id} type='input' label='' style={{ top: pos + 'px', left }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        <FlowPort portSize={25} borderColor={resolvedTheme == 'dark' ? '#222' : primaryColor} borderWidth={"5px"} key={i} id={id} type='input' label='' style={{ top: pos + 'px', left, right }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
                         {/*@ts-ignore*/}
                         {isFirst && blockEdgesPos.includes(i) ? <Button
                             animation={"quick"}
