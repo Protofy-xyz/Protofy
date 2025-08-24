@@ -14,7 +14,7 @@ import { Button, CardFrame } from '@my/ui';
 
 const blockOffset = 200
 const _marginTop = 222
-const minBlockHeight = 140
+const minBlockHeight = 120
 const singleNodeOffset = 45
 const alignBlockWithChildrens = true
 const borderWidth = 3
@@ -178,12 +178,12 @@ const Block = (node) => {
     const thick = 8;                 // borde izquierdo
     const thin = borderWidth;        // borde fino
     const color = typeConf[type].color;
-    const joinX = Math.max(0, thick - Math.sqrt(Math.max(0, thin * (2 * thick - thin))));
+    const left = isEmpty ? 108 : -thick
     const bg = "rgba(0,0,0," + (resolvedTheme == 'dark' ? '0.2' : '0.04') + ")"; // fondo semitransparente
     return (
         <Node
             draggable={false}
-            container={true}
+            container={!isEmpty}
             style={extraStyle}
             icon={typeConf[type].icon ?? null}
             node={node}
@@ -195,7 +195,7 @@ const Block = (node) => {
             color={typeConf[type].color}
             dataOutput={DataOutput.block}>
             <div>
-                <div
+                {!isEmpty && <div
                     style={{
                         position: "absolute",
                         top: 23,
@@ -226,10 +226,11 @@ const Block = (node) => {
                         }}
                     />
                 </div>
+                }
                 {/* {nodeData.connections?.map((ele, i) => <FlowPort id={id} type='input' label='' style={{ top: 60 + (i * 60) + 'px' }} handleId={'block' + i} />)} */}
                 {nodeData.connections?.map((ele, i) => {
                     const prevPos = metaData?.childHeights?.[i - 1]?.height
-                    let pos = prevPos ? prevPos + nodeOffset : (i == 0 ? 120 : i * portSpacing + (nodeMarginVerticalPort / 1.4))
+                    let pos = prevPos ? prevPos + nodeOffset : (i == 0 ? isEmpty ? 70 : 120 : i * portSpacing + (nodeMarginVerticalPort / 1.4))
                     const isFirst = i == 0
                     const isLast = i == nodeData.connections.length - 1
                     const nextPos = isLast ? pos + 80 : metaData?.childHeights?.[i]?.height ? metaData?.childHeights?.[i]?.height + nodeOffset : portSpacing
@@ -238,7 +239,7 @@ const Block = (node) => {
                     const isAddVisible = isLast && blockEdgesPos.includes(i) || blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
 
                     return <>
-                        <FlowPort portSize={25} borderColor={resolvedTheme == 'dark' ? '#222' : primaryColor} borderWidth={"5px"} key={i} id={id} type='input' label='' style={{ top: pos + 'px', left: -8 }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        <FlowPort portSize={25} borderColor={resolvedTheme == 'dark' ? '#222' : primaryColor} borderWidth={"5px"} key={i} id={id} type='input' label='' style={{ top: pos + 'px', left }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
                         {/*@ts-ignore*/}
                         {isFirst && blockEdgesPos.includes(i) ? <Button
                             animation={"quick"}
