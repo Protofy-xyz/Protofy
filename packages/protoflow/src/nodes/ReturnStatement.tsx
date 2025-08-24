@@ -3,13 +3,25 @@ import { connectItem, dumpConnection, PORT_TYPES, DumpType } from '../lib/Node';
 import Node, { Field } from '../Node';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { DataOutput } from '../lib/types';
-import { Reply } from '@tamagui/lucide-icons';
-import { useNodeColor } from '../diagram/Theme';
+import { Workflow } from '@tamagui/lucide-icons';
+import { usePrimaryColor } from '../diagram/Theme';
 
+
+const ReverseWorkflow = (props) => {
+  return (
+    <Workflow
+      {...props}
+      style={{
+        ...(props.style || {}),
+        transform: 'scale(-1, 1)', // espejo horizontal
+      }}
+    />
+  )
+}
 
 const ReturnStatement =(node) => {
     const { id, type } = node
-    const color = useNodeColor(type)
+    const color = usePrimaryColor()
     const nodeParams: Field[] = [
         { label: 'Value', field: 'value', type: 'input'},
     ]
@@ -18,7 +30,7 @@ const ReturnStatement =(node) => {
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
     return (
-        <Node icon={Reply} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
+        <Node icon={ReverseWorkflow} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
     );
 }
 ReturnStatement.category = "common"

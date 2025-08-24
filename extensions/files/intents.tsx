@@ -301,7 +301,7 @@ export const CodeView = ({ rulesWithFlows = false, pathname = undefined, disable
       sourceCode={sourceCode.current}
       path={flowsPath ?? path}
       themeMode={resolvedTheme}
-      primaryColor={resolvedTheme == 'dark' ? theme[tint + '8'].val : theme[tint + '7'].val} />
+      primaryColor={resolvedTheme == 'dark' ? theme[tint + '10'].val : theme[tint + '7'].val} />
   }
 
   const getBody = () => {

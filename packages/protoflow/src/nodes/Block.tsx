@@ -1,28 +1,31 @@
 import React, { useContext } from 'react';
 import { connectItem, dumpConnection, getId, PORT_TYPES, DumpType, createNode } from '../lib/Node';
 import Node, { FlowPort, headerSize } from '../Node';
-import { useEdges } from 'reactflow';
+import { Background, useEdges } from 'reactflow';
 import { FlowStoreContext } from "../store/FlowsStore";
 import { NODE_TREE } from '../toggles';
 import { DataOutput } from '../lib/types';
 import useTheme, { usePrimaryColor } from '../diagram/Theme';
-import { ListOrdered, Square, ArrowDownUp, Plus } from '@tamagui/lucide-icons';
+import { ListOrdered, Square, ArrowDownUp, Plus, Workflow } from '@tamagui/lucide-icons';
 import { generateBoxShadow } from '../lib/shadow';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { useProtoflow } from '../store/DiagramStore';
 import { Button, CardFrame } from '@my/ui';
-import { Workflow } from 'lucide-react';
 
 const blockOffset = 200
 const _marginTop = 222
-const minBlockHeight = 120
-const singleNodeOffset = 30
+const minBlockHeight = 140
+const singleNodeOffset = 45
 const alignBlockWithChildrens = true
-const _borderWidth = 5
+const borderWidth = 3
+const borderColor = '#ccc'
 
 const ENABLE_CONTAINER = false
 const portSpacing = 100
-const nodeMarginVerticalPort = 120
+const nodeMarginVerticalPort = 110
+
+const nodeOffset = 120
+const childOffset = nodeOffset - 15
 
 const Block = (node) => {
     const { id, type } = node
@@ -30,6 +33,7 @@ const Block = (node) => {
     const primaryColor = usePrimaryColor()
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
     const metaData = useFlowsStore(state => state.nodeData[id] && state.nodeData[id]['_metadata'] ? state.nodeData[id]['_metadata'] : { childWidth: 0, childHeight: 0, childHeights: [] })
+    console.log('metadata: ', metaData)
     const setNodeData = useFlowsStore(state => state.setNodeData)
     const currentPath = useFlowsStore(state => state.currentPath)
 
@@ -47,7 +51,7 @@ const Block = (node) => {
     //console.log('metadata in', node.id, metaData)
     const getBlockHeight = () => {
         if (!metaData.childHeight) return minBlockHeight
-        return nodeMarginVerticalPort + Math.max(0, nodeData.connections?.length - 1) * portSpacing
+        return Math.max(250, metaData.childHeight + 120)
     }
 
     const height = id ? getBlockHeight() : 0
@@ -77,6 +81,7 @@ const Block = (node) => {
     let extraStyle: any = {}
     extraStyle.minHeight = height + 'px'
     extraStyle.border = 0
+
     extraStyle.minWidth = type == 'CaseClause' || type == 'DefaultClause' ? '400px' : '120px'
 
     const containerColor = useTheme('containerColor')
@@ -89,34 +94,37 @@ const Block = (node) => {
         },
         Block: {
             icon: Workflow,
-            color: resolvedTheme == 'dark' ? '#ccc' : '#ccc',
+            color: primaryColor,
             title: 'Block'
         },
         CaseClause: {
             icon: Workflow,
-            color: '#cccccc88',
+            color: primaryColor,
             title: 'Case Clause'
         },
         DefaultClause: {
             icon: Workflow,
-            color: '#cccccc88',
+            color: primaryColor,
             title: 'Case Clause'
         }
     }
 
+    // extraStyle.backgroundColor = typeConf[type].color
+
     const buttonStyle = {
         opacity: 0.1,
-        // borderColor: typeConf[type].color,
-        borderWidth: 2,
+        borderRadius: '4px',
+        borderColor: typeConf[type].color,
+        borderWidth: 5,
         position: 'absolute',
-        backgroundColor: nodeBackgroundColor,
+        backgroundColor: 'transparent',
         hoverStyle: {
             borderColor: typeConf[type].color,
             opacity: 1
         },
         scaleIcon: 1.5,
         padding: "$2",
-        right: 0
+        left: 3
     }
     const connectedEdges = id ? edges.filter(e => e.target == id) : []
 
@@ -154,7 +162,7 @@ const Block = (node) => {
 
         setEdges(edgs => [
             // sort edges by targetHandle to avoid conflicts
-            ...edgs.sort((a,b) => ((Number(a?.targetHandle.split('block')[1])) - Number(b.targetHandle.split('block')[1]))).map(e => {
+            ...edgs.sort((a, b) => ((Number(a?.targetHandle.split('block')[1])) - Number(b.targetHandle.split('block')[1]))).map(e => {
                 if (e.target == id) {
                     e['targetHandle'] = id + '_block' + newPosArr[prevIndex]
                     prevIndex = prevIndex + 1
@@ -167,12 +175,15 @@ const Block = (node) => {
         )
     }
 
-    const lineColor = "#00000025"
+    const thick = 8;                 // borde izquierdo
+    const thin = borderWidth;        // borde fino
+    const color = typeConf[type].color;
+    const joinX = Math.max(0, thick - Math.sqrt(Math.max(0, thin * (2 * thick - thin))));
+    const bg = "rgba(0,0,0," + (resolvedTheme == 'dark' ? '0.2' : '0.04') + ")"; // fondo semitransparente
     return (
         <Node
-            draggable={type != 'SourceFile'}
-            // contentStyle={{borderLeft:borderWidth+'px solid '+borderColor}}
-            container={!isEmpty && ENABLE_CONTAINER}
+            draggable={false}
+            container={true}
             style={extraStyle}
             icon={typeConf[type].icon ?? null}
             node={node}
@@ -184,22 +195,53 @@ const Block = (node) => {
             color={typeConf[type].color}
             dataOutput={DataOutput.block}>
             <div>
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 23,
+                        left: 0,
+                        width: metaData.childWidth + thin,
+                        height: height - 23,
+                        backgroundColor: bg,
+
+                        // exterior: recto arriba izq
+                        borderTopLeftRadius: 0,
+                        borderTopRightRadius: thin,
+                        borderBottomRightRadius: thin,
+                        borderBottomLeftRadius: thick,
+
+                        overflow: "hidden",
+                        pointerEvents: "none",
+                    }}
+                >
+                    {/* lateral izquierdo */}
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            bottom: 0,
+                            width: thick,
+                            background: color,
+                        }}
+                    />
+                </div>
                 {/* {nodeData.connections?.map((ele, i) => <FlowPort id={id} type='input' label='' style={{ top: 60 + (i * 60) + 'px' }} handleId={'block' + i} />)} */}
                 {nodeData.connections?.map((ele, i) => {
-                    let pos = i * portSpacing + (nodeMarginVerticalPort/1.4)
-                    let posNext = (i + 1) * portSpacing + (nodeMarginVerticalPort/1.4)
+                    const prevPos = metaData?.childHeights?.[i - 1]?.height
+                    let pos = prevPos ? prevPos + nodeOffset : (i == 0 ? 120 : i * portSpacing + (nodeMarginVerticalPort / 1.4))
                     const isFirst = i == 0
                     const isLast = i == nodeData.connections.length - 1
+                    const nextPos = isLast ? pos + 80 : metaData?.childHeights?.[i]?.height ? metaData?.childHeights?.[i]?.height + nodeOffset : portSpacing
+                    const halfPos = (pos + nextPos) / 2
                     const isSwitchVisible = !isLast && blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
-                    const nextPos = isLast ? pos : posNext
-                    const switchPos = isLast ? (pos + 40) : (pos + nextPos) / 2
-
                     const isAddVisible = isLast && blockEdgesPos.includes(i) || blockEdgesPos.includes(i) && blockEdgesPos.includes(i + 1)
 
                     return <>
-                        <FlowPort key={i} id={id} type='input' label='' style={{ top: pos + 'px' }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
+                        <FlowPort portSize={25} borderColor={resolvedTheme == 'dark' ? '#222' : primaryColor} borderWidth={"5px"} key={i} id={id} type='input' label='' style={{ top: pos + 'px', left: -8 }} handleId={'block' + i} allowedTypes={["data", "flow"]} />
                         {/*@ts-ignore*/}
                         {isFirst && blockEdgesPos.includes(i) ? <Button
+                            animation={"quick"}
                             {...buttonStyle}
                             onPress={() => onAddConnection(i)}
                             top={singleNodeOffset}
@@ -207,25 +249,23 @@ const Block = (node) => {
                         /> : null}
                         {/*@ts-ignore*/}
                         {!isSwitchVisible && isAddVisible ? <Button
+                            animation={"quick"}
                             {...buttonStyle}
                             onPress={() => onAddConnection(i + 1)}
-                            top={switchPos - 16}
+                            top={pos + 40}
                             icon={<Plus color={typeConf[type].color} />}
                         /> : null}
                         {/*@ts-ignore*/}
                         {isSwitchVisible && isAddVisible ? <Button
+                            animation={"quick"}
                             {...buttonStyle}
                             onPress={() => onSwitchConnection(i + 1)}
-                            top={switchPos - 16}
+                            top={halfPos}
                             icon={<ArrowDownUp color={typeConf[type].color} />}
                         /> : null}
                     </>
                 })}
             </div>
-
-            {/* <div style={{position:'absolute', width: metaData.childWidth+'px', height: borderWidth+'px', backgroundColor: borderColor}}></div>
-            <div style={{top: height-borderWidth+'px', position:'absolute', width: metaData.childWidth+'px', height: borderWidth+'px', backgroundColor: borderColor}}></div>
-            <div style={{top: headerSize-(borderWidth*2)+'px', position:'absolute', left: metaData.childWidth+'px', height: height-headerSize+(borderWidth*2)+'px', width: borderWidth+'px', backgroundColor: borderColor}}></div> */}
         </Node>
     );
 }
@@ -308,6 +348,12 @@ Block.dump = (node, nodes, edges, nodesData, metadata = null, enableMarkers = fa
 //     },[]))
 // }
 
+Block.getPosition = (pos, type) => {
+    pos.y = pos.y + childOffset
+    // pos.x = pos.x + 40000
+    return pos
+}
+
 Block.filterChildren = (node, childNodeList, edges, nodeDataTable, setNodeData) => {
     if (!NODE_TREE) return childNodeList
     //if(!childNodeList.length || !childNodeList[0].id.startsWith('SourceFile_')) return childNodeList
@@ -315,6 +361,10 @@ Block.filterChildren = (node, childNodeList, edges, nodeDataTable, setNodeData) 
     vContainer[0].children = childNodeList
 
     return vContainer;
+}
+
+Block.getWidth = (node) => {
+    return 0
 }
 
 export default Block

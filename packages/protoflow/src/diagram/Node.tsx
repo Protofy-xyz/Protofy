@@ -157,11 +157,15 @@ export interface NodePortProps {
     isConnected?: boolean,
     nodeId?: string,
     position?: any,
-    allowedTypes?: string[]
+    allowedTypes?: string[],
+    portSize?: number,
+    borderWidth?: string,
+    borderColor?: string,
+    color?: string
 }
 
 //{`${id}${PORT_TYPES.flow}${handleId ?? type}`}
-export const NodePort = ({ id, type, style, label, sublabel, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
+export const NodePort = ({ id, color=undefined, borderWidth=undefined, borderColor=undefined, portSize=undefined, type, style, label, sublabel, isConnected = false, nodeId, position = Position.Right, allowedTypes }: NodePortProps) => {
     const textRef: any = useRef()
     const handleRef: any = useRef()
     const useFlowsStore = useContext(FlowStoreContext)
@@ -173,10 +177,13 @@ export const NodePort = ({ id, type, style, label, sublabel, isConnected = false
     const edges = useProtoEdges();
     const connected = isHandleConnected(edges, id)
 
-    const portSize = useTheme('portSize')
+    const themePortSize = useTheme('portSize')
+    portSize = portSize ?? themePortSize
     const plusColor = useTheme('plusColor')
-    const borderColor = useTheme('nodeBorderColor')
-    const borderWidth = useTheme('nodeBorderWidth')
+    const themeBorderColor = useTheme('nodeBorderColor')
+    const themeBorderWidth = useTheme('nodeBorderWidth')
+    borderWidth = borderWidth ?? themeBorderWidth
+    borderColor = borderColor ?? themeBorderColor
     const blockPortColor = useTheme('blockPort')
     const flowPortColor = useTheme('flowPort')
     const dataPorColor = useTheme('dataPort')
@@ -187,7 +194,7 @@ export const NodePort = ({ id, type, style, label, sublabel, isConnected = false
             target: nodeId
         })
     }
-    let backgroundColor = allowedTypes ? allowedTypes.includes("block") ? blockPortColor : flowPortColor : null
+    let backgroundColor = color ?? allowedTypes ? allowedTypes.includes("block") ? blockPortColor : flowPortColor : null
     if (allowedTypes.length == 1 && allowedTypes.includes("data")) backgroundColor = dataPorColor
 
     React.useEffect(() => {

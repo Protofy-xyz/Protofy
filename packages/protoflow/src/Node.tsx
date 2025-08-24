@@ -531,7 +531,7 @@ export const NodeOutput = ({ vars, ...props }: NodePortProps & { vars?: string[]
     </div>
 }
 
-export const FlowPort = ({ id, type, style, handleId, label, sublabel, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"] }: NodePortProps) => {
+export const FlowPort = ({ id, type, style, handleId, label, sublabel, isConnected = false, position = null, allowedTypes = ["block", "data", "flow"], portSize=undefined, borderColor=undefined, borderWidth=undefined, color=undefined }: NodePortProps) => {
     const _position = position ?? (flowDirection == 'RIGHT' ? Position.Left : Position.Right)
     return (<NodePort
         position={_position}
@@ -543,6 +543,10 @@ export const FlowPort = ({ id, type, style, handleId, label, sublabel, isConnect
         isConnected={isConnected}
         nodeId={id}
         allowedTypes={allowedTypes}
+        portSize={portSize}
+        borderColor={borderColor}
+        borderWidth={borderWidth}
+        color={color}
     />)
 }
 

@@ -160,11 +160,7 @@ export const usePrimaryColor = () => {
     const useFlowsStore = useContext(FlowStoreContext)
     const primaryColor = useFlowsStore(state => state.primaryColor)
     const themeMode = useFlowsStore(state => state.themeMode)
-    if (themeMode == 'dark') {
-        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette?.gamut?.saturation - 10, nodePalette?.gamut?.value + 5)
-    } else {
-        return '#' + convert.hsv.hex(colord(primaryColor).hue(), nodePalette?.gamut?.saturation, nodePalette?.gamut?.value)
-    }
+    return primaryColor
 
 }
 
