@@ -302,7 +302,8 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                 editedCode.current = code
                 setRulesCode(code)
             }}
-            path={board.name + '.ts'}
+            path={cardData.name+'.ts'}
+            flowsPath={cardData.name}
             sourceCode={editedCode}
             monacoOnMount={(editor, monaco) => {
                 monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions?.({

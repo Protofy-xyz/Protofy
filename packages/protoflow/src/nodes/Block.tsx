@@ -10,7 +10,8 @@ import { ListOrdered, Square, ArrowDownUp, Plus } from '@tamagui/lucide-icons';
 import { generateBoxShadow } from '../lib/shadow';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { useProtoflow } from '../store/DiagramStore';
-import { Button } from '@my/ui';
+import { Button, CardFrame } from '@my/ui';
+import { Workflow } from 'lucide-react';
 
 const blockOffset = 200
 const _marginTop = 222
@@ -81,23 +82,23 @@ const Block = (node) => {
     const containerColor = useTheme('containerColor')
     const typeConf = {
         SourceFile: {
-            // icon: Box,
+            icon: Workflow,
             output: false,
-            color: resolvedTheme == 'dark' ? primaryColor : '#ccc',
+            color: primaryColor,
             title: currentPath.split(/[/\\]/).pop()
         },
         Block: {
-            icon: ListOrdered,
+            icon: Workflow,
             color: resolvedTheme == 'dark' ? '#ccc' : '#ccc',
             title: 'Block'
         },
         CaseClause: {
-            icon: Square,
+            icon: Workflow,
             color: '#cccccc88',
             title: 'Case Clause'
         },
         DefaultClause: {
-            icon: Square,
+            icon: Workflow,
             color: '#cccccc88',
             title: 'Case Clause'
         }
