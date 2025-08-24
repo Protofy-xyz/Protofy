@@ -257,15 +257,14 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
 
 
     const theme = useTheme()
-    const savedCode = useRef(rulesCode)
-    const editedCode = useRef(rulesCode)
+    const editedCode = useRef(rulesCode ?? '')
     const [selectedActionTab, setSelectedActionTab] = useState('board')
     const [selectedStateTab, setSelectedStateTab] = useState('board')
 
     const flows = useMemo(() => {
         return <CodeView
             rulesWithFlows={true}
-            pathname={'/rules'}
+            pathname={cardData.type == 'action' ? '/rules' : '/observerCard'}
             onApplyRules={async (rules) => {
                 return await setRules(rules)
             }}
