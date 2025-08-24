@@ -15,6 +15,7 @@ import { SettingsEditor } from './SettingsEditor'
 import { ViewEditor } from './ViewEditor'
 import { DisplayEditor } from './DisplayEditor'
 import { useUpdateEffect } from 'usehooks-ts'
+import { TabBar } from 'protolib/components/TabBar';
 
 export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit = (data) => { }, errors, mode = "edit" }) => {
 
@@ -195,37 +196,11 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
     <YStack f={1}>
       <Tinted>
         <YStack f={1}>
-          <XStack borderBottomColor="$gray6" borderBottomWidth="1px">
-            {
-              tabs.map((tab, index) => {
-                const isSelected = selectedTab === tab.id;
-                return <XStack
-                  key={index}
-                  onPress={() => setSelectedTab(tab.id)}
-                  cursor={tab.disabled ? "default" : "pointer"}
-                  paddingVertical="$2.5"
-                  paddingHorizontal="$4"
-                  disabled={tab.disabled}
-                  style={{
-                    boxShadow: isSelected
-                      ? '0px 2px 0px var(--color8)'
-                      : 'none',
-                    transition: 'box-shadow 0.2s ease'
-                  }}
-                  justifyContent="center"
-                  gap="$2"
-                  alignItems="center"
-                  opacity={isSelected ? 1 : !tab.disabled ? 0.6 : 0.2}
-                  hoverStyle={{ opacity: tab.disabled ? null : 0.9 }}
-                >
-                  {tab.icon}
-                  <Text fontSize="$4">
-                    {tab.label}
-                  </Text>
-                </XStack>
-              })
-            }
-          </XStack>
+          <TabBar
+            tabs={tabs}
+            selectedId={selectedTab}
+            onSelect={(id) => setSelectedTab(id)}
+          />
           <Tinted>
             {
               tabs.map((tabItem) => (

@@ -1,15 +1,14 @@
 import { Panel, PanelGroup } from "react-resizable-panels";
-import { YStack, ScrollView, Spinner, Text, Input, XStack, Button, useTheme } from "@my/ui";
+import { YStack, ScrollView, Text, Input, XStack, Button, useTheme } from "@my/ui";
 import { Tinted } from "../../components/Tinted";
 import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
-import { Rules } from "./Rules";
 import { useThemeSetting } from '@tamagui/next-theme'
-import { Monaco } from "../Monaco";
 import { JSONView } from "../JSONView";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { AlignLeft, Braces, Copy, Save, Search } from "@tamagui/lucide-icons";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { AlignLeft, Braces, Copy, Globe, LayoutDashboard, Search, Settings } from "@tamagui/lucide-icons";
 import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
+import { TabBar } from "../../components/TabBar";
 
 function flattenObject(obj, prefix = "", maxDepth = undefined, currentDepth = 1) {
     let result = [];
@@ -129,24 +128,9 @@ const FormattedView = ({ maxDepth = 1, copyIndex = 1, displayIndex = 1, data, hi
                 const value = line[copyIndex]
 
                 return (
-                    <XStack
-                        key={keyLabel + index}
-                        cursor="pointer"
-                        p="$2"
-                        px="$4"
-                        bg="$gray2"
-                        gap="$2"
-                        br="$4"
-                        hoverStyle={{ backgroundColor: "$color5" }}
-                        onPress={() => handleCopy(value, index)}
-                    >
+                    <XStack key={keyLabel + index} cursor="pointer" p="$2" px="$4" bg="$gray2" gap="$2" br="$4" hoverStyle={{ backgroundColor: "$color5" }} onPress={() => handleCopy(value, index)}>
                         {isCopied && (
-                            <Text
-                                fos="$4"
-                                color="$color7"
-                                pos="absolute"
-                                left="$4"
-                            >
+                            <Text fos="$4" color="$color7" pos="absolute" left="$4" >
                                 copied to clipboard!
                             </Text>
                         )}
@@ -163,14 +147,7 @@ const FormattedView = ({ maxDepth = 1, copyIndex = 1, displayIndex = 1, data, hi
                         </XStack>
 
                         <YStack flex={1} hoverStyle={{ opacity: 1 }} opacity={0}>
-                            <Copy
-                                display="flex"
-                                color="$blue8"
-                                pos="absolute"
-                                r="$1"
-                                top={2}
-                                size={14}
-                            />
+                            <Copy display="flex" color="$blue8" pos="absolute" r="$1" top={2} size={14} />
                         </YStack>
                     </XStack>
                 )
@@ -194,39 +171,38 @@ const generateParamsDeclaration = (cardData) => {
     return `declare const params: {\n${params}\n};`;
 }
 
-export const AutopilotEditor = ({ cardData, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, setRules}) => {
+export const AutopilotEditor = ({ cardData, board, panels = ['actions', 'staes'], actions, states, rules, rulesCode, setRulesCode, value, valueReady = true, setRules }) => {
     const { resolvedTheme } = useThemeSetting()
     const [inputMode, setInputMode] = useState<"json" | "formatted">("formatted")
     const [search, setSearch] = useState('')
     const [stateSearch, setStateSearch] = useState('')
 
+    // Show/hide action and state tabs
+    const showActionsTabs = false
+    const showStatesTabs = false
+
     const cleanedActions = useMemo(() => {
         const cleaned = {};
-
         if (!actions || typeof actions !== 'object') return cleaned;
-
         for (const [level1Key, level1Value] of Object.entries(actions)) {
             if (!level1Value || typeof level1Value !== 'object') continue;
-
             for (const [level2Key, level2Value] of Object.entries(level1Value)) {
                 if (!level2Value || typeof level2Value !== 'object') continue;
-
                 const { name, description, params, url } = level2Value;
-
                 if (!cleaned[level1Key]) cleaned[level1Key] = {};
-
                 cleaned[level1Key][level2Key] = { name, description, params, url };
             }
         }
-
         return cleaned;
     }, [actions]);
 
     const isAIEnabled = useSettingValue('ai.enabled', false);
+
     const filteredData = useMemo(() => {
         const filtered = filterObjectBySearch(cleanedActions?.[board.name] ?? {}, search)
         return filtered
     }, [cleanedActions, search]);
+
     const filteredStateData = useMemo(() => {
         const filtered = filterObjectBySearch(states?.[board.name] ?? {}, stateSearch)
         return filtered
@@ -283,6 +259,9 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
     const theme = useTheme()
     const savedCode = useRef(rulesCode)
     const editedCode = useRef(rulesCode)
+    const [selectedActionTab, setSelectedActionTab] = useState('board')
+    const [selectedStateTab, setSelectedStateTab] = useState('board')
+
     const flows = useMemo(() => {
         return <CodeView
             rulesWithFlows={true}
@@ -302,7 +281,7 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                 editedCode.current = code
                 setRulesCode(code)
             }}
-            path={cardData.name+'.ts'}
+            path={cardData.name + '.ts'}
             flowsPath={cardData.name}
             sourceCode={editedCode}
             monacoOnMount={(editor, monaco) => {
@@ -341,6 +320,28 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
             }}
         />
     }, [resolvedTheme, board.name, theme, isAIEnabled]);
+
+    const actionsTab = [
+        { id: 'board', label: 'Board', icon: <LayoutDashboard size={"$1"} />, content: actionsPanel },
+        { id: 'global', label: 'Global', icon: <Globe size={"$1"} />, content: <h1>Global actions panel (todo)</h1> },
+        { id: 'system', label: 'System', icon: <Settings size={"$1"} />, content: <h1>System actions panel (todo)</h1> }
+    ]
+
+    const statesTab = [
+        { id: 'board', label: 'Board', icon: <LayoutDashboard size={"$1"} />, content: statesPanel },
+        { id: 'global', label: 'Global', icon: <Globe size={"$1"} />, content: <h1>Global states panel (todo)</h1> },
+        { id: 'system', label: 'System', icon: <Settings size={"$1"} />, content: <h1>System states panel (todo)</h1> }
+    ]
+
+    const selectedAction = useMemo(
+        () => actionsTab.find(t => t.id === selectedActionTab),
+        [actionsTab, selectedActionTab]
+    );
+
+    const selectedState = useMemo(
+        () => statesTab.find(t => t.id === selectedStateTab),
+        [statesTab, selectedStateTab]
+    );
 
     return (
         <PanelGroup direction="horizontal">
@@ -385,12 +386,22 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                                     />
                                 </XStack>
                             </XStack>
-                            <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
-                                <Tinted>
-                                    {actionsPanel}
-                                </Tinted>
+                            <ScrollView flex={1} width="100%" height="100%" overflow="auto">
+                                {showActionsTabs ? (
+                                    <>
+                                        <TabBar
+                                            tabs={actionsTab}
+                                            selectedId={selectedActionTab}
+                                            onSelect={setSelectedActionTab}
+                                        />
+                                        <XStack mt="$2">
+                                            {selectedAction?.content ?? null}
+                                        </XStack>
+                                    </>
+                                ) : (
+                                    actionsPanel
+                                )}
                             </ScrollView>
-
                         </YStack>
                     </Panel>}
                     <CustomPanelResizeHandle direction="horizontal" />
@@ -418,9 +429,20 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
                                 <p>State</p>
                             </XStack>
                             <ScrollView flex={1} width="100%" height="100%" overflow="auto" >
-                                <Tinted>
-                                    {statesPanel}
-                                </Tinted>
+                                {showStatesTabs ? (
+                                    <>
+                                        <TabBar
+                                            tabs={statesTab}
+                                            selectedId={selectedStateTab}
+                                            onSelect={setSelectedStateTab}
+                                        />
+                                        <XStack mt="$2">
+                                            {selectedState?.content ?? null}
+                                        </XStack>
+                                    </>
+                                ) : (
+                                    statesPanel
+                                )}
                             </ScrollView>
 
                         </YStack>
