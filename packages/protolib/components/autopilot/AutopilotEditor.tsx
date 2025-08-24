@@ -5,7 +5,7 @@ import CustomPanelResizeHandle from "../MainPanel/CustomPanelResizeHandle";
 import { useThemeSetting } from '@tamagui/next-theme'
 import { JSONView } from "../JSONView";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { AlignLeft, Braces, Copy, Search } from "@tamagui/lucide-icons";
+import { AlignLeft, Braces, Copy, Globe, LayoutDashboard, Search, Settings } from "@tamagui/lucide-icons";
 import { useSettingValue } from "@extensions/settings/hooks";
 import { CodeView } from '@extensions/files/intents';
 import { TabBar } from "../../components/TabBar";
@@ -322,15 +322,15 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
     }, [resolvedTheme, board.name, theme, isAIEnabled]);
 
     const actionsTab = [
-        { id: 'board', label: 'Board', icon: <Braces size={"$1"} />, content: actionsPanel },
-        { id: 'global', label: 'Global', icon: <Braces size={"$1"} />, content: <h1>Global actions panel (todo)</h1> },
-        { id: 'system', label: 'System', icon: <Braces size={"$1"} />, content: <h1>System actions panel (todo)</h1> }
+        { id: 'board', label: 'Board', icon: <LayoutDashboard size={"$1"} />, content: actionsPanel },
+        { id: 'global', label: 'Global', icon: <Globe size={"$1"} />, content: <h1>Global actions panel (todo)</h1> },
+        { id: 'system', label: 'System', icon: <Settings size={"$1"} />, content: <h1>System actions panel (todo)</h1> }
     ]
 
     const statesTab = [
-        { id: 'board', label: 'Board', icon: <Braces size={"$1"} />, content: statesPanel },
-        { id: 'global', label: 'Global', icon: <Braces size={"$1"} />, content: <h1>Global states panel (todo)</h1> },
-        { id: 'system', label: 'System', icon: <Braces size={"$1"} />, content: <h1>System states panel (todo)</h1> }
+        { id: 'board', label: 'Board', icon: <LayoutDashboard size={"$1"} />, content: statesPanel },
+        { id: 'global', label: 'Global', icon: <Globe size={"$1"} />, content: <h1>Global states panel (todo)</h1> },
+        { id: 'system', label: 'System', icon: <Settings size={"$1"} />, content: <h1>System states panel (todo)</h1> }
     ]
 
     const selectedAction = useMemo(
