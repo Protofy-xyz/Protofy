@@ -2,7 +2,7 @@ import { createElement, useState, useRef } from 'react';
 import { XStack, YStack, Text } from '@my/ui';
 import { useThemeSetting } from '@tamagui/next-theme'
 import { X, Minimize2, Maximize2 } from '@tamagui/lucide-icons'
-import { Tinted } from 'protolib/components/Tinted';
+import { TabBar } from 'protolib/components/TabBar';
 
 export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
     const openWindowSize = 1010
@@ -68,32 +68,11 @@ export const FloatingWindow = ({ visible, onChangeTab, selectedTab, tabs }) => {
                         borderRightColor={"$gray6"}
                     ></YStack>
                     {
-                        tabs && Object.keys(tabs).length > 0 && Object.keys(tabs).map((tab, index) => {
-                            const isSelected = selectedTab === tab;
-                            return <Tinted><XStack
-                                key={index}
-                                onPress={() => onChangeTab(tab)}
-                                cursor="pointer"
-                                paddingVertical="$2.5"
-                                paddingHorizontal="$4"
-                                style={{
-                                    boxShadow: isSelected
-                                        ? '0px 2px 0px var(--color8)'
-                                        : 'none',
-                                    transition: 'box-shadow 0.2s ease'
-                                }}
-                                justifyContent="center"
-                                gap="$2"
-                                alignItems="center"
-                                opacity={isSelected ? 1 : 0.6}
-                                hoverStyle={{ opacity: 0.8 }}
-                            >
-                                {tabs[tab].icon && createElement(tabs[tab].icon, { size: 16 })}
-                                {tabs[tab].label && <Text fontSize="$4">
-                                    {tabs[tab].label}
-                                </Text>}
-                            </XStack></Tinted>
-                        })
+                        <TabBar
+                            tabs={tabs}
+                            selectedId={selectedTab}
+                            onSelect={onChangeTab}
+                        />
                     }
                 </XStack>
                 <XStack flex={1}>
