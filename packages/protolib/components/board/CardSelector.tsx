@@ -160,7 +160,7 @@ const iconTable = {
 
 const SecondSlide = ({ remountKey, card, board, states, icons, actions, setCard, errors }) => {
   return (
-    <YStack mb="$4" f={1}>
+    <YStack mb="$4" marginTop="$-5" marginHorizontal="$-6" f={1}>
       <ActionCardSettings
         key={remountKey}
         mode="create"
@@ -369,7 +369,6 @@ export const CardSelector = ({ defaults = {}, board, addOpened, setAddOpened, on
               },
               {
                 name: "Configure your widget",
-                title: "Configure your widget",
                 component: card ? (
                   <SecondSlide remountKey={remountKey} board={board} states={states} icons={icons} actions={actions} card={card} setCard={setCard} errors={errors} />
                 ) : null, 
