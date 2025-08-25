@@ -22,13 +22,9 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
   const [cardData, setCardData] = useState(card);
   const originalNameRef = useRef(card?.name ?? null)
 
-  const isSimpleReturnString =
-    !cardData.rulesCode ||
-    /^return\s*`[\s\S]*`$/.test(cardData.rulesCode.trim());
-  const hasEmptyRulesCode = !cardData.rulesCode
   const isCreateMode = mode === "create";
-  //if there is rules code and it is a simple return string, we show the value tab by default, otherwise we show the rules tab
-  const [selectedTab, setSelectedTab] = useState(isCreateMode ? "info" : !hasEmptyRulesCode && isSimpleReturnString ? "value" : "rules");
+
+  const [selectedTab, setSelectedTab] = useState(isCreateMode ? "info" : "rules");
 
   const { resolvedTheme } = useThemeSetting();
 
@@ -94,43 +90,6 @@ export const ActionCardSettings = ({ board, actions, states, card, icons, onEdit
           </PanelGroup>
         </YStack>
       </YStack>
-    },
-    {
-      id: 'value',
-      label: 'Value',
-      icon: <HelpingHand size={"$1"} />,
-      disabled: !isSimpleReturnString,
-      opacity: !isSimpleReturnString ? 0.4 : 1,
-      content: <Monaco
-        colors={{ 'editor.background': resolvedTheme === 'dark' ? '#1E1E1E' : '#FFFFFF' }}
-        path={"value-" + cardData.name + ".ts"}
-        darkMode={resolvedTheme === 'dark'}
-        sourceCode={
-          (cardData.rulesCode?.trim().startsWith('return `') && cardData.rulesCode?.trim().endsWith('`'))
-            ? cardData.rulesCode.trim().slice(8, -1)
-            : cardData.rulesCode || ''
-        }
-        onChange={(newCode) => {
-          setCardData({
-            ...cardData,
-            rulesCode: `return \`${newCode}\``
-          })
-        }}
-        options={{
-          scrollBeyondLastLine: false,
-          scrollbar: {
-            vertical: 'auto',
-            horizontal: 'auto',
-          },
-          folding: false,
-          lineDecorationsWidth: 0,
-          lineNumbersMinChars: 0,
-          lineNumbers: "off",
-          minimap: { enabled: false },
-          formatOnPaste: true,
-          formatOnType: true,
-        }}
-      />
     },
     {
       id: 'rules',
