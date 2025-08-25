@@ -590,6 +590,7 @@ export default async (app, context) => {
         cleanContext.mqtt = 'points to the active mqtt connection. Use context.mqtt if you need to pass a mqtt connection handler'
         const serializedContext = safeDump(cleanContext);
 
+        delete req.body.actions[req.body.card.name]
         const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, context: serializedContext, templateName: "actionRules", card: JSON.stringify(req.body.card, null, 4), states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
