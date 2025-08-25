@@ -257,7 +257,7 @@ ${cardData.type == 'action' ? generateParamsDeclaration(cardData) : ''}`
 
 
     const theme = useTheme()
-    const editedCode = useRef(rulesCode ?? '')
+    const editedCode = useRef(rulesCode ?? 'return;')
     const [selectedActionTab, setSelectedActionTab] = useState('board')
     const [selectedStateTab, setSelectedStateTab] = useState('board')
 
