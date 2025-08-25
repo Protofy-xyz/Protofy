@@ -15,7 +15,7 @@ const { createExpressProxy, handleUpgrade } = require('app/proxy.js')
 import http from 'http';
 
 import chokidar from 'chokidar';
-import BundleContext from 'app/bundles/coreContext'
+import BundleContext from 'app/bundles/context'
 import { startMqtt } from './mqtt';
 
 const isFullDev = process.env.FULL_DEV === '1';
