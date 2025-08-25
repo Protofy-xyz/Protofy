@@ -133,6 +133,7 @@ const Subtabs = ({ tabs, subtabs, collapsed, shortedMatch }: any) => {
                         // selected={replaceFirstCharIfSlash(pathname).startsWith(replaceFirstCharIfSlash(originalHref.replace(/\/$/, '').replace(/\?.*$/, '')))}
                         icon={getIcon(subtab.icon)}
                         text={subtab.name}
+                        extraLabel={subtab.extraLabel}
                     />
                 </Tinted>
                 if (subtab.external || (!subtab.href?.startsWith('/workspace/') && appId == 'adminpanel')) {
