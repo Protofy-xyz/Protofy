@@ -44,7 +44,7 @@ export const PanelMenuItem = React.forwardRef(({ onPress, children, selected, co
           {text && !collapsed ? <SizableText numberOfLines={1} ellipsizeMode="tail" selectable={false} pointerEvents="none" color="$color" o={1} size="$4" fontWeight={selected ? "400" : "400"}>
             {text}
           </SizableText> : null}
-          {extraLabel?<XStack ml="auto" ai="center" jc="center" {...collapsed ? { ml: 0 } : {}}>
+          {extraLabel && !collapsed?<XStack ml="auto" ai="center" jc="center" {...collapsed ? { ml: 0 } : {}}>
             <SizableText flexShrink={0} o={1} size="$1" bg="$color6" p="$2" borderRadius={"$5"} color="$color" pointerEvents="none" selectable={false}>{extraLabel}</SizableText>
           </XStack> : null}
           {children}
