@@ -341,8 +341,7 @@ export const CodeView = ({ rulesWithFlows = false, pathname = undefined, disable
           </YStack>
         </Panel>
         <CustomPanelResizeHandle direction="horizontal" />
-
-        <Panel defaultSize={50} minSize={33} style={{ paddingTop: "32px" }}>
+        <Panel defaultSize={50} minSize={33} style={{  }}>
           <YStack f={1} h="100%">
             {getFlows()}
           </YStack>

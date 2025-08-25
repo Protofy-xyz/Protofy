@@ -30,7 +30,7 @@ const ReturnStatement =(node) => {
     const nodeData = useFlowsStore(state => state.nodeData[id] ?? {})
 
     return (
-        <Node icon={ReverseWorkflow} node={node} isPreview={!id} title={"return"+(!node.id?'':(' '+nodeData.value))} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
+        <Node icon={ReverseWorkflow} node={node} isPreview={!id} title={"return"} id={id} params={nodeParams} color={color} dataOutput = {DataOutput.flow}/>
     );
 }
 ReturnStatement.category = "common"
