@@ -24,7 +24,7 @@ async function execute_action(url_or_name, params={}) {
             }
         }
     }
-
+    params._stackTrace = JSON.stringify(stackTrace);
     if (action.method === 'post') {
         let { token, ...data } = params;
         if(action.token) {

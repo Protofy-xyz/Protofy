@@ -61,10 +61,11 @@ const castValueToType = (value, type) => {
     }
 }
 
-export const handleBoardAction = async (context, Manager, boardId, action_or_card_id, res, params) => {
+export const handleBoardAction = async (context, Manager, boardId, action_or_card_id, res, rawParams) => {
     const actions = await getBoardActions(boardId);
     const action = actions.find(a => a.name === action_or_card_id);
-
+    const { _stackTrace, ...params } = rawParams;
+    const stackTrace = _stackTrace ? [{ name: action.name, board: boardId }, ...JSON.parse(_stackTrace)] : [{ name: action.name, board: boardId }];
     if (!action) {
         res.send({ error: "Action not found" });
         return;
@@ -95,14 +96,15 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
             status: 'running',
             action: action_or_card_id,
             boardId: boardId,
-            params
+            params,
+            stackTrace
         },
     }, getServiceToken());
 
     const states = await context.state.getStateTree();
     let rulesCode = action.rulesCode.trim();
 
-    const wrapper = new AsyncFunction('boardName', 'name', 'states', 'boardActions', 'board', 'userParams', 'params', 'token', 'context', 'API', 'fetch', 'logger', `
+    const wrapper = new AsyncFunction('boardName', 'name', 'states', 'boardActions', 'board', 'userParams', 'params', 'token', 'context', 'API', 'fetch', 'logger', 'stackTrace', `
         ${getExecuteAction(await getActions(context), boardId)}
         ${rulesCode}
     `);
@@ -110,8 +112,8 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
     try {
         let response = null;
         try {
-            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, context, API, fetch, getLogger({module: 'boards', board: boardId, card: action.name }));
-            getLogger({module: 'boards', board: boardId, card: action.name }).info({ value: response }, "New value for card");
+            response = await wrapper(boardId, action_or_card_id, states, actions, states?.boards?.[boardId] ?? {}, params, params, token, context, API, fetch, getLogger({ module: 'boards', board: boardId, card: action.name }), stackTrace);
+            getLogger({ module: 'boards', board: boardId, card: action.name }).info({ value: response, stackTrace }, "New value for card: " + action.name);
         } catch (err) {
             await generateEvent({
                 path: `actions/boards/${boardId}/${action_or_card_id}/code/error`,
@@ -126,12 +128,13 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
                     stack: err.stack,
                     message: err.message,
                     name: err.name,
-                    code: err.code
+                    code: err.code,
+                    stackTrace
                 },
             }, getServiceToken());
 
-            getLogger({module: 'boards', board: boardId, card: action.name }).error({err},"Error executing card: ");
-            res.status(500).send({ _err: "e_code", error: "Error executing action code", message: err.message, stack: err.stack, name: err.name, code: err.code });
+            getLogger({ module: 'boards', board: boardId, card: action.name }).error({ err }, "Error executing card: ");
+            res.status(500).send({ _err: "e_code", error: "Error executing action code", message: err.message, stack: err.stack, stackTrace, name: err.name, code: err.code });
             return;
         }
 
@@ -157,7 +160,8 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
                 action: action_or_card_id,
                 boardId: boardId,
                 params,
-                response
+                response,
+                stackTrace
             },
         }, getServiceToken());
 
@@ -180,7 +184,8 @@ export const handleBoardAction = async (context, Manager, boardId, action_or_car
                 stack: err.stack,
                 message: err.message,
                 name: err.name,
-                code: err.code
+                code: err.code,
+                stackTrace
             },
         }, getServiceToken());
         console.error("Error executing action: ", err);
