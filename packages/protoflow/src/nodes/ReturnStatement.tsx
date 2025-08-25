@@ -48,6 +48,3 @@ ReturnStatement.dump = (node, nodes, edges, nodesData, metadata = null, enableMa
 }
 
 export default React.memo(ReturnStatement)
-
-
-
