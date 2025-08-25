@@ -508,8 +508,89 @@ export default async (app, context) => {
         res.send({ jsCode: cleanCode(jsCode) })
     })
 
+    function safeDump(root, { maxDepth = 10, maxFuncChars = 50_000 } = {}) {
+        const seen = new WeakMap(); // obj -> path
+        function enc(val, path, depth) {
+            if (val === null || typeof val === 'undefined') return val;
+            const t = typeof val;
+
+            if (t === 'function') {
+                const name = val.name || null;
+                let code = '';
+                try { code = String(val); } catch { }
+                if (maxFuncChars && code.length > maxFuncChars) {
+                    code = code.slice(0, maxFuncChars) + `\n/* ...truncated (${code.length - maxFuncChars} more chars) */`;
+                }
+                return { __type: 'Function', name, code };
+            }
+
+            if (t === 'bigint') return { __type: 'BigInt', value: val.toString() };
+            if (t === 'symbol') return { __type: 'Symbol', value: String(val) };
+            if (t !== 'object') return val;
+
+            // Circular refs
+            const prevPath = seen.get(val);
+            if (prevPath) return { __circular: prevPath };
+
+            if (depth >= maxDepth) return { __truncated: true, __path: path };
+
+            seen.set(val, path);
+
+            // Built-ins
+            if (val instanceof Date) return { __type: 'Date', value: val.toISOString() };
+            if (val instanceof RegExp) return { __type: 'RegExp', value: val.toString() };
+            if (val instanceof Error) {
+                return {
+                    __type: 'Error',
+                    name: val.name,
+                    message: val.message,
+                    stack: val.stack
+                };
+            }
+            if (typeof Buffer !== 'undefined' && Buffer.isBuffer(val)) {
+                return { __type: 'Buffer', length: val.length, base64: val.toString('base64') };
+            }
+            if (val instanceof Map) {
+                return { __type: 'Map', entries: Array.from(val, ([k, v], i) => [enc(k, `${path}.<key${i}>`, depth + 1), enc(v, `${path}.<val${i}>`, depth + 1)]) };
+            }
+            if (val instanceof Set) {
+                return { __type: 'Set', values: Array.from(val, (v, i) => enc(v, `${path}[${i}]`, depth + 1)) };
+            }
+            if (Array.isArray(val)) {
+                return val.map((v, i) => enc(v, `${path}[${i}]`, depth + 1));
+            }
+
+            // Objetos normales (incluye getters enumerables ya materializados)
+            const out = {};
+            for (const key of Reflect.ownKeys(val)) {
+                // Propiedades no enumerables/símbolos también, si quieres limitar a enumerables, usa Object.keys
+                try {
+                    out[key] = enc(val[key], `${path}.${String(key)}`, depth + 1);
+                } catch (e) {
+                    out[key] = { __error: `Cannot serialize property: ${String(e)}` };
+                }
+            }
+            return out;
+        }
+
+        const tree = enc(root, '$', 0);
+        return JSON.stringify(tree, null, 2);
+    }
+
+    
+    app.get('/api/core/v1/autopilot/getContext', requireAdmin(), async (req, res) => {
+        const {mqtt, ...cleanContext} = context;
+        const serializedContext = safeDump(cleanContext);
+        res.send(serializedContext);
+    })
+
     app.post('/api/core/v1/autopilot/getActionCode', requireAdmin(), async (req, res) => {
-        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, templateName: "actionRules", card: JSON.stringify(req.body.card, null, 4), states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
+        //build a textual representation of context
+        const {mqtt, ...cleanContext} = context;
+        cleanContext.mqtt = 'points to the active mqtt connection. Use context.mqtt if you need to pass a mqtt connection handler'
+        const serializedContext = safeDump(cleanContext);
+
+        const prompt = await context.autopilot.getPromptFromTemplate({ board: req.body.board, context: serializedContext, templateName: "actionRules", card: JSON.stringify(req.body.card, null, 4), states: JSON.stringify(req.body.states, null, 4), rules: JSON.stringify(req.body.rules, null, 4), actions: JSON.stringify(req.body.actions, null, 4), userParams: JSON.stringify(req.body.userParams, null, 4) });
         if (req.query.debug) {
             console.log("Prompt: ", prompt)
         }

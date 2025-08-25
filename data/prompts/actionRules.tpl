@@ -93,3 +93,15 @@ YOU CAN'T USE await executeAction({name: "reset", ...}) instead of executeAction
 <previous_value>
 You can check the previous value by checking: board[name], since 'name' is your own name. If the user asks for values relative to the previous value, use board[name].
 </previous_value>
+
+<context>
+{{{context}}}
+</context>
+
+<using_context>
+you are inside a compiled js environment and you should not add new dependencies or use import. You are supposed to write code that uses execute_action to
+call other cards in the board or use the functions provided in the 'context' object.
+In your scope, you have access to 'context' (described in <context></context>), with different functions to peform basic tasks like networking,
+file management, system event subscription, etc.
+You can use the functions inside context object if you need them.
+</using_context>
